@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site_segment_static_routes.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.site_segment_static_routes.Object"] = ObjectValidator()
 	vr["ves.io.schema.site_segment_static_routes.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.site_segment_static_routes.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.site_segment_static_routes.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.site_segment_static_routes.DeleteRequest"] = DeleteRequestValidator()
@@ -27,12 +25,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site_segment_static_routes.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.site_segment_static_routes.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.site_segment_static_routes.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.site_segment_static_routes.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.site_segment_static_routes.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.site_segment_static_routes.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.site_segment_static_routes.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -44,11 +40,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.site_segment_static_routes.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.site_segment_static_routes.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.site_segment_static_routes.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.site_segment_static_routes.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.site_segment_static_routes.CreateRequest.spec.nameserver_v6",
@@ -59,7 +53,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site_segment_static_routes.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.nameserver_v6",
@@ -70,7 +63,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_segment_static_routes.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.nameserver_v6",
@@ -81,7 +73,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_segment_static_routes.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.nameserver_v6",
@@ -108,7 +99,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_segment_static_routes.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.nameserver_v6",
@@ -119,7 +109,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.site_segment_static_routes.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.site_segment_static_routes.ReplaceRequest.spec.nameserver_v6",
@@ -130,7 +119,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site_segment_static_routes.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.nameserver_v6",
@@ -141,21 +129,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.site_segment_static_routes.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -164,9 +148,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.site_segment_static_routes.Object"] = APISwaggerJSON
@@ -180,22 +162,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.site_segment_static_routes.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.site_segment_static_routes.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.site_segment_static_routes.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

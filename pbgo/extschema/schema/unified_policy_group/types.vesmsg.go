@@ -72,15 +72,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInternetPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -88,7 +85,6 @@ func (m *CreateSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEastWestPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEastWestPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEastWestPolicy().GetDRefInfo() FAILED")
@@ -98,7 +94,6 @@ func (m *CreateSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "east_west_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -106,7 +101,6 @@ func (m *CreateSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInternetPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInternetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfo() FAILED")
@@ -116,7 +110,6 @@ func (m *CreateSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "internet_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -136,34 +129,25 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["east_west_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("east_west_policy"))
 		if err := fv(ctx, m.GetEastWestPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_policy"))
 		if err := fv(ctx, m.GetInternetPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["internet_policy"] = InternetPolicyTypeValidator().Validate
-
 	v.FldValidators["east_west_policy"] = EastWestPolicyTypeValidator().Validate
 
 	return v
@@ -216,7 +200,6 @@ func (m *EastWestPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -224,7 +207,6 @@ func (m *EastWestPolicyType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPolicies() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetPolicies().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPolicies().GetDRefInfo() FAILED")
@@ -234,7 +216,6 @@ func (m *EastWestPolicyType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "policies." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateEastWestPolicyType struct {
@@ -254,23 +235,18 @@ func (v *ValidateEastWestPolicyType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEastWestPolicyTypeValidator = func() *ValidateEastWestPolicyType {
 	v := &ValidateEastWestPolicyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["policies"] = ves_io_schema_policy.SecurityPoliciesTypeValidator().Validate
 
 	return v
@@ -328,15 +304,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInternetPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -344,7 +317,6 @@ func (m *GetSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEastWestPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEastWestPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEastWestPolicy().GetDRefInfo() FAILED")
@@ -354,7 +326,6 @@ func (m *GetSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "east_west_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -362,7 +333,6 @@ func (m *GetSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInternetPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInternetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfo() FAILED")
@@ -372,7 +342,6 @@ func (m *GetSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "internet_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -392,34 +361,25 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["east_west_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("east_west_policy"))
 		if err := fv(ctx, m.GetEastWestPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_policy"))
 		if err := fv(ctx, m.GetInternetPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["internet_policy"] = InternetPolicyTypeValidator().Validate
-
 	v.FldValidators["east_west_policy"] = EastWestPolicyTypeValidator().Validate
 
 	return v
@@ -477,15 +437,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInternetPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -493,7 +450,6 @@ func (m *GlobalSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEastWestPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEastWestPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEastWestPolicy().GetDRefInfo() FAILED")
@@ -503,7 +459,6 @@ func (m *GlobalSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "east_west_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -511,7 +466,6 @@ func (m *GlobalSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInternetPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInternetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfo() FAILED")
@@ -521,7 +475,6 @@ func (m *GlobalSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "internet_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -541,34 +494,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["east_west_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("east_west_policy"))
 		if err := fv(ctx, m.GetEastWestPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_policy"))
 		if err := fv(ctx, m.GetInternetPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["internet_policy"] = InternetPolicyTypeValidator().Validate
-
 	v.FldValidators["east_west_policy"] = EastWestPolicyTypeValidator().Validate
 
 	return v
@@ -621,7 +565,6 @@ func (m *InternetPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -629,7 +572,6 @@ func (m *InternetPolicyType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPolicies() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetPolicies().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPolicies().GetDRefInfo() FAILED")
@@ -639,7 +581,6 @@ func (m *InternetPolicyType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "policies." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateInternetPolicyType struct {
@@ -659,23 +600,18 @@ func (v *ValidateInternetPolicyType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInternetPolicyTypeValidator = func() *ValidateInternetPolicyType {
 	v := &ValidateInternetPolicyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["policies"] = ves_io_schema_policy.SecurityPoliciesTypeValidator().Validate
 
 	return v
@@ -733,15 +669,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInternetPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -749,7 +682,6 @@ func (m *ReplaceSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEastWestPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEastWestPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEastWestPolicy().GetDRefInfo() FAILED")
@@ -759,7 +691,6 @@ func (m *ReplaceSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "east_west_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -767,7 +698,6 @@ func (m *ReplaceSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInternetPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInternetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfo() FAILED")
@@ -777,7 +707,6 @@ func (m *ReplaceSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "internet_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -797,34 +726,25 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["east_west_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("east_west_policy"))
 		if err := fv(ctx, m.GetEastWestPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_policy"))
 		if err := fv(ctx, m.GetInternetPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["internet_policy"] = InternetPolicyTypeValidator().Validate
-
 	v.FldValidators["east_west_policy"] = EastWestPolicyTypeValidator().Validate
 
 	return v

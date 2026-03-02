@@ -1,3 +1,7 @@
+//
+// Copyright (c) 2026 F5 Inc. All rights reserved.
+//
+
 package volterra
 
 import (
@@ -148,6 +152,11 @@ func resourceVolterraServiceCredential() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
+			},
+
+			"data": {
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 		},
 	}

@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_crawler.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.api_sec.api_crawler.Object"] = ObjectValidator()
 	vr["ves.io.schema.api_sec.api_crawler.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.api_sec.api_crawler.RemoveScanStatusReq"] = RemoveScanStatusReqValidator()
 	vr["ves.io.schema.api_sec.api_crawler.RemoveScanStatusResp"] = RemoveScanStatusRespValidator()
 	vr["ves.io.schema.api_sec.api_crawler.StatusCompleted"] = StatusCompletedValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_crawler.StatusStarted"] = StatusStartedValidator()
 	vr["ves.io.schema.api_sec.api_crawler.UpdateScanStatusReq"] = UpdateScanStatusReqValidator()
 	vr["ves.io.schema.api_sec.api_crawler.UpdateScanStatusResp"] = UpdateScanStatusRespValidator()
-
 	vr["ves.io.schema.api_sec.api_crawler.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.api_sec.api_crawler.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.api_sec.api_crawler.DeleteRequest"] = DeleteRequestValidator()
@@ -38,7 +35,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_crawler.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.api_sec.api_crawler.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.api_sec.api_crawler.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.api_sec.api_crawler.ApiCrawlingStatus"] = ApiCrawlingStatusValidator()
 	vr["ves.io.schema.api_sec.api_crawler.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.api_sec.api_crawler.DomainConfiguration"] = DomainConfigurationValidator()
@@ -47,7 +43,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_crawler.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.api_sec.api_crawler.ScanInfo"] = ScanInfoValidator()
 	vr["ves.io.schema.api_sec.api_crawler.SimpleLogin"] = SimpleLoginValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -59,51 +54,40 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.api_sec.api_crawler.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.api_sec.api_crawler.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.api_sec.api_crawler.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.api_crawler.API.Create"] = []string{
 		"spec.domains.#.simple_login.password.blindfold_secret_info_internal",
 		"spec.domains.#.simple_login.password.secret_encoding_type",
 		"spec.domains.#.simple_login.password.vault_secret_info",
 		"spec.domains.#.simple_login.password.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.api_crawler.API.Create"] = "ves.io.schema.api_sec.api_crawler.CreateRequest"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_crawler.API.Get"] = []string{
 		"status.#.conditions.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_crawler.API.List"] = []string{
 		"items.#.status_set.#.conditions.#",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.api_crawler.API.Replace"] = []string{
 		"spec.domains.#.simple_login.password.blindfold_secret_info_internal",
 		"spec.domains.#.simple_login.password.secret_encoding_type",
 		"spec.domains.#.simple_login.password.vault_secret_info",
 		"spec.domains.#.simple_login.password.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.api_crawler.API.Replace"] = "ves.io.schema.api_sec.api_crawler.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.api_sec.api_crawler.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -112,14 +96,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.api_sec.api_crawler.Object"] = PrivateCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
 		if isExternal {
@@ -130,11 +110,8 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewPrivateCustomAPIServer(svc)
 		}
-
 	}()
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.api_sec.api_crawler.Object"] = APISwaggerJSON
@@ -148,22 +125,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.api_sec.api_crawler.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.api_sec.api_crawler.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.api_sec.api_crawler.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

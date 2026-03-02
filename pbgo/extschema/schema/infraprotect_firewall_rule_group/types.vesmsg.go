@@ -66,7 +66,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) FirewallRuleGroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for firewall_rule_group_name")
@@ -88,23 +87,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["firewall_rule_group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("firewall_rule_group_name"))
 		if err := fv(ctx, m.GetFirewallRuleGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -174,7 +168,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFirewallRulesetDRefInfo()
-
 }
 
 func (m *GetSpecType) GetFirewallRulesetDRefInfo() ([]db.DRefInfo, error) {
@@ -199,7 +192,6 @@ func (m *GetSpecType) GetFirewallRulesetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFirewallRulesetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -218,7 +210,6 @@ func (m *GetSpecType) GetFirewallRulesetDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -227,7 +218,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) FirewallRuleGroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for firewall_rule_group_name")
@@ -235,9 +225,7 @@ func (v *ValidateGetSpecType) FirewallRuleGroupNameValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) FirewallRulesetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -297,31 +285,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["firewall_rule_group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("firewall_rule_group_name"))
 		if err := fv(ctx, m.GetFirewallRuleGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["firewall_ruleset"]; exists {
 		vOpts := append(opts, db.WithValidateField("firewall_ruleset"))
 		if err := fv(ctx, m.GetFirewallRuleset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -403,7 +384,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFirewallRulesetDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetFirewallRulesetDRefInfo() ([]db.DRefInfo, error) {
@@ -428,7 +408,6 @@ func (m *GlobalSpecType) GetFirewallRulesetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFirewallRulesetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -447,7 +426,6 @@ func (m *GlobalSpecType) GetFirewallRulesetDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -456,7 +434,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) FirewallRuleGroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for firewall_rule_group_name")
@@ -464,9 +441,7 @@ func (v *ValidateGlobalSpecType) FirewallRuleGroupNameValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) FirewallRulesetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -526,31 +501,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["firewall_rule_group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("firewall_rule_group_name"))
 		if err := fv(ctx, m.GetFirewallRuleGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["firewall_ruleset"]; exists {
 		vOpts := append(opts, db.WithValidateField("firewall_ruleset"))
 		if err := fv(ctx, m.GetFirewallRuleset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -631,7 +599,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) FirewallRuleGroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for firewall_rule_group_name")
@@ -653,23 +620,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["firewall_rule_group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("firewall_rule_group_name"))
 		if err := fv(ctx, m.GetFirewallRuleGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

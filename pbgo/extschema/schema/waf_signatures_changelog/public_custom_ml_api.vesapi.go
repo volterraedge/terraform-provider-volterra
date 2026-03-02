@@ -74,9 +74,7 @@ func NewSignatureCustomApiGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetStagedSignatures"] = ccl.doRPCGetStagedSignatures
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -165,7 +163,6 @@ func (c *SignatureCustomApiRestClient) doRPCGetStagedSignatures(ctx context.Cont
 	pbRsp := &StagedSignaturesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf_signatures_changelog.StagedSignaturesRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -199,9 +196,7 @@ func NewSignatureCustomApiRestClient(baseURL string, hc http.Client) server.Cust
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetStagedSignatures"] = ccl.doRPCGetStagedSignatures
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -282,7 +277,6 @@ func (s *signatureCustomApiSrv) GetStagedSignatures(ctx context.Context, in *Sta
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf_signatures_changelog.StagedSignaturesRsp", rsp)...)
 
 	return rsp, nil

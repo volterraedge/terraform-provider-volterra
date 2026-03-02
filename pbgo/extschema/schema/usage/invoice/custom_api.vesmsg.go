@@ -63,6 +63,15 @@ type ValidateDownloadInvoicePdfReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDownloadInvoicePdfReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDownloadInvoicePdfReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DownloadInvoicePdfReq)
 	if !ok {
@@ -76,31 +85,42 @@ func (v *ValidateDownloadInvoicePdfReq) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDownloadInvoicePdfReqValidator = func() *ValidateDownloadInvoicePdfReq {
 	v := &ValidateDownloadInvoicePdfReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DownloadInvoicePdfReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -163,16 +183,12 @@ func (v *ValidateDownloadInvoicePdfRsp) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["pdf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pdf"))
 		if err := fv(ctx, m.GetPdf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -241,70 +257,48 @@ func (v *ValidateInvoiceType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active"))
 		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["amount"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("amount"))
 		if err := fv(ctx, m.GetAmount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["currency"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("currency"))
 		if err := fv(ctx, m.GetCurrency(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["period_end"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("period_end"))
 		if err := fv(ctx, m.GetPeriodEnd(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["period_start"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("period_start"))
 		if err := fv(ctx, m.GetPeriodStart(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -360,6 +354,15 @@ type ValidateListInvoicesReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListInvoicesReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListInvoicesReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListInvoicesReq)
 	if !ok {
@@ -373,31 +376,42 @@ func (v *ValidateListInvoicesReq) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListInvoicesReqValidator = func() *ValidateListInvoicesReq {
 	v := &ValidateListInvoicesReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListInvoicesReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -460,9 +474,7 @@ func (v *ValidateListInvoicesRsp) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["invoices"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("invoices"))
 		for idx, item := range m.GetInvoices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -470,9 +482,7 @@ func (v *ValidateListInvoicesRsp) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

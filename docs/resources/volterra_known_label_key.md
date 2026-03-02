@@ -27,12 +27,12 @@ resource "volterra_known_label_key" "volterra_known_label_key" {
 Argument Reference
 ------------------
 
--	`key` - (Required) Key of the label key (`String`).
--	`namespace` - (Required) Namespace in which to create label key (`String`).
--	`description` - (Optional) Description of what this label key means (`String`).
+-   `key` - (Required) Key of the label key (`String`).
+-   `namespace` - (Required) Namespace in which to create label key (`String`).
+-   `description` - (Optional) Description of what this label key means (`String`).
 
 Attribute Reference
 -------------------
 
--	`id` - ID of the known label key returned
--	`key` - Key of the known label key returned
+-   `id` - ID of the known label key returned
+-   `key` - Key of the known label key returned

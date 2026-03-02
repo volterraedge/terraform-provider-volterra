@@ -64,7 +64,6 @@ type ValidateGetCloudInitConfigReq struct {
 }
 
 func (v *ValidateGetCloudInitConfigReq) ProviderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for provider")
@@ -86,32 +85,30 @@ func (v *ValidateGetCloudInitConfigReq) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
+	if fv, exists := v.FldValidators["enable_management_network"]; exists {
+		vOpts := append(opts, db.WithValidateField("enable_management_network"))
+		if err := fv(ctx, m.GetEnableManagementNetwork(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetCloudInitConfigReqValidator = func() *ValidateGetCloudInitConfigReq {
 	v := &ValidateGetCloudInitConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -192,16 +189,12 @@ func (v *ValidateGetCloudInitConfigResp) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_init_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_init_config"))
 		if err := fv(ctx, m.GetCloudInitConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -259,7 +252,6 @@ func (m *ObjectChangeResp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return nil, nil
-
 }
 
 type ValidateObjectChangeResp struct {
@@ -279,23 +271,18 @@ func (v *ValidateObjectChangeResp) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["obj"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("obj"))
 		if err := fv(ctx, m.GetObj(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectChangeRespValidator = func() *ValidateObjectChangeResp {
 	v := &ValidateObjectChangeResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["obj"] = ObjectValidator().Validate
 
 	return v
@@ -359,34 +346,24 @@ func (v *ValidateStateReq) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

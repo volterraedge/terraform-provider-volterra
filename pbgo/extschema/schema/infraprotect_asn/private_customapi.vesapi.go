@@ -74,9 +74,7 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["UpdateASNReviewStatus"] = ccl.doRPCUpdateASNReviewStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -165,7 +163,6 @@ func (c *CustomPrivateAPIRestClient) doRPCUpdateASNReviewStatus(ctx context.Cont
 	pbRsp := &UpdateASNReviewStatusResponsePrivate{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.infraprotect_asn.UpdateASNReviewStatusResponsePrivate", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -199,9 +196,7 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["UpdateASNReviewStatus"] = ccl.doRPCUpdateASNReviewStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

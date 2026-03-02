@@ -76,43 +76,30 @@ func (v *ValidateAttachmentType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attachment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachment"))
 		if err := fv(ctx, m.GetAttachment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_type"))
 		if err := fv(ctx, m.GetContentType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filename"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filename"))
 		if err := fv(ctx, m.GetFilename(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tp_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tp_id"))
 		if err := fv(ctx, m.GetTpId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -181,9 +168,7 @@ func (v *ValidateCommentType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attachment_ids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachment_ids"))
 		for idx, item := range m.GetAttachmentIds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -191,11 +176,8 @@ func (v *ValidateCommentType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["attachments_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachments_info"))
 		for idx, item := range m.GetAttachmentsInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -203,63 +185,43 @@ func (v *ValidateCommentType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["author_email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("author_email"))
 		if err := fv(ctx, m.GetAuthorEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["author_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("author_name"))
 		if err := fv(ctx, m.GetAuthorName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["comment_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("comment_id"))
 		if err := fv(ctx, m.GetCommentId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["created_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("created_at"))
 		if err := fv(ctx, m.GetCreatedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["html"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("html"))
 		if err := fv(ctx, m.GetHtml(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plain_text"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plain_text"))
 		if err := fv(ctx, m.GetPlainText(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -317,7 +279,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRelatesToDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
@@ -342,7 +303,6 @@ func (m *CreateSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRelatesToDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -361,7 +321,6 @@ func (m *CreateSpecType) GetRelatesToDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -382,18 +341,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["category"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("category"))
 		if err := fv(ctx, m.GetCategory(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["comments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("comments"))
 		for idx, item := range m.GetComments() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -401,47 +355,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ongoing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ongoing"))
 		if err := fv(ctx, m.GetOngoing(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["product_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("product_data"))
 		if err := fv(ctx, m.GetProductData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["relates_to"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("relates_to"))
 		for idx, item := range m.GetRelatesTo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -449,72 +388,49 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service"))
 		if err := fv(ctx, m.GetService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subject"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subject"))
 		if err := fv(ctx, m.GetSubject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timeline"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timeline"))
 		if err := fv(ctx, m.GetTimeline(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topic"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topic"))
 		if err := fv(ctx, m.GetTopic(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tp_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tp_id"))
 		if err := fv(ctx, m.GetTpId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -577,21 +493,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRelatesToDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRelatesToDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetUserDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUserDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetFollowupsDRefInfo() ([]db.DRefInfo, error) {
@@ -616,7 +528,6 @@ func (m *GetSpecType) GetFollowupsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFollowupsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -635,7 +546,6 @@ func (m *GetSpecType) GetFollowupsDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -661,7 +571,6 @@ func (m *GetSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRelatesToDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -680,7 +589,6 @@ func (m *GetSpecType) GetRelatesToDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -706,7 +614,6 @@ func (m *GetSpecType) GetUserDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUserDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -725,7 +632,6 @@ func (m *GetSpecType) GetUserDBEntries(ctx context.Context, d db.Interface) ([]d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -746,27 +652,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["author_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("author_name"))
 		if err := fv(ctx, m.GetAuthorName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["category"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("category"))
 		if err := fv(ctx, m.GetCategory(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["comments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("comments"))
 		for idx, item := range m.GetComments() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -774,20 +672,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["created_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("created_at"))
 		if err := fv(ctx, m.GetCreatedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["custom_fields"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("custom_fields"))
 		for idx, item := range m.GetCustomFields() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -795,29 +687,20 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["escalated"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("escalated"))
 		if err := fv(ctx, m.GetEscalated(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["followups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("followups"))
 		for idx, item := range m.GetFollowups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -825,38 +708,26 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ongoing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ongoing"))
 		if err := fv(ctx, m.GetOngoing(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["product_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("product_data"))
 		if err := fv(ctx, m.GetProductData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["relates_to"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("relates_to"))
 		for idx, item := range m.GetRelatesTo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -864,38 +735,26 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service"))
 		if err := fv(ctx, m.GetService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subject"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subject"))
 		if err := fv(ctx, m.GetSubject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for idx, item := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -903,56 +762,38 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timeline"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timeline"))
 		if err := fv(ctx, m.GetTimeline(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topic"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topic"))
 		if err := fv(ctx, m.GetTopic(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tp_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tp_id"))
 		if err := fv(ctx, m.GetTpId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_at"))
 		if err := fv(ctx, m.GetUpdateAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user"))
 		for idx, item := range m.GetUser() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -960,11 +801,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["via"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("via"))
 		for key, value := range m.GetVia() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -972,9 +810,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1037,21 +873,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRelatesToDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRelatesToDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetUserDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUserDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetFollowupsDRefInfo() ([]db.DRefInfo, error) {
@@ -1076,7 +908,6 @@ func (m *GlobalSpecType) GetFollowupsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFollowupsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1095,7 +926,6 @@ func (m *GlobalSpecType) GetFollowupsDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1121,7 +951,6 @@ func (m *GlobalSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRelatesToDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1140,7 +969,6 @@ func (m *GlobalSpecType) GetRelatesToDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1166,7 +994,6 @@ func (m *GlobalSpecType) GetUserDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUserDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1185,7 +1012,6 @@ func (m *GlobalSpecType) GetUserDBEntries(ctx context.Context, d db.Interface) (
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1206,36 +1032,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["author_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("author_name"))
 		if err := fv(ctx, m.GetAuthorName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["case_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("case_id"))
 		if err := fv(ctx, m.GetCaseId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["category"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("category"))
 		if err := fv(ctx, m.GetCategory(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["comments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("comments"))
 		for idx, item := range m.GetComments() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1243,20 +1058,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["created_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("created_at"))
 		if err := fv(ctx, m.GetCreatedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["custom_fields"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("custom_fields"))
 		for idx, item := range m.GetCustomFields() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1264,29 +1073,20 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["escalated"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("escalated"))
 		if err := fv(ctx, m.GetEscalated(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["followups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("followups"))
 		for idx, item := range m.GetFollowups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1294,56 +1094,38 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ongoing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ongoing"))
 		if err := fv(ctx, m.GetOngoing(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private"))
 		if err := fv(ctx, m.GetPrivate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["product_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("product_data"))
 		if err := fv(ctx, m.GetProductData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_id"))
 		if err := fv(ctx, m.GetProviderId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["relates_to"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("relates_to"))
 		for idx, item := range m.GetRelatesTo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1351,38 +1133,26 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service"))
 		if err := fv(ctx, m.GetService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subject"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subject"))
 		if err := fv(ctx, m.GetSubject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for idx, item := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1390,56 +1160,38 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timeline"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timeline"))
 		if err := fv(ctx, m.GetTimeline(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topic"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topic"))
 		if err := fv(ctx, m.GetTopic(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tp_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tp_id"))
 		if err := fv(ctx, m.GetTpId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_at"))
 		if err := fv(ctx, m.GetUpdateAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user"))
 		for idx, item := range m.GetUser() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1447,11 +1199,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["via"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("via"))
 		for key, value := range m.GetVia() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1459,9 +1208,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

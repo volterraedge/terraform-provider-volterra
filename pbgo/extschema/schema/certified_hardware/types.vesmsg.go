@@ -89,9 +89,7 @@ func (v *ValidateAws) Validate(ctx context.Context, pm interface{}, opts ...db.V
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -160,25 +158,18 @@ func (v *ValidateAwsImage) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["image_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("image_id"))
 		if err := fv(ctx, m.GetImageId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -271,9 +262,7 @@ func (v *ValidateAzure) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -342,16 +331,12 @@ func (v *ValidateAzureImage) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["image_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("image_id"))
 		if err := fv(ctx, m.GetImageId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -420,16 +405,12 @@ func (v *ValidateCertifiedHardwareStatus) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["latest_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("latest_version"))
 		if err := fv(ctx, m.GetLatestVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -498,9 +479,7 @@ func (v *ValidateDeviceType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["device_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_list"))
 		for idx, item := range m.GetDeviceList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -508,54 +487,37 @@ func (v *ValidateDeviceType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_unit"))
 		if err := fv(ctx, m.GetMaxUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_unit"))
 		if err := fv(ctx, m.GetMinUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["use"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("use"))
 		if err := fv(ctx, m.GetUse(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -637,9 +599,7 @@ func (v *ValidateGcp) Validate(ctx context.Context, pm interface{}, opts ...db.V
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -708,16 +668,12 @@ func (v *ValidateGcpImage) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["image_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("image_id"))
 		if err := fv(ctx, m.GetImageId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -786,18 +742,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certified_hardware_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hardware_type"))
 		if err := fv(ctx, m.GetCertifiedHardwareType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["devices"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("devices"))
 		for idx, item := range m.GetDevices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -805,11 +756,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["image_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("image_list"))
 		for idx, item := range m.GetImageList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -817,11 +765,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_usb_device_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_usb_device_rule"))
 		for idx, item := range m.GetInternalUsbDeviceRule() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -829,29 +774,20 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mem_page_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mem_page_number"))
 		if err := fv(ctx, m.GetMemPageNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mem_page_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mem_page_size"))
 		if err := fv(ctx, m.GetMemPageSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["numa_mem"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("numa_mem"))
 		for idx, item := range m.GetNumaMem() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -859,20 +795,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["numa_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("numa_nodes"))
 		if err := fv(ctx, m.GetNumaNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vendor_model_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vendor_model_list"))
 		for idx, item := range m.GetVendorModelList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -880,9 +810,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -951,18 +879,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certified_hardware_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hardware_type"))
 		if err := fv(ctx, m.GetCertifiedHardwareType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["devices"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("devices"))
 		for idx, item := range m.GetDevices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -970,11 +893,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["image_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("image_list"))
 		for idx, item := range m.GetImageList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -982,11 +902,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_usb_device_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_usb_device_rule"))
 		for idx, item := range m.GetInternalUsbDeviceRule() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -994,29 +911,20 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mem_page_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mem_page_number"))
 		if err := fv(ctx, m.GetMemPageNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mem_page_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mem_page_size"))
 		if err := fv(ctx, m.GetMemPageSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["numa_mem"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("numa_mem"))
 		for idx, item := range m.GetNumaMem() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1024,20 +932,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["numa_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("numa_nodes"))
 		if err := fv(ctx, m.GetNumaNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vendor_model_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vendor_model_list"))
 		for idx, item := range m.GetVendorModelList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1045,9 +947,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1116,25 +1016,18 @@ func (v *ValidateHardwareVendorModel) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["model"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("model"))
 		if err := fv(ctx, m.GetModel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vendor"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vendor"))
 		if err := fv(ctx, m.GetVendor(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1238,27 +1131,19 @@ func (v *ValidateImageType) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1327,52 +1212,36 @@ func (v *ValidateMarketplace) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offer"))
 		if err := fv(ctx, m.GetOffer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["publisher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("publisher"))
 		if err := fv(ctx, m.GetPublisher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sku"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sku"))
 		if err := fv(ctx, m.GetSku(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1441,25 +1310,18 @@ func (v *ValidateNumaMem) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["memory"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("memory"))
 		if err := fv(ctx, m.GetMemory(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node"))
 		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

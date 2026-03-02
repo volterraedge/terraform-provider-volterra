@@ -76,45 +76,31 @@ func (v *ValidateCalculatedUsageItem) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["amount"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("amount"))
 		if err := fv(ctx, m.GetAmount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["currency_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("currency_code"))
 		if err := fv(ctx, m.GetCurrencyCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_timestamp"))
 		if err := fv(ctx, m.GetEndTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fixed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fixed"))
 		if err := fv(ctx, m.GetFixed(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric_labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric_labels"))
 		for idx, item := range m.GetMetricLabels() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -122,72 +108,49 @@ func (v *ValidateCalculatedUsageItem) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["quantity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("quantity"))
 		if err := fv(ctx, m.GetQuantity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["quantity_billable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("quantity_billable"))
 		if err := fv(ctx, m.GetQuantityBillable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_timestamp"))
 		if err := fv(ctx, m.GetStartTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit_name"))
 		if err := fv(ctx, m.GetUnitName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit_name_billable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit_name_billable"))
 		if err := fv(ctx, m.GetUnitNameBillable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["usage_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usage_type"))
 		if err := fv(ctx, m.GetUsageType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -244,7 +207,6 @@ type ValidateCoupon struct {
 }
 
 func (v *ValidateCoupon) DiscountTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(DiscountType)
@@ -258,9 +220,7 @@ func (v *ValidateCoupon) DiscountTypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCoupon) DiscountAmountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for discount_amount")
@@ -282,41 +242,30 @@ func (v *ValidateCoupon) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discount_amount"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discount_amount"))
 		if err := fv(ctx, m.GetDiscountAmount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["discount_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discount_type"))
 		if err := fv(ctx, m.GetDiscountType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["title"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("title"))
 		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCouponValidator = func() *ValidateCoupon {
 	v := &ValidateCoupon{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -395,6 +344,15 @@ type ValidateListCurrentUsageReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListCurrentUsageReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListCurrentUsageReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListCurrentUsageReq)
 	if !ok {
@@ -408,40 +366,48 @@ func (v *ValidateListCurrentUsageReq) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["from"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("from"))
 		if err := fv(ctx, m.GetFrom(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["to"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("to"))
 		if err := fv(ctx, m.GetTo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListCurrentUsageReqValidator = func() *ValidateListCurrentUsageReq {
 	v := &ValidateListCurrentUsageReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListCurrentUsageReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -504,9 +470,7 @@ func (v *ValidateListCurrentUsageResp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["coupons"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coupons"))
 		for idx, item := range m.GetCoupons() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -514,29 +478,20 @@ func (v *ValidateListCurrentUsageResp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["discount"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discount"))
 		if err := fv(ctx, m.GetDiscount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_cost"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_cost"))
 		if err := fv(ctx, m.GetTotalCost(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["usage_items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usage_items"))
 		for idx, item := range m.GetUsageItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -544,16 +499,13 @@ func (v *ValidateListCurrentUsageResp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListCurrentUsageRespValidator = func() *ValidateListCurrentUsageResp {
 	v := &ValidateListCurrentUsageResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["coupons"] = CouponValidator().Validate
 
 	return v
@@ -604,6 +556,15 @@ type ValidateListMonthlyUsageReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListMonthlyUsageReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListMonthlyUsageReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListMonthlyUsageReq)
 	if !ok {
@@ -617,22 +578,36 @@ func (v *ValidateListMonthlyUsageReq) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListMonthlyUsageReqValidator = func() *ValidateListMonthlyUsageReq {
 	v := &ValidateListMonthlyUsageReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListMonthlyUsageReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -695,9 +670,7 @@ func (v *ValidateListMonthlyUsageResp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["monthly_usage_items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("monthly_usage_items"))
 		for idx, item := range m.GetMonthlyUsageItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -705,9 +678,7 @@ func (v *ValidateListMonthlyUsageResp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -776,43 +747,30 @@ func (v *ValidateMonthlyUsageType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["amount"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("amount"))
 		if err := fv(ctx, m.GetAmount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["currency_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("currency_code"))
 		if err := fv(ctx, m.GetCurrencyCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_timestamp"))
 		if err := fv(ctx, m.GetEndTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_timestamp"))
 		if err := fv(ctx, m.GetStartTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

@@ -68,11 +68,9 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReportConfigDRefInfo()
-
 }
 
 func (m *GetSpecType) GetReportConfigDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetReportConfig()
 	if vref == nil {
 		return nil, nil
@@ -88,7 +86,6 @@ func (m *GetSpecType) GetReportConfigDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetReportConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -98,7 +95,6 @@ func (m *GetSpecType) GetReportConfigDBEntries(ctx context.Context, d db.Interfa
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: report_config")
 	}
-
 	vref := m.GetReportConfig()
 	if vref == nil {
 		return nil, nil
@@ -116,7 +112,6 @@ func (m *GetSpecType) GetReportConfigDBEntries(ctx context.Context, d db.Interfa
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -131,19 +126,15 @@ func (v *ValidateGetSpecType) ReportDataValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SentTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var (
 		reqdValidatorFn db.ValidatorFunc
 		err             error
 	)
-
 	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for sent_time")
 	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if reqdValidatorFn != nil {
 			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -156,9 +147,7 @@ func (v *ValidateGetSpecType) SentTimeValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ReportFrequencyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for report_frequency")
@@ -166,9 +155,7 @@ func (v *ValidateGetSpecType) ReportFrequencyValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ReportCreatorMethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ReportCreatorMethod)
@@ -196,23 +183,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["report_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_config"))
 		if err := fv(ctx, m.GetReportConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_creator_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_creator_method"))
 		if err := fv(ctx, m.GetReportCreatorMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["report_data"]; exists {
@@ -248,70 +229,49 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_delivery_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_delivery_status"))
 		if err := fv(ctx, m.GetReportDeliveryStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_frequency"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_frequency"))
 		if err := fv(ctx, m.GetReportFrequency(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_generation_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_generation_status"))
 		if err := fv(ctx, m.GetReportGenerationStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_id"))
 		if err := fv(ctx, m.GetReportId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_status"))
 		if err := fv(ctx, m.GetReportStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sent_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sent_time"))
 		if err := fv(ctx, m.GetSentTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -319,7 +279,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhReportData := v.ReportDataValidationRuleHandler
 	rulesReportData := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -364,14 +323,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["report_creator_method"] = vFn
-
 	v.FldValidators["report_data.waap"] = ReportDataWAAPValidator().Validate
 	v.FldValidators["report_data.atb"] = ReportDataATBValidator().Validate
-
 	v.FldValidators["report_generation_status"] = ReportGenerationStatusValidator().Validate
-
 	v.FldValidators["report_delivery_status"] = ReportDeliveryStatusValidator().Validate
-
 	v.FldValidators["report_config"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -424,11 +379,9 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReportConfigDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetReportConfigDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetReportConfig()
 	if vref == nil {
 		return nil, nil
@@ -444,7 +397,6 @@ func (m *GlobalSpecType) GetReportConfigDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetReportConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -454,7 +406,6 @@ func (m *GlobalSpecType) GetReportConfigDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: report_config")
 	}
-
 	vref := m.GetReportConfig()
 	if vref == nil {
 		return nil, nil
@@ -472,7 +423,6 @@ func (m *GlobalSpecType) GetReportConfigDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -487,19 +437,15 @@ func (v *ValidateGlobalSpecType) ReportDataValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SentTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var (
 		reqdValidatorFn db.ValidatorFunc
 		err             error
 	)
-
 	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for sent_time")
 	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if reqdValidatorFn != nil {
 			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -512,9 +458,7 @@ func (v *ValidateGlobalSpecType) SentTimeValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ReportFrequencyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for report_frequency")
@@ -522,9 +466,7 @@ func (v *ValidateGlobalSpecType) ReportFrequencyValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ReportCreatorMethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ReportCreatorMethod)
@@ -552,23 +494,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["report_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_config"))
 		if err := fv(ctx, m.GetReportConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_creator_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_creator_method"))
 		if err := fv(ctx, m.GetReportCreatorMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["report_data"]; exists {
@@ -604,52 +540,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_delivery_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_delivery_status"))
 		if err := fv(ctx, m.GetReportDeliveryStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_frequency"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_frequency"))
 		if err := fv(ctx, m.GetReportFrequency(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_generation_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_generation_status"))
 		if err := fv(ctx, m.GetReportGenerationStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sent_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sent_time"))
 		if err := fv(ctx, m.GetSentTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -657,7 +578,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhReportData := v.ReportDataValidationRuleHandler
 	rulesReportData := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -702,14 +622,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["report_creator_method"] = vFn
-
 	v.FldValidators["report_data.waap"] = ReportDataWAAPValidator().Validate
 	v.FldValidators["report_data.atb"] = ReportDataATBValidator().Validate
-
 	v.FldValidators["report_generation_status"] = ReportGenerationStatusValidator().Validate
-
 	v.FldValidators["report_delivery_status"] = ReportDeliveryStatusValidator().Validate
-
 	v.FldValidators["report_config"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -761,7 +677,6 @@ type ValidateReportDeliveryStatus struct {
 }
 
 func (v *ValidateReportDeliveryStatus) ReportDeliveryStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ReportDeliveryState)
@@ -789,41 +704,30 @@ func (v *ValidateReportDeliveryStatus) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["delivered_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("delivered_time"))
 		if err := fv(ctx, m.GetDeliveredTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["eta"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("eta"))
 		if err := fv(ctx, m.GetEta(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_delivery_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_delivery_state"))
 		if err := fv(ctx, m.GetReportDeliveryState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReportDeliveryStatusValidator = func() *ValidateReportDeliveryStatus {
 	v := &ValidateReportDeliveryStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -892,7 +796,6 @@ type ValidateReportGenerationStatus struct {
 }
 
 func (v *ValidateReportGenerationStatus) ReportStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ReportStatus)
@@ -920,41 +823,36 @@ func (v *ValidateReportGenerationStatus) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["eta"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("eta"))
 		if err := fv(ctx, m.GetEta(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["generated_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("generated_time"))
+		if err := fv(ctx, m.GetGeneratedTime(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["report_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_status"))
 		if err := fv(ctx, m.GetReportStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scheduled_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scheduled_time"))
 		if err := fv(ctx, m.GetScheduledTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReportGenerationStatusValidator = func() *ValidateReportGenerationStatus {
 	v := &ValidateReportGenerationStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

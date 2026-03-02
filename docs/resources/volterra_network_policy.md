@@ -23,14 +23,13 @@ resource "volterra_network_policy" "example" {
   endpoint {
     // One of the arguments from this list "any inside_endpoints interface label_selector namespace outside_endpoints prefix_list" must be set
 
-    interface {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+    prefix_list {
+      ipv6_prefixes = ["fd48:fa09:d9d4::/48"]
+
+      prefixes = ["192.168.20.0/24"]
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -317,4 +316,4 @@ Select specific protocol and port ranges traffic to match.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured network_policy.
+*   `id` - This is the id of the configured network_policy.

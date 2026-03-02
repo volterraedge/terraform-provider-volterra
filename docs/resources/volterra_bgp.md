@@ -67,11 +67,11 @@ resource "volterra_bgp" "example" {
     external {
       // One of the arguments from this list "address default_gateway disable external_connector from_site subnet_begin_offset subnet_end_offset" must be set
 
-      external_connector = true
+      subnet_end_offset = "subnet_end_offset"
 
       // One of the arguments from this list "address_ipv6 default_gateway_v6 disable_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6" must be set
 
-      subnet_begin_offset_v6 = "subnet_begin_offset_v6"
+      address_ipv6 = "address_ipv6"
       asn = "64512"
 
       // One of the arguments from this list "md5_auth_key no_authentication" can be set
@@ -80,17 +80,41 @@ resource "volterra_bgp" "example" {
       family_inet {
         // One of the arguments from this list "disable enable" must be set
 
-        enable = true
+        enable {
+          aggregation {
+            ip_prefix = "ip_prefix"
+
+            options {
+              // One of the arguments from this list "summary_only" must be set
+
+              summary_only = true
+            }
+          }
+        }
       }
       family_inet_v6 {
         // One of the arguments from this list "disable enable" must be set
 
-        enable = true
+        enable {
+          aggregation {
+            ip_prefix = "ip_prefix"
+
+            options {
+              // One of the arguments from this list "summary_only" must be set
+
+              summary_only = true
+            }
+          }
+        }
       }
 
       // One of the arguments from this list "inside_interfaces interface interface_list outside_interfaces" must be set
 
-      outside_interfaces = true
+      interface {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
       port = "179"
     }
   }
@@ -98,7 +122,7 @@ resource "volterra_bgp" "example" {
   where {
     // One of the arguments from this list "site virtual_site" must be set
 
-    virtual_site {
+    site {
       // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
 
       disable_internet_vip = true
@@ -119,7 +143,6 @@ resource "volterra_bgp" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -173,9 +196,9 @@ List of peers.
 
 ###### One of the arguments from this list "bfd_disabled, bfd_enabled" must be set
 
-`bfd_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).(Deprecated)
+`bfd_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
 
-`bfd_enabled` - (Optional) x-displayName: "Enabled". See [Bfd Choice Bfd Enabled ](#bfd-choice-bfd-enabled) below for details.(Deprecated)
+`bfd_enabled` - (Optional) x-displayName: "Enabled". See [Bfd Choice Bfd Enabled ](#bfd-choice-bfd-enabled) below for details.
 
 ###### One of the arguments from this list "disable, routing_policies" must be set
 
@@ -239,6 +262,18 @@ No Peer IPv6 Address..
 
 Use the address specified in the site object..
 
+### Aggregation Options
+
+x-displayName: "Aggregation Options".
+
+###### One of the arguments from this list "summary_only" must be set
+
+`summary_only` - (Optional) Advertise only the aggregated prefix and suppress all contributing more-specifics to neighbors. (`Bool`).
+
+### Aggregation Choice Summary Only
+
+Advertise only the aggregated prefix and suppress all contributing more-specifics to neighbors..
+
 ### Auth Choice No Authentication
 
 No Authentication of BGP session.
@@ -275,13 +310,29 @@ Apply policy on routes being imported.
 
 Apply policy on routes being exported.
 
+### Enable Aggregation
+
+BGP aggregation prefixes are shared among all peers, aggregation configured under any peer will take effect on all peers. Aggregation in BGP occurs only when more specific routes exist in the routing table and applies to outbound advertisements..
+
+`ip_prefix` - (Optional) Specify IPV4 subnet for aggregation. (`String`).
+
+`options` - (Optional) x-displayName: "Aggregation Options". See [Aggregation Options ](#aggregation-options) below for details.
+
+### Enable Aggregation
+
+BGP aggregation prefixes are shared among all peers, aggregation configured under any peer will take effect on all peers. Aggregation in BGP occurs only when more specific routes exist in the routing table and applies to outbound advertisements..
+
+`ip_prefix` - (Optional) Specify IPV6 subnet for aggregation. (`String`).
+
+`options` - (Optional) x-displayName: "Aggregation Options". See [Aggregation Options ](#aggregation-options) below for details.
+
 ### Enable Choice Disable
 
 Disables the BGP routing policy.
 
 ### Enable Choice Enable
 
-Enable IPv4 family Route Exchange..
+Enable the IPv6 Unicast family..
 
 ### Enable Choice Enable
 
@@ -292,6 +343,18 @@ Enable the IPv4 Unicast family..
 `disable` - (Optional) Disable the IPv4 Unicast family. (`Bool`).(Deprecated)
 
 `enable` - (Optional) Enable the IPv4 Unicast family. (`Bool`).
+
+### Enable Choice Enable
+
+Enable IPv4 family Route Exchange..
+
+`aggregation` - (Optional) BGP aggregation prefixes are shared among all peers, aggregation configured under any peer will take effect on all peers. Aggregation in BGP occurs only when more specific routes exist in the routing table and applies to outbound advertisements.. See [Enable Aggregation ](#enable-aggregation) below for details.
+
+### Enable Choice Enable
+
+Enable IPv6 family Route Exchange..
+
+`aggregation` - (Optional) BGP aggregation prefixes are shared among all peers, aggregation configured under any peer will take effect on all peers. Aggregation in BGP occurs only when more specific routes exist in the routing table and applies to outbound advertisements.. See [Enable Aggregation ](#enable-aggregation) below for details.
 
 ### Enable Choice Routing Policies
 
@@ -307,7 +370,7 @@ Enable/Disable Ipv4 family of routes exchange with peer.
 
 `disable` - (Optional) Disable IPv4 family Route Exchange. (`Bool`).
 
-`enable` - (Optional) Enable IPv4 family Route Exchange. (`Bool`).
+`enable` - (Optional) Enable IPv4 family Route Exchange.. See [Enable Choice Enable ](#enable-choice-enable) below for details.
 
 ### External Family Inet V6
 
@@ -317,7 +380,7 @@ Enable/Disable IPv6 family of routes exchange with peer.
 
 `disable` - (Optional) Disable IPv6 family Route Exchange. (`Bool`).
 
-`enable` - (Optional) Enable IPv6 family Route Exchange. (`Bool`).
+`enable` - (Optional) Enable IPv6 family Route Exchange.. See [Enable Choice Enable ](#enable-choice-enable) below for details.
 
 ### Interface Choice Inside Interfaces
 
@@ -594,4 +657,4 @@ IPv6 Address.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured bgp.
+*   `id` - This is the id of the configured bgp.

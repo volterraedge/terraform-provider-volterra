@@ -74,9 +74,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SuspiciousUserStatus"] = ccl.doRPCSuspiciousUserStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -167,7 +165,6 @@ func (c *CustomAPIRestClient) doRPCSuspiciousUserStatus(ctx context.Context, cal
 	pbRsp := &SuspiciousUserStatusRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_setting.SuspiciousUserStatusRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -201,9 +198,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SuspiciousUserStatus"] = ccl.doRPCSuspiciousUserStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -284,7 +279,6 @@ func (s *customAPISrv) SuspiciousUserStatus(ctx context.Context, in *SuspiciousU
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_setting.SuspiciousUserStatusRsp", rsp)...)
 
 	return rsp, nil
@@ -393,7 +387,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "query",
-                        "description": "x-example: \"query={app_type=\"blogging_app\"}\"\nquery is used to specify the list of matchers\nsyntax for query := {[\u003cmatcher\u003e]} \n\u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n\u003cfield_name\u003e := string\n  One or more of these fields in the security event may be specified in the query.\n    app_type - application type\n    vh_name - name of the virtual host\n\u003cvalue\u003e := string\n\u003coperator\u003e := [\"=\"|\"!=\"]\n  = : equal to \n  != : not equal to\nWhen more than one matcher is specified in the query, then security events matching ALL the matchers will be returned in the response.\nExample: query={country=\"United States\", city=\"California\"} will return all security events originating from California, United States.\n\nOptional: If not specified, all the security events matching the given tenant and namespace will be returned in the response.",
+                        "description": "x-example: \"query={app_type=\"blogging_app\"}\"\nquery is used to specify the list of matchers\nsyntax for query := {[\u003cmatcher\u003e]}\n\u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n\u003cfield_name\u003e := string\n  One or more of these fields in the security event may be specified in the query.\n    app_type - application type\n    vh_name - name of the virtual host\n\u003cvalue\u003e := string\n\u003coperator\u003e := [\"=\"|\"!=\"]\n  = : equal to\n  != : not equal to\nWhen more than one matcher is specified in the query, then security events matching ALL the matchers will be returned in the response.\nExample: query={country=\"United States\", city=\"California\"} will return all security events originating from California, United States.\n\nOptional: If not specified, all the security events matching the given tenant and namespace will be returned in the response.",
                         "in": "query",
                         "required": false,
                         "type": "string",

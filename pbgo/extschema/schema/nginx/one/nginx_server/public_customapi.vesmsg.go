@@ -67,7 +67,6 @@ func (m *GetDataplaneServerResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -75,7 +74,6 @@ func (m *GetDataplaneServerResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -85,7 +83,6 @@ func (m *GetDataplaneServerResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetDataplaneServerResponse struct {
@@ -105,43 +102,31 @@ func (v *ValidateGetDataplaneServerResponse) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetDataplaneServerResponseValidator = func() *ValidateGetDataplaneServerResponse {
 	v := &ValidateGetDataplaneServerResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = GetSpecTypeValidator().Validate
 
 	return v
@@ -194,7 +179,6 @@ func (m *GetDataplaneServersRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDataplaneRefDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -202,7 +186,6 @@ func (m *GetDataplaneServersRequest) GetDataplaneRefDRefInfo() ([]db.DRefInfo, e
 	if m.GetDataplaneRef() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDataplaneRef().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfo() FAILED")
@@ -212,7 +195,6 @@ func (m *GetDataplaneServersRequest) GetDataplaneRefDRefInfo() ([]db.DRefInfo, e
 		dri.DRField = "dataplane_ref." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetDataplaneServersRequest struct {
@@ -220,7 +202,6 @@ type ValidateGetDataplaneServersRequest struct {
 }
 
 func (v *ValidateGetDataplaneServersRequest) DataplaneRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for dataplane_ref")
@@ -229,11 +210,9 @@ func (v *ValidateGetDataplaneServersRequest) DataplaneRefValidationRuleHandler(r
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := DataplaneReferenceValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -253,32 +232,24 @@ func (v *ValidateGetDataplaneServersRequest) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dataplane_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dataplane_ref"))
 		if err := fv(ctx, m.GetDataplaneRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetDataplaneServersRequestValidator = func() *ValidateGetDataplaneServersRequest {
 	v := &ValidateGetDataplaneServersRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -348,7 +319,6 @@ func (m *GetDataplaneServersResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetItemsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -356,7 +326,6 @@ func (m *GetDataplaneServersResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetItems() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
@@ -370,7 +339,6 @@ func (m *GetDataplaneServersResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetDataplaneServersResponse struct {
@@ -378,7 +346,6 @@ type ValidateGetDataplaneServersResponse struct {
 }
 
 func (v *ValidateGetDataplaneServersResponse) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -438,22 +405,18 @@ func (v *ValidateGetDataplaneServersResponse) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
 		vOpts := append(opts, db.WithValidateField("items"))
 		if err := fv(ctx, m.GetItems(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetDataplaneServersResponseValidator = func() *ValidateGetDataplaneServersResponse {
 	v := &ValidateGetDataplaneServersResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

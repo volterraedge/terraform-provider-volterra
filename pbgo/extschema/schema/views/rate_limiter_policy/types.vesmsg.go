@@ -70,7 +70,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRulesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -78,7 +77,6 @@ func (m *CreateSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
@@ -92,7 +90,6 @@ func (m *CreateSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCreateSpecType struct {
@@ -106,9 +103,7 @@ func (v *ValidateCreateSpecType) ServerChoiceServerNameValidationRuleHandler(rul
 	}
 	return oValidatorFn_ServerName, nil
 }
-
 func (v *ValidateCreateSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -168,13 +163,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServerChoice().(type) {
@@ -222,16 +215,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -239,7 +229,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServerChoiceServerName := v.ServerChoiceServerNameValidationRuleHandler
 	rulesServerChoiceServerName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -249,7 +238,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.server_choice_server_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["server_choice.server_name"] = vFnMap["server_choice.server_name"]
 
 	vrhRules := v.RulesValidationRuleHandler
@@ -263,7 +251,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rules"] = vFn
-
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -317,7 +304,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRulesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -325,7 +311,6 @@ func (m *GetSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
@@ -339,7 +324,6 @@ func (m *GetSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetSpecType struct {
@@ -353,9 +337,7 @@ func (v *ValidateGetSpecType) ServerChoiceServerNameValidationRuleHandler(rules 
 	}
 	return oValidatorFn_ServerName, nil
 }
-
 func (v *ValidateGetSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -415,13 +397,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServerChoice().(type) {
@@ -469,16 +449,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -486,7 +463,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServerChoiceServerName := v.ServerChoiceServerNameValidationRuleHandler
 	rulesServerChoiceServerName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -496,7 +472,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.server_choice_server_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["server_choice.server_name"] = vFnMap["server_choice.server_name"]
 
 	vrhRules := v.RulesValidationRuleHandler
@@ -510,7 +485,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rules"] = vFn
-
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -569,15 +543,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -585,7 +556,6 @@ func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
@@ -599,11 +569,9 @@ func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -619,7 +587,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -629,7 +596,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -647,7 +613,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -662,9 +627,7 @@ func (v *ValidateGlobalSpecType) ServerChoiceServerNameValidationRuleHandler(rul
 	}
 	return oValidatorFn_ServerName, nil
 }
-
 func (v *ValidateGlobalSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -724,13 +687,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServerChoice().(type) {
@@ -778,25 +739,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -804,7 +759,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServerChoiceServerName := v.ServerChoiceServerNameValidationRuleHandler
 	rulesServerChoiceServerName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -814,7 +768,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.server_choice_server_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["server_choice.server_name"] = vFnMap["server_choice.server_name"]
 
 	vrhRules := v.RulesValidationRuleHandler
@@ -828,10 +781,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rules"] = vFn
-
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -884,7 +835,6 @@ func (m *PolicyList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *PolicyList) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -910,7 +860,6 @@ func (m *PolicyList) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -938,7 +887,6 @@ func (m *PolicyList) GetPoliciesDBEntries(ctx context.Context, d db.Interface) (
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -947,7 +895,6 @@ type ValidatePolicyList struct {
 }
 
 func (v *ValidatePolicyList) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1007,22 +954,18 @@ func (v *ValidatePolicyList) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPolicyListValidator = func() *ValidatePolicyList {
 	v := &ValidatePolicyList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1093,7 +1036,6 @@ func (m *RateLimiterRule) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1101,7 +1043,6 @@ func (m *RateLimiterRule) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -1111,7 +1052,6 @@ func (m *RateLimiterRule) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateRateLimiterRule struct {
@@ -1119,7 +1059,6 @@ type ValidateRateLimiterRule struct {
 }
 
 func (v *ValidateRateLimiterRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -1128,19 +1067,15 @@ func (v *ValidateRateLimiterRule) MetadataValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRateLimiterRule) SpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for spec")
@@ -1149,11 +1084,9 @@ func (v *ValidateRateLimiterRule) SpecValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_service_policy_rule.RateLimiterRuleSpecValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1173,32 +1106,24 @@ func (v *ValidateRateLimiterRule) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRateLimiterRuleValidator = func() *ValidateRateLimiterRule {
 	v := &ValidateRateLimiterRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1279,7 +1204,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRulesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1287,7 +1211,6 @@ func (m *ReplaceSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
@@ -1301,7 +1224,6 @@ func (m *ReplaceSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1315,9 +1237,7 @@ func (v *ValidateReplaceSpecType) ServerChoiceServerNameValidationRuleHandler(ru
 	}
 	return oValidatorFn_ServerName, nil
 }
-
 func (v *ValidateReplaceSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1377,13 +1297,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServerChoice().(type) {
@@ -1431,16 +1349,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1448,7 +1363,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServerChoiceServerName := v.ServerChoiceServerNameValidationRuleHandler
 	rulesServerChoiceServerName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -1458,7 +1372,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.server_choice_server_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["server_choice.server_name"] = vFnMap["server_choice.server_name"]
 
 	vrhRules := v.RulesValidationRuleHandler
@@ -1472,7 +1385,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rules"] = vFn
-
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 

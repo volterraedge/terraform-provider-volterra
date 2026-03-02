@@ -43,7 +43,6 @@ func (c *UamKubeConfigAPIGrpcClient) doRPCCreateGlobalKubeConfig(ctx context.Con
 	rsp, err := c.grpcClient.CreateGlobalKubeConfig(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *UamKubeConfigAPIGrpcClient) doRPCListGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListGlobalKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -52,7 +51,6 @@ func (c *UamKubeConfigAPIGrpcClient) doRPCListGlobalKubeConfig(ctx context.Conte
 	rsp, err := c.grpcClient.ListGlobalKubeConfig(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *UamKubeConfigAPIGrpcClient) doRPCRevokeGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RevokeKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -93,13 +91,9 @@ func NewUamKubeConfigAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CreateGlobalKubeConfig"] = ccl.doRPCCreateGlobalKubeConfig
-
 	rpcFns["ListGlobalKubeConfig"] = ccl.doRPCListGlobalKubeConfig
-
 	rpcFns["RevokeGlobalKubeConfig"] = ccl.doRPCRevokeGlobalKubeConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -188,7 +182,6 @@ func (c *UamKubeConfigAPIRestClient) doRPCCreateGlobalKubeConfig(ctx context.Con
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,7 +189,6 @@ func (c *UamKubeConfigAPIRestClient) doRPCCreateGlobalKubeConfig(ctx context.Con
 	}
 	return pbRsp, nil
 }
-
 func (c *UamKubeConfigAPIRestClient) doRPCListGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -271,7 +263,6 @@ func (c *UamKubeConfigAPIRestClient) doRPCListGlobalKubeConfig(ctx context.Conte
 	pbRsp := &ListKubeConfigRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.ListKubeConfigRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -279,7 +270,6 @@ func (c *UamKubeConfigAPIRestClient) doRPCListGlobalKubeConfig(ctx context.Conte
 	}
 	return pbRsp, nil
 }
-
 func (c *UamKubeConfigAPIRestClient) doRPCRevokeGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -354,7 +344,6 @@ func (c *UamKubeConfigAPIRestClient) doRPCRevokeGlobalKubeConfig(ctx context.Con
 	pbRsp := &KubeConfigStatusRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.KubeConfigStatusRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -388,13 +377,9 @@ func NewUamKubeConfigAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CreateGlobalKubeConfig"] = ccl.doRPCCreateGlobalKubeConfig
-
 	rpcFns["ListGlobalKubeConfig"] = ccl.doRPCListGlobalKubeConfig
-
 	rpcFns["RevokeGlobalKubeConfig"] = ccl.doRPCRevokeGlobalKubeConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -483,7 +468,6 @@ func (s *uamKubeConfigAPISrv) CreateGlobalKubeConfig(ctx context.Context, in *Cr
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -532,7 +516,6 @@ func (s *uamKubeConfigAPISrv) ListGlobalKubeConfig(ctx context.Context, in *List
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.ListKubeConfigRsp", rsp)...)
 
 	return rsp, nil
@@ -581,7 +564,6 @@ func (s *uamKubeConfigAPISrv) RevokeGlobalKubeConfig(ctx context.Context, in *Re
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.KubeConfigStatusRsp", rsp)...)
 
 	return rsp, nil

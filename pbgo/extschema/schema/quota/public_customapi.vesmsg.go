@@ -63,6 +63,15 @@ type ValidateGetQuotaLimitsRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetQuotaLimitsRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetQuotaLimitsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetQuotaLimitsRequest)
 	if !ok {
@@ -76,22 +85,36 @@ func (v *ValidateGetQuotaLimitsRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetQuotaLimitsRequestValidator = func() *ValidateGetQuotaLimitsRequest {
 	v := &ValidateGetQuotaLimitsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetQuotaLimitsRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -154,9 +177,7 @@ func (v *ValidateGetQuotaLimitsResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_limits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_limits"))
 		for key, value := range m.GetApiLimits() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -164,11 +185,8 @@ func (v *ValidateGetQuotaLimitsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apis"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apis"))
 		for key, value := range m.GetApis() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -176,11 +194,8 @@ func (v *ValidateGetQuotaLimitsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["float_quota_usage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("float_quota_usage"))
 		for key, value := range m.GetFloatQuotaUsage() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -188,11 +203,8 @@ func (v *ValidateGetQuotaLimitsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["objects"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("objects"))
 		for key, value := range m.GetObjects() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -200,11 +212,8 @@ func (v *ValidateGetQuotaLimitsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["quota_usage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("quota_usage"))
 		for key, value := range m.GetQuotaUsage() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -212,11 +221,8 @@ func (v *ValidateGetQuotaLimitsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resources"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resources"))
 		for key, value := range m.GetResources() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -224,24 +230,17 @@ func (v *ValidateGetQuotaLimitsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetQuotaLimitsResponseValidator = func() *ValidateGetQuotaLimitsResponse {
 	v := &ValidateGetQuotaLimitsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["float_quota_usage"] = QuotaLimitsItemTypeValidator().Validate
-
 	v.FldValidators["api_limits"] = RateLimitTypeValidator().Validate
-
 	v.FldValidators["objects"] = QuotaLimitsItemTypeValidator().Validate
-
 	v.FldValidators["resources"] = QuotaLimitsItemTypeValidator().Validate
-
 	v.FldValidators["apis"] = QuotaLimitsItemTypeValidator().Validate
 
 	return v
@@ -292,6 +291,15 @@ type ValidateGetRequestType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetRequestType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetRequestType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetRequestType)
 	if !ok {
@@ -305,22 +313,36 @@ func (v *ValidateGetRequestType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetRequestTypeValidator = func() *ValidateGetRequestType {
 	v := &ValidateGetRequestType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetRequestType.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -383,9 +405,7 @@ func (v *ValidateGetResponseType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_limits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_limits"))
 		for key, value := range m.GetApiLimits() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -393,11 +413,8 @@ func (v *ValidateGetResponseType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apis"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apis"))
 		for key, value := range m.GetApis() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -405,11 +422,8 @@ func (v *ValidateGetResponseType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["float_quota_usage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("float_quota_usage"))
 		for key, value := range m.GetFloatQuotaUsage() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -417,11 +431,8 @@ func (v *ValidateGetResponseType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["objects"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("objects"))
 		for key, value := range m.GetObjects() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -429,11 +440,8 @@ func (v *ValidateGetResponseType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["quota_usage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("quota_usage"))
 		for key, value := range m.GetQuotaUsage() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -441,11 +449,8 @@ func (v *ValidateGetResponseType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resources"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resources"))
 		for key, value := range m.GetResources() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -453,24 +458,17 @@ func (v *ValidateGetResponseType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetResponseTypeValidator = func() *ValidateGetResponseType {
 	v := &ValidateGetResponseType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["float_quota_usage"] = QuotaUsageItemTypeValidator().Validate
-
 	v.FldValidators["api_limits"] = RateLimitTypeValidator().Validate
-
 	v.FldValidators["objects"] = QuotaUsageItemTypeValidator().Validate
-
 	v.FldValidators["resources"] = QuotaUsageItemTypeValidator().Validate
-
 	v.FldValidators["apis"] = QuotaUsageItemTypeValidator().Validate
 
 	return v

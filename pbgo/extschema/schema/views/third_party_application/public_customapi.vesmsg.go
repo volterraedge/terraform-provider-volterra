@@ -64,7 +64,6 @@ type ValidateGenerateTokenRequest struct {
 }
 
 func (v *ValidateGenerateTokenRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -72,9 +71,7 @@ func (v *ValidateGenerateTokenRequest) NamespaceValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGenerateTokenRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -96,32 +93,24 @@ func (v *ValidateGenerateTokenRequest) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGenerateTokenRequestValidator = func() *ValidateGenerateTokenRequest {
 	v := &ValidateGenerateTokenRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -213,16 +202,12 @@ func (v *ValidateGenerateTokenResponse) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("token"))
 		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -285,9 +270,7 @@ func (v *ValidateGetSecurityConfigReq) ThirdPartyChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSecurityConfigReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -309,14 +292,11 @@ func (v *ValidateGetSecurityConfigReq) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["third_party_choice"]; exists {
@@ -352,16 +332,13 @@ func (v *ValidateGetSecurityConfigReq) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSecurityConfigReqValidator = func() *ValidateGetSecurityConfigReq {
 	v := &ValidateGetSecurityConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -369,7 +346,6 @@ var DefaultGetSecurityConfigReqValidator = func() *ValidateGetSecurityConfigReq 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhThirdPartyChoice := v.ThirdPartyChoiceValidationRuleHandler
 	rulesThirdPartyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -391,7 +367,6 @@ var DefaultGetSecurityConfigReqValidator = func() *ValidateGetSecurityConfigReq 
 		panic(errMsg)
 	}
 	v.FldValidators["namespace"] = vFn
-
 	v.FldValidators["third_party_choice.third_party_applications_list"] = ThirdPartyApplicationListValidator().Validate
 
 	return v
@@ -443,7 +418,6 @@ type ValidateThirdPartyApplicationList struct {
 }
 
 func (v *ValidateThirdPartyApplicationList) ThirdPartyApplicationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -497,22 +471,18 @@ func (v *ValidateThirdPartyApplicationList) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["third_party_applications"]; exists {
 		vOpts := append(opts, db.WithValidateField("third_party_applications"))
 		if err := fv(ctx, m.GetThirdPartyApplications(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThirdPartyApplicationListValidator = func() *ValidateThirdPartyApplicationList {
 	v := &ValidateThirdPartyApplicationList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

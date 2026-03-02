@@ -67,7 +67,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *CreateSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *CreateSpecType) GetPoliciesDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -180,22 +176,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -265,7 +257,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *GetSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -290,7 +281,6 @@ func (m *GetSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -309,7 +299,6 @@ func (m *GetSpecType) GetPoliciesDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -318,7 +307,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -378,22 +366,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -463,7 +447,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -488,7 +471,6 @@ func (m *GlobalSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -507,7 +489,6 @@ func (m *GlobalSpecType) GetPoliciesDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -516,7 +497,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -576,22 +556,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -661,7 +637,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -686,7 +661,6 @@ func (m *ReplaceSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -705,7 +679,6 @@ func (m *ReplaceSpecType) GetPoliciesDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -714,7 +687,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -774,22 +746,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

@@ -76,43 +76,30 @@ func (v *ValidateCDNControllerStatus) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cfg_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cfg_version"))
 		if err := fv(ctx, m.GetCfgVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cp_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cp_version"))
 		if err := fv(ctx, m.GetCpVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -181,34 +168,24 @@ func (v *ValidateCDNSiteStatus) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -265,7 +242,6 @@ type ValidateGetServiceOperationReq struct {
 }
 
 func (v *ValidateGetServiceOperationReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -273,9 +249,7 @@ func (v *ValidateGetServiceOperationReq) NamespaceValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetServiceOperationReq) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -283,9 +257,7 @@ func (v *ValidateGetServiceOperationReq) NameValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetServiceOperationReq) ServiceOpIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_op_id")
@@ -307,41 +279,30 @@ func (v *ValidateGetServiceOperationReq) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_op_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_op_id"))
 		if err := fv(ctx, m.GetServiceOpId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetServiceOperationReqValidator = func() *ValidateGetServiceOperationReq {
 	v := &ValidateGetServiceOperationReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -444,18 +405,13 @@ func (v *ValidateGetServiceOperationRsp) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -463,16 +419,13 @@ func (v *ValidateGetServiceOperationRsp) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetServiceOperationRspValidator = func() *ValidateGetServiceOperationRsp {
 	v := &ValidateGetServiceOperationRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = ServiceOperationItemValidator().Validate
 
 	return v
@@ -538,6 +491,7 @@ func (v *ValidateLilacCDNCachePurgeRequest) PatternTypePatternValidationRuleHand
 	}
 	return oValidatorFn_Pattern, nil
 }
+
 func (v *ValidateLilacCDNCachePurgeRequest) PatternTypeHostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Hostname, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -545,7 +499,6 @@ func (v *ValidateLilacCDNCachePurgeRequest) PatternTypeHostnameValidationRuleHan
 	}
 	return oValidatorFn_Hostname, nil
 }
-
 func (v *ValidateLilacCDNCachePurgeRequest) PurgeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -553,9 +506,7 @@ func (v *ValidateLilacCDNCachePurgeRequest) PurgeTypeValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNCachePurgeRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -563,9 +514,7 @@ func (v *ValidateLilacCDNCachePurgeRequest) NamespaceValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNCachePurgeRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -587,23 +536,17 @@ func (v *ValidateLilacCDNCachePurgeRequest) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pattern_type"]; exists {
@@ -661,16 +604,12 @@ func (v *ValidateLilacCDNCachePurgeRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["purge_epoch_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("purge_epoch_timestamp"))
 		if err := fv(ctx, m.GetPurgeEpochTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["purge_type"]; exists {
@@ -706,16 +645,13 @@ func (v *ValidateLilacCDNCachePurgeRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLilacCDNCachePurgeRequestValidator = func() *ValidateLilacCDNCachePurgeRequest {
 	v := &ValidateLilacCDNCachePurgeRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -723,7 +659,6 @@ var DefaultLilacCDNCachePurgeRequestValidator = func() *ValidateLilacCDNCachePur
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPatternType := v.PatternTypeValidationRuleHandler
 	rulesPatternType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -734,12 +669,10 @@ var DefaultLilacCDNCachePurgeRequestValidator = func() *ValidateLilacCDNCachePur
 		panic(errMsg)
 	}
 	v.FldValidators["pattern_type"] = vFn
-
 	vrhPatternTypePattern := v.PatternTypePatternValidationRuleHandler
 	rulesPatternTypePattern := map[string]string{
-		"ves.io.schema.rules.string.max_len":    "256",
-		"ves.io.schema.rules.string.min_len":    "1",
-		"ves.io.schema.rules.string.pcre_regex": "true",
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
 	}
 	vFnMap["pattern_type.pattern"], err = vrhPatternTypePattern(rulesPatternTypePattern)
 	if err != nil {
@@ -755,10 +688,8 @@ var DefaultLilacCDNCachePurgeRequestValidator = func() *ValidateLilacCDNCachePur
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LilacCDNCachePurgeRequest.pattern_type_hostname: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["pattern_type.pattern"] = vFnMap["pattern_type.pattern"]
 	v.FldValidators["pattern_type.hostname"] = vFnMap["pattern_type.hostname"]
-
 	vrhPurgeType := v.PurgeTypeValidationRuleHandler
 	rulesPurgeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -853,16 +784,12 @@ func (v *ValidateLilacCDNCachePurgeResponse) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["purge_request_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("purge_request_id"))
 		if err := fv(ctx, m.GetPurgeRequestId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -925,9 +852,7 @@ func (v *ValidateListServiceOperationsReq) OptionsValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateListServiceOperationsReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -949,23 +874,17 @@ func (v *ValidateListServiceOperationsReq) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["options"]; exists {
@@ -1001,16 +920,13 @@ func (v *ValidateListServiceOperationsReq) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListServiceOperationsReqValidator = func() *ValidateListServiceOperationsReq {
 	v := &ValidateListServiceOperationsReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1018,7 +934,6 @@ var DefaultListServiceOperationsReqValidator = func() *ValidateListServiceOperat
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhOptions := v.OptionsValidationRuleHandler
 	rulesOptions := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1040,7 +955,6 @@ var DefaultListServiceOperationsReqValidator = func() *ValidateListServiceOperat
 		panic(errMsg)
 	}
 	v.FldValidators["namespace"] = vFn
-
 	v.FldValidators["options.time_range"] = ServiceOperationsTimeRangeValidator().Validate
 
 	return v
@@ -1104,18 +1018,13 @@ func (v *ValidateListServiceOperationsRsp) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1123,16 +1032,13 @@ func (v *ValidateListServiceOperationsRsp) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListServiceOperationsRspValidator = func() *ValidateListServiceOperationsRsp {
 	v := &ValidateListServiceOperationsRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = ServiceOperationsItemValidator().Validate
 
 	return v
@@ -1184,7 +1090,6 @@ type ValidatePurgeOperationItem struct {
 }
 
 func (v *ValidatePurgeOperationItem) PurgeTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for purge_time")
@@ -1192,9 +1097,7 @@ func (v *ValidatePurgeOperationItem) PurgeTimeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePurgeOperationItem) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -1202,9 +1105,7 @@ func (v *ValidatePurgeOperationItem) StartTimeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePurgeOperationItem) FinishTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for finish_time")
@@ -1226,86 +1127,60 @@ func (v *ValidatePurgeOperationItem) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bytes_not_purged"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bytes_not_purged"))
 		if err := fv(ctx, m.GetBytesNotPurged(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bytes_purged"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bytes_purged"))
 		if err := fv(ctx, m.GetBytesPurged(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["finish_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("finish_time"))
 		if err := fv(ctx, m.GetFinishTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hard_purge"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hard_purge"))
 		if err := fv(ctx, m.GetHardPurge(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["purge_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("purge_time"))
 		if err := fv(ctx, m.GetPurgeTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["regexp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("regexp"))
 		if err := fv(ctx, m.GetRegexp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPurgeOperationItemValidator = func() *ValidatePurgeOperationItem {
 	v := &ValidatePurgeOperationItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1421,34 +1296,25 @@ func (v *ValidateServiceOperationItem) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_op_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_op_id"))
 		if err := fv(ctx, m.GetServiceOpId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceOperationItemValidator = func() *ValidateServiceOperationItem {
 	v := &ValidateServiceOperationItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["op_status.purge"] = PurgeOperationItemValidator().Validate
 
 	return v
@@ -1500,7 +1366,6 @@ type ValidateServiceOperationsItem struct {
 }
 
 func (v *ValidateServiceOperationsItem) CreatedTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for created_time")
@@ -1508,9 +1373,7 @@ func (v *ValidateServiceOperationsItem) CreatedTimeValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServiceOperationsItem) ModifiedTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for modified_time")
@@ -1532,50 +1395,36 @@ func (v *ValidateServiceOperationsItem) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["created_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("created_time"))
 		if err := fv(ctx, m.GetCreatedTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["modified_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("modified_time"))
 		if err := fv(ctx, m.GetModifiedTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_op_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_op_id"))
 		if err := fv(ctx, m.GetServiceOpId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["svc_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("svc_version"))
 		if err := fv(ctx, m.GetSvcVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceOperationsItemValidator = func() *ValidateServiceOperationsItem {
 	v := &ValidateServiceOperationsItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1655,7 +1504,6 @@ type ValidateServiceOperationsTimeRange struct {
 }
 
 func (v *ValidateServiceOperationsTimeRange) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -1663,9 +1511,7 @@ func (v *ValidateServiceOperationsTimeRange) StartTimeValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServiceOperationsTimeRange) FinishTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for finish_time")
@@ -1687,32 +1533,24 @@ func (v *ValidateServiceOperationsTimeRange) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["finish_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("finish_time"))
 		if err := fv(ctx, m.GetFinishTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceOperationsTimeRangeValidator = func() *ValidateServiceOperationsTimeRange {
 	v := &ValidateServiceOperationsTimeRange{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

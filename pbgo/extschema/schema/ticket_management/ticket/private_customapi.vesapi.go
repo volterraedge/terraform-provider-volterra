@@ -42,7 +42,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCCreateTicket(ctx context.Context, yaml
 	rsp, err := c.grpcClient.CreateTicket(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCSearchTickets(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SearchTicketRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCSearchTickets(ctx context.Context, yam
 	rsp, err := c.grpcClient.SearchTickets(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCUnlinkTickets(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnlinkTicketsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CreateTicket"] = ccl.doRPCCreateTicket
-
 	rpcFns["SearchTickets"] = ccl.doRPCSearchTickets
-
 	rpcFns["UnlinkTickets"] = ccl.doRPCUnlinkTickets
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -184,7 +178,6 @@ func (c *CustomPrivateAPIRestClient) doRPCCreateTicket(ctx context.Context, call
 	pbRsp := &PrivateCreateTicketResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.ticket_management.ticket.PrivateCreateTicketResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -192,7 +185,6 @@ func (c *CustomPrivateAPIRestClient) doRPCCreateTicket(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCSearchTickets(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -269,7 +261,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSearchTickets(ctx context.Context, cal
 	pbRsp := &SearchTicketResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.ticket_management.ticket.SearchTicketResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -277,7 +268,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSearchTickets(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCUnlinkTickets(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -354,7 +344,6 @@ func (c *CustomPrivateAPIRestClient) doRPCUnlinkTickets(ctx context.Context, cal
 	pbRsp := &UnlinkTicketsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.ticket_management.ticket.UnlinkTicketsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -388,13 +377,9 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CreateTicket"] = ccl.doRPCCreateTicket
-
 	rpcFns["SearchTickets"] = ccl.doRPCSearchTickets
-
 	rpcFns["UnlinkTickets"] = ccl.doRPCUnlinkTickets
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -732,7 +717,7 @@ var CustomPrivateAPISwaggerJSON string = `{
         "/private/custom/namespaces/system/tickets/unlink": {
             "post": {
                 "summary": "Unlink Tickets",
-                "description": "Private API to unlink Tickets - called when \"unlinking\" Tickets in the UI\nThis RPC only deletes Ticket objects from within XC's local ticket tracking system object, \nit does NOT delete the tickets from the external ticket tracking system.",
+                "description": "Private API to unlink Tickets - called when \"unlinking\" Tickets in the UI\nThis RPC only deletes Ticket objects from within XC's local ticket tracking system object,\nit does NOT delete the tickets from the external ticket tracking system.",
                 "operationId": "ves.io.schema.ticket_management.ticket.CustomPrivateAPI.UnlinkTickets",
                 "responses": {
                     "200": {
@@ -1204,7 +1189,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -1378,7 +1363,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 },
                 "project": {
                     "type": "string",
-                    "description": " external ID of the project \n\nExample: - \"10001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " external ID of the project\n\nExample: - \"10001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "project",
                     "x-displayname": "Project",
                     "x-ves-example": "10001",
@@ -1726,7 +1711,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "x-displayname": "Issue Type"
                 },
                 "project": {
-                    "description": " external ID of the project ",
+                    "description": " external ID of the project",
                     "title": "project",
                     "$ref": "#/definitions/ticket_managementJiraProject",
                     "x-displayname": "Project"

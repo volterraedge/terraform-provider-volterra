@@ -74,9 +74,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetBgpStatus"] = ccl.doRPCGetBgpStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -164,7 +162,6 @@ func (c *CustomAPIRestClient) doRPCGetBgpStatus(ctx context.Context, callOpts *s
 	pbRsp := &GetStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.bgp.GetStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -198,9 +195,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetBgpStatus"] = ccl.doRPCGetBgpStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -281,7 +276,6 @@ func (s *customAPISrv) GetBgpStatus(ctx context.Context, in *GetStatusRequest) (
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.bgp.GetStatusResponse", rsp)...)
 
 	return rsp, nil
@@ -412,6 +406,43 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBfdPeerState": {
+            "type": "string",
+            "description": "Indicates the state of BFD session\n\nBFD session state is unknown\nBFD session is Down\nBFD session is Up\nBFD session is administratively down\nBFD session is initializing",
+            "title": "BFD Peer State",
+            "enum": [
+                "BFD_PEER_UNKNOWN",
+                "BFD_PEER_DOWN",
+                "BFD_PEER_UP",
+                "BFD_PEER_ADMIN_DOWN",
+                "BFD_PEER_INIT"
+            ],
+            "default": "BFD_PEER_UNKNOWN",
+            "x-displayname": "BFD Peer State",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BfdPeerState"
+        },
+        "bgpBfdPeerStatusType": {
+            "type": "object",
+            "description": "Status of BFD session for this BGP peer",
+            "title": "BFD Peer Status",
+            "x-displayname": "BFD Peer Status",
+            "x-ves-proto-message": "ves.io.schema.bgp.BfdPeerStatusType",
+            "properties": {
+                "state": {
+                    "description": " Current state of the BFD session",
+                    "title": "State",
+                    "$ref": "#/definitions/bgpBfdPeerState",
+                    "x-displayname": "State"
+                },
+                "state_change_timestamp": {
+                    "type": "string",
+                    "description": " Timestamp at which last BFD state change happened",
+                    "title": "State Change Timestamp",
+                    "format": "date-time",
+                    "x-displayname": "State Change Timestamp"
+                }
+            }
+        },
         "bgpBgpPeerProtocolState": {
             "type": "string",
             "description": "Status of BGP connection to this Peer\n\nConnection state is not known\nConnection state is Idle\nConnection state is Connecting\nConnection state is Active\nConnection state is Open Sent\nConnection state is Open Confirm\nConnection state is Established\nConnection state is Clearing\nConnection state is Deleted",
@@ -444,6 +475,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Advertised Prefix Count",
                     "format": "int64",
                     "x-displayname": "Advertised Prefix Count"
+                },
+                "bfd_status": {
+                    "description": " Status of BFD session for this peer. Only present when BFD is enabled for the peer.",
+                    "title": "BFD Status",
+                    "$ref": "#/definitions/bgpBfdPeerStatusType",
+                    "x-displayname": "BFD Status"
                 },
                 "connection_flap_count": {
                     "type": "integer",
@@ -697,10 +734,10 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",

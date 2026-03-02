@@ -68,7 +68,6 @@ func (m *ActiveEnhancedFirewallPoliciesType) GetDRefInfo() ([]db.DRefInfo, error
 	}
 
 	return m.GetEnhancedFirewallPoliciesDRefInfo()
-
 }
 
 func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -94,7 +93,6 @@ func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfo
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetEnhancedFirewallPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -122,7 +120,6 @@ func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDBEntrie
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -131,7 +128,6 @@ type ValidateActiveEnhancedFirewallPoliciesType struct {
 }
 
 func (v *ValidateActiveEnhancedFirewallPoliciesType) EnhancedFirewallPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -191,22 +187,18 @@ func (v *ValidateActiveEnhancedFirewallPoliciesType) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["enhanced_firewall_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("enhanced_firewall_policies"))
 		if err := fv(ctx, m.GetEnhancedFirewallPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultActiveEnhancedFirewallPoliciesTypeValidator = func() *ValidateActiveEnhancedFirewallPoliciesType {
 	v := &ValidateActiveEnhancedFirewallPoliciesType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -278,7 +270,6 @@ func (m *ActiveFastACLsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFastAclsDRefInfo()
-
 }
 
 func (m *ActiveFastACLsType) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
@@ -304,7 +295,6 @@ func (m *ActiveFastACLsType) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFastAclsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -332,7 +322,6 @@ func (m *ActiveFastACLsType) GetFastAclsDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -341,7 +330,6 @@ type ValidateActiveFastACLsType struct {
 }
 
 func (v *ValidateActiveFastACLsType) FastAclsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -401,22 +389,18 @@ func (v *ValidateActiveFastACLsType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fast_acls"]; exists {
 		vOpts := append(opts, db.WithValidateField("fast_acls"))
 		if err := fv(ctx, m.GetFastAcls(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultActiveFastACLsTypeValidator = func() *ValidateActiveFastACLsType {
 	v := &ValidateActiveFastACLsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -488,7 +472,6 @@ func (m *ActiveForwardProxyPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetForwardProxyPoliciesDRefInfo()
-
 }
 
 func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -514,7 +497,6 @@ func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfo() ([]db
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardProxyPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -542,7 +524,6 @@ func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDBEntries(ctx co
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -551,7 +532,6 @@ type ValidateActiveForwardProxyPoliciesType struct {
 }
 
 func (v *ValidateActiveForwardProxyPoliciesType) ForwardProxyPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -611,22 +591,18 @@ func (v *ValidateActiveForwardProxyPoliciesType) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["forward_proxy_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("forward_proxy_policies"))
 		if err := fv(ctx, m.GetForwardProxyPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultActiveForwardProxyPoliciesTypeValidator = func() *ValidateActiveForwardProxyPoliciesType {
 	v := &ValidateActiveForwardProxyPoliciesType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -698,7 +674,6 @@ func (m *ActiveNetworkPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkPoliciesDRefInfo()
-
 }
 
 func (m *ActiveNetworkPoliciesType) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -724,7 +699,6 @@ func (m *ActiveNetworkPoliciesType) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo,
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -752,7 +726,6 @@ func (m *ActiveNetworkPoliciesType) GetNetworkPoliciesDBEntries(ctx context.Cont
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -761,7 +734,6 @@ type ValidateActiveNetworkPoliciesType struct {
 }
 
 func (v *ValidateActiveNetworkPoliciesType) NetworkPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -821,22 +793,18 @@ func (v *ValidateActiveNetworkPoliciesType) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["network_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("network_policies"))
 		if err := fv(ctx, m.GetNetworkPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultActiveNetworkPoliciesTypeValidator = func() *ValidateActiveNetworkPoliciesType {
 	v := &ValidateActiveNetworkPoliciesType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -913,21 +881,17 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetForwardProxyPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetForwardProxyPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -937,11 +901,8 @@ func (m *CreateSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetFastAclChoice().(type) {
 	case *CreateSpecType_DisableFastAcl:
-
 		return nil, nil
-
 	case *CreateSpecType_ActiveFastAcls:
-
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
@@ -951,9 +912,7 @@ func (m *CreateSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_fast_acls." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_FastAclSet:
-
 		vref := m.GetFastAclSet()
 		if vref == nil {
 			return nil, nil
@@ -969,11 +928,9 @@ func (m *CreateSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -983,11 +940,8 @@ func (m *CreateSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetForwardProxyPolicyChoice().(type) {
 	case *CreateSpecType_DisableForwardProxyPolicy:
-
 		return nil, nil
-
 	case *CreateSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -997,9 +951,7 @@ func (m *CreateSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_ForwardProxyPolicySet:
-
 		vref := m.GetForwardProxyPolicySet()
 		if vref == nil {
 			return nil, nil
@@ -1015,11 +967,9 @@ func (m *CreateSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1029,11 +979,8 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *CreateSpecType_DisableNetworkPolicy:
-
 		return nil, nil
-
 	case *CreateSpecType_ActiveNetworkPolicies:
-
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -1043,9 +990,7 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "active_network_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_NetworkPolicySet:
-
 		vref := m.GetNetworkPolicySet()
 		if vref == nil {
 			return nil, nil
@@ -1061,9 +1006,7 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *CreateSpecType_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -1073,11 +1016,9 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -1095,7 +1036,6 @@ func (v *ValidateCreateSpecType) FastAclChoiceValidationRuleHandler(rules map[st
 func (v *ValidateCreateSpecType) FastAclChoiceFastAclSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ves_io_schema_views.ObjectRefTypeValidator().Validate, nil
 }
-
 func (v *ValidateCreateSpecType) ForwardProxyPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1107,7 +1047,6 @@ func (v *ValidateCreateSpecType) ForwardProxyPolicyChoiceValidationRuleHandler(r
 func (v *ValidateCreateSpecType) ForwardProxyPolicyChoiceForwardProxyPolicySetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ves_io_schema_views.ObjectRefTypeValidator().Validate, nil
 }
-
 func (v *ValidateCreateSpecType) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1178,7 +1117,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["forward_proxy_policy_choice"]; exists {
@@ -1225,7 +1163,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
@@ -1283,16 +1220,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1300,7 +1234,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFastAclChoice := v.FastAclChoiceValidationRuleHandler
 	rulesFastAclChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1311,7 +1244,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["fast_acl_choice"] = vFn
-
 	vrhFastAclChoiceFastAclSet := v.FastAclChoiceFastAclSetValidationRuleHandler
 	rulesFastAclChoiceFastAclSet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -1321,9 +1253,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.fast_acl_choice_fast_acl_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["fast_acl_choice.fast_acl_set"] = vFnMap["fast_acl_choice.fast_acl_set"]
-
 	vrhForwardProxyPolicyChoice := v.ForwardProxyPolicyChoiceValidationRuleHandler
 	rulesForwardProxyPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1334,7 +1264,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forward_proxy_policy_choice"] = vFn
-
 	vrhForwardProxyPolicyChoiceForwardProxyPolicySet := v.ForwardProxyPolicyChoiceForwardProxyPolicySetValidationRuleHandler
 	rulesForwardProxyPolicyChoiceForwardProxyPolicySet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -1344,9 +1273,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.forward_proxy_policy_choice_forward_proxy_policy_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["forward_proxy_policy_choice.forward_proxy_policy_set"] = vFnMap["forward_proxy_policy_choice.forward_proxy_policy_set"]
-
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1357,7 +1284,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_policy_choice"] = vFn
-
 	vrhNetworkPolicyChoiceNetworkPolicySet := v.NetworkPolicyChoiceNetworkPolicySetValidationRuleHandler
 	rulesNetworkPolicyChoiceNetworkPolicySet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -1367,13 +1293,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.network_policy_choice_network_policy_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["network_policy_choice.network_policy_set"] = vFnMap["network_policy_choice.network_policy_set"]
-
 	v.FldValidators["fast_acl_choice.active_fast_acls"] = ActiveFastACLsTypeValidator().Validate
-
 	v.FldValidators["forward_proxy_policy_choice.active_forward_proxy_policies"] = ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["network_policy_choice.active_network_policies"] = ActiveNetworkPoliciesTypeValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 
@@ -1432,21 +1354,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetForwardProxyPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetForwardProxyPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1456,11 +1374,8 @@ func (m *GetSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetFastAclChoice().(type) {
 	case *GetSpecType_DisableFastAcl:
-
 		return nil, nil
-
 	case *GetSpecType_ActiveFastAcls:
-
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
@@ -1470,9 +1385,7 @@ func (m *GetSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_fast_acls." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_FastAclSet:
-
 		vref := m.GetFastAclSet()
 		if vref == nil {
 			return nil, nil
@@ -1488,11 +1401,9 @@ func (m *GetSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1502,11 +1413,8 @@ func (m *GetSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetForwardProxyPolicyChoice().(type) {
 	case *GetSpecType_DisableForwardProxyPolicy:
-
 		return nil, nil
-
 	case *GetSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -1516,9 +1424,7 @@ func (m *GetSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_ForwardProxyPolicySet:
-
 		vref := m.GetForwardProxyPolicySet()
 		if vref == nil {
 			return nil, nil
@@ -1534,11 +1440,9 @@ func (m *GetSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, erro
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1548,11 +1452,8 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *GetSpecType_DisableNetworkPolicy:
-
 		return nil, nil
-
 	case *GetSpecType_ActiveNetworkPolicies:
-
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -1562,9 +1463,7 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_network_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_NetworkPolicySet:
-
 		vref := m.GetNetworkPolicySet()
 		if vref == nil {
 			return nil, nil
@@ -1580,9 +1479,7 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *GetSpecType_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -1592,11 +1489,9 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -1614,7 +1509,6 @@ func (v *ValidateGetSpecType) FastAclChoiceValidationRuleHandler(rules map[strin
 func (v *ValidateGetSpecType) FastAclChoiceFastAclSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ves_io_schema_views.ObjectRefTypeValidator().Validate, nil
 }
-
 func (v *ValidateGetSpecType) ForwardProxyPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1626,7 +1520,6 @@ func (v *ValidateGetSpecType) ForwardProxyPolicyChoiceValidationRuleHandler(rule
 func (v *ValidateGetSpecType) ForwardProxyPolicyChoiceForwardProxyPolicySetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ves_io_schema_views.ObjectRefTypeValidator().Validate, nil
 }
-
 func (v *ValidateGetSpecType) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1697,7 +1590,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["forward_proxy_policy_choice"]; exists {
@@ -1744,7 +1636,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
@@ -1802,16 +1693,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1819,7 +1707,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFastAclChoice := v.FastAclChoiceValidationRuleHandler
 	rulesFastAclChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1830,7 +1717,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["fast_acl_choice"] = vFn
-
 	vrhFastAclChoiceFastAclSet := v.FastAclChoiceFastAclSetValidationRuleHandler
 	rulesFastAclChoiceFastAclSet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -1840,9 +1726,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.fast_acl_choice_fast_acl_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["fast_acl_choice.fast_acl_set"] = vFnMap["fast_acl_choice.fast_acl_set"]
-
 	vrhForwardProxyPolicyChoice := v.ForwardProxyPolicyChoiceValidationRuleHandler
 	rulesForwardProxyPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1853,7 +1737,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forward_proxy_policy_choice"] = vFn
-
 	vrhForwardProxyPolicyChoiceForwardProxyPolicySet := v.ForwardProxyPolicyChoiceForwardProxyPolicySetValidationRuleHandler
 	rulesForwardProxyPolicyChoiceForwardProxyPolicySet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -1863,9 +1746,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.forward_proxy_policy_choice_forward_proxy_policy_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["forward_proxy_policy_choice.forward_proxy_policy_set"] = vFnMap["forward_proxy_policy_choice.forward_proxy_policy_set"]
-
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1876,7 +1757,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_policy_choice"] = vFn
-
 	vrhNetworkPolicyChoiceNetworkPolicySet := v.NetworkPolicyChoiceNetworkPolicySetValidationRuleHandler
 	rulesNetworkPolicyChoiceNetworkPolicySet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -1886,13 +1766,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.network_policy_choice_network_policy_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["network_policy_choice.network_policy_set"] = vFnMap["network_policy_choice.network_policy_set"]
-
 	v.FldValidators["fast_acl_choice.active_fast_acls"] = ActiveFastACLsTypeValidator().Validate
-
 	v.FldValidators["forward_proxy_policy_choice.active_forward_proxy_policies"] = ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["network_policy_choice.active_network_policies"] = ActiveNetworkPoliciesTypeValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 
@@ -1951,51 +1827,42 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFastAclConfigModeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFastAclConfigModeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFastAclSetDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFastAclSetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetForwardProxyPolicyConfigModeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetForwardProxyPolicyConfigModeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetForwardProxyPolicySetDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetForwardProxyPolicySetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyConfigModeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyConfigModeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicySetDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicySetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetEnhancedFirewallPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -2020,7 +1887,6 @@ func (m *GlobalSpecType) GetEnhancedFirewallPoliciesDRefInfo() ([]db.DRefInfo, e
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetEnhancedFirewallPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2039,7 +1905,6 @@ func (m *GlobalSpecType) GetEnhancedFirewallPoliciesDBEntries(ctx context.Contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2050,11 +1915,8 @@ func (m *GlobalSpecType) GetFastAclConfigModeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetFastAclConfigMode().(type) {
 	case *GlobalSpecType_DisableFastAcl:
-
 		return nil, nil
-
 	case *GlobalSpecType_ActiveFastAcls:
-
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
@@ -2064,15 +1926,11 @@ func (m *GlobalSpecType) GetFastAclConfigModeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_fast_acls." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_FastAclLegacyMode:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetFastAclSetDRefInfo() ([]db.DRefInfo, error) {
@@ -2097,7 +1955,6 @@ func (m *GlobalSpecType) GetFastAclSetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFastAclSetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2116,7 +1973,6 @@ func (m *GlobalSpecType) GetFastAclSetDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2127,11 +1983,8 @@ func (m *GlobalSpecType) GetForwardProxyPolicyConfigModeDRefInfo() ([]db.DRefInf
 	}
 	switch m.GetForwardProxyPolicyConfigMode().(type) {
 	case *GlobalSpecType_DisableForwardProxyPolicy:
-
 		return nil, nil
-
 	case *GlobalSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -2141,15 +1994,11 @@ func (m *GlobalSpecType) GetForwardProxyPolicyConfigModeDRefInfo() ([]db.DRefInf
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_ForwardProxyPolicyLegacyMode:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetForwardProxyPolicySetDRefInfo() ([]db.DRefInfo, error) {
@@ -2174,7 +2023,6 @@ func (m *GlobalSpecType) GetForwardProxyPolicySetDRefInfo() ([]db.DRefInfo, erro
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardProxyPolicySetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2193,7 +2041,6 @@ func (m *GlobalSpecType) GetForwardProxyPolicySetDBEntries(ctx context.Context, 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2204,11 +2051,8 @@ func (m *GlobalSpecType) GetNetworkPolicyConfigModeDRefInfo() ([]db.DRefInfo, er
 	}
 	switch m.GetNetworkPolicyConfigMode().(type) {
 	case *GlobalSpecType_DisableNetworkPolicy:
-
 		return nil, nil
-
 	case *GlobalSpecType_ActiveNetworkPolicies:
-
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -2218,13 +2062,9 @@ func (m *GlobalSpecType) GetNetworkPolicyConfigModeDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "active_network_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_NetworkPolicyLegacyMode:
-
 		return nil, nil
-
 	case *GlobalSpecType_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -2234,11 +2074,9 @@ func (m *GlobalSpecType) GetNetworkPolicyConfigModeDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetNetworkPolicySetDRefInfo() ([]db.DRefInfo, error) {
@@ -2263,7 +2101,6 @@ func (m *GlobalSpecType) GetNetworkPolicySetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkPolicySetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2282,12 +2119,10 @@ func (m *GlobalSpecType) GetNetworkPolicySetDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2303,7 +2138,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2313,7 +2147,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2331,7 +2164,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2340,7 +2172,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) NetworkPolicySetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2386,9 +2217,7 @@ func (v *ValidateGlobalSpecType) NetworkPolicySetValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ForwardProxyPolicySetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2434,9 +2263,7 @@ func (v *ValidateGlobalSpecType) ForwardProxyPolicySetValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) FastAclSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2482,9 +2309,7 @@ func (v *ValidateGlobalSpecType) FastAclSetValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EnhancedFirewallPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2544,13 +2369,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["enhanced_firewall_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("enhanced_firewall_policies"))
 		if err := fv(ctx, m.GetEnhancedFirewallPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetFastAclConfigMode().(type) {
@@ -2587,15 +2410,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fast_acl_set"]; exists {
 		vOpts := append(opts, db.WithValidateField("fast_acl_set"))
 		if err := fv(ctx, m.GetFastAclSet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetForwardProxyPolicyConfigMode().(type) {
@@ -2632,15 +2452,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["forward_proxy_policy_set"]; exists {
 		vOpts := append(opts, db.WithValidateField("forward_proxy_policy_set"))
 		if err := fv(ctx, m.GetForwardProxyPolicySet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNetworkPolicyConfigMode().(type) {
@@ -2688,33 +2505,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_policy_set"]; exists {
 		vOpts := append(opts, db.WithValidateField("network_policy_set"))
 		if err := fv(ctx, m.GetNetworkPolicySet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2766,14 +2575,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["enhanced_firewall_policies"] = vFn
-
 	v.FldValidators["fast_acl_config_mode.active_fast_acls"] = ActiveFastACLsTypeValidator().Validate
-
 	v.FldValidators["forward_proxy_policy_config_mode.active_forward_proxy_policies"] = ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["network_policy_config_mode.active_network_policies"] = ActiveNetworkPoliciesTypeValidator().Validate
 	v.FldValidators["network_policy_config_mode.active_enhanced_firewall_policies"] = ActiveEnhancedFirewallPoliciesTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2837,16 +2642,12 @@ func (v *ValidateNetworkFirewallStatus) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["installed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("installed"))
 		if err := fv(ctx, m.GetInstalled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2909,21 +2710,17 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetForwardProxyPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetForwardProxyPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2933,11 +2730,8 @@ func (m *ReplaceSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetFastAclChoice().(type) {
 	case *ReplaceSpecType_DisableFastAcl:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ActiveFastAcls:
-
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
@@ -2947,9 +2741,7 @@ func (m *ReplaceSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_fast_acls." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_FastAclSet:
-
 		vref := m.GetFastAclSet()
 		if vref == nil {
 			return nil, nil
@@ -2965,11 +2757,9 @@ func (m *ReplaceSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2979,11 +2769,8 @@ func (m *ReplaceSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 	switch m.GetForwardProxyPolicyChoice().(type) {
 	case *ReplaceSpecType_DisableForwardProxyPolicy:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -2993,9 +2780,7 @@ func (m *ReplaceSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_ForwardProxyPolicySet:
-
 		vref := m.GetForwardProxyPolicySet()
 		if vref == nil {
 			return nil, nil
@@ -3011,11 +2796,9 @@ func (m *ReplaceSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3025,11 +2808,8 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *ReplaceSpecType_DisableNetworkPolicy:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ActiveNetworkPolicies:
-
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -3039,9 +2819,7 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "active_network_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_NetworkPolicySet:
-
 		vref := m.GetNetworkPolicySet()
 		if vref == nil {
 			return nil, nil
@@ -3057,9 +2835,7 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *ReplaceSpecType_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -3069,11 +2845,9 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -3091,7 +2865,6 @@ func (v *ValidateReplaceSpecType) FastAclChoiceValidationRuleHandler(rules map[s
 func (v *ValidateReplaceSpecType) FastAclChoiceFastAclSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ves_io_schema_views.ObjectRefTypeValidator().Validate, nil
 }
-
 func (v *ValidateReplaceSpecType) ForwardProxyPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3103,7 +2876,6 @@ func (v *ValidateReplaceSpecType) ForwardProxyPolicyChoiceValidationRuleHandler(
 func (v *ValidateReplaceSpecType) ForwardProxyPolicyChoiceForwardProxyPolicySetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ves_io_schema_views.ObjectRefTypeValidator().Validate, nil
 }
-
 func (v *ValidateReplaceSpecType) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3174,7 +2946,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["forward_proxy_policy_choice"]; exists {
@@ -3221,7 +2992,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
@@ -3279,16 +3049,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3296,7 +3063,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFastAclChoice := v.FastAclChoiceValidationRuleHandler
 	rulesFastAclChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3307,7 +3073,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["fast_acl_choice"] = vFn
-
 	vrhFastAclChoiceFastAclSet := v.FastAclChoiceFastAclSetValidationRuleHandler
 	rulesFastAclChoiceFastAclSet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -3317,9 +3082,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.fast_acl_choice_fast_acl_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["fast_acl_choice.fast_acl_set"] = vFnMap["fast_acl_choice.fast_acl_set"]
-
 	vrhForwardProxyPolicyChoice := v.ForwardProxyPolicyChoiceValidationRuleHandler
 	rulesForwardProxyPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3330,7 +3093,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forward_proxy_policy_choice"] = vFn
-
 	vrhForwardProxyPolicyChoiceForwardProxyPolicySet := v.ForwardProxyPolicyChoiceForwardProxyPolicySetValidationRuleHandler
 	rulesForwardProxyPolicyChoiceForwardProxyPolicySet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -3340,9 +3102,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.forward_proxy_policy_choice_forward_proxy_policy_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["forward_proxy_policy_choice.forward_proxy_policy_set"] = vFnMap["forward_proxy_policy_choice.forward_proxy_policy_set"]
-
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3353,7 +3113,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_policy_choice"] = vFn
-
 	vrhNetworkPolicyChoiceNetworkPolicySet := v.NetworkPolicyChoiceNetworkPolicySetValidationRuleHandler
 	rulesNetworkPolicyChoiceNetworkPolicySet := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -3363,13 +3122,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.network_policy_choice_network_policy_set: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["network_policy_choice.network_policy_set"] = vFnMap["network_policy_choice.network_policy_set"]
-
 	v.FldValidators["fast_acl_choice.active_fast_acls"] = ActiveFastACLsTypeValidator().Validate
-
 	v.FldValidators["forward_proxy_policy_choice.active_forward_proxy_policies"] = ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["network_policy_choice.active_network_policies"] = ActiveNetworkPoliciesTypeValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 

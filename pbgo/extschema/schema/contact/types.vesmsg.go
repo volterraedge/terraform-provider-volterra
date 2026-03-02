@@ -76,97 +76,66 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address1"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address1"))
 		if err := fv(ctx, m.GetAddress1(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address2"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address2"))
 		if err := fv(ctx, m.GetAddress2(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["city"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("city"))
 		if err := fv(ctx, m.GetCity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["contact_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("contact_type"))
 		if err := fv(ctx, m.GetContactType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["country"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("country"))
 		if err := fv(ctx, m.GetCountry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["county"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("county"))
 		if err := fv(ctx, m.GetCounty(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["phone_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("phone_number"))
 		if err := fv(ctx, m.GetPhoneNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state_code"))
 		if err := fv(ctx, m.GetStateCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zip_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zip_code"))
 		if err := fv(ctx, m.GetZipCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -235,97 +204,66 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address1"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address1"))
 		if err := fv(ctx, m.GetAddress1(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address2"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address2"))
 		if err := fv(ctx, m.GetAddress2(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["city"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("city"))
 		if err := fv(ctx, m.GetCity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["contact_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("contact_type"))
 		if err := fv(ctx, m.GetContactType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["country"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("country"))
 		if err := fv(ctx, m.GetCountry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["county"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("county"))
 		if err := fv(ctx, m.GetCounty(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["phone_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("phone_number"))
 		if err := fv(ctx, m.GetPhoneNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state_code"))
 		if err := fv(ctx, m.GetStateCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zip_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zip_code"))
 		if err := fv(ctx, m.GetZipCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -394,97 +332,66 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address1"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address1"))
 		if err := fv(ctx, m.GetAddress1(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address2"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address2"))
 		if err := fv(ctx, m.GetAddress2(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["city"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("city"))
 		if err := fv(ctx, m.GetCity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["contact_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("contact_type"))
 		if err := fv(ctx, m.GetContactType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["country"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("country"))
 		if err := fv(ctx, m.GetCountry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["county"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("county"))
 		if err := fv(ctx, m.GetCounty(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["phone_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("phone_number"))
 		if err := fv(ctx, m.GetPhoneNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state_code"))
 		if err := fv(ctx, m.GetStateCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zip_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zip_code"))
 		if err := fv(ctx, m.GetZipCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -553,97 +460,66 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address1"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address1"))
 		if err := fv(ctx, m.GetAddress1(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address2"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address2"))
 		if err := fv(ctx, m.GetAddress2(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["city"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("city"))
 		if err := fv(ctx, m.GetCity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["contact_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("contact_type"))
 		if err := fv(ctx, m.GetContactType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["country"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("country"))
 		if err := fv(ctx, m.GetCountry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["county"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("county"))
 		if err := fv(ctx, m.GetCounty(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["phone_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("phone_number"))
 		if err := fv(ctx, m.GetPhoneNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state_code"))
 		if err := fv(ctx, m.GetStateCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zip_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zip_code"))
 		if err := fv(ctx, m.GetZipCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

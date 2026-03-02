@@ -76,7 +76,6 @@ func (v *ValidateGetUserTokenRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -100,7 +99,6 @@ func (m *GetUserTokenResponse) ToJSON() (string, error) {
 func (m *GetUserTokenResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *GetUserTokenResponse) String() string {
 	if m == nil {
 		return ""
@@ -172,34 +170,24 @@ func (v *ValidateGetUserTokenResponse) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["redirect_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("redirect_url"))
 		if err := fv(ctx, m.GetRedirectUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("token"))
 		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_id"))
 		if err := fv(ctx, m.GetUserId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

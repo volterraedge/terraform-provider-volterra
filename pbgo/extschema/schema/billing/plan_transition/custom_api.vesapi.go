@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCGetPlanTransition(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.GetPlanTransition(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCInitiatePlanTransition(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &InitiatePlanTransitionReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetPlanTransition"] = ccl.doRPCGetPlanTransition
-
 	rpcFns["InitiatePlanTransition"] = ccl.doRPCInitiatePlanTransition
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -173,7 +169,6 @@ func (c *CustomAPIRestClient) doRPCGetPlanTransition(ctx context.Context, callOp
 	pbRsp := &GetPlanTransitionRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.plan_transition.GetPlanTransitionRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -181,7 +176,6 @@ func (c *CustomAPIRestClient) doRPCGetPlanTransition(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCInitiatePlanTransition(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -258,7 +252,6 @@ func (c *CustomAPIRestClient) doRPCInitiatePlanTransition(ctx context.Context, c
 	pbRsp := &InitiatePlanTransitionRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.plan_transition.InitiatePlanTransitionRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -292,11 +285,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetPlanTransition"] = ccl.doRPCGetPlanTransition
-
 	rpcFns["InitiatePlanTransition"] = ccl.doRPCInitiatePlanTransition
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -381,7 +371,6 @@ func (s *customAPISrv) GetPlanTransition(ctx context.Context, in *GetPlanTransit
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.billing.plan_transition.GetPlanTransitionRsp", rsp)...)
 
 	return rsp, nil
@@ -430,7 +419,6 @@ func (s *customAPISrv) InitiatePlanTransition(ctx context.Context, in *InitiateP
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.billing.plan_transition.InitiatePlanTransitionRsp", rsp)...)
 
 	return rsp, nil
@@ -674,10 +662,13 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " This namespace is not used, all requests are stored under system namespace.\n\nExample: - \"system\"-",
+                    "description": " This namespace is not used, all requests are stored under system namespace.\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "new_plan": {
                     "type": "string",

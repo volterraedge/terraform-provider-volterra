@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nfv_service.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.nfv_service.Object"] = ObjectValidator()
 	vr["ves.io.schema.nfv_service.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.nfv_service.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.nfv_service.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.nfv_service.DeleteRequest"] = DeleteRequestValidator()
@@ -28,15 +26,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nfv_service.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.nfv_service.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.nfv_service.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.nfv_service.ForceDeleteNFVServiceRequest"] = ForceDeleteNFVServiceRequestValidator()
 	vr["ves.io.schema.nfv_service.ForceDeleteNFVServiceResponse"] = ForceDeleteNFVServiceResponseValidator()
-
 	vr["ves.io.schema.nfv_service.MetricData"] = MetricDataValidator()
 	vr["ves.io.schema.nfv_service.MetricTypeData"] = MetricTypeDataValidator()
 	vr["ves.io.schema.nfv_service.MetricsRequest"] = MetricsRequestValidator()
 	vr["ves.io.schema.nfv_service.MetricsResponse"] = MetricsResponseValidator()
-
 	vr["ves.io.schema.nfv_service.BigIqInstanceType"] = BigIqInstanceTypeValidator()
 	vr["ves.io.schema.nfv_service.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.nfv_service.EndpointRefType"] = EndpointRefTypeValidator()
@@ -69,7 +64,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nfv_service.ServiceNodesAWSType"] = ServiceNodesAWSTypeValidator()
 	vr["ves.io.schema.nfv_service.ServiceNodesBareMetalType"] = ServiceNodesBareMetalTypeValidator()
 	vr["ves.io.schema.nfv_service.SuggestedCommands"] = SuggestedCommandsValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -81,11 +75,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.nfv_service.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.nfv_service.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.nfv_service.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.nfv_service.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.nfv_service.CreateRequest.spec.service_provider_choice.f5_big_ip_aws_service.nodes.mgmt_subnet_choice.mgmt_subnet.choice.subnet_param.ipv6",
@@ -96,15 +88,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.nfv_service.API.Create"] = []string{
 		"spec.enabled_ssh_access.advertise_on_public",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.nfv_service.API.Create"] = []string{
 		"spec.enabled_ssh_access.advertise_on_public",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.nfv_service.API.Create"] = []string{
 		"spec.f5_big_ip_aws_service.admin_password.blindfold_secret_info_internal",
 		"spec.f5_big_ip_aws_service.admin_password.secret_encoding_type",
@@ -149,7 +138,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.palo_alto_fw_service.panorama_server.authorization_key.vault_secret_info",
 		"spec.palo_alto_fw_service.panorama_server.authorization_key.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.nfv_service.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
@@ -160,7 +148,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
@@ -171,15 +158,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.nfv_service.API.Create"] = "ves.io.schema.nfv_service.CreateRequest"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.nfv_service.API.Get"] = []string{
 		"create_form.spec.enabled_ssh_access.advertise_on_public",
 		"replace_form.spec.enabled_ssh_access.advertise_on_public",
 		"spec.enabled_ssh_access.advertise_on_public",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
@@ -198,11 +182,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.nfv_service.API.List"] = []string{
 		"items.#.get_spec.enabled_ssh_access.advertise_on_public",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
@@ -213,11 +195,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.nfv_service.API.Replace"] = []string{
 		"spec.enabled_ssh_access.advertise_on_public",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.nfv_service.API.Replace"] = []string{
 		"spec.https_management.advertise_on_public",
 		"spec.https_management.advertise_on_public_default_vip",
@@ -241,25 +221,20 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.https_management.do_not_advertise",
 		"spec.https_management.do_not_advertise_on_internet",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.nfv_service.API.Replace"] = "ves.io.schema.nfv_service.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.nfv_service.API"] = "config"
 	sm["ves.io.schema.nfv_service.CustomAPI"] = "config"
 	sm["ves.io.schema.nfv_service.CustomDataAPI"] = "data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -268,9 +243,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.nfv_service.Object"] = APISwaggerJSON
@@ -284,16 +257,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.nfv_service.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.nfv_service.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.nfv_service.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.nfv_service.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.nfv_service.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.nfv_service.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -304,16 +272,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.nfv_service.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.nfv_service.Object"] = CustomDataAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.nfv_service.CustomDataAPI"] = NewCustomDataAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.nfv_service.CustomDataAPI"] = NewCustomDataAPIRestClient
 		if isExternal {
@@ -324,22 +287,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.nfv_service.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

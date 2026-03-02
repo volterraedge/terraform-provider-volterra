@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.virtual_host.Object"] = ObjectValidator()
 	vr["ves.io.schema.virtual_host.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.virtual_host.APIEPActivityMetrics"] = APIEPActivityMetricsValidator()
 	vr["ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaReq"] = APIEPSourceOpenApiSchemaReqValidator()
 	vr["ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaRsp"] = APIEPSourceOpenApiSchemaRspValidator()
@@ -62,7 +60,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.VulnEvidenceSample"] = VulnEvidenceSampleValidator()
 	vr["ves.io.schema.virtual_host.VulnRisk"] = VulnRiskValidator()
 	vr["ves.io.schema.virtual_host.Vulnerability"] = VulnerabilityValidator()
-
 	vr["ves.io.schema.virtual_host.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.virtual_host.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.virtual_host.DeleteRequest"] = DeleteRequestValidator()
@@ -73,12 +70,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.virtual_host.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.virtual_host.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.virtual_host.AssignAPIDefinitionReq"] = AssignAPIDefinitionReqValidator()
 	vr["ves.io.schema.virtual_host.AssignAPIDefinitionResp"] = AssignAPIDefinitionRespValidator()
 	vr["ves.io.schema.virtual_host.GetDnsInfoRequest"] = GetDnsInfoRequestValidator()
 	vr["ves.io.schema.virtual_host.GetDnsInfoResponse"] = GetDnsInfoResponseValidator()
-
 	vr["ves.io.schema.virtual_host.ApiSpec"] = ApiSpecValidator()
 	vr["ves.io.schema.virtual_host.AuthenticationDetails"] = AuthenticationDetailsValidator()
 	vr["ves.io.schema.virtual_host.AutoCertInfoType"] = AutoCertInfoTypeValidator()
@@ -124,7 +119,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.VerStatusType"] = VerStatusTypeValidator()
 	vr["ves.io.schema.virtual_host.VirtualHostID"] = VirtualHostIDValidator()
 	vr["ves.io.schema.virtual_host.ZtnaProxyConfiguration"] = ZtnaProxyConfigurationValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -136,15 +130,12 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.virtual_host.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.virtual_host.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.virtual_host.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"] = []string{
 		"discovered_openapi_spec",
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.virtual_host.CreateRequest.spec.api_spec.open_api_validation_choice.enable_open_api_validation",
@@ -155,13 +146,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []string{
 		"spec.cdn_service.cache_ttl",
 		"spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []string{
 		"spec.api_spec",
 		"spec.authentication.cookie_params.auth_hmac.prim_key.blindfold_secret_info_internal",
@@ -172,6 +161,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.authentication.cookie_params.auth_hmac.sec_key.secret_encoding_type",
 		"spec.authentication.cookie_params.auth_hmac.sec_key.vault_secret_info",
 		"spec.authentication.cookie_params.auth_hmac.sec_key.wingman_secret_info",
+		"spec.bigip_application_profiles.#",
 		"spec.buffer_policy.max_request_time",
 		"spec.cookies_to_modify.#",
 		"spec.cors_policy.max_age",
@@ -210,7 +200,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.require_client_certificate",
 		"spec.ztna_proxy_configurations",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.cdn_service.cdn_origin_pool.origin_servers.#.public_ip.ipv6",
@@ -221,15 +210,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Create"] = "ves.io.schema.virtual_host.CreateRequest"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.Get"] = []string{
 		"spec.cdn_service.cache_ttl",
 		"spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.cdn_service.cdn_origin_pool.origin_servers.#.public_ip.ipv6",
@@ -240,13 +226,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1"},
 		},
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.List"] = []string{
 		"items.#.get_spec.cdn_service.cache_ttl",
 		"items.#.get_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.get_spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.cdn_service.cdn_origin_pool.origin_servers.#.public_ip.ipv6",
@@ -257,7 +241,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_host.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.virtual_host.ReplaceRequest.spec.api_spec.open_api_validation_choice.enable_open_api_validation",
@@ -268,7 +251,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_host.API.Replace"] = []string{
 		"spec.api_spec",
 		"spec.authentication.cookie_params.auth_hmac.prim_key.blindfold_secret_info_internal",
@@ -279,6 +261,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.authentication.cookie_params.auth_hmac.sec_key.secret_encoding_type",
 		"spec.authentication.cookie_params.auth_hmac.sec_key.vault_secret_info",
 		"spec.authentication.cookie_params.auth_hmac.sec_key.wingman_secret_info",
+		"spec.bigip_application_profiles.#",
 		"spec.buffer_policy.max_request_time",
 		"spec.cookies_to_modify.#",
 		"spec.cors_policy.max_age",
@@ -317,25 +300,20 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.require_client_certificate",
 		"spec.ztna_proxy_configurations",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Replace"] = "ves.io.schema.virtual_host.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.virtual_host.ApiepCustomAPI"] = "ml/data"
 	sm["ves.io.schema.virtual_host.API"] = "config"
 	sm["ves.io.schema.virtual_host.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -344,14 +322,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.virtual_host.Object"] = ApiepCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.virtual_host.ApiepCustomAPI"] = NewApiepCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.virtual_host.ApiepCustomAPI"] = NewApiepCustomAPIRestClient
 		if isExternal {
@@ -362,11 +336,8 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.virtual_host.ApiepCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewApiepCustomAPIServer(svc)
 		}
-
 	}()
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.virtual_host.Object"] = APISwaggerJSON
@@ -380,16 +351,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.virtual_host.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.virtual_host.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.virtual_host.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.virtual_host.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.virtual_host.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.virtual_host.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -400,22 +366,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.virtual_host.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

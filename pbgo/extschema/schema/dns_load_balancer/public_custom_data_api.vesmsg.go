@@ -78,16 +78,12 @@ func (v *ValidateDNSLBHealthStatusListRequest) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -156,9 +152,7 @@ func (v *ValidateDNSLBHealthStatusListResponse) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pools_status_summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pools_status_summary"))
 		for idx, item := range m.GetDnsLbPoolsStatusSummary() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -166,11 +160,8 @@ func (v *ValidateDNSLBHealthStatusListResponse) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_load_balancer_status_summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_load_balancer_status_summary"))
 		for idx, item := range m.GetDnsLoadBalancerStatusSummary() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -178,11 +169,8 @@ func (v *ValidateDNSLBHealthStatusListResponse) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -190,9 +178,7 @@ func (v *ValidateDNSLBHealthStatusListResponse) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -261,9 +247,7 @@ func (v *ValidateDNSLBHealthStatusListResponseItem) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pools_status_summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pools_status_summary"))
 		for idx, item := range m.GetDnsLbPoolsStatusSummary() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -271,20 +255,14 @@ func (v *ValidateDNSLBHealthStatusListResponseItem) Validate(ctx context.Context
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -292,9 +270,7 @@ func (v *ValidateDNSLBHealthStatusListResponseItem) Validate(ctx context.Context
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -363,25 +339,18 @@ func (v *ValidateDNSLBHealthStatusRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -450,9 +419,7 @@ func (v *ValidateDNSLBHealthStatusResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pool_items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pool_items"))
 		for idx, item := range m.GetDnsLbPoolItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -460,11 +427,8 @@ func (v *ValidateDNSLBHealthStatusResponse) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -472,9 +436,7 @@ func (v *ValidateDNSLBHealthStatusResponse) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -543,9 +505,7 @@ func (v *ValidateDNSLBPoolHealthStatusListResponseItem) Validate(ctx context.Con
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pool_members_status_summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pool_members_status_summary"))
 		for idx, item := range m.GetDnsLbPoolMembersStatusSummary() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -553,29 +513,20 @@ func (v *ValidateDNSLBPoolHealthStatusListResponseItem) Validate(ctx context.Con
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_check_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_type"))
 		if err := fv(ctx, m.GetHealthCheckType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -583,9 +534,7 @@ func (v *ValidateDNSLBPoolHealthStatusListResponseItem) Validate(ctx context.Con
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -654,34 +603,24 @@ func (v *ValidateDNSLBPoolHealthStatusRequest) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_name"))
 		if err := fv(ctx, m.GetDnsLbName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pool_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pool_name"))
 		if err := fv(ctx, m.GetDnsLbPoolName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -750,9 +689,7 @@ func (v *ValidateDNSLBPoolHealthStatusResponse) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pool_member_items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pool_member_items"))
 		for idx, item := range m.GetDnsLbPoolMemberItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -760,11 +697,8 @@ func (v *ValidateDNSLBPoolHealthStatusResponse) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -772,16 +706,13 @@ func (v *ValidateDNSLBPoolHealthStatusResponse) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSLBPoolHealthStatusResponseValidator = func() *ValidateDNSLBPoolHealthStatusResponse {
 	v := &ValidateDNSLBPoolHealthStatusResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["dns_lb_pool_member_items"] = DNSLBPoolMemberHealthStatusListResponseItemValidator().Validate
 
 	return v
@@ -845,36 +776,25 @@ func (v *ValidateDNSLBPoolMemberHealthStatusEvent) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_code"))
 		if err := fv(ctx, m.GetErrorCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_description"))
 		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pool_member_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pool_member_address"))
 		if err := fv(ctx, m.GetPoolMemberAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -882,9 +802,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusEvent) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -953,16 +871,12 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListRequest) Validate(ctx context.Co
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1031,9 +945,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponse) Validate(ctx context.C
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1041,16 +953,13 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponse) Validate(ctx context.C
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSLBPoolMemberHealthStatusListResponseValidator = func() *ValidateDNSLBPoolMemberHealthStatusListResponse {
 	v := &ValidateDNSLBPoolMemberHealthStatusListResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = DNSLBPoolMemberHealthStatusListResponseItemValidator().Validate
 
 	return v
@@ -1102,7 +1011,6 @@ type ValidateDNSLBPoolMemberHealthStatusListResponseItem struct {
 }
 
 func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) HttpStatusCodeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpStatusCode)
@@ -1116,9 +1024,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) HttpStatusCodeVali
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepUint32ItemRules(rules)
 	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1158,9 +1064,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) PortsValidationRul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) UnhealthyPortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepUint32ItemRules(rules)
 	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1214,80 +1118,55 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_name"))
 		if err := fv(ctx, m.GetDnsLbName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pool_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pool_name"))
 		if err := fv(ctx, m.GetDnsLbPoolName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_code"))
 		if err := fv(ctx, m.GetErrorCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_description"))
 		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_check_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_type"))
 		if err := fv(ctx, m.GetHealthCheckType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_status_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_status_code"))
 		if err := fv(ctx, m.GetHttpStatusCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("ports"))
 		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1295,24 +1174,19 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx conte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unhealthy_ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("unhealthy_ports"))
 		if err := fv(ctx, m.GetUnhealthyPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSLBPoolMemberHealthStatusListResponseItemValidator = func() *ValidateDNSLBPoolMemberHealthStatusListResponseItem {
 	v := &ValidateDNSLBPoolMemberHealthStatusListResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1404,7 +1278,6 @@ type ValidateDNSLBPoolMemberHealthStatusRequest struct {
 }
 
 func (v *ValidateDNSLBPoolMemberHealthStatusRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1412,9 +1285,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusRequest) NamespaceValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDNSLBPoolMemberHealthStatusRequest) DnsLbNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_lb_name")
@@ -1422,9 +1293,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusRequest) DnsLbNameValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDNSLBPoolMemberHealthStatusRequest) DnsLbPoolNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_lb_pool_name")
@@ -1432,9 +1301,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusRequest) DnsLbPoolNameValidationRule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDNSLBPoolMemberHealthStatusRequest) PoolMemberAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for pool_member_address")
@@ -1456,50 +1323,36 @@ func (v *ValidateDNSLBPoolMemberHealthStatusRequest) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_name"))
 		if err := fv(ctx, m.GetDnsLbName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pool_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pool_name"))
 		if err := fv(ctx, m.GetDnsLbPoolName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pool_member_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pool_member_address"))
 		if err := fv(ctx, m.GetPoolMemberAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSLBPoolMemberHealthStatusRequestValidator = func() *ValidateDNSLBPoolMemberHealthStatusRequest {
 	v := &ValidateDNSLBPoolMemberHealthStatusRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1613,9 +1466,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusResponse) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pool_member_events"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pool_member_events"))
 		for idx, item := range m.GetDnsLbPoolMemberEvents() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1623,9 +1474,7 @@ func (v *ValidateDNSLBPoolMemberHealthStatusResponse) Validate(ctx context.Conte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1694,9 +1543,7 @@ func (v *ValidateHealthStatusSummary) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		for idx, item := range m.GetCount() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1704,18 +1551,13 @@ func (v *ValidateHealthStatusSummary) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

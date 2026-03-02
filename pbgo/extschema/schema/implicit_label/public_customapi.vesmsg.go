@@ -66,7 +66,6 @@ type ValidateGetRequest struct {
 }
 
 func (v *ValidateGetRequest) KeyClassesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -126,49 +125,36 @@ func (v *ValidateGetRequest) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key_classes"]; exists {
 		vOpts := append(opts, db.WithValidateField("key_classes"))
 		if err := fv(ctx, m.GetKeyClasses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetRequestValidator = func() *ValidateGetRequest {
 	v := &ValidateGetRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -251,9 +237,7 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		for idx, item := range m.GetLabel() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -261,9 +245,7 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -332,34 +314,24 @@ func (v *ValidateLabelType) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

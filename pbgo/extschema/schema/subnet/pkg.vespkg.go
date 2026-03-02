@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.subnet.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.subnet.Object"] = ObjectValidator()
 	vr["ves.io.schema.subnet.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.subnet.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.subnet.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.subnet.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.subnet.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.subnet.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.subnet.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.subnet.ConnectToLayer2"] = ConnectToLayer2Validator()
 	vr["ves.io.schema.subnet.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.subnet.DHCPNetworkType"] = DHCPNetworkTypeValidator()
@@ -37,7 +34,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.subnet.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.subnet.SiteSubnetParametersType"] = SiteSubnetParametersTypeValidator()
 	vr["ves.io.schema.subnet.SubnetDHCPServerParametersType"] = SubnetDHCPServerParametersTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -49,37 +45,31 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.subnet.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.subnet.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.subnet.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.subnet.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.subnet.CreateRequest.spec.site_subnet_params.subnet_dhcp_server_params.dhcp_networks.network_prefix_choice.network_prefix_ipv6",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.subnet.API.Create"] = []string{
 		"spec.connect_to_layer2.layer2_intf_internal_ref.#",
 		"spec.connect_to_sli",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.subnet.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.site_subnet_params.#.subnet_dhcp_server_params.dhcp_networks.#.network_prefix_ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.subnet.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.site_subnet_params.#.subnet_dhcp_server_params.dhcp_networks.#.network_prefix_ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.subnet.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.site_subnet_params.#.subnet_dhcp_server_params.dhcp_networks.#.network_prefix_ipv6",
@@ -90,33 +80,27 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.subnet.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.site_subnet_params.#.subnet_dhcp_server_params.dhcp_networks.#.network_prefix_ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.subnet.API.Replace"] = []string{
 		"spec.connect_to_layer2.layer2_intf_internal_ref.#",
 		"spec.connect_to_sli",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.subnet.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -125,9 +109,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.subnet.Object"] = APISwaggerJSON
@@ -141,22 +123,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.subnet.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.subnet.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.subnet.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

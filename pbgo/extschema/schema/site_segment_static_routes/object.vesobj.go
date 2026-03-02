@@ -11,17 +11,16 @@ import (
 	"time"
 
 	google_protobuf "github.com/gogo/protobuf/types"
+	"github.com/google/uuid"
 	multierror "github.com/hashicorp/go-multierror"
 
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/db/sro"
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/store"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	"github.com/google/uuid"
-	"gopkg.volterra.us/stdlib/db/sro"
 )
 
 const (
@@ -157,9 +156,7 @@ type DBObject struct {
 
 // GetObjectIndexers returns the associated store.Indexers for Object
 func GetObjectIndexers() store.Indexers {
-
 	return nil
-
 }
 
 func (e *DBObject) GetDB() (*db.DB, error) {
@@ -366,9 +363,7 @@ func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (e *DBObject) ToStore() store.Entry {
@@ -416,7 +411,6 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -426,7 +420,6 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -434,7 +427,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -444,7 +436,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // Implement sro.SRO interface
@@ -533,6 +524,112 @@ func (o *DBObject) SetObjSpec(in sro.Spec) error {
 	}
 	o.Spec = m
 	return nil
+}
+
+func FindObjectStatus(ctx context.Context, d db.Interface, objUid string) ([]*StatusObject, error) {
+	statusDBEntries, err := d.GetEntryBackrefs(ctx, objUid, ObjectType, db.WithBackrefTypes([]string{"ves.io.schema.site_segment_static_routes.StatusObject"}))
+	if err != nil {
+		return nil, err
+	}
+	var merr *multierror.Error
+	var statusObjs []*StatusObject
+	for _, statusDBEntry := range statusDBEntries {
+		statusEntry := statusDBEntry.ToStore()
+		statusObj, ok := statusEntry.(*StatusObject)
+		if !ok {
+			merr = multierror.Append(merr, fmt.Errorf("Status Backref expected *StatusObject, got %T: %v", statusEntry, statusEntry))
+			continue
+		}
+		statusObjs = append(statusObjs, statusObj)
+	}
+	return statusObjs, errors.ErrOrNil(merr)
+}
+
+// SetObjectRef sets reference to a configuration object
+func (o *StatusObject) SetObjectRef(objKind, objUid string) error {
+	if len(o.GetObjectRefs()) != 0 {
+		return fmt.Errorf("StatusObject already has a reference to %v", o.GetObjectRefs())
+	}
+	o.ObjectRefs = append(o.ObjectRefs, &ves_io_schema.ObjectRefType{Kind: objKind, Uid: objUid})
+	return nil
+}
+
+func (o *StatusObject) GetStatusObjMetadata() sro.StatusObjectMetadata {
+	return o.GetMetadata()
+}
+
+func (o *StatusObject) SetStatusObjMetadata(md sro.StatusObjectMetadata) {
+	if o == nil {
+		return
+	}
+	if o.Metadata == nil {
+		o.Metadata = &ves_io_schema.StatusMetaType{}
+	}
+	o.Metadata = md.(*ves_io_schema.StatusMetaType)
+}
+
+// GenerateUuidv5() returns a deterministic UUIDv5 based on the unique semantic key of status object
+func (o *StatusObject) GenerateUuidV5() (string, error) {
+	statusObjectMetaData := o.GetStatusObjMetadata()
+	creatorClass := statusObjectMetaData.GetCreatorClass()
+	creatorId := statusObjectMetaData.GetCreatorId()
+	statusId := statusObjectMetaData.GetStatusId()
+	objectRefArray := o.GetObjectRefs()
+	if len(objectRefArray) == 0 {
+		return "", fmt.Errorf("StatusObject does not have a reference to config object.")
+	}
+	configObjectUuid := objectRefArray[0].Uid
+	configObjectKind := objectRefArray[0].Kind
+	keyFields := []string{creatorClass, creatorId, statusId, configObjectKind, configObjectUuid}
+	secKey := strings.Join(keyFields, "::")
+	newUuid := uuid.NewSHA1(uuid.NameSpaceOID, []byte(secKey)).String()
+	return newUuid, nil
+}
+
+// SetUuidV5 sets deterministic uuid for a status object.
+func (o *StatusObject) SetUuidV5() error {
+	if o == nil {
+		return fmt.Errorf("Status object is nil")
+	}
+	uuidV5, err := o.GenerateUuidV5()
+	if err != nil {
+		return err
+	}
+	o.GetMetadata().SetUid(uuidV5)
+	return nil
+}
+
+// GetVtrpId returns vtrpId of the status object.
+func (o *StatusObject) GetVtrpId() string {
+	return o.GetMetadata().GetVtrpId()
+}
+
+// SetVtrpId sets vtrpId of the status object.
+func (o *StatusObject) SetVtrpId(id string) {
+	o.GetMetadata().SetVtrpId(id)
+}
+
+// GetVtrpStale returns true if the object is stale in Mars
+func (o *StatusObject) GetVtrpStale() bool {
+	return o.GetMetadata().GetVtrpStale()
+}
+
+// SetVtrpStale sets vtrpStale on the status object
+func (o *StatusObject) SetVtrpStale(isStale bool) {
+	o.GetMetadata().SetVtrpStale(isStale)
+}
+func (o *StatusObject) GetStatusObjConditions() []sro.StatusObjectCondition {
+	if o == nil {
+		return nil
+	}
+	return ves_io_schema.ToStatusObjectConditions(o.GetConditions())
+}
+
+func (o *StatusObject) SetStatusObjConditions(socSet []sro.StatusObjectCondition) {
+	if o == nil {
+		return
+	}
+	o.Conditions = ves_io_schema.FromStatusObjectConditions(socSet)
 }
 
 func (o *DBObject) GetObjType() string {
@@ -774,47 +871,33 @@ func (v *ValidateObject) Validate(ctx context.Context, pm interface{}, opts ...d
 	if e == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, e.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, e.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectValidator = func() *ValidateObject {
 	v := &ValidateObject{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = SpecTypeValidator().Validate
-
 	return v
 }()
 
@@ -898,9 +981,7 @@ type DBStatusObject struct {
 
 // GetStatusObjectIndexers returns the associated store.Indexers for StatusObject
 func GetStatusObjectIndexers() store.Indexers {
-
 	return nil
-
 }
 
 func (e *DBStatusObject) GetDB() (*db.DB, error) {
@@ -912,7 +993,7 @@ func (e *DBStatusObject) GetDB() (*db.DB, error) {
 
 // Implement ves.io/stdlib/db.Entry interface
 func (e *DBStatusObject) Key(opts ...db.KeyOpt) (string, error) {
-	return "", fmt.Errorf("No defined key field")
+	return e.GetMetadata().GetUid(), nil
 }
 
 func (e *DBStatusObject) Type() string {
@@ -937,7 +1018,6 @@ func (e *DBStatusObject) UnmarshalBytes(b []byte) error {
 }
 
 func (e *DBStatusObject) Sample(r *rand.Rand) (db.Entry, error) {
-
 	o := &StatusObject{}
 
 	return &DBStatusObject{o, e.tbl}, nil
@@ -1024,6 +1104,42 @@ func (e *DBStatusObject) SetTable(tbl db.Table) {
 	e.tbl = tbl
 }
 
+func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
+	if e == nil {
+		return nil, nil
+	}
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
+	}
+
+	drInfos, err := e.GetObjectRefsDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetObjectRefsDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+		dri.DRField = "ves.io.schema.site_segment_static_routes.StatusObject." + dri.DRField
+		dri.RefrType = e.Type()
+		dri.RefrUID = refrUID
+
+		// convert any ref_to schema annotation specified by kind value to type value
+		if !strings.HasPrefix(dri.RefdType, "ves.io") {
+			d, err := e.GetDB()
+			if err != nil {
+				return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+			}
+			refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+			if err != nil {
+				return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+			}
+			dri.RefdType = refdType
+		}
+	}
+	return drInfos, nil
+}
+
 func (e *DBStatusObject) ToStore() store.Entry {
 	return e.StatusObject
 }
@@ -1064,6 +1180,64 @@ func NewEntryStatusObject(opts ...db.OpOption) db.Entry {
 	return nil
 }
 
+func (e *DBStatusObject) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
+	}
+	refs := e.GetObjectRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("StatusObject.object_refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site_segment_static_routes.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			RefrType:   e.Type(),
+			RefrUID:    refrUID,
+			DRField:    "object_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+
+// GetObjectRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (e *DBStatusObject) GetObjectRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "Get<fld>DBEntries, error in key")
+	}
+	refdType, err := d.TypeForEntryKind(e.Type(), refrUID, "site_segment_static_routes.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: site_segment_static_routes")
+	}
+	tblName := db.DefaultTableName(refdType)
+	if intTbl, err := d.GetTable(ctx, db.InternalTableName(refdType)); err == nil {
+		tblName = intTbl.Name()
+	}
+	for _, ref := range e.GetObjectRefs() {
+		e, exist, err := d.FindEntry(ctx, tblName, ref.Uid)
+		if err != nil {
+			return nil, errors.Wrap(err, fmt.Sprintf("Tbl: %s, Key: %s", tblName, ref.Uid))
+		}
+		if !exist {
+			continue
+		}
+		entries = append(entries, e)
+	}
+	return entries, nil
+}
+
 type ValidateStatusObject struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1079,14 +1253,37 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 	if e == nil {
 		return nil
 	}
-
+	if fv, exists := v.FldValidators["conditions"]; exists {
+		vOpts := append(opts, db.WithValidateField("conditions"))
+		for idx, item := range e.GetConditions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["metadata"]; exists {
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["object_refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("object_refs"))
+		for idx, item := range e.GetObjectRefs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
-
+	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
 	return v
 }()
 

@@ -45,7 +45,6 @@ func (c *CustomAPIGrpcClient) doRPCAssignDomainOwner(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.AssignDomainOwner(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDeleteImage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -54,7 +53,6 @@ func (c *CustomAPIGrpcClient) doRPCDeleteImage(ctx context.Context, yamlReq stri
 	rsp, err := c.grpcClient.DeleteImage(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDeleteTenant(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DeleteTenantRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -63,7 +61,6 @@ func (c *CustomAPIGrpcClient) doRPCDeleteTenant(ctx context.Context, yamlReq str
 	rsp, err := c.grpcClient.DeleteTenant(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDisableTenantLevelOTP(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -72,7 +69,6 @@ func (c *CustomAPIGrpcClient) doRPCDisableTenantLevelOTP(ctx context.Context, ya
 	rsp, err := c.grpcClient.DisableTenantLevelOTP(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCEnableTenantLevelOTP(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -81,7 +77,6 @@ func (c *CustomAPIGrpcClient) doRPCEnableTenantLevelOTP(ctx context.Context, yam
 	rsp, err := c.grpcClient.EnableTenantLevelOTP(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetFavIcon(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -90,7 +85,6 @@ func (c *CustomAPIGrpcClient) doRPCGetFavIcon(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.GetFavIcon(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetIDMSettings(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -99,7 +93,6 @@ func (c *CustomAPIGrpcClient) doRPCGetIDMSettings(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.GetIDMSettings(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetImage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -108,7 +101,6 @@ func (c *CustomAPIGrpcClient) doRPCGetImage(ctx context.Context, yamlReq string,
 	rsp, err := c.grpcClient.GetImage(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetLastLoginMap(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -117,7 +109,6 @@ func (c *CustomAPIGrpcClient) doRPCGetLastLoginMap(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.GetLastLoginMap(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetLoginEvents(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetLoginEventsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -126,7 +117,6 @@ func (c *CustomAPIGrpcClient) doRPCGetLoginEvents(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.GetLoginEvents(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetLoginEventsInTimeFrameRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -135,7 +125,6 @@ func (c *CustomAPIGrpcClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context
 	rsp, err := c.grpcClient.GetLoginEventsInTimeFrame(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetLogo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -144,7 +133,6 @@ func (c *CustomAPIGrpcClient) doRPCGetLogo(ctx context.Context, yamlReq string, 
 	rsp, err := c.grpcClient.GetLogo(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetPasswordPolicy(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetPasswordPolicyRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -153,7 +141,6 @@ func (c *CustomAPIGrpcClient) doRPCGetPasswordPolicy(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.GetPasswordPolicy(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetSupportInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -162,7 +149,6 @@ func (c *CustomAPIGrpcClient) doRPCGetSupportInfo(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.GetSupportInfo(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetTenantEscalationDoc(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -171,7 +157,6 @@ func (c *CustomAPIGrpcClient) doRPCGetTenantEscalationDoc(ctx context.Context, y
 	rsp, err := c.grpcClient.GetTenantEscalationDoc(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetTenantSettings(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -180,7 +165,6 @@ func (c *CustomAPIGrpcClient) doRPCGetTenantSettings(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.GetTenantSettings(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListInactiveUsers(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -189,7 +173,6 @@ func (c *CustomAPIGrpcClient) doRPCListInactiveUsers(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.ListInactiveUsers(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCLookupCname(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LookupCnameRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -198,7 +181,6 @@ func (c *CustomAPIGrpcClient) doRPCLookupCname(ctx context.Context, yamlReq stri
 	rsp, err := c.grpcClient.LookupCname(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUnassignDomainOwner(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnassignDomainOwnerRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -207,7 +189,6 @@ func (c *CustomAPIGrpcClient) doRPCUnassignDomainOwner(ctx context.Context, yaml
 	rsp, err := c.grpcClient.UnassignDomainOwner(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateIDMSettings(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_tenant_configuration.GlobalSpecType{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -216,7 +197,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateIDMSettings(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.UpdateIDMSettings(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateImage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateImageRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -225,7 +205,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateImage(ctx context.Context, yamlReq stri
 	rsp, err := c.grpcClient.UpdateImage(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateTenantSettings(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateTenantSettingsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -266,51 +245,28 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AssignDomainOwner"] = ccl.doRPCAssignDomainOwner
-
 	rpcFns["DeleteImage"] = ccl.doRPCDeleteImage
-
 	rpcFns["DeleteTenant"] = ccl.doRPCDeleteTenant
-
 	rpcFns["DisableTenantLevelOTP"] = ccl.doRPCDisableTenantLevelOTP
-
 	rpcFns["EnableTenantLevelOTP"] = ccl.doRPCEnableTenantLevelOTP
-
 	rpcFns["GetFavIcon"] = ccl.doRPCGetFavIcon
-
 	rpcFns["GetIDMSettings"] = ccl.doRPCGetIDMSettings
-
 	rpcFns["GetImage"] = ccl.doRPCGetImage
-
 	rpcFns["GetLastLoginMap"] = ccl.doRPCGetLastLoginMap
-
 	rpcFns["GetLoginEvents"] = ccl.doRPCGetLoginEvents
-
 	rpcFns["GetLoginEventsInTimeFrame"] = ccl.doRPCGetLoginEventsInTimeFrame
-
 	rpcFns["GetLogo"] = ccl.doRPCGetLogo
-
 	rpcFns["GetPasswordPolicy"] = ccl.doRPCGetPasswordPolicy
-
 	rpcFns["GetSupportInfo"] = ccl.doRPCGetSupportInfo
-
 	rpcFns["GetTenantEscalationDoc"] = ccl.doRPCGetTenantEscalationDoc
-
 	rpcFns["GetTenantSettings"] = ccl.doRPCGetTenantSettings
-
 	rpcFns["ListInactiveUsers"] = ccl.doRPCListInactiveUsers
-
 	rpcFns["LookupCname"] = ccl.doRPCLookupCname
-
 	rpcFns["UnassignDomainOwner"] = ccl.doRPCUnassignDomainOwner
-
 	rpcFns["UpdateIDMSettings"] = ccl.doRPCUpdateIDMSettings
-
 	rpcFns["UpdateImage"] = ccl.doRPCUpdateImage
-
 	rpcFns["UpdateTenantSettings"] = ccl.doRPCUpdateTenantSettings
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -396,7 +352,6 @@ func (c *CustomAPIRestClient) doRPCAssignDomainOwner(ctx context.Context, callOp
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -404,7 +359,6 @@ func (c *CustomAPIRestClient) doRPCAssignDomainOwner(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDeleteImage(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -478,7 +432,6 @@ func (c *CustomAPIRestClient) doRPCDeleteImage(ctx context.Context, callOpts *se
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -486,7 +439,6 @@ func (c *CustomAPIRestClient) doRPCDeleteImage(ctx context.Context, callOpts *se
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDeleteTenant(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -564,7 +516,6 @@ func (c *CustomAPIRestClient) doRPCDeleteTenant(ctx context.Context, callOpts *s
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -572,7 +523,6 @@ func (c *CustomAPIRestClient) doRPCDeleteTenant(ctx context.Context, callOpts *s
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDisableTenantLevelOTP(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -646,7 +596,6 @@ func (c *CustomAPIRestClient) doRPCDisableTenantLevelOTP(ctx context.Context, ca
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -654,7 +603,6 @@ func (c *CustomAPIRestClient) doRPCDisableTenantLevelOTP(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCEnableTenantLevelOTP(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -728,7 +676,6 @@ func (c *CustomAPIRestClient) doRPCEnableTenantLevelOTP(ctx context.Context, cal
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -736,7 +683,6 @@ func (c *CustomAPIRestClient) doRPCEnableTenantLevelOTP(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetFavIcon(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -812,7 +758,6 @@ func (c *CustomAPIRestClient) doRPCGetFavIcon(ctx context.Context, callOpts *ser
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -820,7 +765,6 @@ func (c *CustomAPIRestClient) doRPCGetFavIcon(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetIDMSettings(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -894,7 +838,6 @@ func (c *CustomAPIRestClient) doRPCGetIDMSettings(ctx context.Context, callOpts 
 	pbRsp := &ves_io_schema_views_tenant_configuration.GlobalSpecType{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.tenant_configuration.GlobalSpecType", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -902,7 +845,6 @@ func (c *CustomAPIRestClient) doRPCGetIDMSettings(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetImage(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -978,7 +920,6 @@ func (c *CustomAPIRestClient) doRPCGetImage(ctx context.Context, callOpts *serve
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -986,7 +927,6 @@ func (c *CustomAPIRestClient) doRPCGetImage(ctx context.Context, callOpts *serve
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetLastLoginMap(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1060,7 +1000,6 @@ func (c *CustomAPIRestClient) doRPCGetLastLoginMap(ctx context.Context, callOpts
 	pbRsp := &LastLoginMap{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.LastLoginMap", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1068,7 +1007,6 @@ func (c *CustomAPIRestClient) doRPCGetLastLoginMap(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetLoginEvents(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1144,7 +1082,6 @@ func (c *CustomAPIRestClient) doRPCGetLoginEvents(ctx context.Context, callOpts 
 	pbRsp := &LoginEventsMap{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.LoginEventsMap", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1152,7 +1089,6 @@ func (c *CustomAPIRestClient) doRPCGetLoginEvents(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1230,7 +1166,6 @@ func (c *CustomAPIRestClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context
 	pbRsp := &LoginEventsMap{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.LoginEventsMap", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1238,7 +1173,6 @@ func (c *CustomAPIRestClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetLogo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1314,7 +1248,6 @@ func (c *CustomAPIRestClient) doRPCGetLogo(ctx context.Context, callOpts *server
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1322,7 +1255,6 @@ func (c *CustomAPIRestClient) doRPCGetLogo(ctx context.Context, callOpts *server
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetPasswordPolicy(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1397,7 +1329,6 @@ func (c *CustomAPIRestClient) doRPCGetPasswordPolicy(ctx context.Context, callOp
 	pbRsp := &PasswordPolicyPublicAccess{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.PasswordPolicyPublicAccess", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1405,7 +1336,6 @@ func (c *CustomAPIRestClient) doRPCGetPasswordPolicy(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetSupportInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1479,7 +1409,6 @@ func (c *CustomAPIRestClient) doRPCGetSupportInfo(ctx context.Context, callOpts 
 	pbRsp := &SupportInfo{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.SupportInfo", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1487,7 +1416,6 @@ func (c *CustomAPIRestClient) doRPCGetSupportInfo(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetTenantEscalationDoc(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1563,7 +1491,6 @@ func (c *CustomAPIRestClient) doRPCGetTenantEscalationDoc(ctx context.Context, c
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1571,7 +1498,6 @@ func (c *CustomAPIRestClient) doRPCGetTenantEscalationDoc(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetTenantSettings(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1645,7 +1571,6 @@ func (c *CustomAPIRestClient) doRPCGetTenantSettings(ctx context.Context, callOp
 	pbRsp := &TenantSettingsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.TenantSettingsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1653,7 +1578,6 @@ func (c *CustomAPIRestClient) doRPCGetTenantSettings(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListInactiveUsers(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1727,7 +1651,6 @@ func (c *CustomAPIRestClient) doRPCListInactiveUsers(ctx context.Context, callOp
 	pbRsp := &UserList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.UserList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1735,7 +1658,6 @@ func (c *CustomAPIRestClient) doRPCListInactiveUsers(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCLookupCname(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1811,7 +1733,6 @@ func (c *CustomAPIRestClient) doRPCLookupCname(ctx context.Context, callOpts *se
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1819,7 +1740,6 @@ func (c *CustomAPIRestClient) doRPCLookupCname(ctx context.Context, callOpts *se
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUnassignDomainOwner(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1894,7 +1814,6 @@ func (c *CustomAPIRestClient) doRPCUnassignDomainOwner(ctx context.Context, call
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1902,7 +1821,6 @@ func (c *CustomAPIRestClient) doRPCUnassignDomainOwner(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateIDMSettings(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1943,9 +1861,11 @@ func (c *CustomAPIRestClient) doRPCUpdateIDMSettings(ctx context.Context, callOp
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("basic_configuration", fmt.Sprintf("%v", req.BasicConfiguration))
+		q.Add("brute_force_detection", fmt.Sprintf("%v", req.BruteForceDetection))
 		q.Add("brute_force_detection_settings", fmt.Sprintf("%v", req.BruteForceDetectionSettings))
 		q.Add("password_policy", fmt.Sprintf("%v", req.PasswordPolicy))
-		q.Add("session_management", fmt.Sprintf("%v", req.SessionManagement))
+		q.Add("tenant_details", fmt.Sprintf("%v", req.TenantDetails))
+		q.Add("user_session_expiration", fmt.Sprintf("%v", req.UserSessionExpiration))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -1980,7 +1900,6 @@ func (c *CustomAPIRestClient) doRPCUpdateIDMSettings(ctx context.Context, callOp
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1988,7 +1907,6 @@ func (c *CustomAPIRestClient) doRPCUpdateIDMSettings(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateImage(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2064,7 +1982,6 @@ func (c *CustomAPIRestClient) doRPCUpdateImage(ctx context.Context, callOpts *se
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2072,7 +1989,6 @@ func (c *CustomAPIRestClient) doRPCUpdateImage(ctx context.Context, callOpts *se
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateTenantSettings(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2148,7 +2064,6 @@ func (c *CustomAPIRestClient) doRPCUpdateTenantSettings(ctx context.Context, cal
 	pbRsp := &UpdateTenantSettingsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.UpdateTenantSettingsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2182,51 +2097,28 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AssignDomainOwner"] = ccl.doRPCAssignDomainOwner
-
 	rpcFns["DeleteImage"] = ccl.doRPCDeleteImage
-
 	rpcFns["DeleteTenant"] = ccl.doRPCDeleteTenant
-
 	rpcFns["DisableTenantLevelOTP"] = ccl.doRPCDisableTenantLevelOTP
-
 	rpcFns["EnableTenantLevelOTP"] = ccl.doRPCEnableTenantLevelOTP
-
 	rpcFns["GetFavIcon"] = ccl.doRPCGetFavIcon
-
 	rpcFns["GetIDMSettings"] = ccl.doRPCGetIDMSettings
-
 	rpcFns["GetImage"] = ccl.doRPCGetImage
-
 	rpcFns["GetLastLoginMap"] = ccl.doRPCGetLastLoginMap
-
 	rpcFns["GetLoginEvents"] = ccl.doRPCGetLoginEvents
-
 	rpcFns["GetLoginEventsInTimeFrame"] = ccl.doRPCGetLoginEventsInTimeFrame
-
 	rpcFns["GetLogo"] = ccl.doRPCGetLogo
-
 	rpcFns["GetPasswordPolicy"] = ccl.doRPCGetPasswordPolicy
-
 	rpcFns["GetSupportInfo"] = ccl.doRPCGetSupportInfo
-
 	rpcFns["GetTenantEscalationDoc"] = ccl.doRPCGetTenantEscalationDoc
-
 	rpcFns["GetTenantSettings"] = ccl.doRPCGetTenantSettings
-
 	rpcFns["ListInactiveUsers"] = ccl.doRPCListInactiveUsers
-
 	rpcFns["LookupCname"] = ccl.doRPCLookupCname
-
 	rpcFns["UnassignDomainOwner"] = ccl.doRPCUnassignDomainOwner
-
 	rpcFns["UpdateIDMSettings"] = ccl.doRPCUpdateIDMSettings
-
 	rpcFns["UpdateImage"] = ccl.doRPCUpdateImage
-
 	rpcFns["UpdateTenantSettings"] = ccl.doRPCUpdateTenantSettings
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -2391,7 +2283,6 @@ func (s *customAPISrv) AssignDomainOwner(ctx context.Context, in *AssignDomainOw
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
 
 	return rsp, nil
@@ -2440,7 +2331,6 @@ func (s *customAPISrv) DeleteImage(ctx context.Context, in *Empty) (*Empty, erro
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
 
 	return rsp, nil
@@ -2489,7 +2379,6 @@ func (s *customAPISrv) DeleteTenant(ctx context.Context, in *DeleteTenantRequest
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2538,7 +2427,6 @@ func (s *customAPISrv) DisableTenantLevelOTP(ctx context.Context, in *Empty) (*E
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
 
 	return rsp, nil
@@ -2587,7 +2475,6 @@ func (s *customAPISrv) EnableTenantLevelOTP(ctx context.Context, in *Empty) (*Em
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
 
 	return rsp, nil
@@ -2636,7 +2523,6 @@ func (s *customAPISrv) GetFavIcon(ctx context.Context, in *Empty) (*google_api.H
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -2685,7 +2571,6 @@ func (s *customAPISrv) GetIDMSettings(ctx context.Context, in *Empty) (*ves_io_s
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.tenant_configuration.GlobalSpecType", rsp)...)
 
 	return rsp, nil
@@ -2734,7 +2619,6 @@ func (s *customAPISrv) GetImage(ctx context.Context, in *Empty) (*google_api.Htt
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -2783,7 +2667,6 @@ func (s *customAPISrv) GetLastLoginMap(ctx context.Context, in *Empty) (*LastLog
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.LastLoginMap", rsp)...)
 
 	return rsp, nil
@@ -2832,7 +2715,6 @@ func (s *customAPISrv) GetLoginEvents(ctx context.Context, in *GetLoginEventsReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.LoginEventsMap", rsp)...)
 
 	return rsp, nil
@@ -2881,7 +2763,6 @@ func (s *customAPISrv) GetLoginEventsInTimeFrame(ctx context.Context, in *GetLog
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.LoginEventsMap", rsp)...)
 
 	return rsp, nil
@@ -2930,7 +2811,6 @@ func (s *customAPISrv) GetLogo(ctx context.Context, in *Empty) (*google_api.Http
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -2979,7 +2859,6 @@ func (s *customAPISrv) GetPasswordPolicy(ctx context.Context, in *GetPasswordPol
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.PasswordPolicyPublicAccess", rsp)...)
 
 	return rsp, nil
@@ -3028,7 +2907,6 @@ func (s *customAPISrv) GetSupportInfo(ctx context.Context, in *Empty) (*SupportI
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.SupportInfo", rsp)...)
 
 	return rsp, nil
@@ -3077,7 +2955,6 @@ func (s *customAPISrv) GetTenantEscalationDoc(ctx context.Context, in *Empty) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -3126,7 +3003,6 @@ func (s *customAPISrv) GetTenantSettings(ctx context.Context, in *Empty) (*Tenan
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.TenantSettingsResponse", rsp)...)
 
 	return rsp, nil
@@ -3175,7 +3051,6 @@ func (s *customAPISrv) ListInactiveUsers(ctx context.Context, in *Empty) (*UserL
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.UserList", rsp)...)
 
 	return rsp, nil
@@ -3224,7 +3099,6 @@ func (s *customAPISrv) LookupCname(ctx context.Context, in *LookupCnameRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -3273,7 +3147,6 @@ func (s *customAPISrv) UnassignDomainOwner(ctx context.Context, in *UnassignDoma
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
 
 	return rsp, nil
@@ -3322,7 +3195,6 @@ func (s *customAPISrv) UpdateIDMSettings(ctx context.Context, in *ves_io_schema_
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
 
 	return rsp, nil
@@ -3371,7 +3243,6 @@ func (s *customAPISrv) UpdateImage(ctx context.Context, in *UpdateImageRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
 
 	return rsp, nil
@@ -3420,7 +3291,6 @@ func (s *customAPISrv) UpdateTenantSettings(ctx context.Context, in *UpdateTenan
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.UpdateTenantSettingsResponse", rsp)...)
 
 	return rsp, nil
@@ -6075,12 +5945,14 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "display_name": {
                     "type": "string",
-                    "description": " Tenant display name in the login screen\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^[^\u003c\u003e\u0026\\\"]+$\n",
+                    "description": " Changes the tenant name displayed during login without affecting your company’s domain name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^[^\u003c\u003e\u0026\\\"]+$\n",
                     "title": "Display Name",
                     "maxLength": 255,
                     "x-displayname": "Display Name",
                     "x-ves-example": "value",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "255",
                         "ves.io.schema.rules.string.pattern": "^[^\u003c\u003e\u0026\\\"]+$"
                     }
@@ -6103,6 +5975,94 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "30"
                     }
+                }
+            }
+        },
+        "tenant_configurationCookieHoursDuration": {
+            "type": "object",
+            "description": "Represents the cookie duration in hours.",
+            "title": "Cookie Hours Duration",
+            "x-displayname": "Cookie Hours Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.CookieHoursDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 720\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "720"
+                    }
+                }
+            }
+        },
+        "tenant_configurationCookieMinutesDuration": {
+            "type": "object",
+            "description": "Represents the cookie duration in minutes.",
+            "title": "Cookie Minutes Duration",
+            "x-displayname": "Cookie Minutes Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.CookieMinutesDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 5\n  ves.io.schema.rules.uint32.lte: 43200\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "5",
+                        "ves.io.schema.rules.uint32.lte": "43200"
+                    }
+                }
+            }
+        },
+        "tenant_configurationDurationByUnitCookie": {
+            "type": "object",
+            "description": "Represents the cookie expiration duration",
+            "title": "Duration By Unit Cookie",
+            "x-displayname": "Duration By Unit Cookie",
+            "x-ves-oneof-field-unit_of_time": "[\"hours\",\"minutes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.DurationByUnitCookie",
+            "properties": {
+                "hours": {
+                    "description": "Exclusive with [minutes]\n",
+                    "title": "Hours",
+                    "$ref": "#/definitions/tenant_configurationCookieHoursDuration",
+                    "x-displayname": "Hours"
+                },
+                "minutes": {
+                    "description": "Exclusive with [hours]\n",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/tenant_configurationCookieMinutesDuration",
+                    "x-displayname": "Minutes"
+                }
+            }
+        },
+        "tenant_configurationDurationByUnitSession": {
+            "type": "object",
+            "description": "Represents the session expiration duration.",
+            "title": "Duration By Unit Session",
+            "x-displayname": "Duration By Unit Session",
+            "x-ves-oneof-field-unit_of_time": "[\"hours\",\"minutes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.DurationByUnitSession",
+            "properties": {
+                "hours": {
+                    "description": "Exclusive with [minutes]\n",
+                    "title": "Hours",
+                    "$ref": "#/definitions/tenant_configurationSessionHoursDuration",
+                    "x-displayname": "Hours"
+                },
+                "minutes": {
+                    "description": "Exclusive with [hours]\n",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/tenant_configurationSessionMinutesDuration",
+                    "x-displayname": "Minutes"
                 }
             }
         },
@@ -6197,38 +6157,75 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "tenant_configurationSessionManagement": {
+        "tenant_configurationSessionHoursDuration": {
             "type": "object",
-            "title": "SessionManagement",
-            "x-displayname": "SessionManagement",
-            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionManagement",
+            "description": "Represents the session duration in hours.",
+            "title": "Session Hours Duration",
+            "x-displayname": "Session Hours Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionHoursDuration",
             "properties": {
-                "cookie_expiry": {
+                "duration": {
                     "type": "integer",
-                    "description": " Session cookie expiry in seconds.\n The user will be logged-out after these many seconds, if inactive on the console.\n\nExample: - \"900\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 86400\n",
-                    "title": "Session Cookie Expiry",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 720\n",
+                    "title": "Duration",
                     "format": "int64",
-                    "x-displayname": "Session Cookie Expiry",
-                    "x-ves-example": "900",
+                    "x-displayname": "Duration",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "60",
-                        "ves.io.schema.rules.uint32.lte": "86400"
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "720"
+                    }
+                }
+            }
+        },
+        "tenant_configurationSessionMinutesDuration": {
+            "type": "object",
+            "description": "Represents the session duration in minutes.",
+            "title": "Session Minutes Duration",
+            "x-displayname": "Session Minutes Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionMinutesDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 5\n  ves.io.schema.rules.uint32.lte: 43200\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "5",
+                        "ves.io.schema.rules.uint32.lte": "43200"
+                    }
+                }
+            }
+        },
+        "tenant_configurationUserSessionExpiration": {
+            "type": "object",
+            "description": "Defines all session-related expiration for user sessions within a tenant's environment.\nRelationship between session_expiry and cookie_expiry:\n- session_expiry defines the 'absolute maximum duration' of a session and enforces re-authentication after this time.\n- cookie_expiry defines the 'inactivity timeout', which resets on user activity and only logs out users after idle periods.\nTogether, these ensure the user is logged out when either the session reaches its maximum age or the user is inactive for too long.",
+            "title": "User Session Expiration",
+            "x-displayname": "User Session Expiration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.UserSessionExpiration",
+            "properties": {
+                "absolute_timeout": {
+                    "description": " Maximum length of user session.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Absolute Timeout",
+                    "$ref": "#/definitions/tenant_configurationDurationByUnitSession",
+                    "x-displayname": "Absolute Timeout",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "session_expiry": {
-                    "type": "integer",
-                    "description": " Maximum session expiry in seconds.\n The user will be prompted for a re-login after this interval in spite of being active on the console\n\nExample: - \"86400\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 86400\n",
-                    "title": "Maximum Session Expiry",
-                    "format": "int64",
-                    "x-displayname": "Maximum Session Expiry",
-                    "x-ves-example": "86400",
+                "idle_timeout": {
+                    "description": " Maximum user inactivity allowed in a session.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Idle Timeout",
+                    "$ref": "#/definitions/tenant_configurationDurationByUnitCookie",
+                    "x-displayname": "Idle Timeout",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "60",
-                        "ves.io.schema.rules.uint32.lte": "86400"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -6246,6 +6243,12 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/tenant_configurationBasicConfiguration",
                     "x-displayname": "Basic Configuration"
                 },
+                "brute_force_detection": {
+                    "description": " This system uses algorithms to temporarily lock accounts for a specified time period after detecting an attack.\n The lockout duration increases with longer persisting attack attempts.",
+                    "title": "Brute Force Detection",
+                    "$ref": "#/definitions/tenant_configurationBruteForceDetectionSettings",
+                    "x-displayname": "Brute Force Detection"
+                },
                 "brute_force_detection_settings": {
                     "description": " Our brute force detection system uses temporary lockout algorithm.\n Temporary lockout will disable a user’s account for a time period after an attack is detected;\n the time period for which the account is disabled increases the longer the attack continues.\n You can adjust some parameters of the brute force detection system.",
                     "title": "Brute Force Detection Settings",
@@ -6253,16 +6256,22 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Brute Force Detection Settings"
                 },
                 "password_policy": {
-                    "description": " Password policy allows you to configure your own password policy within tenant.\n Each user within tenant will have to comply with the configured policy when they set or update the password.",
+                    "description": " Define custom password requirements for your tenant.\n All tenant users must adhere to the policy when creating or updating their passwords.",
                     "title": "Password Policy",
                     "$ref": "#/definitions/tenant_configurationPasswordPolicy",
                     "x-displayname": "Password Policy"
                 },
-                "session_management": {
-                    "description": " Session management allows you to configure the session attributes such as cookie expiry, etc.",
-                    "title": "Session Managemement",
-                    "$ref": "#/definitions/tenant_configurationSessionManagement",
-                    "x-displayname": "Session Managemement"
+                "tenant_details": {
+                    "description": " Tenant details defines the metadata of the tenant.",
+                    "title": "Tenant Details",
+                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
+                    "x-displayname": "Tenant Details"
+                },
+                "user_session_expiration": {
+                    "description": " Changes take approximately 5 minutes to apply. Log in again to see the updates reflected. For more details,\n refer to [Tech Docs](https://docs.cloud.f5.com/docs-v2/administration/how-tos/user-mgmt/general-management).",
+                    "title": "User Session Expiration",
+                    "$ref": "#/definitions/tenant_configurationUserSessionExpiration",
+                    "x-displayname": "User Session Expiration"
                 }
             }
         }

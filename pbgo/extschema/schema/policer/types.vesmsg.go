@@ -64,7 +64,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) CommittedInformationRateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for committed_information_rate")
@@ -72,9 +71,7 @@ func (v *ValidateCreateSpecType) CommittedInformationRateValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) BurstSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for burst_size")
@@ -96,50 +93,36 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["burst_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("burst_size"))
 		if err := fv(ctx, m.GetBurstSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["committed_information_rate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("committed_information_rate"))
 		if err := fv(ctx, m.GetCommittedInformationRate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policer_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policer_mode"))
 		if err := fv(ctx, m.GetPolicerMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policer_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policer_type"))
 		if err := fv(ctx, m.GetPolicerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -222,7 +205,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) CommittedInformationRateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for committed_information_rate")
@@ -230,9 +212,7 @@ func (v *ValidateGetSpecType) CommittedInformationRateValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) BurstSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for burst_size")
@@ -254,50 +234,36 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["burst_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("burst_size"))
 		if err := fv(ctx, m.GetBurstSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["committed_information_rate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("committed_information_rate"))
 		if err := fv(ctx, m.GetCommittedInformationRate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policer_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policer_mode"))
 		if err := fv(ctx, m.GetPolicerMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policer_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policer_type"))
 		if err := fv(ctx, m.GetPolicerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -380,7 +346,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) CommittedInformationRateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for committed_information_rate")
@@ -388,9 +353,7 @@ func (v *ValidateGlobalSpecType) CommittedInformationRateValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BurstSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for burst_size")
@@ -412,50 +375,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["burst_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("burst_size"))
 		if err := fv(ctx, m.GetBurstSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["committed_information_rate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("committed_information_rate"))
 		if err := fv(ctx, m.GetCommittedInformationRate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policer_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policer_mode"))
 		if err := fv(ctx, m.GetPolicerMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policer_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policer_type"))
 		if err := fv(ctx, m.GetPolicerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -538,7 +487,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) CommittedInformationRateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for committed_information_rate")
@@ -546,9 +494,7 @@ func (v *ValidateReplaceSpecType) CommittedInformationRateValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) BurstSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for burst_size")
@@ -570,50 +516,36 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["burst_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("burst_size"))
 		if err := fv(ctx, m.GetBurstSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["committed_information_rate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("committed_information_rate"))
 		if err := fv(ctx, m.GetCommittedInformationRate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policer_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policer_mode"))
 		if err := fv(ctx, m.GetPolicerMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policer_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policer_type"))
 		if err := fv(ctx, m.GetPolicerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -696,7 +628,6 @@ type ValidateSingleRateTwoColorType struct {
 }
 
 func (v *ValidateSingleRateTwoColorType) CommittedInformationRateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for committed_information_rate")
@@ -704,9 +635,7 @@ func (v *ValidateSingleRateTwoColorType) CommittedInformationRateValidationRuleH
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSingleRateTwoColorType) BurstSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for burst_size")
@@ -728,32 +657,24 @@ func (v *ValidateSingleRateTwoColorType) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["burst_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("burst_size"))
 		if err := fv(ctx, m.GetBurstSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["committed_information_rate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("committed_information_rate"))
 		if err := fv(ctx, m.GetCommittedInformationRate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSingleRateTwoColorTypeValidator = func() *ValidateSingleRateTwoColorType {
 	v := &ValidateSingleRateTwoColorType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

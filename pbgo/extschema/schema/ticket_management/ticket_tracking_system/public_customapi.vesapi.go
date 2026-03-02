@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCJiraProjectsIssueTypes(ctx context.Context, y
 	rsp, err := c.grpcClient.JiraProjectsIssueTypes(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCValidateTicketTrackingSystem(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ValidateTicketTrackingSystemRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["JiraProjectsIssueTypes"] = ccl.doRPCJiraProjectsIssueTypes
-
 	rpcFns["ValidateTicketTrackingSystem"] = ccl.doRPCValidateTicketTrackingSystem
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -173,7 +169,6 @@ func (c *CustomAPIRestClient) doRPCJiraProjectsIssueTypes(ctx context.Context, c
 	pbRsp := &JiraProjectsIssueTypesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.ticket_management.ticket_tracking_system.JiraProjectsIssueTypesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -181,7 +176,6 @@ func (c *CustomAPIRestClient) doRPCJiraProjectsIssueTypes(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCValidateTicketTrackingSystem(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -256,7 +250,6 @@ func (c *CustomAPIRestClient) doRPCValidateTicketTrackingSystem(ctx context.Cont
 	pbRsp := &ValidateTicketTrackingSystemResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.ticket_management.ticket_tracking_system.ValidateTicketTrackingSystemResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -290,11 +283,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["JiraProjectsIssueTypes"] = ccl.doRPCJiraProjectsIssueTypes
-
 	rpcFns["ValidateTicketTrackingSystem"] = ccl.doRPCValidateTicketTrackingSystem
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -379,7 +369,6 @@ func (s *customAPISrv) JiraProjectsIssueTypes(ctx context.Context, in *JiraProje
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.ticket_management.ticket_tracking_system.JiraProjectsIssueTypesResponse", rsp)...)
 
 	return rsp, nil
@@ -428,7 +417,6 @@ func (s *customAPISrv) ValidateTicketTrackingSystem(ctx context.Context, in *Val
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.ticket_management.ticket_tracking_system.ValidateTicketTrackingSystemResponse", rsp)...)
 
 	return rsp, nil
@@ -919,7 +907,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "api_token": {
                     "type": "string",
-                    "description": " API Token (password) specified by the customer in plaintext to be used for Basic Auth.\n This value is purely used for user input and is not persisted in the database.\n It will be converted to a blindfolded and encrypted form before saving.\n For editing/replacing the existing JIRA configuration, and to use the already stored value of \n the encrypted API Token, this field should be sent as an empty string.\n Since this field is confidential, the Get/List public APIs will return this value as an empty string.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "description": " API Token (password) specified by the customer in plaintext to be used for Basic Auth.\n This value is purely used for user input and is not persisted in the database.\n It will be converted to a blindfolded and encrypted form before saving.\n For editing/replacing the existing JIRA configuration, and to use the already stored value of\n the encrypted API Token, this field should be sent as an empty string.\n Since this field is confidential, the Get/List public APIs will return this value as an empty string.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n",
                     "title": "api_token",
                     "maxLength": 512,
                     "x-displayname": "API Token",

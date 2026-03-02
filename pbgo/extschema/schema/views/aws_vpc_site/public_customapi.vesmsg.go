@@ -79,52 +79,37 @@ func (v *ValidateSetCloudSiteInfoRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_vpc_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_vpc_info"))
 		if err := fv(ctx, m.GetAwsVpcInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_info"))
 		if err := fv(ctx, m.GetDirectConnectInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetCloudSiteInfoRequestValidator = func() *ValidateSetCloudSiteInfoRequest {
 	v := &ValidateSetCloudSiteInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aws_vpc_info"] = AWSVPCSiteInfoTypeValidator().Validate
-
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
@@ -188,7 +173,6 @@ func (v *ValidateSetCloudSiteInfoResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -245,7 +229,6 @@ type ValidateSetVIPInfoRequest struct {
 }
 
 func (v *ValidateSetVIPInfoRequest) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -305,40 +288,30 @@ func (v *ValidateSetVIPInfoRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
 		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
 		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetVIPInfoRequestValidator = func() *ValidateSetVIPInfoRequest {
 	v := &ValidateSetVIPInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -419,7 +392,6 @@ func (v *ValidateSetVIPInfoResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -488,27 +460,19 @@ func (v *ValidateSetVPCK8SHostnamesRequest) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_names"))
 		for idx, item := range m.GetNodeNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -516,9 +480,7 @@ func (v *ValidateSetVPCK8SHostnamesRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -587,7 +549,6 @@ func (v *ValidateSetVPCK8SHostnamesResponse) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

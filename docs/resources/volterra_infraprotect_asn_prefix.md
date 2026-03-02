@@ -28,7 +28,6 @@ resource "volterra_infraprotect_asn_prefix" "example" {
 
   prefix = ["10.10.10.0/24"]
 }
-
 ```
 
 Argument Reference
@@ -67,4 +66,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured infraprotect_asn_prefix.
+*   `id` - This is the id of the configured infraprotect_asn_prefix.

@@ -89,16 +89,13 @@ func (v *ValidateAggregationRequest) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAggregationRequestValidator = func() *ValidateAggregationRequest {
 	v := &ValidateAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggregation_type.date_aggregation"] = DateAggregationValidator().Validate
 
 	return v
@@ -150,7 +147,6 @@ type ValidateDateAggregation struct {
 }
 
 func (v *ValidateDateAggregation) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -172,23 +168,18 @@ func (v *ValidateDateAggregation) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDateAggregationValidator = func() *ValidateDateAggregation {
 	v := &ValidateDateAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

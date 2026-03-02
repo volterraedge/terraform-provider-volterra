@@ -33,16 +33,17 @@ resource "volterra_dns_load_balancer" "example" {
 
       // One of the arguments from this list "asn_list asn_matcher geo_location_label_selector geo_location_set ip_prefix_list ip_prefix_set" must be set
 
-      geo_location_set {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+      asn_matcher {
+        asn_sets {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
       }
       score = "50"
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -187,4 +188,4 @@ Rules to perform load balancing.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured dns_load_balancer.
+*   `id`- This is the id of the configured dns_load_balancer.

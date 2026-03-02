@@ -65,7 +65,6 @@ func (m *GlobalNetworkItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRefDRefInfo()
-
 }
 
 func (m *GlobalNetworkItem) GetRefDRefInfo() ([]db.DRefInfo, error) {
@@ -90,7 +89,6 @@ func (m *GlobalNetworkItem) GetRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -109,7 +107,6 @@ func (m *GlobalNetworkItem) GetRefDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -130,18 +127,13 @@ func (v *ValidateGlobalNetworkItem) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ref"))
 		for idx, item := range m.GetRef() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -149,9 +141,7 @@ func (v *ValidateGlobalNetworkItem) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -208,7 +198,6 @@ type ValidateGlobalNetworkListRequest struct {
 }
 
 func (v *ValidateGlobalNetworkListRequest) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for site")
@@ -230,32 +219,24 @@ func (v *ValidateGlobalNetworkListRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalNetworkListRequestValidator = func() *ValidateGlobalNetworkListRequest {
 	v := &ValidateGlobalNetworkListRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -325,7 +306,6 @@ func (m *GlobalNetworkListResp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetItemsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -333,7 +313,6 @@ func (m *GlobalNetworkListResp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItems() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
@@ -347,7 +326,6 @@ func (m *GlobalNetworkListResp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGlobalNetworkListResp struct {
@@ -367,9 +345,7 @@ func (v *ValidateGlobalNetworkListResp) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -377,9 +353,7 @@ func (v *ValidateGlobalNetworkListResp) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -437,7 +411,6 @@ func (m *SegmentItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRefDRefInfo()
-
 }
 
 func (m *SegmentItem) GetRefDRefInfo() ([]db.DRefInfo, error) {
@@ -462,7 +435,6 @@ func (m *SegmentItem) GetRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -481,7 +453,6 @@ func (m *SegmentItem) GetRefDBEntries(ctx context.Context, d db.Interface) ([]db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -502,18 +473,13 @@ func (v *ValidateSegmentItem) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ref"))
 		for idx, item := range m.GetRef() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -521,9 +487,7 @@ func (v *ValidateSegmentItem) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -580,7 +544,6 @@ type ValidateSegmentListRequest struct {
 }
 
 func (v *ValidateSegmentListRequest) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for site")
@@ -602,32 +565,24 @@ func (v *ValidateSegmentListRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSegmentListRequestValidator = func() *ValidateSegmentListRequest {
 	v := &ValidateSegmentListRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -697,7 +652,6 @@ func (m *SegmentListResp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetItemsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -705,7 +659,6 @@ func (m *SegmentListResp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItems() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
@@ -719,7 +672,6 @@ func (m *SegmentListResp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateSegmentListResp struct {
@@ -739,9 +691,7 @@ func (v *ValidateSegmentListResp) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -749,9 +699,7 @@ func (v *ValidateSegmentListResp) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

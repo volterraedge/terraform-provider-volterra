@@ -66,7 +66,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ObjectLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -104,9 +103,7 @@ func (v *ValidateCreateSpecType) ObjectLimitsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ResourceLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -144,9 +141,7 @@ func (v *ValidateCreateSpecType) ResourceLimitsValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ApiLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -198,38 +193,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_limits"))
 		if err := fv(ctx, m.GetApiLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("object_limits"))
 		if err := fv(ctx, m.GetObjectLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("resource_limits"))
 		if err := fv(ctx, m.GetResourceLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -338,16 +325,12 @@ func (v *ValidateFloatLimitType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["maximum"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("maximum"))
 		if err := fv(ctx, m.GetMaximum(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -404,7 +387,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ObjectLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -442,9 +424,7 @@ func (v *ValidateGetSpecType) ObjectLimitsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ResourceLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -482,9 +462,7 @@ func (v *ValidateGetSpecType) ResourceLimitsValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ApiLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -536,38 +514,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_limits"))
 		if err := fv(ctx, m.GetApiLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("object_limits"))
 		if err := fv(ctx, m.GetObjectLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("resource_limits"))
 		if err := fv(ctx, m.GetResourceLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -664,7 +634,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ObjectLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -702,9 +671,7 @@ func (v *ValidateGlobalSpecType) ObjectLimitsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ResourceLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -742,9 +709,7 @@ func (v *ValidateGlobalSpecType) ResourceLimitsValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ApiLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -782,9 +747,7 @@ func (v *ValidateGlobalSpecType) ApiLimitsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ApigwLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -836,46 +799,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_limits"))
 		if err := fv(ctx, m.GetApiLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apigw_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("apigw_limits"))
 		if err := fv(ctx, m.GetApigwLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("object_limits"))
 		if err := fv(ctx, m.GetObjectLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("resource_limits"))
 		if err := fv(ctx, m.GetResourceLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -997,16 +950,12 @@ func (v *ValidateLimitType) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["maximum"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("maximum"))
 		if err := fv(ctx, m.GetMaximum(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1075,34 +1024,24 @@ func (v *ValidateQuotaLimits) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1171,50 +1110,36 @@ func (v *ValidateQuotaLimitsItemType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_limit"))
 		if err := fv(ctx, m.GetApiLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultQuotaLimitsItemTypeValidator = func() *ValidateQuotaLimitsItemType {
 	v := &ValidateQuotaLimitsItemType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["api_limit"] = RateLimitTypeValidator().Validate
 
 	return v
@@ -1278,43 +1203,30 @@ func (v *ValidateQuotaUsage) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["usage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usage"))
 		if err := fv(ctx, m.GetUsage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1383,59 +1295,42 @@ func (v *ValidateQuotaUsageItemType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_limit"))
 		if err := fv(ctx, m.GetApiLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["usage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usage"))
 		if err := fv(ctx, m.GetUsage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultQuotaUsageItemTypeValidator = func() *ValidateQuotaUsageItemType {
 	v := &ValidateQuotaUsageItemType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["api_limit"] = RateLimitTypeValidator().Validate
 
 	return v
@@ -1487,7 +1382,6 @@ type ValidateRateLimitType struct {
 }
 
 func (v *ValidateRateLimitType) UnitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for unit")
@@ -1509,41 +1403,30 @@ func (v *ValidateRateLimitType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["burst"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("burst"))
 		if err := fv(ctx, m.GetBurst(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rate"))
 		if err := fv(ctx, m.GetRate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit"))
 		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRateLimitTypeValidator = func() *ValidateRateLimitType {
 	v := &ValidateRateLimitType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1612,7 +1495,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ObjectLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1650,9 +1532,7 @@ func (v *ValidateReplaceSpecType) ObjectLimitsValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ResourceLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1690,9 +1570,7 @@ func (v *ValidateReplaceSpecType) ResourceLimitsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ApiLimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1744,38 +1622,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_limits"))
 		if err := fv(ctx, m.GetApiLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("object_limits"))
 		if err := fv(ctx, m.GetObjectLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("resource_limits"))
 		if err := fv(ctx, m.GetResourceLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

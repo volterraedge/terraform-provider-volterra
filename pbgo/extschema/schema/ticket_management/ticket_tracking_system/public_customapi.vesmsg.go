@@ -76,16 +76,12 @@ func (v *ValidateJiraProjectsIssueTypesRequest) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ticket_tracking_system"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ticket_tracking_system"))
 		if err := fv(ctx, m.GetTicketTrackingSystem(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,9 +150,7 @@ func (v *ValidateJiraProjectsIssueTypesResponse) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["projects"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("projects"))
 		for idx, item := range m.GetProjects() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -164,18 +158,13 @@ func (v *ValidateJiraProjectsIssueTypesResponse) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ticket_tracking_system"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ticket_tracking_system"))
 		if err := fv(ctx, m.GetTicketTrackingSystem(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -206,7 +195,6 @@ func (m *ValidateTicketTrackingSystemRequest) Redact(ctx context.Context) error 
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetJiraConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ValidateTicketTrackingSystemRequest.jira_config")
 	}
@@ -289,16 +277,13 @@ func (v *ValidateValidateTicketTrackingSystemRequest) Validate(ctx context.Conte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultValidateTicketTrackingSystemRequestValidator = func() *ValidateValidateTicketTrackingSystemRequest {
 	v := &ValidateValidateTicketTrackingSystemRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -306,7 +291,6 @@ var DefaultValidateTicketTrackingSystemRequestValidator = func() *ValidateValida
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhProviderConfig := v.ProviderConfigValidationRuleHandler
 	rulesProviderConfig := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -317,7 +301,6 @@ var DefaultValidateTicketTrackingSystemRequestValidator = func() *ValidateValida
 		panic(errMsg)
 	}
 	v.FldValidators["provider_config"] = vFn
-
 	v.FldValidators["provider_config.jira_config"] = JiraConfigurationTypeValidator().Validate
 
 	return v
@@ -381,9 +364,7 @@ func (v *ValidateValidateTicketTrackingSystemResponse) Validate(ctx context.Cont
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["errors"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("errors"))
 		for idx, item := range m.GetErrors() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -391,9 +372,7 @@ func (v *ValidateValidateTicketTrackingSystemResponse) Validate(ctx context.Cont
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

@@ -76,16 +76,12 @@ func (v *ValidateAssignDomainOwnerRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,43 +150,30 @@ func (v *ValidateDeleteTenantRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["feedback"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("feedback"))
 		if err := fv(ctx, m.GetFeedback(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reason"))
 		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -259,16 +242,12 @@ func (v *ValidateDisableTenantResponse) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["job_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("job_id"))
 		if err := fv(ctx, m.GetJobId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -337,16 +316,12 @@ func (v *ValidateEscalationDocResp) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -415,43 +390,30 @@ func (v *ValidateGetLoginEventsInTimeFrameRequest) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end"))
 		if err := fv(ctx, m.GetEnd(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["first"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first"))
 		if err := fv(ctx, m.GetFirst(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max"))
 		if err := fv(ctx, m.GetMax(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start"))
 		if err := fv(ctx, m.GetStart(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -520,25 +482,18 @@ func (v *ValidateGetLoginEventsRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["first"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first"))
 		if err := fv(ctx, m.GetFirst(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max"))
 		if err := fv(ctx, m.GetMax(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -607,16 +562,12 @@ func (v *ValidateGetPasswordPolicyRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["realm_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("realm_id"))
 		if err := fv(ctx, m.GetRealmId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -685,9 +636,7 @@ func (v *ValidateLastLoginMap) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["last_login_map"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_login_map"))
 		for key, value := range m.GetLastLoginMap() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -695,9 +644,7 @@ func (v *ValidateLastLoginMap) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -766,61 +713,42 @@ func (v *ValidateLoginEvent) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["auth_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auth_method"))
 		if err := fv(ctx, m.GetAuthMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_address"))
 		if err := fv(ctx, m.GetIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["session_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("session_id"))
 		if err := fv(ctx, m.GetSessionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("time"))
 		if err := fv(ctx, m.GetTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -889,9 +817,7 @@ func (v *ValidateLoginEvents) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["login_events"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("login_events"))
 		for idx, item := range m.GetLoginEvents() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -899,9 +825,7 @@ func (v *ValidateLoginEvents) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -970,9 +894,7 @@ func (v *ValidateLoginEventsMap) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["login_events_map"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("login_events_map"))
 		for key, value := range m.GetLoginEventsMap() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -980,9 +902,7 @@ func (v *ValidateLoginEventsMap) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1051,25 +971,18 @@ func (v *ValidateLookupCnameRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cname"))
 		if err := fv(ctx, m.GetCname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1138,70 +1051,48 @@ func (v *ValidatePasswordPolicyPublicAccess) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["digits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("digits"))
 		if err := fv(ctx, m.GetDigits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["lowercase_characters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("lowercase_characters"))
 		if err := fv(ctx, m.GetLowercaseCharacters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["minimum_length"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("minimum_length"))
 		if err := fv(ctx, m.GetMinimumLength(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_recently_used"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_recently_used"))
 		if err := fv(ctx, m.GetNotRecentlyUsed(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_username"))
 		if err := fv(ctx, m.GetNotUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["special_characters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("special_characters"))
 		if err := fv(ctx, m.GetSpecialCharacters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uppercase_characters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uppercase_characters"))
 		if err := fv(ctx, m.GetUppercaseCharacters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1270,7 +1161,6 @@ func (v *ValidateStatusResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -1339,16 +1229,12 @@ func (v *ValidateSupportInfo) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["support_email_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("support_email_address"))
 		if err := fv(ctx, m.GetSupportEmailAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1417,106 +1303,72 @@ func (v *ValidateTenantSettingsResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active_plan_transition_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active_plan_transition_id"))
 		if err := fv(ctx, m.GetActivePlanTransitionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["company_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("company_name"))
 		if err := fv(ctx, m.GetCompanyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_credentials_expiry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_credentials_expiry"))
 		if err := fv(ctx, m.GetMaxCredentialsExpiry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["original_tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("original_tenant"))
 		if err := fv(ctx, m.GetOriginalTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["otp_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("otp_enabled"))
 		if err := fv(ctx, m.GetOtpEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["otp_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("otp_status"))
 		if err := fv(ctx, m.GetOtpStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scim_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scim_enabled"))
 		if err := fv(ctx, m.GetScimEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sso_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sso_enabled"))
 		if err := fv(ctx, m.GetSsoEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1585,16 +1437,12 @@ func (v *ValidateUnassignDomainOwnerRequest) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1618,7 +1466,6 @@ func (m *UpdateImageRequest) ToJSON() (string, error) {
 func (m *UpdateImageRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *UpdateImageRequest) String() string {
 	if m == nil {
 		return ""
@@ -1690,25 +1537,18 @@ func (v *ValidateUpdateImageRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["content_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_type"))
 		if err := fv(ctx, m.GetContentType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["image"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("image"))
 		if err := fv(ctx, m.GetImage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1777,25 +1617,18 @@ func (v *ValidateUpdateTenantSettingsRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["max_credentials_expiry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_credentials_expiry"))
 		if err := fv(ctx, m.GetMaxCredentialsExpiry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["otp_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("otp_enabled"))
 		if err := fv(ctx, m.GetOtpEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1864,54 +1697,37 @@ func (v *ValidateUpdateTenantSettingsResponse) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["max_credentials_expiry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_credentials_expiry"))
 		if err := fv(ctx, m.GetMaxCredentialsExpiry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["otp_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("otp_enabled"))
 		if err := fv(ctx, m.GetOtpEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["otp_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("otp_status"))
 		if err := fv(ctx, m.GetOtpStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scim_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scim_enabled"))
 		if err := fv(ctx, m.GetScimEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sso_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sso_enabled"))
 		if err := fv(ctx, m.GetSsoEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["validation_errors"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("validation_errors"))
 		for idx, item := range m.GetValidationErrors() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1919,9 +1735,7 @@ func (v *ValidateUpdateTenantSettingsResponse) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1990,16 +1804,12 @@ func (v *ValidateUser) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2068,9 +1878,7 @@ func (v *ValidateUserList) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["users"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("users"))
 		for idx, item := range m.GetUsers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2078,9 +1886,7 @@ func (v *ValidateUserList) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2149,25 +1955,18 @@ func (v *ValidateValidationErrorField) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error_field"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_field"))
 		if err := fv(ctx, m.GetErrorField(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_message"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_message"))
 		if err := fv(ctx, m.GetErrorMessage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

@@ -13,17 +13,14 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.jwt_provider.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.jwt_provider.Object"] = ObjectValidator()
 	vr["ves.io.schema.jwt_provider.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.jwt_provider.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.jwt_provider.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.jwt_provider.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.jwt_provider.JwtHeader"] = JwtHeaderValidator()
 	vr["ves.io.schema.jwt_provider.RemoteJwks"] = RemoteJwksValidator()
 	vr["ves.io.schema.jwt_provider.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -35,19 +32,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.jwt_provider.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.jwt_provider.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.jwt_provider.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -56,20 +49,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

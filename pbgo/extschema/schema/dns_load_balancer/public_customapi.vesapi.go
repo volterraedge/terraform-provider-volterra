@@ -74,9 +74,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -165,7 +163,6 @@ func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *
 	pbRsp := &SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_load_balancer.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -199,9 +196,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -282,7 +277,6 @@ func (s *customAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.SuggestValuesResp", rsp)...)
 
 	return rsp, nil

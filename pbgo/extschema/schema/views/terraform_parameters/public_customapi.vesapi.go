@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts
 	rsp, err := c.grpcClient.Get(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["GetStatus"] = ccl.doRPCGetStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -175,7 +171,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -183,7 +178,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -260,7 +254,6 @@ func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *serv
 	pbRsp := &GetStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -294,11 +287,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["GetStatus"] = ccl.doRPCGetStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -383,7 +373,6 @@ func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, e
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.GetResponse", rsp)...)
 
 	return rsp, nil
@@ -432,7 +421,6 @@ func (s *customAPISrv) GetStatus(ctx context.Context, in *GetRequest) (*GetStatu
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.GetStatusResponse", rsp)...)
 
 	return rsp, nil
@@ -446,7 +434,7 @@ var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "View Terraform Parameters",
-        "description": "View Terraform Parameters is set of parameters that are used by terraform scripts \nto instantiate view objects external to volterra",
+        "description": "View Terraform Parameters is set of parameters that are used by terraform scripts\nto instantiate view objects external to volterra",
         "version": "version not set"
     },
     "schemes": [
@@ -744,10 +732,10 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",

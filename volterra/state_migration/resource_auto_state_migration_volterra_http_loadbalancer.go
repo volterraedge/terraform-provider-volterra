@@ -1,3 +1,7 @@
+//
+// Copyright (c) 2026 F5 Inc. All rights reserved.
+//
+
 package statemigration
 
 import (
@@ -77,7 +81,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"public_ip": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -117,7 +120,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"cloud_edge": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -156,7 +158,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"segment": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -206,7 +207,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"segment": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -261,7 +261,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"site": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -311,7 +310,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"segment": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -340,7 +338,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"site": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -404,7 +401,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"virtual_network": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -449,7 +445,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"virtual_site": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -499,7 +494,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"segment": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -528,7 +522,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"virtual_site": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -583,7 +576,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"virtual_site": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -716,7 +708,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"public_ip": {
-
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Required: true,
@@ -797,7 +788,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"api_definitions": {
-
 							Type:       schema.TypeList,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
@@ -835,7 +825,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"api_definition": {
-
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Required: true,
@@ -922,7 +911,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"methods": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -1121,7 +1109,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"response_validation_properties": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -1166,7 +1153,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"request_validation_properties": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -1260,7 +1246,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"methods": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -1341,7 +1326,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"methods": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -1426,7 +1410,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"response_validation_properties": {
-
 																			Type: schema.TypeList,
 
 																			Required: true,
@@ -1471,7 +1454,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"request_validation_properties": {
-
 																			Type: schema.TypeList,
 
 																			Required: true,
@@ -1893,7 +1875,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"api_code_repo": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -1906,7 +1887,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"code_base_integration": {
-
 													Type:     schema.TypeList,
 													MaxItems: 1,
 													Required: true,
@@ -1944,7 +1924,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"api_discovery_ref": {
-
 										Type:     schema.TypeList,
 										MaxItems: 1,
 										Required: true,
@@ -2221,7 +2200,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"custom_sections": {
-
 																			Type: schema.TypeList,
 
 																			Required:   true,
@@ -2257,7 +2235,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"methods": {
-
 																			Type: schema.TypeList,
 
 																			Required:   true,
@@ -2383,7 +2360,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"methods": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -2423,7 +2399,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"expressions": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -2444,7 +2419,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ip_threat_categories": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -2471,7 +2445,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"as_numbers": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -2492,7 +2465,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"asn_sets": {
-
 																Type:     schema.TypeList,
 																Required: true,
 																Elem: &schema.Resource{
@@ -2536,7 +2508,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefix_sets": {
-
 																Type:     schema.TypeList,
 																Required: true,
 																Elem: &schema.Resource{
@@ -2580,7 +2551,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ip_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -2590,7 +2560,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -2611,7 +2580,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"classes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -2621,7 +2589,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"exact_values": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -2631,7 +2598,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"excluded_values": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -2726,7 +2692,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2736,7 +2701,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2746,7 +2710,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2806,7 +2769,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2816,7 +2778,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2826,7 +2787,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2886,7 +2846,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2896,7 +2855,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2906,7 +2864,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2964,7 +2921,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2974,7 +2930,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -2984,7 +2939,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3075,7 +3029,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"expressions": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -3096,7 +3049,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ip_threat_categories": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -3123,7 +3075,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"as_numbers": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -3144,7 +3095,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"asn_sets": {
-
 																Type:     schema.TypeList,
 																Required: true,
 																Elem: &schema.Resource{
@@ -3188,7 +3138,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefix_sets": {
-
 																Type:     schema.TypeList,
 																Required: true,
 																Elem: &schema.Resource{
@@ -3232,7 +3181,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ip_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -3242,7 +3190,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -3263,7 +3210,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"classes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -3273,7 +3219,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"exact_values": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -3283,7 +3228,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"excluded_values": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -3378,7 +3322,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3388,7 +3331,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3398,7 +3340,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3458,7 +3399,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3468,7 +3408,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3478,7 +3417,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3538,7 +3476,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3548,7 +3485,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3558,7 +3494,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3616,7 +3551,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3626,7 +3560,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3636,7 +3569,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -3700,7 +3632,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"methods": {
-
 													Type: schema.TypeList,
 
 													Optional:   true,
@@ -3751,7 +3682,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"expressions": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -3774,7 +3704,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ip_threat_categories": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -3804,7 +3733,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"as_numbers": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -3827,7 +3755,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"asn_sets": {
-
 																Type:       schema.TypeList,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
@@ -3878,7 +3805,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefix_sets": {
-
 																Type:       schema.TypeList,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
@@ -3929,7 +3855,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ip_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -3940,7 +3865,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -3963,7 +3887,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"classes": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -3974,7 +3897,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"exact_values": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -3985,7 +3907,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"excluded_values": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -4149,7 +4070,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4160,7 +4080,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4171,7 +4090,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4238,7 +4156,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4249,7 +4166,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4260,7 +4176,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4327,7 +4242,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4338,7 +4252,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4349,7 +4262,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4415,7 +4327,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4426,7 +4337,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4437,7 +4347,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4509,7 +4418,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"expressions": {
-
 																			Type: schema.TypeList,
 
 																			Required:   true,
@@ -4532,7 +4440,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"ip_threat_categories": {
-
 																			Type: schema.TypeList,
 
 																			Required:   true,
@@ -4562,7 +4469,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"as_numbers": {
-
 																			Type: schema.TypeList,
 
 																			Required:   true,
@@ -4585,7 +4491,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"asn_sets": {
-
 																			Type:       schema.TypeList,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
@@ -4636,7 +4541,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"prefix_sets": {
-
 																			Type:       schema.TypeList,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
@@ -4687,7 +4591,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"ip_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4698,7 +4601,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"ipv6_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4721,7 +4623,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"classes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4732,7 +4633,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4743,7 +4643,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"excluded_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -4776,7 +4675,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"methods": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -4805,7 +4703,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"api_groups": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -4886,7 +4783,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -4897,7 +4793,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -4908,7 +4803,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -4975,7 +4869,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -4986,7 +4879,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -4997,7 +4889,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -5064,7 +4955,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -5075,7 +4965,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -5086,7 +4975,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -5152,7 +5040,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -5163,7 +5050,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -5174,7 +5060,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -5216,7 +5101,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"rate_limiter_allowed_prefixes": {
-
 										Type:       schema.TypeList,
 										Required:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
@@ -5255,7 +5139,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"ipv6_prefixes": {
-
 										Type: schema.TypeList,
 
 										Optional:   true,
@@ -5266,7 +5149,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"prefixes": {
-
 										Type: schema.TypeList,
 
 										Optional:   true,
@@ -5332,7 +5214,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"expressions": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -5355,7 +5236,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ip_threat_categories": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -5385,7 +5265,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"as_numbers": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -5408,7 +5287,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"asn_sets": {
-
 																Type:       schema.TypeList,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
@@ -5459,7 +5337,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefix_sets": {
-
 																Type:       schema.TypeList,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
@@ -5510,7 +5387,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ip_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -5521,7 +5397,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -5544,7 +5419,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"classes": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -5555,7 +5429,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"exact_values": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -5566,7 +5439,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"excluded_values": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -5730,7 +5602,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5741,7 +5612,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5752,7 +5622,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5819,7 +5688,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5830,7 +5698,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5841,7 +5708,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5908,7 +5774,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5919,7 +5784,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5930,7 +5794,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -5996,7 +5859,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -6007,7 +5869,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -6018,7 +5879,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -6851,7 +6711,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"actions": {
-
 							Type: schema.TypeList,
 
 							Optional: true,
@@ -7415,7 +7274,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -7425,7 +7283,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -7435,7 +7292,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -7527,7 +7383,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -7538,7 +7393,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -7549,7 +7403,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -7603,7 +7456,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -7614,7 +7466,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -7625,7 +7476,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional:   true,
@@ -7764,7 +7614,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																											},
 
 																											"regex_values": {
-
 																												Type: schema.TypeList,
 
 																												Optional: true,
@@ -7794,7 +7643,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																											},
 
 																											"regex_values": {
-
 																												Type: schema.TypeList,
 
 																												Optional: true,
@@ -8085,7 +7933,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8095,7 +7942,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8105,7 +7951,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8133,7 +7978,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"http_methods": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -8340,7 +8184,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8350,7 +8193,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8360,7 +8202,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8767,7 +8608,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"mobile": {
-
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Optional: true,
@@ -8840,7 +8680,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8850,7 +8689,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8860,7 +8698,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -8887,7 +8724,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"web": {
-
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Optional: true,
@@ -8923,9 +8759,7 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 				Type:     schema.TypeList,
 				MaxItems: 1,
-				Required: false,
 				Optional: true,
-				Computed: false,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -8938,7 +8772,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"cdn_cache_rules": {
-
 										Type:     schema.TypeList,
 										Optional: true,
 										Elem: &schema.Resource{
@@ -9370,7 +9203,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9380,7 +9212,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9390,7 +9221,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9432,7 +9262,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"as_numbers": {
-
 																			Type: schema.TypeList,
 
 																			Required: true,
@@ -9453,7 +9282,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"asn_sets": {
-
 																			Type:     schema.TypeList,
 																			Required: true,
 																			Elem: &schema.Resource{
@@ -9492,7 +9320,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9502,7 +9329,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9512,7 +9338,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9565,7 +9390,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -9576,7 +9400,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -9587,7 +9410,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -9609,7 +9431,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"expressions": {
-
 																			Type: schema.TypeList,
 
 																			Required: true,
@@ -9654,7 +9475,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9664,7 +9484,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9674,7 +9493,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9710,7 +9528,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9720,7 +9537,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9770,7 +9586,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9780,7 +9595,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9790,7 +9604,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -9831,7 +9644,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"methods": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9863,7 +9675,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"prefix_sets": {
-
 																			Type:     schema.TypeList,
 																			Required: true,
 																			Elem: &schema.Resource{
@@ -9907,7 +9718,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"ip_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9917,7 +9727,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"ipv6_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9937,8 +9746,12 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
-																		"exact_values": {
+																		"encoded_path_matcher": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
 
+																		"exact_values": {
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9953,7 +9766,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"prefix_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9963,7 +9775,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9973,7 +9784,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"suffix_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -9983,7 +9793,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -10033,7 +9842,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -10043,7 +9851,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -10053,7 +9860,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -10085,7 +9891,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -10107,7 +9912,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"classes": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -10117,7 +9921,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -10127,7 +9930,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"excluded_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -10565,7 +10367,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"allow_origin": {
-
 							Type: schema.TypeList,
 
 							Optional: true,
@@ -10575,7 +10376,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"allow_origin_regex": {
-
 							Type: schema.TypeList,
 
 							Optional: true,
@@ -10631,7 +10431,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"domains": {
-
 										Type: schema.TypeList,
 
 										Required: true,
@@ -10810,7 +10609,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"as_numbers": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -10823,7 +10621,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"country_list": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -10841,7 +10638,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"exact_values": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -10862,7 +10658,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"classes": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -10872,7 +10667,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"exact_values": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -10882,7 +10676,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"excluded_values": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -10911,7 +10704,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"ip_prefixes": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -10921,7 +10713,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"ipv6_prefixes": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -11376,7 +11167,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"ip_threat_categories": {
-
 							Type: schema.TypeList,
 
 							Required: true,
@@ -11426,6 +11216,39 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
+						"authorization_server": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"authorization_servers": {
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"jwks": {
 
 							Type:       schema.TypeString,
@@ -11458,7 +11281,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"claim_names": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -11487,7 +11309,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"audiences": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -11555,7 +11376,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"api_groups": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -11576,7 +11396,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"base_paths": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -12101,7 +11920,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"certificates": {
-
 										Type:     schema.TypeList,
 										Required: true,
 										Elem: &schema.Resource{
@@ -12232,7 +12050,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"xfcc_header_elements": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -12264,7 +12081,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"cipher_suites": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -12422,7 +12238,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"xfcc_header_elements": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -12463,7 +12278,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"hash_algorithms": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -12669,7 +12483,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"cipher_suites": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -12989,7 +12802,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"xfcc_header_elements": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -13069,7 +12881,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"cipher_suites": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -13128,7 +12939,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 			},
 
 			"malicious_user_mitigation": {
-
 				Type:       schema.TypeList,
 				MaxItems:   1,
 				Optional:   true,
@@ -13250,7 +13060,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"http_methods": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -13621,7 +13430,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"api_code_repo": {
-
 																			Type: schema.TypeList,
 
 																			Required:   true,
@@ -13635,7 +13443,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"code_base_integration": {
-
 																Type:       schema.TypeList,
 																MaxItems:   1,
 																Required:   true,
@@ -13678,7 +13485,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"api_discovery_ref": {
-
 													Type:       schema.TypeList,
 													MaxItems:   1,
 													Required:   true,
@@ -13964,7 +13770,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"custom_sections": {
-
 																						Type: schema.TypeList,
 
 																						Required:   true,
@@ -14000,7 +13805,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"methods": {
-
 																						Type: schema.TypeList,
 
 																						Required:   true,
@@ -14140,7 +13944,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"content_type": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -14309,7 +14112,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"jwt": {
-
 							Type:       schema.TypeList,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
@@ -14337,6 +14139,18 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"max_request_header_size": {
 							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_requests_per_connection": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"no_request_limit_per_connection": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 
@@ -14535,7 +14349,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"request_cookies_to_remove": {
-
 							Type: schema.TypeList,
 
 							Optional: true,
@@ -14725,7 +14538,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"request_headers_to_remove": {
-
 							Type: schema.TypeList,
 
 							Optional: true,
@@ -15029,7 +14841,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"response_cookies_to_remove": {
-
 							Type: schema.TypeList,
 
 							Optional: true,
@@ -15219,7 +15030,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"response_headers_to_remove": {
-
 							Type: schema.TypeList,
 
 							Optional: true,
@@ -15238,7 +15048,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"domains": {
-
 										Type: schema.TypeList,
 
 										Required:   true,
@@ -15478,6 +15287,20 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
+									"max_requests_per_connection": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"no_request_limit_per_connection": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"disable_outlier_detection": {
 
 										Type:       schema.TypeBool,
@@ -15587,7 +15410,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"keys": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -15659,7 +15481,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"healthcheck": {
-
 							Type:       schema.TypeList,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
@@ -15852,7 +15673,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"ipv6_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -15863,7 +15683,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -15892,7 +15711,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"endpoint": {
-
 													Type:       schema.TypeList,
 													MaxItems:   1,
 													Required:   true,
@@ -15975,7 +15793,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"expressions": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -16094,7 +15911,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"ipv6_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -16105,7 +15921,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -16295,7 +16110,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"ipv6_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -16306,7 +16120,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -16494,7 +16307,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"ipv6_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -16505,7 +16317,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional:   true,
@@ -16584,7 +16395,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"virtual_network": {
-
 													Type:       schema.TypeList,
 													MaxItems:   1,
 													Required:   true,
@@ -16644,7 +16454,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"private_network": {
-
 													Type:       schema.TypeList,
 													MaxItems:   1,
 													Required:   true,
@@ -16787,7 +16596,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"hash_algorithms": {
-
 																			Type: schema.TypeList,
 
 																			Required:   true,
@@ -17119,7 +16927,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"cipher_suites": {
-
 																Type: schema.TypeList,
 
 																Required:   true,
@@ -17198,7 +17005,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"view_internal": {
-
 							Type:       schema.TypeList,
 							MaxItems:   1,
 							Optional:   true,
@@ -17367,7 +17173,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"as_numbers": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -17388,7 +17193,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"asn_sets": {
-
 													Type:     schema.TypeList,
 													Required: true,
 													Elem: &schema.Resource{
@@ -17428,7 +17232,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"exact_values": {
-
 													Type: schema.TypeList,
 
 													Optional:   true,
@@ -17439,7 +17242,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"regex_values": {
-
 													Type: schema.TypeList,
 
 													Optional:   true,
@@ -17450,7 +17252,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"transformers": {
-
 													Type: schema.TypeList,
 
 													Optional:   true,
@@ -17464,7 +17265,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"country_codes": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -17493,7 +17293,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"prefix_sets": {
-
 													Type:     schema.TypeList,
 													Required: true,
 													Elem: &schema.Resource{
@@ -17537,7 +17336,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"ip_prefixes": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -17547,7 +17345,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"ipv6_prefixes": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -17592,7 +17389,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"re_name_list": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -17610,7 +17406,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"expressions": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -17752,7 +17547,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"methods": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -17798,7 +17592,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"expressions": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -17819,7 +17612,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ip_threat_categories": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -17846,7 +17638,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"as_numbers": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -17867,7 +17658,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"asn_sets": {
-
 																Type:     schema.TypeList,
 																Required: true,
 																Elem: &schema.Resource{
@@ -17911,7 +17701,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefix_sets": {
-
 																Type:     schema.TypeList,
 																Required: true,
 																Elem: &schema.Resource{
@@ -17955,7 +17744,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ip_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -17965,7 +17753,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -17986,7 +17773,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"classes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -17996,7 +17782,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"exact_values": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -18006,7 +17791,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"excluded_values": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -18149,7 +17933,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18159,7 +17942,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18169,7 +17951,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18229,7 +18010,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18239,7 +18019,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18249,7 +18028,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18309,7 +18087,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18319,7 +18096,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18329,7 +18105,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18387,7 +18162,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18397,7 +18171,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18407,7 +18180,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18473,7 +18245,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"expressions": {
-
 																			Type: schema.TypeList,
 
 																			Required: true,
@@ -18494,7 +18265,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"ip_threat_categories": {
-
 																			Type: schema.TypeList,
 
 																			Required: true,
@@ -18521,7 +18291,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"as_numbers": {
-
 																			Type: schema.TypeList,
 
 																			Required: true,
@@ -18542,7 +18311,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"asn_sets": {
-
 																			Type:     schema.TypeList,
 																			Required: true,
 																			Elem: &schema.Resource{
@@ -18586,7 +18354,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"prefix_sets": {
-
 																			Type:     schema.TypeList,
 																			Required: true,
 																			Elem: &schema.Resource{
@@ -18630,7 +18397,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"ip_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18640,7 +18406,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"ipv6_prefixes": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18661,7 +18426,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"classes": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18671,7 +18435,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18681,7 +18444,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"excluded_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -18711,7 +18473,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"methods": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -18737,7 +18498,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"api_groups": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -18808,7 +18568,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -18818,7 +18577,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -18828,7 +18586,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -18888,7 +18645,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -18898,7 +18654,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -18908,7 +18663,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -18968,7 +18722,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -18978,7 +18731,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -18988,7 +18740,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -19046,7 +18797,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -19056,7 +18806,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"regex_values": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -19066,7 +18815,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																					},
 
 																					"transformers": {
-
 																						Type: schema.TypeList,
 
 																						Optional: true,
@@ -19106,7 +18854,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"rate_limiter_allowed_prefixes": {
-
 										Type:     schema.TypeList,
 										Required: true,
 										Elem: &schema.Resource{
@@ -19140,7 +18887,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"ipv6_prefixes": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -19150,7 +18896,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"prefixes": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -19208,7 +18953,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"expressions": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -19229,7 +18973,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ip_threat_categories": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -19256,7 +18999,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"as_numbers": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -19277,7 +19019,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"asn_sets": {
-
 																Type:     schema.TypeList,
 																Required: true,
 																Elem: &schema.Resource{
@@ -19321,7 +19062,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefix_sets": {
-
 																Type:     schema.TypeList,
 																Required: true,
 																Elem: &schema.Resource{
@@ -19365,7 +19105,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ip_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -19375,7 +19114,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -19396,7 +19134,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"classes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -19406,7 +19143,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"exact_values": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -19416,7 +19152,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"excluded_values": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -19559,7 +19294,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19569,7 +19303,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19579,7 +19312,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19639,7 +19371,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19649,7 +19380,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19659,7 +19389,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19719,7 +19448,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19729,7 +19457,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19739,7 +19466,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19797,7 +19523,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19807,7 +19532,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"regex_values": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19817,7 +19541,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																		},
 
 																		"transformers": {
-
 																			Type: schema.TypeList,
 
 																			Optional: true,
@@ -19871,7 +19594,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"rate_limiter_allowed_prefixes": {
-
 										Type:     schema.TypeList,
 										Required: true,
 										Elem: &schema.Resource{
@@ -19905,7 +19627,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"ipv6_prefixes": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -19915,7 +19636,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									},
 
 									"prefixes": {
-
 										Type: schema.TypeList,
 
 										Optional: true,
@@ -19948,7 +19668,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"policies": {
-
 										Type:     schema.TypeList,
 										Required: true,
 										Elem: &schema.Resource{
@@ -20107,8 +19826,19 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"route_ref": {
+									"caching_disable": {
 
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"caching_inherit": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"route_ref": {
 										Type:     schema.TypeList,
 										MaxItems: 1,
 										Optional: true,
@@ -20441,7 +20171,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"query_params": {
-
 																Type: schema.TypeList,
 
 																Optional:   true,
@@ -20619,7 +20348,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"allow_origin": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -20629,7 +20357,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"allow_origin_regex": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -20685,7 +20412,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																	Schema: map[string]*schema.Schema{
 
 																		"domains": {
-
 																			Type: schema.TypeList,
 
 																			Required: true,
@@ -20849,7 +20575,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"origin_pool": {
-
 																Type:     schema.TypeList,
 																MaxItems: 1,
 																Required: true,
@@ -21082,7 +20807,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"request_cookies_to_remove": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -21272,7 +20996,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"request_headers_to_remove": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -21576,7 +21299,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"response_cookies_to_remove": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -21766,7 +21488,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"response_headers_to_remove": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -21827,7 +21548,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"retriable_status_codes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -21837,7 +21557,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"retry_condition": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -21994,6 +21713,18 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"caching_disable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"caching_inherit": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"headers": {
@@ -22235,6 +21966,18 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								},
 							},
 						},
+
+						"route_state_disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"route_state_enabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -22263,7 +22006,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"fields": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -22298,7 +22040,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"methods": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -22350,7 +22091,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"sensitive_data_policy_ref": {
-
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Required: true,
@@ -22385,7 +22125,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"policies": {
-
 							Type:     schema.TypeList,
 							Required: true,
 							Elem: &schema.Resource{
@@ -22483,7 +22222,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"client_ip_headers": {
-
 							Type: schema.TypeList,
 
 							Required: true,
@@ -22524,7 +22262,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"actions": {
-
 							Type: schema.TypeList,
 
 							Optional: true,
@@ -22775,7 +22512,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 
 												"methods": {
-
 													Type: schema.TypeList,
 
 													Optional: true,
@@ -23008,7 +22744,6 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						},
 
 						"methods": {
-
 							Type: schema.TypeList,
 
 							Optional:   true,

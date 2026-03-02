@@ -43,7 +43,7 @@ resource "volterra_fast_acl" "example" {
       port {
         // One of the arguments from this list "all dns user_defined" can be set
 
-        all = true
+        user_defined = "user_defined"
       }
 
       // One of the arguments from this list "ip_prefix_set prefix" must be set
@@ -64,7 +64,6 @@ resource "volterra_fast_acl" "example" {
     interface_services = true
   }
 }
-
 ```
 
 Argument Reference
@@ -202,7 +201,7 @@ L4 port numbers to match.
 
 ### Legacy Acl Destination Type
 
-1.	Explicit IP and port.
+1.  Explicit IP and port.
 
 ###### One of the arguments from this list "all_services, destination_ip_address, interface_services, selected_vip_address, shared_vip_services, vhost, vip_services" can be set
 
@@ -417,4 +416,4 @@ Indicates use of site local inside network.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured fast_acl.
+*   `id` - This is the id of the configured fast_acl.

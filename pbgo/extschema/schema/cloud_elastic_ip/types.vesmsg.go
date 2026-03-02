@@ -67,7 +67,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteRefDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *CreateSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *CreateSpecType) GetSiteRefDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) SiteRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -166,9 +162,7 @@ func (v *ValidateCreateSpecType) SiteRefValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) CountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for count")
@@ -190,31 +184,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_ref"))
 		if err := fv(ctx, m.GetSiteRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -297,7 +284,6 @@ func (m *DeleteSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteRefDRefInfo()
-
 }
 
 func (m *DeleteSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
@@ -322,7 +308,6 @@ func (m *DeleteSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -341,7 +326,6 @@ func (m *DeleteSpecType) GetSiteRefDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -350,7 +334,6 @@ type ValidateDeleteSpecType struct {
 }
 
 func (v *ValidateDeleteSpecType) SiteRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -396,9 +379,7 @@ func (v *ValidateDeleteSpecType) SiteRefValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeleteSpecType) CountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for count")
@@ -420,31 +401,24 @@ func (v *ValidateDeleteSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_ref"))
 		if err := fv(ctx, m.GetSiteRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDeleteSpecTypeValidator = func() *ValidateDeleteSpecType {
 	v := &ValidateDeleteSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -537,43 +511,30 @@ func (v *ValidateElasticIPInfoType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_ip_address"))
 		if err := fv(ctx, m.GetPrivateIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip_address"))
 		if err := fv(ctx, m.GetPublicIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -642,9 +603,7 @@ func (v *ValidateElasticIPStatusType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["elactic_ip_infos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("elactic_ip_infos"))
 		for idx, item := range m.GetElacticIpInfos() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -652,18 +611,13 @@ func (v *ValidateElasticIPStatusType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -721,7 +675,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteRefDRefInfo()
-
 }
 
 func (m *GetSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
@@ -746,7 +699,6 @@ func (m *GetSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -765,7 +717,6 @@ func (m *GetSpecType) GetSiteRefDBEntries(ctx context.Context, d db.Interface) (
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -774,7 +725,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) SiteRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -820,9 +770,7 @@ func (v *ValidateGetSpecType) SiteRefValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) CountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for count")
@@ -844,49 +792,36 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["finalizer_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("finalizer_timestamp"))
 		if err := fv(ctx, m.GetFinalizerTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["force_delete"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("force_delete"))
 		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_ref"))
 		if err := fv(ctx, m.GetSiteRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -969,7 +904,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteRefDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
@@ -994,7 +928,6 @@ func (m *GlobalSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1013,7 +946,6 @@ func (m *GlobalSpecType) GetSiteRefDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1022,7 +954,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) SiteRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1068,9 +999,7 @@ func (v *ValidateGlobalSpecType) SiteRefValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for count")
@@ -1092,49 +1021,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["finalizer_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("finalizer_timestamp"))
 		if err := fv(ctx, m.GetFinalizerTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["force_delete"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("force_delete"))
 		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_ref"))
 		if err := fv(ctx, m.GetSiteRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1217,7 +1133,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteRefDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
@@ -1242,7 +1157,6 @@ func (m *ReplaceSpecType) GetSiteRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1261,7 +1175,6 @@ func (m *ReplaceSpecType) GetSiteRefDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1270,7 +1183,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) SiteRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1316,9 +1228,7 @@ func (v *ValidateReplaceSpecType) SiteRefValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) CountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for count")
@@ -1340,31 +1250,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_ref"))
 		if err := fv(ctx, m.GetSiteRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

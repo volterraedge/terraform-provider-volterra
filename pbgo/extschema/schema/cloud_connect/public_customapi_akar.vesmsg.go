@@ -80,16 +80,12 @@ func (v *ValidateCredentialsRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -147,7 +143,6 @@ func (m *CredentialsResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCredDRefInfo()
-
 }
 
 func (m *CredentialsResponse) GetCredDRefInfo() ([]db.DRefInfo, error) {
@@ -173,7 +168,6 @@ func (m *CredentialsResponse) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -201,7 +195,6 @@ func (m *CredentialsResponse) GetCredDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -222,9 +215,7 @@ func (v *ValidateCredentialsResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		for idx, item := range m.GetCred() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -232,16 +223,13 @@ func (v *ValidateCredentialsResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCredentialsResponseValidator = func() *ValidateCredentialsResponse {
 	v := &ValidateCredentialsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -305,7 +293,6 @@ func (v *ValidateEdgeListRequest) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -374,9 +361,7 @@ func (v *ValidateEdgeListResponse) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["edge_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("edge_site"))
 		for idx, item := range m.GetEdgeSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -384,16 +369,13 @@ func (v *ValidateEdgeListResponse) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEdgeListResponseValidator = func() *ValidateEdgeListResponse {
 	v := &ValidateEdgeListResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["edge_site"] = EdgeSiteValidator().Validate
 
 	return v
@@ -457,50 +439,36 @@ func (v *ValidateEdgeSite) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["edge_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("edge_site"))
 		if err := fv(ctx, m.GetEdgeSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEdgeSiteValidator = func() *ValidateEdgeSite {
 	v := &ValidateEdgeSite{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v

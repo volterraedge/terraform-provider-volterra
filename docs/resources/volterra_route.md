@@ -53,7 +53,7 @@ resource "volterra_route" "example" {
       incoming_port {
         // One of the arguments from this list "no_port_match port port_ranges" can be set
 
-        port = "6443"
+        no_port_match = true
       }
 
       path {
@@ -67,7 +67,7 @@ resource "volterra_route" "example" {
 
         // One of the arguments from this list "exact regex" can be set
 
-        regex = "regex"
+        exact = "exact"
       }
     }
 
@@ -120,11 +120,11 @@ resource "volterra_route" "example" {
 
       // One of the arguments from this list "add_path ignore_path" can be set
 
-      add_path = "add_path"
+      ignore_path = true
 
       // One of the arguments from this list "ignore_samesite samesite_lax samesite_none samesite_strict" can be set
 
-      ignore_samesite = true
+      samesite_none = true
 
       // One of the arguments from this list "add_secure ignore_secure" can be set
 
@@ -185,7 +185,9 @@ resource "volterra_route" "example" {
       csrf_policy {
         // One of the arguments from this list "all_load_balancer_domains custom_domain_list disabled" must be set
 
-        all_load_balancer_domains = true
+        custom_domain_list {
+          domains = ["www.foo.com"]
+        }
       }
       destinations {
         cluster {
@@ -208,14 +210,31 @@ resource "volterra_route" "example" {
       hash_policy {
         // One of the arguments from this list "cookie header_name source_ip" must be set
 
-        header_name = "host"
+        cookie {
+          // One of the arguments from this list "add_httponly ignore_httponly" can be set
+
+          ignore_httponly = true
+
+          name = "userid"
+
+          path = "/Users/userid/browser/cookies"
+
+          // One of the arguments from this list "ignore_samesite samesite_lax samesite_none samesite_strict" can be set
+
+          ignore_samesite = true
+
+          // One of the arguments from this list "add_secure ignore_secure" can be set
+
+          ignore_secure = true
+          ttl = "5000"
+        }
 
         terminal = true
       }
 
       // One of the arguments from this list "auto_host_rewrite host_rewrite" must be set
 
-      auto_host_rewrite = true
+      host_rewrite = "one.volterra.com"
       mirror_policy {
         cluster {
           name      = "test1"
@@ -293,7 +312,6 @@ resource "volterra_route" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -369,7 +387,7 @@ List of routes to match for incoming request.
 
 `inherited_waf_exclusion` - (Optional) Any WAF Exclusion configuration that was configured on a higher level will be enforced (`Bool`).
 
-`waf_exclusion_policy` - (Required) A direct reference to a WAF Exclusion Policy configuration object. See [ref](#ref) below for details.
+`waf_exclusion_policy` - (Optional) A direct reference to a WAF Exclusion Policy configuration object. See [ref](#ref) below for details.
 
 `waf_exclusion_service_policy` - (Optional) A reference to service_policy objects.. See [ref](#ref) below for details.(Deprecated)
 
@@ -1108,4 +1126,4 @@ Any WAF Exclusion configuration that was configured on a higher level will be en
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured route.
+*   `id` - This is the id of the configured route.

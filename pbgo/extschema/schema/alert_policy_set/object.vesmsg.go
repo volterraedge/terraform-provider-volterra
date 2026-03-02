@@ -68,11 +68,9 @@ func (m *AlertPolicyStatus) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicyDRefInfo()
-
 }
 
 func (m *AlertPolicyStatus) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetPolicy()
 	if vref == nil {
 		return nil, nil
@@ -88,7 +86,6 @@ func (m *AlertPolicyStatus) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -98,7 +95,6 @@ func (m *AlertPolicyStatus) GetPolicyDBEntries(ctx context.Context, d db.Interfa
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: alert_policy")
 	}
-
 	vref := m.GetPolicy()
 	if vref == nil {
 		return nil, nil
@@ -116,7 +112,6 @@ func (m *AlertPolicyStatus) GetPolicyDBEntries(ctx context.Context, d db.Interfa
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -125,7 +120,6 @@ type ValidateAlertPolicyStatus struct {
 }
 
 func (v *ValidateAlertPolicyStatus) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for policy")
@@ -134,19 +128,15 @@ func (v *ValidateAlertPolicyStatus) PolicyValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAlertPolicyStatus) StatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for status")
@@ -168,18 +158,13 @@ func (v *ValidateAlertPolicyStatus) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy"))
 		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reason"))
 		for idx, item := range m.GetReason() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -187,25 +172,19 @@ func (v *ValidateAlertPolicyStatus) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAlertPolicyStatusValidator = func() *ValidateAlertPolicyStatus {
 	v := &ValidateAlertPolicyStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -286,7 +265,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -294,7 +272,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
@@ -304,7 +281,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSpecType struct {
@@ -324,23 +300,18 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v

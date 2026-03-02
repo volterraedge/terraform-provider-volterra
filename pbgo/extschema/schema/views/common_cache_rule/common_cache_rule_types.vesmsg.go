@@ -68,7 +68,6 @@ func (m *CustomCacheRule) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCdnCacheRulesDRefInfo()
-
 }
 
 func (m *CustomCacheRule) GetCdnCacheRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -94,7 +93,6 @@ func (m *CustomCacheRule) GetCdnCacheRulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCdnCacheRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -122,7 +120,6 @@ func (m *CustomCacheRule) GetCdnCacheRulesDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -143,9 +140,7 @@ func (v *ValidateCustomCacheRule) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cdn_cache_rules"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cdn_cache_rules"))
 		for idx, item := range m.GetCdnCacheRules() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -153,16 +148,13 @@ func (v *ValidateCustomCacheRule) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomCacheRuleValidator = func() *ValidateCustomCacheRule {
 	v := &ValidateCustomCacheRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["cdn_cache_rules"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -220,6 +212,7 @@ func (v *ValidateDefaultCacheAction) CacheActionsCacheTtlDefaultValidationRuleHa
 	}
 	return oValidatorFn_CacheTtlDefault, nil
 }
+
 func (v *ValidateDefaultCacheAction) CacheActionsCacheTtlOverrideValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_CacheTtlOverride, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -287,16 +280,13 @@ func (v *ValidateDefaultCacheAction) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDefaultCacheActionValidator = func() *ValidateDefaultCacheAction {
 	v := &ValidateDefaultCacheAction{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -304,7 +294,6 @@ var DefaultDefaultCacheActionValidator = func() *ValidateDefaultCacheAction {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCacheActionsCacheTtlDefault := v.CacheActionsCacheTtlDefaultValidationRuleHandler
 	rulesCacheActionsCacheTtlDefault := map[string]string{
 		"ves.io.schema.rules.string.time_interval": "true",
@@ -323,10 +312,8 @@ var DefaultDefaultCacheActionValidator = func() *ValidateDefaultCacheAction {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DefaultCacheAction.cache_actions_cache_ttl_override: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["cache_actions.cache_ttl_default"] = vFnMap["cache_actions.cache_ttl_default"]
 	v.FldValidators["cache_actions.cache_ttl_override"] = vFnMap["cache_actions.cache_ttl_override"]
-
 	v.FldValidators["cache_actions.eligible_for_cache"] = DefaultCacheTTLPropsValidator().Validate
 
 	return v
@@ -378,7 +365,6 @@ type ValidateDefaultCacheTTLProps struct {
 }
 
 func (v *ValidateDefaultCacheTTLProps) CacheTtlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_ttl")
@@ -400,23 +386,18 @@ func (v *ValidateDefaultCacheTTLProps) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cache_ttl"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_ttl"))
 		if err := fv(ctx, m.GetCacheTtl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDefaultCacheTTLPropsValidator = func() *ValidateDefaultCacheTTLProps {
 	v := &ValidateDefaultCacheTTLProps{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

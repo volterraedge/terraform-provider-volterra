@@ -74,9 +74,7 @@ func (v *ValidateCreateSpecType) IkeKeyLifetimeValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) EncryptionAlgosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -122,9 +120,7 @@ func (v *ValidateCreateSpecType) EncryptionAlgosValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AuthenticationAlgosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -184,21 +180,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["authentication_algos"]; exists {
 		vOpts := append(opts, db.WithValidateField("authentication_algos"))
 		if err := fv(ctx, m.GetAuthenticationAlgos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["encryption_algos"]; exists {
 		vOpts := append(opts, db.WithValidateField("encryption_algos"))
 		if err := fv(ctx, m.GetEncryptionAlgos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ike_key_lifetime"]; exists {
@@ -245,7 +237,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetPfsMode().(type) {
@@ -271,16 +262,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -288,7 +276,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIkeKeyLifetime := v.IkeKeyLifetimeValidationRuleHandler
 	rulesIkeKeyLifetime := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -321,10 +308,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["authentication_algos"] = vFn
-
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_minutes"] = ves_io_schema_views_ike_phase1_profile.InputMinutesValidator().Validate
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_hours"] = ves_io_schema_views_ike_phase1_profile.InputHoursValidator().Validate
-
 	v.FldValidators["pfs_mode.dh_group_set"] = DHGroupsValidator().Validate
 
 	return v
@@ -376,7 +361,6 @@ type ValidateDHGroups struct {
 }
 
 func (v *ValidateDHGroups) DhGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -436,22 +420,18 @@ func (v *ValidateDHGroups) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dh_groups"]; exists {
 		vOpts := append(opts, db.WithValidateField("dh_groups"))
 		if err := fv(ctx, m.GetDhGroups(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHGroupsValidator = func() *ValidateDHGroups {
 	v := &ValidateDHGroups{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -526,9 +506,7 @@ func (v *ValidateGetSpecType) IkeKeyLifetimeValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) EncryptionAlgosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -574,9 +552,7 @@ func (v *ValidateGetSpecType) EncryptionAlgosValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AuthenticationAlgosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -636,21 +612,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["authentication_algos"]; exists {
 		vOpts := append(opts, db.WithValidateField("authentication_algos"))
 		if err := fv(ctx, m.GetAuthenticationAlgos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["encryption_algos"]; exists {
 		vOpts := append(opts, db.WithValidateField("encryption_algos"))
 		if err := fv(ctx, m.GetEncryptionAlgos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ike_key_lifetime"]; exists {
@@ -697,7 +669,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetPfsMode().(type) {
@@ -723,16 +694,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -740,7 +708,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIkeKeyLifetime := v.IkeKeyLifetimeValidationRuleHandler
 	rulesIkeKeyLifetime := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -773,10 +740,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["authentication_algos"] = vFn
-
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_minutes"] = ves_io_schema_views_ike_phase1_profile.InputMinutesValidator().Validate
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_hours"] = ves_io_schema_views_ike_phase1_profile.InputHoursValidator().Validate
-
 	v.FldValidators["pfs_mode.dh_group_set"] = DHGroupsValidator().Validate
 
 	return v
@@ -829,11 +794,9 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetViewInternalDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -849,7 +812,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -859,7 +821,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -877,7 +838,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -892,9 +852,7 @@ func (v *ValidateGlobalSpecType) IkeKeyLifetimeValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EncryptionAlgosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -940,9 +898,7 @@ func (v *ValidateGlobalSpecType) EncryptionAlgosValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AuthenticationAlgosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1002,21 +958,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["authentication_algos"]; exists {
 		vOpts := append(opts, db.WithValidateField("authentication_algos"))
 		if err := fv(ctx, m.GetAuthenticationAlgos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["encryption_algos"]; exists {
 		vOpts := append(opts, db.WithValidateField("encryption_algos"))
 		if err := fv(ctx, m.GetEncryptionAlgos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ike_key_lifetime"]; exists {
@@ -1063,7 +1015,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetPfsMode().(type) {
@@ -1089,25 +1040,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1115,7 +1060,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIkeKeyLifetime := v.IkeKeyLifetimeValidationRuleHandler
 	rulesIkeKeyLifetime := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1148,12 +1092,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["authentication_algos"] = vFn
-
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_minutes"] = ves_io_schema_views_ike_phase1_profile.InputMinutesValidator().Validate
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_hours"] = ves_io_schema_views_ike_phase1_profile.InputHoursValidator().Validate
-
 	v.FldValidators["pfs_mode.dh_group_set"] = DHGroupsValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1211,9 +1152,7 @@ func (v *ValidateReplaceSpecType) IkeKeyLifetimeValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) EncryptionAlgosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1259,9 +1198,7 @@ func (v *ValidateReplaceSpecType) EncryptionAlgosValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) AuthenticationAlgosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1321,21 +1258,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["authentication_algos"]; exists {
 		vOpts := append(opts, db.WithValidateField("authentication_algos"))
 		if err := fv(ctx, m.GetAuthenticationAlgos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["encryption_algos"]; exists {
 		vOpts := append(opts, db.WithValidateField("encryption_algos"))
 		if err := fv(ctx, m.GetEncryptionAlgos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ike_key_lifetime"]; exists {
@@ -1382,7 +1315,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetPfsMode().(type) {
@@ -1408,16 +1340,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1425,7 +1354,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIkeKeyLifetime := v.IkeKeyLifetimeValidationRuleHandler
 	rulesIkeKeyLifetime := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1458,10 +1386,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["authentication_algos"] = vFn
-
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_minutes"] = ves_io_schema_views_ike_phase1_profile.InputMinutesValidator().Validate
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_hours"] = ves_io_schema_views_ike_phase1_profile.InputHoursValidator().Validate
-
 	v.FldValidators["pfs_mode.dh_group_set"] = DHGroupsValidator().Validate
 
 	return v

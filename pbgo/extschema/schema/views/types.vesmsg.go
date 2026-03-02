@@ -120,16 +120,13 @@ func (v *ValidateAcceleratedNetworkingType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAcceleratedNetworkingTypeValidator = func() *ValidateAcceleratedNetworkingType {
 	v := &ValidateAcceleratedNetworkingType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -137,7 +134,6 @@ var DefaultAcceleratedNetworkingTypeValidator = func() *ValidateAcceleratedNetwo
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAcceleratedNetworking := v.AcceleratedNetworkingValidationRuleHandler
 	rulesAcceleratedNetworking := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -172,7 +168,6 @@ func (m *AdminUserCredentialsType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdminPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AdminUserCredentialsType.admin_password")
 	}
@@ -212,7 +207,6 @@ type ValidateAdminUserCredentialsType struct {
 }
 
 func (v *ValidateAdminUserCredentialsType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
@@ -234,32 +228,24 @@ func (v *ValidateAdminUserCredentialsType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAdminUserCredentialsTypeValidator = func() *ValidateAdminUserCredentialsType {
 	v := &ValidateAdminUserCredentialsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -278,7 +264,6 @@ var DefaultAdminUserCredentialsTypeValidator = func() *ValidateAdminUserCredenti
 		panic(errMsg)
 	}
 	v.FldValidators["ssh_key"] = vFn
-
 	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -331,7 +316,6 @@ func (m *AdvertiseCustom) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAdvertiseWhereDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -339,7 +323,6 @@ func (m *AdvertiseCustom) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAdvertiseWhere() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAdvertiseWhere() {
 		driSet, err := e.GetDRefInfo()
@@ -353,7 +336,6 @@ func (m *AdvertiseCustom) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateAdvertiseCustom struct {
@@ -361,7 +343,6 @@ type ValidateAdvertiseCustom struct {
 }
 
 func (v *ValidateAdvertiseCustom) AdvertiseWhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -421,22 +402,18 @@ func (v *ValidateAdvertiseCustom) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["advertise_where"]; exists {
 		vOpts := append(opts, db.WithValidateField("advertise_where"))
 		if err := fv(ctx, m.GetAdvertiseWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAdvertiseCustomValidator = func() *ValidateAdvertiseCustom {
 	v := &ValidateAdvertiseCustom{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -509,11 +486,9 @@ func (m *AdvertisePublic) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPublicIpDRefInfo()
-
 }
 
 func (m *AdvertisePublic) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetPublicIp()
 	if vref == nil {
 		return nil, nil
@@ -529,7 +504,6 @@ func (m *AdvertisePublic) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetPublicIpDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -539,7 +513,6 @@ func (m *AdvertisePublic) GetPublicIpDBEntries(ctx context.Context, d db.Interfa
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: public_ip")
 	}
-
 	vref := m.GetPublicIp()
 	if vref == nil {
 		return nil, nil
@@ -557,7 +530,6 @@ func (m *AdvertisePublic) GetPublicIpDBEntries(ctx context.Context, d db.Interfa
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -566,7 +538,6 @@ type ValidateAdvertisePublic struct {
 }
 
 func (v *ValidateAdvertisePublic) PublicIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for public_ip")
@@ -575,11 +546,9 @@ func (v *ValidateAdvertisePublic) PublicIpValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -599,23 +568,18 @@ func (v *ValidateAdvertisePublic) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["public_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip"))
 		if err := fv(ctx, m.GetPublicIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAdvertisePublicValidator = func() *ValidateAdvertisePublic {
 	v := &ValidateAdvertisePublic{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -685,7 +649,6 @@ func (m *AdvertiseSiteVsite) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAdvertiseWhereDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -693,7 +656,6 @@ func (m *AdvertiseSiteVsite) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetAdvertiseWhere() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAdvertiseWhere() {
 		driSet, err := e.GetDRefInfo()
@@ -707,7 +669,6 @@ func (m *AdvertiseSiteVsite) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateAdvertiseSiteVsite struct {
@@ -715,7 +676,6 @@ type ValidateAdvertiseSiteVsite struct {
 }
 
 func (v *ValidateAdvertiseSiteVsite) AdvertiseWhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -775,22 +735,18 @@ func (v *ValidateAdvertiseSiteVsite) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["advertise_where"]; exists {
 		vOpts := append(opts, db.WithValidateField("advertise_where"))
 		if err := fv(ctx, m.GetAdvertiseWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAdvertiseSiteVsiteValidator = func() *ValidateAdvertiseSiteVsite {
 	v := &ValidateAdvertiseSiteVsite{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -862,7 +818,6 @@ type ValidateApiEndpointWithSchema struct {
 }
 
 func (v *ValidateApiEndpointWithSchema) ApiOperationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_operation")
@@ -871,19 +826,15 @@ func (v *ValidateApiEndpointWithSchema) ApiOperationValidationRuleHandler(rules 
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApiOperationValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateApiEndpointWithSchema) SchemaJsonValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for schema_json")
@@ -905,32 +856,24 @@ func (v *ValidateApiEndpointWithSchema) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_operation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_operation"))
 		if err := fv(ctx, m.GetApiOperation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["schema_json"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("schema_json"))
 		if err := fv(ctx, m.GetSchemaJson(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiEndpointWithSchemaValidator = func() *ValidateApiEndpointWithSchema {
 	v := &ValidateApiEndpointWithSchema{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1011,7 +954,6 @@ type ValidateApiOperation struct {
 }
 
 func (v *ValidateApiOperation) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpMethod)
@@ -1025,9 +967,7 @@ func (v *ValidateApiOperation) MethodValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateApiOperation) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
@@ -1049,32 +989,24 @@ func (v *ValidateApiOperation) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiOperationValidator = func() *ValidateApiOperation {
 	v := &ValidateApiOperation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1159,7 +1091,6 @@ type ValidateCustomCiphers struct {
 }
 
 func (v *ValidateCustomCiphers) CipherSuitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1213,40 +1144,30 @@ func (v *ValidateCustomCiphers) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cipher_suites"]; exists {
 		vOpts := append(opts, db.WithValidateField("cipher_suites"))
 		if err := fv(ctx, m.GetCipherSuites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_version"))
 		if err := fv(ctx, m.GetMaxVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_version"))
 		if err := fv(ctx, m.GetMinVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomCiphersValidator = func() *ValidateCustomCiphers {
 	v := &ValidateCustomCiphers{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1317,7 +1238,6 @@ type ValidateCustomDNS struct {
 }
 
 func (v *ValidateCustomDNS) InsideNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_nameserver")
@@ -1325,9 +1245,7 @@ func (v *ValidateCustomDNS) InsideNameserverValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCustomDNS) OutsideNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver")
@@ -1335,9 +1253,7 @@ func (v *ValidateCustomDNS) OutsideNameserverValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCustomDNS) InsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_nameserver_v6")
@@ -1345,9 +1261,7 @@ func (v *ValidateCustomDNS) InsideNameserverV6ValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCustomDNS) OutsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver_v6")
@@ -1369,50 +1283,36 @@ func (v *ValidateCustomDNS) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["inside_nameserver"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_nameserver"))
 		if err := fv(ctx, m.GetInsideNameserver(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_nameserver_v6"))
 		if err := fv(ctx, m.GetInsideNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_nameserver"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_nameserver"))
 		if err := fv(ctx, m.GetOutsideNameserver(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_nameserver_v6"))
 		if err := fv(ctx, m.GetOutsideNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomDNSValidator = func() *ValidateCustomDNS {
 	v := &ValidateCustomDNS{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1520,15 +1420,12 @@ func (m *DownstreamTLSCertsParams) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetMtlsChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMtlsChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *DownstreamTLSCertsParams) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
@@ -1554,7 +1451,6 @@ func (m *DownstreamTLSCertsParams) GetCertificatesDRefInfo() ([]db.DRefInfo, err
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCertificatesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1582,7 +1478,6 @@ func (m *DownstreamTLSCertsParams) GetCertificatesDBEntries(ctx context.Context,
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1593,11 +1488,8 @@ func (m *DownstreamTLSCertsParams) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetMtlsChoice().(type) {
 	case *DownstreamTLSCertsParams_NoMtls:
-
 		return nil, nil
-
 	case *DownstreamTLSCertsParams_UseMtls:
-
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
@@ -1607,11 +1499,9 @@ func (m *DownstreamTLSCertsParams) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "use_mtls." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateDownstreamTLSCertsParams struct {
@@ -1625,9 +1515,7 @@ func (v *ValidateDownstreamTLSCertsParams) MtlsChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDownstreamTLSCertsParams) CertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1687,13 +1575,11 @@ func (v *ValidateDownstreamTLSCertsParams) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificates"]; exists {
 		vOpts := append(opts, db.WithValidateField("certificates"))
 		if err := fv(ctx, m.GetCertificates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["mtls_choice"]; exists {
@@ -1729,25 +1615,19 @@ func (v *ValidateDownstreamTLSCertsParams) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_config"))
 		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDownstreamTLSCertsParamsValidator = func() *ValidateDownstreamTLSCertsParams {
 	v := &ValidateDownstreamTLSCertsParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1755,7 +1635,6 @@ var DefaultDownstreamTLSCertsParamsValidator = func() *ValidateDownstreamTLSCert
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1779,9 +1658,7 @@ var DefaultDownstreamTLSCertsParamsValidator = func() *ValidateDownstreamTLSCert
 		panic(errMsg)
 	}
 	v.FldValidators["certificates"] = vFn
-
 	v.FldValidators["mtls_choice.use_mtls"] = DownstreamTlsValidationContextValidator().Validate
-
 	v.FldValidators["tls_config"] = TlsConfigValidator().Validate
 
 	return v
@@ -1807,7 +1684,6 @@ func (m *DownstreamTlsParamsType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetTlsCertificates() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting DownstreamTlsParamsType.tls_certificates idx %v", idx)
@@ -1850,7 +1726,6 @@ func (m *DownstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetMtlsChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1860,11 +1735,8 @@ func (m *DownstreamTlsParamsType) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetMtlsChoice().(type) {
 	case *DownstreamTlsParamsType_NoMtls:
-
 		return nil, nil
-
 	case *DownstreamTlsParamsType_UseMtls:
-
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
@@ -1874,11 +1746,9 @@ func (m *DownstreamTlsParamsType) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "use_mtls." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateDownstreamTlsParamsType struct {
@@ -1892,9 +1762,7 @@ func (v *ValidateDownstreamTlsParamsType) MtlsChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDownstreamTlsParamsType) TlsCertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1988,33 +1856,25 @@ func (v *ValidateDownstreamTlsParamsType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_certificates"]; exists {
 		vOpts := append(opts, db.WithValidateField("tls_certificates"))
 		if err := fv(ctx, m.GetTlsCertificates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_config"))
 		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParamsType {
 	v := &ValidateDownstreamTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2022,7 +1882,6 @@ var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParam
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2046,9 +1905,7 @@ var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParam
 		panic(errMsg)
 	}
 	v.FldValidators["tls_certificates"] = vFn
-
 	v.FldValidators["mtls_choice.use_mtls"] = DownstreamTlsValidationContextValidator().Validate
-
 	v.FldValidators["tls_config"] = TlsConfigValidator().Validate
 
 	return v
@@ -2106,25 +1963,19 @@ func (m *DownstreamTlsValidationContext) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTrustedCaChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTrustedCaChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *DownstreamTlsValidationContext) GetCrlChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetCrlChoice().(type) {
 	case *DownstreamTlsValidationContext_NoCrl:
-
 		return nil, nil
-
 	case *DownstreamTlsValidationContext_Crl:
-
 		vref := m.GetCrl()
 		if vref == nil {
 			return nil, nil
@@ -2140,7 +1991,6 @@ func (m *DownstreamTlsValidationContext) GetCrlChoiceDRefInfo() ([]db.DRefInfo, 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -2152,13 +2002,11 @@ func (m *DownstreamTlsValidationContext) GetCrlChoiceDBEntries(ctx context.Conte
 
 	switch m.GetCrlChoice().(type) {
 	case *DownstreamTlsValidationContext_NoCrl:
-
 	case *DownstreamTlsValidationContext_Crl:
 		refdType, err := d.TypeForEntryKind("", "", "crl.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: crl")
 		}
-
 		vref := m.GetCrl()
 		if vref == nil {
 			return nil, nil
@@ -2176,7 +2024,6 @@ func (m *DownstreamTlsValidationContext) GetCrlChoiceDBEntries(ctx context.Conte
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -2185,7 +2032,6 @@ func (m *DownstreamTlsValidationContext) GetCrlChoiceDBEntries(ctx context.Conte
 func (m *DownstreamTlsValidationContext) GetTrustedCaChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetTrustedCaChoice().(type) {
 	case *DownstreamTlsValidationContext_TrustedCa:
-
 		vref := m.GetTrustedCa()
 		if vref == nil {
 			return nil, nil
@@ -2201,7 +2047,6 @@ func (m *DownstreamTlsValidationContext) GetTrustedCaChoiceDRefInfo() ([]db.DRef
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -2217,7 +2062,6 @@ func (m *DownstreamTlsValidationContext) GetTrustedCaChoiceDBEntries(ctx context
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
 		}
-
 		vref := m.GetTrustedCa()
 		if vref == nil {
 			return nil, nil
@@ -2235,7 +2079,6 @@ func (m *DownstreamTlsValidationContext) GetTrustedCaChoiceDBEntries(ctx context
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -2274,14 +2117,11 @@ func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["client_certificate_optional"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_certificate_optional"))
 		if err := fv(ctx, m.GetClientCertificateOptional(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetCrlChoice().(type) {
@@ -2307,7 +2147,6 @@ func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["trusted_ca_choice"]; exists {
@@ -2343,7 +2182,6 @@ func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetXfccHeader().(type) {
@@ -2369,16 +2207,13 @@ func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDownstreamTlsValidationContextValidator = func() *ValidateDownstreamTlsValidationContext {
 	v := &ValidateDownstreamTlsValidationContext{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2386,7 +2221,6 @@ var DefaultDownstreamTlsValidationContextValidator = func() *ValidateDownstreamT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTrustedCaChoice := v.TrustedCaChoiceValidationRuleHandler
 	rulesTrustedCaChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2397,7 +2231,6 @@ var DefaultDownstreamTlsValidationContextValidator = func() *ValidateDownstreamT
 		panic(errMsg)
 	}
 	v.FldValidators["trusted_ca_choice"] = vFn
-
 	vrhTrustedCaChoiceTrustedCaUrl := v.TrustedCaChoiceTrustedCaUrlValidationRuleHandler
 	rulesTrustedCaChoiceTrustedCaUrl := map[string]string{
 		"ves.io.schema.rules.string.max_bytes":      "131072",
@@ -2409,13 +2242,9 @@ var DefaultDownstreamTlsValidationContextValidator = func() *ValidateDownstreamT
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DownstreamTlsValidationContext.trusted_ca_choice_trusted_ca_url: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["trusted_ca_choice.trusted_ca_url"] = vFnMap["trusted_ca_choice.trusted_ca_url"]
-
 	v.FldValidators["crl_choice.crl"] = ObjectRefTypeValidator().Validate
-
 	v.FldValidators["trusted_ca_choice.trusted_ca"] = ObjectRefTypeValidator().Validate
-
 	v.FldValidators["xfcc_header.xfcc_options"] = XfccHeaderKeysValidator().Validate
 
 	return v
@@ -2467,7 +2296,6 @@ type ValidateExistingTGWType struct {
 }
 
 func (v *ValidateExistingTGWType) TgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_id")
@@ -2475,9 +2303,7 @@ func (v *ValidateExistingTGWType) TgwIdValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateExistingTGWType) TgwAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_asn")
@@ -2485,9 +2311,7 @@ func (v *ValidateExistingTGWType) TgwAsnValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateExistingTGWType) VolterraSiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_site_asn")
@@ -2509,41 +2333,30 @@ func (v *ValidateExistingTGWType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tgw_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_asn"))
 		if err := fv(ctx, m.GetTgwAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_id"))
 		if err := fv(ctx, m.GetTgwId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))
 		if err := fv(ctx, m.GetVolterraSiteAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultExistingTGWTypeValidator = func() *ValidateExistingTGWType {
 	v := &ValidateExistingTGWType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2638,11 +2451,9 @@ func (m *GlobalConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGlobalVnDRefInfo()
-
 }
 
 func (m *GlobalConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetGlobalVn()
 	if vref == nil {
 		return nil, nil
@@ -2658,7 +2469,6 @@ func (m *GlobalConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetGlobalVnDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2668,7 +2478,6 @@ func (m *GlobalConnectorType) GetGlobalVnDBEntries(ctx context.Context, d db.Int
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
 	}
-
 	vref := m.GetGlobalVn()
 	if vref == nil {
 		return nil, nil
@@ -2686,7 +2495,6 @@ func (m *GlobalConnectorType) GetGlobalVnDBEntries(ctx context.Context, d db.Int
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2695,7 +2503,6 @@ type ValidateGlobalConnectorType struct {
 }
 
 func (v *ValidateGlobalConnectorType) GlobalVnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for global_vn")
@@ -2704,11 +2511,9 @@ func (v *ValidateGlobalConnectorType) GlobalVnValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2728,23 +2533,18 @@ func (v *ValidateGlobalConnectorType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["global_vn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("global_vn"))
 		if err := fv(ctx, m.GetGlobalVn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalConnectorTypeValidator = func() *ValidateGlobalConnectorType {
 	v := &ValidateGlobalConnectorType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2825,34 +2625,24 @@ func (v *ValidateInternetVIPInfo) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_network_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_network_type"))
 		if err := fv(ctx, m.GetSiteNetworkType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2921,52 +2711,36 @@ func (v *ValidateInternetVIPListenerStatusType) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["arn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("arn"))
 		if err := fv(ctx, m.GetArn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reason"))
 		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3035,54 +2809,37 @@ func (v *ValidateInternetVIPStatus) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["arn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("arn"))
 		if err := fv(ctx, m.GetArn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nlb_cname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nlb_cname"))
 		if err := fv(ctx, m.GetNlbCname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nlb_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nlb_status"))
 		if err := fv(ctx, m.GetNlbStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reason"))
 		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["target_group_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("target_group_status"))
 		for idx, item := range m.GetTargetGroupStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3090,9 +2847,7 @@ func (v *ValidateInternetVIPStatus) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -3161,18 +2916,13 @@ func (v *ValidateInternetVIPTargetGroupStatusType) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["arn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("arn"))
 		if err := fv(ctx, m.GetArn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listener_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("listener_status"))
 		for idx, item := range m.GetListenerStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3180,45 +2930,31 @@ func (v *ValidateInternetVIPTargetGroupStatusType) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reason"))
 		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3329,16 +3065,13 @@ func (v *ValidateKubernetesUpgradeDrain) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultKubernetesUpgradeDrainValidator = func() *ValidateKubernetesUpgradeDrain {
 	v := &ValidateKubernetesUpgradeDrain{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3346,7 +3079,6 @@ var DefaultKubernetesUpgradeDrainValidator = func() *ValidateKubernetesUpgradeDr
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhKubernetesUpgradeDrainEnableChoice := v.KubernetesUpgradeDrainEnableChoiceValidationRuleHandler
 	rulesKubernetesUpgradeDrainEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3357,7 +3089,6 @@ var DefaultKubernetesUpgradeDrainValidator = func() *ValidateKubernetesUpgradeDr
 		panic(errMsg)
 	}
 	v.FldValidators["kubernetes_upgrade_drain_enable_choice"] = vFn
-
 	v.FldValidators["kubernetes_upgrade_drain_enable_choice.enable_upgrade_drain"] = KubernetesUpgradeDrainConfigValidator().Validate
 
 	return v
@@ -3423,6 +3154,7 @@ func (v *ValidateKubernetesUpgradeDrainConfig) DrainMaxUnavailableChoiceDrainMax
 	}
 	return oValidatorFn_DrainMaxUnavailableNodeCount, nil
 }
+
 func (v *ValidateKubernetesUpgradeDrainConfig) DrainMaxUnavailableChoiceDrainMaxUnavailableNodePercentageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_DrainMaxUnavailableNodePercentage, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -3430,7 +3162,6 @@ func (v *ValidateKubernetesUpgradeDrainConfig) DrainMaxUnavailableChoiceDrainMax
 	}
 	return oValidatorFn_DrainMaxUnavailableNodePercentage, nil
 }
-
 func (v *ValidateKubernetesUpgradeDrainConfig) VegaUpgradeModeToggleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3438,9 +3169,7 @@ func (v *ValidateKubernetesUpgradeDrainConfig) VegaUpgradeModeToggleChoiceValida
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateKubernetesUpgradeDrainConfig) DrainNodeTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for drain_node_timeout")
@@ -3496,16 +3225,12 @@ func (v *ValidateKubernetesUpgradeDrainConfig) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["drain_node_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("drain_node_timeout"))
 		if err := fv(ctx, m.GetDrainNodeTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vega_upgrade_mode_toggle_choice"]; exists {
@@ -3541,16 +3266,13 @@ func (v *ValidateKubernetesUpgradeDrainConfig) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultKubernetesUpgradeDrainConfigValidator = func() *ValidateKubernetesUpgradeDrainConfig {
 	v := &ValidateKubernetesUpgradeDrainConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3558,7 +3280,6 @@ var DefaultKubernetesUpgradeDrainConfigValidator = func() *ValidateKubernetesUpg
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDrainMaxUnavailableChoice := v.DrainMaxUnavailableChoiceValidationRuleHandler
 	rulesDrainMaxUnavailableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3569,7 +3290,6 @@ var DefaultKubernetesUpgradeDrainConfigValidator = func() *ValidateKubernetesUpg
 		panic(errMsg)
 	}
 	v.FldValidators["drain_max_unavailable_choice"] = vFn
-
 	vrhDrainMaxUnavailableChoiceDrainMaxUnavailableNodeCount := v.DrainMaxUnavailableChoiceDrainMaxUnavailableNodeCountValidationRuleHandler
 	rulesDrainMaxUnavailableChoiceDrainMaxUnavailableNodeCount := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -3590,10 +3310,8 @@ var DefaultKubernetesUpgradeDrainConfigValidator = func() *ValidateKubernetesUpg
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field KubernetesUpgradeDrainConfig.drain_max_unavailable_choice_drain_max_unavailable_node_percentage: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["drain_max_unavailable_choice.drain_max_unavailable_node_count"] = vFnMap["drain_max_unavailable_choice.drain_max_unavailable_node_count"]
 	v.FldValidators["drain_max_unavailable_choice.drain_max_unavailable_node_percentage"] = vFnMap["drain_max_unavailable_choice.drain_max_unavailable_node_percentage"]
-
 	vrhVegaUpgradeModeToggleChoice := v.VegaUpgradeModeToggleChoiceValidationRuleHandler
 	rulesVegaUpgradeModeToggleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3721,16 +3439,13 @@ func (v *ValidateL3PerformanceEnhancementType) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultL3PerformanceEnhancementTypeValidator = func() *ValidateL3PerformanceEnhancementType {
 	v := &ValidateL3PerformanceEnhancementType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3738,7 +3453,6 @@ var DefaultL3PerformanceEnhancementTypeValidator = func() *ValidateL3Performance
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPerfModeChoice := v.PerfModeChoiceValidationRuleHandler
 	rulesPerfModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3755,6 +3469,134 @@ var DefaultL3PerformanceEnhancementTypeValidator = func() *ValidateL3Performance
 
 func L3PerformanceEnhancementTypeValidator() db.Validator {
 	return DefaultL3PerformanceEnhancementTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *L7PerformanceEnhancementType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *L7PerformanceEnhancementType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *L7PerformanceEnhancementType) DeepCopy() *L7PerformanceEnhancementType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &L7PerformanceEnhancementType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *L7PerformanceEnhancementType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *L7PerformanceEnhancementType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return L7PerformanceEnhancementTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateL7PerformanceEnhancementType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateL7PerformanceEnhancementType) PerfModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for perf_mode_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateL7PerformanceEnhancementType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*L7PerformanceEnhancementType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *L7PerformanceEnhancementType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["perf_mode_choice"]; exists {
+		val := m.GetPerfModeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("perf_mode_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPerfModeChoice().(type) {
+	case *L7PerformanceEnhancementType_JumboDisabled:
+		if fv, exists := v.FldValidators["perf_mode_choice.jumbo_disabled"]; exists {
+			val := m.GetPerfModeChoice().(*L7PerformanceEnhancementType_JumboDisabled).JumboDisabled
+			vOpts := append(opts,
+				db.WithValidateField("perf_mode_choice"),
+				db.WithValidateField("jumbo_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *L7PerformanceEnhancementType_JumboEnabled:
+		if fv, exists := v.FldValidators["perf_mode_choice.jumbo_enabled"]; exists {
+			val := m.GetPerfModeChoice().(*L7PerformanceEnhancementType_JumboEnabled).JumboEnabled
+			vOpts := append(opts,
+				db.WithValidateField("perf_mode_choice"),
+				db.WithValidateField("jumbo_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultL7PerformanceEnhancementTypeValidator = func() *ValidateL7PerformanceEnhancementType {
+	v := &ValidateL7PerformanceEnhancementType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhPerfModeChoice := v.PerfModeChoiceValidationRuleHandler
+	rulesPerfModeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPerfModeChoice(rulesPerfModeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7PerformanceEnhancementType.perf_mode_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["perf_mode_choice"] = vFn
+
+	return v
+}()
+
+func L7PerformanceEnhancementTypeValidator() db.Validator {
+	return DefaultL7PerformanceEnhancementTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3799,7 +3641,6 @@ type ValidateLinkRefType struct {
 }
 
 func (v *ValidateLinkRefType) HrefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for href")
@@ -3807,9 +3648,7 @@ func (v *ValidateLinkRefType) HrefValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLinkRefType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -3831,32 +3670,24 @@ func (v *ValidateLinkRefType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["href"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("href"))
 		if err := fv(ctx, m.GetHref(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLinkRefTypeValidator = func() *ValidateLinkRefType {
 	v := &ValidateLinkRefType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3938,7 +3769,6 @@ type ValidateMasterNode struct {
 }
 
 func (v *ValidateMasterNode) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -3946,9 +3776,7 @@ func (v *ValidateMasterNode) NameValidationRuleHandler(rules map[string]string) 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMasterNode) PublicIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for public_ip")
@@ -3970,32 +3798,24 @@ func (v *ValidateMasterNode) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip"))
 		if err := fv(ctx, m.GetPublicIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMasterNodeValidator = func() *ValidateMasterNode {
 	v := &ValidateMasterNode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4076,21 +3896,15 @@ func (m *NetworkSelectType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkChoiceDRefInfo()
-
 }
 
 func (m *NetworkSelectType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *NetworkSelectType_SiteLocalNetwork:
-
 		return nil, nil
-
 	case *NetworkSelectType_SiteLocalInsideNetwork:
-
 		return nil, nil
-
 	case *NetworkSelectType_SegmentNetwork:
-
 		vref := m.GetSegmentNetwork()
 		if vref == nil {
 			return nil, nil
@@ -4106,7 +3920,6 @@ func (m *NetworkSelectType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -4118,15 +3931,12 @@ func (m *NetworkSelectType) GetNetworkChoiceDBEntries(ctx context.Context, d db.
 
 	switch m.GetNetworkChoice().(type) {
 	case *NetworkSelectType_SiteLocalNetwork:
-
 	case *NetworkSelectType_SiteLocalInsideNetwork:
-
 	case *NetworkSelectType_SegmentNetwork:
 		refdType, err := d.TypeForEntryKind("", "", "segment.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 		}
-
 		vref := m.GetSegmentNetwork()
 		if vref == nil {
 			return nil, nil
@@ -4144,7 +3954,6 @@ func (m *NetworkSelectType) GetNetworkChoiceDBEntries(ctx context.Context, d db.
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -4202,16 +4011,13 @@ func (v *ValidateNetworkSelectType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkSelectTypeValidator = func() *ValidateNetworkSelectType {
 	v := &ValidateNetworkSelectType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["network_choice.segment_network"] = ObjectRefTypeValidator().Validate
 
 	return v
@@ -4278,7 +4084,6 @@ type ValidateObjectRefType struct {
 }
 
 func (v *ValidateObjectRefType) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant")
@@ -4286,9 +4091,7 @@ func (v *ValidateObjectRefType) TenantValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateObjectRefType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -4296,9 +4099,7 @@ func (v *ValidateObjectRefType) NamespaceValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateObjectRefType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -4320,41 +4121,30 @@ func (v *ValidateObjectRefType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectRefTypeValidator = func() *ValidateObjectRefType {
 	v := &ValidateObjectRefType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4509,16 +4299,13 @@ func (v *ValidateOperatingSystemType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOperatingSystemTypeValidator = func() *ValidateOperatingSystemType {
 	v := &ValidateOperatingSystemType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4526,7 +4313,6 @@ var DefaultOperatingSystemTypeValidator = func() *ValidateOperatingSystemType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhOperatingSystemVersionChoice := v.OperatingSystemVersionChoiceValidationRuleHandler
 	rulesOperatingSystemVersionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4537,7 +4323,6 @@ var DefaultOperatingSystemTypeValidator = func() *ValidateOperatingSystemType {
 		panic(errMsg)
 	}
 	v.FldValidators["operating_system_version_choice"] = vFn
-
 	vrhOperatingSystemVersionChoiceOperatingSystemVersion := v.OperatingSystemVersionChoiceOperatingSystemVersionValidationRuleHandler
 	rulesOperatingSystemVersionChoiceOperatingSystemVersion := map[string]string{
 		"ves.io.schema.rules.string.max_len": "20",
@@ -4547,7 +4332,6 @@ var DefaultOperatingSystemTypeValidator = func() *ValidateOperatingSystemType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OperatingSystemType.operating_system_version_choice_operating_system_version: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["operating_system_version_choice.operating_system_version"] = vFnMap["operating_system_version_choice.operating_system_version"]
 
 	return v
@@ -4600,7 +4384,6 @@ func (m *OriginPoolListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoolsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -4608,7 +4391,6 @@ func (m *OriginPoolListType) GetPoolsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPools() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPools() {
 		driSet, err := e.GetDRefInfo()
@@ -4622,7 +4404,6 @@ func (m *OriginPoolListType) GetPoolsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateOriginPoolListType struct {
@@ -4630,7 +4411,6 @@ type ValidateOriginPoolListType struct {
 }
 
 func (v *ValidateOriginPoolListType) PoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4690,22 +4470,18 @@ func (v *ValidateOriginPoolListType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("pools"))
 		if err := fv(ctx, m.GetPools(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginPoolListTypeValidator = func() *ValidateOriginPoolListType {
 	v := &ValidateOriginPoolListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4776,13 +4552,11 @@ func (m *OriginPoolWithWeight) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoolChoiceDRefInfo()
-
 }
 
 func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPoolChoice().(type) {
 	case *OriginPoolWithWeight_Pool:
-
 		vref := m.GetPool()
 		if vref == nil {
 			return nil, nil
@@ -4798,9 +4572,7 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *OriginPoolWithWeight_Cluster:
-
 		vref := m.GetCluster()
 		if vref == nil {
 			return nil, nil
@@ -4816,7 +4588,6 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -4832,7 +4603,6 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDBEntries(ctx context.Context, d db.
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: origin_pool")
 		}
-
 		vref := m.GetPool()
 		if vref == nil {
 			return nil, nil
@@ -4850,13 +4620,11 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDBEntries(ctx context.Context, d db.
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *OriginPoolWithWeight_Cluster:
 		refdType, err := d.TypeForEntryKind("", "", "cluster.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: cluster")
 		}
-
 		vref := m.GetCluster()
 		if vref == nil {
 			return nil, nil
@@ -4874,7 +4642,6 @@ func (m *OriginPoolWithWeight) GetPoolChoiceDBEntries(ctx context.Context, d db.
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -4891,9 +4658,7 @@ func (v *ValidateOriginPoolWithWeight) PoolChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateOriginPoolWithWeight) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -4936,9 +4701,7 @@ func (v *ValidateOriginPoolWithWeight) EndpointSubsetsValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOriginPoolWithWeight) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
@@ -4960,13 +4723,11 @@ func (v *ValidateOriginPoolWithWeight) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
 		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pool_choice"]; exists {
@@ -5002,34 +4763,25 @@ func (v *ValidateOriginPoolWithWeight) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["weight"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("weight"))
 		if err := fv(ctx, m.GetWeight(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginPoolWithWeightValidator = func() *ValidateOriginPoolWithWeight {
 	v := &ValidateOriginPoolWithWeight{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5037,7 +4789,6 @@ var DefaultOriginPoolWithWeightValidator = func() *ValidateOriginPoolWithWeight 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPoolChoice := v.PoolChoiceValidationRuleHandler
 	rulesPoolChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5070,7 +4821,6 @@ var DefaultOriginPoolWithWeightValidator = func() *ValidateOriginPoolWithWeight 
 		panic(errMsg)
 	}
 	v.FldValidators["priority"] = vFn
-
 	v.FldValidators["pool_choice.pool"] = ObjectRefTypeValidator().Validate
 	v.FldValidators["pool_choice.cluster"] = ObjectRefTypeValidator().Validate
 
@@ -5177,16 +4927,13 @@ func (v *ValidatePerformanceEnhancementModeType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPerformanceEnhancementModeTypeValidator = func() *ValidatePerformanceEnhancementModeType {
 	v := &ValidatePerformanceEnhancementModeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5194,7 +4941,6 @@ var DefaultPerformanceEnhancementModeTypeValidator = func() *ValidatePerformance
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPerfModeChoice := v.PerfModeChoiceValidationRuleHandler
 	rulesPerfModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5205,7 +4951,7 @@ var DefaultPerformanceEnhancementModeTypeValidator = func() *ValidatePerformance
 		panic(errMsg)
 	}
 	v.FldValidators["perf_mode_choice"] = vFn
-
+	v.FldValidators["perf_mode_choice.perf_mode_l7_enhanced"] = L7PerformanceEnhancementTypeValidator().Validate
 	v.FldValidators["perf_mode_choice.perf_mode_l3_enhanced"] = L3PerformanceEnhancementTypeValidator().Validate
 
 	return v
@@ -5257,7 +5003,6 @@ type ValidatePrefixStringListType struct {
 }
 
 func (v *ValidatePrefixStringListType) PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5297,9 +5042,7 @@ func (v *ValidatePrefixStringListType) PrefixesValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePrefixStringListType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5353,30 +5096,24 @@ func (v *ValidatePrefixStringListType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
 		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefixes"))
 		if err := fv(ctx, m.GetPrefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPrefixStringListTypeValidator = func() *ValidatePrefixStringListType {
 	v := &ValidatePrefixStringListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5496,9 +5233,7 @@ func (v *ValidateProactiveMonitoringChoice) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -5602,16 +5337,13 @@ func (v *ValidateRegionalEdgeSelection) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRegionalEdgeSelectionValidator = func() *ValidateRegionalEdgeSelection {
 	v := &ValidateRegionalEdgeSelection{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["re_selection_choice.specific_re"] = SpecificREValidator().Validate
 
 	return v
@@ -5664,7 +5396,6 @@ func (m *SegmentRefList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSegmentsDRefInfo()
-
 }
 
 func (m *SegmentRefList) GetSegmentsDRefInfo() ([]db.DRefInfo, error) {
@@ -5690,7 +5421,6 @@ func (m *SegmentRefList) GetSegmentsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSegmentsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5718,7 +5448,6 @@ func (m *SegmentRefList) GetSegmentsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -5727,7 +5456,6 @@ type ValidateSegmentRefList struct {
 }
 
 func (v *ValidateSegmentRefList) SegmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5787,22 +5515,18 @@ func (v *ValidateSegmentRefList) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["segments"]; exists {
 		vOpts := append(opts, db.WithValidateField("segments"))
 		if err := fv(ctx, m.GetSegments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSegmentRefListValidator = func() *ValidateSegmentRefList {
 	v := &ValidateSegmentRefList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5872,13 +5596,11 @@ func (m *SiteLocator) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetChoiceDRefInfo()
-
 }
 
 func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetChoice().(type) {
 	case *SiteLocator_Site:
-
 		vref := m.GetSite()
 		if vref == nil {
 			return nil, nil
@@ -5894,9 +5616,7 @@ func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *SiteLocator_VirtualSite:
-
 		vref := m.GetVirtualSite()
 		if vref == nil {
 			return nil, nil
@@ -5912,7 +5632,6 @@ func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -5928,7 +5647,6 @@ func (m *SiteLocator) GetChoiceDBEntries(ctx context.Context, d db.Interface) ([
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: site")
 		}
-
 		vref := m.GetSite()
 		if vref == nil {
 			return nil, nil
@@ -5946,13 +5664,11 @@ func (m *SiteLocator) GetChoiceDBEntries(ctx context.Context, d db.Interface) ([
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *SiteLocator_VirtualSite:
 		refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
 		}
-
 		vref := m.GetVirtualSite()
 		if vref == nil {
 			return nil, nil
@@ -5970,7 +5686,6 @@ func (m *SiteLocator) GetChoiceDBEntries(ctx context.Context, d db.Interface) ([
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -6035,16 +5750,13 @@ func (v *ValidateSiteLocator) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteLocatorValidator = func() *ValidateSiteLocator {
 	v := &ValidateSiteLocator{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6052,7 +5764,6 @@ var DefaultSiteLocatorValidator = func() *ValidateSiteLocator {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6063,7 +5774,6 @@ var DefaultSiteLocatorValidator = func() *ValidateSiteLocator {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.site"] = ObjectRefTypeValidator().Validate
 	v.FldValidators["choice.virtual_site"] = ObjectRefTypeValidator().Validate
 
@@ -6117,7 +5827,6 @@ func (m *SiteReferenceListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRefsDRefInfo()
-
 }
 
 func (m *SiteReferenceListType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -6143,7 +5852,6 @@ func (m *SiteReferenceListType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6171,7 +5879,6 @@ func (m *SiteReferenceListType) GetRefsDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -6180,7 +5887,6 @@ type ValidateSiteReferenceListType struct {
 }
 
 func (v *ValidateSiteReferenceListType) RefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6240,22 +5946,18 @@ func (v *ValidateSiteReferenceListType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("refs"))
 		if err := fv(ctx, m.GetRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteReferenceListTypeValidator = func() *ValidateSiteReferenceListType {
 	v := &ValidateSiteReferenceListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6325,13 +6027,11 @@ func (m *SiteRegionLocator) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetChoiceDRefInfo()
-
 }
 
 func (m *SiteRegionLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetChoice().(type) {
 	case *SiteRegionLocator_Site:
-
 		vref := m.GetSite()
 		if vref == nil {
 			return nil, nil
@@ -6347,9 +6047,7 @@ func (m *SiteRegionLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *SiteRegionLocator_CloudReRegion:
-
 		vref := m.GetCloudReRegion()
 		if vref == nil {
 			return nil, nil
@@ -6365,9 +6063,7 @@ func (m *SiteRegionLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *SiteRegionLocator_VirtualSite:
-
 		vref := m.GetVirtualSite()
 		if vref == nil {
 			return nil, nil
@@ -6383,7 +6079,6 @@ func (m *SiteRegionLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -6399,7 +6094,6 @@ func (m *SiteRegionLocator) GetChoiceDBEntries(ctx context.Context, d db.Interfa
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: site")
 		}
-
 		vref := m.GetSite()
 		if vref == nil {
 			return nil, nil
@@ -6417,13 +6111,11 @@ func (m *SiteRegionLocator) GetChoiceDBEntries(ctx context.Context, d db.Interfa
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *SiteRegionLocator_CloudReRegion:
 		refdType, err := d.TypeForEntryKind("", "", "cloud_region.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: cloud_region")
 		}
-
 		vref := m.GetCloudReRegion()
 		if vref == nil {
 			return nil, nil
@@ -6441,13 +6133,11 @@ func (m *SiteRegionLocator) GetChoiceDBEntries(ctx context.Context, d db.Interfa
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *SiteRegionLocator_VirtualSite:
 		refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
 		}
-
 		vref := m.GetVirtualSite()
 		if vref == nil {
 			return nil, nil
@@ -6465,7 +6155,6 @@ func (m *SiteRegionLocator) GetChoiceDBEntries(ctx context.Context, d db.Interfa
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -6541,16 +6230,13 @@ func (v *ValidateSiteRegionLocator) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteRegionLocatorValidator = func() *ValidateSiteRegionLocator {
 	v := &ValidateSiteRegionLocator{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6558,7 +6244,6 @@ var DefaultSiteRegionLocatorValidator = func() *ValidateSiteRegionLocator {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6569,7 +6254,6 @@ var DefaultSiteRegionLocatorValidator = func() *ValidateSiteRegionLocator {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.site"] = ObjectRefTypeValidator().Validate
 	v.FldValidators["choice.cloud_re_region"] = ObjectRefTypeValidator().Validate
 	v.FldValidators["choice.virtual_site"] = ObjectRefTypeValidator().Validate
@@ -6659,16 +6343,13 @@ func (v *ValidateSnatPoolConfiguration) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSnatPoolConfigurationValidator = func() *ValidateSnatPoolConfiguration {
 	v := &ValidateSnatPoolConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["snat_pool_choice.snat_pool"] = PrefixStringListTypeValidator().Validate
 
 	return v
@@ -6720,7 +6401,6 @@ type ValidateSpecificRE struct {
 }
 
 func (v *ValidateSpecificRE) PrimaryReValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for primary_re")
@@ -6742,32 +6422,24 @@ func (v *ValidateSpecificRE) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["backup_re"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("backup_re"))
 		if err := fv(ctx, m.GetBackupRe(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["primary_re"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("primary_re"))
 		if err := fv(ctx, m.GetPrimaryRe(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecificREValidator = func() *ValidateSpecificRE {
 	v := &ValidateSpecificRE{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6837,7 +6509,6 @@ type ValidateTGWAssignedASNType struct {
 }
 
 func (v *ValidateTGWAssignedASNType) TgwAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_asn")
@@ -6845,9 +6516,7 @@ func (v *ValidateTGWAssignedASNType) TgwAsnValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTGWAssignedASNType) VolterraSiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_site_asn")
@@ -6869,32 +6538,24 @@ func (v *ValidateTGWAssignedASNType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tgw_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_asn"))
 		if err := fv(ctx, m.GetTgwAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))
 		if err := fv(ctx, m.GetVolterraSiteAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTGWAssignedASNTypeValidator = func() *ValidateTGWAssignedASNType {
 	v := &ValidateTGWAssignedASNType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7030,16 +6691,13 @@ func (v *ValidateTGWParamsType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTGWParamsTypeValidator = func() *ValidateTGWParamsType {
 	v := &ValidateTGWParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7047,7 +6705,6 @@ var DefaultTGWParamsTypeValidator = func() *ValidateTGWParamsType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7058,7 +6715,6 @@ var DefaultTGWParamsTypeValidator = func() *ValidateTGWParamsType {
 		panic(errMsg)
 	}
 	v.FldValidators["asn_choice"] = vFn
-
 	v.FldValidators["asn_choice.user_assigned"] = TGWAssignedASNTypeValidator().Validate
 
 	return v
@@ -7110,7 +6766,6 @@ type ValidateThirdPartyAuthorizationToken struct {
 }
 
 func (v *ValidateThirdPartyAuthorizationToken) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant")
@@ -7118,9 +6773,7 @@ func (v *ValidateThirdPartyAuthorizationToken) TenantValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThirdPartyAuthorizationToken) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -7128,9 +6781,7 @@ func (v *ValidateThirdPartyAuthorizationToken) NamespaceValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThirdPartyAuthorizationToken) VhNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vh_name")
@@ -7138,9 +6789,7 @@ func (v *ValidateThirdPartyAuthorizationToken) VhNameValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThirdPartyAuthorizationToken) AppTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for app_type")
@@ -7162,50 +6811,36 @@ func (v *ValidateThirdPartyAuthorizationToken) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type"))
 		if err := fv(ctx, m.GetAppType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vh_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vh_name"))
 		if err := fv(ctx, m.GetVhName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThirdPartyAuthorizationTokenValidator = func() *ValidateThirdPartyAuthorizationToken {
 	v := &ValidateThirdPartyAuthorizationToken{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7383,16 +7018,13 @@ func (v *ValidateTlsConfig) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTlsConfigValidator = func() *ValidateTlsConfig {
 	v := &ValidateTlsConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7400,7 +7032,6 @@ var DefaultTlsConfigValidator = func() *ValidateTlsConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7411,7 +7042,6 @@ var DefaultTlsConfigValidator = func() *ValidateTlsConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.custom_security"] = CustomCiphersValidator().Validate
 
 	return v
@@ -7525,16 +7155,13 @@ func (v *ValidateVolterraSoftwareType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVolterraSoftwareTypeValidator = func() *ValidateVolterraSoftwareType {
 	v := &ValidateVolterraSoftwareType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7542,7 +7169,6 @@ var DefaultVolterraSoftwareTypeValidator = func() *ValidateVolterraSoftwareType 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhVolterraSwVersionChoice := v.VolterraSwVersionChoiceValidationRuleHandler
 	rulesVolterraSwVersionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7553,7 +7179,6 @@ var DefaultVolterraSoftwareTypeValidator = func() *ValidateVolterraSoftwareType 
 		panic(errMsg)
 	}
 	v.FldValidators["volterra_sw_version_choice"] = vFn
-
 	vrhVolterraSwVersionChoiceVolterraSoftwareVersion := v.VolterraSwVersionChoiceVolterraSoftwareVersionValidationRuleHandler
 	rulesVolterraSwVersionChoiceVolterraSoftwareVersion := map[string]string{
 		"ves.io.schema.rules.string.max_len": "20",
@@ -7563,7 +7188,6 @@ var DefaultVolterraSoftwareTypeValidator = func() *ValidateVolterraSoftwareType 
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field VolterraSoftwareType.volterra_sw_version_choice_volterra_software_version: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["volterra_sw_version_choice.volterra_software_version"] = vFnMap["volterra_sw_version_choice.volterra_software_version"]
 
 	return v
@@ -7621,19 +7245,15 @@ func (m *WhereCloudEdgeSegment) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *WhereCloudEdgeSegment) GetCloudEdgeDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCloudEdge()
 	if vref == nil {
 		return nil, nil
@@ -7649,7 +7269,6 @@ func (m *WhereCloudEdgeSegment) GetCloudEdgeDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCloudEdgeDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7659,7 +7278,6 @@ func (m *WhereCloudEdgeSegment) GetCloudEdgeDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_region")
 	}
-
 	vref := m.GetCloudEdge()
 	if vref == nil {
 		return nil, nil
@@ -7677,12 +7295,10 @@ func (m *WhereCloudEdgeSegment) GetCloudEdgeDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *WhereCloudEdgeSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -7698,7 +7314,6 @@ func (m *WhereCloudEdgeSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7708,7 +7323,6 @@ func (m *WhereCloudEdgeSegment) GetSegmentDBEntries(ctx context.Context, d db.In
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -7726,7 +7340,6 @@ func (m *WhereCloudEdgeSegment) GetSegmentDBEntries(ctx context.Context, d db.In
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -7735,7 +7348,6 @@ type ValidateWhereCloudEdgeSegment struct {
 }
 
 func (v *ValidateWhereCloudEdgeSegment) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
@@ -7744,19 +7356,15 @@ func (v *ValidateWhereCloudEdgeSegment) SegmentValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereCloudEdgeSegment) CloudEdgeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cloud_edge")
@@ -7765,19 +7373,15 @@ func (v *ValidateWhereCloudEdgeSegment) CloudEdgeValidationRuleHandler(rules map
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereCloudEdgeSegment) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
@@ -7785,9 +7389,7 @@ func (v *ValidateWhereCloudEdgeSegment) IpValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereCloudEdgeSegment) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
@@ -7809,50 +7411,36 @@ func (v *ValidateWhereCloudEdgeSegment) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_edge"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_edge"))
 		if err := fv(ctx, m.GetCloudEdge(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6"))
 		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment"))
 		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereCloudEdgeSegmentValidator = func() *ValidateWhereCloudEdgeSegment {
 	v := &ValidateWhereCloudEdgeSegment{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7956,11 +7544,9 @@ func (m *WhereSegment) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSegmentDRefInfo()
-
 }
 
 func (m *WhereSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -7976,7 +7562,6 @@ func (m *WhereSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7986,7 +7571,6 @@ func (m *WhereSegment) GetSegmentDBEntries(ctx context.Context, d db.Interface) 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -8004,7 +7588,6 @@ func (m *WhereSegment) GetSegmentDBEntries(ctx context.Context, d db.Interface) 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -8013,7 +7596,6 @@ type ValidateWhereSegment struct {
 }
 
 func (v *ValidateWhereSegment) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
@@ -8022,19 +7604,15 @@ func (v *ValidateWhereSegment) SegmentValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSegment) Ipv4VipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4_vip")
@@ -8042,9 +7620,7 @@ func (v *ValidateWhereSegment) Ipv4VipValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSegment) Ipv6VipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6_vip")
@@ -8066,41 +7642,30 @@ func (v *ValidateWhereSegment) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv4_vip"))
 		if err := fv(ctx, m.GetIpv4Vip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6_vip"))
 		if err := fv(ctx, m.GetIpv6Vip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment"))
 		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereSegmentValidator = func() *ValidateWhereSegment {
 	v := &ValidateWhereSegment{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8193,11 +7758,9 @@ func (m *WhereSite) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteDRefInfo()
-
 }
 
 func (m *WhereSite) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -8213,7 +7776,6 @@ func (m *WhereSite) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -8223,7 +7785,6 @@ func (m *WhereSite) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -8241,7 +7802,6 @@ func (m *WhereSite) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -8250,7 +7810,6 @@ type ValidateWhereSite struct {
 }
 
 func (v *ValidateWhereSite) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(SiteNetwork)
@@ -8264,9 +7823,7 @@ func (v *ValidateWhereSite) NetworkValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSite) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site")
@@ -8275,19 +7832,15 @@ func (v *ValidateWhereSite) SiteValidationRuleHandler(rules map[string]string) (
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSite) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
@@ -8295,9 +7848,7 @@ func (v *ValidateWhereSite) IpValidationRuleHandler(rules map[string]string) (db
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSite) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
@@ -8319,50 +7870,36 @@ func (v *ValidateWhereSite) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6"))
 		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network"))
 		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereSiteValidator = func() *ValidateWhereSite {
 	v := &ValidateWhereSite{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8470,19 +8007,15 @@ func (m *WhereSiteSegment) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *WhereSiteSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -8498,7 +8031,6 @@ func (m *WhereSiteSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -8508,7 +8040,6 @@ func (m *WhereSiteSegment) GetSegmentDBEntries(ctx context.Context, d db.Interfa
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -8526,12 +8057,10 @@ func (m *WhereSiteSegment) GetSegmentDBEntries(ctx context.Context, d db.Interfa
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *WhereSiteSegment) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -8547,7 +8076,6 @@ func (m *WhereSiteSegment) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -8557,7 +8085,6 @@ func (m *WhereSiteSegment) GetSiteDBEntries(ctx context.Context, d db.Interface)
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -8575,7 +8102,6 @@ func (m *WhereSiteSegment) GetSiteDBEntries(ctx context.Context, d db.Interface)
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -8584,7 +8110,6 @@ type ValidateWhereSiteSegment struct {
 }
 
 func (v *ValidateWhereSiteSegment) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
@@ -8593,19 +8118,15 @@ func (v *ValidateWhereSiteSegment) SegmentValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSiteSegment) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site")
@@ -8614,19 +8135,15 @@ func (v *ValidateWhereSiteSegment) SiteValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSiteSegment) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
@@ -8634,9 +8151,7 @@ func (v *ValidateWhereSiteSegment) IpValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSiteSegment) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
@@ -8658,50 +8173,36 @@ func (v *ValidateWhereSiteSegment) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6"))
 		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment"))
 		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereSiteSegmentValidator = func() *ValidateWhereSiteSegment {
 	v := &ValidateWhereSiteSegment{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8805,7 +8306,6 @@ func (m *WhereType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -8815,7 +8315,6 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetChoice().(type) {
 	case *WhereType_Site:
-
 		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
@@ -8825,9 +8324,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_VirtualSite:
-
 		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
@@ -8837,9 +8334,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_Vk8SService:
-
 		drInfos, err := m.GetVk8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVk8SService().GetDRefInfo() FAILED")
@@ -8849,9 +8344,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "vk8s_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_VirtualNetwork:
-
 		drInfos, err := m.GetVirtualNetwork().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualNetwork().GetDRefInfo() FAILED")
@@ -8861,9 +8354,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_network." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_SiteSegment:
-
 		drInfos, err := m.GetSiteSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteSegment().GetDRefInfo() FAILED")
@@ -8873,9 +8364,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site_segment." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_VirtualSiteSegment:
-
 		drInfos, err := m.GetVirtualSiteSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSiteSegment().GetDRefInfo() FAILED")
@@ -8885,9 +8374,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_site_segment." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_Segment:
-
 		drInfos, err := m.GetSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSegment().GetDRefInfo() FAILED")
@@ -8897,9 +8384,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "segment." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_CloudEdgeSegment:
-
 		drInfos, err := m.GetCloudEdgeSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCloudEdgeSegment().GetDRefInfo() FAILED")
@@ -8909,9 +8394,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "cloud_edge_segment." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_VirtualSiteWithVip:
-
 		drInfos, err := m.GetVirtualSiteWithVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSiteWithVip().GetDRefInfo() FAILED")
@@ -8921,9 +8404,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_site_with_vip." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -8933,11 +8414,9 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateWhereType struct {
@@ -8951,7 +8430,6 @@ func (v *ValidateWhereType) ChoiceValidationRuleHandler(rules map[string]string)
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8967,6 +8445,7 @@ func (v *ValidateWhereType) PortChoicePortValidationRuleHandler(rules map[string
 	}
 	return oValidatorFn_Port, nil
 }
+
 func (v *ValidateWhereType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -9110,7 +8589,6 @@ func (v *ValidateWhereType) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -9157,16 +8635,13 @@ func (v *ValidateWhereType) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereTypeValidator = func() *ValidateWhereType {
 	v := &ValidateWhereType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9174,7 +8649,6 @@ var DefaultWhereTypeValidator = func() *ValidateWhereType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9185,7 +8659,6 @@ var DefaultWhereTypeValidator = func() *ValidateWhereType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9196,7 +8669,6 @@ var DefaultWhereTypeValidator = func() *ValidateWhereType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -9219,10 +8691,8 @@ var DefaultWhereTypeValidator = func() *ValidateWhereType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
-
 	v.FldValidators["choice.site"] = WhereSiteValidator().Validate
 	v.FldValidators["choice.virtual_site"] = WhereVirtualSiteValidator().Validate
 	v.FldValidators["choice.vk8s_service"] = WhereVK8SServiceValidator().Validate
@@ -9284,7 +8754,6 @@ func (m *WhereTypeSiteVsite) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -9294,7 +8763,6 @@ func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetChoice().(type) {
 	case *WhereTypeSiteVsite_Site:
-
 		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
@@ -9304,9 +8772,7 @@ func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *WhereTypeSiteVsite_VirtualSite:
-
 		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
@@ -9316,11 +8782,9 @@ func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_site." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateWhereTypeSiteVsite struct {
@@ -9390,7 +8854,6 @@ func (v *ValidateWhereTypeSiteVsite) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetPortChoice().(type) {
@@ -9416,16 +8879,13 @@ func (v *ValidateWhereTypeSiteVsite) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereTypeSiteVsiteValidator = func() *ValidateWhereTypeSiteVsite {
 	v := &ValidateWhereTypeSiteVsite{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9433,7 +8893,6 @@ var DefaultWhereTypeSiteVsiteValidator = func() *ValidateWhereTypeSiteVsite {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9444,7 +8903,6 @@ var DefaultWhereTypeSiteVsiteValidator = func() *ValidateWhereTypeSiteVsite {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -9455,9 +8913,7 @@ var DefaultWhereTypeSiteVsiteValidator = func() *ValidateWhereTypeSiteVsite {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereTypeSiteVsite.port_choice_port: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
-
 	v.FldValidators["choice.site"] = WhereSiteValidator().Validate
 	v.FldValidators["choice.virtual_site"] = WhereVirtualSiteValidator().Validate
 
@@ -9511,13 +8967,11 @@ func (m *WhereVK8SService) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetChoiceDRefInfo()
-
 }
 
 func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetChoice().(type) {
 	case *WhereVK8SService_Site:
-
 		vref := m.GetSite()
 		if vref == nil {
 			return nil, nil
@@ -9533,9 +8987,7 @@ func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *WhereVK8SService_VirtualSite:
-
 		vref := m.GetVirtualSite()
 		if vref == nil {
 			return nil, nil
@@ -9551,7 +9003,6 @@ func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -9567,7 +9018,6 @@ func (m *WhereVK8SService) GetChoiceDBEntries(ctx context.Context, d db.Interfac
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: site")
 		}
-
 		vref := m.GetSite()
 		if vref == nil {
 			return nil, nil
@@ -9585,13 +9035,11 @@ func (m *WhereVK8SService) GetChoiceDBEntries(ctx context.Context, d db.Interfac
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *WhereVK8SService_VirtualSite:
 		refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
 		}
-
 		vref := m.GetVirtualSite()
 		if vref == nil {
 			return nil, nil
@@ -9609,7 +9057,6 @@ func (m *WhereVK8SService) GetChoiceDBEntries(ctx context.Context, d db.Interfac
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -9674,16 +9121,13 @@ func (v *ValidateWhereVK8SService) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereVK8SServiceValidator = func() *ValidateWhereVK8SService {
 	v := &ValidateWhereVK8SService{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9691,7 +9135,6 @@ var DefaultWhereVK8SServiceValidator = func() *ValidateWhereVK8SService {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9702,7 +9145,6 @@ var DefaultWhereVK8SServiceValidator = func() *ValidateWhereVK8SService {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.site"] = ObjectRefTypeValidator().Validate
 	v.FldValidators["choice.virtual_site"] = ObjectRefTypeValidator().Validate
 
@@ -9756,11 +9198,9 @@ func (m *WhereVirtualNetwork) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualNetworkDRefInfo()
-
 }
 
 func (m *WhereVirtualNetwork) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetVirtualNetwork()
 	if vref == nil {
 		return nil, nil
@@ -9776,7 +9216,6 @@ func (m *WhereVirtualNetwork) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error)
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -9786,7 +9225,6 @@ func (m *WhereVirtualNetwork) GetVirtualNetworkDBEntries(ctx context.Context, d 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
 	}
-
 	vref := m.GetVirtualNetwork()
 	if vref == nil {
 		return nil, nil
@@ -9804,7 +9242,6 @@ func (m *WhereVirtualNetwork) GetVirtualNetworkDBEntries(ctx context.Context, d 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -9827,9 +9264,7 @@ func (v *ValidateWhereVirtualNetwork) VipChoiceSpecificVipValidationRuleHandler(
 	}
 	return oValidatorFn_SpecificVip, nil
 }
-
 func (v *ValidateWhereVirtualNetwork) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_network")
@@ -9838,11 +9273,9 @@ func (v *ValidateWhereVirtualNetwork) VirtualNetworkValidationRuleHandler(rules 
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -9886,7 +9319,6 @@ func (v *ValidateWhereVirtualNetwork) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetVipChoice().(type) {
@@ -9912,25 +9344,19 @@ func (v *ValidateWhereVirtualNetwork) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereVirtualNetworkValidator = func() *ValidateWhereVirtualNetwork {
 	v := &ValidateWhereVirtualNetwork{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9938,7 +9364,6 @@ var DefaultWhereVirtualNetworkValidator = func() *ValidateWhereVirtualNetwork {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhV6VipChoiceSpecificV6Vip := v.V6VipChoiceSpecificV6VipValidationRuleHandler
 	rulesV6VipChoiceSpecificV6Vip := map[string]string{
 		"ves.io.schema.rules.string.ipv6": "true",
@@ -9948,9 +9373,7 @@ var DefaultWhereVirtualNetworkValidator = func() *ValidateWhereVirtualNetwork {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereVirtualNetwork.v6_vip_choice_specific_v6_vip: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["v6_vip_choice.specific_v6_vip"] = vFnMap["v6_vip_choice.specific_v6_vip"]
-
 	vrhVipChoiceSpecificVip := v.VipChoiceSpecificVipValidationRuleHandler
 	rulesVipChoiceSpecificVip := map[string]string{
 		"ves.io.schema.rules.string.ipv4": "true",
@@ -9960,7 +9383,6 @@ var DefaultWhereVirtualNetworkValidator = func() *ValidateWhereVirtualNetwork {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereVirtualNetwork.vip_choice_specific_vip: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["vip_choice.specific_vip"] = vFnMap["vip_choice.specific_vip"]
 
 	vrhVirtualNetwork := v.VirtualNetworkValidationRuleHandler
@@ -10024,11 +9446,9 @@ func (m *WhereVirtualSite) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualSiteDRefInfo()
-
 }
 
 func (m *WhereVirtualSite) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -10044,7 +9464,6 @@ func (m *WhereVirtualSite) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10054,7 +9473,6 @@ func (m *WhereVirtualSite) GetVirtualSiteDBEntries(ctx context.Context, d db.Int
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
 	}
-
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -10072,7 +9490,6 @@ func (m *WhereVirtualSite) GetVirtualSiteDBEntries(ctx context.Context, d db.Int
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -10081,7 +9498,6 @@ type ValidateWhereVirtualSite struct {
 }
 
 func (v *ValidateWhereVirtualSite) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(SiteNetwork)
@@ -10095,9 +9511,7 @@ func (v *ValidateWhereVirtualSite) NetworkValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereVirtualSite) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_site")
@@ -10106,11 +9520,9 @@ func (v *ValidateWhereVirtualSite) VirtualSiteValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -10130,32 +9542,24 @@ func (v *ValidateWhereVirtualSite) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network"))
 		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereVirtualSiteValidator = func() *ValidateWhereVirtualSite {
 	v := &ValidateWhereVirtualSite{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -10241,19 +9645,15 @@ func (m *WhereVirtualSiteSegment) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *WhereVirtualSiteSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -10269,7 +9669,6 @@ func (m *WhereVirtualSiteSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10279,7 +9678,6 @@ func (m *WhereVirtualSiteSegment) GetSegmentDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -10297,12 +9695,10 @@ func (m *WhereVirtualSiteSegment) GetSegmentDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *WhereVirtualSiteSegment) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -10318,7 +9714,6 @@ func (m *WhereVirtualSiteSegment) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10328,7 +9723,6 @@ func (m *WhereVirtualSiteSegment) GetVirtualSiteDBEntries(ctx context.Context, d
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
 	}
-
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -10346,7 +9740,6 @@ func (m *WhereVirtualSiteSegment) GetVirtualSiteDBEntries(ctx context.Context, d
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -10355,7 +9748,6 @@ type ValidateWhereVirtualSiteSegment struct {
 }
 
 func (v *ValidateWhereVirtualSiteSegment) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
@@ -10364,19 +9756,15 @@ func (v *ValidateWhereVirtualSiteSegment) SegmentValidationRuleHandler(rules map
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereVirtualSiteSegment) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_site")
@@ -10385,19 +9773,15 @@ func (v *ValidateWhereVirtualSiteSegment) VirtualSiteValidationRuleHandler(rules
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereVirtualSiteSegment) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
@@ -10405,9 +9789,7 @@ func (v *ValidateWhereVirtualSiteSegment) IpValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereVirtualSiteSegment) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
@@ -10429,50 +9811,36 @@ func (v *ValidateWhereVirtualSiteSegment) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6"))
 		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment"))
 		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereVirtualSiteSegmentValidator = func() *ValidateWhereVirtualSiteSegment {
 	v := &ValidateWhereVirtualSiteSegment{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -10576,11 +9944,9 @@ func (m *WhereVirtualSiteSpecifiedVIP) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualSiteDRefInfo()
-
 }
 
 func (m *WhereVirtualSiteSpecifiedVIP) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -10596,7 +9962,6 @@ func (m *WhereVirtualSiteSpecifiedVIP) GetVirtualSiteDRefInfo() ([]db.DRefInfo, 
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10606,7 +9971,6 @@ func (m *WhereVirtualSiteSpecifiedVIP) GetVirtualSiteDBEntries(ctx context.Conte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
 	}
-
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -10624,7 +9988,6 @@ func (m *WhereVirtualSiteSpecifiedVIP) GetVirtualSiteDBEntries(ctx context.Conte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -10633,7 +9996,6 @@ type ValidateWhereVirtualSiteSpecifiedVIP struct {
 }
 
 func (v *ValidateWhereVirtualSiteSpecifiedVIP) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(SiteNetworkSpecifiedVIP)
@@ -10647,9 +10009,7 @@ func (v *ValidateWhereVirtualSiteSpecifiedVIP) NetworkValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereVirtualSiteSpecifiedVIP) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_site")
@@ -10658,19 +10018,15 @@ func (v *ValidateWhereVirtualSiteSpecifiedVIP) VirtualSiteValidationRuleHandler(
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereVirtualSiteSpecifiedVIP) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
@@ -10678,9 +10034,7 @@ func (v *ValidateWhereVirtualSiteSpecifiedVIP) IpValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereVirtualSiteSpecifiedVIP) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
@@ -10702,50 +10056,36 @@ func (v *ValidateWhereVirtualSiteSpecifiedVIP) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6"))
 		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network"))
 		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereVirtualSiteSpecifiedVIPValidator = func() *ValidateWhereVirtualSiteSpecifiedVIP {
 	v := &ValidateWhereVirtualSiteSpecifiedVIP{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -10847,7 +10187,6 @@ type ValidateXfccHeaderKeys struct {
 }
 
 func (v *ValidateXfccHeaderKeys) XfccHeaderElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -10907,22 +10246,18 @@ func (v *ValidateXfccHeaderKeys) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["xfcc_header_elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("xfcc_header_elements"))
 		if err := fv(ctx, m.GetXfccHeaderElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultXfccHeaderKeysValidator = func() *ValidateXfccHeaderKeys {
 	v := &ValidateXfccHeaderKeys{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

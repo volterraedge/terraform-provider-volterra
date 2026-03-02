@@ -538,7 +538,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1270,19 +1269,14 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1341,7 +1335,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1494,11 +1487,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1511,7 +1502,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1557,16 +1546,13 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1598,7 +1584,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1618,7 +1603,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1628,7 +1612,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.origin_pool.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1640,7 +1623,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1649,7 +1631,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
 
 		resp.Items = append(resp.Items, item)
@@ -2733,6 +2714,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-lb_source_ip_persistance_choice": "[\"disable_lb_source_ip_persistance\",\"enable_lb_source_ip_persistance\"]",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-proxy_protocol_choice": "[\"disable_proxy_protocol\",\"proxy_protocol_v1\",\"proxy_protocol_v2\"]",
@@ -2833,11 +2815,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "600000"
                     }
                 },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n Sets the maximum number of requests allowed per connection to the origin server.\n Enter a value \u003e=1 to define the request limit per connection.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "Maximum Requests Per Connection",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
                 "no_panic_threshold": {
                     "description": "Exclusive with [panic_threshold]\n Disable panic threshold. Only healthy endpoints are considered for load balancing.",
                     "title": "Disable panic threshold",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Panic threshold"
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "title": "Disable the max requests per connection option",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "outlier_detection": {
                     "description": "Exclusive with [disable_outlier_detection]\n Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
@@ -2954,7 +2953,7 @@ var APISwaggerJSON string = `{
         },
         "origin_poolOriginServerConsulService": {
             "type": "object",
-            "description": "Specify origin server with Hashi Corp Consul service name and site information",
+            "description": "Specify origin server with HashiCorp Consul service name and site information",
             "title": "OriginServerConsulService",
             "x-displayname": "Consul Service Name on given Sites",
             "x-ves-displayorder": "1,2,3",
@@ -3298,10 +3297,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
                 "cbip_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with cBIP service name",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with BIG-IP service name",
                     "title": "OriginServerCBIPService",
                     "$ref": "#/definitions/origin_poolOriginServerCBIPService",
-                    "x-displayname": "cBIP Service Name of Origin Server"
+                    "x-displayname": "BIG-IP Service Name of Origin Server"
                 },
                 "consul_service": {
                     "description": "Exclusive with [cbip_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",

@@ -78,34 +78,25 @@ func (v *ValidateCreateRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateRequestValidator = func() *ValidateCreateRequest {
 	v := &ValidateCreateRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectCreateMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = CreateSpecTypeValidator().Validate
 
 	return v
@@ -169,43 +160,31 @@ func (v *ValidateCreateResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateResponseValidator = func() *ValidateCreateResponse {
 	v := &ValidateCreateResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = GetSpecTypeValidator().Validate
 
 	return v
@@ -269,43 +248,31 @@ func (v *ValidateReplaceRequest) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_version"))
 		if err := fv(ctx, m.GetResourceVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceRequestValidator = func() *ValidateReplaceRequest {
 	v := &ValidateReplaceRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectReplaceMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = ReplaceSpecTypeValidator().Validate
 
 	return v
@@ -369,7 +336,6 @@ func (v *ValidateReplaceResponse) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

@@ -538,7 +538,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1270,19 +1269,14 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1341,7 +1335,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1494,11 +1487,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1511,7 +1502,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1557,16 +1546,13 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1598,7 +1584,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1618,7 +1603,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1628,7 +1612,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.cdn_cache_rule.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1640,7 +1623,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1649,7 +1631,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
 
 		resp.Items = append(resp.Items, item)
@@ -2372,7 +2353,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " A case-sensitive cookie name.\n\nExample: - \"Session\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "description": " Enter the name of the cookie to match\n\nExample: - \"Session\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "name",
                     "maxLength": 256,
                     "x-displayname": "Cookie Name",
@@ -2385,7 +2366,7 @@ var APISwaggerJSON string = `{
                 },
                 "operator": {
                     "title": "cache_operator",
-                    "$ref": "#/definitions/cdn_cache_ruleCacheOperator",
+                    "$ref": "#/definitions/cdn_cache_ruleCookieMatcherCacheOperator",
                     "x-displayname": "Operator"
                 }
             }
@@ -2420,7 +2401,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.CacheHeaderMatcherType",
             "properties": {
                 "name": {
-                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Select the name of the header from the list\n\nExample: - \"Content-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Name",
                     "$ref": "#/definitions/cdn_cache_ruleHeaderOptions",
                     "x-displayname": "Name",
@@ -2433,7 +2414,7 @@ var APISwaggerJSON string = `{
                 "operator": {
                     "description": " Available operators",
                     "title": "cache_operator",
-                    "$ref": "#/definitions/cdn_cache_ruleCacheOperator",
+                    "$ref": "#/definitions/cdn_cache_ruleHeaderCacheOperator",
                     "x-displayname": "Operator"
                 }
             }
@@ -2447,62 +2428,61 @@ var APISwaggerJSON string = `{
             "properties": {
                 "Contains": {
                     "type": "string",
-                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must contain",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The path must include the specified value as a substring, up to the filename.",
                     "title": "Contains",
                     "x-displayname": "Contains"
                 },
                 "DoesNotContain": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not contain",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The path must not include the specified value as a substring, up to the filename.",
                     "title": "Does Not Contain",
                     "x-displayname": "Does Not Contain"
                 },
                 "DoesNotEndWith": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not end with",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The path must not end with the specified value, up to the filename.",
                     "title": "Does Not End With",
                     "x-displayname": "Does Not End With"
                 },
                 "DoesNotEqual": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not equal",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The path must not match the specified value, up to the filename.",
                     "title": "Does Not Equal",
                     "x-displayname": "Does Not Equal"
                 },
                 "DoesNotStartWith": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n Field must not start with",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n The path must not begin with the specified value, up to the filename.",
                     "title": "Does Not Start With",
                     "x-displayname": "Does Not Start With"
                 },
                 "Endswith": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n Field must end with",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n The path must end with the specified value, up to the filename.",
                     "title": "Ends With",
                     "x-displayname": "Ends With"
                 },
                 "Equals": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n Field must exactly match",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n The path must exactly match the specified value, up to the filename.",
                     "title": "Equals",
                     "x-displayname": "Equals"
                 },
                 "MatchRegex": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n Field matches PCRE 1 compliant regular expression\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pcre_regex: true\n",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n The path must match the specified regular expression pattern in PCRE format.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Matches Regex",
                     "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Matches Regex",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.pcre_regex": "true"
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "Startswith": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n Field must start with",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n The path must begin with the specified value, up to the filename.",
                     "title": "Starts With",
                     "x-displayname": "Starts With"
                 }
@@ -2517,7 +2497,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " Query parameter key\n In the above example, assignee_username is the key\n\nExample: - \"assignee_username\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " The name of the query parameter to match\n\nExample: - \"assignee_username\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "key",
                     "minLength": 1,
                     "maxLength": 256,
@@ -2532,7 +2512,7 @@ var APISwaggerJSON string = `{
                 },
                 "operator": {
                     "title": "cache_operator",
-                    "$ref": "#/definitions/cdn_cache_ruleCacheOperator",
+                    "$ref": "#/definitions/cdn_cache_ruleQueryParamCacheOperator",
                     "x-displayname": "Operator"
                 }
             }
@@ -2569,6 +2549,75 @@ var APISwaggerJSON string = `{
                     "title": "Set Cookie",
                     "format": "boolean",
                     "x-displayname": "Ignore-Response-Cookie"
+                }
+            }
+        },
+        "cdn_cache_ruleCookieMatcherCacheOperator": {
+            "type": "object",
+            "title": "Cookie Matcher Cache Operator",
+            "x-displayname": "Operator",
+            "x-ves-oneof-field-cache_operator": "[\"Contains\",\"DoesNotContain\",\"DoesNotEndWith\",\"DoesNotEqual\",\"DoesNotStartWith\",\"Endswith\",\"Equals\",\"MatchRegex\",\"Startswith\"]",
+            "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.CookieMatcherCacheOperator",
+            "properties": {
+                "Contains": {
+                    "type": "string",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The cookie value must include the specified value as a substring.",
+                    "title": "Contains",
+                    "x-displayname": "Contains"
+                },
+                "DoesNotContain": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The cookie value must not include the specified value as a substring.",
+                    "title": "Does Not Contain",
+                    "x-displayname": "Does Not Contain"
+                },
+                "DoesNotEndWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The cookie value must not end with the specified value.",
+                    "title": "Does Not End With",
+                    "x-displayname": "Does Not End With"
+                },
+                "DoesNotEqual": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The cookie value must not match the specified value.",
+                    "title": "Does Not Equal",
+                    "x-displayname": "Does Not Equal"
+                },
+                "DoesNotStartWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n The cookie value must not begin with the specified value.",
+                    "title": "Does Not Start With",
+                    "x-displayname": "Does Not Start With"
+                },
+                "Endswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n The cookie value must end with the specified value.",
+                    "title": "Ends With",
+                    "x-displayname": "Ends With"
+                },
+                "Equals": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n The cookie value must exactly match the specified value.",
+                    "title": "Equals",
+                    "x-displayname": "Equals"
+                },
+                "MatchRegex": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n The cookie value must match the specified regular expression pattern in PCRE format.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Matches Regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Matches Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "Startswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n The cookie value must begin with the specified value.",
+                    "title": "Starts With",
+                    "x-displayname": "Starts With"
                 }
             }
         },
@@ -2727,6 +2776,75 @@ var APISwaggerJSON string = `{
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
+        "cdn_cache_ruleHeaderCacheOperator": {
+            "type": "object",
+            "title": "Header Cache Operator",
+            "x-displayname": "Operator",
+            "x-ves-oneof-field-cache_operator": "[\"Contains\",\"DoesNotContain\",\"DoesNotEndWith\",\"DoesNotEqual\",\"DoesNotStartWith\",\"Endswith\",\"Equals\",\"MatchRegex\",\"Startswith\"]",
+            "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.HeaderCacheOperator",
+            "properties": {
+                "Contains": {
+                    "type": "string",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The header value must include the specified value as a substring.",
+                    "title": "Contains",
+                    "x-displayname": "Contains"
+                },
+                "DoesNotContain": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The header value must not include the specified value as a substring.",
+                    "title": "Does Not Contain",
+                    "x-displayname": "Does Not Contain"
+                },
+                "DoesNotEndWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The header value must not end with the specified value.",
+                    "title": "Does Not End With",
+                    "x-displayname": "Does Not End With"
+                },
+                "DoesNotEqual": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The header value must not match the specified value.",
+                    "title": "Does Not Equal",
+                    "x-displayname": "Does Not Equal"
+                },
+                "DoesNotStartWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n The header value must not begin with the specified value.",
+                    "title": "Does Not Start With",
+                    "x-displayname": "Does Not Start With"
+                },
+                "Endswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n The header value must end with the specified value.",
+                    "title": "Ends With",
+                    "x-displayname": "Ends With"
+                },
+                "Equals": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n The header value must exactly match the specified value.",
+                    "title": "Equals",
+                    "x-displayname": "Equals"
+                },
+                "MatchRegex": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n The header value must match the specified regular expression pattern.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Matches Regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Matches Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "Startswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n The header value must begin with the specified value.",
+                    "title": "Starts With",
+                    "x-displayname": "Starts With"
+                }
+            }
+        },
         "cdn_cache_ruleHeaderOptions": {
             "type": "string",
             "description": "\n - PROXY_HOST: Proxy Host\n\nName of the proxied server\n - REFERER: Referer\n\nThis is the address of the previous web page from which a link to the currently requested page was followed\n - SCHEME: Scheme\n\nThe http scheme used: http or https\n - USER_AGENT: User Agent\n\nThe user agent string of the user agent",
@@ -2851,6 +2969,75 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
+                }
+            }
+        },
+        "cdn_cache_ruleQueryParamCacheOperator": {
+            "type": "object",
+            "title": "Query Param Cache Operator",
+            "x-displayname": "Operator",
+            "x-ves-oneof-field-cache_operator": "[\"Contains\",\"DoesNotContain\",\"DoesNotEndWith\",\"DoesNotEqual\",\"DoesNotStartWith\",\"Endswith\",\"Equals\",\"MatchRegex\",\"Startswith\"]",
+            "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.QueryParamCacheOperator",
+            "properties": {
+                "Contains": {
+                    "type": "string",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The query parameter value must include the specified value as a substring.",
+                    "title": "Contains",
+                    "x-displayname": "Contains"
+                },
+                "DoesNotContain": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The query parameter value must not include the specified value as a substring.",
+                    "title": "Does Not Contain",
+                    "x-displayname": "Does Not Contain"
+                },
+                "DoesNotEndWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The query parameter value must not end with the specified value.",
+                    "title": "Does Not End With",
+                    "x-displayname": "Does Not End With"
+                },
+                "DoesNotEqual": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The query parameter value must not match the specified value.",
+                    "title": "Does Not Equal",
+                    "x-displayname": "Does Not Equal"
+                },
+                "DoesNotStartWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n The query parameter value must not begin with the specified value.",
+                    "title": "Does Not Start With",
+                    "x-displayname": "Does Not Start With"
+                },
+                "Endswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n The query parameter value must end with the specified value.",
+                    "title": "Ends With",
+                    "x-displayname": "Ends With"
+                },
+                "Equals": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n The query parameter value must exactly match the specified value.",
+                    "title": "Equals",
+                    "x-displayname": "Equals"
+                },
+                "MatchRegex": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n The query parameter value must match the specified regular expression pattern in PCRE format.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Matches Regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Matches Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "Startswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n The query parameter value must begin with the specified value.",
+                    "title": "Starts With",
+                    "x-displayname": "Starts With"
                 }
             }
         },

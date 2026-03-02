@@ -64,7 +64,6 @@ type ValidateSpecType struct {
 }
 
 func (v *ValidateSpecType) GcSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn := GlobalSpecTypeValidator().Validate
 
 	return validatorFn, nil
@@ -83,23 +82,18 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

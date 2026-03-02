@@ -82,11 +82,15 @@ resource "volterra_aws_tgw_site" "example" {
       tenant    = "acmecorp"
     }
     disk_size = "80"
+
+    // One of the arguments from this list "disable_encryption enable_encryption" can be set
+
+    disable_encryption = true
     instance_type = "a1.xlarge"
 
     // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
 
-    disable_internet_vip = true
+    enable_internet_vip = true
 
     // One of the arguments from this list "custom_security_group f5xc_security_group" must be set
 
@@ -94,14 +98,7 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "new_vpc vpc_id" must be set
 
-    new_vpc {
-      allocate_ipv6 = true
-
-      // One of the arguments from this list "autogenerate name_tag" must be set
-
-      name_tag = "name_tag"
-      primary_ipv4 = "10.1.0.0/16"
-    }
+    vpc_id = "vpc-12345678901234567"
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "existing_tgw new_tgw" must be set
@@ -114,11 +111,7 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "reserved_tgw_cidr tgw_cidr" must be set
 
-    tgw_cidr {
-      ipv4 = "10.1.2.0/24"
-
-      ipv6 = "1234:568:abcd:9100::/64"
-    }
+    reserved_tgw_cidr = true
 
     // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
 
@@ -127,7 +120,15 @@ resource "volterra_aws_tgw_site" "example" {
 
   // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
 
-  default_blocked_services = true
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "dns ssh web_user_interface" can be set
+
+      web_user_interface = true
+
+      network_type = "network_type"
+    }
+  }
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
 
@@ -137,7 +138,6 @@ resource "volterra_aws_tgw_site" "example" {
 
   logs_streaming_disabled = true
 }
-
 ```
 
 Argument Reference
@@ -224,6 +224,12 @@ Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc.
 `aws_cred` - (Optional) Reference to AWS cloud credential object used to deploy cloud resources. See [ref](#ref) below for details.
 
 `disk_size` - (Optional) Node disk size for all node in the F5XC site. Unit is GiB (`Int`).
+
+###### One of the arguments from this list "disable_encryption, enable_encryption" can be set
+
+`disable_encryption` - (Optional) Disk attached to VM will not be encrypted (`Bool`).
+
+`enable_encryption` - (Optional) Disk will be encrypted with the specified key. See [Encryption Choice Enable Encryption ](#encryption-choice-enable-encryption) below for details.
 
 `instance_type` - (Required) Instance size based on the performance. (`String`).
 
@@ -325,7 +331,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Sw
 
@@ -383,7 +389,7 @@ Site Network related details will be configured.
 
 ###### One of the arguments from this list "global_network_list, no_global_network" must be set
 
-`global_network_list` - (Optional) List of global network connections. See [Global Network Choice Global Network List ](#global-network-choice-global-network-list) below for details.
+`global_network_list`- (Optional) List of global network connections. See [Global Network Choice Global Network List ](#global-network-choice-global-network-list) below for details.
 
 `no_global_network` - (Optional) No global network to connect (`Bool`).
 
@@ -679,6 +685,16 @@ Disable Interception.
 
 Enable Interception.
 
+### Encryption Choice Disable Encryption
+
+Disk attached to VM will not be encrypted.
+
+### Encryption Choice Enable Encryption
+
+Disk will be encrypted with the specified key.
+
+`kms_key_id` - (Required) AWS KMS Key to be used to encrypt the disk attached to the VM (`String`).
+
 ### Forward Proxy Choice Active Forward Proxy Policies
 
 Enable Forward Proxy for this site and manage policies.
@@ -913,6 +929,14 @@ List of Static routes.
 
 x-displayName: "Enabled".
 
+### Perf Mode Choice Jumbo Disabled
+
+x-displayName: "Disabled".
+
+### Perf Mode Choice Jumbo Enabled
+
+x-displayName: "Enabled".
+
 ### Perf Mode Choice No Jumbo
 
 x-displayName: "Disabled".
@@ -930,6 +954,12 @@ Site optimized for L3 traffic processing.
 ### Perf Mode Choice Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
+
+###### One of the arguments from this list "jumbo_disabled, jumbo_enabled" must be set
+
+`jumbo_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
+`jumbo_enabled` - (Optional) x-displayName: "Enabled" (`Bool`).
 
 ### Policy Interception Rules
 
@@ -1254,4 +1284,4 @@ Worker nodes is set to zero.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured aws_tgw_site.
+*   `id` - This is the id of the configured aws_tgw_site.

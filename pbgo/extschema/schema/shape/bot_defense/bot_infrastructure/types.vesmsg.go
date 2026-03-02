@@ -77,12 +77,11 @@ func (v *ValidateCreateSpecInfraCloudHosted) TypeChoiceValidationRuleHandler(rul
 func (v *ValidateCreateSpecInfraCloudHosted) TypeChoiceProductionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ProductionValidator().Validate, nil
 }
+
 func (v *ValidateCreateSpecInfraCloudHosted) TypeChoiceTestingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return TestingValidator().Validate, nil
 }
-
 func (v *ValidateCreateSpecInfraCloudHosted) IpAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -136,13 +135,11 @@ func (v *ValidateCreateSpecInfraCloudHosted) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_addresses"))
 		if err := fv(ctx, m.GetIpAddresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["type_choice"]; exists {
@@ -178,16 +175,13 @@ func (v *ValidateCreateSpecInfraCloudHosted) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecInfraCloudHostedValidator = func() *ValidateCreateSpecInfraCloudHosted {
 	v := &ValidateCreateSpecInfraCloudHosted{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -195,7 +189,6 @@ var DefaultCreateSpecInfraCloudHostedValidator = func() *ValidateCreateSpecInfra
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTypeChoice := v.TypeChoiceValidationRuleHandler
 	rulesTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -206,7 +199,6 @@ var DefaultCreateSpecInfraCloudHostedValidator = func() *ValidateCreateSpecInfra
 		panic(errMsg)
 	}
 	v.FldValidators["type_choice"] = vFn
-
 	vrhTypeChoiceProduction := v.TypeChoiceProductionValidationRuleHandler
 	rulesTypeChoiceProduction := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -225,7 +217,6 @@ var DefaultCreateSpecInfraCloudHostedValidator = func() *ValidateCreateSpecInfra
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecInfraCloudHosted.type_choice_testing: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["type_choice.production"] = vFnMap["type_choice.production"]
 	v.FldValidators["type_choice.testing"] = vFnMap["type_choice.testing"]
 
@@ -314,25 +305,25 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["deployment_mode"]; exists {
+		vOpts := append(opts, db.WithValidateField("deployment_mode"))
+		if err := fv(ctx, m.GetDeploymentMode(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["traffic_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("traffic_type"))
 		if err := fv(ctx, m.GetTrafficType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["create_bot_infra_choice.create_cloud_hosted"] = CreateSpecInfraCloudHostedValidator().Validate
 
 	return v
@@ -396,50 +387,36 @@ func (v *ValidateDevice) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certification_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certification_status"))
 		if err := fv(ctx, m.GetCertificationStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device_firmware_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_firmware_version"))
 		if err := fv(ctx, m.GetDeviceFirmwareVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_name"))
 		if err := fv(ctx, m.GetDeviceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_info"))
 		if err := fv(ctx, m.GetIpInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDeviceValidator = func() *ValidateDevice {
 	v := &ValidateDevice{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["ip_info"] = IPInfoValidator().Validate
 
 	return v
@@ -491,7 +468,6 @@ type ValidateEgress struct {
 }
 
 func (v *ValidateEgress) IpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_address")
@@ -499,9 +475,7 @@ func (v *ValidateEgress) IpAddressValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateEgress) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(Location)
@@ -529,32 +503,24 @@ func (v *ValidateEgress) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_address"))
 		if err := fv(ctx, m.GetIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEgressValidator = func() *ValidateEgress {
 	v := &ValidateEgress{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -635,7 +601,6 @@ type ValidateEndpointPolicyMetadata struct {
 }
 
 func (v *ValidateEndpointPolicyMetadata) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -643,9 +608,7 @@ func (v *ValidateEndpointPolicyMetadata) NameValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateEndpointPolicyMetadata) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -667,41 +630,30 @@ func (v *ValidateEndpointPolicyMetadata) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEndpointPolicyMetadataValidator = func() *ValidateEndpointPolicyMetadata {
 	v := &ValidateEndpointPolicyMetadata{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -787,9 +739,7 @@ func (v *ValidateGetSpecType) BotInfraChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) InfraHostNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for infra_host_name")
@@ -797,9 +747,7 @@ func (v *ValidateGetSpecType) InfraHostNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) IngressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -845,9 +793,7 @@ func (v *ValidateGetSpecType) IngressValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) EgressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -893,9 +839,7 @@ func (v *ValidateGetSpecType) EgressValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) HostNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -935,9 +879,7 @@ func (v *ValidateGetSpecType) HostNamesValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) IpAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -991,23 +933,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bot_allowlist_policy_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_allowlist_policy_metadata"))
 		if err := fv(ctx, m.GetBotAllowlistPolicyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_endpoint_policy_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_endpoint_policy_metadata"))
 		if err := fv(ctx, m.GetBotEndpointPolicyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bot_infra_choice"]; exists {
@@ -1054,63 +990,50 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_network_policy_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_network_policy_metadata"))
 		if err := fv(ctx, m.GetBotNetworkPolicyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster_state"))
 		if err := fv(ctx, m.GetClusterState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["deployment_mode"]; exists {
+		vOpts := append(opts, db.WithValidateField("deployment_mode"))
+		if err := fv(ctx, m.GetDeploymentMode(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["egress"]; exists {
 		vOpts := append(opts, db.WithValidateField("egress"))
 		if err := fv(ctx, m.GetEgress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["environment_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("environment_type"))
 		if err := fv(ctx, m.GetEnvironmentType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_names"]; exists {
 		vOpts := append(opts, db.WithValidateField("host_names"))
 		if err := fv(ctx, m.GetHostNames(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra_host_name"))
 		if err := fv(ctx, m.GetInfraHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra_region"))
 		for idx, item := range m.GetInfraRegion() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1118,50 +1041,37 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra_type"))
 		if err := fv(ctx, m.GetInfraType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ingress"]; exists {
 		vOpts := append(opts, db.WithValidateField("ingress"))
 		if err := fv(ctx, m.GetIngress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_addresses"))
 		if err := fv(ctx, m.GetIpAddresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["traffic_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("traffic_type"))
 		if err := fv(ctx, m.GetTrafficType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1169,7 +1079,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBotInfraChoice := v.BotInfraChoiceValidationRuleHandler
 	rulesBotInfraChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1235,15 +1144,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ip_addresses"] = vFn
-
 	v.FldValidators["bot_infra_choice.cloud_hosted"] = InfraCloudHostedValidator().Validate
 	v.FldValidators["bot_infra_choice.physical_hosted"] = InfraF5HostedOnPremValidator().Validate
 	v.FldValidators["bot_infra_choice.on_prem"] = InfraF5HostedOnPremValidator().Validate
-
 	v.FldValidators["bot_endpoint_policy_metadata"] = EndpointPolicyMetadataValidator().Validate
-
 	v.FldValidators["bot_allowlist_policy_metadata"] = PolicyMetadataValidator().Validate
-
 	v.FldValidators["bot_network_policy_metadata"] = PolicyMetadataValidator().Validate
 
 	return v
@@ -1301,25 +1206,20 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetBotEndpointPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetBotEndpointPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetBotNetworkPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetBotNetworkPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetBotAllowlistPolicyDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetBotAllowlistPolicy()
 	if vref == nil {
 		return nil, nil
@@ -1335,7 +1235,6 @@ func (m *GlobalSpecType) GetBotAllowlistPolicyDRefInfo() ([]db.DRefInfo, error) 
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetBotAllowlistPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1345,7 +1244,6 @@ func (m *GlobalSpecType) GetBotAllowlistPolicyDBEntries(ctx context.Context, d d
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: bot_allowlist_policy")
 	}
-
 	vref := m.GetBotAllowlistPolicy()
 	if vref == nil {
 		return nil, nil
@@ -1363,12 +1261,10 @@ func (m *GlobalSpecType) GetBotAllowlistPolicyDBEntries(ctx context.Context, d d
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetBotEndpointPolicyDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetBotEndpointPolicy()
 	if vref == nil {
 		return nil, nil
@@ -1384,7 +1280,6 @@ func (m *GlobalSpecType) GetBotEndpointPolicyDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetBotEndpointPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1394,7 +1289,6 @@ func (m *GlobalSpecType) GetBotEndpointPolicyDBEntries(ctx context.Context, d db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: bot_endpoint_policy")
 	}
-
 	vref := m.GetBotEndpointPolicy()
 	if vref == nil {
 		return nil, nil
@@ -1412,12 +1306,10 @@ func (m *GlobalSpecType) GetBotEndpointPolicyDBEntries(ctx context.Context, d db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetBotNetworkPolicyDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetBotNetworkPolicy()
 	if vref == nil {
 		return nil, nil
@@ -1433,7 +1325,6 @@ func (m *GlobalSpecType) GetBotNetworkPolicyDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetBotNetworkPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1443,7 +1334,6 @@ func (m *GlobalSpecType) GetBotNetworkPolicyDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: bot_network_policy")
 	}
-
 	vref := m.GetBotNetworkPolicy()
 	if vref == nil {
 		return nil, nil
@@ -1461,7 +1351,6 @@ func (m *GlobalSpecType) GetBotNetworkPolicyDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1476,9 +1365,7 @@ func (v *ValidateGlobalSpecType) BotInfraChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) InfraHostNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for infra_host_name")
@@ -1486,9 +1373,7 @@ func (v *ValidateGlobalSpecType) InfraHostNameValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IngressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1534,9 +1419,7 @@ func (v *ValidateGlobalSpecType) IngressValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EgressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1582,9 +1465,7 @@ func (v *ValidateGlobalSpecType) EgressValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) HostNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1624,9 +1505,7 @@ func (v *ValidateGlobalSpecType) HostNamesValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IpAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1680,41 +1559,29 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bot_allowlist_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_allowlist_policy"))
 		if err := fv(ctx, m.GetBotAllowlistPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_allowlist_policy_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_allowlist_policy_metadata"))
 		if err := fv(ctx, m.GetBotAllowlistPolicyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_endpoint_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_endpoint_policy"))
 		if err := fv(ctx, m.GetBotEndpointPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_endpoint_policy_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_endpoint_policy_metadata"))
 		if err := fv(ctx, m.GetBotEndpointPolicyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bot_infra_choice"]; exists {
@@ -1761,43 +1628,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_network_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_network_policy"))
 		if err := fv(ctx, m.GetBotNetworkPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_network_policy_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_network_policy_metadata"))
 		if err := fv(ctx, m.GetBotNetworkPolicyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_threat_intelligence_policy_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_threat_intelligence_policy_metadata"))
 		if err := fv(ctx, m.GetBotThreatIntelligencePolicyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster_state"))
 		if err := fv(ctx, m.GetClusterState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetCreateBotInfraChoice().(type) {
@@ -1812,54 +1666,44 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["deployment_mode"]; exists {
+		vOpts := append(opts, db.WithValidateField("deployment_mode"))
+		if err := fv(ctx, m.GetDeploymentMode(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["egress"]; exists {
 		vOpts := append(opts, db.WithValidateField("egress"))
 		if err := fv(ctx, m.GetEgress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["environment_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("environment_type"))
 		if err := fv(ctx, m.GetEnvironmentType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["firmware_release_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("firmware_release_id"))
 		if err := fv(ctx, m.GetFirmwareReleaseId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_names"]; exists {
 		vOpts := append(opts, db.WithValidateField("host_names"))
 		if err := fv(ctx, m.GetHostNames(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra_host_name"))
 		if err := fv(ctx, m.GetInfraHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra_region"))
 		for idx, item := range m.GetInfraRegion() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1867,59 +1711,43 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra_type"))
 		if err := fv(ctx, m.GetInfraType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ingress"]; exists {
 		vOpts := append(opts, db.WithValidateField("ingress"))
 		if err := fv(ctx, m.GetIngress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_addresses"))
 		if err := fv(ctx, m.GetIpAddresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spm_cluster_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spm_cluster_id"))
 		if err := fv(ctx, m.GetSpmClusterId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["traffic_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("traffic_type"))
 		if err := fv(ctx, m.GetTrafficType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1927,7 +1755,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBotInfraChoice := v.BotInfraChoiceValidationRuleHandler
 	rulesBotInfraChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1993,25 +1820,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ip_addresses"] = vFn
-
 	v.FldValidators["bot_infra_choice.cloud_hosted"] = InfraCloudHostedValidator().Validate
 	v.FldValidators["bot_infra_choice.physical_hosted"] = InfraF5HostedOnPremValidator().Validate
 	v.FldValidators["bot_infra_choice.on_prem"] = InfraF5HostedOnPremValidator().Validate
-
 	v.FldValidators["create_bot_infra_choice.create_cloud_hosted"] = CreateSpecInfraCloudHostedValidator().Validate
-
 	v.FldValidators["bot_endpoint_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["bot_endpoint_policy_metadata"] = EndpointPolicyMetadataValidator().Validate
-
 	v.FldValidators["bot_allowlist_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["bot_allowlist_policy_metadata"] = PolicyMetadataValidator().Validate
-
 	v.FldValidators["bot_network_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["bot_network_policy_metadata"] = PolicyMetadataValidator().Validate
-
 	v.FldValidators["bot_threat_intelligence_policy_metadata"] = PolicyMetadataValidator().Validate
 
 	return v
@@ -2063,7 +1881,6 @@ type ValidateIPInfo struct {
 }
 
 func (v *ValidateIPInfo) TrafficValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for traffic")
@@ -2071,9 +1888,7 @@ func (v *ValidateIPInfo) TrafficValidationRuleHandler(rules map[string]string) (
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIPInfo) WanValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for wan")
@@ -2081,9 +1896,7 @@ func (v *ValidateIPInfo) WanValidationRuleHandler(rules map[string]string) (db.V
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIPInfo) LocalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for local")
@@ -2105,41 +1918,30 @@ func (v *ValidateIPInfo) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["local"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local"))
 		if err := fv(ctx, m.GetLocal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["traffic"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("traffic"))
 		if err := fv(ctx, m.GetTraffic(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["wan"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("wan"))
 		if err := fv(ctx, m.GetWan(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPInfoValidator = func() *ValidateIPInfo {
 	v := &ValidateIPInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2230,7 +2032,6 @@ type ValidateInfraCloudHosted struct {
 }
 
 func (v *ValidateInfraCloudHosted) InfraHostNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for infra_host_name")
@@ -2238,9 +2039,7 @@ func (v *ValidateInfraCloudHosted) InfraHostNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInfraCloudHosted) IngressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2286,9 +2085,7 @@ func (v *ValidateInfraCloudHosted) IngressValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInfraCloudHosted) EgressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2334,9 +2131,7 @@ func (v *ValidateInfraCloudHosted) EgressValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInfraCloudHosted) HostNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2376,9 +2171,7 @@ func (v *ValidateInfraCloudHosted) HostNamesValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInfraCloudHosted) IpAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2418,9 +2211,7 @@ func (v *ValidateInfraCloudHosted) IpAddressesValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInfraCloudHosted) InfraRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -2480,72 +2271,54 @@ func (v *ValidateInfraCloudHosted) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["egress"]; exists {
 		vOpts := append(opts, db.WithValidateField("egress"))
 		if err := fv(ctx, m.GetEgress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["firmware_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("firmware_version"))
 		if err := fv(ctx, m.GetFirmwareVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_names"]; exists {
 		vOpts := append(opts, db.WithValidateField("host_names"))
 		if err := fv(ctx, m.GetHostNames(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra_host_name"))
 		if err := fv(ctx, m.GetInfraHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_region"]; exists {
 		vOpts := append(opts, db.WithValidateField("infra_region"))
 		if err := fv(ctx, m.GetInfraRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ingress"]; exists {
 		vOpts := append(opts, db.WithValidateField("ingress"))
 		if err := fv(ctx, m.GetIngress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_addresses"))
 		if err := fv(ctx, m.GetIpAddresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInfraCloudHostedValidator = func() *ValidateInfraCloudHosted {
 	v := &ValidateInfraCloudHosted{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2681,9 +2454,7 @@ func (v *ValidateInfraF5HostedOnPrem) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["devices"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("devices"))
 		for idx, item := range m.GetDevices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2691,34 +2462,25 @@ func (v *ValidateInfraF5HostedOnPrem) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["firmware_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("firmware_version"))
 		if err := fv(ctx, m.GetFirmwareVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infra_host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra_host_name"))
 		if err := fv(ctx, m.GetInfraHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInfraF5HostedOnPremValidator = func() *ValidateInfraF5HostedOnPrem {
 	v := &ValidateInfraF5HostedOnPrem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["devices"] = DeviceValidator().Validate
 
 	return v
@@ -2784,6 +2546,7 @@ func (v *ValidateIngress) TypeChoiceHostNameValidationRuleHandler(rules map[stri
 	}
 	return oValidatorFn_HostName, nil
 }
+
 func (v *ValidateIngress) TypeChoiceIpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_IpAddress, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -2791,9 +2554,7 @@ func (v *ValidateIngress) TypeChoiceIpAddressValidationRuleHandler(rules map[str
 	}
 	return oValidatorFn_IpAddress, nil
 }
-
 func (v *ValidateIngress) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(Location)
@@ -2821,14 +2582,11 @@ func (v *ValidateIngress) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["type_choice"]; exists {
@@ -2864,16 +2622,13 @@ func (v *ValidateIngress) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIngressValidator = func() *ValidateIngress {
 	v := &ValidateIngress{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2881,7 +2636,6 @@ var DefaultIngressValidator = func() *ValidateIngress {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTypeChoice := v.TypeChoiceValidationRuleHandler
 	rulesTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2892,7 +2646,6 @@ var DefaultIngressValidator = func() *ValidateIngress {
 		panic(errMsg)
 	}
 	v.FldValidators["type_choice"] = vFn
-
 	vrhTypeChoiceHostName := v.TypeChoiceHostNameValidationRuleHandler
 	rulesTypeChoiceHostName := map[string]string{
 		"ves.io.schema.rules.string.hostname": "true",
@@ -2911,7 +2664,6 @@ var DefaultIngressValidator = func() *ValidateIngress {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Ingress.type_choice_ip_address: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["type_choice.host_name"] = vFnMap["type_choice.host_name"]
 	v.FldValidators["type_choice.ip_address"] = vFnMap["type_choice.ip_address"]
 
@@ -2975,7 +2727,6 @@ type ValidatePolicyMetadata struct {
 }
 
 func (v *ValidatePolicyMetadata) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -2983,9 +2734,7 @@ func (v *ValidatePolicyMetadata) NameValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePolicyMetadata) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -3007,32 +2756,24 @@ func (v *ValidatePolicyMetadata) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPolicyMetadataValidator = func() *ValidatePolicyMetadata {
 	v := &ValidatePolicyMetadata{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3112,7 +2853,6 @@ type ValidateProduction struct {
 }
 
 func (v *ValidateProduction) Region_1ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for region_1")
@@ -3120,9 +2860,7 @@ func (v *ValidateProduction) Region_1ValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateProduction) Region_2ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for region_2")
@@ -3144,32 +2882,24 @@ func (v *ValidateProduction) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["region_1"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region_1"))
 		if err := fv(ctx, m.GetRegion_1(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region_2"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region_2"))
 		if err := fv(ctx, m.GetRegion_2(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProductionValidator = func() *ValidateProduction {
 	v := &ValidateProduction{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3314,34 +3044,25 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["environment_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("environment_type"))
 		if err := fv(ctx, m.GetEnvironmentType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["traffic_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("traffic_type"))
 		if err := fv(ctx, m.GetTrafficType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3349,7 +3070,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBotInfraChoice := v.BotInfraChoiceValidationRuleHandler
 	rulesBotInfraChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3360,7 +3080,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bot_infra_choice"] = vFn
-
 	v.FldValidators["bot_infra_choice.cloud_hosted"] = InfraCloudHostedValidator().Validate
 	v.FldValidators["bot_infra_choice.physical_hosted"] = InfraF5HostedOnPremValidator().Validate
 	v.FldValidators["bot_infra_choice.on_prem"] = InfraF5HostedOnPremValidator().Validate
@@ -3414,7 +3133,6 @@ type ValidateTesting struct {
 }
 
 func (v *ValidateTesting) Region_1ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for region_1")
@@ -3436,23 +3154,18 @@ func (v *ValidateTesting) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["region_1"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region_1"))
 		if err := fv(ctx, m.GetRegion_1(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTestingValidator = func() *ValidateTesting {
 	v := &ValidateTesting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3513,6 +3226,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 		return
 	}
 	m.GetCreateBotInfraChoiceFromGlobalSpecType(f)
+	m.DeploymentMode = f.GetDeploymentMode()
 	m.TrafficType = f.GetTrafficType()
 }
 
@@ -3532,6 +3246,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	m1.SetCreateBotInfraChoiceToGlobalSpecType(f)
+	f.DeploymentMode = m1.DeploymentMode
 	f.TrafficType = m1.TrafficType
 }
 
@@ -3593,6 +3308,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetBotInfraChoiceFromGlobalSpecType(f)
 	m.BotNetworkPolicyMetadata = f.GetBotNetworkPolicyMetadata()
 	m.ClusterState = f.GetClusterState()
+	m.DeploymentMode = f.GetDeploymentMode()
 	m.Egress = f.GetEgress()
 	m.EnvironmentType = f.GetEnvironmentType()
 	m.HostNames = f.GetHostNames()
@@ -3624,6 +3340,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetBotInfraChoiceToGlobalSpecType(f)
 	f.BotNetworkPolicyMetadata = m1.BotNetworkPolicyMetadata
 	f.ClusterState = m1.ClusterState
+	f.DeploymentMode = m1.DeploymentMode
 	f.Egress = m1.Egress
 	f.EnvironmentType = m1.EnvironmentType
 	f.HostNames = m1.HostNames

@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCustomReplace(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.CustomReplace(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetContent(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetContentRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCGetContent(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.GetContent(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetNetworkPoliciesAndVersionsList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetPoliciesAndVersionsListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCGetNetworkPoliciesAndVersionsList(ctx context
 	rsp, err := c.grpcClient.GetNetworkPoliciesAndVersionsList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetNetworkPolicyVersions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PolicyVersionsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,15 +98,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
-
 	rpcFns["GetContent"] = ccl.doRPCGetContent
-
 	rpcFns["GetNetworkPoliciesAndVersionsList"] = ccl.doRPCGetNetworkPoliciesAndVersionsList
-
 	rpcFns["GetNetworkPolicyVersions"] = ccl.doRPCGetNetworkPolicyVersions
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -197,7 +189,6 @@ func (c *CustomAPIRestClient) doRPCCustomReplace(ctx context.Context, callOpts *
 	pbRsp := &CustomReplaceResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_network_policy.CustomReplaceResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -205,7 +196,6 @@ func (c *CustomAPIRestClient) doRPCCustomReplace(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetContent(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -282,7 +272,6 @@ func (c *CustomAPIRestClient) doRPCGetContent(ctx context.Context, callOpts *ser
 	pbRsp := &GetContentResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_network_policy.GetContentResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -290,7 +279,6 @@ func (c *CustomAPIRestClient) doRPCGetContent(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetNetworkPoliciesAndVersionsList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -365,7 +353,6 @@ func (c *CustomAPIRestClient) doRPCGetNetworkPoliciesAndVersionsList(ctx context
 	pbRsp := &GetPoliciesAndVersionsListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_network_policy.GetPoliciesAndVersionsListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -373,7 +360,6 @@ func (c *CustomAPIRestClient) doRPCGetNetworkPoliciesAndVersionsList(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetNetworkPolicyVersions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -449,7 +435,6 @@ func (c *CustomAPIRestClient) doRPCGetNetworkPolicyVersions(ctx context.Context,
 	pbRsp := &PolicyVersionsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_network_policy.PolicyVersionsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -483,15 +468,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
-
 	rpcFns["GetContent"] = ccl.doRPCGetContent
-
 	rpcFns["GetNetworkPoliciesAndVersionsList"] = ccl.doRPCGetNetworkPoliciesAndVersionsList
-
 	rpcFns["GetNetworkPolicyVersions"] = ccl.doRPCGetNetworkPolicyVersions
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -584,7 +564,6 @@ func (s *customAPISrv) CustomReplace(ctx context.Context, in *CustomReplaceReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_network_policy.CustomReplaceResponse", rsp)...)
 
 	return rsp, nil
@@ -633,7 +612,6 @@ func (s *customAPISrv) GetContent(ctx context.Context, in *GetContentRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_network_policy.GetContentResponse", rsp)...)
 
 	return rsp, nil
@@ -682,7 +660,6 @@ func (s *customAPISrv) GetNetworkPoliciesAndVersionsList(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_network_policy.GetPoliciesAndVersionsListResponse", rsp)...)
 
 	return rsp, nil
@@ -731,7 +708,6 @@ func (s *customAPISrv) GetNetworkPolicyVersions(ctx context.Context, in *PolicyV
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_network_policy.PolicyVersionsResponse", rsp)...)
 
 	return rsp, nil
@@ -1448,7 +1424,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_network_policy.ReplaceSpecType",
             "properties": {
                 "network_policy_content": {
-                    "description": " Network Policy Content ",
+                    "description": " Network Policy Content",
                     "$ref": "#/definitions/bot_defenseNetworkPolicyContent",
                     "x-displayname": "Routing"
                 }

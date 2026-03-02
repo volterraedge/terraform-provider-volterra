@@ -74,9 +74,7 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ValidateToken"] = ccl.doRPCValidateToken
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -163,7 +161,6 @@ func (c *CustomPrivateAPIRestClient) doRPCValidateToken(ctx context.Context, cal
 	pbRsp := &ValidateTokenResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ValidateTokenResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -197,9 +194,7 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ValidateToken"] = ccl.doRPCValidateToken
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

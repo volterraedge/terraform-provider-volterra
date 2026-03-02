@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.http_loadbalancer.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -3621,7 +3598,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeBotDefenseType",
             "properties": {
                 "disable_cors_support": {
-                    "description": "Exclusive with [enable_cors_support]\n Blocks Bot Defense from working with existing CORS policies on your \n application. This will significantly impact Bot Defense's ability to \n protect against Bot Attacks.",
+                    "description": "Exclusive with [enable_cors_support]\n Blocks Bot Defense from working with existing CORS policies on your\n application. This will significantly impact Bot Defense's ability to\n protect against Bot Attacks.",
                     "title": "Disable CORS Support",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
@@ -4576,6 +4553,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "common_wafAuthorizationServer": {
+            "type": "object",
+            "description": "Reference to Authorization Server object",
+            "title": "authorization_server",
+            "x-displayname": "Authorization Servers",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.AuthorizationServer",
+            "properties": {
+                "authorization_servers": {
+                    "type": "array",
+                    "description": " Authorization Servers are configured separately in the 'Shared Objects' section of the Web App \u0026\n API Protection workspace and used to fetch JWKS for JWT validation.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "authorization_server_name",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Authorization Server Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "common_wafBasePathsType": {
             "type": "object",
             "title": "base_paths",
@@ -4618,7 +4617,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Any Domain"
                 },
                 "any_url": {
-                    "description": "Exclusive with [api_endpoint api_groups base_path]\n Any URL ",
+                    "description": "Exclusive with [api_endpoint api_groups base_path]\n Any URL",
                     "title": "any_url",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Any URL"
@@ -5058,7 +5057,7 @@ var APISwaggerJSON string = `{
             "description": "JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming\nJWTs before they are passed to your API origin. JWT Validation will also stop requests with expired\ntokens or tokens that are not yet valid.",
             "title": "JWT Validation",
             "x-displayname": "JWT Validation",
-            "x-ves-oneof-field-jwks_configuration": "[\"jwks_config\"]",
+            "x-ves-oneof-field-jwks_configuration": "[\"authorization_server\",\"jwks_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_waf.JWTValidation",
             "properties": {
                 "action": {
@@ -5071,11 +5070,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "authorization_server": {
+                    "description": "Exclusive with [jwks_config]\n Automatically fetch JWKS from URI endpoint",
+                    "title": "authorization_server",
+                    "$ref": "#/definitions/common_wafAuthorizationServer",
+                    "x-displayname": "Authorization Servers"
+                },
                 "jwks_config": {
-                    "description": "Exclusive with []\n The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.",
+                    "description": "Exclusive with [authorization_server]\n Manually provide JWKS",
                     "title": "jwks_config",
                     "$ref": "#/definitions/common_wafJWKS",
-                    "x-displayname": "JSON Web Key Set (JWKS)"
+                    "x-displayname": "Local Input"
                 },
                 "mandatory_claims": {
                     "description": " Configuration for validation of mandatory claims. The system will verify that the claim exists in JWT.\n If the claim does not exist JWT token validation will fail.",
@@ -5951,6 +5956,7 @@ var APISwaggerJSON string = `{
             "description": "This defines various options to define a route",
             "title": "Advanced options",
             "x-displayname": "Advanced Options",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.AdvancedOptionsType",
@@ -6020,6 +6026,23 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "96"
                     }
+                },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n Sets the maximum number of requests a downstream client can send\n over a single connection to Envoy.\n Enter a value \u003e=1 to define the request limit per connection.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "Maximum Requests Per Connection",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "title": "Disable the max requests per connection option",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "request_cookies_to_add": {
                     "type": "array",
@@ -6838,7 +6861,7 @@ var APISwaggerJSON string = `{
                 },
                 "token_response_key": {
                     "type": "string",
-                    "description": " Specifies how to handle the API response, extracting authentication tokens.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Specifies the key name used to extract the authentication token from the login response, such as token or access_token.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Token Response Key",
                     "x-displayname": "Token Response Key",
                     "x-ves-required": "true",
@@ -7599,8 +7622,22 @@ var APISwaggerJSON string = `{
             "description": "A custom route uses a route object created outside of this view.",
             "title": "RouteTypeCustomRoute",
             "x-displayname": "Custom Route Object",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-caching": "[\"caching_disable\",\"caching_inherit\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeCustomRoute",
             "properties": {
+                "caching_disable": {
+                    "description": "Exclusive with [caching_inherit]\n",
+                    "title": "Caching is disabled for this Route",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "caching_inherit": {
+                    "description": "Exclusive with [caching_disable]\n",
+                    "title": "Caching is inherited from Load Balancer",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inherit"
+                },
                 "route_ref": {
                     "description": " Reference to a custom route object",
                     "title": "route_refs",
@@ -7718,7 +7755,8 @@ var APISwaggerJSON string = `{
             "description": "A simple route matches on path, incoming header, incoming port and/or HTTP method\nand forwards the matching traffic to the associated pools",
             "title": "RouteTypeSimple",
             "x-displayname": "Simple Route",
-            "x-ves-displayorder": "2,1,9,10,3,4,11,8",
+            "x-ves-displayorder": "2,1,9,10,13,3,4,11,8",
+            "x-ves-oneof-field-caching": "[\"caching_disable\",\"caching_inherit\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeSimple",
             "properties": {
@@ -7733,6 +7771,18 @@ var APISwaggerJSON string = `{
                     "title": "Auto Host Rewrite",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Automatic Host Rewrite"
+                },
+                "caching_disable": {
+                    "description": "Exclusive with [caching_inherit]\n",
+                    "title": "Caching is disabled for this Route",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "caching_inherit": {
+                    "description": "Exclusive with [caching_disable]\n",
+                    "title": "Caching is inherited from Load Balancer",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inherit"
                 },
                 "disable_host_rewrite": {
                     "description": "Exclusive with [auto_host_rewrite host_rewrite]\n Host header is not modified",
@@ -8168,6 +8218,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-lb_source_ip_persistance_choice": "[\"disable_lb_source_ip_persistance\",\"enable_lb_source_ip_persistance\"]",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-proxy_protocol_choice": "[\"disable_proxy_protocol\",\"proxy_protocol_v1\",\"proxy_protocol_v2\"]",
@@ -8268,11 +8319,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "600000"
                     }
                 },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n Sets the maximum number of requests allowed per connection to the origin server.\n Enter a value \u003e=1 to define the request limit per connection.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "Maximum Requests Per Connection",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
                 "no_panic_threshold": {
                     "description": "Exclusive with [panic_threshold]\n Disable panic threshold. Only healthy endpoints are considered for load balancing.",
                     "title": "Disable panic threshold",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Panic threshold"
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "title": "Disable the max requests per connection option",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "outlier_detection": {
                     "description": "Exclusive with [disable_outlier_detection]\n Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
@@ -8389,7 +8457,7 @@ var APISwaggerJSON string = `{
         },
         "origin_poolOriginServerConsulService": {
             "type": "object",
-            "description": "Specify origin server with Hashi Corp Consul service name and site information",
+            "description": "Specify origin server with HashiCorp Consul service name and site information",
             "title": "OriginServerConsulService",
             "x-displayname": "Consul Service Name on given Sites",
             "x-ves-displayorder": "1,2,3",
@@ -8733,10 +8801,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
                 "cbip_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with cBIP service name",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with BIG-IP service name",
                     "title": "OriginServerCBIPService",
                     "$ref": "#/definitions/origin_poolOriginServerCBIPService",
-                    "x-displayname": "cBIP Service Name of Origin Server"
+                    "x-displayname": "BIG-IP Service Name of Origin Server"
                 },
                 "consul_service": {
                     "description": "Exclusive with [cbip_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
@@ -11060,7 +11128,7 @@ var APISwaggerJSON string = `{
                 },
                 "period_multiplier": {
                     "type": "integer",
-                    "description": " This setting, combined with Per Period units, provides a duration \n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " This setting, combined with Per Period units, provides a duration\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
                     "title": "period_multiplier",
                     "format": "int64",
                     "x-displayname": "Periods",
@@ -12130,10 +12198,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -13194,7 +13262,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRegexMatchRewrite": {
             "type": "object",
-            "description": "RegexMatchRewrite describes how to match a string and then produce a new string using a \nregular expression and a substitution string.",
+            "description": "RegexMatchRewrite describes how to match a string and then produce a new string using a\nregular expression and a substitution string.",
             "title": "RegexMatchRewrite",
             "x-displayname": "Regex Match Rewrite",
             "x-ves-proto-message": "ves.io.schema.RegexMatchRewrite",
@@ -13215,7 +13283,7 @@ var APISwaggerJSON string = `{
                 },
                 "substitution": {
                     "type": "string",
-                    "description": " The string that should be substituted into matching portions of the subject string during a \n substitution operation to produce a new string.\n\nExample: - \"\\\\2/instance/\\\\1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " The string that should be substituted into matching portions of the subject string during a\n substitution operation to produce a new string.\n\nExample: - \"\\\\2/instance/\\\\1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Substitution",
                     "maxLength": 256,
                     "x-displayname": "Substitution",
@@ -14087,6 +14155,13 @@ var APISwaggerJSON string = `{
             "x-displayname": "Path Matcher",
             "x-ves-proto-message": "ves.io.schema.policy.PathMatcherType",
             "properties": {
+                "encoded_path_matcher": {
+                    "type": "boolean",
+                    "description": "Match against the encoded, escaped path",
+                    "title": "Encoded_Path",
+                    "format": "boolean",
+                    "x-displayname": "Match Encoded Path"
+                },
                 "exact_values": {
                     "type": "array",
                     "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -15609,7 +15684,7 @@ var APISwaggerJSON string = `{
                 },
                 "cache_ttl_override": {
                     "type": "string",
-                    "description": "Exclusive with [cache_disabled cache_ttl_default]\n Always override the Cahce TTL provided by Origin \n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "description": "Exclusive with [cache_disabled cache_ttl_default]\n Always override the Cahce TTL provided by Origin\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
                     "title": "Override Cache TTL Provided by Origin",
                     "x-displayname": "Override Cache TTL (d/ h/ m/ s)",
                     "x-ves-validation-rules": {
@@ -16306,7 +16381,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "allow_destructive_methods": {
                     "type": "boolean",
-                    "description": " Enable to allow API test to execute destructive methods. Be cautious as these can alter or delete data.",
+                    "description": " Enable to allow API Testing to execute against destructive methods. Use with caution as these may modify or delete data",
                     "title": "Destructive Methods",
                     "format": "boolean",
                     "x-displayname": "Use Destructive Methods (e.g., DELETE, PUT)"
@@ -17465,6 +17540,7 @@ var APISwaggerJSON string = `{
             "title": "RouteType",
             "x-displayname": "Route Type",
             "x-ves-oneof-field-choice": "[\"custom_route_object\",\"direct_response_route\",\"redirect_route\",\"simple_route\"]",
+            "x-ves-oneof-field-route_state": "[\"route_state_disabled\",\"route_state_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteType",
             "properties": {
                 "custom_route_object": {
@@ -17484,6 +17560,18 @@ var APISwaggerJSON string = `{
                     "title": "RouteTypeRedirect",
                     "$ref": "#/definitions/http_loadbalancerRouteTypeRedirect",
                     "x-displayname": "Redirect Route"
+                },
+                "route_state_disabled": {
+                    "description": "Exclusive with [route_state_enabled]\n",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "route_state_enabled": {
+                    "description": "Exclusive with [route_state_disabled]\n",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
                 },
                 "simple_route": {
                     "description": "Exclusive with [custom_route_object direct_response_route redirect_route]\n A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools",

@@ -56,7 +56,6 @@ func (r *ObjectCreateReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // EntryConverter
 func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 	r.FromObject(e)
@@ -76,15 +75,11 @@ func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
 
 // CLIENT side
-
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -93,7 +88,6 @@ func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r.FromObject(e)
 	return r, nil
 }
-
 func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 	r := &ObjectReplaceReq{}
 	if e == nil {
@@ -105,12 +99,10 @@ func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 		// See if uid can be got from Metadata.Uid
 		obj := e.(*object.DBObject)
 		uid = obj.GetMetadata().GetUid()
-
 	}
 	r.ObjectUid = uid
 	return r, nil
 }
-
 func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	ccOpts := server.NewCRUDCallOpts()
 	for _, o := range opts {
@@ -120,7 +112,6 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
-
 func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	r := &ObjectListReq{
 		TenantFilter:      cco.TenantFilter,
@@ -146,7 +137,6 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	}
 	return r, nil
 }
-
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
 	return &ObjectDeleteReq{ObjectUid: uid}
 }
@@ -158,7 +148,6 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -180,11 +169,9 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -202,9 +189,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -228,7 +213,6 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -236,11 +220,9 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -257,11 +239,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -271,11 +251,9 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -285,9 +263,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -312,7 +288,6 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -328,11 +303,9 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
-
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -346,7 +319,6 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -389,7 +361,6 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -457,11 +428,9 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
-
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -543,9 +512,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
-
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -597,7 +564,6 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -605,11 +571,9 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -627,11 +591,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -641,11 +603,9 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -655,9 +615,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.views.tenant_configuration.crudapi", ".")
@@ -748,7 +706,6 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -795,7 +752,6 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -824,7 +780,6 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
-
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.tenant_configuration.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -835,7 +790,6 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
-
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.tenant_configuration.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -846,7 +800,6 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
-
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.tenant_configuration.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -857,11 +810,9 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.crudapi.API.List")
 	return oah.List(ctx, req)
 }
-
 func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (API_ListStreamClient, error) {
 	return nil, fmt.Errorf("ListStream Not implemented")
 }
-
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.tenant_configuration.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -883,7 +834,6 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -904,11 +854,9 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -924,9 +872,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -947,7 +893,6 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -955,11 +900,9 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -977,11 +920,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -991,11 +932,9 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -1005,9 +944,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -1035,7 +972,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1047,7 +983,6 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -1077,7 +1012,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 	}
 	return nil
 }
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1098,7 +1032,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	obj := object.NewDBObject(nil)
 	req.ToObject(obj)
 	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-
 	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1110,7 +1043,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1141,9 +1073,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		return nil, status.Error(codes.ResourceExhausted, errors.Wrap(err, "Replace with NewObjectReplaceRsp").Error())
 	}
 	return rsp, nil
-
 }
-
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1168,7 +1098,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1180,7 +1109,6 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1193,17 +1121,16 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+		return nil, errors.Wrap(err, "List")
 	}
 	rsp, err := NewObjectListRsp(req, rsrcRsp.Items)
 	if err != nil {
-		merr = multierror.Append(merr, err)
+		return rsp, err
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
 	rsp.NextPage = rsrcRsp.NextPage
-	return rsp, merr
+	return rsp, nil
 }
-
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
 	var merr *multierror.Error
 	rsrcReq := &server.ResourceListRequest{
@@ -1215,6 +1142,7 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
 	if err != nil {
 		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+		return errors.ErrOrNil(merr)
 	}
 	streamSvr := &crudAPIListStreamServer{stream}
 	for item := range rsrcRsp.ItemsCh {
@@ -1225,7 +1153,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	}
 	return errors.ErrOrNil(merr)
 }
-
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1314,11 +1241,9 @@ func (r *ObjectGetReq) GetBackrefParam() (bool, []string) {
 func (r *ObjectDeleteReq) ToUid() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectCreateRsp) Key() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectGetRsp) GetBackrefs(ef db.NewEntryFunc) ([]db.Entry, error) {
 	brEnts := []db.Entry{}
 	bRefs := r.GetEntBackrefs()
@@ -1377,7 +1302,6 @@ func NewObjectCreateRsp(e db.Entry) (*ObjectCreateRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo := &ObjectReplaceRsp{}
 	switch e.(type) {
@@ -1391,7 +1315,6 @@ func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*ObjectGetRsp, error) {
 	rspo := &ObjectGetRsp{}
 	e := rsrcRsp.Entry
@@ -1435,7 +1358,6 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 	rspo.Status = statusObjs
 	return rspo, nil
 }
-
 func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*ObjectListRsp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("Nil ObjectListReq")
@@ -1461,7 +1383,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
 			continue
 		}
-
 		tenant := dbObj.GetSystemMetadata().GetTenant()
 		namespace := dbObj.GetMetadata().GetNamespace()
 		name := dbObj.GetMetadata().GetName()
@@ -1484,7 +1405,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 	}
 	return o, errs
 }
-
 func NewObjectDeleteRsp(ec ErrorCode) (*ObjectDeleteRsp, error) {
 	return &ObjectDeleteRsp{Err: ec}, nil
 }
@@ -2941,10 +2861,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -3242,7 +3162,7 @@ var APISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -3399,12 +3319,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "display_name": {
                     "type": "string",
-                    "description": " Tenant display name in the login screen\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^[^\u003c\u003e\u0026\\\"]+$\n",
+                    "description": " Changes the tenant name displayed during login without affecting your company’s domain name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^[^\u003c\u003e\u0026\\\"]+$\n",
                     "title": "Display Name",
                     "maxLength": 255,
                     "x-displayname": "Display Name",
                     "x-ves-example": "value",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "255",
                         "ves.io.schema.rules.string.pattern": "^[^\u003c\u003e\u0026\\\"]+$"
                     }
@@ -3430,6 +3352,94 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "tenant_configurationCookieHoursDuration": {
+            "type": "object",
+            "description": "Represents the cookie duration in hours.",
+            "title": "Cookie Hours Duration",
+            "x-displayname": "Cookie Hours Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.CookieHoursDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 720\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "720"
+                    }
+                }
+            }
+        },
+        "tenant_configurationCookieMinutesDuration": {
+            "type": "object",
+            "description": "Represents the cookie duration in minutes.",
+            "title": "Cookie Minutes Duration",
+            "x-displayname": "Cookie Minutes Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.CookieMinutesDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 5\n  ves.io.schema.rules.uint32.lte: 43200\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "5",
+                        "ves.io.schema.rules.uint32.lte": "43200"
+                    }
+                }
+            }
+        },
+        "tenant_configurationDurationByUnitCookie": {
+            "type": "object",
+            "description": "Represents the cookie expiration duration",
+            "title": "Duration By Unit Cookie",
+            "x-displayname": "Duration By Unit Cookie",
+            "x-ves-oneof-field-unit_of_time": "[\"hours\",\"minutes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.DurationByUnitCookie",
+            "properties": {
+                "hours": {
+                    "description": "Exclusive with [minutes]\n",
+                    "title": "Hours",
+                    "$ref": "#/definitions/tenant_configurationCookieHoursDuration",
+                    "x-displayname": "Hours"
+                },
+                "minutes": {
+                    "description": "Exclusive with [hours]\n",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/tenant_configurationCookieMinutesDuration",
+                    "x-displayname": "Minutes"
+                }
+            }
+        },
+        "tenant_configurationDurationByUnitSession": {
+            "type": "object",
+            "description": "Represents the session expiration duration.",
+            "title": "Duration By Unit Session",
+            "x-displayname": "Duration By Unit Session",
+            "x-ves-oneof-field-unit_of_time": "[\"hours\",\"minutes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.DurationByUnitSession",
+            "properties": {
+                "hours": {
+                    "description": "Exclusive with [minutes]\n",
+                    "title": "Hours",
+                    "$ref": "#/definitions/tenant_configurationSessionHoursDuration",
+                    "x-displayname": "Hours"
+                },
+                "minutes": {
+                    "description": "Exclusive with [hours]\n",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/tenant_configurationSessionMinutesDuration",
+                    "x-displayname": "Minutes"
+                }
+            }
+        },
         "tenant_configurationGlobalSpecType": {
             "type": "object",
             "description": "Shape of the tenant configuration specification",
@@ -3443,6 +3453,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/tenant_configurationBasicConfiguration",
                     "x-displayname": "Basic Configuration"
                 },
+                "brute_force_detection": {
+                    "description": " This system uses algorithms to temporarily lock accounts for a specified time period after detecting an attack.\n The lockout duration increases with longer persisting attack attempts.",
+                    "title": "Brute Force Detection",
+                    "$ref": "#/definitions/tenant_configurationBruteForceDetectionSettings",
+                    "x-displayname": "Brute Force Detection"
+                },
                 "brute_force_detection_settings": {
                     "description": " Our brute force detection system uses temporary lockout algorithm.\n Temporary lockout will disable a user’s account for a time period after an attack is detected;\n the time period for which the account is disabled increases the longer the attack continues.\n You can adjust some parameters of the brute force detection system.",
                     "title": "Brute Force Detection Settings",
@@ -3450,16 +3466,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Brute Force Detection Settings"
                 },
                 "password_policy": {
-                    "description": " Password policy allows you to configure your own password policy within tenant.\n Each user within tenant will have to comply with the configured policy when they set or update the password.",
+                    "description": " Define custom password requirements for your tenant.\n All tenant users must adhere to the policy when creating or updating their passwords.",
                     "title": "Password Policy",
                     "$ref": "#/definitions/tenant_configurationPasswordPolicy",
                     "x-displayname": "Password Policy"
                 },
-                "session_management": {
-                    "description": " Session management allows you to configure the session attributes such as cookie expiry, etc.",
-                    "title": "Session Managemement",
-                    "$ref": "#/definitions/tenant_configurationSessionManagement",
-                    "x-displayname": "Session Managemement"
+                "tenant_details": {
+                    "description": " Tenant details defines the metadata of the tenant.",
+                    "title": "Tenant Details",
+                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
+                    "x-displayname": "Tenant Details"
+                },
+                "user_session_expiration": {
+                    "description": " Changes take approximately 5 minutes to apply. Log in again to see the updates reflected. For more details,\n refer to [Tech Docs](https://docs.cloud.f5.com/docs-v2/administration/how-tos/user-mgmt/general-management).",
+                    "title": "User Session Expiration",
+                    "$ref": "#/definitions/tenant_configurationUserSessionExpiration",
+                    "x-displayname": "User Session Expiration"
                 }
             }
         },
@@ -3554,38 +3576,46 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "tenant_configurationSessionManagement": {
+        "tenant_configurationSessionHoursDuration": {
             "type": "object",
-            "title": "SessionManagement",
-            "x-displayname": "SessionManagement",
-            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionManagement",
+            "description": "Represents the session duration in hours.",
+            "title": "Session Hours Duration",
+            "x-displayname": "Session Hours Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionHoursDuration",
             "properties": {
-                "cookie_expiry": {
+                "duration": {
                     "type": "integer",
-                    "description": " Session cookie expiry in seconds.\n The user will be logged-out after these many seconds, if inactive on the console.\n\nExample: - \"900\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 86400\n",
-                    "title": "Session Cookie Expiry",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 720\n",
+                    "title": "Duration",
                     "format": "int64",
-                    "x-displayname": "Session Cookie Expiry",
-                    "x-ves-example": "900",
+                    "x-displayname": "Duration",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "60",
-                        "ves.io.schema.rules.uint32.lte": "86400"
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "720"
                     }
-                },
-                "session_expiry": {
+                }
+            }
+        },
+        "tenant_configurationSessionMinutesDuration": {
+            "type": "object",
+            "description": "Represents the session duration in minutes.",
+            "title": "Session Minutes Duration",
+            "x-displayname": "Session Minutes Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionMinutesDuration",
+            "properties": {
+                "duration": {
                     "type": "integer",
-                    "description": " Maximum session expiry in seconds.\n The user will be prompted for a re-login after this interval in spite of being active on the console\n\nExample: - \"86400\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 86400\n",
-                    "title": "Maximum Session Expiry",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 5\n  ves.io.schema.rules.uint32.lte: 43200\n",
+                    "title": "Duration",
                     "format": "int64",
-                    "x-displayname": "Maximum Session Expiry",
-                    "x-ves-example": "86400",
+                    "x-displayname": "Duration",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "60",
-                        "ves.io.schema.rules.uint32.lte": "86400"
+                        "ves.io.schema.rules.uint32.gte": "5",
+                        "ves.io.schema.rules.uint32.lte": "43200"
                     }
                 }
             }
@@ -3631,6 +3661,35 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "tenant_configurationUserSessionExpiration": {
+            "type": "object",
+            "description": "Defines all session-related expiration for user sessions within a tenant's environment.\nRelationship between session_expiry and cookie_expiry:\n- session_expiry defines the 'absolute maximum duration' of a session and enforces re-authentication after this time.\n- cookie_expiry defines the 'inactivity timeout', which resets on user activity and only logs out users after idle periods.\nTogether, these ensure the user is logged out when either the session reaches its maximum age or the user is inactive for too long.",
+            "title": "User Session Expiration",
+            "x-displayname": "User Session Expiration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.UserSessionExpiration",
+            "properties": {
+                "absolute_timeout": {
+                    "description": " Maximum length of user session.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Absolute Timeout",
+                    "$ref": "#/definitions/tenant_configurationDurationByUnitSession",
+                    "x-displayname": "Absolute Timeout",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "idle_timeout": {
+                    "description": " Maximum user inactivity allowed in a session.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Idle Timeout",
+                    "$ref": "#/definitions/tenant_configurationDurationByUnitCookie",
+                    "x-displayname": "Idle Timeout",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

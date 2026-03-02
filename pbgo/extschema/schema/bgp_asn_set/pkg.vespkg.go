@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp_asn_set.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.bgp_asn_set.Object"] = ObjectValidator()
 	vr["ves.io.schema.bgp_asn_set.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.bgp_asn_set.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.bgp_asn_set.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.bgp_asn_set.DeleteRequest"] = DeleteRequestValidator()
@@ -27,12 +25,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp_asn_set.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.bgp_asn_set.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.bgp_asn_set.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.bgp_asn_set.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.bgp_asn_set.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.bgp_asn_set.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.bgp_asn_set.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -44,25 +40,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.bgp_asn_set.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.bgp_asn_set.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.bgp_asn_set.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.bgp_asn_set.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -71,9 +62,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.bgp_asn_set.Object"] = APISwaggerJSON
@@ -87,22 +76,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.bgp_asn_set.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.bgp_asn_set.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.bgp_asn_set.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

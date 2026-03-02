@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCDeleteScriptJustification(ctx context.Context
 	rsp, err := c.grpcClient.DeleteScriptJustification(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetDetectedDomains(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetDetectedDomainsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCGetDetectedDomains(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.GetDetectedDomains(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetDomainDetails(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetDomainDetailsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCGetDomainDetails(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.GetDomainDetails(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetFormField(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetFormFieldRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomAPIGrpcClient) doRPCGetFormField(ctx context.Context, yamlReq str
 	rsp, err := c.grpcClient.GetFormField(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetJsInjectionConfiguration(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetJsInjectionConfigurationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *CustomAPIGrpcClient) doRPCGetJsInjectionConfiguration(ctx context.Conte
 	rsp, err := c.grpcClient.GetJsInjectionConfiguration(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetScriptOverview(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetScriptOverviewRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +82,6 @@ func (c *CustomAPIGrpcClient) doRPCGetScriptOverview(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.GetScriptOverview(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetStatusRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +90,6 @@ func (c *CustomAPIGrpcClient) doRPCGetStatus(ctx context.Context, yamlReq string
 	rsp, err := c.grpcClient.GetStatus(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetSummary(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSummaryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -105,7 +98,6 @@ func (c *CustomAPIGrpcClient) doRPCGetSummary(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.GetSummary(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCInit(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &InitRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -114,7 +106,6 @@ func (c *CustomAPIGrpcClient) doRPCInit(ctx context.Context, yamlReq string, opt
 	rsp, err := c.grpcClient.Init(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListAffectedUsers(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListAffectedUsersRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -123,7 +114,6 @@ func (c *CustomAPIGrpcClient) doRPCListAffectedUsers(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.ListAffectedUsers(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListBehaviorsByScript(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListBehaviorsByScriptRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -132,7 +122,14 @@ func (c *CustomAPIGrpcClient) doRPCListBehaviorsByScript(ctx context.Context, ya
 	rsp, err := c.grpcClient.ListBehaviorsByScript(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCListDetectedDomains(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListDetectedDomainsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListDetectedDomainsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListDetectedDomains(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCListFormFields(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListFormFieldsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -141,7 +138,6 @@ func (c *CustomAPIGrpcClient) doRPCListFormFields(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.ListFormFields(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListFormFieldsByScript(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListFormFieldsByScriptRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -150,7 +146,6 @@ func (c *CustomAPIGrpcClient) doRPCListFormFieldsByScript(ctx context.Context, y
 	rsp, err := c.grpcClient.ListFormFieldsByScript(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListFormFieldsGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListFormFieldsGetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -159,7 +154,6 @@ func (c *CustomAPIGrpcClient) doRPCListFormFieldsGet(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.ListFormFieldsGet(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListNetworkInteractionsByScript(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListNetworkInteractionsByScriptRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -168,7 +162,6 @@ func (c *CustomAPIGrpcClient) doRPCListNetworkInteractionsByScript(ctx context.C
 	rsp, err := c.grpcClient.ListNetworkInteractionsByScript(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListScripts(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListScriptsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -177,7 +170,6 @@ func (c *CustomAPIGrpcClient) doRPCListScripts(ctx context.Context, yamlReq stri
 	rsp, err := c.grpcClient.ListScripts(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListScriptsLegacy(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListScriptsLegacyRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -186,7 +178,6 @@ func (c *CustomAPIGrpcClient) doRPCListScriptsLegacy(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.ListScriptsLegacy(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCTestJS(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &TestJSRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -195,7 +186,6 @@ func (c *CustomAPIGrpcClient) doRPCTestJS(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.TestJS(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateDomains(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateDomainsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -204,7 +194,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateDomains(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.UpdateDomains(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateFieldAnalysis(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateFieldAnalysisRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -213,7 +202,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateFieldAnalysis(ctx context.Context, yaml
 	rsp, err := c.grpcClient.UpdateFieldAnalysis(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateScriptJustification(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateScriptJustificationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -222,7 +210,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateScriptJustification(ctx context.Context
 	rsp, err := c.grpcClient.UpdateScriptJustification(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateScriptReadStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateScriptReadStatusRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -263,51 +250,29 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DeleteScriptJustification"] = ccl.doRPCDeleteScriptJustification
-
 	rpcFns["GetDetectedDomains"] = ccl.doRPCGetDetectedDomains
-
 	rpcFns["GetDomainDetails"] = ccl.doRPCGetDomainDetails
-
 	rpcFns["GetFormField"] = ccl.doRPCGetFormField
-
 	rpcFns["GetJsInjectionConfiguration"] = ccl.doRPCGetJsInjectionConfiguration
-
 	rpcFns["GetScriptOverview"] = ccl.doRPCGetScriptOverview
-
 	rpcFns["GetStatus"] = ccl.doRPCGetStatus
-
 	rpcFns["GetSummary"] = ccl.doRPCGetSummary
-
 	rpcFns["Init"] = ccl.doRPCInit
-
 	rpcFns["ListAffectedUsers"] = ccl.doRPCListAffectedUsers
-
 	rpcFns["ListBehaviorsByScript"] = ccl.doRPCListBehaviorsByScript
-
+	rpcFns["ListDetectedDomains"] = ccl.doRPCListDetectedDomains
 	rpcFns["ListFormFields"] = ccl.doRPCListFormFields
-
 	rpcFns["ListFormFieldsByScript"] = ccl.doRPCListFormFieldsByScript
-
 	rpcFns["ListFormFieldsGet"] = ccl.doRPCListFormFieldsGet
-
 	rpcFns["ListNetworkInteractionsByScript"] = ccl.doRPCListNetworkInteractionsByScript
-
 	rpcFns["ListScripts"] = ccl.doRPCListScripts
-
 	rpcFns["ListScriptsLegacy"] = ccl.doRPCListScriptsLegacy
-
 	rpcFns["TestJS"] = ccl.doRPCTestJS
-
 	rpcFns["UpdateDomains"] = ccl.doRPCUpdateDomains
-
 	rpcFns["UpdateFieldAnalysis"] = ccl.doRPCUpdateFieldAnalysis
-
 	rpcFns["UpdateScriptJustification"] = ccl.doRPCUpdateScriptJustification
-
 	rpcFns["UpdateScriptReadStatus"] = ccl.doRPCUpdateScriptReadStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -394,7 +359,6 @@ func (c *CustomAPIRestClient) doRPCDeleteScriptJustification(ctx context.Context
 	pbRsp := &DeleteScriptJustificationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.DeleteScriptJustificationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -402,7 +366,6 @@ func (c *CustomAPIRestClient) doRPCDeleteScriptJustification(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetDetectedDomains(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -443,9 +406,14 @@ func (c *CustomAPIRestClient) doRPCGetDetectedDomains(ctx context.Context, callO
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("duration", fmt.Sprintf("%v", req.Duration))
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
 		q.Add("locations", fmt.Sprintf("%v", req.Locations))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("page_number", fmt.Sprintf("%v", req.PageNumber))
+		q.Add("page_size", fmt.Sprintf("%v", req.PageSize))
+		q.Add("page_token", fmt.Sprintf("%v", req.PageToken))
 		q.Add("risk", fmt.Sprintf("%v", req.Risk))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -480,7 +448,6 @@ func (c *CustomAPIRestClient) doRPCGetDetectedDomains(ctx context.Context, callO
 	pbRsp := &GetDetectedDomainsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.GetDetectedDomainsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -488,7 +455,6 @@ func (c *CustomAPIRestClient) doRPCGetDetectedDomains(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetDomainDetails(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -564,7 +530,6 @@ func (c *CustomAPIRestClient) doRPCGetDomainDetails(ctx context.Context, callOpt
 	pbRsp := &GetDomainDetailsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.GetDomainDetailsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -572,7 +537,6 @@ func (c *CustomAPIRestClient) doRPCGetDomainDetails(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetFormField(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -648,7 +612,6 @@ func (c *CustomAPIRestClient) doRPCGetFormField(ctx context.Context, callOpts *s
 	pbRsp := &GetFormFieldResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.GetFormFieldResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -656,7 +619,6 @@ func (c *CustomAPIRestClient) doRPCGetFormField(ctx context.Context, callOpts *s
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetJsInjectionConfiguration(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -732,7 +694,6 @@ func (c *CustomAPIRestClient) doRPCGetJsInjectionConfiguration(ctx context.Conte
 	pbRsp := &GetJsInjectionConfigurationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.GetJsInjectionConfigurationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -740,7 +701,6 @@ func (c *CustomAPIRestClient) doRPCGetJsInjectionConfiguration(ctx context.Conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetScriptOverview(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -819,7 +779,6 @@ func (c *CustomAPIRestClient) doRPCGetScriptOverview(ctx context.Context, callOp
 	pbRsp := &GetScriptOverviewResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.GetScriptOverviewResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -827,7 +786,6 @@ func (c *CustomAPIRestClient) doRPCGetScriptOverview(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -902,7 +860,6 @@ func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *serv
 	pbRsp := &GetStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.GetStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -910,7 +867,6 @@ func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *serv
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetSummary(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -985,7 +941,6 @@ func (c *CustomAPIRestClient) doRPCGetSummary(ctx context.Context, callOpts *ser
 	pbRsp := &GetSummaryResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.GetSummaryResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -993,7 +948,6 @@ func (c *CustomAPIRestClient) doRPCGetSummary(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCInit(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1070,7 +1024,6 @@ func (c *CustomAPIRestClient) doRPCInit(ctx context.Context, callOpts *server.Cu
 	pbRsp := &InitResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.InitResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1078,7 +1031,6 @@ func (c *CustomAPIRestClient) doRPCInit(ctx context.Context, callOpts *server.Cu
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListAffectedUsers(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1163,7 +1115,6 @@ func (c *CustomAPIRestClient) doRPCListAffectedUsers(ctx context.Context, callOp
 	pbRsp := &ListAffectedUsersResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListAffectedUsersResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1171,7 +1122,6 @@ func (c *CustomAPIRestClient) doRPCListAffectedUsers(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListBehaviorsByScript(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1250,7 +1200,6 @@ func (c *CustomAPIRestClient) doRPCListBehaviorsByScript(ctx context.Context, ca
 	pbRsp := &ListBehaviorsByScriptResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListBehaviorsByScriptResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1258,7 +1207,95 @@ func (c *CustomAPIRestClient) doRPCListBehaviorsByScript(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCListDetectedDomains(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &ListDetectedDomainsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListDetectedDomainsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("duration", fmt.Sprintf("%v", req.Duration))
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("locations", fmt.Sprintf("%v", req.Locations))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("page_number", fmt.Sprintf("%v", req.PageNumber))
+		q.Add("page_size", fmt.Sprintf("%v", req.PageSize))
+		q.Add("page_token", fmt.Sprintf("%v", req.PageToken))
+		q.Add("risk", fmt.Sprintf("%v", req.Risk))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListDetectedDomainsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListDetectedDomainsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCListFormFields(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1342,7 +1379,6 @@ func (c *CustomAPIRestClient) doRPCListFormFields(ctx context.Context, callOpts 
 	pbRsp := &ListFormFieldsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListFormFieldsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1350,7 +1386,6 @@ func (c *CustomAPIRestClient) doRPCListFormFields(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListFormFieldsByScript(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1428,7 +1463,6 @@ func (c *CustomAPIRestClient) doRPCListFormFieldsByScript(ctx context.Context, c
 	pbRsp := &ListFormFieldsByScriptResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListFormFieldsByScriptResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1436,7 +1470,6 @@ func (c *CustomAPIRestClient) doRPCListFormFieldsByScript(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListFormFieldsGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1513,7 +1546,6 @@ func (c *CustomAPIRestClient) doRPCListFormFieldsGet(ctx context.Context, callOp
 	pbRsp := &ListFormFieldsGetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListFormFieldsGetResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1521,7 +1553,6 @@ func (c *CustomAPIRestClient) doRPCListFormFieldsGet(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListNetworkInteractionsByScript(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1599,7 +1630,6 @@ func (c *CustomAPIRestClient) doRPCListNetworkInteractionsByScript(ctx context.C
 	pbRsp := &ListNetworkInteractionsByScriptResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListNetworkInteractionsByScriptResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1607,7 +1637,6 @@ func (c *CustomAPIRestClient) doRPCListNetworkInteractionsByScript(ctx context.C
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListScripts(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1691,7 +1720,6 @@ func (c *CustomAPIRestClient) doRPCListScripts(ctx context.Context, callOpts *se
 	pbRsp := &ListScriptsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListScriptsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1699,7 +1727,6 @@ func (c *CustomAPIRestClient) doRPCListScripts(ctx context.Context, callOpts *se
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListScriptsLegacy(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1779,7 +1806,6 @@ func (c *CustomAPIRestClient) doRPCListScriptsLegacy(ctx context.Context, callOp
 	pbRsp := &ListScriptsLegacyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListScriptsLegacyResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1787,7 +1813,6 @@ func (c *CustomAPIRestClient) doRPCListScriptsLegacy(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCTestJS(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1864,7 +1889,6 @@ func (c *CustomAPIRestClient) doRPCTestJS(ctx context.Context, callOpts *server.
 	pbRsp := &TestJSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.TestJSResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1872,7 +1896,6 @@ func (c *CustomAPIRestClient) doRPCTestJS(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateDomains(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1948,7 +1971,6 @@ func (c *CustomAPIRestClient) doRPCUpdateDomains(ctx context.Context, callOpts *
 	pbRsp := &UpdateDomainsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.UpdateDomainsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1956,7 +1978,6 @@ func (c *CustomAPIRestClient) doRPCUpdateDomains(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateFieldAnalysis(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2033,7 +2054,6 @@ func (c *CustomAPIRestClient) doRPCUpdateFieldAnalysis(ctx context.Context, call
 	pbRsp := &UpdateFieldAnalysisResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.UpdateFieldAnalysisResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2041,7 +2061,6 @@ func (c *CustomAPIRestClient) doRPCUpdateFieldAnalysis(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateScriptJustification(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2119,7 +2138,6 @@ func (c *CustomAPIRestClient) doRPCUpdateScriptJustification(ctx context.Context
 	pbRsp := &UpdateScriptJustificationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.UpdateScriptJustificationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2127,7 +2145,6 @@ func (c *CustomAPIRestClient) doRPCUpdateScriptJustification(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateScriptReadStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2204,7 +2221,6 @@ func (c *CustomAPIRestClient) doRPCUpdateScriptReadStatus(ctx context.Context, c
 	pbRsp := &UpdateScriptReadStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.UpdateScriptReadStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2238,51 +2254,29 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DeleteScriptJustification"] = ccl.doRPCDeleteScriptJustification
-
 	rpcFns["GetDetectedDomains"] = ccl.doRPCGetDetectedDomains
-
 	rpcFns["GetDomainDetails"] = ccl.doRPCGetDomainDetails
-
 	rpcFns["GetFormField"] = ccl.doRPCGetFormField
-
 	rpcFns["GetJsInjectionConfiguration"] = ccl.doRPCGetJsInjectionConfiguration
-
 	rpcFns["GetScriptOverview"] = ccl.doRPCGetScriptOverview
-
 	rpcFns["GetStatus"] = ccl.doRPCGetStatus
-
 	rpcFns["GetSummary"] = ccl.doRPCGetSummary
-
 	rpcFns["Init"] = ccl.doRPCInit
-
 	rpcFns["ListAffectedUsers"] = ccl.doRPCListAffectedUsers
-
 	rpcFns["ListBehaviorsByScript"] = ccl.doRPCListBehaviorsByScript
-
+	rpcFns["ListDetectedDomains"] = ccl.doRPCListDetectedDomains
 	rpcFns["ListFormFields"] = ccl.doRPCListFormFields
-
 	rpcFns["ListFormFieldsByScript"] = ccl.doRPCListFormFieldsByScript
-
 	rpcFns["ListFormFieldsGet"] = ccl.doRPCListFormFieldsGet
-
 	rpcFns["ListNetworkInteractionsByScript"] = ccl.doRPCListNetworkInteractionsByScript
-
 	rpcFns["ListScripts"] = ccl.doRPCListScripts
-
 	rpcFns["ListScriptsLegacy"] = ccl.doRPCListScriptsLegacy
-
 	rpcFns["TestJS"] = ccl.doRPCTestJS
-
 	rpcFns["UpdateDomains"] = ccl.doRPCUpdateDomains
-
 	rpcFns["UpdateFieldAnalysis"] = ccl.doRPCUpdateFieldAnalysis
-
 	rpcFns["UpdateScriptJustification"] = ccl.doRPCUpdateScriptJustification
-
 	rpcFns["UpdateScriptReadStatus"] = ccl.doRPCUpdateScriptReadStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -2336,6 +2330,10 @@ func (c *customAPIInprocClient) ListAffectedUsers(ctx context.Context, in *ListA
 func (c *customAPIInprocClient) ListBehaviorsByScript(ctx context.Context, in *ListBehaviorsByScriptRequest, opts ...grpc.CallOption) (*ListBehaviorsByScriptResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListBehaviorsByScript")
 	return c.CustomAPIServer.ListBehaviorsByScript(ctx, in)
+}
+func (c *customAPIInprocClient) ListDetectedDomains(ctx context.Context, in *ListDetectedDomainsRequest, opts ...grpc.CallOption) (*ListDetectedDomainsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListDetectedDomains")
+	return c.CustomAPIServer.ListDetectedDomains(ctx, in)
 }
 func (c *customAPIInprocClient) ListFormFields(ctx context.Context, in *ListFormFieldsRequest, opts ...grpc.CallOption) (*ListFormFieldsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListFormFields")
@@ -2447,7 +2445,6 @@ func (s *customAPISrv) DeleteScriptJustification(ctx context.Context, in *Delete
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.DeleteScriptJustificationResponse", rsp)...)
 
 	return rsp, nil
@@ -2496,7 +2493,6 @@ func (s *customAPISrv) GetDetectedDomains(ctx context.Context, in *GetDetectedDo
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.GetDetectedDomainsResponse", rsp)...)
 
 	return rsp, nil
@@ -2545,7 +2541,6 @@ func (s *customAPISrv) GetDomainDetails(ctx context.Context, in *GetDomainDetail
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.GetDomainDetailsResponse", rsp)...)
 
 	return rsp, nil
@@ -2594,7 +2589,6 @@ func (s *customAPISrv) GetFormField(ctx context.Context, in *GetFormFieldRequest
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.GetFormFieldResponse", rsp)...)
 
 	return rsp, nil
@@ -2643,7 +2637,6 @@ func (s *customAPISrv) GetJsInjectionConfiguration(ctx context.Context, in *GetJ
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.GetJsInjectionConfigurationResponse", rsp)...)
 
 	return rsp, nil
@@ -2692,7 +2685,6 @@ func (s *customAPISrv) GetScriptOverview(ctx context.Context, in *GetScriptOverv
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.GetScriptOverviewResponse", rsp)...)
 
 	return rsp, nil
@@ -2741,7 +2733,6 @@ func (s *customAPISrv) GetStatus(ctx context.Context, in *GetStatusRequest) (*Ge
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.GetStatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2790,7 +2781,6 @@ func (s *customAPISrv) GetSummary(ctx context.Context, in *GetSummaryRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.GetSummaryResponse", rsp)...)
 
 	return rsp, nil
@@ -2839,7 +2829,6 @@ func (s *customAPISrv) Init(ctx context.Context, in *InitRequest) (*InitResponse
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.InitResponse", rsp)...)
 
 	return rsp, nil
@@ -2888,7 +2877,6 @@ func (s *customAPISrv) ListAffectedUsers(ctx context.Context, in *ListAffectedUs
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListAffectedUsersResponse", rsp)...)
 
 	return rsp, nil
@@ -2937,8 +2925,55 @@ func (s *customAPISrv) ListBehaviorsByScript(ctx context.Context, in *ListBehavi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListBehaviorsByScriptResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ListDetectedDomains(ctx context.Context, in *ListDetectedDomainsRequest) (*ListDetectedDomainsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.shape.client_side_defense.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListDetectedDomainsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListDetectedDomainsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListDetectedDomains' operation on 'client_side_defense'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.shape.client_side_defense.CustomAPI.ListDetectedDomains"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListDetectedDomains(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListDetectedDomainsResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -2986,7 +3021,6 @@ func (s *customAPISrv) ListFormFields(ctx context.Context, in *ListFormFieldsReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListFormFieldsResponse", rsp)...)
 
 	return rsp, nil
@@ -3035,7 +3069,6 @@ func (s *customAPISrv) ListFormFieldsByScript(ctx context.Context, in *ListFormF
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListFormFieldsByScriptResponse", rsp)...)
 
 	return rsp, nil
@@ -3084,7 +3117,6 @@ func (s *customAPISrv) ListFormFieldsGet(ctx context.Context, in *ListFormFields
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListFormFieldsGetResponse", rsp)...)
 
 	return rsp, nil
@@ -3133,7 +3165,6 @@ func (s *customAPISrv) ListNetworkInteractionsByScript(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListNetworkInteractionsByScriptResponse", rsp)...)
 
 	return rsp, nil
@@ -3182,7 +3213,6 @@ func (s *customAPISrv) ListScripts(ctx context.Context, in *ListScriptsRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListScriptsResponse", rsp)...)
 
 	return rsp, nil
@@ -3231,7 +3261,6 @@ func (s *customAPISrv) ListScriptsLegacy(ctx context.Context, in *ListScriptsLeg
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListScriptsLegacyResponse", rsp)...)
 
 	return rsp, nil
@@ -3280,7 +3309,6 @@ func (s *customAPISrv) TestJS(ctx context.Context, in *TestJSRequest) (*TestJSRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.TestJSResponse", rsp)...)
 
 	return rsp, nil
@@ -3329,7 +3357,6 @@ func (s *customAPISrv) UpdateDomains(ctx context.Context, in *UpdateDomainsReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.UpdateDomainsResponse", rsp)...)
 
 	return rsp, nil
@@ -3378,7 +3405,6 @@ func (s *customAPISrv) UpdateFieldAnalysis(ctx context.Context, in *UpdateFieldA
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.UpdateFieldAnalysisResponse", rsp)...)
 
 	return rsp, nil
@@ -3427,7 +3453,6 @@ func (s *customAPISrv) UpdateScriptJustification(ctx context.Context, in *Update
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.UpdateScriptJustificationResponse", rsp)...)
 
 	return rsp, nil
@@ -3476,7 +3501,6 @@ func (s *customAPISrv) UpdateScriptReadStatus(ctx context.Context, in *UpdateScr
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.UpdateScriptReadStatusResponse", rsp)...)
 
 	return rsp, nil
@@ -3590,6 +3614,98 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.shape.client_side_defense.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/detectedDomains": {
+            "post": {
+                "summary": "List All Detected Domains",
+                "description": "List detected domains",
+                "operationId": "ves.io.schema.shape.client_side_defense.CustomAPI.ListDetectedDomains",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/client_side_defenseListDetectedDomainsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"default\"\nNamespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/client_side_defenseListDetectedDomainsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-client_side_defense-customapi-listdetecteddomains"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.shape.client_side_defense.CustomAPI.ListDetectedDomains"
+            },
+            "x-displayname": "CustomAPI",
+            "x-ves-proto-service": "ves.io.schema.shape.client_side_defense.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/detected_domains": {
             "get": {
                 "summary": "Get Detected Domains",
@@ -3683,6 +3799,48 @@ var CustomAPISwaggerJSON string = `{
                         "required": false,
                         "type": "string",
                         "x-displayname": "Risk"
+                    },
+                    {
+                        "name": "start_time",
+                        "description": "x-example: \"1570194000\"\nformat: unix epoch timestamp in seconds\nfetch domains with timestamp \u003e= start_time",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Start Time"
+                    },
+                    {
+                        "name": "end_time",
+                        "description": "x-example: \"1570194300\"\nformat: unix epoch timestamp in seconds\nfetch domains with timestamp \u003c= end_time",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "End Time"
+                    },
+                    {
+                        "name": "page_size",
+                        "description": "x-example: \"500\"\nMaximum number of domains per page",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "x-displayname": "Page Size"
+                    },
+                    {
+                        "name": "page_number",
+                        "description": "x-example: \"1\"\nOne-indexed page number (starts from 1), optional when page_token is specified",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "x-displayname": "Page Number"
+                    },
+                    {
+                        "name": "page_token",
+                        "description": "x-example: \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"\nopaque token from previous response for pagination",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Page Token"
                     }
                 ],
                 "tags": [
@@ -6511,32 +6669,71 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.GetDetectedDomainsResponse",
             "properties": {
                 "customer": {
-                    "description": " Additional Information about the Enterprise",
-                    "title": "EnterpriseInfo",
+                    "description": " Additional information about the enterprise",
+                    "title": "customer",
                     "$ref": "#/definitions/client_side_defenseEnterpriseInfo",
                     "x-displayname": "Enterprise Info"
                 },
-                "domainSummary": {
+                "domain_summary": {
                     "description": " Domain summary data (aggregation of all configured domains)",
-                    "title": "DomainSummary",
+                    "title": "domain_summary",
                     "$ref": "#/definitions/client_side_defenseDomainSummary",
-                    "x-displayname": "Domain summary"
+                    "x-displayname": "Domain Summary"
                 },
-                "domainsList": {
+                "domains_list": {
                     "type": "array",
                     "description": " Detailed runtime information broken down by domain (as opposed to domain summary that is aggregated)",
-                    "title": "DomainsList",
+                    "title": "domains_list",
                     "items": {
                         "$ref": "#/definitions/client_side_defenseDomainDetails"
                     },
                     "x-displayname": "Domains List"
                 },
-                "locationList": {
+                "location_list": {
                     "type": "object",
-                    "description": " \"location URL -\u003e protection flag\" map\n\nExample: - \"['www.some-domain.com/reset-password'true,'www.some-domain.com/login': false]\"-",
-                    "title": "LocationList",
-                    "x-displayname": "Location list",
-                    "x-ves-example": "['www.some-domain.com/reset-password': true,'www.some-domain.com/login': false]"
+                    "description": " \"location URL -\u003e protection flag\" map\n\nExample: - \"{'www.some-domain.com/reset-password'true,'www.some-domain.com/login': false}\"-",
+                    "title": "location_list",
+                    "x-displayname": "Location List",
+                    "x-ves-example": "{'www.some-domain.com/reset-password': true,'www.some-domain.com/login': false}"
+                },
+                "next_page_token": {
+                    "type": "string",
+                    "description": " Opaque value passed back alone with the additional calls. All filtering will stay the same\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-",
+                    "title": "next_page_token",
+                    "x-displayname": "Next Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number (starts from 1), page_number and page_size are optional when page_token is specified\n\nExample: - \"10\"-",
+                    "title": "page_number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "10"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " The maximum number of domains to return per page\n\nExample: - \"500\"-",
+                    "title": "page_size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500"
+                },
+                "total_count": {
+                    "type": "integer",
+                    "description": " Total count of domains available at time of query, and subject to change across queries\n\nExample: - \"1000\"-",
+                    "title": "total_count",
+                    "format": "int32",
+                    "x-displayname": "Total Count",
+                    "x-ves-example": "1000"
+                },
+                "total_pages": {
+                    "type": "integer",
+                    "description": " Total number of pages available depending upon requested page_size\n\nExample: - \"2\"-",
+                    "title": "total_pages",
+                    "format": "int32",
+                    "x-displayname": "Total Pages",
+                    "x-ves-example": "2"
                 }
             }
         },
@@ -7057,6 +7254,159 @@ var CustomAPISwaggerJSON string = `{
                     "title": "total_size",
                     "format": "int32",
                     "x-displayname": "Total Size"
+                }
+            }
+        },
+        "client_side_defenseListDetectedDomainsRequest": {
+            "type": "object",
+            "description": "Any payload to be passed on the Get Provision API",
+            "title": "GetDetectedDomainsRequest",
+            "x-displayname": "Get Domains Request",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListDetectedDomainsRequest",
+            "properties": {
+                "duration": {
+                    "type": "string",
+                    "description": " Length in Days to fetch domain\n\nExample: - \"15\"-",
+                    "title": "Duration Days",
+                    "x-displayname": "Duration days",
+                    "x-ves-example": "15"
+                },
+                "end_time": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in seconds\n fetch domains with timestamp \u003c= end_time\n\nExample: - \"1570194300\"-",
+                    "title": "End time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "1570194300"
+                },
+                "locations": {
+                    "type": "string",
+                    "description": " List of locations if backend needs to filter with locations passed\n\nExample: - \"location1.com,location2.com\"-",
+                    "title": "Locations",
+                    "x-displayname": "Locations",
+                    "x-ves-example": "location1.com,location2.com"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace\n\nExample: - \"default\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number (starts from 1), optional when page_token is specified\n\nExample: - \"1\"-",
+                    "title": "Page number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "1"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " Maximum number of domains per page\n\nExample: - \"500\"-",
+                    "title": "Page size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500"
+                },
+                "page_token": {
+                    "type": "string",
+                    "description": " opaque token from previous response for pagination\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-",
+                    "title": "Page token",
+                    "x-displayname": "Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y"
+                },
+                "risk": {
+                    "type": "string",
+                    "description": " Get the list of high risk domains, all domains is by default\n\nExample: - \"high\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"high\\\", \\\"\\\"]\n",
+                    "title": "Risk",
+                    "x-displayname": "Risk",
+                    "x-ves-example": "high",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"high\\\", \\\"\\\"]"
+                    }
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in seconds\n fetch domains with timestamp \u003e= start_time\n\nExample: - \"1570194000\"-",
+                    "title": "Start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "1570194000"
+                }
+            }
+        },
+        "client_side_defenseListDetectedDomainsResponse": {
+            "type": "object",
+            "description": "Get detected domains monitoring data",
+            "title": "GetDetectedDomainsResponse",
+            "x-displayname": "Get Domains Response",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListDetectedDomainsResponse",
+            "properties": {
+                "customer": {
+                    "description": " Additional information about the enterprise",
+                    "title": "customer",
+                    "$ref": "#/definitions/client_side_defenseEnterpriseInfo",
+                    "x-displayname": "Enterprise Info"
+                },
+                "domain_summary": {
+                    "description": " Domain summary data (aggregation of all configured domains)",
+                    "title": "domain_summary",
+                    "$ref": "#/definitions/client_side_defenseDomainSummary",
+                    "x-displayname": "Domain Summary"
+                },
+                "domains_list": {
+                    "type": "array",
+                    "description": " Detailed runtime information broken down by domain (as opposed to domain summary that is aggregated)",
+                    "title": "domains_list",
+                    "items": {
+                        "$ref": "#/definitions/client_side_defenseDomainDetails"
+                    },
+                    "x-displayname": "Domains List"
+                },
+                "location_list": {
+                    "type": "object",
+                    "description": " \"location URL -\u003e protection flag\" map\n\nExample: - \"{'www.some-domain.com/reset-password'true,'www.some-domain.com/login': false}\"-",
+                    "title": "location_list",
+                    "x-displayname": "Location List",
+                    "x-ves-example": "{'www.some-domain.com/reset-password': true,'www.some-domain.com/login': false}"
+                },
+                "next_page_token": {
+                    "type": "string",
+                    "description": " Opaque value passed back alone with the additional calls. All filtering will stay the same\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-",
+                    "title": "next_page_token",
+                    "x-displayname": "Next Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number (starts from 1), page_number and page_size are optional when page_token is specified\n\nExample: - \"10\"-",
+                    "title": "page_number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "10"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " The maximum number of domains to return per page\n\nExample: - \"500\"-",
+                    "title": "page_size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500"
+                },
+                "total_count": {
+                    "type": "integer",
+                    "description": " Total count of domains available at time of query, and subject to change across queries\n\nExample: - \"1000\"-",
+                    "title": "total_count",
+                    "format": "int32",
+                    "x-displayname": "Total Count",
+                    "x-ves-example": "1000"
+                },
+                "total_pages": {
+                    "type": "integer",
+                    "description": " Total number of pages available depending upon requested page_size\n\nExample: - \"2\"-",
+                    "title": "total_pages",
+                    "format": "int32",
+                    "x-displayname": "Total Pages",
+                    "x-ves-example": "2"
                 }
             }
         },

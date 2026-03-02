@@ -66,7 +66,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ContextKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for context_key")
@@ -74,9 +73,7 @@ func (v *ValidateCreateSpecType) ContextKeyValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) FilterFieldsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -136,31 +133,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["context_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("context_key"))
 		if err := fv(ctx, m.GetContextKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter_fields"]; exists {
 		vOpts := append(opts, db.WithValidateField("filter_fields"))
 		if err := fv(ctx, m.GetFilterFields(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -242,7 +232,6 @@ type ValidateFilterExpressionField struct {
 }
 
 func (v *ValidateFilterExpressionField) ExpressionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for expression")
@@ -264,23 +253,18 @@ func (v *ValidateFilterExpressionField) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["expression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expression"))
 		if err := fv(ctx, m.GetExpression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFilterExpressionFieldValidator = func() *ValidateFilterExpressionField {
 	v := &ValidateFilterExpressionField{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -355,9 +339,7 @@ func (v *ValidateFilterSetField) FieldValueValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateFilterSetField) FieldIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for field_id")
@@ -379,14 +361,11 @@ func (v *ValidateFilterSetField) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_id"))
 		if err := fv(ctx, m.GetFieldId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["field_value"]; exists {
@@ -444,16 +423,13 @@ func (v *ValidateFilterSetField) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFilterSetFieldValidator = func() *ValidateFilterSetField {
 	v := &ValidateFilterSetField{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -461,7 +437,6 @@ var DefaultFilterSetFieldValidator = func() *ValidateFilterSetField {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFieldValue := v.FieldValueValidationRuleHandler
 	rulesFieldValue := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -483,7 +458,6 @@ var DefaultFilterSetFieldValidator = func() *ValidateFilterSetField {
 		panic(errMsg)
 	}
 	v.FldValidators["field_id"] = vFn
-
 	v.FldValidators["field_value.string_field"] = FilterStringFieldValidator().Validate
 	v.FldValidators["field_value.date_field"] = FilterTimeRangeFieldValidator().Validate
 	v.FldValidators["field_value.label_selector_field"] = ves_io_schema.LabelSelectorTypeValidator().Validate
@@ -538,7 +512,6 @@ type ValidateFilterStringField struct {
 }
 
 func (v *ValidateFilterStringField) FieldValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -592,22 +565,18 @@ func (v *ValidateFilterStringField) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_values"]; exists {
 		vOpts := append(opts, db.WithValidateField("field_values"))
 		if err := fv(ctx, m.GetFieldValues(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFilterStringFieldValidator = func() *ValidateFilterStringField {
 	v := &ValidateFilterStringField{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -730,16 +699,13 @@ func (v *ValidateFilterTimeRangeField) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFilterTimeRangeFieldValidator = func() *ValidateFilterTimeRangeField {
 	v := &ValidateFilterTimeRangeField{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -747,7 +713,6 @@ var DefaultFilterTimeRangeFieldValidator = func() *ValidateFilterTimeRangeField 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRangeType := v.RangeTypeValidationRuleHandler
 	rulesRangeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -758,7 +723,6 @@ var DefaultFilterTimeRangeFieldValidator = func() *ValidateFilterTimeRangeField 
 		panic(errMsg)
 	}
 	v.FldValidators["range_type"] = vFn
-
 	v.FldValidators["range_type.absolute"] = ves_io_schema.DateRangeValidator().Validate
 
 	return v
@@ -810,7 +774,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ContextKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for context_key")
@@ -818,9 +781,7 @@ func (v *ValidateGetSpecType) ContextKeyValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) FilterFieldsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -880,31 +841,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["context_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("context_key"))
 		if err := fv(ctx, m.GetContextKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter_fields"]; exists {
 		vOpts := append(opts, db.WithValidateField("filter_fields"))
 		if err := fv(ctx, m.GetFilterFields(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -986,7 +940,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ContextKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for context_key")
@@ -994,9 +947,7 @@ func (v *ValidateGlobalSpecType) ContextKeyValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) FilterFieldsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1056,31 +1007,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["context_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("context_key"))
 		if err := fv(ctx, m.GetContextKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter_fields"]; exists {
 		vOpts := append(opts, db.WithValidateField("filter_fields"))
 		if err := fv(ctx, m.GetFilterFields(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1162,7 +1106,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ContextKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for context_key")
@@ -1170,9 +1113,7 @@ func (v *ValidateReplaceSpecType) ContextKeyValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) FilterFieldsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1232,31 +1173,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["context_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("context_key"))
 		if err := fv(ctx, m.GetContextKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter_fields"]; exists {
 		vOpts := append(opts, db.WithValidateField("filter_fields"))
 		if err := fv(ctx, m.GetFilterFields(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

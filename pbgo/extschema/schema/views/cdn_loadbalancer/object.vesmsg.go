@@ -76,34 +76,24 @@ func (v *ValidateCDNLbStatusType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -172,43 +162,30 @@ func (v *ValidateCDNLoadbalancerStatus) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cfg_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cfg_version"))
 		if err := fv(ctx, m.GetCfgVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cp_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cp_version"))
 		if err := fv(ctx, m.GetCpVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_msg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_msg"))
 		if err := fv(ctx, m.GetErrorMsg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -239,7 +216,6 @@ func (m *SpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetGcSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SpecType.gc_spec")
 	}
@@ -280,7 +256,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -288,7 +263,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
@@ -298,7 +272,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSpecType struct {
@@ -318,23 +291,18 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v

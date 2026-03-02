@@ -66,7 +66,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -126,58 +125,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cos_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cos_limit"))
 		if err := fv(ctx, m.GetCosLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_limit_options"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_limit_options"))
 		if err := fv(ctx, m.GetHttpLimitOptions(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listener_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("listener_limit"))
 		if err := fv(ctx, m.GetListenerLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limiters"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiters"))
 		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
 		if err := fv(ctx, m.GetTenantLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -196,13 +179,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limiters"] = vFn
-
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["listener_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["http_limit_options"] = HttpLimitOptionsValidator().Validate
 
 	return v
@@ -266,16 +245,12 @@ func (v *ValidateCustomKeyScopeType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -332,7 +307,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -392,58 +366,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cos_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cos_limit"))
 		if err := fv(ctx, m.GetCosLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_limit_options"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_limit_options"))
 		if err := fv(ctx, m.GetHttpLimitOptions(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listener_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("listener_limit"))
 		if err := fv(ctx, m.GetListenerLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limiters"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiters"))
 		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
 		if err := fv(ctx, m.GetTenantLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -462,13 +420,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limiters"] = vFn
-
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["listener_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["http_limit_options"] = HttpLimitOptionsValidator().Validate
 
 	return v
@@ -520,7 +474,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -580,58 +533,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cos_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cos_limit"))
 		if err := fv(ctx, m.GetCosLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_limit_options"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_limit_options"))
 		if err := fv(ctx, m.GetHttpLimitOptions(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listener_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("listener_limit"))
 		if err := fv(ctx, m.GetListenerLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limiters"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiters"))
 		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
 		if err := fv(ctx, m.GetTenantLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -650,13 +587,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limiters"] = vFn
-
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["listener_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["http_limit_options"] = HttpLimitOptionsValidator().Validate
 
 	return v
@@ -708,7 +641,6 @@ type ValidateHttpLimitOptions struct {
 }
 
 func (v *ValidateHttpLimitOptions) MaxConcurrentStreamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for max_concurrent_streams")
@@ -716,9 +648,7 @@ func (v *ValidateHttpLimitOptions) MaxConcurrentStreamsValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHttpLimitOptions) DelayedCloseTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for delayed_close_timeout")
@@ -726,9 +656,7 @@ func (v *ValidateHttpLimitOptions) DelayedCloseTimeoutValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHttpLimitOptions) DrainTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for drain_timeout")
@@ -750,95 +678,66 @@ func (v *ValidateHttpLimitOptions) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["delayed_close_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("delayed_close_timeout"))
 		if err := fv(ctx, m.GetDelayedCloseTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["drain_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("drain_timeout"))
 		if err := fv(ctx, m.GetDrainTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_concurrent_streams"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_concurrent_streams"))
 		if err := fv(ctx, m.GetMaxConcurrentStreams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_connection_duration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_connection_duration"))
 		if err := fv(ctx, m.GetMaxConnectionDuration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_requests_per_connection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_requests_per_connection"))
 		if err := fv(ctx, m.GetMaxRequestsPerConnection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_headers_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_timeout"))
 		if err := fv(ctx, m.GetRequestHeadersTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_timeout"))
 		if err := fv(ctx, m.GetRequestTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["stream_idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("stream_idle_timeout"))
 		if err := fv(ctx, m.GetStreamIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHttpLimitOptionsValidator = func() *ValidateHttpLimitOptions {
 	v := &ValidateHttpLimitOptions{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -941,67 +840,46 @@ func (v *ValidatePerCpuUtilizationLimit) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["close_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("close_limit"))
 		if err := fv(ctx, m.GetCloseLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hard_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hard_limit"))
 		if err := fv(ctx, m.GetHardLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_limit"))
 		if err := fv(ctx, m.GetHttpLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_priority_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_priority_limit"))
 		if err := fv(ctx, m.GetRoutePriorityLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["soft_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("soft_limit"))
 		if err := fv(ctx, m.GetSoftLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPerCpuUtilizationLimitValidator = func() *ValidatePerCpuUtilizationLimit {
 	v := &ValidatePerCpuUtilizationLimit{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["soft_limit"] = ves_io_schema.FractionalPercentValidator().Validate
-
 	v.FldValidators["hard_limit"] = ves_io_schema.FractionalPercentValidator().Validate
-
 	v.FldValidators["close_limit"] = ves_io_schema.FractionalPercentValidator().Validate
-
 	v.FldValidators["http_limit"] = ves_io_schema.FractionalPercentValidator().Validate
-
 	v.FldValidators["route_priority_limit"] = ves_io_schema.FractionalPercentValidator().Validate
 
 	return v
@@ -1065,50 +943,36 @@ func (v *ValidateRateLimitEntry) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["sanction"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sanction"))
 		if err := fv(ctx, m.GetSanction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scope"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scope"))
 		if err := fv(ctx, m.GetScope(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["threshold"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("threshold"))
 		if err := fv(ctx, m.GetThreshold(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRateLimitEntryValidator = func() *ValidateRateLimitEntry {
 	v := &ValidateRateLimitEntry{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["threshold"] = ThresholdValidator().Validate
 
 	return v
@@ -1160,7 +1024,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1220,58 +1083,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cos_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cos_limit"))
 		if err := fv(ctx, m.GetCosLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_limit_options"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_limit_options"))
 		if err := fv(ctx, m.GetHttpLimitOptions(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listener_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("listener_limit"))
 		if err := fv(ctx, m.GetListenerLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limiters"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiters"))
 		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
 		if err := fv(ctx, m.GetTenantLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1290,13 +1137,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limiters"] = vFn
-
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["listener_limit"] = PerCpuUtilizationLimitValidator().Validate
-
 	v.FldValidators["http_limit_options"] = HttpLimitOptionsValidator().Validate
 
 	return v
@@ -1428,9 +1271,7 @@ func (v *ValidateSanction) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1556,9 +1397,7 @@ func (v *ValidateScope) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1627,34 +1466,25 @@ func (v *ValidateThreshold) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cpu_utilization"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cpu_utilization"))
 		if err := fv(ctx, m.GetCpuUtilization(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_failure_rate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_failure_rate"))
 		if err := fv(ctx, m.GetUpstreamFailureRate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThresholdValidator = func() *ValidateThreshold {
 	v := &ValidateThreshold{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["cpu_utilization"] = ves_io_schema.FractionalPercentValidator().Validate
-
 	v.FldValidators["upstream_failure_rate"] = ves_io_schema.FractionalPercentValidator().Validate
 
 	return v

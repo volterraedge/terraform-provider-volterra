@@ -76,16 +76,12 @@ func (v *ValidateSummaryRequest) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,25 +150,18 @@ func (v *ValidateSummaryResponse) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip"))
 		if err := fv(ctx, m.GetVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

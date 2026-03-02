@@ -31,20 +31,18 @@ resource "volterra_tgw_vpn_tunnels" "example" {
     type = "HUB"
   }
 }
-
 ```
 
 ### Argument Reference
 
 ---
 
--	`name` - (Required) The value of aws_tgw_site name has to follow DNS-1035 format. (`String`).
+-   `name` - (Required) The value of aws_tgw_site name has to follow DNS-1035 format. (`String`).
 
--	`namespace` - (Required) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
+-   `namespace` - (Required) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
 
--	`vpn_tunnel_config` - (Required) List of vpc ip prefixes
-
-	-	`node_name` - (Required) Name of the node (`String`).
-	-	`node_id` - (Required) Name of node-id (`String`).
-	-	`tunnel_remote_ips` - (Required) List of remote IP on AWS tgw side (`String`).
-	-	`type` - (Optional) Type of VPN tunnel, valid values are `HUB` and `SERVICES`.
+-   `vpn_tunnel_config` - (Required) List of vpc ip prefixes
+    -   `node_name` - (Required) Name of the node (`String`).
+    -   `node_id` - (Required) Name of node-id (`String`).
+    -   `tunnel_remote_ips` - (Required) List of remote IP on AWS tgw side (`String`).
+    -   `type` - (Optional) Type of VPN tunnel, valid values are `HUB` and `SERVICES`.

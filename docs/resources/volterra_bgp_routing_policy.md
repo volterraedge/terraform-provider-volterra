@@ -22,27 +22,20 @@ resource "volterra_bgp_routing_policy" "example" {
 
   rules {
     action {
-      // One of the arguments from this list "aggregate allow as_path community deny local_preference metric" can be set
+      // One of the arguments from this list "allow as_path community deny local_preference metric" can be set
 
-      allow = true
+      deny = true
     }
 
     match {
       // One of the arguments from this list "as_path community ip_prefixes" must be set
 
-      ip_prefixes {
-        prefixes {
-          ip_prefixes = "ip_prefixes"
-
-          // One of the arguments from this list "equal_or_longer_than exact_match longer_than" can be set
-
-          longer_than = true
-        }
+      community {
+        community = ["[65535:65281, 65535:65284]"]
       }
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -73,10 +66,6 @@ of rules is critical as rules are applied top to bottom..
 `action` - (Optional) Actions to be applied if route matches the rule. See [Rules Action ](#rules-action) below for details.
 
 `match` - (Optional) Predicates which have to match information in route for action to be applied. See [Rules Match ](#rules-match) below for details.
-
-### Action Type Aggregate
-
-without sharing the more specific prefix.
 
 ### Action Type Allow
 
@@ -122,9 +111,7 @@ Match the exact prefix length specified in IP prefix.
 
 Actions to be applied if route matches the rule.
 
-###### One of the arguments from this list "aggregate, allow, as_path, community, deny, local_preference, metric" can be set
-
-`aggregate` - (Optional) without sharing the more specific prefix (`Bool`).
+###### One of the arguments from this list "allow, as_path, community, deny, local_preference, metric" can be set
 
 `allow` - (Optional) Allow routes being shared (`Bool`).
 
@@ -165,4 +152,4 @@ Select a prefix or group of prefix.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured bgp_routing_policy.
+*   `id` - This is the id of the configured bgp_routing_policy.

@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.route.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.route.Object"] = ObjectValidator()
 	vr["ves.io.schema.route.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.route.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.route.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.route.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.route.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.route.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.route.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.route.BotDefenseJavascriptInjectionType"] = BotDefenseJavascriptInjectionTypeValidator()
 	vr["ves.io.schema.route.ContentRewriteType"] = ContentRewriteTypeValidator()
 	vr["ves.io.schema.route.ContextExtensionInfo"] = ContextExtensionInfoValidator()
@@ -51,7 +48,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.route.TagAttribute"] = TagAttributeValidator()
 	vr["ves.io.schema.route.VerStatusType"] = VerStatusTypeValidator()
 	vr["ves.io.schema.route.WebsocketConfigType"] = WebsocketConfigTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -63,19 +59,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.route.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.route.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.route.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.route.API.Create"] = []string{
 		"spec.routes.#.route_direct_response.response_body",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.API.Create"] = []string{
 		"spec.routes.#.route_direct_response.response_body",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.route.API.Create"] = []string{
 		"spec.routes.#.bot_defense_javascript_injection_inline_mode",
 		"spec.routes.#.disable_custom_script",
@@ -104,23 +96,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.routes.#.skip_lb_override",
 		"spec.routes.#.waf_exclusion_service_policy.#",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.route.API.Create"] = "ves.io.schema.route.CreateRequest"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.API.Get"] = []string{
 		"create_form.spec.routes.#.route_direct_response.response_body",
 		"replace_form.spec.routes.#.route_direct_response.response_body",
 		"spec.routes.#.route_direct_response.response_body",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.API.List"] = []string{
 		"items.#.get_spec.routes.#.route_direct_response.response_body",
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.route.API.Replace"] = []string{
 		"spec.routes.#.route_direct_response.response_body",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.route.API.Replace"] = []string{
 		"spec.routes.#.bot_defense_javascript_injection_inline_mode",
 		"spec.routes.#.disable_custom_script",
@@ -149,23 +136,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.routes.#.skip_lb_override",
 		"spec.routes.#.waf_exclusion_service_policy.#",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.route.API.Replace"] = "ves.io.schema.route.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.route.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -174,9 +156,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.route.Object"] = APISwaggerJSON
@@ -190,22 +170,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.route.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.route.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.route.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

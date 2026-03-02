@@ -75,9 +75,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetProxyServerCACert"] = ccl.doRPCGetProxyServerCACert
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -166,7 +164,6 @@ func (c *CustomAPIRestClient) doRPCGetProxyServerCACert(ctx context.Context, cal
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -200,9 +197,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetProxyServerCACert"] = ccl.doRPCGetProxyServerCACert
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -283,7 +278,6 @@ func (s *customAPISrv) GetProxyServerCACert(ctx context.Context, in *GetProxySer
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil

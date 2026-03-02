@@ -20,7 +20,6 @@ resource "volterra_sensitive_data_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -67,4 +66,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured sensitive_data_policy.
+*   `id` - This is the id of the configured sensitive_data_policy.

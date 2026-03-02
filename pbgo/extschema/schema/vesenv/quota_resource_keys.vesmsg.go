@@ -518,9 +518,7 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

@@ -23,8 +23,11 @@ resource "volterra_virtual_host" "example" {
   // One of the arguments from this list "captcha_challenge js_challenge no_challenge" must be set
 
   no_challenge = true
-}
 
+  // One of the arguments from this list "max_requests_per_connection no_request_limit_per_connection" must be set
+
+  no_request_limit_per_connection = true
+}
 ```
 
 Argument Reference
@@ -57,6 +60,8 @@ Argument Reference
 `authentication` - (Optional) Configure authentication details. See [Authentication Choice Authentication ](#authentication-choice-authentication) below for details.
 
 `no_authentication` - (Optional) Disable Authentication (`Bool`).
+
+`bigip_application_profiles` - (Optional) internal use. See [ref](#ref) below for details.(Deprecated)
 
 `buffer_policy` - (Optional) specify the maximum buffer size and buffer interval with this config.. See [Buffer Policy ](#buffer-policy) below for details.
 
@@ -111,6 +116,12 @@ Argument Reference
 `max_direct_response_body_size` - (Optional) on any of the virtual hosts (`Int`).(Deprecated)
 
 `max_request_header_size` - (Optional) on any of the virtual hosts (`Int`).
+
+###### One of the arguments from this list "max_requests_per_connection, no_request_limit_per_connection" must be set
+
+`max_requests_per_connection` - (Optional) Enter a value >=1 to define the request limit per connection. (`Int`).
+
+`no_request_limit_per_connection` - (Optional) When selected, no limit is enforced, and connections can handle unlimited requests. (`Bool`).
 
 ###### One of the arguments from this list "disable_path_normalize, enable_path_normalize" can be set
 
@@ -180,7 +191,7 @@ Argument Reference
 
 OpenAPI specification settings.
 
-`api_definition` - (Required) API definition is set on this vhost for enforcing OpenAPI on requests. See [ref](#ref) below for details.(Deprecated)
+`api_definition` - (Optional) API definition is set on this vhost for enforcing OpenAPI on requests. See [ref](#ref) below for details.(Deprecated)
 
 ###### One of the arguments from this list "disable_open_api_validation, enable_open_api_validation" must be set
 
@@ -1199,4 +1210,4 @@ Secret Value of the Cookie header.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured virtual_host.
+*   `id` - This is the id of the configured virtual_host.

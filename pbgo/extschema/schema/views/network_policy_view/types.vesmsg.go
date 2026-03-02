@@ -74,21 +74,17 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIngressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -96,7 +92,6 @@ func (m *CreateSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEgressRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
@@ -110,7 +105,6 @@ func (m *CreateSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -118,7 +112,6 @@ func (m *CreateSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEndpoint() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEndpoint().GetDRefInfo() FAILED")
@@ -128,7 +121,6 @@ func (m *CreateSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "endpoint." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -136,7 +128,6 @@ func (m *CreateSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIngressRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
@@ -150,7 +141,6 @@ func (m *CreateSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCreateSpecType struct {
@@ -158,7 +148,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
@@ -167,19 +156,15 @@ func (v *ValidateCreateSpecType) EndpointValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -225,9 +210,7 @@ func (v *ValidateCreateSpecType) IngressRulesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -287,39 +270,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["egress_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("egress_rules"))
 		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint"))
 		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ingress_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("ingress_rules"))
 		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -418,21 +392,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIngressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -440,7 +410,6 @@ func (m *GetSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEgressRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
@@ -454,7 +423,6 @@ func (m *GetSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -462,7 +430,6 @@ func (m *GetSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEndpoint() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEndpoint().GetDRefInfo() FAILED")
@@ -472,7 +439,6 @@ func (m *GetSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "endpoint." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -480,7 +446,6 @@ func (m *GetSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIngressRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
@@ -494,7 +459,6 @@ func (m *GetSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetSpecType struct {
@@ -502,7 +466,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
@@ -511,19 +474,15 @@ func (v *ValidateGetSpecType) EndpointValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -569,9 +528,7 @@ func (v *ValidateGetSpecType) IngressRulesValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -631,39 +588,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["egress_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("egress_rules"))
 		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint"))
 		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ingress_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("ingress_rules"))
 		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -762,27 +710,22 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIngressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -790,7 +733,6 @@ func (m *GlobalSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEgressRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
@@ -804,7 +746,6 @@ func (m *GlobalSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -812,7 +753,6 @@ func (m *GlobalSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEndpoint() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEndpoint().GetDRefInfo() FAILED")
@@ -822,7 +762,6 @@ func (m *GlobalSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "endpoint." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -830,7 +769,6 @@ func (m *GlobalSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIngressRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
@@ -844,11 +782,9 @@ func (m *GlobalSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -864,7 +800,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -874,7 +809,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -892,7 +826,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -901,7 +834,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
@@ -910,19 +842,15 @@ func (v *ValidateGlobalSpecType) EndpointValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -968,9 +896,7 @@ func (v *ValidateGlobalSpecType) IngressRulesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1030,48 +956,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["egress_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("egress_rules"))
 		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint"))
 		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ingress_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("ingress_rules"))
 		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1114,7 +1028,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["egress_rules"] = vFn
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1172,21 +1085,17 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIngressRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1194,7 +1103,6 @@ func (m *ReplaceSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEgressRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
@@ -1208,7 +1116,6 @@ func (m *ReplaceSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1216,7 +1123,6 @@ func (m *ReplaceSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetEndpoint() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEndpoint().GetDRefInfo() FAILED")
@@ -1226,7 +1132,6 @@ func (m *ReplaceSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "endpoint." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1234,7 +1139,6 @@ func (m *ReplaceSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIngressRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
@@ -1248,7 +1152,6 @@ func (m *ReplaceSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1256,7 +1159,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
@@ -1265,19 +1167,15 @@ func (v *ValidateReplaceSpecType) EndpointValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1323,9 +1221,7 @@ func (v *ValidateReplaceSpecType) IngressRulesValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1385,39 +1281,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["egress_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("egress_rules"))
 		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint"))
 		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ingress_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("ingress_rules"))
 		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

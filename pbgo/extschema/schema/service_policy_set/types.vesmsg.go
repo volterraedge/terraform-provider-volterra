@@ -68,7 +68,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -93,7 +92,6 @@ func (m *CreateSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -112,7 +110,6 @@ func (m *CreateSpecType) GetPoliciesDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -121,7 +118,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -167,9 +163,7 @@ func (v *ValidateCreateSpecType) PoliciesValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) DefaultActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -197,58 +191,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_action"))
 		if err := fv(ctx, m.GetDefaultAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deny_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deny_info"))
 		if err := fv(ctx, m.GetDenyInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scope"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scope"))
 		if err := fv(ctx, m.GetScope(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -278,7 +256,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["default_action"] = vFn
-
 	v.FldValidators["deny_info"] = ves_io_schema_policy.DenyInformationValidator().Validate
 
 	return v
@@ -331,7 +308,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *GetSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -356,7 +332,6 @@ func (m *GetSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -375,7 +350,6 @@ func (m *GetSpecType) GetPoliciesDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -384,7 +358,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -430,9 +403,7 @@ func (v *ValidateGetSpecType) PoliciesValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DefaultActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -460,58 +431,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_action"))
 		if err := fv(ctx, m.GetDefaultAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deny_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deny_info"))
 		if err := fv(ctx, m.GetDenyInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scope"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scope"))
 		if err := fv(ctx, m.GetScope(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -541,7 +496,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["default_action"] = vFn
-
 	v.FldValidators["deny_info"] = ves_io_schema_policy.DenyInformationValidator().Validate
 
 	return v
@@ -594,7 +548,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -619,7 +572,6 @@ func (m *GlobalSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -638,7 +590,6 @@ func (m *GlobalSpecType) GetPoliciesDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -647,7 +598,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -693,9 +643,7 @@ func (v *ValidateGlobalSpecType) PoliciesValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DefaultActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -723,58 +671,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_action"))
 		if err := fv(ctx, m.GetDefaultAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deny_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deny_info"))
 		if err := fv(ctx, m.GetDenyInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scope"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scope"))
 		if err := fv(ctx, m.GetScope(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -804,7 +736,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["default_action"] = vFn
-
 	v.FldValidators["deny_info"] = ves_io_schema_policy.DenyInformationValidator().Validate
 
 	return v
@@ -857,7 +788,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -882,7 +812,6 @@ func (m *ReplaceSpecType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -901,7 +830,6 @@ func (m *ReplaceSpecType) GetPoliciesDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -910,7 +838,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -956,9 +883,7 @@ func (v *ValidateReplaceSpecType) PoliciesValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) DefaultActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -986,58 +911,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_action"))
 		if err := fv(ctx, m.GetDefaultAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deny_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deny_info"))
 		if err := fv(ctx, m.GetDenyInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scope"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scope"))
 		if err := fv(ctx, m.GetScope(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1067,7 +976,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["default_action"] = vFn
-
 	v.FldValidators["deny_info"] = ves_io_schema_policy.DenyInformationValidator().Validate
 
 	return v

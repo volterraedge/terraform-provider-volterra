@@ -35,9 +35,10 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type BasicConfiguration struct {
 	// Display Name
 	//
+	// x-required
 	// x-displayName: "Display Name"
 	// x-example: "value"
-	// Tenant display name in the login screen
+	// Changes the tenant name displayed during login without affecting your company’s domain name.
 	DisplayName string `protobuf:"bytes,1,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
 }
 
@@ -264,44 +265,28 @@ func (m *PasswordPolicy) GetMinimumLength() uint32 {
 	return 0
 }
 
-// SessionManagement
+// Session Minutes Duration
 //
-// x-displayName: "SessionManagement"
-type SessionManagement struct {
-	// Session Cookie Expiry
+// x-displayName: "Session Minutes Duration"
+// Represents the session duration in minutes.
+type SessionMinutesDuration struct {
+	// Duration
 	//
-	// x-displayName: "Session Cookie Expiry"
+	// x-displayName: "Duration"
 	// x-required
-	// x-example: "900"
-	// Session cookie expiry in seconds.
-	// The user will be logged-out after these many seconds, if inactive on the console.
-	CookieExpiry uint32 `protobuf:"varint,1,opt,name=cookie_expiry,json=cookieExpiry,proto3" json:"cookie_expiry,omitempty"`
-	// Session Cookie Refresh Interval
-	//
-	// x-displayName: "Session Cookie Refresh Interval"
-	// x-example: "840"
-	// Session cookie refresh interval in seconds.
-	// The session cookie will be renewed when (expiry - current_timestamp < cookie_refresh_interval) and (max_session_expiry - expiry > cookie_refresh_interval ), otherwise, the existing cookie will be re-used
-	CookieRefreshInterval uint32 `protobuf:"varint,2,opt,name=cookie_refresh_interval,json=cookieRefreshInterval,proto3" json:"cookie_refresh_interval,omitempty"`
-	// Maximum Session Expiry
-	//
-	// x-displayName: "Maximum Session Expiry"
-	// x-required
-	// x-example: "86400"
-	// Maximum session expiry in seconds.
-	// The user will be prompted for a re-login after this interval in spite of being active on the console
-	SessionExpiry uint32 `protobuf:"varint,3,opt,name=session_expiry,json=sessionExpiry,proto3" json:"session_expiry,omitempty"`
+	// x-inlineHint: "Between 5 and 43,200 minutes. Must be greater than Idle Timeout."
+	Duration uint32 `protobuf:"varint,1,opt,name=duration,proto3" json:"duration,omitempty"`
 }
 
-func (m *SessionManagement) Reset()      { *m = SessionManagement{} }
-func (*SessionManagement) ProtoMessage() {}
-func (*SessionManagement) Descriptor() ([]byte, []int) {
+func (m *SessionMinutesDuration) Reset()      { *m = SessionMinutesDuration{} }
+func (*SessionMinutesDuration) ProtoMessage() {}
+func (*SessionMinutesDuration) Descriptor() ([]byte, []int) {
 	return fileDescriptor_364750f54271448d, []int{3}
 }
-func (m *SessionManagement) XXX_Unmarshal(b []byte) error {
+func (m *SessionMinutesDuration) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SessionManagement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SessionMinutesDuration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -309,37 +294,410 @@ func (m *SessionManagement) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 	}
 	return b[:n], nil
 }
-func (m *SessionManagement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SessionManagement.Merge(m, src)
+func (m *SessionMinutesDuration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SessionMinutesDuration.Merge(m, src)
 }
-func (m *SessionManagement) XXX_Size() int {
+func (m *SessionMinutesDuration) XXX_Size() int {
 	return m.Size()
 }
-func (m *SessionManagement) XXX_DiscardUnknown() {
-	xxx_messageInfo_SessionManagement.DiscardUnknown(m)
+func (m *SessionMinutesDuration) XXX_DiscardUnknown() {
+	xxx_messageInfo_SessionMinutesDuration.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SessionManagement proto.InternalMessageInfo
+var xxx_messageInfo_SessionMinutesDuration proto.InternalMessageInfo
 
-func (m *SessionManagement) GetCookieExpiry() uint32 {
+func (m *SessionMinutesDuration) GetDuration() uint32 {
 	if m != nil {
-		return m.CookieExpiry
+		return m.Duration
 	}
 	return 0
 }
 
-func (m *SessionManagement) GetCookieRefreshInterval() uint32 {
+// Session Hours Duration
+//
+// x-displayName: "Session Hours Duration"
+// Represents the session duration in hours.
+type SessionHoursDuration struct {
+	// Duration
+	//
+	// x-displayName: "Duration"
+	// x-required
+	// x-inlineHint: "Between 1 and 720 hours. Must be greater than Idle Timeout."
+	Duration uint32 `protobuf:"varint,1,opt,name=duration,proto3" json:"duration,omitempty"`
+}
+
+func (m *SessionHoursDuration) Reset()      { *m = SessionHoursDuration{} }
+func (*SessionHoursDuration) ProtoMessage() {}
+func (*SessionHoursDuration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_364750f54271448d, []int{4}
+}
+func (m *SessionHoursDuration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SessionHoursDuration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SessionHoursDuration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SessionHoursDuration.Merge(m, src)
+}
+func (m *SessionHoursDuration) XXX_Size() int {
+	return m.Size()
+}
+func (m *SessionHoursDuration) XXX_DiscardUnknown() {
+	xxx_messageInfo_SessionHoursDuration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SessionHoursDuration proto.InternalMessageInfo
+
+func (m *SessionHoursDuration) GetDuration() uint32 {
 	if m != nil {
-		return m.CookieRefreshInterval
+		return m.Duration
 	}
 	return 0
 }
 
-func (m *SessionManagement) GetSessionExpiry() uint32 {
+// Duration By Unit Session
+//
+// x-displayName: "Duration By Unit Session"
+// Represents the session expiration duration.
+type DurationByUnitSession struct {
+	// Unit of Time
+	//
+	// x-displayName: "Unit of Time"
+	//
+	// Types that are valid to be assigned to UnitOfTime:
+	//	*DurationByUnitSession_Minutes
+	//	*DurationByUnitSession_Hours
+	UnitOfTime isDurationByUnitSession_UnitOfTime `protobuf_oneof:"unit_of_time"`
+}
+
+func (m *DurationByUnitSession) Reset()      { *m = DurationByUnitSession{} }
+func (*DurationByUnitSession) ProtoMessage() {}
+func (*DurationByUnitSession) Descriptor() ([]byte, []int) {
+	return fileDescriptor_364750f54271448d, []int{5}
+}
+func (m *DurationByUnitSession) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DurationByUnitSession) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DurationByUnitSession) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DurationByUnitSession.Merge(m, src)
+}
+func (m *DurationByUnitSession) XXX_Size() int {
+	return m.Size()
+}
+func (m *DurationByUnitSession) XXX_DiscardUnknown() {
+	xxx_messageInfo_DurationByUnitSession.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DurationByUnitSession proto.InternalMessageInfo
+
+type isDurationByUnitSession_UnitOfTime interface {
+	isDurationByUnitSession_UnitOfTime()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DurationByUnitSession_Minutes struct {
+	Minutes *SessionMinutesDuration `protobuf:"bytes,2,opt,name=minutes,proto3,oneof" json:"minutes,omitempty"`
+}
+type DurationByUnitSession_Hours struct {
+	Hours *SessionHoursDuration `protobuf:"bytes,3,opt,name=hours,proto3,oneof" json:"hours,omitempty"`
+}
+
+func (*DurationByUnitSession_Minutes) isDurationByUnitSession_UnitOfTime() {}
+func (*DurationByUnitSession_Hours) isDurationByUnitSession_UnitOfTime()   {}
+
+func (m *DurationByUnitSession) GetUnitOfTime() isDurationByUnitSession_UnitOfTime {
 	if m != nil {
-		return m.SessionExpiry
+		return m.UnitOfTime
+	}
+	return nil
+}
+
+func (m *DurationByUnitSession) GetMinutes() *SessionMinutesDuration {
+	if x, ok := m.GetUnitOfTime().(*DurationByUnitSession_Minutes); ok {
+		return x.Minutes
+	}
+	return nil
+}
+
+func (m *DurationByUnitSession) GetHours() *SessionHoursDuration {
+	if x, ok := m.GetUnitOfTime().(*DurationByUnitSession_Hours); ok {
+		return x.Hours
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DurationByUnitSession) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DurationByUnitSession_Minutes)(nil),
+		(*DurationByUnitSession_Hours)(nil),
+	}
+}
+
+// Cookie Minutes Duration
+//
+// x-displayName: "Cookie Minutes Duration"
+// Represents the cookie duration in minutes.
+type CookieMinutesDuration struct {
+	// Duration
+	//
+	// x-displayName: "Duration"
+	// x-required
+	// x-inlineHint: "Between 5 and 43,200 minutes. Must be less than Absolute Timeout."
+	Duration uint32 `protobuf:"varint,1,opt,name=duration,proto3" json:"duration,omitempty"`
+}
+
+func (m *CookieMinutesDuration) Reset()      { *m = CookieMinutesDuration{} }
+func (*CookieMinutesDuration) ProtoMessage() {}
+func (*CookieMinutesDuration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_364750f54271448d, []int{6}
+}
+func (m *CookieMinutesDuration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CookieMinutesDuration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CookieMinutesDuration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CookieMinutesDuration.Merge(m, src)
+}
+func (m *CookieMinutesDuration) XXX_Size() int {
+	return m.Size()
+}
+func (m *CookieMinutesDuration) XXX_DiscardUnknown() {
+	xxx_messageInfo_CookieMinutesDuration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CookieMinutesDuration proto.InternalMessageInfo
+
+func (m *CookieMinutesDuration) GetDuration() uint32 {
+	if m != nil {
+		return m.Duration
 	}
 	return 0
+}
+
+// Cookie Hours Duration
+//
+// x-displayName: "Cookie Hours Duration"
+// Represents the cookie duration in hours.
+type CookieHoursDuration struct {
+	// Duration
+	//
+	// x-displayName: "Duration"
+	// x-required
+	// x-inlineHint: "Between 1 and 720 hours. Must be less than Absolute Timeout."
+	Duration uint32 `protobuf:"varint,1,opt,name=duration,proto3" json:"duration,omitempty"`
+}
+
+func (m *CookieHoursDuration) Reset()      { *m = CookieHoursDuration{} }
+func (*CookieHoursDuration) ProtoMessage() {}
+func (*CookieHoursDuration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_364750f54271448d, []int{7}
+}
+func (m *CookieHoursDuration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CookieHoursDuration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CookieHoursDuration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CookieHoursDuration.Merge(m, src)
+}
+func (m *CookieHoursDuration) XXX_Size() int {
+	return m.Size()
+}
+func (m *CookieHoursDuration) XXX_DiscardUnknown() {
+	xxx_messageInfo_CookieHoursDuration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CookieHoursDuration proto.InternalMessageInfo
+
+func (m *CookieHoursDuration) GetDuration() uint32 {
+	if m != nil {
+		return m.Duration
+	}
+	return 0
+}
+
+// Duration By Unit Cookie
+//
+// x-displayName: "Duration By Unit Cookie"
+// Represents the cookie expiration duration
+type DurationByUnitCookie struct {
+	// Unit of Time
+	//
+	// x-displayName: "Unit of Time"
+	//
+	// Types that are valid to be assigned to UnitOfTime:
+	//	*DurationByUnitCookie_Minutes
+	//	*DurationByUnitCookie_Hours
+	UnitOfTime isDurationByUnitCookie_UnitOfTime `protobuf_oneof:"unit_of_time"`
+}
+
+func (m *DurationByUnitCookie) Reset()      { *m = DurationByUnitCookie{} }
+func (*DurationByUnitCookie) ProtoMessage() {}
+func (*DurationByUnitCookie) Descriptor() ([]byte, []int) {
+	return fileDescriptor_364750f54271448d, []int{8}
+}
+func (m *DurationByUnitCookie) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DurationByUnitCookie) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DurationByUnitCookie) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DurationByUnitCookie.Merge(m, src)
+}
+func (m *DurationByUnitCookie) XXX_Size() int {
+	return m.Size()
+}
+func (m *DurationByUnitCookie) XXX_DiscardUnknown() {
+	xxx_messageInfo_DurationByUnitCookie.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DurationByUnitCookie proto.InternalMessageInfo
+
+type isDurationByUnitCookie_UnitOfTime interface {
+	isDurationByUnitCookie_UnitOfTime()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DurationByUnitCookie_Minutes struct {
+	Minutes *CookieMinutesDuration `protobuf:"bytes,2,opt,name=minutes,proto3,oneof" json:"minutes,omitempty"`
+}
+type DurationByUnitCookie_Hours struct {
+	Hours *CookieHoursDuration `protobuf:"bytes,3,opt,name=hours,proto3,oneof" json:"hours,omitempty"`
+}
+
+func (*DurationByUnitCookie_Minutes) isDurationByUnitCookie_UnitOfTime() {}
+func (*DurationByUnitCookie_Hours) isDurationByUnitCookie_UnitOfTime()   {}
+
+func (m *DurationByUnitCookie) GetUnitOfTime() isDurationByUnitCookie_UnitOfTime {
+	if m != nil {
+		return m.UnitOfTime
+	}
+	return nil
+}
+
+func (m *DurationByUnitCookie) GetMinutes() *CookieMinutesDuration {
+	if x, ok := m.GetUnitOfTime().(*DurationByUnitCookie_Minutes); ok {
+		return x.Minutes
+	}
+	return nil
+}
+
+func (m *DurationByUnitCookie) GetHours() *CookieHoursDuration {
+	if x, ok := m.GetUnitOfTime().(*DurationByUnitCookie_Hours); ok {
+		return x.Hours
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DurationByUnitCookie) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DurationByUnitCookie_Minutes)(nil),
+		(*DurationByUnitCookie_Hours)(nil),
+	}
+}
+
+//	User Session Expiration
+//
+// x-displayName: "User Session Expiration"
+// Defines all session-related expiration for user sessions within a tenant's environment.
+// Relationship between session_expiry and cookie_expiry:
+// - session_expiry defines the 'absolute maximum duration' of a session and enforces re-authentication after this time.
+// - cookie_expiry defines the 'inactivity timeout', which resets on user activity and only logs out users after idle periods.
+// Together, these ensure the user is logged out when either the session reaches its maximum age or the user is inactive for too long.
+type UserSessionExpiration struct {
+	// Absolute Timeout
+	//
+	// x-displayName: "Absolute Timeout"
+	// x-required
+	// Maximum length of user session.
+	AbsoluteTimeout *DurationByUnitSession `protobuf:"bytes,3,opt,name=absolute_timeout,json=absoluteTimeout,proto3" json:"absolute_timeout,omitempty"`
+	// Idle Timeout
+	//
+	// x-displayName: "Idle Timeout"
+	// x-required
+	// Maximum user inactivity allowed in a session.
+	IdleTimeout *DurationByUnitCookie `protobuf:"bytes,4,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
+}
+
+func (m *UserSessionExpiration) Reset()      { *m = UserSessionExpiration{} }
+func (*UserSessionExpiration) ProtoMessage() {}
+func (*UserSessionExpiration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_364750f54271448d, []int{9}
+}
+func (m *UserSessionExpiration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UserSessionExpiration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *UserSessionExpiration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UserSessionExpiration.Merge(m, src)
+}
+func (m *UserSessionExpiration) XXX_Size() int {
+	return m.Size()
+}
+func (m *UserSessionExpiration) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserSessionExpiration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UserSessionExpiration proto.InternalMessageInfo
+
+func (m *UserSessionExpiration) GetAbsoluteTimeout() *DurationByUnitSession {
+	if m != nil {
+		return m.AbsoluteTimeout
+	}
+	return nil
+}
+
+func (m *UserSessionExpiration) GetIdleTimeout() *DurationByUnitCookie {
+	if m != nil {
+		return m.IdleTimeout
+	}
+	return nil
 }
 
 // GlobalSpecType
@@ -351,7 +709,12 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Basic Configuration"
 	// Basic configuration contains general parameters which can be adjusted within tenant.
-	BasicConfiguration *BasicConfiguration `protobuf:"bytes,1,opt,name=basic_configuration,json=basicConfiguration,proto3" json:"basic_configuration,omitempty"`
+	BasicConfiguration *BasicConfiguration `protobuf:"bytes,1,opt,name=basic_configuration,json=basicConfiguration,proto3" json:"basic_configuration,omitempty"` // Deprecated: Do not use.
+	// Tenant Details
+	//
+	// x-displayName: "Tenant Details"
+	// Tenant details defines the metadata of the tenant.
+	TenantDetails *BasicConfiguration `protobuf:"bytes,8,opt,name=tenant_details,json=tenantDetails,proto3" json:"tenant_details,omitempty"`
 	// Brute Force Detection Settings
 	//
 	// x-displayName: "Brute Force Detection Settings"
@@ -359,24 +722,31 @@ type GlobalSpecType struct {
 	// Temporary lockout will disable a user’s account for a time period after an attack is detected;
 	// the time period for which the account is disabled increases the longer the attack continues.
 	// You can adjust some parameters of the brute force detection system.
-	BruteForceDetectionSettings *BruteForceDetectionSettings `protobuf:"bytes,2,opt,name=brute_force_detection_settings,json=bruteForceDetectionSettings,proto3" json:"brute_force_detection_settings,omitempty"`
+	BruteForceDetectionSettings *BruteForceDetectionSettings `protobuf:"bytes,2,opt,name=brute_force_detection_settings,json=bruteForceDetectionSettings,proto3" json:"brute_force_detection_settings,omitempty"` // Deprecated: Do not use.
+	// Brute Force Detection
+	//
+	// x-displayName: "Brute Force Detection"
+	// This system uses algorithms to temporarily lock accounts for a specified time period after detecting an attack.
+	// The lockout duration increases with longer persisting attack attempts.
+	BruteForceDetection *BruteForceDetectionSettings `protobuf:"bytes,7,opt,name=brute_force_detection,json=bruteForceDetection,proto3" json:"brute_force_detection,omitempty"`
 	// Password Policy
 	//
 	// x-displayName: "Password Policy"
-	// Password policy allows you to configure your own password policy within tenant.
-	// Each user within tenant will have to comply with the configured policy when they set or update the password.
+	// Define custom password requirements for your tenant.
+	// All tenant users must adhere to the policy when creating or updating their passwords.
 	PasswordPolicy *PasswordPolicy `protobuf:"bytes,3,opt,name=password_policy,json=passwordPolicy,proto3" json:"password_policy,omitempty"`
-	// Session Managemement
+	// User Session Expiration
 	//
-	// x-displayName: "Session Managemement"
-	// Session management allows you to configure the session attributes such as cookie expiry, etc.
-	SessionManagement *SessionManagement `protobuf:"bytes,4,opt,name=session_management,json=sessionManagement,proto3" json:"session_management,omitempty"`
+	// x-displayName: "User Session Expiration"
+	// Changes take approximately 5 minutes to apply. Log in again to see the updates reflected. For more details,
+	// refer to [Tech Docs](https://docs.cloud.f5.com/docs-v2/administration/how-tos/user-mgmt/general-management).
+	UserSessionExpiration *UserSessionExpiration `protobuf:"bytes,5,opt,name=user_session_expiration,json=userSessionExpiration,proto3" json:"user_session_expiration,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_364750f54271448d, []int{4}
+	return fileDescriptor_364750f54271448d, []int{10}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -401,6 +771,7 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *GlobalSpecType) GetBasicConfiguration() *BasicConfiguration {
 	if m != nil {
 		return m.BasicConfiguration
@@ -408,9 +779,24 @@ func (m *GlobalSpecType) GetBasicConfiguration() *BasicConfiguration {
 	return nil
 }
 
+func (m *GlobalSpecType) GetTenantDetails() *BasicConfiguration {
+	if m != nil {
+		return m.TenantDetails
+	}
+	return nil
+}
+
+// Deprecated: Do not use.
 func (m *GlobalSpecType) GetBruteForceDetectionSettings() *BruteForceDetectionSettings {
 	if m != nil {
 		return m.BruteForceDetectionSettings
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetBruteForceDetection() *BruteForceDetectionSettings {
+	if m != nil {
+		return m.BruteForceDetection
 	}
 	return nil
 }
@@ -422,9 +808,9 @@ func (m *GlobalSpecType) GetPasswordPolicy() *PasswordPolicy {
 	return nil
 }
 
-func (m *GlobalSpecType) GetSessionManagement() *SessionManagement {
+func (m *GlobalSpecType) GetUserSessionExpiration() *UserSessionExpiration {
 	if m != nil {
-		return m.SessionManagement
+		return m.UserSessionExpiration
 	}
 	return nil
 }
@@ -434,15 +820,18 @@ func (m *GlobalSpecType) GetSessionManagement() *SessionManagement {
 // x-displayName: "Create tenant configuration"
 // Shape of the tenant configuration specification
 type CreateSpecType struct {
-	BasicConfiguration          *BasicConfiguration          `protobuf:"bytes,1,opt,name=basic_configuration,json=basicConfiguration,proto3" json:"basic_configuration,omitempty"`
-	BruteForceDetectionSettings *BruteForceDetectionSettings `protobuf:"bytes,2,opt,name=brute_force_detection_settings,json=bruteForceDetectionSettings,proto3" json:"brute_force_detection_settings,omitempty"`
+	BasicConfiguration          *BasicConfiguration          `protobuf:"bytes,1,opt,name=basic_configuration,json=basicConfiguration,proto3" json:"basic_configuration,omitempty"`                                // Deprecated: Do not use.
+	BruteForceDetectionSettings *BruteForceDetectionSettings `protobuf:"bytes,2,opt,name=brute_force_detection_settings,json=bruteForceDetectionSettings,proto3" json:"brute_force_detection_settings,omitempty"` // Deprecated: Do not use.
+	TenantDetails               *BasicConfiguration          `protobuf:"bytes,8,opt,name=tenant_details,json=tenantDetails,proto3" json:"tenant_details,omitempty"`
+	BruteForceDetection         *BruteForceDetectionSettings `protobuf:"bytes,7,opt,name=brute_force_detection,json=bruteForceDetection,proto3" json:"brute_force_detection,omitempty"`
 	PasswordPolicy              *PasswordPolicy              `protobuf:"bytes,3,opt,name=password_policy,json=passwordPolicy,proto3" json:"password_policy,omitempty"`
+	UserSessionExpiration       *UserSessionExpiration       `protobuf:"bytes,5,opt,name=user_session_expiration,json=userSessionExpiration,proto3" json:"user_session_expiration,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_364750f54271448d, []int{5}
+	return fileDescriptor_364750f54271448d, []int{11}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -467,6 +856,7 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *CreateSpecType) GetBasicConfiguration() *BasicConfiguration {
 	if m != nil {
 		return m.BasicConfiguration
@@ -474,9 +864,24 @@ func (m *CreateSpecType) GetBasicConfiguration() *BasicConfiguration {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *CreateSpecType) GetBruteForceDetectionSettings() *BruteForceDetectionSettings {
 	if m != nil {
 		return m.BruteForceDetectionSettings
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetTenantDetails() *BasicConfiguration {
+	if m != nil {
+		return m.TenantDetails
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetBruteForceDetection() *BruteForceDetectionSettings {
+	if m != nil {
+		return m.BruteForceDetection
 	}
 	return nil
 }
@@ -488,20 +893,30 @@ func (m *CreateSpecType) GetPasswordPolicy() *PasswordPolicy {
 	return nil
 }
 
+func (m *CreateSpecType) GetUserSessionExpiration() *UserSessionExpiration {
+	if m != nil {
+		return m.UserSessionExpiration
+	}
+	return nil
+}
+
 // ReplaceSpecType
 //
 // x-displayName: "Replace tenant configuration"
 // Shape of the tenant configuration specification
 type ReplaceSpecType struct {
-	BasicConfiguration          *BasicConfiguration          `protobuf:"bytes,1,opt,name=basic_configuration,json=basicConfiguration,proto3" json:"basic_configuration,omitempty"`
-	BruteForceDetectionSettings *BruteForceDetectionSettings `protobuf:"bytes,2,opt,name=brute_force_detection_settings,json=bruteForceDetectionSettings,proto3" json:"brute_force_detection_settings,omitempty"`
+	BasicConfiguration          *BasicConfiguration          `protobuf:"bytes,1,opt,name=basic_configuration,json=basicConfiguration,proto3" json:"basic_configuration,omitempty"`                                // Deprecated: Do not use.
+	BruteForceDetectionSettings *BruteForceDetectionSettings `protobuf:"bytes,2,opt,name=brute_force_detection_settings,json=bruteForceDetectionSettings,proto3" json:"brute_force_detection_settings,omitempty"` // Deprecated: Do not use.
+	TenantDetails               *BasicConfiguration          `protobuf:"bytes,8,opt,name=tenant_details,json=tenantDetails,proto3" json:"tenant_details,omitempty"`
+	BruteForceDetection         *BruteForceDetectionSettings `protobuf:"bytes,7,opt,name=brute_force_detection,json=bruteForceDetection,proto3" json:"brute_force_detection,omitempty"`
 	PasswordPolicy              *PasswordPolicy              `protobuf:"bytes,3,opt,name=password_policy,json=passwordPolicy,proto3" json:"password_policy,omitempty"`
+	UserSessionExpiration       *UserSessionExpiration       `protobuf:"bytes,5,opt,name=user_session_expiration,json=userSessionExpiration,proto3" json:"user_session_expiration,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_364750f54271448d, []int{6}
+	return fileDescriptor_364750f54271448d, []int{12}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -526,6 +941,7 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *ReplaceSpecType) GetBasicConfiguration() *BasicConfiguration {
 	if m != nil {
 		return m.BasicConfiguration
@@ -533,9 +949,24 @@ func (m *ReplaceSpecType) GetBasicConfiguration() *BasicConfiguration {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *ReplaceSpecType) GetBruteForceDetectionSettings() *BruteForceDetectionSettings {
 	if m != nil {
 		return m.BruteForceDetectionSettings
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetTenantDetails() *BasicConfiguration {
+	if m != nil {
+		return m.TenantDetails
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetBruteForceDetection() *BruteForceDetectionSettings {
+	if m != nil {
+		return m.BruteForceDetection
 	}
 	return nil
 }
@@ -547,20 +978,30 @@ func (m *ReplaceSpecType) GetPasswordPolicy() *PasswordPolicy {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetUserSessionExpiration() *UserSessionExpiration {
+	if m != nil {
+		return m.UserSessionExpiration
+	}
+	return nil
+}
+
 // GetSpecType
 //
 // x-displayName: "Get tenant configuration"
 // Shape of the tenant configuration specification
 type GetSpecType struct {
-	BasicConfiguration          *BasicConfiguration          `protobuf:"bytes,1,opt,name=basic_configuration,json=basicConfiguration,proto3" json:"basic_configuration,omitempty"`
-	BruteForceDetectionSettings *BruteForceDetectionSettings `protobuf:"bytes,2,opt,name=brute_force_detection_settings,json=bruteForceDetectionSettings,proto3" json:"brute_force_detection_settings,omitempty"`
+	BasicConfiguration          *BasicConfiguration          `protobuf:"bytes,1,opt,name=basic_configuration,json=basicConfiguration,proto3" json:"basic_configuration,omitempty"`                                // Deprecated: Do not use.
+	BruteForceDetectionSettings *BruteForceDetectionSettings `protobuf:"bytes,2,opt,name=brute_force_detection_settings,json=bruteForceDetectionSettings,proto3" json:"brute_force_detection_settings,omitempty"` // Deprecated: Do not use.
+	TenantDetails               *BasicConfiguration          `protobuf:"bytes,8,opt,name=tenant_details,json=tenantDetails,proto3" json:"tenant_details,omitempty"`
+	BruteForceDetection         *BruteForceDetectionSettings `protobuf:"bytes,7,opt,name=brute_force_detection,json=bruteForceDetection,proto3" json:"brute_force_detection,omitempty"`
 	PasswordPolicy              *PasswordPolicy              `protobuf:"bytes,3,opt,name=password_policy,json=passwordPolicy,proto3" json:"password_policy,omitempty"`
+	UserSessionExpiration       *UserSessionExpiration       `protobuf:"bytes,5,opt,name=user_session_expiration,json=userSessionExpiration,proto3" json:"user_session_expiration,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_364750f54271448d, []int{7}
+	return fileDescriptor_364750f54271448d, []int{13}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -585,6 +1026,7 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *GetSpecType) GetBasicConfiguration() *BasicConfiguration {
 	if m != nil {
 		return m.BasicConfiguration
@@ -592,9 +1034,24 @@ func (m *GetSpecType) GetBasicConfiguration() *BasicConfiguration {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *GetSpecType) GetBruteForceDetectionSettings() *BruteForceDetectionSettings {
 	if m != nil {
 		return m.BruteForceDetectionSettings
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetTenantDetails() *BasicConfiguration {
+	if m != nil {
+		return m.TenantDetails
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetBruteForceDetection() *BruteForceDetectionSettings {
+	if m != nil {
+		return m.BruteForceDetection
 	}
 	return nil
 }
@@ -606,6 +1063,13 @@ func (m *GetSpecType) GetPasswordPolicy() *PasswordPolicy {
 	return nil
 }
 
+func (m *GetSpecType) GetUserSessionExpiration() *UserSessionExpiration {
+	if m != nil {
+		return m.UserSessionExpiration
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*BasicConfiguration)(nil), "ves.io.schema.views.tenant_configuration.BasicConfiguration")
 	golang_proto.RegisterType((*BasicConfiguration)(nil), "ves.io.schema.views.tenant_configuration.BasicConfiguration")
@@ -613,8 +1077,20 @@ func init() {
 	golang_proto.RegisterType((*BruteForceDetectionSettings)(nil), "ves.io.schema.views.tenant_configuration.BruteForceDetectionSettings")
 	proto.RegisterType((*PasswordPolicy)(nil), "ves.io.schema.views.tenant_configuration.PasswordPolicy")
 	golang_proto.RegisterType((*PasswordPolicy)(nil), "ves.io.schema.views.tenant_configuration.PasswordPolicy")
-	proto.RegisterType((*SessionManagement)(nil), "ves.io.schema.views.tenant_configuration.SessionManagement")
-	golang_proto.RegisterType((*SessionManagement)(nil), "ves.io.schema.views.tenant_configuration.SessionManagement")
+	proto.RegisterType((*SessionMinutesDuration)(nil), "ves.io.schema.views.tenant_configuration.SessionMinutesDuration")
+	golang_proto.RegisterType((*SessionMinutesDuration)(nil), "ves.io.schema.views.tenant_configuration.SessionMinutesDuration")
+	proto.RegisterType((*SessionHoursDuration)(nil), "ves.io.schema.views.tenant_configuration.SessionHoursDuration")
+	golang_proto.RegisterType((*SessionHoursDuration)(nil), "ves.io.schema.views.tenant_configuration.SessionHoursDuration")
+	proto.RegisterType((*DurationByUnitSession)(nil), "ves.io.schema.views.tenant_configuration.DurationByUnitSession")
+	golang_proto.RegisterType((*DurationByUnitSession)(nil), "ves.io.schema.views.tenant_configuration.DurationByUnitSession")
+	proto.RegisterType((*CookieMinutesDuration)(nil), "ves.io.schema.views.tenant_configuration.CookieMinutesDuration")
+	golang_proto.RegisterType((*CookieMinutesDuration)(nil), "ves.io.schema.views.tenant_configuration.CookieMinutesDuration")
+	proto.RegisterType((*CookieHoursDuration)(nil), "ves.io.schema.views.tenant_configuration.CookieHoursDuration")
+	golang_proto.RegisterType((*CookieHoursDuration)(nil), "ves.io.schema.views.tenant_configuration.CookieHoursDuration")
+	proto.RegisterType((*DurationByUnitCookie)(nil), "ves.io.schema.views.tenant_configuration.DurationByUnitCookie")
+	golang_proto.RegisterType((*DurationByUnitCookie)(nil), "ves.io.schema.views.tenant_configuration.DurationByUnitCookie")
+	proto.RegisterType((*UserSessionExpiration)(nil), "ves.io.schema.views.tenant_configuration.UserSessionExpiration")
+	golang_proto.RegisterType((*UserSessionExpiration)(nil), "ves.io.schema.views.tenant_configuration.UserSessionExpiration")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.tenant_configuration.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.tenant_configuration.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.tenant_configuration.CreateSpecType")
@@ -633,66 +1109,113 @@ func init() {
 }
 
 var fileDescriptor_364750f54271448d = []byte{
-	// 938 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcf, 0x6f, 0xdc, 0x44,
-	0x14, 0xde, 0xc9, 0x36, 0x3f, 0x3a, 0x9b, 0xdd, 0x74, 0x5d, 0x10, 0x66, 0x03, 0x26, 0x5d, 0x21,
-	0xb4, 0x0a, 0xc4, 0x1b, 0xb6, 0x15, 0x04, 0x08, 0x05, 0x36, 0xb4, 0x15, 0x52, 0x41, 0x95, 0x43,
-	0x7b, 0x00, 0x11, 0x6b, 0xd6, 0x7e, 0xeb, 0x1d, 0xd5, 0xf6, 0x58, 0x33, 0xe3, 0x4d, 0xf6, 0x50,
-	0xa9, 0x82, 0x0b, 0xe2, 0xc4, 0x1f, 0x80, 0xc4, 0x81, 0x0b, 0x7f, 0x02, 0x22, 0x1c, 0x7a, 0x44,
-	0x9c, 0x72, 0x42, 0x51, 0x4f, 0x64, 0x73, 0x29, 0x3d, 0xf5, 0x3f, 0x28, 0xf2, 0xd8, 0x1b, 0xf6,
-	0x47, 0x80, 0x70, 0x69, 0x2f, 0xb9, 0xd9, 0x7e, 0xdf, 0xf7, 0xde, 0x9b, 0xf7, 0xcd, 0x67, 0x3d,
-	0x7c, 0xa9, 0x0b, 0xc2, 0xa4, 0xac, 0x2e, 0x9c, 0x0e, 0x04, 0xa4, 0xde, 0xa5, 0xb0, 0x2d, 0xea,
-	0x12, 0x42, 0x12, 0x4a, 0xdb, 0x61, 0x61, 0x9b, 0x7a, 0x31, 0x27, 0x92, 0xb2, 0xb0, 0x2e, 0x7b,
-	0x11, 0x08, 0x33, 0xe2, 0x4c, 0x32, 0xad, 0x96, 0xb2, 0xcc, 0x94, 0x65, 0x2a, 0x96, 0x79, 0x1c,
-	0xab, 0xb2, 0xe2, 0x51, 0xd9, 0x89, 0x5b, 0xa6, 0xc3, 0x82, 0xba, 0xc7, 0x3c, 0x56, 0x57, 0x09,
-	0x5a, 0x71, 0x5b, 0xbd, 0xa9, 0x17, 0xf5, 0x94, 0x26, 0xae, 0x2c, 0x8e, 0xb6, 0xc3, 0xa2, 0x24,
-	0x49, 0x56, 0xb5, 0xf2, 0xfc, 0x68, 0x70, 0xa8, 0xa1, 0xca, 0x0b, 0x63, 0xc7, 0x20, 0x3e, 0x75,
-	0x89, 0x84, 0x2c, 0xba, 0x34, 0x79, 0x48, 0x7b, 0x34, 0xf5, 0x4b, 0xc7, 0x8e, 0xe1, 0xef, 0x02,
-	0xd5, 0x5b, 0x58, 0x6b, 0x12, 0x41, 0x9d, 0x8d, 0xe1, 0xd3, 0x69, 0xef, 0xe3, 0x79, 0x97, 0x8a,
-	0xc8, 0x27, 0x3d, 0x3b, 0x24, 0x01, 0xe8, 0x68, 0x09, 0xd5, 0xce, 0x36, 0x5f, 0xfc, 0xf9, 0xcf,
-	0x7b, 0xf9, 0x69, 0x9e, 0xd7, 0x1f, 0xa3, 0xe4, 0xa9, 0xc4, 0xe7, 0x1b, 0x78, 0xeb, 0xf3, 0xad,
-	0xf5, 0xcb, 0xaf, 0x54, 0xbf, 0x78, 0xf5, 0x65, 0xab, 0x90, 0x51, 0x3e, 0x21, 0x01, 0x54, 0x6f,
-	0xe1, 0xc5, 0x26, 0x8f, 0x25, 0x5c, 0x65, 0xdc, 0x81, 0x0f, 0x41, 0x82, 0x93, 0x24, 0xde, 0x04,
-	0x29, 0x69, 0xe8, 0x09, 0xed, 0x4d, 0xac, 0x05, 0x64, 0xc7, 0xf6, 0x99, 0x47, 0x43, 0xbb, 0x4d,
-	0xa8, 0x1f, 0x73, 0x10, 0xaa, 0x4c, 0xb1, 0x79, 0x36, 0x49, 0x7e, 0x66, 0x79, 0x4a, 0x37, 0xac,
-	0x73, 0x01, 0xd9, 0xb9, 0x9e, 0x60, 0xae, 0x66, 0x90, 0xea, 0xf7, 0x79, 0x5c, 0xba, 0x41, 0x84,
-	0xd8, 0x66, 0xdc, 0xbd, 0xc1, 0x7c, 0xea, 0xf4, 0xb4, 0x0b, 0x78, 0xc6, 0xa5, 0x1e, 0x95, 0x13,
-	0xfc, 0x73, 0x56, 0x16, 0xd0, 0xd6, 0xf1, 0x33, 0x3e, 0xdb, 0x06, 0xee, 0x10, 0x01, 0xb6, 0xd3,
-	0x21, 0x9c, 0x38, 0x12, 0xb8, 0xd0, 0xa7, 0xc6, 0x09, 0xe7, 0x8f, 0x60, 0x1b, 0x47, 0xa8, 0x84,
-	0x1d, 0x47, 0xd1, 0x24, 0x3b, 0x3f, 0xc1, 0x3e, 0x82, 0x0d, 0xb1, 0xd7, 0xb0, 0x26, 0x22, 0x70,
-	0x28, 0xf1, 0x87, 0xb9, 0x67, 0xc6, 0xb9, 0xe5, 0x0c, 0x34, 0xc4, 0xbc, 0x80, 0xe7, 0x43, 0x26,
-	0xed, 0x58, 0x00, 0x57, 0x2a, 0x4c, 0x2f, 0xa1, 0xda, 0x9c, 0x55, 0x08, 0x99, 0xbc, 0x99, 0x7d,
-	0xd2, 0x2e, 0xe2, 0x05, 0xd8, 0x89, 0x28, 0x07, 0x3b, 0xca, 0x86, 0xa2, 0xcf, 0xa8, 0xcc, 0x58,
-	0x69, 0xb5, 0x9c, 0xd7, 0x7f, 0x9a, 0xb3, 0x4a, 0x29, 0x64, 0x30, 0x36, 0x6d, 0x19, 0x97, 0x93,
-	0xbc, 0x1c, 0x1c, 0x08, 0xa5, 0xdf, 0x4b, 0x0a, 0xb8, 0xfa, 0x6c, 0x42, 0xb3, 0x16, 0x42, 0x26,
-	0xad, 0xec, 0xfb, 0x4d, 0x01, 0xae, 0xb6, 0x8a, 0x4b, 0x01, 0x0d, 0x69, 0x10, 0x07, 0xb6, 0x0f,
-	0xa1, 0x27, 0x3b, 0xfa, 0xdc, 0x48, 0xe7, 0xb5, 0x59, 0xab, 0x98, 0x01, 0xae, 0xab, 0x78, 0xf5,
-	0x77, 0x84, 0xcb, 0x9b, 0x20, 0x04, 0x65, 0xe1, 0xc7, 0x24, 0x24, 0x1e, 0x04, 0x10, 0x4a, 0xed,
-	0x5d, 0x5c, 0x74, 0x18, 0xbb, 0x4d, 0xc1, 0x56, 0xcd, 0xf4, 0x32, 0xad, 0xf4, 0xfb, 0xbb, 0x28,
-	0xff, 0xd6, 0xea, 0xea, 0xd7, 0xbf, 0x20, 0x75, 0xa7, 0xe6, 0x96, 0x67, 0xf4, 0xbb, 0x3f, 0x4c,
-	0xd7, 0xd6, 0xad, 0xf9, 0x14, 0x7e, 0x45, 0xa1, 0xb5, 0xf7, 0xf0, 0x73, 0x19, 0x9d, 0x43, 0x9b,
-	0x83, 0xe8, 0xd8, 0x34, 0x94, 0xc0, 0xbb, 0xc4, 0xcf, 0x34, 0x9c, 0xdd, 0xbf, 0x83, 0x1e, 0xec,
-	0x22, 0x64, 0x3d, 0x9b, 0xe2, 0xac, 0x14, 0xf6, 0x51, 0x86, 0xd2, 0x3e, 0xc0, 0x25, 0x91, 0x36,
-	0x35, 0x68, 0x20, 0x55, 0xaf, 0x72, 0x7f, 0x17, 0x4d, 0xaf, 0xbd, 0x71, 0xe9, 0xb8, 0x16, 0x8a,
-	0x19, 0x23, 0xed, 0xa1, 0xfa, 0x30, 0x8f, 0x4b, 0xd7, 0x7c, 0xd6, 0x22, 0xfe, 0x66, 0x04, 0xce,
-	0xa7, 0xbd, 0x08, 0xb4, 0x00, 0x9f, 0x6f, 0x25, 0xee, 0x19, 0xfd, 0x39, 0xa8, 0xb3, 0x15, 0x1a,
-	0xeb, 0xe6, 0x49, 0xff, 0x26, 0xe6, 0xa4, 0x05, 0x2d, 0xad, 0x35, 0x69, 0xcb, 0x6f, 0x10, 0x36,
-	0x5a, 0x89, 0xab, 0xec, 0x76, 0x62, 0x2b, 0xdb, 0x1d, 0xf8, 0xca, 0x16, 0x99, 0xb1, 0xd4, 0x34,
-	0x0a, 0x8d, 0x2b, 0xff, 0xa3, 0xf4, 0x3f, 0xbb, 0xd4, 0x5a, 0x6c, 0xfd, 0x8b, 0x85, 0x09, 0x5e,
-	0x18, 0xdc, 0x39, 0x3b, 0x52, 0x4e, 0x54, 0x23, 0x2d, 0x34, 0xd6, 0x4e, 0x5e, 0x7c, 0xd4, 0xc9,
-	0x56, 0x29, 0x1a, 0x75, 0x76, 0x0f, 0x6b, 0x03, 0xd1, 0x82, 0xa3, 0xab, 0xa4, 0xac, 0x53, 0x68,
-	0xbc, 0x73, 0xf2, 0x2a, 0x13, 0xb7, 0xb1, 0x59, 0x7c, 0x78, 0x07, 0xbb, 0x10, 0xb0, 0xd7, 0x5f,
-	0x93, 0x20, 0xa4, 0x55, 0x16, 0xe3, 0x88, 0xea, 0x97, 0x79, 0x5c, 0xda, 0xe0, 0x40, 0x24, 0x9c,
-	0x8a, 0xfd, 0x44, 0xc4, 0x7e, 0xbb, 0xfc, 0xdb, 0xe5, 0x31, 0x7b, 0x55, 0xbf, 0xca, 0xe3, 0x05,
-	0x0b, 0x22, 0x9f, 0x38, 0xa7, 0x2a, 0x3c, 0x3d, 0x15, 0x1e, 0x4f, 0xe1, 0xc2, 0x35, 0x90, 0xa7,
-	0x0a, 0x3c, 0x2d, 0x05, 0x9a, 0xdf, 0xa1, 0xbd, 0x03, 0x23, 0xb7, 0x7f, 0x60, 0xe4, 0x1e, 0x1d,
-	0x18, 0xe8, 0x6e, 0xdf, 0x40, 0x3f, 0xf6, 0x0d, 0xf4, 0x6b, 0xdf, 0x40, 0x7b, 0x7d, 0x03, 0xed,
-	0xf7, 0x0d, 0xf4, 0x47, 0xdf, 0x40, 0x0f, 0xfa, 0x46, 0xee, 0x51, 0xdf, 0x40, 0xdf, 0x1e, 0x1a,
-	0xb9, 0x7b, 0x87, 0x06, 0xda, 0x3b, 0x34, 0x72, 0xfb, 0x87, 0x46, 0xee, 0xb3, 0x2d, 0x8f, 0x45,
-	0xb7, 0x3d, 0xb3, 0xcb, 0x7c, 0x09, 0x9c, 0x13, 0x33, 0x4e, 0x36, 0x61, 0xce, 0x49, 0x9b, 0xf1,
-	0x60, 0x25, 0xe2, 0xac, 0x4b, 0x5d, 0xe0, 0x2b, 0x83, 0x70, 0x3d, 0x6a, 0x79, 0xac, 0x0e, 0x3b,
-	0x32, 0xdb, 0x19, 0xff, 0x73, 0x83, 0x6e, 0xcd, 0xa8, 0x55, 0xf2, 0xe2, 0x5f, 0x01, 0x00, 0x00,
-	0xff, 0xff, 0x48, 0x60, 0xfa, 0xcc, 0x74, 0x0b, 0x00, 0x00,
+	// 1688 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6f, 0x1c, 0x49,
+	0xf5, 0x77, 0x8d, 0x67, 0xc6, 0xb3, 0x65, 0x67, 0x3c, 0x69, 0xc7, 0xc9, 0x7c, 0x9d, 0xfd, 0x0e,
+	0xb5, 0x23, 0x84, 0x8c, 0x59, 0xf7, 0xb0, 0x4e, 0xac, 0x8d, 0xa2, 0x10, 0x96, 0xb1, 0x37, 0x89,
+	0xac, 0x80, 0x56, 0x1d, 0x27, 0x07, 0xc2, 0x66, 0x54, 0xd3, 0xfd, 0xa6, 0xbb, 0xe4, 0xee, 0xae,
+	0xde, 0xaa, 0x6a, 0xdb, 0xa3, 0xc8, 0x5a, 0xc4, 0x01, 0xad, 0x10, 0x5a, 0x56, 0x48, 0xdc, 0x90,
+	0xb8, 0x22, 0x04, 0xe2, 0x86, 0x10, 0xde, 0x43, 0xe0, 0x84, 0x38, 0x99, 0x5b, 0x94, 0x03, 0x22,
+	0xf6, 0x65, 0x41, 0x42, 0xca, 0x7f, 0x00, 0xaa, 0xee, 0x1e, 0x7b, 0xc6, 0x33, 0x09, 0xb1, 0xd8,
+	0xec, 0xc9, 0xa7, 0xa9, 0xa9, 0xaa, 0xcf, 0xe7, 0xfd, 0x7e, 0xaf, 0xd4, 0xf8, 0xf2, 0x26, 0x48,
+	0x93, 0xf1, 0x86, 0xb4, 0x3d, 0x08, 0x68, 0x63, 0x93, 0xc1, 0x96, 0x6c, 0x28, 0x08, 0x69, 0xa8,
+	0x5a, 0x36, 0x0f, 0x3b, 0xcc, 0x8d, 0x05, 0x55, 0x8c, 0x87, 0x0d, 0xd5, 0x8d, 0x40, 0x9a, 0x91,
+	0xe0, 0x8a, 0x1b, 0xf3, 0x29, 0xca, 0x4c, 0x51, 0x66, 0x82, 0x32, 0x47, 0xa1, 0xe6, 0x16, 0x5d,
+	0xa6, 0xbc, 0xb8, 0x6d, 0xda, 0x3c, 0x68, 0xb8, 0xdc, 0xe5, 0x8d, 0x84, 0xa0, 0x1d, 0x77, 0x92,
+	0x7f, 0xc9, 0x9f, 0x64, 0x95, 0x12, 0xcf, 0x5d, 0x1c, 0x54, 0x87, 0x47, 0x9a, 0x24, 0x93, 0x3a,
+	0xf7, 0x7f, 0x83, 0x87, 0x7d, 0x0a, 0xcd, 0xbd, 0x7e, 0xcc, 0x0c, 0xea, 0x33, 0x87, 0x2a, 0xc8,
+	0x4e, 0xc9, 0xb0, 0x91, 0xad, 0x41, 0xea, 0x2f, 0x8d, 0x74, 0xc3, 0x91, 0x80, 0xfa, 0x3d, 0x6c,
+	0x34, 0xa9, 0x64, 0xf6, 0x4a, 0xbf, 0x75, 0xc6, 0x3b, 0x78, 0xca, 0x61, 0x32, 0xf2, 0x69, 0xb7,
+	0x15, 0xd2, 0x00, 0xaa, 0x88, 0xa0, 0xf9, 0xd7, 0x9a, 0xff, 0xff, 0x87, 0x7f, 0x3c, 0x1a, 0x2f,
+	0x88, 0xf1, 0xea, 0xbf, 0x91, 0x5e, 0x95, 0xc5, 0xd4, 0x12, 0x7e, 0x70, 0xff, 0xc1, 0xb5, 0xeb,
+	0x5f, 0xa9, 0xbf, 0xff, 0xb5, 0x2f, 0x5b, 0x93, 0x19, 0xe4, 0x3b, 0x34, 0x80, 0xfa, 0x3d, 0x7c,
+	0xb1, 0x29, 0x62, 0x05, 0x37, 0xb8, 0xb0, 0x61, 0x15, 0x14, 0xd8, 0x9a, 0xf8, 0x0e, 0x28, 0xc5,
+	0x42, 0x57, 0x1a, 0x6f, 0x63, 0x23, 0xa0, 0xdb, 0x2d, 0x9f, 0xbb, 0x2c, 0x6c, 0x75, 0x28, 0xf3,
+	0x63, 0x01, 0x32, 0x11, 0x73, 0xa6, 0xf9, 0x9a, 0x26, 0xcf, 0x2f, 0xe4, 0xaa, 0x35, 0xab, 0x12,
+	0xd0, 0xed, 0xdb, 0xfa, 0xce, 0x8d, 0xec, 0x4a, 0xfd, 0x17, 0xe3, 0xb8, 0xfc, 0x1e, 0x95, 0x72,
+	0x8b, 0x0b, 0xe7, 0x3d, 0xee, 0x33, 0xbb, 0x6b, 0xbc, 0x81, 0x8b, 0x0e, 0x73, 0x99, 0x1a, 0xc2,
+	0x57, 0xac, 0xec, 0xc0, 0xb8, 0x86, 0xcf, 0xf9, 0x7c, 0x0b, 0x84, 0x4d, 0x25, 0xb4, 0x6c, 0x8f,
+	0x0a, 0x6a, 0x2b, 0x10, 0xb2, 0x9a, 0x3b, 0x0e, 0x98, 0x39, 0xbc, 0xb6, 0x72, 0x78, 0x4b, 0xa3,
+	0xe3, 0x28, 0x1a, 0x46, 0x8f, 0x0f, 0xa1, 0x0f, 0xaf, 0xf5, 0xa1, 0xaf, 0x60, 0x43, 0x46, 0x60,
+	0x33, 0xea, 0xf7, 0x63, 0xf3, 0xc7, 0xb1, 0x67, 0xb3, 0x4b, 0x7d, 0xc8, 0x37, 0xf0, 0x54, 0xc8,
+	0x55, 0x2b, 0x96, 0x20, 0x92, 0x28, 0x14, 0x08, 0x9a, 0x2f, 0x59, 0x93, 0x21, 0x57, 0x77, 0xb3,
+	0x2d, 0xe3, 0x12, 0x9e, 0x86, 0xed, 0x88, 0x09, 0x68, 0x45, 0x99, 0x53, 0xaa, 0xc5, 0x84, 0x19,
+	0x27, 0xb1, 0x5a, 0x18, 0xaf, 0xfe, 0xbe, 0x64, 0x95, 0xd3, 0x2b, 0x3d, 0xb7, 0x19, 0x0b, 0xf8,
+	0xac, 0xe6, 0x15, 0x60, 0x43, 0xa8, 0xfc, 0xae, 0x16, 0xe0, 0x54, 0x27, 0x34, 0xcc, 0x9a, 0x0e,
+	0xb9, 0xb2, 0xb2, 0xfd, 0xbb, 0x12, 0x1c, 0xe3, 0xeb, 0xb8, 0x1c, 0xb0, 0x90, 0x05, 0x71, 0xd0,
+	0xf2, 0x21, 0x74, 0x95, 0x57, 0x2d, 0x0d, 0x68, 0x3e, 0x3f, 0x61, 0x9d, 0xc9, 0x2e, 0xdc, 0x4e,
+	0xce, 0xeb, 0x37, 0xf1, 0xf9, 0x3b, 0x20, 0x25, 0xe3, 0xe1, 0xb7, 0x59, 0x18, 0x2b, 0x90, 0xab,
+	0xbd, 0xac, 0x5a, 0xc4, 0x25, 0x27, 0x5b, 0x67, 0xa1, 0x3a, 0xfb, 0xd1, 0xa7, 0x28, 0xa7, 0x99,
+	0x4a, 0x0b, 0xc5, 0xea, 0xa3, 0xbf, 0xe6, 0xe6, 0x0b, 0xd6, 0xe1, 0x95, 0xfa, 0x1a, 0x3e, 0x97,
+	0x11, 0xdd, 0xe2, 0xb1, 0x38, 0xa2, 0x59, 0x1a, 0xa2, 0x39, 0xff, 0x64, 0x17, 0xe5, 0x96, 0x2e,
+	0x7f, 0xf4, 0x29, 0x1a, 0xd7, 0x64, 0x13, 0x0b, 0x85, 0xea, 0x5e, 0x61, 0x1e, 0xf5, 0x71, 0xfd,
+	0x0b, 0xe1, 0xd9, 0x1e, 0x41, 0xb3, 0x7b, 0x37, 0x64, 0x2a, 0xa3, 0x36, 0xbe, 0x87, 0x27, 0x82,
+	0x54, 0xcf, 0x24, 0x1b, 0x26, 0x97, 0xde, 0x31, 0x5f, 0xb6, 0x09, 0x98, 0xa3, 0xed, 0xbc, 0x35,
+	0x66, 0xf5, 0x28, 0x8d, 0x7b, 0xb8, 0xe0, 0x69, 0xe5, 0x93, 0x5c, 0x99, 0x5c, 0xba, 0x7e, 0x62,
+	0xee, 0x01, 0xd3, 0x6f, 0x8d, 0x59, 0x29, 0x5d, 0xb3, 0x8a, 0xa7, 0xe2, 0x90, 0xa9, 0x16, 0xef,
+	0xb4, 0x14, 0x0b, 0xc0, 0x28, 0x3d, 0xda, 0x45, 0xe3, 0x7b, 0xbb, 0x08, 0xad, 0xe5, 0x4b, 0xa8,
+	0x92, 0xab, 0xdf, 0xc6, 0xb3, 0x2b, 0x9c, 0x6f, 0x30, 0x38, 0x1e, 0x83, 0x4b, 0x43, 0xce, 0xbb,
+	0xa0, 0x9d, 0xf7, 0xd6, 0xf2, 0x8b, 0x22, 0xb1, 0x82, 0x67, 0x52, 0xb6, 0xc1, 0x40, 0xbc, 0x39,
+	0xc4, 0x55, 0x79, 0x41, 0x08, 0xfe, 0x89, 0xf0, 0xb9, 0xc1, 0x10, 0xa4, 0x9c, 0xc6, 0xfd, 0xe3,
+	0x11, 0xf8, 0xe6, 0xcb, 0x7b, 0x69, 0xa4, 0x91, 0xfd, 0x01, 0xb8, 0x3b, 0x18, 0x80, 0x6f, 0x9c,
+	0x94, 0xfa, 0x04, 0xfe, 0xcf, 0xf5, 0xf9, 0xff, 0x37, 0x39, 0x3c, 0xab, 0x8b, 0x34, 0x8b, 0xe2,
+	0xbb, 0xba, 0x00, 0x53, 0xa7, 0xfd, 0x10, 0xe1, 0x0a, 0x6d, 0x4b, 0xee, 0xc7, 0x0a, 0x12, 0x2c,
+	0x8f, 0x55, 0xa6, 0xdc, 0x09, 0xec, 0x1e, 0x99, 0xcb, 0xcd, 0xb9, 0x27, 0xbb, 0xe8, 0xfc, 0xc3,
+	0x7a, 0xa2, 0x62, 0xfd, 0xea, 0xc3, 0xfa, 0x26, 0xf5, 0x63, 0xa8, 0x5f, 0x5d, 0xba, 0xbc, 0xb3,
+	0x63, 0x4d, 0xf7, 0x84, 0xae, 0xa7, 0x32, 0x8d, 0x0f, 0xf1, 0x14, 0x73, 0xfc, 0x23, 0x1d, 0xf2,
+	0x27, 0xcd, 0xd0, 0x51, 0xc1, 0x6c, 0xbe, 0xfe, 0x64, 0x17, 0x55, 0x1f, 0xd6, 0x33, 0xf7, 0xf7,
+	0x29, 0xf1, 0xd6, 0xf2, 0xce, 0x8e, 0x35, 0xa9, 0x25, 0x66, 0x0a, 0xa4, 0x9e, 0x5a, 0xcb, 0x97,
+	0x72, 0x95, 0xf1, 0xfa, 0xc7, 0x93, 0xb8, 0x7c, 0xd3, 0xe7, 0x6d, 0xea, 0xdf, 0x89, 0xc0, 0x5e,
+	0xef, 0x46, 0x60, 0x7c, 0x80, 0x67, 0xda, 0x7a, 0x32, 0x0d, 0x4a, 0x4d, 0x12, 0x6d, 0x72, 0xe9,
+	0xda, 0xcb, 0xab, 0x39, 0x3c, 0xde, 0x9a, 0xb9, 0x2a, 0xb2, 0x8c, 0xf6, 0xf0, 0xd8, 0xb3, 0x71,
+	0x39, 0xa3, 0x70, 0x40, 0x51, 0xe6, 0xcb, 0xa4, 0xd9, 0xfd, 0x8f, 0xd2, 0xac, 0x33, 0xe9, 0xc5,
+	0xd5, 0x94, 0xd2, 0xf8, 0x18, 0xe1, 0x5a, 0x5b, 0x8f, 0xc6, 0x56, 0x47, 0xcf, 0x46, 0x2d, 0x2a,
+	0x1d, 0x8e, 0x2d, 0x99, 0x4d, 0xc7, 0xac, 0x0c, 0xde, 0x3d, 0x81, 0xd4, 0xe7, 0x8f, 0xda, 0xc4,
+	0xd8, 0x8b, 0xed, 0x17, 0xcc, 0xe2, 0x2e, 0x9e, 0x1d, 0xa9, 0x4f, 0x32, 0x12, 0x3e, 0x2f, 0x35,
+	0xac, 0x99, 0x11, 0x2a, 0x18, 0x14, 0x4f, 0xf7, 0xe6, 0x56, 0x2b, 0x4a, 0xa6, 0x79, 0x56, 0x0a,
+	0x57, 0x5e, 0x5e, 0xe8, 0xe0, 0x6b, 0xc0, 0x2a, 0x47, 0x83, 0xaf, 0x83, 0x2d, 0x7c, 0x41, 0x0f,
+	0xd0, 0x96, 0x4c, 0x6b, 0xa4, 0x05, 0x87, 0xa5, 0x98, 0xcc, 0xd3, 0x13, 0x55, 0xdd, 0xc8, 0x8a,
+	0xb6, 0x66, 0xe3, 0x51, 0xdb, 0x57, 0x7f, 0x5b, 0xf8, 0xd3, 0x2e, 0xfa, 0x55, 0x01, 0xcf, 0xe0,
+	0xf2, 0x7a, 0x42, 0x46, 0x7a, 0x19, 0x80, 0xae, 0xe0, 0x1f, 0xe4, 0xf0, 0x05, 0xcd, 0x46, 0x32,
+	0x1c, 0xe9, 0xeb, 0x10, 0x68, 0xb9, 0x79, 0x80, 0xf0, 0x63, 0xb4, 0xe2, 0xd1, 0xd0, 0x05, 0x49,
+	0x14, 0xdd, 0x00, 0x42, 0xa3, 0x48, 0xf0, 0x6d, 0x16, 0x50, 0x05, 0x7e, 0x97, 0x2c, 0x93, 0xac,
+	0xc0, 0x88, 0xe2, 0xfa, 0xc8, 0xef, 0x9a, 0xe4, 0x36, 0x77, 0x09, 0x0b, 0x09, 0x75, 0x29, 0x0b,
+	0xf5, 0xb6, 0x04, 0x20, 0xca, 0x03, 0x12, 0x47, 0xfa, 0xc5, 0x28, 0x89, 0x80, 0x8e, 0x0f, 0xb6,
+	0x02, 0xc7, 0x24, 0x37, 0xb8, 0x20, 0x01, 0x17, 0x40, 0xb2, 0x34, 0x7f, 0x53, 0x1f, 0x82, 0xd0,
+	0xa8, 0xfb, 0xeb, 0x60, 0x7b, 0x64, 0x95, 0xdb, 0xf2, 0xfd, 0x79, 0x4f, 0xa9, 0x48, 0x5e, 0x6d,
+	0x34, 0x1c, 0x6e, 0x4b, 0xd3, 0xf6, 0x79, 0xec, 0x98, 0x9d, 0xe5, 0xe4, 0xc5, 0xab, 0x77, 0x16,
+	0x37, 0x97, 0x1a, 0xd4, 0xd1, 0xb3, 0x5f, 0xaa, 0xec, 0x29, 0xed, 0xf1, 0xad, 0x45, 0xc5, 0x65,
+	0x43, 0x3b, 0x64, 0x31, 0x70, 0x03, 0xd5, 0x70, 0x21, 0x04, 0x41, 0xfd, 0xc5, 0x80, 0x86, 0xd4,
+	0x85, 0x00, 0x42, 0xf5, 0x55, 0xd3, 0x28, 0xb2, 0x50, 0x32, 0x07, 0xf0, 0xdf, 0x10, 0x9e, 0x4d,
+	0x52, 0x86, 0x24, 0x69, 0x41, 0x8e, 0xf2, 0x02, 0xbd, 0xdd, 0xfc, 0x23, 0xc2, 0xbf, 0x43, 0xeb,
+	0x1e, 0x93, 0x44, 0x76, 0xa5, 0x82, 0x80, 0xc4, 0x12, 0x24, 0xa1, 0xbe, 0xcb, 0x05, 0x53, 0x5e,
+	0x90, 0x58, 0xae, 0x20, 0x88, 0xb8, 0xa0, 0x82, 0xf9, 0x5d, 0xe2, 0x73, 0x7b, 0x83, 0x50, 0xdb,
+	0xe6, 0x71, 0xa8, 0x24, 0xe9, 0x70, 0x41, 0x28, 0x49, 0x9e, 0x54, 0x1d, 0x06, 0x0e, 0xd1, 0x4d,
+	0x8e, 0x44, 0x20, 0x18, 0x77, 0x08, 0xed, 0x28, 0x10, 0x24, 0x4b, 0xf3, 0xd0, 0x25, 0x34, 0x24,
+	0x54, 0x29, 0x6a, 0x6f, 0x98, 0x64, 0xdd, 0x83, 0x84, 0x88, 0xc7, 0x8a, 0xf4, 0x06, 0x17, 0x61,
+	0xa1, 0x2d, 0x80, 0x6a, 0xe9, 0x5b, 0x4c, 0x79, 0xc4, 0xe7, 0xa1, 0x0b, 0x42, 0x93, 0x49, 0x26,
+	0x53, 0x82, 0x04, 0xad, 0x7f, 0x20, 0x88, 0x94, 0x3c, 0x32, 0xf0, 0xd7, 0x08, 0x4f, 0xf7, 0xd2,
+	0x93, 0x64, 0xf9, 0x88, 0x2e, 0x35, 0x7f, 0x86, 0xf0, 0x8f, 0xd0, 0x2a, 0x74, 0x58, 0x08, 0xc4,
+	0x8e, 0xa5, 0xe2, 0x01, 0xe9, 0x25, 0x2d, 0x11, 0xf0, 0x41, 0xcc, 0x44, 0xe2, 0xa9, 0xd4, 0x8a,
+	0x2e, 0x8f, 0x05, 0x49, 0xb3, 0xd1, 0x24, 0xdf, 0xf2, 0xfd, 0x6c, 0xad, 0xdd, 0x21, 0x24, 0x09,
+	0x62, 0xa9, 0x08, 0x75, 0x3c, 0x10, 0x90, 0x38, 0xc4, 0x03, 0x92, 0xd6, 0x11, 0xd9, 0xf2, 0x20,
+	0x24, 0x5a, 0xf1, 0x44, 0x45, 0x2e, 0xd2, 0x3c, 0xd0, 0x6b, 0xe5, 0x01, 0x13, 0x87, 0x12, 0x8f,
+	0xd4, 0x5d, 0xcb, 0x97, 0xf2, 0x95, 0xc2, 0x5a, 0xbe, 0x54, 0xac, 0x4c, 0xd4, 0x7f, 0x52, 0xc4,
+	0xe5, 0x15, 0x8d, 0x86, 0xc3, 0x86, 0x1c, 0xbf, 0xba, 0x86, 0x5c, 0xfc, 0x6c, 0x17, 0xa1, 0xe7,
+	0x34, 0xe5, 0x9f, 0x7e, 0xc1, 0xfd, 0xb2, 0xa7, 0xcb, 0x0b, 0x7b, 0x26, 0x7b, 0x15, 0x93, 0xa2,
+	0x99, 0x7f, 0xb6, 0x8b, 0xd0, 0xf1, 0x79, 0xf1, 0xe1, 0x17, 0xd1, 0x9e, 0x33, 0xd1, 0x23, 0x9b,
+	0xb4, 0xfb, 0xb9, 0x37, 0xe9, 0x4c, 0xda, 0xf1, 0x56, 0xbd, 0xf3, 0xaa, 0x5b, 0x75, 0x26, 0xf7,
+	0x39, 0x0d, 0xfb, 0xec, 0x5f, 0xae, 0x1f, 0x7b, 0x83, 0x0c, 0x54, 0xc4, 0x27, 0x45, 0x3c, 0x6d,
+	0x41, 0xe4, 0x53, 0xfb, 0xb4, 0x24, 0x4e, 0x4b, 0xe2, 0xb4, 0x24, 0x2a, 0x13, 0xf5, 0x1f, 0x17,
+	0xf1, 0xe4, 0x4d, 0x50, 0xa7, 0xe5, 0x70, 0x5a, 0x0e, 0xa7, 0xe5, 0x30, 0xd1, 0xfc, 0x39, 0xda,
+	0x7b, 0x5a, 0x1b, 0x7b, 0xfc, 0xb4, 0x36, 0xf6, 0xec, 0x69, 0x0d, 0x7d, 0x7f, 0xbf, 0x86, 0x7e,
+	0xb9, 0x5f, 0x43, 0x7f, 0xde, 0xaf, 0xa1, 0xbd, 0xfd, 0x1a, 0x7a, 0xbc, 0x5f, 0x43, 0x7f, 0xdf,
+	0xaf, 0xa1, 0xcf, 0xf6, 0x6b, 0x63, 0xcf, 0xf6, 0x6b, 0xe8, 0x93, 0x83, 0xda, 0xd8, 0xa3, 0x83,
+	0x1a, 0xda, 0x3b, 0xa8, 0x8d, 0x3d, 0x3e, 0xa8, 0x8d, 0x7d, 0xf7, 0x81, 0xcb, 0xa3, 0x0d, 0xd7,
+	0xdc, 0xe4, 0xbe, 0x02, 0x21, 0xa8, 0x19, 0xcb, 0x46, 0xb2, 0xe8, 0x70, 0x11, 0x2c, 0x46, 0x82,
+	0x6f, 0x32, 0x07, 0xc4, 0x62, 0xef, 0xb8, 0x11, 0xb5, 0x5d, 0xde, 0x80, 0x6d, 0x95, 0x7d, 0xda,
+	0xfd, 0xaf, 0x1f, 0xba, 0xdb, 0xc5, 0xe4, 0x8b, 0xef, 0xa5, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff,
+	0x9e, 0x18, 0xd3, 0xba, 0x1b, 0x17, 0x00, 0x00,
 }
 
 func (this *BasicConfiguration) Equal(that interface{}) bool {
@@ -788,14 +1311,14 @@ func (this *PasswordPolicy) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SessionManagement) Equal(that interface{}) bool {
+func (this *SessionMinutesDuration) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SessionManagement)
+	that1, ok := that.(*SessionMinutesDuration)
 	if !ok {
-		that2, ok := that.(SessionManagement)
+		that2, ok := that.(SessionMinutesDuration)
 		if ok {
 			that1 = &that2
 		} else {
@@ -807,13 +1330,262 @@ func (this *SessionManagement) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.CookieExpiry != that1.CookieExpiry {
+	if this.Duration != that1.Duration {
 		return false
 	}
-	if this.CookieRefreshInterval != that1.CookieRefreshInterval {
+	return true
+}
+func (this *SessionHoursDuration) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SessionHoursDuration)
+	if !ok {
+		that2, ok := that.(SessionHoursDuration)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
 		return false
 	}
-	if this.SessionExpiry != that1.SessionExpiry {
+	if this.Duration != that1.Duration {
+		return false
+	}
+	return true
+}
+func (this *DurationByUnitSession) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DurationByUnitSession)
+	if !ok {
+		that2, ok := that.(DurationByUnitSession)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.UnitOfTime == nil {
+		if this.UnitOfTime != nil {
+			return false
+		}
+	} else if this.UnitOfTime == nil {
+		return false
+	} else if !this.UnitOfTime.Equal(that1.UnitOfTime) {
+		return false
+	}
+	return true
+}
+func (this *DurationByUnitSession_Minutes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DurationByUnitSession_Minutes)
+	if !ok {
+		that2, ok := that.(DurationByUnitSession_Minutes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Minutes.Equal(that1.Minutes) {
+		return false
+	}
+	return true
+}
+func (this *DurationByUnitSession_Hours) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DurationByUnitSession_Hours)
+	if !ok {
+		that2, ok := that.(DurationByUnitSession_Hours)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Hours.Equal(that1.Hours) {
+		return false
+	}
+	return true
+}
+func (this *CookieMinutesDuration) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMinutesDuration)
+	if !ok {
+		that2, ok := that.(CookieMinutesDuration)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Duration != that1.Duration {
+		return false
+	}
+	return true
+}
+func (this *CookieHoursDuration) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieHoursDuration)
+	if !ok {
+		that2, ok := that.(CookieHoursDuration)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Duration != that1.Duration {
+		return false
+	}
+	return true
+}
+func (this *DurationByUnitCookie) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DurationByUnitCookie)
+	if !ok {
+		that2, ok := that.(DurationByUnitCookie)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.UnitOfTime == nil {
+		if this.UnitOfTime != nil {
+			return false
+		}
+	} else if this.UnitOfTime == nil {
+		return false
+	} else if !this.UnitOfTime.Equal(that1.UnitOfTime) {
+		return false
+	}
+	return true
+}
+func (this *DurationByUnitCookie_Minutes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DurationByUnitCookie_Minutes)
+	if !ok {
+		that2, ok := that.(DurationByUnitCookie_Minutes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Minutes.Equal(that1.Minutes) {
+		return false
+	}
+	return true
+}
+func (this *DurationByUnitCookie_Hours) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DurationByUnitCookie_Hours)
+	if !ok {
+		that2, ok := that.(DurationByUnitCookie_Hours)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Hours.Equal(that1.Hours) {
+		return false
+	}
+	return true
+}
+func (this *UserSessionExpiration) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UserSessionExpiration)
+	if !ok {
+		that2, ok := that.(UserSessionExpiration)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AbsoluteTimeout.Equal(that1.AbsoluteTimeout) {
+		return false
+	}
+	if !this.IdleTimeout.Equal(that1.IdleTimeout) {
 		return false
 	}
 	return true
@@ -840,13 +1612,19 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.BasicConfiguration.Equal(that1.BasicConfiguration) {
 		return false
 	}
+	if !this.TenantDetails.Equal(that1.TenantDetails) {
+		return false
+	}
 	if !this.BruteForceDetectionSettings.Equal(that1.BruteForceDetectionSettings) {
+		return false
+	}
+	if !this.BruteForceDetection.Equal(that1.BruteForceDetection) {
 		return false
 	}
 	if !this.PasswordPolicy.Equal(that1.PasswordPolicy) {
 		return false
 	}
-	if !this.SessionManagement.Equal(that1.SessionManagement) {
+	if !this.UserSessionExpiration.Equal(that1.UserSessionExpiration) {
 		return false
 	}
 	return true
@@ -876,7 +1654,16 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.BruteForceDetectionSettings.Equal(that1.BruteForceDetectionSettings) {
 		return false
 	}
+	if !this.TenantDetails.Equal(that1.TenantDetails) {
+		return false
+	}
+	if !this.BruteForceDetection.Equal(that1.BruteForceDetection) {
+		return false
+	}
 	if !this.PasswordPolicy.Equal(that1.PasswordPolicy) {
+		return false
+	}
+	if !this.UserSessionExpiration.Equal(that1.UserSessionExpiration) {
 		return false
 	}
 	return true
@@ -906,7 +1693,16 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.BruteForceDetectionSettings.Equal(that1.BruteForceDetectionSettings) {
 		return false
 	}
+	if !this.TenantDetails.Equal(that1.TenantDetails) {
+		return false
+	}
+	if !this.BruteForceDetection.Equal(that1.BruteForceDetection) {
+		return false
+	}
 	if !this.PasswordPolicy.Equal(that1.PasswordPolicy) {
+		return false
+	}
+	if !this.UserSessionExpiration.Equal(that1.UserSessionExpiration) {
 		return false
 	}
 	return true
@@ -936,7 +1732,16 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.BruteForceDetectionSettings.Equal(that1.BruteForceDetectionSettings) {
 		return false
 	}
+	if !this.TenantDetails.Equal(that1.TenantDetails) {
+		return false
+	}
+	if !this.BruteForceDetection.Equal(that1.BruteForceDetection) {
+		return false
+	}
 	if !this.PasswordPolicy.Equal(that1.PasswordPolicy) {
+		return false
+	}
+	if !this.UserSessionExpiration.Equal(that1.UserSessionExpiration) {
 		return false
 	}
 	return true
@@ -978,15 +1783,114 @@ func (this *PasswordPolicy) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SessionManagement) GoString() string {
+func (this *SessionMinutesDuration) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
-	s = append(s, "&tenant_configuration.SessionManagement{")
-	s = append(s, "CookieExpiry: "+fmt.Sprintf("%#v", this.CookieExpiry)+",\n")
-	s = append(s, "CookieRefreshInterval: "+fmt.Sprintf("%#v", this.CookieRefreshInterval)+",\n")
-	s = append(s, "SessionExpiry: "+fmt.Sprintf("%#v", this.SessionExpiry)+",\n")
+	s := make([]string, 0, 5)
+	s = append(s, "&tenant_configuration.SessionMinutesDuration{")
+	s = append(s, "Duration: "+fmt.Sprintf("%#v", this.Duration)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SessionHoursDuration) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&tenant_configuration.SessionHoursDuration{")
+	s = append(s, "Duration: "+fmt.Sprintf("%#v", this.Duration)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DurationByUnitSession) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&tenant_configuration.DurationByUnitSession{")
+	if this.UnitOfTime != nil {
+		s = append(s, "UnitOfTime: "+fmt.Sprintf("%#v", this.UnitOfTime)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DurationByUnitSession_Minutes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tenant_configuration.DurationByUnitSession_Minutes{` +
+		`Minutes:` + fmt.Sprintf("%#v", this.Minutes) + `}`}, ", ")
+	return s
+}
+func (this *DurationByUnitSession_Hours) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tenant_configuration.DurationByUnitSession_Hours{` +
+		`Hours:` + fmt.Sprintf("%#v", this.Hours) + `}`}, ", ")
+	return s
+}
+func (this *CookieMinutesDuration) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&tenant_configuration.CookieMinutesDuration{")
+	s = append(s, "Duration: "+fmt.Sprintf("%#v", this.Duration)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CookieHoursDuration) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&tenant_configuration.CookieHoursDuration{")
+	s = append(s, "Duration: "+fmt.Sprintf("%#v", this.Duration)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DurationByUnitCookie) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&tenant_configuration.DurationByUnitCookie{")
+	if this.UnitOfTime != nil {
+		s = append(s, "UnitOfTime: "+fmt.Sprintf("%#v", this.UnitOfTime)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DurationByUnitCookie_Minutes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tenant_configuration.DurationByUnitCookie_Minutes{` +
+		`Minutes:` + fmt.Sprintf("%#v", this.Minutes) + `}`}, ", ")
+	return s
+}
+func (this *DurationByUnitCookie_Hours) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tenant_configuration.DurationByUnitCookie_Hours{` +
+		`Hours:` + fmt.Sprintf("%#v", this.Hours) + `}`}, ", ")
+	return s
+}
+func (this *UserSessionExpiration) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&tenant_configuration.UserSessionExpiration{")
+	if this.AbsoluteTimeout != nil {
+		s = append(s, "AbsoluteTimeout: "+fmt.Sprintf("%#v", this.AbsoluteTimeout)+",\n")
+	}
+	if this.IdleTimeout != nil {
+		s = append(s, "IdleTimeout: "+fmt.Sprintf("%#v", this.IdleTimeout)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -994,19 +1898,25 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 10)
 	s = append(s, "&tenant_configuration.GlobalSpecType{")
 	if this.BasicConfiguration != nil {
 		s = append(s, "BasicConfiguration: "+fmt.Sprintf("%#v", this.BasicConfiguration)+",\n")
 	}
+	if this.TenantDetails != nil {
+		s = append(s, "TenantDetails: "+fmt.Sprintf("%#v", this.TenantDetails)+",\n")
+	}
 	if this.BruteForceDetectionSettings != nil {
 		s = append(s, "BruteForceDetectionSettings: "+fmt.Sprintf("%#v", this.BruteForceDetectionSettings)+",\n")
+	}
+	if this.BruteForceDetection != nil {
+		s = append(s, "BruteForceDetection: "+fmt.Sprintf("%#v", this.BruteForceDetection)+",\n")
 	}
 	if this.PasswordPolicy != nil {
 		s = append(s, "PasswordPolicy: "+fmt.Sprintf("%#v", this.PasswordPolicy)+",\n")
 	}
-	if this.SessionManagement != nil {
-		s = append(s, "SessionManagement: "+fmt.Sprintf("%#v", this.SessionManagement)+",\n")
+	if this.UserSessionExpiration != nil {
+		s = append(s, "UserSessionExpiration: "+fmt.Sprintf("%#v", this.UserSessionExpiration)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1015,7 +1925,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 10)
 	s = append(s, "&tenant_configuration.CreateSpecType{")
 	if this.BasicConfiguration != nil {
 		s = append(s, "BasicConfiguration: "+fmt.Sprintf("%#v", this.BasicConfiguration)+",\n")
@@ -1023,8 +1933,17 @@ func (this *CreateSpecType) GoString() string {
 	if this.BruteForceDetectionSettings != nil {
 		s = append(s, "BruteForceDetectionSettings: "+fmt.Sprintf("%#v", this.BruteForceDetectionSettings)+",\n")
 	}
+	if this.TenantDetails != nil {
+		s = append(s, "TenantDetails: "+fmt.Sprintf("%#v", this.TenantDetails)+",\n")
+	}
+	if this.BruteForceDetection != nil {
+		s = append(s, "BruteForceDetection: "+fmt.Sprintf("%#v", this.BruteForceDetection)+",\n")
+	}
 	if this.PasswordPolicy != nil {
 		s = append(s, "PasswordPolicy: "+fmt.Sprintf("%#v", this.PasswordPolicy)+",\n")
+	}
+	if this.UserSessionExpiration != nil {
+		s = append(s, "UserSessionExpiration: "+fmt.Sprintf("%#v", this.UserSessionExpiration)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1033,7 +1952,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 10)
 	s = append(s, "&tenant_configuration.ReplaceSpecType{")
 	if this.BasicConfiguration != nil {
 		s = append(s, "BasicConfiguration: "+fmt.Sprintf("%#v", this.BasicConfiguration)+",\n")
@@ -1041,8 +1960,17 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.BruteForceDetectionSettings != nil {
 		s = append(s, "BruteForceDetectionSettings: "+fmt.Sprintf("%#v", this.BruteForceDetectionSettings)+",\n")
 	}
+	if this.TenantDetails != nil {
+		s = append(s, "TenantDetails: "+fmt.Sprintf("%#v", this.TenantDetails)+",\n")
+	}
+	if this.BruteForceDetection != nil {
+		s = append(s, "BruteForceDetection: "+fmt.Sprintf("%#v", this.BruteForceDetection)+",\n")
+	}
 	if this.PasswordPolicy != nil {
 		s = append(s, "PasswordPolicy: "+fmt.Sprintf("%#v", this.PasswordPolicy)+",\n")
+	}
+	if this.UserSessionExpiration != nil {
+		s = append(s, "UserSessionExpiration: "+fmt.Sprintf("%#v", this.UserSessionExpiration)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1051,7 +1979,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 10)
 	s = append(s, "&tenant_configuration.GetSpecType{")
 	if this.BasicConfiguration != nil {
 		s = append(s, "BasicConfiguration: "+fmt.Sprintf("%#v", this.BasicConfiguration)+",\n")
@@ -1059,8 +1987,17 @@ func (this *GetSpecType) GoString() string {
 	if this.BruteForceDetectionSettings != nil {
 		s = append(s, "BruteForceDetectionSettings: "+fmt.Sprintf("%#v", this.BruteForceDetectionSettings)+",\n")
 	}
+	if this.TenantDetails != nil {
+		s = append(s, "TenantDetails: "+fmt.Sprintf("%#v", this.TenantDetails)+",\n")
+	}
+	if this.BruteForceDetection != nil {
+		s = append(s, "BruteForceDetection: "+fmt.Sprintf("%#v", this.BruteForceDetection)+",\n")
+	}
 	if this.PasswordPolicy != nil {
 		s = append(s, "PasswordPolicy: "+fmt.Sprintf("%#v", this.PasswordPolicy)+",\n")
+	}
+	if this.UserSessionExpiration != nil {
+		s = append(s, "UserSessionExpiration: "+fmt.Sprintf("%#v", this.UserSessionExpiration)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1199,7 +2136,7 @@ func (m *PasswordPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SessionManagement) Marshal() (dAtA []byte, err error) {
+func (m *SessionMinutesDuration) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1209,30 +2146,299 @@ func (m *SessionManagement) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SessionManagement) MarshalTo(dAtA []byte) (int, error) {
+func (m *SessionMinutesDuration) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SessionManagement) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SessionMinutesDuration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.SessionExpiry != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SessionExpiry))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.CookieRefreshInterval != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieRefreshInterval))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.CookieExpiry != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieExpiry))
+	if m.Duration != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Duration))
 		i--
 		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SessionHoursDuration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SessionHoursDuration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SessionHoursDuration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Duration))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DurationByUnitSession) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DurationByUnitSession) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DurationByUnitSession) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.UnitOfTime != nil {
+		{
+			size := m.UnitOfTime.Size()
+			i -= size
+			if _, err := m.UnitOfTime.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DurationByUnitSession_Minutes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DurationByUnitSession_Minutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Minutes != nil {
+		{
+			size, err := m.Minutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DurationByUnitSession_Hours) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DurationByUnitSession_Hours) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Hours != nil {
+		{
+			size, err := m.Hours.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CookieMinutesDuration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CookieMinutesDuration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMinutesDuration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Duration))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CookieHoursDuration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CookieHoursDuration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieHoursDuration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Duration))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DurationByUnitCookie) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DurationByUnitCookie) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DurationByUnitCookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.UnitOfTime != nil {
+		{
+			size := m.UnitOfTime.Size()
+			i -= size
+			if _, err := m.UnitOfTime.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DurationByUnitCookie_Minutes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DurationByUnitCookie_Minutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Minutes != nil {
+		{
+			size, err := m.Minutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DurationByUnitCookie_Hours) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DurationByUnitCookie_Hours) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Hours != nil {
+		{
+			size, err := m.Hours.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *UserSessionExpiration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UserSessionExpiration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UserSessionExpiration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.IdleTimeout != nil {
+		{
+			size, err := m.IdleTimeout.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.AbsoluteTimeout != nil {
+		{
+			size, err := m.AbsoluteTimeout.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	return len(dAtA) - i, nil
 }
@@ -1257,9 +2463,9 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.SessionManagement != nil {
+	if m.TenantDetails != nil {
 		{
-			size, err := m.SessionManagement.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.TenantDetails.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1267,7 +2473,31 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x42
+	}
+	if m.BruteForceDetection != nil {
+		{
+			size, err := m.BruteForceDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.UserSessionExpiration != nil {
+		{
+			size, err := m.UserSessionExpiration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.PasswordPolicy != nil {
 		{
@@ -1328,6 +2558,42 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TenantDetails != nil {
+		{
+			size, err := m.TenantDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.BruteForceDetection != nil {
+		{
+			size, err := m.BruteForceDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.UserSessionExpiration != nil {
+		{
+			size, err := m.UserSessionExpiration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
 	if m.PasswordPolicy != nil {
 		{
 			size, err := m.PasswordPolicy.MarshalToSizedBuffer(dAtA[:i])
@@ -1387,6 +2653,42 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TenantDetails != nil {
+		{
+			size, err := m.TenantDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.BruteForceDetection != nil {
+		{
+			size, err := m.BruteForceDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.UserSessionExpiration != nil {
+		{
+			size, err := m.UserSessionExpiration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
 	if m.PasswordPolicy != nil {
 		{
 			size, err := m.PasswordPolicy.MarshalToSizedBuffer(dAtA[:i])
@@ -1446,6 +2748,42 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TenantDetails != nil {
+		{
+			size, err := m.TenantDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.BruteForceDetection != nil {
+		{
+			size, err := m.BruteForceDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.UserSessionExpiration != nil {
+		{
+			size, err := m.UserSessionExpiration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
 	if m.PasswordPolicy != nil {
 		{
 			size, err := m.PasswordPolicy.MarshalToSizedBuffer(dAtA[:i])
@@ -1554,20 +2892,139 @@ func (m *PasswordPolicy) Size() (n int) {
 	return n
 }
 
-func (m *SessionManagement) Size() (n int) {
+func (m *SessionMinutesDuration) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.CookieExpiry != 0 {
-		n += 1 + sovTypes(uint64(m.CookieExpiry))
+	if m.Duration != 0 {
+		n += 1 + sovTypes(uint64(m.Duration))
 	}
-	if m.CookieRefreshInterval != 0 {
-		n += 1 + sovTypes(uint64(m.CookieRefreshInterval))
+	return n
+}
+
+func (m *SessionHoursDuration) Size() (n int) {
+	if m == nil {
+		return 0
 	}
-	if m.SessionExpiry != 0 {
-		n += 1 + sovTypes(uint64(m.SessionExpiry))
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		n += 1 + sovTypes(uint64(m.Duration))
+	}
+	return n
+}
+
+func (m *DurationByUnitSession) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UnitOfTime != nil {
+		n += m.UnitOfTime.Size()
+	}
+	return n
+}
+
+func (m *DurationByUnitSession_Minutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Minutes != nil {
+		l = m.Minutes.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DurationByUnitSession_Hours) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Hours != nil {
+		l = m.Hours.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CookieMinutesDuration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		n += 1 + sovTypes(uint64(m.Duration))
+	}
+	return n
+}
+
+func (m *CookieHoursDuration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		n += 1 + sovTypes(uint64(m.Duration))
+	}
+	return n
+}
+
+func (m *DurationByUnitCookie) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UnitOfTime != nil {
+		n += m.UnitOfTime.Size()
+	}
+	return n
+}
+
+func (m *DurationByUnitCookie_Minutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Minutes != nil {
+		l = m.Minutes.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DurationByUnitCookie_Hours) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Hours != nil {
+		l = m.Hours.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *UserSessionExpiration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AbsoluteTimeout != nil {
+		l = m.AbsoluteTimeout.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.IdleTimeout != nil {
+		l = m.IdleTimeout.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -1590,8 +3047,16 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.PasswordPolicy.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.SessionManagement != nil {
-		l = m.SessionManagement.Size()
+	if m.UserSessionExpiration != nil {
+		l = m.UserSessionExpiration.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.BruteForceDetection != nil {
+		l = m.BruteForceDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TenantDetails != nil {
+		l = m.TenantDetails.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -1615,6 +3080,18 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.PasswordPolicy.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.UserSessionExpiration != nil {
+		l = m.UserSessionExpiration.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.BruteForceDetection != nil {
+		l = m.BruteForceDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TenantDetails != nil {
+		l = m.TenantDetails.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1636,6 +3113,18 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.PasswordPolicy.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.UserSessionExpiration != nil {
+		l = m.UserSessionExpiration.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.BruteForceDetection != nil {
+		l = m.BruteForceDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TenantDetails != nil {
+		l = m.TenantDetails.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1655,6 +3144,18 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.PasswordPolicy != nil {
 		l = m.PasswordPolicy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.UserSessionExpiration != nil {
+		l = m.UserSessionExpiration.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.BruteForceDetection != nil {
+		l = m.BruteForceDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TenantDetails != nil {
+		l = m.TenantDetails.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -1703,14 +3204,113 @@ func (this *PasswordPolicy) String() string {
 	}, "")
 	return s
 }
-func (this *SessionManagement) String() string {
+func (this *SessionMinutesDuration) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SessionManagement{`,
-		`CookieExpiry:` + fmt.Sprintf("%v", this.CookieExpiry) + `,`,
-		`CookieRefreshInterval:` + fmt.Sprintf("%v", this.CookieRefreshInterval) + `,`,
-		`SessionExpiry:` + fmt.Sprintf("%v", this.SessionExpiry) + `,`,
+	s := strings.Join([]string{`&SessionMinutesDuration{`,
+		`Duration:` + fmt.Sprintf("%v", this.Duration) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SessionHoursDuration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SessionHoursDuration{`,
+		`Duration:` + fmt.Sprintf("%v", this.Duration) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DurationByUnitSession) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DurationByUnitSession{`,
+		`UnitOfTime:` + fmt.Sprintf("%v", this.UnitOfTime) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DurationByUnitSession_Minutes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DurationByUnitSession_Minutes{`,
+		`Minutes:` + strings.Replace(fmt.Sprintf("%v", this.Minutes), "SessionMinutesDuration", "SessionMinutesDuration", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DurationByUnitSession_Hours) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DurationByUnitSession_Hours{`,
+		`Hours:` + strings.Replace(fmt.Sprintf("%v", this.Hours), "SessionHoursDuration", "SessionHoursDuration", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMinutesDuration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMinutesDuration{`,
+		`Duration:` + fmt.Sprintf("%v", this.Duration) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieHoursDuration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieHoursDuration{`,
+		`Duration:` + fmt.Sprintf("%v", this.Duration) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DurationByUnitCookie) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DurationByUnitCookie{`,
+		`UnitOfTime:` + fmt.Sprintf("%v", this.UnitOfTime) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DurationByUnitCookie_Minutes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DurationByUnitCookie_Minutes{`,
+		`Minutes:` + strings.Replace(fmt.Sprintf("%v", this.Minutes), "CookieMinutesDuration", "CookieMinutesDuration", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DurationByUnitCookie_Hours) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DurationByUnitCookie_Hours{`,
+		`Hours:` + strings.Replace(fmt.Sprintf("%v", this.Hours), "CookieHoursDuration", "CookieHoursDuration", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UserSessionExpiration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UserSessionExpiration{`,
+		`AbsoluteTimeout:` + strings.Replace(this.AbsoluteTimeout.String(), "DurationByUnitSession", "DurationByUnitSession", 1) + `,`,
+		`IdleTimeout:` + strings.Replace(this.IdleTimeout.String(), "DurationByUnitCookie", "DurationByUnitCookie", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1723,7 +3323,9 @@ func (this *GlobalSpecType) String() string {
 		`BasicConfiguration:` + strings.Replace(this.BasicConfiguration.String(), "BasicConfiguration", "BasicConfiguration", 1) + `,`,
 		`BruteForceDetectionSettings:` + strings.Replace(this.BruteForceDetectionSettings.String(), "BruteForceDetectionSettings", "BruteForceDetectionSettings", 1) + `,`,
 		`PasswordPolicy:` + strings.Replace(this.PasswordPolicy.String(), "PasswordPolicy", "PasswordPolicy", 1) + `,`,
-		`SessionManagement:` + strings.Replace(this.SessionManagement.String(), "SessionManagement", "SessionManagement", 1) + `,`,
+		`UserSessionExpiration:` + strings.Replace(this.UserSessionExpiration.String(), "UserSessionExpiration", "UserSessionExpiration", 1) + `,`,
+		`BruteForceDetection:` + strings.Replace(this.BruteForceDetection.String(), "BruteForceDetectionSettings", "BruteForceDetectionSettings", 1) + `,`,
+		`TenantDetails:` + strings.Replace(this.TenantDetails.String(), "BasicConfiguration", "BasicConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1736,6 +3338,9 @@ func (this *CreateSpecType) String() string {
 		`BasicConfiguration:` + strings.Replace(this.BasicConfiguration.String(), "BasicConfiguration", "BasicConfiguration", 1) + `,`,
 		`BruteForceDetectionSettings:` + strings.Replace(this.BruteForceDetectionSettings.String(), "BruteForceDetectionSettings", "BruteForceDetectionSettings", 1) + `,`,
 		`PasswordPolicy:` + strings.Replace(this.PasswordPolicy.String(), "PasswordPolicy", "PasswordPolicy", 1) + `,`,
+		`UserSessionExpiration:` + strings.Replace(this.UserSessionExpiration.String(), "UserSessionExpiration", "UserSessionExpiration", 1) + `,`,
+		`BruteForceDetection:` + strings.Replace(this.BruteForceDetection.String(), "BruteForceDetectionSettings", "BruteForceDetectionSettings", 1) + `,`,
+		`TenantDetails:` + strings.Replace(this.TenantDetails.String(), "BasicConfiguration", "BasicConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1748,6 +3353,9 @@ func (this *ReplaceSpecType) String() string {
 		`BasicConfiguration:` + strings.Replace(this.BasicConfiguration.String(), "BasicConfiguration", "BasicConfiguration", 1) + `,`,
 		`BruteForceDetectionSettings:` + strings.Replace(this.BruteForceDetectionSettings.String(), "BruteForceDetectionSettings", "BruteForceDetectionSettings", 1) + `,`,
 		`PasswordPolicy:` + strings.Replace(this.PasswordPolicy.String(), "PasswordPolicy", "PasswordPolicy", 1) + `,`,
+		`UserSessionExpiration:` + strings.Replace(this.UserSessionExpiration.String(), "UserSessionExpiration", "UserSessionExpiration", 1) + `,`,
+		`BruteForceDetection:` + strings.Replace(this.BruteForceDetection.String(), "BruteForceDetectionSettings", "BruteForceDetectionSettings", 1) + `,`,
+		`TenantDetails:` + strings.Replace(this.TenantDetails.String(), "BasicConfiguration", "BasicConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1760,6 +3368,9 @@ func (this *GetSpecType) String() string {
 		`BasicConfiguration:` + strings.Replace(this.BasicConfiguration.String(), "BasicConfiguration", "BasicConfiguration", 1) + `,`,
 		`BruteForceDetectionSettings:` + strings.Replace(this.BruteForceDetectionSettings.String(), "BruteForceDetectionSettings", "BruteForceDetectionSettings", 1) + `,`,
 		`PasswordPolicy:` + strings.Replace(this.PasswordPolicy.String(), "PasswordPolicy", "PasswordPolicy", 1) + `,`,
+		`UserSessionExpiration:` + strings.Replace(this.UserSessionExpiration.String(), "UserSessionExpiration", "UserSessionExpiration", 1) + `,`,
+		`BruteForceDetection:` + strings.Replace(this.BruteForceDetection.String(), "BruteForceDetectionSettings", "BruteForceDetectionSettings", 1) + `,`,
+		`TenantDetails:` + strings.Replace(this.TenantDetails.String(), "BasicConfiguration", "BasicConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2135,7 +3746,7 @@ func (m *PasswordPolicy) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SessionManagement) Unmarshal(dAtA []byte) error {
+func (m *SessionMinutesDuration) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2158,17 +3769,17 @@ func (m *SessionManagement) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SessionManagement: wiretype end group for non-group")
+			return fmt.Errorf("proto: SessionMinutesDuration: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SessionManagement: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SessionMinutesDuration: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieExpiry", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
 			}
-			m.CookieExpiry = 0
+			m.Duration = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2178,16 +3789,141 @@ func (m *SessionManagement) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CookieExpiry |= uint32(b&0x7F) << shift
+				m.Duration |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SessionHoursDuration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SessionHoursDuration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SessionHoursDuration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
+			}
+			m.Duration = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Duration |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DurationByUnitSession) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DurationByUnitSession: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DurationByUnitSession: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieRefreshInterval", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Minutes", wireType)
 			}
-			m.CookieRefreshInterval = 0
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2197,16 +3933,32 @@ func (m *SessionManagement) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CookieRefreshInterval |= uint32(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SessionMinutesDuration{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UnitOfTime = &DurationByUnitSession_Minutes{v}
+			iNdEx = postIndex
 		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SessionExpiry", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hours", wireType)
 			}
-			m.SessionExpiry = 0
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2216,11 +3968,419 @@ func (m *SessionManagement) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SessionExpiry |= uint32(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SessionHoursDuration{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UnitOfTime = &DurationByUnitSession_Hours{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CookieMinutesDuration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CookieMinutesDuration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CookieMinutesDuration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
+			}
+			m.Duration = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Duration |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CookieHoursDuration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CookieHoursDuration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CookieHoursDuration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
+			}
+			m.Duration = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Duration |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DurationByUnitCookie) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DurationByUnitCookie: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DurationByUnitCookie: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Minutes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CookieMinutesDuration{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UnitOfTime = &DurationByUnitCookie_Minutes{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hours", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CookieHoursDuration{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UnitOfTime = &DurationByUnitCookie_Hours{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UserSessionExpiration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UserSessionExpiration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UserSessionExpiration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AbsoluteTimeout", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AbsoluteTimeout == nil {
+				m.AbsoluteTimeout = &DurationByUnitSession{}
+			}
+			if err := m.AbsoluteTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IdleTimeout", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.IdleTimeout == nil {
+				m.IdleTimeout = &DurationByUnitCookie{}
+			}
+			if err := m.IdleTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2382,9 +4542,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SessionManagement", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field UserSessionExpiration", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2411,10 +4571,82 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.SessionManagement == nil {
-				m.SessionManagement = &SessionManagement{}
+			if m.UserSessionExpiration == nil {
+				m.UserSessionExpiration = &UserSessionExpiration{}
 			}
-			if err := m.SessionManagement.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.UserSessionExpiration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BruteForceDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BruteForceDetection == nil {
+				m.BruteForceDetection = &BruteForceDetectionSettings{}
+			}
+			if err := m.BruteForceDetection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TenantDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TenantDetails == nil {
+				m.TenantDetails = &BasicConfiguration{}
+			}
+			if err := m.TenantDetails.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2579,6 +4811,114 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserSessionExpiration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UserSessionExpiration == nil {
+				m.UserSessionExpiration = &UserSessionExpiration{}
+			}
+			if err := m.UserSessionExpiration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BruteForceDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BruteForceDetection == nil {
+				m.BruteForceDetection = &BruteForceDetectionSettings{}
+			}
+			if err := m.BruteForceDetection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TenantDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TenantDetails == nil {
+				m.TenantDetails = &BasicConfiguration{}
+			}
+			if err := m.TenantDetails.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2740,6 +5080,114 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserSessionExpiration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UserSessionExpiration == nil {
+				m.UserSessionExpiration = &UserSessionExpiration{}
+			}
+			if err := m.UserSessionExpiration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BruteForceDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BruteForceDetection == nil {
+				m.BruteForceDetection = &BruteForceDetectionSettings{}
+			}
+			if err := m.BruteForceDetection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TenantDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TenantDetails == nil {
+				m.TenantDetails = &BasicConfiguration{}
+			}
+			if err := m.TenantDetails.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2898,6 +5346,114 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				m.PasswordPolicy = &PasswordPolicy{}
 			}
 			if err := m.PasswordPolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserSessionExpiration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UserSessionExpiration == nil {
+				m.UserSessionExpiration = &UserSessionExpiration{}
+			}
+			if err := m.UserSessionExpiration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BruteForceDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BruteForceDetection == nil {
+				m.BruteForceDetection = &BruteForceDetectionSettings{}
+			}
+			if err := m.BruteForceDetection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TenantDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TenantDetails == nil {
+				m.TenantDetails = &BasicConfiguration{}
+			}
+			if err := m.TenantDetails.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

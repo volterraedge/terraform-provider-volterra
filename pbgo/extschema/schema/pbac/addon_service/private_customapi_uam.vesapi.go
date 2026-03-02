@@ -42,7 +42,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCCanSubscribe(ctx context.Context, yaml
 	rsp, err := c.grpcClient.CanSubscribe(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCSetSubscription(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetSubscriptionReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCSetSubscription(ctx context.Context, y
 	rsp, err := c.grpcClient.SetSubscription(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCSetSubscriptionRestricted(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetSubscriptionReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CanSubscribe"] = ccl.doRPCCanSubscribe
-
 	rpcFns["SetSubscription"] = ccl.doRPCSetSubscription
-
 	rpcFns["SetSubscriptionRestricted"] = ccl.doRPCSetSubscriptionRestricted
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -185,7 +179,6 @@ func (c *CustomPrivateAPIRestClient) doRPCCanSubscribe(ctx context.Context, call
 	pbRsp := &CanSubscribeResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.pbac.addon_service.CanSubscribeResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -193,7 +186,6 @@ func (c *CustomPrivateAPIRestClient) doRPCCanSubscribe(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCSetSubscription(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -270,7 +262,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSetSubscription(ctx context.Context, c
 	pbRsp := &SetSubscriptionResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.pbac.addon_service.SetSubscriptionResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -278,7 +269,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSetSubscription(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCSetSubscriptionRestricted(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -355,7 +345,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSetSubscriptionRestricted(ctx context.
 	pbRsp := &SetSubscriptionResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.pbac.addon_service.SetSubscriptionResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -389,13 +378,9 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CanSubscribe"] = ccl.doRPCCanSubscribe
-
 	rpcFns["SetSubscription"] = ccl.doRPCSetSubscription
-
 	rpcFns["SetSubscriptionRestricted"] = ccl.doRPCSetSubscriptionRestricted
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -850,7 +835,7 @@ var CustomPrivateAPISwaggerJSON string = `{
             "properties": {
                 "addon_service": {
                     "type": "string",
-                    "description": " Name of the addon_service \n\nExample: - \"addon-service-1\"-",
+                    "description": " Name of the addon_service\n\nExample: - \"addon-service-1\"-",
                     "title": "addon_service",
                     "x-displayname": "Addon Service",
                     "x-ves-example": "addon-service-1"
@@ -896,7 +881,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 },
                 "addon_service": {
                     "type": "string",
-                    "description": " Name of the addon_service \n\nExample: - \"addon-service-1\"-",
+                    "description": " Name of the addon_service\n\nExample: - \"addon-service-1\"-",
                     "title": "addon_service",
                     "x-displayname": "Addon Service",
                     "x-ves-example": "addon-service-1"

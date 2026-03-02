@@ -356,7 +356,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -897,22 +896,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	tenant := server.TenantFromContext(ctx)
 	rsrcReq := &server.ResourceGetRequest{IsPublic: true, Tenant: tenant, Namespace: req.GetNamespace(), Name: req.GetName()}
 	switch req.ResponseFormat {
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -971,7 +964,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1069,7 +1061,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1081,7 +1072,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1094,7 +1084,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1116,7 +1105,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1131,19 +1119,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1175,7 +1159,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1195,7 +1178,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1205,7 +1187,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.site.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1217,7 +1198,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1226,9 +1206,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1237,7 +1215,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -1261,7 +1238,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Site",
-        "description": "Site represent physical/cloud cluster of volterra processing elements. There are two types of sites currently.\n\n   Regional Edge (RE)\n\n    Regional Edge sites are network edge sites owned and operated by volterra edge cloud. RE can be used to\n    host VIPs, run API gateway or any application at network edge.\n\n   Customer Edge (CE)\n\n    Customer Edge sites are edge sites owned by customer and operated by volterra cloud. CE can be as application gateway\n    to connect applications in multiple clusters or clouds. CE can also run applications at customer premise.\n   \n   Nginx One\n     Nginx One sites are sites owned and operated by Nginx One SaaS Console. Nginx One site can be used to configure service\n     discovery which allows customer to bring their NGINX inventory visibility into the core XC workspaces.\n\nSite configuration contains the information like\n\n    Site locations\n    parameters to override fleet config\n    IP Addresses to be used by automatic vip assignments for default networks\n    etc\n\n Sites are automatically created by registration mechanism. They can be modified to add location or description and they can be deleted.",
+        "description": "Site represent physical/cloud cluster of volterra processing elements. There are two types of sites currently.\n\n   Regional Edge (RE)\n\n    Regional Edge sites are network edge sites owned and operated by volterra edge cloud. RE can be used to\n    host VIPs, run API gateway or any application at network edge.\n\n   Customer Edge (CE)\n\n    Customer Edge sites are edge sites owned by customer and operated by volterra cloud. CE can be as application gateway\n    to connect applications in multiple clusters or clouds. CE can also run applications at customer premise.\n\n   Nginx One\n     Nginx One sites are sites owned and operated by Nginx One SaaS Console. Nginx One site can be used to configure service\n     discovery which allows customer to bring their NGINX inventory visibility into the core XC workspaces.\n\nSite configuration contains the information like\n\n    Site locations\n    parameters to override fleet config\n    IP Addresses to be used by automatic vip assignments for default networks\n    etc\n\n Sites are automatically created by registration mechanism. They can be modified to add location or description and they can be deleted.",
         "version": "version not set"
     },
     "schemes": [
@@ -1803,10 +1780,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -2566,7 +2543,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_MANAGEMENT is used for management purposes",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -2581,7 +2558,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
                 "VIRTUAL_NETWORK_IP_FABRIC",
-                "VIRTUAL_NETWORK_SEGMENT"
+                "VIRTUAL_NETWORK_SEGMENT",
+                "VIRTUAL_NETWORK_MANAGEMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -2704,8 +2682,8 @@ var APISwaggerJSON string = `{
                 },
                 "inside_nameserver": {
                     "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "DNS Server for Inside Network",
+                    "description": " Optional IPv4 DNS server to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "IPv4 DNS Server for Inside Network",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -2713,8 +2691,8 @@ var APISwaggerJSON string = `{
                 },
                 "inside_nameserver_v6": {
                     "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "description": " Optional IPv6 DNS server to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "IPv6 DNS Server for Inside Network",
                     "x-ves-example": "1001::1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6": "true"
@@ -2787,8 +2765,8 @@ var APISwaggerJSON string = `{
                 },
                 "outside_nameserver": {
                     "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "DNS Server for Outside Network",
+                    "description": " Optional IPv4 DNS server to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "IPv4 DNS Server for Outside Network",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -2796,8 +2774,8 @@ var APISwaggerJSON string = `{
                 },
                 "outside_nameserver_v6": {
                     "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "description": " Optional IPv6 DNS server to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "IPv6 DNS Server for Outside Network",
                     "x-ves-example": "1001::1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6": "true"
@@ -3026,8 +3004,8 @@ var APISwaggerJSON string = `{
                 },
                 "inside_nameserver": {
                     "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "DNS Server for Inside Network",
+                    "description": " Optional IPv4 DNS server to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "IPv4 DNS Server for Inside Network",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -3035,8 +3013,8 @@ var APISwaggerJSON string = `{
                 },
                 "inside_nameserver_v6": {
                     "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "description": " Optional IPv6 DNS server to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "IPv6 DNS Server for Inside Network",
                     "x-ves-example": "1001::1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6": "true"
@@ -3073,8 +3051,8 @@ var APISwaggerJSON string = `{
                 },
                 "outside_nameserver": {
                     "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "DNS Server for Outside Network",
+                    "description": " Optional IPv4 DNS server to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "IPv4 DNS Server for Outside Network",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -3082,8 +3060,8 @@ var APISwaggerJSON string = `{
                 },
                 "outside_nameserver_v6": {
                     "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "description": " Optional IPv6 DNS server to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "IPv6 DNS Server for Outside Network",
                     "x-ves-example": "1001::1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6": "true"
@@ -3169,6 +3147,467 @@ var APISwaggerJSON string = `{
                     "description": " Desired F5XC software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
                     "x-displayname": "Software Version",
                     "x-ves-example": "value"
+                }
+            }
+        },
+        "siteAWSElasticIPAllocationStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Elastic IP Allocation\"\nAWS Elastic IP Allocation",
+            "title": "AWS Elastic IP",
+            "properties": {
+                "allocation_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Allocation ID\"\nAllocation ID",
+                    "title": "Allocation ID"
+                },
+                "association_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Association ID\"\nAssociation ID",
+                    "title": "Association ID"
+                },
+                "private_address": {
+                    "type": "string",
+                    "description": "x-displayName: \"Private IP address\"\nPrivate IP address",
+                    "title": "Private IP address"
+                },
+                "public_address": {
+                    "type": "string",
+                    "description": "x-displayName: \"Allocated IPv4 address\"\nAllocated IPv4 address",
+                    "title": "Allocated IPv4 address"
+                },
+                "state": {
+                    "description": "x-displayName: \"Elastic IP State\"\nElastic IP State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                }
+            }
+        },
+        "siteAWSInstanceStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Instance Status Type\"\nAWS Instance Status Type",
+            "title": "AWS Instance Status Type",
+            "properties": {
+                "ami_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"AMI ID\"\nAMI ID",
+                    "title": "AMI ID"
+                },
+                "host_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"HostName\"\nHostname",
+                    "title": "HostName"
+                },
+                "instance_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Instance ID\"\nInstance ID",
+                    "title": "Instance ID"
+                },
+                "instance_type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Instance Type\"\nInstance Type",
+                    "title": "Instance Type"
+                },
+                "interface_status": {
+                    "type": "array",
+                    "description": "x-displayName: \"Network Interface Status\"\nNetwork Interface Status",
+                    "title": "Network Interface Status",
+                    "items": {
+                        "$ref": "#/definitions/siteAWSNetworkInterfaceStatusType"
+                    }
+                },
+                "state": {
+                    "description": "x-displayName: \"EC2 Instance State\"\nEC2 Instance State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "volume_status": {
+                    "description": "x-displayName: \"Instance Volume\"\nInstance Volume",
+                    "title": "Instance Volume",
+                    "$ref": "#/definitions/siteAWSVolumeStatusType"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                }
+            }
+        },
+        "siteAWSNetworkInterfaceStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Network Interface Status\"\nAWS Network Interface Status Type",
+            "title": "AWS Network Interface Status Type",
+            "properties": {
+                "attachment_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Attachment ID\"\nAttachment ID",
+                    "title": "Attachment ID"
+                },
+                "availablity_zone": {
+                    "type": "string",
+                    "description": "x-displayName: \"Availablity Zone\"\nAvailablity Zone",
+                    "title": "Availablity Zone"
+                },
+                "elastic_ip_status": {
+                    "description": "Elastic IP Status",
+                    "title": "Elastic IP Status\nx-displayName: \"Elastic IP Status\"",
+                    "$ref": "#/definitions/siteAWSElasticIPAllocationStatusType"
+                },
+                "interface_type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Interface type\"",
+                    "title": "Interface type"
+                },
+                "network_interface_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Network Interface ID\"\nNetwork Interface ID",
+                    "title": "Network Interface ID"
+                },
+                "network_type": {
+                    "description": "x-displayName: \"NetworkType\"\nNetwork Type",
+                    "title": "Network Type",
+                    "$ref": "#/definitions/siteNetworkType"
+                },
+                "private_ip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Private IP\"\nPrivate IP",
+                    "title": "Private IP"
+                },
+                "security_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"Security Group\"\nSecurity Group",
+                    "title": "Security Group"
+                },
+                "state": {
+                    "description": "x-displayName: \"Network Interface State\"\nNetwork Interface State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "subnet_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Subnet ID\"\nSubnet ID",
+                    "title": "Subnet ID"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                }
+            }
+        },
+        "siteAWSOrchestrationStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Site Orchestration Status Type\"\nAWS Managed Sites Orchestration Status",
+            "title": "AWS Site Orchestration Status Type",
+            "properties": {
+                "instance_status": {
+                    "type": "array",
+                    "description": "x-displayName: \"AWS Instance Status\"\nAWS Instance Status",
+                    "title": "Instance Status",
+                    "items": {
+                        "$ref": "#/definitions/siteAWSInstanceStatusType"
+                    }
+                },
+                "site_vpc_status": {
+                    "description": "x-displayName: \"Site VPC Status\"\nAWS Site VPC Status",
+                    "title": "AWS Site VPC Status",
+                    "$ref": "#/definitions/siteAWSSiteVPCStatusType"
+                },
+                "subnet_status": {
+                    "type": "array",
+                    "description": "x-displayName: \"Subnet Status\"\nAWS Subnet Status",
+                    "title": "Subnet Status",
+                    "items": {
+                        "$ref": "#/definitions/siteAWSSubnetStatusType"
+                    }
+                },
+                "transit_gateway_status": {
+                    "description": "x-displayName: \"Transit Gateway Status\"\nTransit Gateway Status",
+                    "title": "Transit Gateway Status",
+                    "$ref": "#/definitions/siteAWSTransitGatewayStatus"
+                }
+            }
+        },
+        "siteAWSRouteTableStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Route Table ID\"\nAWS route table ID",
+            "title": "AWS Route Table ID",
+            "properties": {
+                "route_table_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Route Table ID\"\nRoute Table ID",
+                    "title": "Route Table ID"
+                },
+                "state": {
+                    "description": "x-displayName: \"Route Table State\"",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "subnet_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Subnet ID\"\nSubnet ID",
+                    "title": "Subnet ID"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                }
+            }
+        },
+        "siteAWSSiteVPCStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"Site VPC Status\"\nAWS Site VPC Status",
+            "title": "AWS Site VPC Status",
+            "properties": {
+                "state": {
+                    "description": "x-displayName: \"Site VPC Deployment State\"",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "vpc_cidr": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC CIDR\"\nVPC CIDR",
+                    "title": "VPC CIDR"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                },
+                "vpc_owner_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC Owner ID\"\nVPC Owner ID",
+                    "title": "VPC Owner ID"
+                }
+            }
+        },
+        "siteAWSSubnetStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Subnet Status Type\"\nAWS Subnet Status Type",
+            "title": "AWS Subnet Status Type",
+            "properties": {
+                "availablity_zone": {
+                    "type": "string",
+                    "description": "x-displayName: \"Availablity Zone\"\nAvailablity Zone",
+                    "title": "Availablity Zone"
+                },
+                "cidr": {
+                    "type": "string",
+                    "description": "x-displayName: \"Subnet CIDR\"\nSubnet CIDR",
+                    "title": "CIDR"
+                },
+                "route_table": {
+                    "description": "x-displayName: \"Route Table\"\nRoute Table",
+                    "title": "Route Table",
+                    "$ref": "#/definitions/siteAWSRouteTableStatusType"
+                },
+                "state": {
+                    "description": "x-displayName: \"Subnet State\"",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "subnet_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Subnet ID\"\nSubnet ID",
+                    "title": "Subnet ID"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                }
+            }
+        },
+        "siteAWSTransitGatewayAttachmentResourceType": {
+            "type": "string",
+            "description": "x-displayName: \"AWS Transit Gateway Attachment Resource Type\"\nAWS Transit Gateway Attachment Resource Type\n\n - VPC: VPC Resource Type\n - VPN: VPN Resource Type\n - DIRECT_CONNECT_GATEWAY: Direct Connect Gateway Resource Type\n - CONNECT: Connect Resource Type\n - PEERING: Peering Resource Type\n - TGW_PEERING: TGW Peering Resource Type\n - NETWORK_FUNCTION: Network Function Resource Type",
+            "title": "AWS Transit Gateway Attachment Resource Type",
+            "enum": [
+                "VPC",
+                "VPN",
+                "DIRECT_CONNECT_GATEWAY",
+                "CONNECT",
+                "PEERING",
+                "TGW_PEERING",
+                "NETWORK_FUNCTION"
+            ],
+            "default": "VPC"
+        },
+        "siteAWSTransitGatewayAttachmentStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Transit Gateway Attachment Status Type\"\nAWS Transit Gateway Attachment Status Type",
+            "title": "AWS Transit Gateway Attachment Status Type",
+            "properties": {
+                "resource_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Attachment Resource ID\"",
+                    "title": "Attachment Resource ID"
+                },
+                "resource_owner_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Resource Owner ID\"\nResource Owner ID",
+                    "title": "Resource Owner ID"
+                },
+                "resource_type": {
+                    "description": "x-displayName: \"Resource Type\"\nResource Type",
+                    "title": "Resource Type",
+                    "$ref": "#/definitions/siteAWSTransitGatewayAttachmentResourceType"
+                },
+                "state": {
+                    "description": "x-displayName: \"Attachment State\"\nAttachment State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "tgw_attachment_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"TGW Attachment ID\"\nTGW Attachment ID",
+                    "title": "TGW Attachment ID"
+                }
+            }
+        },
+        "siteAWSTransitGatewayStatus": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Transit Gateway Status\"\nAWS Transit Gateway Status",
+            "title": "AWS Transit Gateway Status",
+            "properties": {
+                "amazon_asn": {
+                    "type": "string",
+                    "description": "x-displayName: \"Amazon ASN\"\nAmazon ASN",
+                    "title": "Amazon ASN",
+                    "format": "uint64"
+                },
+                "cidr_blocks": {
+                    "type": "array",
+                    "description": "x-displayName: \"Transit gateway CIDR blocks\"\nTransit gateway CIDR blocks",
+                    "title": "Transit gateway CIDR blocks",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "owner_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Owner ID\"\nOwner ID",
+                    "title": "Owner ID"
+                },
+                "site_vpc_attachment_state": {
+                    "description": "x-displayName: \"Site VPC Attachment State\"\nSite VPC Attachment State",
+                    "title": "Site VPC Attachment State",
+                    "$ref": "#/definitions/siteAWSTransitGatewayAttachmentStatusType"
+                },
+                "state": {
+                    "description": "x-displayName: \"Transit Gateway State\"\nNetwork Interface State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "transit_gateway_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Transit Gateway ID\"\nTransit Gateway ID",
+                    "title": "Transit Gateway ID"
+                }
+            }
+        },
+        "siteAWSVolumeEncryptionStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Volume Encryption Status Type\"\nAWS Volume Encryption Status Type",
+            "title": "AWS Volume Encryption Status Type",
+            "properties": {
+                "encrypted_enabled": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Volume Encryption Status\"\nVolume Encryption Status",
+                    "title": "Volume Encryption Status",
+                    "format": "boolean"
+                },
+                "kms_key_arn": {
+                    "type": "string",
+                    "description": "x-displayName: \"KMS Key ARN\"\nKMS Key Arn",
+                    "title": "KMS Key arn"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                }
+            }
+        },
+        "siteAWSVolumeStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Elastic Block Storage\"\nAWS Elastic Block Storage",
+            "title": "AWS Elastic Block Storage",
+            "properties": {
+                "availability_zone": {
+                    "type": "string",
+                    "description": "x-displayName: \"Availablity Zone\"\nAvailablity Zone",
+                    "title": "Availablity Zone"
+                },
+                "disk_size": {
+                    "type": "string",
+                    "description": "x-displayName: \"Disk Size\"\nDisk Size",
+                    "title": "Disk Size"
+                },
+                "encryption": {
+                    "description": "x-displayName: \"Volume Encryption\"\nVolume Encryption",
+                    "title": "Volume Encyption",
+                    "$ref": "#/definitions/siteAWSVolumeEncryptionStatusType"
+                },
+                "state": {
+                    "description": "x-displayName: \"Volume State\"\nVolume State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Volume Type\"\nVolume Type",
+                    "title": "Volume Type"
+                },
+                "volumeID": {
+                    "type": "string",
+                    "description": "x-displayName: \"Volume ID\"\nVolume ID",
+                    "title": "Volume ID"
                 }
             }
         },
@@ -3527,6 +3966,23 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "siteCloudResourceState": {
+            "type": "string",
+            "description": "x-displayName: \"Cloud Resource Deployment State\"\nCloud Resource Deployment State\n\n - RESOURCE_STATE_NONE: None\n\nx-displayName: \"None\"\nNone\n - RESOURCE_DEPLOYMENT_IN_PROGRESS: In Progress\n\nx-displayName: \"In Progress\"\nResource deployment is in flight.\n - RESOURCE_IS_AVAILABLE: Available\n\nx-displayName: \"Available\"\nResource is deployed and is in available state.\n - RESOURCE_DEPLOYMENT_HAS_FAILED: Failed\n\nx-displayName: \"Failed\"\nResource deployment has failed.\n - RESOURCE_IS_DELETING: Deleting\n\nx-displayName: \"Deleting\"\nResource being deleted\n - RESOURCE_IS_DELETED: Deleted\n\nx-displayName: \"Deleted\"\nResource is deleted\n - RESOURCE_DELETION_FAILED: Resource Failed to Delete\n\nx-displayName: \"Failed to Delete\"\nFailed to Delete\n - INVALID_RESOURCE: INVALID\n\nx-displayName: \"INVALID\"\nResource is invalid and does not exists on the cloud\n - VALID_RESOURCE: VALID\n\nx-displayName: \"VALID\"\nResource is valid and found on the cloud",
+            "title": "Cloud Resource Deployment State",
+            "enum": [
+                "RESOURCE_STATE_NONE",
+                "RESOURCE_DEPLOYMENT_IN_PROGRESS",
+                "RESOURCE_IS_AVAILABLE",
+                "RESOURCE_DEPLOYMENT_HAS_FAILED",
+                "RESOURCE_IS_DELETING",
+                "RESOURCE_IS_DELETED",
+                "RESOURCE_DELETION_FAILED",
+                "INVALID_RESOURCE",
+                "VALID_RESOURCE"
+            ],
+            "default": "RESOURCE_STATE_NONE"
         },
         "siteCoordinates": {
             "type": "object",
@@ -4458,6 +4914,17 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteNetworkType": {
+            "type": "string",
+            "description": "x-displayName \"Network Type\"\nNetwork Type\n\n - SLO: x-displayName \"SLO\"\nSLO Network\n - SLI: x-displayName \"SLI\"\nSLI Network Type\n - SEGMENT: x-displayName \"Segment\"\nSegment Network Type",
+            "title": "Network Type",
+            "enum": [
+                "SLO",
+                "SLI",
+                "SEGMENT"
+            ],
+            "default": "SLO"
+        },
         "siteNodeInfo": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.site.NodeInfo",
@@ -4585,6 +5052,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                }
+            }
+        },
+        "siteOrchestrationStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"Site Orchestration Status Type\"\nManaged Sites Orchestration Status",
+            "title": "Site Orchestration Status Type",
+            "properties": {
+                "aws_orchestration_status": {
+                    "description": "x-displayName: \"AWS Site orchestration status\"\nAWS Site orchestration status",
+                    "title": "AWS Site orchestration status",
+                    "$ref": "#/definitions/siteAWSOrchestrationStatusType"
                 }
             }
         },
@@ -4997,7 +5476,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteState": {
             "type": "string",
-            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.\nSite is in failed state for prolong period of time. Site Status Objects contain more details.\nSite resources are waiting to be updated. Check Status objects for more details\nAn Error occurred while updating cloud resources for F5XC managed site. Check Status objects for more details.\nSite resources orchestration is queued for F5XC managed site. Check Status objects for more details\nSite resources update is queued for F5XC managed site. Check Status objects for more details\nSite resources delete is queued for F5XC managed site. Check Status objects for more details",
             "title": "SiteState",
             "enum": [
                 "ONLINE",
@@ -5017,11 +5496,35 @@ var APISwaggerJSON string = `{
                 "ERROR_DELETING_CLOUD_RESOURCES",
                 "VALIDATION_IN_PROGRESS",
                 "VALIDATION_SUCCESS",
-                "VALIDATION_FAILED"
+                "VALIDATION_FAILED",
+                "FAILED_INACTIVE",
+                "UPDATING_CLOUD_RESOURCES",
+                "ERROR_UPDATING_CLOUD_RESOURCES",
+                "ORCHESTRATION_QUEUED",
+                "UPDATE_QUEUED",
+                "DELETE_QUEUED"
             ],
             "default": "ONLINE",
             "x-displayname": "Site State",
             "x-ves-proto-enum": "ves.io.schema.site.SiteState"
+        },
+        "siteSiteStateStatus": {
+            "type": "object",
+            "description": "x-displayName: \"Site State Status\"\nCurrent site state status",
+            "title": "Site State Status",
+            "properties": {
+                "site_state": {
+                    "description": "x-displayName: \"Site State\"\nSite state defines its state machine and in which operational phase it is\nTODO: WIP. Not fully in use yet. To migrate usage of site state from schema.Site object to SiteStateStatus",
+                    "title": "site_state",
+                    "$ref": "#/definitions/siteSiteState"
+                },
+                "site_state_update_timestamp": {
+                    "type": "string",
+                    "description": "x-displayName: \"Site state update timestamp\"\nTimestamp of site state last change",
+                    "title": "Timestamp for site state last change",
+                    "format": "date-time"
+                }
+            }
         },
         "siteSiteSubtype": {
             "type": "string",
@@ -6103,7 +6606,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5 Orchestrated Routing"
                 },
                 "manual_routing": {
-                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments.",
                     "title": "Manual Routing",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Manual Routing"
@@ -6423,6 +6926,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsSiteError": {
+            "type": "object",
+            "description": "x-displayName: \"Site Error\"\nSite Error",
+            "title": "Site Error",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": "x-example: \"invalid VPC ID\"\nx-displayName: \"Error Description\"\nError Description",
+                    "title": "Error Description"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": "x-example: \"update VPC ID\"\nx-displayName: \"Suggested Action\"\nSuggested Action",
+                    "title": "Suggested Action"
+                }
+            }
+        },
         "viewsSpecificRE": {
             "type": "object",
             "description": "Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs.",
@@ -6430,6 +6950,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specific RE",
             "x-ves-proto-message": "ves.io.schema.views.SpecificRE",
             "properties": {
+                "backup_re": {
+                    "type": "string",
+                    "description": " Select backup RE for this site, cannot be the same as Primary RE.",
+                    "title": "Backup RE Geography",
+                    "x-displayname": "Backup RE Geography"
+                },
                 "primary_re": {
                     "type": "string",
                     "description": " Select primary RE for this site.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",

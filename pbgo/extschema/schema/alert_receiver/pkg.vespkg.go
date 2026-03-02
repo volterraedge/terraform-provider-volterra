@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.alert_receiver.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.alert_receiver.Object"] = ObjectValidator()
 	vr["ves.io.schema.alert_receiver.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.alert_receiver.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.alert_receiver.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.alert_receiver.DeleteRequest"] = DeleteRequestValidator()
@@ -28,14 +26,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.alert_receiver.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.alert_receiver.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.alert_receiver.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.alert_receiver.ConfirmAlertReceiverRequest"] = ConfirmAlertReceiverRequestValidator()
 	vr["ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse"] = ConfirmAlertReceiverResponseValidator()
 	vr["ves.io.schema.alert_receiver.TestAlertReceiverRequest"] = TestAlertReceiverRequestValidator()
 	vr["ves.io.schema.alert_receiver.TestAlertReceiverResponse"] = TestAlertReceiverResponseValidator()
 	vr["ves.io.schema.alert_receiver.VerifyAlertReceiverRequest"] = VerifyAlertReceiverRequestValidator()
 	vr["ves.io.schema.alert_receiver.VerifyAlertReceiverResponse"] = VerifyAlertReceiverResponseValidator()
-
 	vr["ves.io.schema.alert_receiver.AuthToken"] = AuthTokenValidator()
 	vr["ves.io.schema.alert_receiver.CACertificateObj"] = CACertificateObjValidator()
 	vr["ves.io.schema.alert_receiver.ClientCertificateObj"] = ClientCertificateObjValidator()
@@ -53,7 +49,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.alert_receiver.TLSConfig"] = TLSConfigValidator()
 	vr["ves.io.schema.alert_receiver.UpstreamTlsValidationContext"] = UpstreamTlsValidationContextValidator()
 	vr["ves.io.schema.alert_receiver.WebhookConfig"] = WebhookConfigValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -65,11 +60,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.alert_receiver.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.alert_receiver.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.alert_receiver.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.alert_receiver.API.Create"] = []string{
 		"spec.opsgenie.api_key.blindfold_secret_info_internal",
 		"spec.opsgenie.api_key.secret_encoding_type",
@@ -96,9 +89,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.webhook.url.vault_secret_info",
 		"spec.webhook.url.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.API.Create"] = "ves.io.schema.alert_receiver.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.alert_receiver.API.Replace"] = []string{
 		"spec.opsgenie.api_key.blindfold_secret_info_internal",
 		"spec.opsgenie.api_key.secret_encoding_type",
@@ -125,24 +116,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.webhook.url.vault_secret_info",
 		"spec.webhook.url.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.API.Replace"] = "ves.io.schema.alert_receiver.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.alert_receiver.API"] = "config"
 	sm["ves.io.schema.alert_receiver.CustomAPI"] = "alert"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -151,9 +137,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.alert_receiver.Object"] = APISwaggerJSON
@@ -167,16 +151,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.alert_receiver.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.alert_receiver.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.alert_receiver.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.alert_receiver.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.alert_receiver.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.alert_receiver.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -187,22 +166,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.alert_receiver.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

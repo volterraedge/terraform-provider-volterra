@@ -42,7 +42,6 @@ func (c *PrivateCustomAPIGrpcClient) doRPCRemoveScanStatus(ctx context.Context, 
 	rsp, err := c.grpcClient.RemoveScanStatus(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PrivateCustomAPIGrpcClient) doRPCUpdateScanStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateScanStatusReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewPrivateCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["RemoveScanStatus"] = ccl.doRPCRemoveScanStatus
-
 	rpcFns["UpdateScanStatus"] = ccl.doRPCUpdateScanStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -176,7 +172,6 @@ func (c *PrivateCustomAPIRestClient) doRPCRemoveScanStatus(ctx context.Context, 
 	pbRsp := &RemoveScanStatusResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_sec.api_crawler.RemoveScanStatusResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -184,7 +179,6 @@ func (c *PrivateCustomAPIRestClient) doRPCRemoveScanStatus(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *PrivateCustomAPIRestClient) doRPCUpdateScanStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -265,7 +259,6 @@ func (c *PrivateCustomAPIRestClient) doRPCUpdateScanStatus(ctx context.Context, 
 	pbRsp := &UpdateScanStatusResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_sec.api_crawler.UpdateScanStatusResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -299,11 +292,8 @@ func NewPrivateCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["RemoveScanStatus"] = ccl.doRPCRemoveScanStatus
-
 	rpcFns["UpdateScanStatus"] = ccl.doRPCUpdateScanStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCFleetDefaultConfigDependencyMap(ctx context.C
 	rsp, err := c.grpcClient.FleetDefaultConfigDependencyMap(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetDefaultFleetConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetDefaultFleetConfigRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["FleetDefaultConfigDependencyMap"] = ccl.doRPCFleetDefaultConfigDependencyMap
-
 	rpcFns["GetDefaultFleetConfig"] = ccl.doRPCGetDefaultFleetConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -174,7 +170,6 @@ func (c *CustomAPIRestClient) doRPCFleetDefaultConfigDependencyMap(ctx context.C
 	pbRsp := &FleetDefaultConfigDependencyMapRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.fleet_default_config.FleetDefaultConfigDependencyMapRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -182,7 +177,6 @@ func (c *CustomAPIRestClient) doRPCFleetDefaultConfigDependencyMap(ctx context.C
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetDefaultFleetConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -258,7 +252,6 @@ func (c *CustomAPIRestClient) doRPCGetDefaultFleetConfig(ctx context.Context, ca
 	pbRsp := &GetDefaultFleetConfigResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.fleet_default_config.GetDefaultFleetConfigResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -292,11 +285,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["FleetDefaultConfigDependencyMap"] = ccl.doRPCFleetDefaultConfigDependencyMap
-
 	rpcFns["GetDefaultFleetConfig"] = ccl.doRPCGetDefaultFleetConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

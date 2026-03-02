@@ -68,7 +68,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUztnaHealthcheckDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
@@ -94,7 +93,6 @@ func (m *CreateSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUztnaHealthcheckDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -122,7 +120,6 @@ func (m *CreateSpecType) GetUztnaHealthcheckDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -131,7 +128,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -177,9 +173,7 @@ func (v *ValidateCreateSpecType) OriginServersValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) UztnaHealthcheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -225,9 +219,7 @@ func (v *ValidateCreateSpecType) UztnaHealthcheckValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) LoadbalancerAlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for loadbalancer_algorithm")
@@ -236,7 +228,6 @@ func (v *ValidateCreateSpecType) LoadbalancerAlgorithmValidationRuleHandler(rule
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -256,39 +247,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uztna_healthcheck"]; exists {
 		vOpts := append(opts, db.WithValidateField("uztna_healthcheck"))
 		if err := fv(ctx, m.GetUztnaHealthcheck(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -383,7 +365,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUztnaHealthcheckDRefInfo()
-
 }
 
 func (m *GetSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
@@ -409,7 +390,6 @@ func (m *GetSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUztnaHealthcheckDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -437,7 +417,6 @@ func (m *GetSpecType) GetUztnaHealthcheckDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -446,7 +425,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -492,9 +470,7 @@ func (v *ValidateGetSpecType) OriginServersValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) UztnaHealthcheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -540,9 +516,7 @@ func (v *ValidateGetSpecType) UztnaHealthcheckValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) LoadbalancerAlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for loadbalancer_algorithm")
@@ -551,7 +525,6 @@ func (v *ValidateGetSpecType) LoadbalancerAlgorithmValidationRuleHandler(rules m
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -571,39 +544,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uztna_healthcheck"]; exists {
 		vOpts := append(opts, db.WithValidateField("uztna_healthcheck"))
 		if err := fv(ctx, m.GetUztnaHealthcheck(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -698,7 +662,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUztnaHealthcheckDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
@@ -724,7 +687,6 @@ func (m *GlobalSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUztnaHealthcheckDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -752,7 +714,6 @@ func (m *GlobalSpecType) GetUztnaHealthcheckDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -761,7 +722,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -807,9 +767,7 @@ func (v *ValidateGlobalSpecType) OriginServersValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) LoadbalancerAlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for loadbalancer_algorithm")
@@ -818,15 +776,12 @@ func (v *ValidateGlobalSpecType) LoadbalancerAlgorithmValidationRuleHandler(rule
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) UztnaHealthcheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -886,39 +841,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uztna_healthcheck"]; exists {
 		vOpts := append(opts, db.WithValidateField("uztna_healthcheck"))
 		if err := fv(ctx, m.GetUztnaHealthcheck(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1048,9 +994,7 @@ func (v *ValidateLoadbalancerAlgorithm) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1121,6 +1065,7 @@ func (v *ValidateOriginServerPrivateIP) PrivateIpChoiceIpValidationRuleHandler(r
 	}
 	return oValidatorFn_Ip, nil
 }
+
 func (v *ValidateOriginServerPrivateIP) PrivateIpChoiceIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Ipv6, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1176,16 +1121,13 @@ func (v *ValidateOriginServerPrivateIP) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginServerPrivateIPValidator = func() *ValidateOriginServerPrivateIP {
 	v := &ValidateOriginServerPrivateIP{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1193,7 +1135,6 @@ var DefaultOriginServerPrivateIPValidator = func() *ValidateOriginServerPrivateI
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPrivateIpChoice := v.PrivateIpChoiceValidationRuleHandler
 	rulesPrivateIpChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1204,7 +1145,6 @@ var DefaultOriginServerPrivateIPValidator = func() *ValidateOriginServerPrivateI
 		panic(errMsg)
 	}
 	v.FldValidators["private_ip_choice"] = vFn
-
 	vrhPrivateIpChoiceIp := v.PrivateIpChoiceIpValidationRuleHandler
 	rulesPrivateIpChoiceIp := map[string]string{
 		"ves.io.schema.rules.string.ipv4": "true",
@@ -1223,7 +1163,6 @@ var DefaultOriginServerPrivateIPValidator = func() *ValidateOriginServerPrivateI
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerPrivateIP.private_ip_choice_ipv6: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["private_ip_choice.ip"] = vFnMap["private_ip_choice.ip"]
 	v.FldValidators["private_ip_choice.ipv6"] = vFnMap["private_ip_choice.ipv6"]
 
@@ -1276,7 +1215,6 @@ type ValidateOriginServerPrivateName struct {
 }
 
 func (v *ValidateOriginServerPrivateName) HostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
@@ -1284,9 +1222,7 @@ func (v *ValidateOriginServerPrivateName) HostnameValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOriginServerPrivateName) RefreshIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for refresh_interval")
@@ -1308,32 +1244,24 @@ func (v *ValidateOriginServerPrivateName) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hostname"))
 		if err := fv(ctx, m.GetHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["refresh_interval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("refresh_interval"))
 		if err := fv(ctx, m.GetRefreshInterval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginServerPrivateNameValidator = func() *ValidateOriginServerPrivateName {
 	v := &ValidateOriginServerPrivateName{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1419,9 +1347,7 @@ func (v *ValidateOriginServerType) ChoiceValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateOriginServerType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -1477,11 +1403,8 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1489,25 +1412,19 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 	v := &ValidateOriginServerType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1515,7 +1432,6 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1539,7 +1455,6 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["choice.private_ip"] = OriginServerPrivateIPValidator().Validate
 	v.FldValidators["choice.private_name"] = OriginServerPrivateNameValidator().Validate
 
@@ -1593,7 +1508,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUztnaHealthcheckDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
@@ -1619,7 +1533,6 @@ func (m *ReplaceSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUztnaHealthcheckDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1647,7 +1560,6 @@ func (m *ReplaceSpecType) GetUztnaHealthcheckDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1656,7 +1568,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1702,9 +1613,7 @@ func (v *ValidateReplaceSpecType) OriginServersValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) UztnaHealthcheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1750,9 +1659,7 @@ func (v *ValidateReplaceSpecType) UztnaHealthcheckValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) LoadbalancerAlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for loadbalancer_algorithm")
@@ -1761,7 +1668,6 @@ func (v *ValidateReplaceSpecType) LoadbalancerAlgorithmValidationRuleHandler(rul
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1781,39 +1687,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uztna_healthcheck"]; exists {
 		vOpts := append(opts, db.WithValidateField("uztna_healthcheck"))
 		if err := fv(ctx, m.GetUztnaHealthcheck(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

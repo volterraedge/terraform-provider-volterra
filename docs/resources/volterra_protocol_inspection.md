@@ -36,7 +36,6 @@ resource "volterra_protocol_inspection" "example" {
     enable_signature = true
   }
 }
-
 ```
 
 Argument Reference
@@ -109,4 +108,4 @@ x-displayName: "Enable".
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured protocol_inspection.
+*   `id` - This is the id of the configured protocol_inspection.

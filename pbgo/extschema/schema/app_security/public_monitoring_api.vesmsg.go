@@ -80,43 +80,30 @@ func (v *ValidateLoadbalancerData) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_data"))
 		if err := fv(ctx, m.GetRequestData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["security_events_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("security_events_data"))
 		if err := fv(ctx, m.GetSecurityEventsData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -185,34 +172,24 @@ func (v *ValidateRequestData) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_time"))
 		if err := fv(ctx, m.GetMaxTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_time"))
 		if err := fv(ctx, m.GetMinTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -225,6 +202,86 @@ var DefaultRequestDataValidator = func() *ValidateRequestData {
 
 func RequestDataValidator() db.Validator {
 	return DefaultRequestDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SearchAfterSortValues) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SearchAfterSortValues) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SearchAfterSortValues) DeepCopy() *SearchAfterSortValues {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SearchAfterSortValues{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SearchAfterSortValues) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SearchAfterSortValues) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SearchAfterSortValuesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSearchAfterSortValues struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSearchAfterSortValues) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SearchAfterSortValues)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SearchAfterSortValues got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["last_doc_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_doc_id"))
+		if err := fv(ctx, m.GetLastDocId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["last_timestamp"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_timestamp"))
+		if err := fv(ctx, m.GetLastTimestamp(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSearchAfterSortValuesValidator = func() *ValidateSearchAfterSortValues {
+	v := &ValidateSearchAfterSortValues{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SearchAfterSortValuesValidator() db.Validator {
+	return DefaultSearchAfterSortValuesValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -269,7 +326,6 @@ type ValidateSearchFilter struct {
 }
 
 func (v *ValidateSearchFilter) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -323,40 +379,30 @@ func (v *ValidateSearchFilter) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["op"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("op"))
 		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSearchFilterValidator = func() *ValidateSearchFilter {
 	v := &ValidateSearchFilter{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -425,7 +471,6 @@ type ValidateSearchLoadBalancersRequest struct {
 }
 
 func (v *ValidateSearchLoadBalancersRequest) LabelFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -485,31 +530,24 @@ func (v *ValidateSearchLoadBalancersRequest) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSearchLoadBalancersRequestValidator = func() *ValidateSearchLoadBalancersRequest {
 	v := &ValidateSearchLoadBalancersRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -590,9 +628,7 @@ func (v *ValidateSearchLoadBalancersResponse) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancers"))
 		for idx, item := range m.GetLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -600,9 +636,7 @@ func (v *ValidateSearchLoadBalancersResponse) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -659,7 +693,6 @@ type ValidateSecurityEventsAggregationRequest struct {
 }
 
 func (v *ValidateSecurityEventsAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -667,9 +700,7 @@ func (v *ValidateSecurityEventsAggregationRequest) StartTimeValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityEventsAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -691,9 +722,7 @@ func (v *ValidateSecurityEventsAggregationRequest) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -701,52 +730,37 @@ func (v *ValidateSecurityEventsAggregationRequest) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityEventsAggregationRequestValidator = func() *ValidateSecurityEventsAggregationRequest {
 	v := &ValidateSecurityEventsAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -776,7 +790,6 @@ var DefaultSecurityEventsAggregationRequestValidator = func() *ValidateSecurityE
 		panic(errMsg)
 	}
 	v.FldValidators["end_time"] = vFn
-
 	v.FldValidators["aggs"] = AggregationRequestValidator().Validate
 
 	return v
@@ -840,9 +853,7 @@ func (v *ValidateSecurityEventsAggregationResponse) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -850,25 +861,19 @@ func (v *ValidateSecurityEventsAggregationResponse) Validate(ctx context.Context
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityEventsAggregationResponseValidator = func() *ValidateSecurityEventsAggregationResponse {
 	v := &ValidateSecurityEventsAggregationResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggs"] = ves_io_schema_log.LogAggregationDataValidator().Validate
 
 	return v
@@ -920,7 +925,6 @@ type ValidateSecurityEventsCountRequest struct {
 }
 
 func (v *ValidateSecurityEventsCountRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -928,9 +932,7 @@ func (v *ValidateSecurityEventsCountRequest) StartTimeValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityEventsCountRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -938,9 +940,7 @@ func (v *ValidateSecurityEventsCountRequest) EndTimeValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityEventsCountRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -962,18 +962,13 @@ func (v *ValidateSecurityEventsCountRequest) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -981,11 +976,8 @@ func (v *ValidateSecurityEventsCountRequest) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		for idx, item := range m.GetLabelFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -993,43 +985,31 @@ func (v *ValidateSecurityEventsCountRequest) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityEventsCountRequestValidator = func() *ValidateSecurityEventsCountRequest {
 	v := &ValidateSecurityEventsCountRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1120,7 +1100,6 @@ type ValidateSecurityEventsCountResponse struct {
 }
 
 func (v *ValidateSecurityEventsCountResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -1142,9 +1121,7 @@ func (v *ValidateSecurityEventsCountResponse) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1152,25 +1129,19 @@ func (v *ValidateSecurityEventsCountResponse) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityEventsCountResponseValidator = func() *ValidateSecurityEventsCountResponse {
 	v := &ValidateSecurityEventsCountResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1251,34 +1222,24 @@ func (v *ValidateSecurityEventsData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_time"))
 		if err := fv(ctx, m.GetMaxTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_time"))
 		if err := fv(ctx, m.GetMinTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1335,7 +1296,6 @@ type ValidateSecurityEventsRequest struct {
 }
 
 func (v *ValidateSecurityEventsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -1343,9 +1303,7 @@ func (v *ValidateSecurityEventsRequest) StartTimeValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityEventsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -1367,9 +1325,7 @@ func (v *ValidateSecurityEventsRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1377,88 +1333,73 @@ func (v *ValidateSecurityEventsRequest) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scroll"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll"))
 		if err := fv(ctx, m.GetScroll(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["search_after"]; exists {
+		vOpts := append(opts, db.WithValidateField("search_after"))
+		if err := fv(ctx, m.GetSearchAfter(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["sort"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort"))
 		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sort_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort_by"))
 		if err := fv(ctx, m.GetSortBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["sort_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("sort_values"))
+		if err := fv(ctx, m.GetSortValues(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityEventsRequestValidator = func() *ValidateSecurityEventsRequest {
 	v := &ValidateSecurityEventsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1488,7 +1429,6 @@ var DefaultSecurityEventsRequestValidator = func() *ValidateSecurityEventsReques
 		panic(errMsg)
 	}
 	v.FldValidators["end_time"] = vFn
-
 	v.FldValidators["aggs"] = AggregationRequestValidator().Validate
 
 	return v
@@ -1552,9 +1492,7 @@ func (v *ValidateSecurityEventsResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1562,11 +1500,8 @@ func (v *ValidateSecurityEventsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["events"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("events"))
 		for idx, item := range m.GetEvents() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1574,34 +1509,31 @@ func (v *ValidateSecurityEventsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["last_sort_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_sort_values"))
+		if err := fv(ctx, m.GetLastSortValues(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["scroll_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll_id"))
 		if err := fv(ctx, m.GetScrollId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityEventsResponseValidator = func() *ValidateSecurityEventsResponse {
 	v := &ValidateSecurityEventsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggs"] = ves_io_schema_log.LogAggregationDataValidator().Validate
 
 	return v
@@ -1665,25 +1597,18 @@ func (v *ValidateSecurityEventsScrollRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scroll_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll_id"))
 		if err := fv(ctx, m.GetScrollId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1740,7 +1665,6 @@ type ValidateSecurityIncidentsAggregationRequest struct {
 }
 
 func (v *ValidateSecurityIncidentsAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -1748,9 +1672,7 @@ func (v *ValidateSecurityIncidentsAggregationRequest) StartTimeValidationRuleHan
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityIncidentsAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -1772,9 +1694,7 @@ func (v *ValidateSecurityIncidentsAggregationRequest) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1782,52 +1702,37 @@ func (v *ValidateSecurityIncidentsAggregationRequest) Validate(ctx context.Conte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityIncidentsAggregationRequestValidator = func() *ValidateSecurityIncidentsAggregationRequest {
 	v := &ValidateSecurityIncidentsAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1857,7 +1762,6 @@ var DefaultSecurityIncidentsAggregationRequestValidator = func() *ValidateSecuri
 		panic(errMsg)
 	}
 	v.FldValidators["end_time"] = vFn
-
 	v.FldValidators["aggs"] = ves_io_schema_app_security_incidents.AggregationRequestValidator().Validate
 
 	return v
@@ -1921,9 +1825,7 @@ func (v *ValidateSecurityIncidentsAggregationResponse) Validate(ctx context.Cont
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1931,25 +1833,19 @@ func (v *ValidateSecurityIncidentsAggregationResponse) Validate(ctx context.Cont
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityIncidentsAggregationResponseValidator = func() *ValidateSecurityIncidentsAggregationResponse {
 	v := &ValidateSecurityIncidentsAggregationResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggs"] = ves_io_schema_log.LogAggregationDataValidator().Validate
 
 	return v
@@ -2001,7 +1897,6 @@ type ValidateSecurityIncidentsRequest struct {
 }
 
 func (v *ValidateSecurityIncidentsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -2009,9 +1904,7 @@ func (v *ValidateSecurityIncidentsRequest) StartTimeValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityIncidentsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -2033,9 +1926,7 @@ func (v *ValidateSecurityIncidentsRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2043,88 +1934,73 @@ func (v *ValidateSecurityIncidentsRequest) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scroll"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll"))
 		if err := fv(ctx, m.GetScroll(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["search_after"]; exists {
+		vOpts := append(opts, db.WithValidateField("search_after"))
+		if err := fv(ctx, m.GetSearchAfter(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["sort"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort"))
 		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sort_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort_by"))
 		if err := fv(ctx, m.GetSortBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["sort_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("sort_values"))
+		if err := fv(ctx, m.GetSortValues(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityIncidentsRequestValidator = func() *ValidateSecurityIncidentsRequest {
 	v := &ValidateSecurityIncidentsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2154,7 +2030,6 @@ var DefaultSecurityIncidentsRequestValidator = func() *ValidateSecurityIncidents
 		panic(errMsg)
 	}
 	v.FldValidators["end_time"] = vFn
-
 	v.FldValidators["aggs"] = ves_io_schema_app_security_incidents.AggregationRequestValidator().Validate
 
 	return v
@@ -2218,9 +2093,7 @@ func (v *ValidateSecurityIncidentsResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2228,11 +2101,8 @@ func (v *ValidateSecurityIncidentsResponse) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["incidents"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("incidents"))
 		for idx, item := range m.GetIncidents() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2240,34 +2110,31 @@ func (v *ValidateSecurityIncidentsResponse) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["last_sort_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_sort_values"))
+		if err := fv(ctx, m.GetLastSortValues(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["scroll_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll_id"))
 		if err := fv(ctx, m.GetScrollId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityIncidentsResponseValidator = func() *ValidateSecurityIncidentsResponse {
 	v := &ValidateSecurityIncidentsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggs"] = ves_io_schema_log.LogAggregationDataValidator().Validate
 
 	return v
@@ -2331,25 +2198,18 @@ func (v *ValidateSecurityIncidentsScrollRequest) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scroll_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll_id"))
 		if err := fv(ctx, m.GetScrollId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2406,7 +2266,6 @@ type ValidateSuspiciousUserLogsAggregationRequest struct {
 }
 
 func (v *ValidateSuspiciousUserLogsAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -2414,9 +2273,7 @@ func (v *ValidateSuspiciousUserLogsAggregationRequest) StartTimeValidationRuleHa
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSuspiciousUserLogsAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -2438,9 +2295,7 @@ func (v *ValidateSuspiciousUserLogsAggregationRequest) Validate(ctx context.Cont
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2448,52 +2303,37 @@ func (v *ValidateSuspiciousUserLogsAggregationRequest) Validate(ctx context.Cont
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuspiciousUserLogsAggregationRequestValidator = func() *ValidateSuspiciousUserLogsAggregationRequest {
 	v := &ValidateSuspiciousUserLogsAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2523,7 +2363,6 @@ var DefaultSuspiciousUserLogsAggregationRequestValidator = func() *ValidateSuspi
 		panic(errMsg)
 	}
 	v.FldValidators["end_time"] = vFn
-
 	v.FldValidators["aggs"] = ves_io_schema_app_security_suspicious_user_log.AggregationRequestValidator().Validate
 
 	return v
@@ -2587,9 +2426,7 @@ func (v *ValidateSuspiciousUserLogsAggregationResponse) Validate(ctx context.Con
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2597,25 +2434,19 @@ func (v *ValidateSuspiciousUserLogsAggregationResponse) Validate(ctx context.Con
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuspiciousUserLogsAggregationResponseValidator = func() *ValidateSuspiciousUserLogsAggregationResponse {
 	v := &ValidateSuspiciousUserLogsAggregationResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggs"] = ves_io_schema_log.LogAggregationDataValidator().Validate
 
 	return v
@@ -2667,7 +2498,6 @@ type ValidateSuspiciousUserLogsRequest struct {
 }
 
 func (v *ValidateSuspiciousUserLogsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -2675,9 +2505,7 @@ func (v *ValidateSuspiciousUserLogsRequest) StartTimeValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSuspiciousUserLogsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -2699,9 +2527,7 @@ func (v *ValidateSuspiciousUserLogsRequest) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2709,88 +2535,73 @@ func (v *ValidateSuspiciousUserLogsRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scroll"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll"))
 		if err := fv(ctx, m.GetScroll(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["search_after"]; exists {
+		vOpts := append(opts, db.WithValidateField("search_after"))
+		if err := fv(ctx, m.GetSearchAfter(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["sort"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort"))
 		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sort_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort_by"))
 		if err := fv(ctx, m.GetSortBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["sort_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("sort_values"))
+		if err := fv(ctx, m.GetSortValues(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuspiciousUserLogsRequestValidator = func() *ValidateSuspiciousUserLogsRequest {
 	v := &ValidateSuspiciousUserLogsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2820,7 +2631,6 @@ var DefaultSuspiciousUserLogsRequestValidator = func() *ValidateSuspiciousUserLo
 		panic(errMsg)
 	}
 	v.FldValidators["end_time"] = vFn
-
 	v.FldValidators["aggs"] = ves_io_schema_app_security_suspicious_user_log.AggregationRequestValidator().Validate
 
 	return v
@@ -2884,9 +2694,7 @@ func (v *ValidateSuspiciousUserLogsResponse) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2894,11 +2702,14 @@ func (v *ValidateSuspiciousUserLogsResponse) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["last_sort_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_sort_values"))
+		if err := fv(ctx, m.GetLastSortValues(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["logs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("logs"))
 		for idx, item := range m.GetLogs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2906,34 +2717,25 @@ func (v *ValidateSuspiciousUserLogsResponse) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scroll_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll_id"))
 		if err := fv(ctx, m.GetScrollId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuspiciousUserLogsResponseValidator = func() *ValidateSuspiciousUserLogsResponse {
 	v := &ValidateSuspiciousUserLogsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggs"] = ves_io_schema_log.LogAggregationDataValidator().Validate
 
 	return v
@@ -2997,25 +2799,18 @@ func (v *ValidateSuspiciousUserLogsScrollRequest) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scroll_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scroll_id"))
 		if err := fv(ctx, m.GetScrollId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

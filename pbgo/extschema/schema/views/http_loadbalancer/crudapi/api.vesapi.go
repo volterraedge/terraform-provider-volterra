@@ -56,7 +56,6 @@ func (r *ObjectCreateReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // EntryConverter
 func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 	r.FromObject(e)
@@ -76,15 +75,11 @@ func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
 
 // CLIENT side
-
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -93,7 +88,6 @@ func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r.FromObject(e)
 	return r, nil
 }
-
 func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 	r := &ObjectReplaceReq{}
 	if e == nil {
@@ -105,12 +99,10 @@ func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 		// See if uid can be got from Metadata.Uid
 		obj := e.(*object.DBObject)
 		uid = obj.GetMetadata().GetUid()
-
 	}
 	r.ObjectUid = uid
 	return r, nil
 }
-
 func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	ccOpts := server.NewCRUDCallOpts()
 	for _, o := range opts {
@@ -120,7 +112,6 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
-
 func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	r := &ObjectListReq{
 		TenantFilter:      cco.TenantFilter,
@@ -146,7 +137,6 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	}
 	return r, nil
 }
-
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
 	return &ObjectDeleteReq{ObjectUid: uid}
 }
@@ -158,7 +148,6 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -180,11 +169,9 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -202,9 +189,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -228,7 +213,6 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -236,11 +220,9 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -257,11 +239,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -271,11 +251,9 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -285,9 +263,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -312,7 +288,6 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -328,11 +303,9 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
-
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -346,7 +319,6 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -389,7 +361,6 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -457,11 +428,9 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
-
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -543,9 +512,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
-
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -597,7 +564,6 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -605,11 +571,9 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -627,11 +591,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -641,11 +603,9 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -655,9 +615,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.views.http_loadbalancer.crudapi", ".")
@@ -748,7 +706,6 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -795,7 +752,6 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -824,7 +780,6 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
-
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -835,7 +790,6 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
-
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -846,7 +800,6 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
-
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -857,11 +810,9 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.crudapi.API.List")
 	return oah.List(ctx, req)
 }
-
 func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (API_ListStreamClient, error) {
 	return nil, fmt.Errorf("ListStream Not implemented")
 }
-
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -883,7 +834,6 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -904,11 +854,9 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -924,9 +872,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -947,7 +893,6 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -955,11 +900,9 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -977,11 +920,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -991,11 +932,9 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -1005,9 +944,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -1035,7 +972,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1047,7 +983,6 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -1077,7 +1012,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 	}
 	return nil
 }
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1098,7 +1032,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	obj := object.NewDBObject(nil)
 	req.ToObject(obj)
 	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-
 	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1110,7 +1043,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1141,9 +1073,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		return nil, status.Error(codes.ResourceExhausted, errors.Wrap(err, "Replace with NewObjectReplaceRsp").Error())
 	}
 	return rsp, nil
-
 }
-
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1168,7 +1098,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1180,7 +1109,6 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1193,17 +1121,16 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+		return nil, errors.Wrap(err, "List")
 	}
 	rsp, err := NewObjectListRsp(req, rsrcRsp.Items)
 	if err != nil {
-		merr = multierror.Append(merr, err)
+		return rsp, err
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
 	rsp.NextPage = rsrcRsp.NextPage
-	return rsp, merr
+	return rsp, nil
 }
-
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
 	var merr *multierror.Error
 	rsrcReq := &server.ResourceListRequest{
@@ -1215,6 +1142,7 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
 	if err != nil {
 		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+		return errors.ErrOrNil(merr)
 	}
 	streamSvr := &crudAPIListStreamServer{stream}
 	for item := range rsrcRsp.ItemsCh {
@@ -1225,7 +1153,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	}
 	return errors.ErrOrNil(merr)
 }
-
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1314,11 +1241,9 @@ func (r *ObjectGetReq) GetBackrefParam() (bool, []string) {
 func (r *ObjectDeleteReq) ToUid() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectCreateRsp) Key() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectGetRsp) GetBackrefs(ef db.NewEntryFunc) ([]db.Entry, error) {
 	brEnts := []db.Entry{}
 	bRefs := r.GetEntBackrefs()
@@ -1377,7 +1302,6 @@ func NewObjectCreateRsp(e db.Entry) (*ObjectCreateRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo := &ObjectReplaceRsp{}
 	switch e.(type) {
@@ -1391,7 +1315,6 @@ func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*ObjectGetRsp, error) {
 	rspo := &ObjectGetRsp{}
 	e := rsrcRsp.Entry
@@ -1435,7 +1358,6 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 	rspo.Status = statusObjs
 	return rspo, nil
 }
-
 func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*ObjectListRsp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("Nil ObjectListReq")
@@ -1461,7 +1383,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
 			continue
 		}
-
 		tenant := dbObj.GetSystemMetadata().GetTenant()
 		namespace := dbObj.GetMetadata().GetNamespace()
 		name := dbObj.GetMetadata().GetName()
@@ -1484,7 +1405,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 	}
 	return o, errs
 }
-
 func NewObjectDeleteRsp(ec ErrorCode) (*ObjectDeleteRsp, error) {
 	return &ObjectDeleteRsp{Err: ec}, nil
 }
@@ -4040,7 +3960,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeBotDefenseType",
             "properties": {
                 "disable_cors_support": {
-                    "description": "Exclusive with [enable_cors_support]\n Blocks Bot Defense from working with existing CORS policies on your \n application. This will significantly impact Bot Defense's ability to \n protect against Bot Attacks.",
+                    "description": "Exclusive with [enable_cors_support]\n Blocks Bot Defense from working with existing CORS policies on your\n application. This will significantly impact Bot Defense's ability to\n protect against Bot Attacks.",
                     "title": "Disable CORS Support",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
@@ -4995,6 +4915,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "common_wafAuthorizationServer": {
+            "type": "object",
+            "description": "Reference to Authorization Server object",
+            "title": "authorization_server",
+            "x-displayname": "Authorization Servers",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.AuthorizationServer",
+            "properties": {
+                "authorization_servers": {
+                    "type": "array",
+                    "description": " Authorization Servers are configured separately in the 'Shared Objects' section of the Web App \u0026\n API Protection workspace and used to fetch JWKS for JWT validation.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "authorization_server_name",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Authorization Server Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "common_wafBasePathsType": {
             "type": "object",
             "title": "base_paths",
@@ -5037,7 +4979,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Any Domain"
                 },
                 "any_url": {
-                    "description": "Exclusive with [api_endpoint api_groups base_path]\n Any URL ",
+                    "description": "Exclusive with [api_endpoint api_groups base_path]\n Any URL",
                     "title": "any_url",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Any URL"
@@ -5477,7 +5419,7 @@ var APISwaggerJSON string = `{
             "description": "JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming\nJWTs before they are passed to your API origin. JWT Validation will also stop requests with expired\ntokens or tokens that are not yet valid.",
             "title": "JWT Validation",
             "x-displayname": "JWT Validation",
-            "x-ves-oneof-field-jwks_configuration": "[\"jwks_config\"]",
+            "x-ves-oneof-field-jwks_configuration": "[\"authorization_server\",\"jwks_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_waf.JWTValidation",
             "properties": {
                 "action": {
@@ -5490,11 +5432,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "authorization_server": {
+                    "description": "Exclusive with [jwks_config]\n Automatically fetch JWKS from URI endpoint",
+                    "title": "authorization_server",
+                    "$ref": "#/definitions/common_wafAuthorizationServer",
+                    "x-displayname": "Authorization Servers"
+                },
                 "jwks_config": {
-                    "description": "Exclusive with []\n The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.",
+                    "description": "Exclusive with [authorization_server]\n Manually provide JWKS",
                     "title": "jwks_config",
                     "$ref": "#/definitions/common_wafJWKS",
-                    "x-displayname": "JSON Web Key Set (JWKS)"
+                    "x-displayname": "Local Input"
                 },
                 "mandatory_claims": {
                     "description": " Configuration for validation of mandatory claims. The system will verify that the claim exists in JWT.\n If the claim does not exist JWT token validation will fail.",
@@ -6549,6 +6497,7 @@ var APISwaggerJSON string = `{
             "description": "This defines various options to define a route",
             "title": "Advanced options",
             "x-displayname": "Advanced Options",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.AdvancedOptionsType",
@@ -6618,6 +6567,23 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "96"
                     }
+                },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n Sets the maximum number of requests a downstream client can send\n over a single connection to Envoy.\n Enter a value \u003e=1 to define the request limit per connection.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "Maximum Requests Per Connection",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "title": "Disable the max requests per connection option",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "request_cookies_to_add": {
                     "type": "array",
@@ -7149,7 +7115,7 @@ var APISwaggerJSON string = `{
                 },
                 "token_response_key": {
                     "type": "string",
-                    "description": " Specifies how to handle the API response, extracting authentication tokens.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Specifies the key name used to extract the authentication token from the login response, such as token or access_token.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Token Response Key",
                     "x-displayname": "Token Response Key",
                     "x-ves-required": "true",
@@ -7885,8 +7851,22 @@ var APISwaggerJSON string = `{
             "description": "A custom route uses a route object created outside of this view.",
             "title": "RouteTypeCustomRoute",
             "x-displayname": "Custom Route Object",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-caching": "[\"caching_disable\",\"caching_inherit\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeCustomRoute",
             "properties": {
+                "caching_disable": {
+                    "description": "Exclusive with [caching_inherit]\n",
+                    "title": "Caching is disabled for this Route",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "caching_inherit": {
+                    "description": "Exclusive with [caching_disable]\n",
+                    "title": "Caching is inherited from Load Balancer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Inherit"
+                },
                 "route_ref": {
                     "description": " Reference to a custom route object",
                     "title": "route_refs",
@@ -8004,7 +7984,8 @@ var APISwaggerJSON string = `{
             "description": "A simple route matches on path, incoming header, incoming port and/or HTTP method\nand forwards the matching traffic to the associated pools",
             "title": "RouteTypeSimple",
             "x-displayname": "Simple Route",
-            "x-ves-displayorder": "2,1,9,10,3,4,11,8",
+            "x-ves-displayorder": "2,1,9,10,13,3,4,11,8",
+            "x-ves-oneof-field-caching": "[\"caching_disable\",\"caching_inherit\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeSimple",
             "properties": {
@@ -8019,6 +8000,18 @@ var APISwaggerJSON string = `{
                     "title": "Auto Host Rewrite",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Automatic Host Rewrite"
+                },
+                "caching_disable": {
+                    "description": "Exclusive with [caching_inherit]\n",
+                    "title": "Caching is disabled for this Route",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "caching_inherit": {
+                    "description": "Exclusive with [caching_disable]\n",
+                    "title": "Caching is inherited from Load Balancer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Inherit"
                 },
                 "disable_host_rewrite": {
                     "description": "Exclusive with [auto_host_rewrite host_rewrite]\n Host header is not modified",
@@ -8459,6 +8452,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-lb_source_ip_persistance_choice": "[\"disable_lb_source_ip_persistance\",\"enable_lb_source_ip_persistance\"]",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-proxy_protocol_choice": "[\"disable_proxy_protocol\",\"proxy_protocol_v1\",\"proxy_protocol_v2\"]",
@@ -8559,11 +8553,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "600000"
                     }
                 },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n Sets the maximum number of requests allowed per connection to the origin server.\n Enter a value \u003e=1 to define the request limit per connection.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "Maximum Requests Per Connection",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
                 "no_panic_threshold": {
                     "description": "Exclusive with [panic_threshold]\n Disable panic threshold. Only healthy endpoints are considered for load balancing.",
                     "title": "Disable panic threshold",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No Panic threshold"
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "title": "Disable the max requests per connection option",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "outlier_detection": {
                     "description": "Exclusive with [disable_outlier_detection]\n Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
@@ -8680,7 +8691,7 @@ var APISwaggerJSON string = `{
         },
         "origin_poolOriginServerConsulService": {
             "type": "object",
-            "description": "Specify origin server with Hashi Corp Consul service name and site information",
+            "description": "Specify origin server with HashiCorp Consul service name and site information",
             "title": "OriginServerConsulService",
             "x-displayname": "Consul Service Name on given Sites",
             "x-ves-displayorder": "1,2,3",
@@ -9024,10 +9035,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
                 "cbip_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with cBIP service name",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with BIG-IP service name",
                     "title": "OriginServerCBIPService",
                     "$ref": "#/definitions/origin_poolOriginServerCBIPService",
-                    "x-displayname": "cBIP Service Name of Origin Server"
+                    "x-displayname": "BIG-IP Service Name of Origin Server"
                 },
                 "consul_service": {
                     "description": "Exclusive with [cbip_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
@@ -11351,7 +11362,7 @@ var APISwaggerJSON string = `{
                 },
                 "period_multiplier": {
                     "type": "integer",
-                    "description": " This setting, combined with Per Period units, provides a duration \n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " This setting, combined with Per Period units, provides a duration\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
                     "title": "period_multiplier",
                     "format": "int64",
                     "x-displayname": "Periods",
@@ -12446,10 +12457,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -13357,7 +13368,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRegexMatchRewrite": {
             "type": "object",
-            "description": "RegexMatchRewrite describes how to match a string and then produce a new string using a \nregular expression and a substitution string.",
+            "description": "RegexMatchRewrite describes how to match a string and then produce a new string using a\nregular expression and a substitution string.",
             "title": "RegexMatchRewrite",
             "x-displayname": "Regex Match Rewrite",
             "x-ves-proto-message": "ves.io.schema.RegexMatchRewrite",
@@ -13378,7 +13389,7 @@ var APISwaggerJSON string = `{
                 },
                 "substitution": {
                     "type": "string",
-                    "description": " The string that should be substituted into matching portions of the subject string during a \n substitution operation to produce a new string.\n\nExample: - \"\\\\2/instance/\\\\1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " The string that should be substituted into matching portions of the subject string during a\n substitution operation to produce a new string.\n\nExample: - \"\\\\2/instance/\\\\1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Substitution",
                     "maxLength": 256,
                     "x-displayname": "Substitution",
@@ -13874,7 +13885,7 @@ var APISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -14311,6 +14322,13 @@ var APISwaggerJSON string = `{
             "x-displayname": "Path Matcher",
             "x-ves-proto-message": "ves.io.schema.policy.PathMatcherType",
             "properties": {
+                "encoded_path_matcher": {
+                    "type": "boolean",
+                    "description": "Match against the encoded, escaped path",
+                    "title": "Encoded_Path",
+                    "format": "boolean",
+                    "x-displayname": "Match Encoded Path"
+                },
                 "exact_values": {
                     "type": "array",
                     "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -15833,7 +15851,7 @@ var APISwaggerJSON string = `{
                 },
                 "cache_ttl_override": {
                     "type": "string",
-                    "description": "Exclusive with [cache_disabled cache_ttl_default]\n Always override the Cahce TTL provided by Origin \n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "description": "Exclusive with [cache_disabled cache_ttl_default]\n Always override the Cahce TTL provided by Origin\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
                     "title": "Override Cache TTL Provided by Origin",
                     "x-displayname": "Override Cache TTL (d/ h/ m/ s)",
                     "x-ves-validation-rules": {
@@ -16003,7 +16021,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "allow_destructive_methods": {
                     "type": "boolean",
-                    "description": " Enable to allow API test to execute destructive methods. Be cautious as these can alter or delete data.",
+                    "description": " Enable to allow API Testing to execute against destructive methods. Use with caution as these may modify or delete data",
                     "title": "Destructive Methods",
                     "format": "boolean",
                     "x-displayname": "Use Destructive Methods (e.g., DELETE, PUT)"
@@ -16744,6 +16762,7 @@ var APISwaggerJSON string = `{
             "title": "RouteType",
             "x-displayname": "Route Type",
             "x-ves-oneof-field-choice": "[\"custom_route_object\",\"direct_response_route\",\"redirect_route\",\"simple_route\"]",
+            "x-ves-oneof-field-route_state": "[\"route_state_disabled\",\"route_state_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteType",
             "properties": {
                 "custom_route_object": {
@@ -16763,6 +16782,18 @@ var APISwaggerJSON string = `{
                     "title": "RouteTypeRedirect",
                     "$ref": "#/definitions/http_loadbalancerRouteTypeRedirect",
                     "x-displayname": "Redirect Route"
+                },
+                "route_state_disabled": {
+                    "description": "Exclusive with [route_state_enabled]\n",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "route_state_enabled": {
+                    "description": "Exclusive with [route_state_disabled]\n",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enabled"
                 },
                 "simple_route": {
                     "description": "Exclusive with [custom_route_object direct_response_route redirect_route]\n A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools",

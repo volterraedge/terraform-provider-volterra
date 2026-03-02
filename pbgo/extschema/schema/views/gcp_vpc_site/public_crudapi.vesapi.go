@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.gcp_vpc_site.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2232,12 +2209,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DNS"
                 },
                 "network_type": {
-                    "description": " Site Local VRF on which this service will be disabled\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
+                    "description": " Site Local VRF on which this service will be disabled\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,13]\n",
                     "title": "network_type",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
                     "x-displayname": "Site Local VRF",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1]"
+                        "ves.io.schema.rules.enum.in": "[0,1,13]"
                     }
                 },
                 "ssh": {
@@ -2347,6 +2324,35 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
+                }
+            }
+        },
+        "gcp_vpc_siteGCPDiskEncryption": {
+            "type": "object",
+            "description": "Information related to disk encryption",
+            "title": "Disk Encryption",
+            "x-displayname": "Disk Encryption",
+            "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPDiskEncryption",
+            "properties": {
+                "kms_key_resource_id": {
+                    "type": "string",
+                    "description": " GCP KMS Key to be used to encrypt the disk attached to the VM\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "KMS Key Resource ID",
+                    "x-displayname": "KMS Key Resource ID",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "kms_key_ring_id": {
+                    "type": "string",
+                    "description": " Key ring in which the CMK to be used to encrypt is present\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "KMS Key Ring ID",
+                    "x-displayname": "KMS Key Ring ID",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3683,10 +3689,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -4761,7 +4767,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_MANAGEMENT is used for management purposes",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -4776,7 +4782,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
                 "VIRTUAL_NETWORK_IP_FABRIC",
-                "VIRTUAL_NETWORK_SEGMENT"
+                "VIRTUAL_NETWORK_SEGMENT",
+                "VIRTUAL_NETWORK_MANAGEMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -4927,7 +4934,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteState": {
             "type": "string",
-            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.\nSite is in failed state for prolong period of time. Site Status Objects contain more details.\nSite resources are waiting to be updated. Check Status objects for more details\nAn Error occurred while updating cloud resources for F5XC managed site. Check Status objects for more details.\nSite resources orchestration is queued for F5XC managed site. Check Status objects for more details\nSite resources update is queued for F5XC managed site. Check Status objects for more details\nSite resources delete is queued for F5XC managed site. Check Status objects for more details",
             "title": "SiteState",
             "enum": [
                 "ONLINE",
@@ -4947,7 +4954,13 @@ var APISwaggerJSON string = `{
                 "ERROR_DELETING_CLOUD_RESOURCES",
                 "VALIDATION_IN_PROGRESS",
                 "VALIDATION_SUCCESS",
-                "VALIDATION_FAILED"
+                "VALIDATION_FAILED",
+                "FAILED_INACTIVE",
+                "UPDATING_CLOUD_RESOURCES",
+                "ERROR_UPDATING_CLOUD_RESOURCES",
+                "ORCHESTRATION_QUEUED",
+                "UPDATE_QUEUED",
+                "DELETE_QUEUED"
             ],
             "default": "ONLINE",
             "x-displayname": "Site State",
@@ -5560,6 +5573,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsL7PerformanceEnhancementType": {
+            "type": "object",
+            "description": "x-required\nL7 enhanced performance mode options",
+            "title": "L7 Mode Enhanced Performance options",
+            "x-displayname": "L7 Mode Enhanced Performance",
+            "x-ves-oneof-field-perf_mode_choice": "[\"jumbo_disabled\",\"jumbo_enabled\"]",
+            "x-ves-proto-message": "ves.io.schema.views.L7PerformanceEnhancementType",
+            "properties": {
+                "jumbo_disabled": {
+                    "description": "Exclusive with [jumbo_enabled]\n",
+                    "title": "L7 Mode Enhanced Performance with no jumbo frame support",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "jumbo_enabled": {
+                    "description": "Exclusive with [jumbo_disabled]\n",
+                    "title": "L7 Mode Enhanced Performance with jumbo frame support(9000)",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
+                }
+            }
+        },
         "viewsOfflineSurvivabilityModeType": {
             "type": "object",
             "description": "Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\nWhen this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\nThe certificates needed to keep the services running on this site are signed using a local CA.\nSecrets would also be cached locally to handle the connectivity loss.\nWhen the mode is toggled, services will restart and traffic disruption will be seen.",
@@ -5628,7 +5663,7 @@ var APISwaggerJSON string = `{
                 "perf_mode_l7_enhanced": {
                     "description": "Exclusive with [perf_mode_l3_enhanced]\n Site optimized for L7 traffic processing",
                     "title": "Default Performance Mode",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/viewsL7PerformanceEnhancementType",
                     "x-displayname": "L7 Enhanced"
                 }
             }
@@ -5674,14 +5709,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "error_description": {
                     "type": "string",
-                    "description": " Error Description \n\nExample: - \"invalid VPC ID\"-",
+                    "description": " Error Description\n\nExample: - \"invalid VPC ID\"-",
                     "title": "Error Description",
                     "x-displayname": "Error Description",
                     "x-ves-example": "invalid VPC ID"
                 },
                 "suggested_action": {
                     "type": "string",
-                    "description": " Suggested Action \n\nExample: - \"update VPC ID\"-",
+                    "description": " Suggested Action\n\nExample: - \"update VPC ID\"-",
                     "title": "Suggested Action",
                     "x-displayname": "Suggested Action",
                     "x-ves-example": "update VPC ID"
@@ -5826,6 +5861,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create GCP VPC site",
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"cloud_credentials\"]",
+            "x-ves-oneof-field-encryption_choice": "[\"disable_encryption\",\"enable_encryption\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-private_connectivity_choice": "[\"private_connect_disabled\",\"private_connectivity\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
@@ -5877,6 +5913,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
+                "disable_encryption": {
+                    "description": "Exclusive with [enable_encryption]\n Disk attached to VM will not be encrypted with CMK",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Encryption"
+                },
                 "disk_size": {
                     "type": "integer",
                     "description": " Disk size to be used for this instance in GiB. 80 is 80 GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 64000\n",
@@ -5886,6 +5927,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "64000"
                     }
+                },
+                "enable_encryption": {
+                    "description": "Exclusive with [disable_encryption]\n Disk will be encrypted with the specified key",
+                    "$ref": "#/definitions/gcp_vpc_siteGCPDiskEncryption",
+                    "x-displayname": "Enable Encryption"
                 },
                 "gcp_labels": {
                     "type": "object",
@@ -6002,6 +6048,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get GCP VPC site",
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"cloud_credentials\"]",
+            "x-ves-oneof-field-encryption_choice": "[\"disable_encryption\",\"enable_encryption\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-private_connectivity_choice": "[\"private_connect_disabled\",\"private_connectivity\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
@@ -6058,6 +6105,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
+                "disable_encryption": {
+                    "description": "Exclusive with [enable_encryption]\n Disk attached to VM will not be encrypted with CMK",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Encryption"
+                },
                 "disk_size": {
                     "type": "integer",
                     "description": " Disk size to be used for this instance in GiB. 80 is 80 GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 64000\n",
@@ -6067,6 +6119,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "64000"
                     }
+                },
+                "enable_encryption": {
+                    "description": "Exclusive with [disable_encryption]\n Disk will be encrypted with the specified key",
+                    "$ref": "#/definitions/gcp_vpc_siteGCPDiskEncryption",
+                    "x-displayname": "Enable Encryption"
                 },
                 "error_description": {
                     "type": "string",

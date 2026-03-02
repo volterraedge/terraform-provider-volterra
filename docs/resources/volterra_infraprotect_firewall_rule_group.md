@@ -21,7 +21,6 @@ resource "volterra_infraprotect_firewall_rule_group" "example" {
   namespace                = "staging"
   firewall_rule_group_name = ["Group Name"]
 }
-
 ```
 
 Argument Reference
@@ -48,4 +47,4 @@ Argument Reference
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured infraprotect_firewall_rule_group.
+*   `id` - This is the id of the configured infraprotect_firewall_rule_group.

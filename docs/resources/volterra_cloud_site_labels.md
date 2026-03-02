@@ -83,7 +83,6 @@ resource "volterra_cloud_site_labels" "labels" {
 			}
 			ignore_on_delete = true
 		}
-
 ```
 
 ### Argument Reference

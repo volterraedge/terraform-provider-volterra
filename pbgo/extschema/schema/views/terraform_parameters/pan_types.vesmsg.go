@@ -33,7 +33,6 @@ func (m *PANAWSType) ToJSON() (string, error) {
 func (m *PANAWSType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *PANAWSType) String() string {
 	if m == nil {
 		return ""
@@ -97,7 +96,6 @@ type ValidatePANAWSType struct {
 }
 
 func (v *ValidatePANAWSType) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_region")
@@ -105,9 +103,7 @@ func (v *ValidatePANAWSType) AwsRegionValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSType) AwsNamePrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_name_prefix")
@@ -115,9 +111,7 @@ func (v *ValidatePANAWSType) AwsNamePrefixValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSType) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
@@ -125,9 +119,7 @@ func (v *ValidatePANAWSType) VpcIdValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSType) AdminUsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for admin_username")
@@ -135,9 +127,7 @@ func (v *ValidatePANAWSType) AdminUsernameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSType) DevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -183,9 +173,7 @@ func (v *ValidatePANAWSType) DevicesValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
@@ -193,9 +181,7 @@ func (v *ValidatePANAWSType) SshKeyValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSType) VolterraSubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -241,9 +227,7 @@ func (v *ValidatePANAWSType) VolterraSubnetIdsValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSType) SiteNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for site_name")
@@ -265,188 +249,127 @@ func (v *ValidatePANAWSType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
 		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
 		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_username"))
 		if err := fv(ctx, m.GetAdminUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_name"))
 		if err := fv(ctx, m.GetAwsName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_name_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_name_prefix"))
 		if err := fv(ctx, m.GetAwsNamePrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device_group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_group_name"))
 		if err := fv(ctx, m.GetDeviceGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("devices"))
 		if err := fv(ctx, m.GetDevices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pan_authorization_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pan_authorization_key"))
 		if err := fv(ctx, m.GetPanAuthorizationKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pan_authorization_key_blindfolded"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pan_authorization_key_blindfolded"))
 		if err := fv(ctx, m.GetPanAuthorizationKeyBlindfolded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pan_authorization_key_clear_b64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pan_authorization_key_clear_b64"))
 		if err := fv(ctx, m.GetPanAuthorizationKeyClearB64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["panorama_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("panorama_server"))
 		if err := fv(ctx, m.GetPanoramaServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["panorama_template_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("panorama_template_name"))
 		if err := fv(ctx, m.GetPanoramaTemplateName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["product_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("product_code"))
 		if err := fv(ctx, m.GetProductCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_private_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_private_key"))
 		if err := fv(ctx, m.GetSshPrivateKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_private_key_blindfolded"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_private_key_blindfolded"))
 		if err := fv(ctx, m.GetSshPrivateKeyBlindfolded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_private_key_clear_b64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_private_key_clear_b64"))
 		if err := fv(ctx, m.GetSshPrivateKeyClearB64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -454,42 +377,31 @@ func (v *ValidatePANAWSType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vmseries_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vmseries_version"))
 		if err := fv(ctx, m.GetVmseriesVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_subnet_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("volterra_subnet_ids"))
 		if err := fv(ctx, m.GetVolterraSubnetIds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPANAWSTypeValidator = func() *ValidatePANAWSType {
 	v := &ValidatePANAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -637,7 +549,6 @@ type ValidatePaloAltoServicesNodeType struct {
 }
 
 func (v *ValidatePaloAltoServicesNodeType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -645,9 +556,7 @@ func (v *ValidatePaloAltoServicesNodeType) NameValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoServicesNodeType) InstanceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for instance_type")
@@ -655,9 +564,7 @@ func (v *ValidatePaloAltoServicesNodeType) InstanceTypeValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoServicesNodeType) SliSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sli_subnet_id")
@@ -665,9 +572,7 @@ func (v *ValidatePaloAltoServicesNodeType) SliSubnetIdValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoServicesNodeType) MgmtSubnetCidrValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mgmt_subnet_cidr")
@@ -675,9 +580,7 @@ func (v *ValidatePaloAltoServicesNodeType) MgmtSubnetCidrValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoServicesNodeType) MgmtSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mgmt_subnet_id")
@@ -699,68 +602,48 @@ func (v *ValidatePaloAltoServicesNodeType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["availability_zone"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("availability_zone"))
 		if err := fv(ctx, m.GetAvailabilityZone(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_type"))
 		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mgmt_subnet_cidr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mgmt_subnet_cidr"))
 		if err := fv(ctx, m.GetMgmtSubnetCidr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mgmt_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mgmt_subnet_id"))
 		if err := fv(ctx, m.GetMgmtSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sli_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sli_subnet_id"))
 		if err := fv(ctx, m.GetSliSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPaloAltoServicesNodeTypeValidator = func() *ValidatePaloAltoServicesNodeType {
 	v := &ValidatePaloAltoServicesNodeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

@@ -13,9 +13,7 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp_routing_policy.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.bgp_routing_policy.Object"] = ObjectValidator()
-
 	vr["ves.io.schema.bgp_routing_policy.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.bgp_routing_policy.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.bgp_routing_policy.DeleteRequest"] = DeleteRequestValidator()
@@ -26,7 +24,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp_routing_policy.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.bgp_routing_policy.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.bgp_routing_policy.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.bgp_routing_policy.BgpCommunity"] = BgpCommunityValidator()
 	vr["ves.io.schema.bgp_routing_policy.BgpPrefixMatch"] = BgpPrefixMatchValidator()
 	vr["ves.io.schema.bgp_routing_policy.BgpPrefixMatchList"] = BgpPrefixMatchListValidator()
@@ -37,7 +34,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp_routing_policy.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.bgp_routing_policy.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.bgp_routing_policy.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -45,68 +41,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.bgp_routing_policy.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.bgp_routing_policy.Object"] = reflect.TypeOf(&DBObject{})
 	mdr.EntryIndexers["ves.io.schema.bgp_routing_policy.Object"] = GetObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp_routing_policy.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.rules.#.action.aggregate",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp_routing_policy.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.rules.#.action.aggregate",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp_routing_policy.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "create_form.spec.rules.#.action.aggregate",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.rules.#.action.aggregate",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "spec.rules.#.action.aggregate",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp_routing_policy.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.rules.#.action.aggregate",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp_routing_policy.API.Replace"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.rules.#.action.aggregate",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.bgp_routing_policy.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -115,9 +63,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.bgp_routing_policy.Object"] = APISwaggerJSON
@@ -131,22 +77,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.bgp_routing_policy.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.bgp_routing_policy.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.bgp_routing_policy.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

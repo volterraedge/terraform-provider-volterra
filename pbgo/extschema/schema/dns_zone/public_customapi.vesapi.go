@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCloneFromDNSDomain(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.CloneFromDNSDomain(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCExportZoneFile(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ExportZoneFileRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCExportZoneFile(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.ExportZoneFile(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetLocalZoneFile(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetLocalZoneFileRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCGetLocalZoneFile(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.GetLocalZoneFile(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetRemoteZoneFile(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRemoteZoneFileRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomAPIGrpcClient) doRPCGetRemoteZoneFile(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.GetRemoteZoneFile(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCImportAXFR(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ImportAXFRRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *CustomAPIGrpcClient) doRPCImportAXFR(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.ImportAXFR(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCImportBINDCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ImportBINDCreateRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +82,6 @@ func (c *CustomAPIGrpcClient) doRPCImportBINDCreate(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.ImportBINDCreate(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCImportBINDValidate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ImportBINDValidateRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +90,6 @@ func (c *CustomAPIGrpcClient) doRPCImportBINDValidate(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.ImportBINDValidate(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCImportF5CSZone(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ImportF5CSZoneRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -137,23 +130,14 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CloneFromDNSDomain"] = ccl.doRPCCloneFromDNSDomain
-
 	rpcFns["ExportZoneFile"] = ccl.doRPCExportZoneFile
-
 	rpcFns["GetLocalZoneFile"] = ccl.doRPCGetLocalZoneFile
-
 	rpcFns["GetRemoteZoneFile"] = ccl.doRPCGetRemoteZoneFile
-
 	rpcFns["ImportAXFR"] = ccl.doRPCImportAXFR
-
 	rpcFns["ImportBINDCreate"] = ccl.doRPCImportBINDCreate
-
 	rpcFns["ImportBINDValidate"] = ccl.doRPCImportBINDValidate
-
 	rpcFns["ImportF5CSZone"] = ccl.doRPCImportF5CSZone
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -239,7 +223,6 @@ func (c *CustomAPIRestClient) doRPCCloneFromDNSDomain(ctx context.Context, callO
 	pbRsp := &CloneResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.CloneResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -247,7 +230,6 @@ func (c *CustomAPIRestClient) doRPCCloneFromDNSDomain(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCExportZoneFile(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -323,7 +305,6 @@ func (c *CustomAPIRestClient) doRPCExportZoneFile(ctx context.Context, callOpts 
 	pbRsp := &ExportZoneFileResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.ExportZoneFileResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -331,7 +312,6 @@ func (c *CustomAPIRestClient) doRPCExportZoneFile(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetLocalZoneFile(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -407,7 +387,6 @@ func (c *CustomAPIRestClient) doRPCGetLocalZoneFile(ctx context.Context, callOpt
 	pbRsp := &GetLocalZoneFileResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.GetLocalZoneFileResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -415,7 +394,6 @@ func (c *CustomAPIRestClient) doRPCGetLocalZoneFile(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetRemoteZoneFile(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -491,7 +469,6 @@ func (c *CustomAPIRestClient) doRPCGetRemoteZoneFile(ctx context.Context, callOp
 	pbRsp := &GetRemoteZoneFileResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.GetRemoteZoneFileResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -499,7 +476,6 @@ func (c *CustomAPIRestClient) doRPCGetRemoteZoneFile(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCImportAXFR(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -576,7 +552,6 @@ func (c *CustomAPIRestClient) doRPCImportAXFR(ctx context.Context, callOpts *ser
 	pbRsp := &ImportAXFRResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.ImportAXFRResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -584,7 +559,6 @@ func (c *CustomAPIRestClient) doRPCImportAXFR(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCImportBINDCreate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -663,7 +637,6 @@ func (c *CustomAPIRestClient) doRPCImportBINDCreate(ctx context.Context, callOpt
 	pbRsp := &ImportBINDResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.ImportBINDResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -671,7 +644,6 @@ func (c *CustomAPIRestClient) doRPCImportBINDCreate(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCImportBINDValidate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -747,7 +719,6 @@ func (c *CustomAPIRestClient) doRPCImportBINDValidate(ctx context.Context, callO
 	pbRsp := &ImportBINDResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.ImportBINDResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -755,7 +726,6 @@ func (c *CustomAPIRestClient) doRPCImportBINDValidate(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCImportF5CSZone(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -830,7 +800,6 @@ func (c *CustomAPIRestClient) doRPCImportF5CSZone(ctx context.Context, callOpts 
 	pbRsp := &ImportF5CSZoneResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.ImportF5CSZoneResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -864,23 +833,14 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CloneFromDNSDomain"] = ccl.doRPCCloneFromDNSDomain
-
 	rpcFns["ExportZoneFile"] = ccl.doRPCExportZoneFile
-
 	rpcFns["GetLocalZoneFile"] = ccl.doRPCGetLocalZoneFile
-
 	rpcFns["GetRemoteZoneFile"] = ccl.doRPCGetRemoteZoneFile
-
 	rpcFns["ImportAXFR"] = ccl.doRPCImportAXFR
-
 	rpcFns["ImportBINDCreate"] = ccl.doRPCImportBINDCreate
-
 	rpcFns["ImportBINDValidate"] = ccl.doRPCImportBINDValidate
-
 	rpcFns["ImportF5CSZone"] = ccl.doRPCImportF5CSZone
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -989,7 +949,6 @@ func (s *customAPISrv) CloneFromDNSDomain(ctx context.Context, in *CloneReq) (*C
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.CloneResp", rsp)...)
 
 	return rsp, nil
@@ -1038,7 +997,6 @@ func (s *customAPISrv) ExportZoneFile(ctx context.Context, in *ExportZoneFileReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ExportZoneFileResponse", rsp)...)
 
 	return rsp, nil
@@ -1087,7 +1045,6 @@ func (s *customAPISrv) GetLocalZoneFile(ctx context.Context, in *GetLocalZoneFil
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.GetLocalZoneFileResponse", rsp)...)
 
 	return rsp, nil
@@ -1136,7 +1093,6 @@ func (s *customAPISrv) GetRemoteZoneFile(ctx context.Context, in *GetRemoteZoneF
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.GetRemoteZoneFileResponse", rsp)...)
 
 	return rsp, nil
@@ -1185,7 +1141,6 @@ func (s *customAPISrv) ImportAXFR(ctx context.Context, in *ImportAXFRRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportAXFRResponse", rsp)...)
 
 	return rsp, nil
@@ -1234,7 +1189,6 @@ func (s *customAPISrv) ImportBINDCreate(ctx context.Context, in *ImportBINDCreat
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportBINDResponse", rsp)...)
 
 	return rsp, nil
@@ -1283,7 +1237,6 @@ func (s *customAPISrv) ImportBINDValidate(ctx context.Context, in *ImportBINDVal
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportBINDResponse", rsp)...)
 
 	return rsp, nil
@@ -1332,7 +1285,6 @@ func (s *customAPISrv) ImportF5CSZone(ctx context.Context, in *ImportF5CSZoneReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportF5CSZoneResponse", rsp)...)
 
 	return rsp, nil
@@ -1531,7 +1483,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/dns_zone/import_axfr": {
             "post": {
-                "summary": "Import DNS Zone",
+                "summary": "Import AXFR for Primary Zone",
                 "description": "Import DNS Zone via AXFR",
                 "operationId": "ves.io.schema.dns_zone.CustomAPI.ImportAXFR",
                 "responses": {
@@ -3283,7 +3235,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "valid_zone_list": {
                     "type": "array",
-                    "description": " Zones that we parsed succcessfully. On submission, objects will be created for every zone in this list. ",
+                    "description": " Zones that we parsed succcessfully. On submission, objects will be created for every zone in this list.",
                     "title": "Valid Zone List",
                     "items": {
                         "$ref": "#/definitions/dns_zoneValidZone"
@@ -3916,7 +3868,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "digest": {
                     "type": "string",
-                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record.\n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
                     "title": "Digest",
                     "minLength": 40,
                     "maxLength": 40,
@@ -3939,7 +3891,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "fingerprint": {
                     "type": "string",
-                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record. \n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
+                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record.\n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
                     "title": "Fingerprint",
                     "minLength": 40,
                     "maxLength": 40,
@@ -3962,7 +3914,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "digest": {
                     "type": "string",
-                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record.\n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
                     "title": "Digest",
                     "minLength": 64,
                     "maxLength": 64,
@@ -3985,7 +3937,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "fingerprint": {
                     "type": "string",
-                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record. \n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
+                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record.\n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
                     "title": "Fingerprint",
                     "minLength": 64,
                     "maxLength": 64,
@@ -4008,7 +3960,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "digest": {
                     "type": "string",
-                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"b4a9b28d142d91968ca232b95dfca771ee66f99924148b85026dfa686f6288d0edbfa71c98a798fda71e130f48e8f0f8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 96\n  ves.io.schema.rules.string.min_len: 96\n",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record.\n\nExample: - \"b4a9b28d142d91968ca232b95dfca771ee66f99924148b85026dfa686f6288d0edbfa71c98a798fda71e130f48e8f0f8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 96\n  ves.io.schema.rules.string.min_len: 96\n",
                     "title": "Digest",
                     "minLength": 96,
                     "maxLength": 96,
@@ -4347,7 +4299,7 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "certificate_usage": {
-                    "description": " x-example: \n TLSA Record Certificate Usage.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " x-example:\n TLSA Record Certificate Usage.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Certificate Usage",
                     "$ref": "#/definitions/dns_zoneTLSARecordCertificateUsage",
                     "x-displayname": "Certificate Usage",

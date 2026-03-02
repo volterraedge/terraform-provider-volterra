@@ -22,19 +22,13 @@ resource "volterra_app_firewall" "example" {
 
   // One of the arguments from this list "allow_all_response_codes allowed_response_codes" must be set
 
-  allow_all_response_codes = true
+  allowed_response_codes {
+    response_code = ["[200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]"]
+  }
 
   // One of the arguments from this list "custom_anonymization default_anonymization disable_anonymization" must be set
 
-  custom_anonymization {
-    anonymization_config {
-      // One of the arguments from this list "cookie http_header query_parameter" must be set
-
-      http_header {
-        header_name = "value"
-      }
-    }
-  }
+  disable_anonymization = true
 
   // One of the arguments from this list "blocking_page use_default_blocking_page" must be set
 
@@ -46,13 +40,74 @@ resource "volterra_app_firewall" "example" {
 
   // One of the arguments from this list "ai_risk_based_blocking default_detection_settings detection_settings" must be set
 
-  default_detection_settings = true
+  detection_settings {
+    // One of the arguments from this list "bot_protection_setting default_bot_setting" must be set
+
+    bot_protection_setting {
+      good_bot_action = "good_bot_action"
+
+      malicious_bot_action = "malicious_bot_action"
+
+      suspicious_bot_action = "suspicious_bot_action"
+    }
+
+    configured_violations {
+      name = "VIOL_MANDATORY_HEADER"
+
+      // One of the arguments from this list "disabled enabled" must be set
+
+      enabled = true
+    }
+
+    // One of the arguments from this list "disable_suppression enable_suppression" must be set
+
+    enable_suppression = true
+    signature_selection_setting {
+      // One of the arguments from this list "attack_type_settings default_attack_type_settings" must be set
+
+      default_attack_type_settings = true
+
+      // One of the arguments from this list "high_medium_accuracy_signatures high_medium_low_accuracy_signatures only_high_accuracy_signatures" must be set
+
+      only_high_accuracy_signatures = true
+    }
+
+    // One of the arguments from this list "disable_staging stage_new_and_updated_signatures stage_new_signatures" can be set
+
+    stage_new_and_updated_signatures {
+      staging_period = "7"
+    }
+
+    // One of the arguments from this list "disable_threat_campaigns enable_threat_campaigns" must be set
+
+    enable_threat_campaigns = true
+
+    // One of the arguments from this list "default_violation_settings violation_settings" must be set
+
+    violation_settings {
+      disabled_violation_types = ["disabled_violation_types"]
+    }
+    violations_view {
+      description = "description"
+
+      enabled = true
+
+      enabled_by_default = "enabled_by_default"
+
+      name = "name"
+
+      title = "title"
+    }
+  }
 
   // One of the arguments from this list "blocking monitoring use_loadbalancer_setting" must be set
 
-  blocking = true
-}
+  use_loadbalancer_setting = true
 
+  // One of the arguments from this list "disable_ai_enhancements enable_ai_enhancements" must be set
+
+  disable_ai_enhancements = true
+}
 ```
 
 Argument Reference
@@ -102,7 +157,7 @@ Argument Reference
 
 ###### One of the arguments from this list "ai_risk_based_blocking, default_detection_settings, detection_settings" must be set
 
-`ai_risk_based_blocking` - (Optional) only high-risk requests will be blocked by default. This feature is in preview mode.. See [Detection Setting Choice Ai Risk Based Blocking ](#detection-setting-choice-ai-risk-based-blocking) below for details.
+`ai_risk_based_blocking` - (Optional) only high-risk requests will be blocked by default. This feature is in preview mode.. See [Detection Setting Choice Ai Risk Based Blocking ](#detection-setting-choice-ai-risk-based-blocking) below for details.(Deprecated)
 
 `default_detection_settings` - (Optional) All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled. (`Bool`).
 
@@ -116,6 +171,12 @@ Argument Reference
 
 `use_loadbalancer_setting` - (Optional) Use the mode as specified in the load balancer (`Bool`).(Deprecated)
 
+###### One of the arguments from this list "disable_ai_enhancements, enable_ai_enhancements" must be set
+
+`disable_ai_enhancements` - (Optional) Risk-base AI evaluations will not factor into enforcement actions (`Bool`).
+
+`enable_ai_enhancements` - (Optional) of the F5 AI Powered Risk-based analysis. See [Enhance With Ai Choice Enable Ai Enhancements ](#enhance-with-ai-choice-enable-ai-enhancements) below for details.
+
 ### Allowed Response Codes Choice Allowed Response Codes
 
 Define list of HTTP response status codes that are allowed.
@@ -126,19 +187,19 @@ Define list of HTTP response status codes that are allowed.
 
 x-displayName: "Cookie".
 
-`cookie_name` - (Required) Masks the cookie value. The setting does not mask the cookie name. (`String`).
+`cookie_name` - (Required) with a wildcard asterisk (*), or by using only an asterisk to match any cookie name. (`String`).
 
 ### Anonymization Choice Http Header
 
 x-displayName: "HTTP Header".
 
-`header_name` - (Required) Masks the HTTP header value. The setting does not mask the HTTP header name. (`String`).
+`header_name` - (Required) with a wildcard asterisk (*), or by using only an asterisk to match any HTTP header name. (`String`).
 
 ### Anonymization Choice Query Parameter
 
 x-displayName: "Query Parameter".
 
-`query_param_name` - (Required) Masks the query parameter value. The setting does not mask the query parameter name. (`String`).
+`query_param_name` - (Required) with a wildcard asterisk (*), or by using only an asterisk to match any query parameter name. (`String`).
 
 ### Anonymization Setting Custom Anonymization
 
@@ -210,6 +271,8 @@ Define Custom Security Policy settings.
 
 `default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be ignored. (`Bool`).
 
+`configured_violations` - (Optional) Will store the list of violations with config that are different from the default violation config. See [Detection Settings Configured Violations ](#detection-settings-configured-violations) below for details.(Deprecated)
+
 ###### One of the arguments from this list "disable_suppression, enable_suppression" must be set
 
 `disable_suppression` - (Optional) x-displayName: "Disable" (`Bool`).
@@ -234,9 +297,23 @@ Define Custom Security Policy settings.
 
 ###### One of the arguments from this list "default_violation_settings, violation_settings" must be set
 
-`default_violation_settings` - (Optional) All violations are enabled for detection (`Bool`).
+`default_violation_settings` - (Optional) All violations are enabled for detection (`Bool`).(Deprecated)
 
-`violation_settings` - (Optional) Define violations to be disabled for detection. See [Violation Detection Setting Violation Settings ](#violation-detection-setting-violation-settings) below for details.
+`violation_settings` - (Optional) Define violations to be disabled for detection. See [Violation Detection Setting Violation Settings ](#violation-detection-setting-violation-settings) below for details.(Deprecated)
+
+`violations_view` - (Required) List of violation checks that are performed on HTTP request to ensure the requests are properly formatted, detection of evasion techniques and other violations.. See [Detection Settings Violations View ](#detection-settings-violations-view) below for details.
+
+### Detection Settings Configured Violations
+
+Will store the list of violations with config that are different from the default violation config.
+
+`name` - (Required) x-required (`String`).
+
+###### One of the arguments from this list "disabled, enabled" must be set
+
+`disabled` - (Optional) Disables the specific violation (`Bool`).
+
+`enabled` - (Optional) Enables the specific violation (`Bool`).
 
 ### Detection Settings Signature Selection Setting
 
@@ -256,6 +333,30 @@ Attack Signatures are patterns that identify attacks on a web application and it
 
 `only_high_accuracy_signatures` - (Optional) Enables only high accuracy signatures (`Bool`).
 
+### Detection Settings Violations View
+
+List of violation checks that are performed on HTTP request to ensure the requests are properly formatted, detection of evasion techniques and other violations..
+
+`description` - (Optional) x-displayName: "Description" (`String`).
+
+`enabled` - (Optional) x-displayName: "State" (`Bool`).
+
+`enabled_by_default` - (Optional) Violations that are enabled by default by F5 are advisable to leave enabled (`String`).
+
+`name` - (Optional) x-displayName: "Name" (`String`).
+
+`title` - (Optional) x-displayName: "Title" (`String`).
+
+### Enhance With Ai Choice Enable Ai Enhancements
+
+of the F5 AI Powered Risk-based analysis.
+
+###### One of the arguments from this list "mitigate_high_medium_risk_action, mitigate_high_risk_action" must be set
+
+`mitigate_high_medium_risk_action` - (Optional) Mitigate requests if the risk score is High or Medium (`Bool`).
+
+`mitigate_high_risk_action` - (Optional) Mitigate requests only if the risk score is classified as High (`Bool`).
+
 ### False Positive Suppression Disable Suppression
 
 x-displayName: "Disable".
@@ -263,6 +364,14 @@ x-displayName: "Disable".
 ### False Positive Suppression Enable Suppression
 
 x-displayName: "Enable".
+
+### Risk Score Action Choice Mitigate High Medium Risk Action
+
+Mitigate requests if the risk score is High or Medium.
+
+### Risk Score Action Choice Mitigate High Risk Action
+
+Mitigate requests only if the risk score is classified as High.
 
 ### Signature Selection By Accuracy High Medium Accuracy Signatures
 
@@ -292,6 +401,14 @@ Stage new attack signatures only. Updated signatures will be enforced.
 
 `staging_period` - (Required) 20 days. (`Int`).
 
+### State Choice Disabled
+
+Disables the specific violation.
+
+### State Choice Enabled
+
+Enables the specific violation.
+
 ### Threat Campaign Choice Disable Threat Campaigns
 
 x-displayName: "Disable".
@@ -313,4 +430,4 @@ Define violations to be disabled for detection.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured app_firewall.
+*   `id` - This is the id of the configured app_firewall.

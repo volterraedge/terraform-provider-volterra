@@ -52,7 +52,6 @@ resource "volterra_external_connector" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -80,7 +79,7 @@ Argument Reference
 
 `direct_connection` - (Optional) External Connector with direct connection. See [Connection Type Direct Connection ](#connection-type-direct-connection) below for details.(Deprecated)
 
-`gre` - (Optional) External Connector with GRE tunnel. See [Connection Type Gre ](#connection-type-gre) below for details.(Deprecated)
+`gre` - (Optional) External Connector with GRE tunnel. See [Connection Type Gre ](#connection-type-gre) below for details.
 
 `ipsec` - (Optional) External Connector with IPSec tunnel. See [Connection Type Ipsec ](#connection-type-ipsec) below for details.
 
@@ -104,7 +103,7 @@ External Connector with IPSec tunnel.
 
 ### Dpd Choice Dpd Disabled
 
-Disabled Dead Peer Detection .
+Disabled Dead Peer Detection.
 
 ### Dpd Choice Dpd Keep Alive Timer
 
@@ -192,7 +191,7 @@ In this section, we will configure the tunnel parameters, source, destination, I
 
 `psk` - (Required) The IKE pre-shared key (PSK) is required to ensure the IKE peers can authenticate one another within IKE phase 1 negotiation. (`String`).
 
-`tunnel_eps` - (Required) Configure tunnel parameters, local and remote IP addresses . See [Ipsec Tunnel Parameters Tunnel Eps ](#ipsec-tunnel-parameters-tunnel-eps) below for details.
+`tunnel_eps` - (Required) Configure tunnel parameters, local and remote IP addresses. See [Ipsec Tunnel Parameters Tunnel Eps ](#ipsec-tunnel-parameters-tunnel-eps) below for details.
 
 `tunnel_mtu` - (Required) The tunnel MTU defines the maximum size of the packet that can be sent through the tunnel without needing to be fragmented (`Int`).
 
@@ -212,7 +211,7 @@ This is the reachable address for the remote gateway. For instance if the remote
 
 ### Ipsec Tunnel Parameters Tunnel Eps
 
-Configure tunnel parameters, local and remote IP addresses .
+Configure tunnel parameters, local and remote IP addresses.
 
 `interface` - (Required) For the chosen node, specify the interface that will be the tunnel source. (`String`).
 
@@ -299,4 +298,4 @@ IPv6 Address.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured external_connector.
+*   `id` - This is the id of the configured external_connector.

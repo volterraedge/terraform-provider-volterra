@@ -40,7 +40,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.password")
 	}
@@ -80,7 +79,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) RegistryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for registry")
@@ -88,9 +86,7 @@ func (v *ValidateCreateSpecType) RegistryValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) UserNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user_name")
@@ -98,9 +94,7 @@ func (v *ValidateCreateSpecType) UserNameValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -109,19 +103,15 @@ func (v *ValidateCreateSpecType) PasswordValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
@@ -143,50 +133,36 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["registry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("registry"))
 		if err := fv(ctx, m.GetRegistry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_name"))
 		if err := fv(ctx, m.GetUserName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -264,7 +240,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.password")
 	}
@@ -304,7 +279,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) RegistryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for registry")
@@ -312,9 +286,7 @@ func (v *ValidateGetSpecType) RegistryValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) UserNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user_name")
@@ -322,9 +294,7 @@ func (v *ValidateGetSpecType) UserNameValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -333,19 +303,15 @@ func (v *ValidateGetSpecType) PasswordValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
@@ -367,50 +333,36 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["registry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("registry"))
 		if err := fv(ctx, m.GetRegistry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_name"))
 		if err := fv(ctx, m.GetUserName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -488,7 +440,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.password")
 	}
@@ -528,7 +479,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RegistryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for registry")
@@ -536,9 +486,7 @@ func (v *ValidateGlobalSpecType) RegistryValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) UserNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user_name")
@@ -546,9 +494,7 @@ func (v *ValidateGlobalSpecType) UserNameValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -557,19 +503,15 @@ func (v *ValidateGlobalSpecType) PasswordValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
@@ -591,50 +533,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["registry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("registry"))
 		if err := fv(ctx, m.GetRegistry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_name"))
 		if err := fv(ctx, m.GetUserName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -712,7 +640,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.password")
 	}
@@ -752,7 +679,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) RegistryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for registry")
@@ -760,9 +686,7 @@ func (v *ValidateReplaceSpecType) RegistryValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) UserNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user_name")
@@ -770,9 +694,7 @@ func (v *ValidateReplaceSpecType) UserNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -781,19 +703,15 @@ func (v *ValidateReplaceSpecType) PasswordValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
@@ -815,50 +733,36 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["registry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("registry"))
 		if err := fv(ctx, m.GetRegistry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_name"))
 		if err := fv(ctx, m.GetUserName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

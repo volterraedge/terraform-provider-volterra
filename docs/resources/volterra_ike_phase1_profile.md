@@ -17,9 +17,8 @@ Example Usage
 
 ```hcl
 resource "volterra_ike_phase1_profile" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
+  name                 = "acmecorp-web"
+  namespace            = "staging"
   authentication_algos = ["authentication_algos"]
 
   dh_group = ["dh_group"]
@@ -37,7 +36,6 @@ resource "volterra_ike_phase1_profile" "example" {
   }
   prf = ["prf"]
 }
-
 ```
 
 Argument Reference
@@ -110,4 +108,4 @@ Set Reauthentication timeout in Hours.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured ike_phase1_profile.
+*   `id` - This is the id of the configured ike_phase1_profile.

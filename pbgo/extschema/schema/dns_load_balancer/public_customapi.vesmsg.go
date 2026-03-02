@@ -66,7 +66,6 @@ type ValidateSuggestValuesReq struct {
 }
 
 func (v *ValidateSuggestValuesReq) FieldPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for field_path")
@@ -74,9 +73,7 @@ func (v *ValidateSuggestValuesReq) FieldPathValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSuggestValuesReq) MatchValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for match_value")
@@ -98,50 +95,36 @@ func (v *ValidateSuggestValuesReq) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_path"))
 		if err := fv(ctx, m.GetFieldPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["match_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match_value"))
 		if err := fv(ctx, m.GetMatchValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_body"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_body"))
 		if err := fv(ctx, m.GetRequestBody(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuggestValuesReqValidator = func() *ValidateSuggestValuesReq {
 	v := &ValidateSuggestValuesReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -233,9 +216,7 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -243,16 +224,13 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuggestValuesRespValidator = func() *ValidateSuggestValuesResp {
 	v := &ValidateSuggestValuesResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = SuggestedItemValidator().Validate
 
 	return v
@@ -316,14 +294,11 @@ func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetValueChoice().(type) {
@@ -349,16 +324,13 @@ func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuggestedItemValidator = func() *ValidateSuggestedItem {
 	v := &ValidateSuggestedItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["value_choice.ref_value"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

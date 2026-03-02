@@ -65,8 +65,15 @@ type ValidateCustomCreateRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCustomCreateRequest) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCustomCreateRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
 
+	return validatorFn, nil
+}
+func (v *ValidateCustomCreateRequest) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -120,49 +127,36 @@ func (v *ValidateCustomCreateRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		if err := fv(ctx, m.GetApiGroups(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomCreateRequestValidator = func() *ValidateCustomCreateRequest {
 	v := &ValidateCustomCreateRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -170,6 +164,17 @@ var DefaultCustomCreateRequestValidator = func() *ValidateCustomCreateRequest {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomCreateRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	vrhApiGroups := v.ApiGroupsValidationRuleHandler
 	rulesApiGroups := map[string]string{
@@ -182,9 +187,7 @@ var DefaultCustomCreateRequestValidator = func() *ValidateCustomCreateRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["api_groups"] = vFn
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectCreateMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = CreateSpecTypeValidator().Validate
 
 	return v
@@ -235,6 +238,15 @@ type ValidateCustomGetRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCustomGetRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCustomGetRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CustomGetRequest)
 	if !ok {
@@ -248,31 +260,42 @@ func (v *ValidateCustomGetRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomGetRequestValidator = func() *ValidateCustomGetRequest {
 	v := &ValidateCustomGetRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^(shared|system)$",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomGetRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -324,7 +347,6 @@ func (m *CustomGetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return nil, nil
-
 }
 
 type ValidateCustomGetResponse struct {
@@ -344,9 +366,7 @@ func (v *ValidateCustomGetResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		for idx, item := range m.GetApiGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -354,25 +374,19 @@ func (v *ValidateCustomGetResponse) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object"))
 		if err := fv(ctx, m.GetObject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomGetResponseValidator = func() *ValidateCustomGetResponse {
 	v := &ValidateCustomGetResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["object"] = ObjectValidator().Validate
 
 	return v
@@ -423,6 +437,15 @@ type ValidateCustomListRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCustomListRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCustomListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CustomListRequest)
 	if !ok {
@@ -436,22 +459,36 @@ func (v *ValidateCustomListRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomListRequestValidator = func() *ValidateCustomListRequest {
 	v := &ValidateCustomListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^(shared|system)$",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomListRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -503,7 +540,6 @@ func (m *CustomListResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetItemsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -511,7 +547,6 @@ func (m *CustomListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItems() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
@@ -525,7 +560,6 @@ func (m *CustomListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCustomListResponse struct {
@@ -545,9 +579,7 @@ func (v *ValidateCustomListResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -555,16 +587,13 @@ func (v *ValidateCustomListResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomListResponseValidator = func() *ValidateCustomListResponse {
 	v := &ValidateCustomListResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = RoleValidator().Validate
 
 	return v
@@ -615,8 +644,15 @@ type ValidateCustomReplaceRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCustomReplaceRequest) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCustomReplaceRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
 
+	return validatorFn, nil
+}
+func (v *ValidateCustomReplaceRequest) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -670,49 +706,36 @@ func (v *ValidateCustomReplaceRequest) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		if err := fv(ctx, m.GetApiGroups(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomReplaceRequestValidator = func() *ValidateCustomReplaceRequest {
 	v := &ValidateCustomReplaceRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -720,6 +743,17 @@ var DefaultCustomReplaceRequestValidator = func() *ValidateCustomReplaceRequest 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomReplaceRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	vrhApiGroups := v.ApiGroupsValidationRuleHandler
 	rulesApiGroups := map[string]string{
@@ -732,7 +766,6 @@ var DefaultCustomReplaceRequestValidator = func() *ValidateCustomReplaceRequest 
 		panic(errMsg)
 	}
 	v.FldValidators["api_groups"] = vFn
-
 	v.FldValidators["spec"] = ReplaceSpecTypeValidator().Validate
 
 	return v
@@ -785,7 +818,6 @@ func (m *Role) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGetSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -793,7 +825,6 @@ func (m *Role) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfo() FAILED")
@@ -803,7 +834,6 @@ func (m *Role) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "get_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateRole struct {
@@ -823,9 +853,7 @@ func (v *ValidateRole) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		for idx, item := range m.GetApiGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -833,70 +861,49 @@ func (v *ValidateRole) Validate(ctx context.Context, pm interface{}, opts ...db.
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disabled"))
 		if err := fv(ctx, m.GetDisabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["get_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("get_spec"))
 		if err := fv(ctx, m.GetGetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRoleValidator = func() *ValidateRole {
 	v := &ValidateRole{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["get_spec"] = GetSpecTypeValidator().Validate
 
 	return v

@@ -40,7 +40,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.tls_parameters")
 	}
@@ -86,21 +85,17 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
@@ -125,7 +120,6 @@ func (m *CreateSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPublicIpDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -144,7 +138,6 @@ func (m *CreateSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -153,7 +146,6 @@ func (m *CreateSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -163,7 +155,6 @@ func (m *CreateSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -171,7 +162,6 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -181,7 +171,6 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -203,6 +192,7 @@ func (v *ValidateCreateSpecType) PortChoicePortValidationRuleHandler(rules map[s
 	}
 	return oValidatorFn_Port, nil
 }
+
 func (v *ValidateCreateSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -210,9 +200,7 @@ func (v *ValidateCreateSpecType) PortChoicePortRangesValidationRuleHandler(rules
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -220,9 +208,7 @@ func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -244,14 +230,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -287,20 +270,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip"))
 		for idx, item := range m.GetPublicIp() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -308,43 +285,31 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["skip_xff_append"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("skip_xff_append"))
 		if err := fv(ctx, m.GetSkipXffAppend(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
 		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -352,7 +317,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -363,7 +327,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -385,7 +348,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
 
@@ -410,9 +372,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
-
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
 	return v
@@ -438,7 +398,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.tls_parameters")
 	}
@@ -484,21 +443,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
@@ -523,7 +478,6 @@ func (m *GetSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPublicIpDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -542,7 +496,6 @@ func (m *GetSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -551,7 +504,6 @@ func (m *GetSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -561,7 +513,6 @@ func (m *GetSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -569,7 +520,6 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -579,7 +529,6 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -601,6 +550,7 @@ func (v *ValidateGetSpecType) PortChoicePortValidationRuleHandler(rules map[stri
 	}
 	return oValidatorFn_Port, nil
 }
+
 func (v *ValidateGetSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -608,9 +558,7 @@ func (v *ValidateGetSpecType) PortChoicePortRangesValidationRuleHandler(rules ma
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -618,9 +566,7 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -642,14 +588,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -685,20 +628,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip"))
 		for idx, item := range m.GetPublicIp() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -706,43 +643,31 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["skip_xff_append"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("skip_xff_append"))
 		if err := fv(ctx, m.GetSkipXffAppend(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
 		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -750,7 +675,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -761,7 +685,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -783,7 +706,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
 
@@ -808,9 +730,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
-
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
 	return v
@@ -836,7 +756,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.tls_parameters")
 	}
@@ -882,21 +801,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
@@ -921,7 +836,6 @@ func (m *GlobalSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPublicIpDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -940,7 +854,6 @@ func (m *GlobalSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -949,7 +862,6 @@ func (m *GlobalSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -959,7 +871,6 @@ func (m *GlobalSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -967,7 +878,6 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -977,7 +887,6 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -999,6 +908,7 @@ func (v *ValidateGlobalSpecType) PortChoicePortValidationRuleHandler(rules map[s
 	}
 	return oValidatorFn_Port, nil
 }
+
 func (v *ValidateGlobalSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1006,9 +916,7 @@ func (v *ValidateGlobalSpecType) PortChoicePortRangesValidationRuleHandler(rules
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -1016,9 +924,7 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -1040,14 +946,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
+	}
 
+	switch m.GetAdvertisePolicyType().(type) {
+	case *GlobalSpecType_DefaultAdvertisePolicy:
+		if fv, exists := v.FldValidators["advertise_policy_type.default_advertise_policy"]; exists {
+			val := m.GetAdvertisePolicyType().(*GlobalSpecType_DefaultAdvertisePolicy).DefaultAdvertisePolicy
+			vOpts := append(opts,
+				db.WithValidateField("advertise_policy_type"),
+				db.WithValidateField("default_advertise_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_TmmVirtualAddress:
+		if fv, exists := v.FldValidators["advertise_policy_type.tmm_virtual_address"]; exists {
+			val := m.GetAdvertisePolicyType().(*GlobalSpecType_TmmVirtualAddress).TmmVirtualAddress
+			vOpts := append(opts,
+				db.WithValidateField("advertise_policy_type"),
+				db.WithValidateField("tmm_virtual_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -1083,20 +1011,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip"))
 		for idx, item := range m.GetPublicIp() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1104,43 +1026,31 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["skip_xff_append"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("skip_xff_append"))
 		if err := fv(ctx, m.GetSkipXffAppend(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
 		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1148,7 +1058,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1159,7 +1068,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -1181,7 +1089,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
 
@@ -1206,9 +1113,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
+	v.FldValidators["advertise_policy_type.tmm_virtual_address"] = TMMVirtualAddressTypeValidator().Validate
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
-
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
 	return v
@@ -1272,34 +1178,24 @@ func (v *ValidateListenerConfig) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1330,7 +1226,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.tls_parameters")
 	}
@@ -1376,21 +1271,17 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
@@ -1415,7 +1306,6 @@ func (m *ReplaceSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPublicIpDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1434,7 +1324,6 @@ func (m *ReplaceSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1443,7 +1332,6 @@ func (m *ReplaceSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -1453,7 +1341,6 @@ func (m *ReplaceSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1461,7 +1348,6 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -1471,7 +1357,6 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1493,6 +1378,7 @@ func (v *ValidateReplaceSpecType) PortChoicePortValidationRuleHandler(rules map[
 	}
 	return oValidatorFn_Port, nil
 }
+
 func (v *ValidateReplaceSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1500,9 +1386,7 @@ func (v *ValidateReplaceSpecType) PortChoicePortRangesValidationRuleHandler(rule
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -1510,9 +1394,7 @@ func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -1534,14 +1416,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -1577,20 +1456,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip"))
 		for idx, item := range m.GetPublicIp() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1598,43 +1471,31 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["skip_xff_append"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("skip_xff_append"))
 		if err := fv(ctx, m.GetSkipXffAppend(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
 		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1642,7 +1503,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1653,7 +1513,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -1675,7 +1534,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
 
@@ -1700,9 +1558,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
-
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
 	return v
@@ -1710,6 +1566,113 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TMMVirtualAddressType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TMMVirtualAddressType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TMMVirtualAddressType) DeepCopy() *TMMVirtualAddressType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TMMVirtualAddressType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TMMVirtualAddressType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TMMVirtualAddressType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TMMVirtualAddressTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTMMVirtualAddressType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTMMVirtualAddressType) StateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for state")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTMMVirtualAddressType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TMMVirtualAddressType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TMMVirtualAddressType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["state"]; exists {
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTMMVirtualAddressTypeValidator = func() *ValidateTMMVirtualAddressType {
+	v := &ValidateTMMVirtualAddressType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhState := v.StateValidationRuleHandler
+	rulesState := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhState(rulesState)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TMMVirtualAddressType.state: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["state"] = vFn
+
+	return v
+}()
+
+func TMMVirtualAddressTypeValidator() db.Validator {
+	return DefaultTMMVirtualAddressTypeValidator
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields

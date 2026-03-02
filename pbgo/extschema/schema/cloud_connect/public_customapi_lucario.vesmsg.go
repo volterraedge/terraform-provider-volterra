@@ -68,11 +68,9 @@ func (m *DiscoverVPCRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCredDRefInfo()
-
 }
 
 func (m *DiscoverVPCRequest) GetCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -88,7 +86,6 @@ func (m *DiscoverVPCRequest) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -98,7 +95,6 @@ func (m *DiscoverVPCRequest) GetCredDBEntries(ctx context.Context, d db.Interfac
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -116,7 +112,6 @@ func (m *DiscoverVPCRequest) GetCredDBEntries(ctx context.Context, d db.Interfac
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -137,50 +132,36 @@ func (v *ValidateDiscoverVPCRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["edge_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("edge_site"))
 		if err := fv(ctx, m.GetEdgeSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDiscoverVPCRequestValidator = func() *ValidateDiscoverVPCRequest {
 	v := &ValidateDiscoverVPCRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -233,7 +214,6 @@ func (m *DiscoverVPCResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveredVpcDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -241,7 +221,6 @@ func (m *DiscoverVPCResponse) GetDiscoveredVpcDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetDiscoveredVpc() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetDiscoveredVpc() {
 		driSet, err := e.GetDRefInfo()
@@ -255,7 +234,6 @@ func (m *DiscoverVPCResponse) GetDiscoveredVpcDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateDiscoverVPCResponse struct {
@@ -275,9 +253,7 @@ func (v *ValidateDiscoverVPCResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovered_vpc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovered_vpc"))
 		for idx, item := range m.GetDiscoveredVpc() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -285,16 +261,13 @@ func (v *ValidateDiscoverVPCResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDiscoverVPCResponseValidator = func() *ValidateDiscoverVPCResponse {
 	v := &ValidateDiscoverVPCResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["discovered_vpc"] = DiscoveredVPCTypeValidator().Validate
 
 	return v
@@ -347,11 +320,9 @@ func (m *DiscoveredVPCType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCredDRefInfo()
-
 }
 
 func (m *DiscoveredVPCType) GetCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -367,7 +338,6 @@ func (m *DiscoveredVPCType) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -377,7 +347,6 @@ func (m *DiscoveredVPCType) GetCredDBEntries(ctx context.Context, d db.Interface
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -395,7 +364,6 @@ func (m *DiscoveredVPCType) GetCredDBEntries(ctx context.Context, d db.Interface
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -416,59 +384,42 @@ func (v *ValidateDiscoveredVPCType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_name"))
 		if err := fv(ctx, m.GetVpcName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDiscoveredVPCTypeValidator = func() *ValidateDiscoveredVPCType {
 	v := &ValidateDiscoveredVPCType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -521,11 +472,9 @@ func (m *ReApplyVPCAttachmentRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudConnectDRefInfo()
-
 }
 
 func (m *ReApplyVPCAttachmentRequest) GetCloudConnectDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCloudConnect()
 	if vref == nil {
 		return nil, nil
@@ -541,7 +490,6 @@ func (m *ReApplyVPCAttachmentRequest) GetCloudConnectDRefInfo() ([]db.DRefInfo, 
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCloudConnectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -551,7 +499,6 @@ func (m *ReApplyVPCAttachmentRequest) GetCloudConnectDBEntries(ctx context.Conte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_connect")
 	}
-
 	vref := m.GetCloudConnect()
 	if vref == nil {
 		return nil, nil
@@ -569,7 +516,6 @@ func (m *ReApplyVPCAttachmentRequest) GetCloudConnectDBEntries(ctx context.Conte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -590,41 +536,30 @@ func (v *ValidateReApplyVPCAttachmentRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_connect"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_connect"))
 		if err := fv(ctx, m.GetCloudConnect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReApplyVPCAttachmentRequestValidator = func() *ValidateReApplyVPCAttachmentRequest {
 	v := &ValidateReApplyVPCAttachmentRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["cloud_connect"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -688,7 +623,6 @@ func (v *ValidateReApplyVPCAttachmentResponse) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

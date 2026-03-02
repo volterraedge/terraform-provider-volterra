@@ -27,10 +27,9 @@ resource "volterra_uztna_healthcheck" "example" {
 
     send_payload = "send_payload"
   }
-  interval = ["10"]
-  timeout = ["1"]
+  interval = 10
+  timeout = 1
 }
-
 ```
 
 Argument Reference
@@ -71,4 +70,4 @@ Specifies send payload and expected response payload.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_healthcheck.
+-   `id` - This is the id of the configured uztna_healthcheck.

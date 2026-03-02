@@ -18,18 +18,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.api_inventory.UpdateApiDefinitionRefResp"] = UpdateApiDefinitionRefRespValidator()
 	vr["ves.io.schema.views.api_inventory.UpdateApiInventoryListsReq"] = UpdateApiInventoryListsReqValidator()
 	vr["ves.io.schema.views.api_inventory.UpdateApiInventoryListsResp"] = UpdateApiInventoryListsRespValidator()
-
 	vr["ves.io.schema.views.api_inventory.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.api_inventory.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.api_inventory.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.api_inventory.GlobalSpecType"] = GlobalSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.EntryFactory["ves.io.schema.views.api_inventory.Object"] = NewEntryObject
 	mdr.EntryStoreMap["ves.io.schema.views.api_inventory.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.api_inventory.Object"] = reflect.TypeOf(&DBObject{})
@@ -38,24 +33,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.api_inventory.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.api_inventory.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.api_inventory.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -65,12 +55,9 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.api_inventory.Object"] = CustomAPIPrivateSwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.api_inventory.CustomAPIPrivate"] = NewCustomAPIPrivateGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.api_inventory.CustomAPIPrivate"] = NewCustomAPIPrivateRestClient
 		if isExternal {
@@ -81,22 +68,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.api_inventory.CustomAPIPrivate"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIPrivateServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

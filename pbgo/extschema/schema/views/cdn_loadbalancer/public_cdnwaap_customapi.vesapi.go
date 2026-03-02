@@ -44,7 +44,6 @@ func (c *CustomCDNWAAPAPIGrpcClient) doRPCDeleteCDNDoSAutoMitigationRule(ctx con
 	rsp, err := c.grpcClient.DeleteCDNDoSAutoMitigationRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomCDNWAAPAPIGrpcClient) doRPCGetCDNDoSAutoMitigationRules(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_common_security.GetDoSAutoMitigationRulesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *CustomCDNWAAPAPIGrpcClient) doRPCGetCDNDoSAutoMitigationRules(ctx conte
 	rsp, err := c.grpcClient.GetCDNDoSAutoMitigationRules(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomCDNWAAPAPIGrpcClient) doRPCGetCDNSecurityConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetCDNSecurityConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -94,13 +92,9 @@ func NewCustomCDNWAAPAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DeleteCDNDoSAutoMitigationRule"] = ccl.doRPCDeleteCDNDoSAutoMitigationRule
-
 	rpcFns["GetCDNDoSAutoMitigationRules"] = ccl.doRPCGetCDNDoSAutoMitigationRules
-
 	rpcFns["GetCDNSecurityConfig"] = ccl.doRPCGetCDNSecurityConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -188,7 +182,6 @@ func (c *CustomCDNWAAPAPIRestClient) doRPCDeleteCDNDoSAutoMitigationRule(ctx con
 	pbRsp := &ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,7 +189,6 @@ func (c *CustomCDNWAAPAPIRestClient) doRPCDeleteCDNDoSAutoMitigationRule(ctx con
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomCDNWAAPAPIRestClient) doRPCGetCDNDoSAutoMitigationRules(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -272,7 +264,6 @@ func (c *CustomCDNWAAPAPIRestClient) doRPCGetCDNDoSAutoMitigationRules(ctx conte
 	pbRsp := &ves_io_schema_views_common_security.GetDoSAutoMitigationRulesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.GetDoSAutoMitigationRulesRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -280,7 +271,6 @@ func (c *CustomCDNWAAPAPIRestClient) doRPCGetCDNDoSAutoMitigationRules(ctx conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomCDNWAAPAPIRestClient) doRPCGetCDNSecurityConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -356,7 +346,6 @@ func (c *CustomCDNWAAPAPIRestClient) doRPCGetCDNSecurityConfig(ctx context.Conte
 	pbRsp := &ves_io_schema_views_common_security.GetSecurityConfigRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.GetSecurityConfigRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -390,13 +379,9 @@ func NewCustomCDNWAAPAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DeleteCDNDoSAutoMitigationRule"] = ccl.doRPCDeleteCDNDoSAutoMitigationRule
-
 	rpcFns["GetCDNDoSAutoMitigationRules"] = ccl.doRPCGetCDNDoSAutoMitigationRules
-
 	rpcFns["GetCDNSecurityConfig"] = ccl.doRPCGetCDNSecurityConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -485,7 +470,6 @@ func (s *customCDNWAAPAPISrv) DeleteCDNDoSAutoMitigationRule(ctx context.Context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -534,7 +518,6 @@ func (s *customCDNWAAPAPISrv) GetCDNDoSAutoMitigationRules(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.GetDoSAutoMitigationRulesRsp", rsp)...)
 
 	return rsp, nil
@@ -583,7 +566,6 @@ func (s *customCDNWAAPAPISrv) GetCDNSecurityConfig(ctx context.Context, in *GetC
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.GetSecurityConfigRsp", rsp)...)
 
 	return rsp, nil

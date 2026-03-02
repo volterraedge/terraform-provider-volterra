@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCAccessLogAggregationQuery(ctx context.Context
 	rsp, err := c.grpcClient.AccessLogAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCAccessLogQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &AccessLogRequestV2{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCAccessLogQueryV2(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.AccessLogQueryV2(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCAccessLogScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LogScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCAccessLogScrollQuery(ctx context.Context, yam
 	rsp, err := c.grpcClient.AccessLogScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCAuditLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &AuditLogAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomAPIGrpcClient) doRPCAuditLogAggregationQuery(ctx context.Context,
 	rsp, err := c.grpcClient.AuditLogAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCAuditLogQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &AuditLogRequestV2{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *CustomAPIGrpcClient) doRPCAuditLogQueryV2(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.AuditLogQueryV2(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCAuditLogScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LogScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +82,6 @@ func (c *CustomAPIGrpcClient) doRPCAuditLogScrollQuery(ctx context.Context, yaml
 	rsp, err := c.grpcClient.AuditLogScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCExternalConnectorLogQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ExternalConnectorRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +90,6 @@ func (c *CustomAPIGrpcClient) doRPCExternalConnectorLogQuery(ctx context.Context
 	rsp, err := c.grpcClient.ExternalConnectorLogQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCFirewallLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &FirewallLogAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -105,7 +98,6 @@ func (c *CustomAPIGrpcClient) doRPCFirewallLogAggregationQuery(ctx context.Conte
 	rsp, err := c.grpcClient.FirewallLogAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCFirewallLogQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &FirewallLogRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -114,7 +106,6 @@ func (c *CustomAPIGrpcClient) doRPCFirewallLogQuery(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.FirewallLogQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCFirewallLogScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LogScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -123,7 +114,6 @@ func (c *CustomAPIGrpcClient) doRPCFirewallLogScrollQuery(ctx context.Context, y
 	rsp, err := c.grpcClient.FirewallLogScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCK8SAuditLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &K8SAuditLogAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -132,7 +122,6 @@ func (c *CustomAPIGrpcClient) doRPCK8SAuditLogAggregationQuery(ctx context.Conte
 	rsp, err := c.grpcClient.K8SAuditLogAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCK8SAuditLogQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &K8SAuditLogRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -141,7 +130,6 @@ func (c *CustomAPIGrpcClient) doRPCK8SAuditLogQuery(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.K8SAuditLogQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LogScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -150,7 +138,6 @@ func (c *CustomAPIGrpcClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, y
 	rsp, err := c.grpcClient.K8SAuditLogScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCK8SEventsAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &K8SEventsAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -159,7 +146,6 @@ func (c *CustomAPIGrpcClient) doRPCK8SEventsAggregationQuery(ctx context.Context
 	rsp, err := c.grpcClient.K8SEventsAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCK8SEventsQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &K8SEventsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -168,7 +154,6 @@ func (c *CustomAPIGrpcClient) doRPCK8SEventsQuery(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.K8SEventsQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCK8SEventsScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LogScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -177,7 +162,6 @@ func (c *CustomAPIGrpcClient) doRPCK8SEventsScrollQuery(ctx context.Context, yam
 	rsp, err := c.grpcClient.K8SEventsScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCPlatformEventAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PlatformEventAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -186,7 +170,6 @@ func (c *CustomAPIGrpcClient) doRPCPlatformEventAggregationQuery(ctx context.Con
 	rsp, err := c.grpcClient.PlatformEventAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCPlatformEventQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PlatformEventRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -195,7 +178,6 @@ func (c *CustomAPIGrpcClient) doRPCPlatformEventQuery(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.PlatformEventQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCPlatformEventScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LogScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -204,7 +186,6 @@ func (c *CustomAPIGrpcClient) doRPCPlatformEventScrollQuery(ctx context.Context,
 	rsp, err := c.grpcClient.PlatformEventScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VK8SAuditLogAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -213,7 +194,6 @@ func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Cont
 	rsp, err := c.grpcClient.VK8SAuditLogAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VK8SAuditLogRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -222,7 +202,6 @@ func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogQuery(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.VK8SAuditLogQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LogScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -231,7 +210,6 @@ func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, 
 	rsp, err := c.grpcClient.VK8SAuditLogScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCVK8SEventsAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VK8SEventsAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -240,7 +218,6 @@ func (c *CustomAPIGrpcClient) doRPCVK8SEventsAggregationQuery(ctx context.Contex
 	rsp, err := c.grpcClient.VK8SEventsAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCVK8SEventsQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VK8SEventsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -249,7 +226,6 @@ func (c *CustomAPIGrpcClient) doRPCVK8SEventsQuery(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.VK8SEventsQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCVK8SEventsScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LogScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -290,57 +266,31 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AccessLogAggregationQuery"] = ccl.doRPCAccessLogAggregationQuery
-
 	rpcFns["AccessLogQueryV2"] = ccl.doRPCAccessLogQueryV2
-
 	rpcFns["AccessLogScrollQuery"] = ccl.doRPCAccessLogScrollQuery
-
 	rpcFns["AuditLogAggregationQuery"] = ccl.doRPCAuditLogAggregationQuery
-
 	rpcFns["AuditLogQueryV2"] = ccl.doRPCAuditLogQueryV2
-
 	rpcFns["AuditLogScrollQuery"] = ccl.doRPCAuditLogScrollQuery
-
 	rpcFns["ExternalConnectorLogQuery"] = ccl.doRPCExternalConnectorLogQuery
-
 	rpcFns["FirewallLogAggregationQuery"] = ccl.doRPCFirewallLogAggregationQuery
-
 	rpcFns["FirewallLogQuery"] = ccl.doRPCFirewallLogQuery
-
 	rpcFns["FirewallLogScrollQuery"] = ccl.doRPCFirewallLogScrollQuery
-
 	rpcFns["K8SAuditLogAggregationQuery"] = ccl.doRPCK8SAuditLogAggregationQuery
-
 	rpcFns["K8SAuditLogQuery"] = ccl.doRPCK8SAuditLogQuery
-
 	rpcFns["K8SAuditLogScrollQuery"] = ccl.doRPCK8SAuditLogScrollQuery
-
 	rpcFns["K8SEventsAggregationQuery"] = ccl.doRPCK8SEventsAggregationQuery
-
 	rpcFns["K8SEventsQuery"] = ccl.doRPCK8SEventsQuery
-
 	rpcFns["K8SEventsScrollQuery"] = ccl.doRPCK8SEventsScrollQuery
-
 	rpcFns["PlatformEventAggregationQuery"] = ccl.doRPCPlatformEventAggregationQuery
-
 	rpcFns["PlatformEventQuery"] = ccl.doRPCPlatformEventQuery
-
 	rpcFns["PlatformEventScrollQuery"] = ccl.doRPCPlatformEventScrollQuery
-
 	rpcFns["VK8SAuditLogAggregationQuery"] = ccl.doRPCVK8SAuditLogAggregationQuery
-
 	rpcFns["VK8SAuditLogQuery"] = ccl.doRPCVK8SAuditLogQuery
-
 	rpcFns["VK8SAuditLogScrollQuery"] = ccl.doRPCVK8SAuditLogScrollQuery
-
 	rpcFns["VK8SEventsAggregationQuery"] = ccl.doRPCVK8SEventsAggregationQuery
-
 	rpcFns["VK8SEventsQuery"] = ccl.doRPCVK8SEventsQuery
-
 	rpcFns["VK8SEventsScrollQuery"] = ccl.doRPCVK8SEventsScrollQuery
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -430,7 +380,6 @@ func (c *CustomAPIRestClient) doRPCAccessLogAggregationQuery(ctx context.Context
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -438,7 +387,6 @@ func (c *CustomAPIRestClient) doRPCAccessLogAggregationQuery(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCAccessLogQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -484,7 +432,9 @@ func (c *CustomAPIRestClient) doRPCAccessLogQueryV2(ctx context.Context, callOpt
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -520,7 +470,6 @@ func (c *CustomAPIRestClient) doRPCAccessLogQueryV2(ctx context.Context, callOpt
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -528,7 +477,6 @@ func (c *CustomAPIRestClient) doRPCAccessLogQueryV2(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCAccessLogScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -604,7 +552,6 @@ func (c *CustomAPIRestClient) doRPCAccessLogScrollQuery(ctx context.Context, cal
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -612,7 +559,6 @@ func (c *CustomAPIRestClient) doRPCAccessLogScrollQuery(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCAuditLogAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -691,7 +637,6 @@ func (c *CustomAPIRestClient) doRPCAuditLogAggregationQuery(ctx context.Context,
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -699,7 +644,6 @@ func (c *CustomAPIRestClient) doRPCAuditLogAggregationQuery(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCAuditLogQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -745,7 +689,9 @@ func (c *CustomAPIRestClient) doRPCAuditLogQueryV2(ctx context.Context, callOpts
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -781,7 +727,6 @@ func (c *CustomAPIRestClient) doRPCAuditLogQueryV2(ctx context.Context, callOpts
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -789,7 +734,6 @@ func (c *CustomAPIRestClient) doRPCAuditLogQueryV2(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCAuditLogScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -865,7 +809,6 @@ func (c *CustomAPIRestClient) doRPCAuditLogScrollQuery(ctx context.Context, call
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -873,7 +816,6 @@ func (c *CustomAPIRestClient) doRPCAuditLogScrollQuery(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCExternalConnectorLogQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -956,7 +898,6 @@ func (c *CustomAPIRestClient) doRPCExternalConnectorLogQuery(ctx context.Context
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -964,7 +905,6 @@ func (c *CustomAPIRestClient) doRPCExternalConnectorLogQuery(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCFirewallLogAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1043,7 +983,6 @@ func (c *CustomAPIRestClient) doRPCFirewallLogAggregationQuery(ctx context.Conte
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1051,7 +990,6 @@ func (c *CustomAPIRestClient) doRPCFirewallLogAggregationQuery(ctx context.Conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCFirewallLogQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1097,7 +1035,9 @@ func (c *CustomAPIRestClient) doRPCFirewallLogQuery(ctx context.Context, callOpt
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1133,7 +1073,6 @@ func (c *CustomAPIRestClient) doRPCFirewallLogQuery(ctx context.Context, callOpt
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1141,7 +1080,6 @@ func (c *CustomAPIRestClient) doRPCFirewallLogQuery(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCFirewallLogScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1217,7 +1155,6 @@ func (c *CustomAPIRestClient) doRPCFirewallLogScrollQuery(ctx context.Context, c
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1225,7 +1162,6 @@ func (c *CustomAPIRestClient) doRPCFirewallLogScrollQuery(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCK8SAuditLogAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1305,7 +1241,6 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogAggregationQuery(ctx context.Conte
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1313,7 +1248,6 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogAggregationQuery(ctx context.Conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCK8SAuditLogQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1359,8 +1293,10 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogQuery(ctx context.Context, callOpt
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("site", fmt.Sprintf("%v", req.Site))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1396,7 +1332,6 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogQuery(ctx context.Context, callOpt
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1404,7 +1339,6 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogQuery(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1480,7 +1414,6 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, c
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1488,7 +1421,6 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCK8SEventsAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1568,7 +1500,6 @@ func (c *CustomAPIRestClient) doRPCK8SEventsAggregationQuery(ctx context.Context
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1576,7 +1507,6 @@ func (c *CustomAPIRestClient) doRPCK8SEventsAggregationQuery(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1622,8 +1552,10 @@ func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts 
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("site", fmt.Sprintf("%v", req.Site))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1659,7 +1591,6 @@ func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts 
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1667,7 +1598,6 @@ func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCK8SEventsScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1743,7 +1673,6 @@ func (c *CustomAPIRestClient) doRPCK8SEventsScrollQuery(ctx context.Context, cal
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1751,7 +1680,6 @@ func (c *CustomAPIRestClient) doRPCK8SEventsScrollQuery(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCPlatformEventAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1830,7 +1758,6 @@ func (c *CustomAPIRestClient) doRPCPlatformEventAggregationQuery(ctx context.Con
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1838,7 +1765,6 @@ func (c *CustomAPIRestClient) doRPCPlatformEventAggregationQuery(ctx context.Con
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCPlatformEventQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1885,7 +1811,9 @@ func (c *CustomAPIRestClient) doRPCPlatformEventQuery(ctx context.Context, callO
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1921,7 +1849,6 @@ func (c *CustomAPIRestClient) doRPCPlatformEventQuery(ctx context.Context, callO
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1929,7 +1856,6 @@ func (c *CustomAPIRestClient) doRPCPlatformEventQuery(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCPlatformEventScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2005,7 +1931,6 @@ func (c *CustomAPIRestClient) doRPCPlatformEventScrollQuery(ctx context.Context,
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2013,7 +1938,6 @@ func (c *CustomAPIRestClient) doRPCPlatformEventScrollQuery(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2092,7 +2016,6 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Cont
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2100,7 +2023,6 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Cont
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCVK8SAuditLogQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2146,7 +2068,9 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogQuery(ctx context.Context, callOp
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -2182,7 +2106,6 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogQuery(ctx context.Context, callOp
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2190,7 +2113,6 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogQuery(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2266,7 +2188,6 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, 
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2274,7 +2195,6 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCVK8SEventsAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2353,7 +2273,6 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsAggregationQuery(ctx context.Contex
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2361,7 +2280,6 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsAggregationQuery(ctx context.Contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCVK8SEventsQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2407,7 +2325,9 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsQuery(ctx context.Context, callOpts
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -2443,7 +2363,6 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsQuery(ctx context.Context, callOpts
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2451,7 +2370,6 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsQuery(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCVK8SEventsScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2527,7 +2445,6 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsScrollQuery(ctx context.Context, ca
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2561,57 +2478,31 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AccessLogAggregationQuery"] = ccl.doRPCAccessLogAggregationQuery
-
 	rpcFns["AccessLogQueryV2"] = ccl.doRPCAccessLogQueryV2
-
 	rpcFns["AccessLogScrollQuery"] = ccl.doRPCAccessLogScrollQuery
-
 	rpcFns["AuditLogAggregationQuery"] = ccl.doRPCAuditLogAggregationQuery
-
 	rpcFns["AuditLogQueryV2"] = ccl.doRPCAuditLogQueryV2
-
 	rpcFns["AuditLogScrollQuery"] = ccl.doRPCAuditLogScrollQuery
-
 	rpcFns["ExternalConnectorLogQuery"] = ccl.doRPCExternalConnectorLogQuery
-
 	rpcFns["FirewallLogAggregationQuery"] = ccl.doRPCFirewallLogAggregationQuery
-
 	rpcFns["FirewallLogQuery"] = ccl.doRPCFirewallLogQuery
-
 	rpcFns["FirewallLogScrollQuery"] = ccl.doRPCFirewallLogScrollQuery
-
 	rpcFns["K8SAuditLogAggregationQuery"] = ccl.doRPCK8SAuditLogAggregationQuery
-
 	rpcFns["K8SAuditLogQuery"] = ccl.doRPCK8SAuditLogQuery
-
 	rpcFns["K8SAuditLogScrollQuery"] = ccl.doRPCK8SAuditLogScrollQuery
-
 	rpcFns["K8SEventsAggregationQuery"] = ccl.doRPCK8SEventsAggregationQuery
-
 	rpcFns["K8SEventsQuery"] = ccl.doRPCK8SEventsQuery
-
 	rpcFns["K8SEventsScrollQuery"] = ccl.doRPCK8SEventsScrollQuery
-
 	rpcFns["PlatformEventAggregationQuery"] = ccl.doRPCPlatformEventAggregationQuery
-
 	rpcFns["PlatformEventQuery"] = ccl.doRPCPlatformEventQuery
-
 	rpcFns["PlatformEventScrollQuery"] = ccl.doRPCPlatformEventScrollQuery
-
 	rpcFns["VK8SAuditLogAggregationQuery"] = ccl.doRPCVK8SAuditLogAggregationQuery
-
 	rpcFns["VK8SAuditLogQuery"] = ccl.doRPCVK8SAuditLogQuery
-
 	rpcFns["VK8SAuditLogScrollQuery"] = ccl.doRPCVK8SAuditLogScrollQuery
-
 	rpcFns["VK8SEventsAggregationQuery"] = ccl.doRPCVK8SEventsAggregationQuery
-
 	rpcFns["VK8SEventsQuery"] = ccl.doRPCVK8SEventsQuery
-
 	rpcFns["VK8SEventsScrollQuery"] = ccl.doRPCVK8SEventsScrollQuery
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -2788,7 +2679,6 @@ func (s *customAPISrv) AccessLogAggregationQuery(ctx context.Context, in *Access
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -2837,7 +2727,6 @@ func (s *customAPISrv) AccessLogQueryV2(ctx context.Context, in *AccessLogReques
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -2886,7 +2775,6 @@ func (s *customAPISrv) AccessLogScrollQuery(ctx context.Context, in *LogScrollRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -2935,7 +2823,6 @@ func (s *customAPISrv) AuditLogAggregationQuery(ctx context.Context, in *AuditLo
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -2984,7 +2871,6 @@ func (s *customAPISrv) AuditLogQueryV2(ctx context.Context, in *AuditLogRequestV
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3033,7 +2919,6 @@ func (s *customAPISrv) AuditLogScrollQuery(ctx context.Context, in *LogScrollReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3082,7 +2967,6 @@ func (s *customAPISrv) ExternalConnectorLogQuery(ctx context.Context, in *Extern
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3131,7 +3015,6 @@ func (s *customAPISrv) FirewallLogAggregationQuery(ctx context.Context, in *Fire
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -3180,7 +3063,6 @@ func (s *customAPISrv) FirewallLogQuery(ctx context.Context, in *FirewallLogRequ
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3229,7 +3111,6 @@ func (s *customAPISrv) FirewallLogScrollQuery(ctx context.Context, in *LogScroll
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3278,7 +3159,6 @@ func (s *customAPISrv) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SA
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -3327,7 +3207,6 @@ func (s *customAPISrv) K8SAuditLogQuery(ctx context.Context, in *K8SAuditLogRequ
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3376,7 +3255,6 @@ func (s *customAPISrv) K8SAuditLogScrollQuery(ctx context.Context, in *LogScroll
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3425,7 +3303,6 @@ func (s *customAPISrv) K8SEventsAggregationQuery(ctx context.Context, in *K8SEve
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -3474,7 +3351,6 @@ func (s *customAPISrv) K8SEventsQuery(ctx context.Context, in *K8SEventsRequest)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3523,7 +3399,6 @@ func (s *customAPISrv) K8SEventsScrollQuery(ctx context.Context, in *LogScrollRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3572,7 +3447,6 @@ func (s *customAPISrv) PlatformEventAggregationQuery(ctx context.Context, in *Pl
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -3621,7 +3495,6 @@ func (s *customAPISrv) PlatformEventQuery(ctx context.Context, in *PlatformEvent
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3670,7 +3543,6 @@ func (s *customAPISrv) PlatformEventScrollQuery(ctx context.Context, in *LogScro
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3719,7 +3591,6 @@ func (s *customAPISrv) VK8SAuditLogAggregationQuery(ctx context.Context, in *VK8
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -3768,7 +3639,6 @@ func (s *customAPISrv) VK8SAuditLogQuery(ctx context.Context, in *VK8SAuditLogRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3817,7 +3687,6 @@ func (s *customAPISrv) VK8SAuditLogScrollQuery(ctx context.Context, in *LogScrol
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3866,7 +3735,6 @@ func (s *customAPISrv) VK8SEventsAggregationQuery(ctx context.Context, in *VK8SE
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -3915,7 +3783,6 @@ func (s *customAPISrv) VK8SEventsQuery(ctx context.Context, in *VK8SEventsReques
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -3964,7 +3831,6 @@ func (s *customAPISrv) VK8SEventsScrollQuery(ctx context.Context, in *LogScrollR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
 
 	return rsp, nil
@@ -7244,11 +7110,26 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the log\n Optional: default is descending order",
                     "title": "sort order",
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "Sort Order"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -7364,11 +7245,26 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the log\n Optional: default is descending order",
                     "title": "sort order",
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "Sort Order"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -7863,11 +7759,26 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the log\n Optional: default is descending order",
                     "title": "sort order",
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "Sort Order"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -7990,6 +7901,14 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "site": {
                     "type": "string",
                     "description": " Site where the K8s Cluster is running\n\nExample: - \"ce-1\"-",
@@ -8002,6 +7921,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "sort order",
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "Sort Order"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -8124,6 +8050,14 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "site": {
                     "type": "string",
                     "description": " Site where the K8s Cluster is running\n\nExample: - \"ce-1\"-",
@@ -8136,6 +8070,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "sort order",
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "Sort Order"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -8284,6 +8225,13 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Aggregations provide summary/analytics data over the log response. If the number of logs that matched the query\n is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.\n The aggregation data is key'ed with the aggregation name specified in the request.",
                     "title": "aggregations",
                     "x-displayname": "Aggregations"
+                },
+                "last_sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n Currently, timestamp and doc_id are the supported sort values.\n Empty list indicates no more messages to scroll (EOF).\n Note: This is stateless and hence more performant than the scroll API.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "last sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Last Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "logs": {
                     "type": "array",
@@ -8524,7 +8472,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "query": {
                     "type": "string",
-                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in platform events may be specified in the query.\n   user - user name\n   resource_type - resource type\n   resource - resource\n   event_type - event type \n   \n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n When more than one matcher is specified in the query, then platform events matching ALL the matchers will be returned in the response.\n Example: query={resource_type=\"CUSTOMER_EDGE\"} will return all platform events with resource_type equals CUSTOMER_EDGE\n\n Optional: If not specified, all the platform events matching the given tenant and namespace are returned\n\nExample: - \"{user=\\\"abc\\\", rsp_code=\\\"404\\\"}\"-",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in platform events may be specified in the query.\n   user - user name\n   resource_type - resource type\n   resource - resource\n   event_type - event type\n\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n When more than one matcher is specified in the query, then platform events matching ALL the matchers will be returned in the response.\n Example: query={resource_type=\"CUSTOMER_EDGE\"} will return all platform events with resource_type equals CUSTOMER_EDGE\n\n Optional: If not specified, all the platform events matching the given tenant and namespace are returned\n\nExample: - \"{user=\\\"abc\\\", rsp_code=\\\"404\\\"}\"-",
                     "title": "query",
                     "x-displayname": "Query",
                     "x-ves-example": "{user=\\\"abc\\\", rsp_code=\\\"404\\\"}"
@@ -8566,7 +8514,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "include_config_changes": {
                     "type": "boolean",
-                    "description": "\n Platform events of type config change captures old and new object blobs. This flag is used to include the blobs in \n response. It is introduced to reduce any performance impact UI may face while rendering. \n Optional: default is false ",
+                    "description": "\n Platform events of type config change captures old and new object blobs. This flag is used to include the blobs in\n response. It is introduced to reduce any performance impact UI may face while rendering.\n Optional: default is false",
                     "title": "include_config_changes",
                     "format": "boolean",
                     "x-displayname": "Exclude config changes"
@@ -8588,7 +8536,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "query": {
                     "type": "string",
-                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in platform events may be specified in the query.\n   user - user name\n   resource_type - resource type\n   resource - resource\n   event_type - event type \n   \n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n When more than one matcher is specified in the query, then platform events matching ALL the matchers will be returned in the response.\n Example: query={resource_type=\"CUSTOMER_EDGE\"} will return all platform events with resource_type equals CUSTOMER_EDGE\n\n Optional: If not specified, all the platform events matching the given tenant and namespace are returned\n\nExample: - \"{user=\\\"abc\\\", rsp_code=\\\"404\\\"}\"-",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in platform events may be specified in the query.\n   user - user name\n   resource_type - resource type\n   resource - resource\n   event_type - event type\n\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n When more than one matcher is specified in the query, then platform events matching ALL the matchers will be returned in the response.\n Example: query={resource_type=\"CUSTOMER_EDGE\"} will return all platform events with resource_type equals CUSTOMER_EDGE\n\n Optional: If not specified, all the platform events matching the given tenant and namespace are returned\n\nExample: - \"{user=\\\"abc\\\", rsp_code=\\\"404\\\"}\"-",
                     "title": "query",
                     "x-displayname": "Query",
                     "x-ves-example": "{user=\\\"abc\\\", rsp_code=\\\"404\\\"}"
@@ -8601,11 +8549,26 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the log\n Optional: default is descending order",
                     "title": "sort order",
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "Sort Order"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -8616,6 +8579,29 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.query_time": "true"
                     }
+                }
+            }
+        },
+        "logSearchAfterSortValues": {
+            "type": "object",
+            "description": "These are timestamp and doc_id values returned by elastic search in the search request.\nClient is expected to set these values in a subsequent request to get the next page of results.",
+            "title": "SearchAfterSortValues",
+            "x-displayname": "Search After Sort Values",
+            "x-ves-proto-message": "ves.io.schema.log.SearchAfterSortValues",
+            "properties": {
+                "last_doc_id": {
+                    "type": "string",
+                    "description": " This is a unique uuid generated by elastic search\n\nExample: - \"-8881051689166072872\"-",
+                    "title": "last_doc_id",
+                    "x-displayname": "Last Doc ID",
+                    "x-ves-example": "-8881051689166072872"
+                },
+                "last_timestamp": {
+                    "type": "number",
+                    "description": "\n\nExample: - 1745695692759-",
+                    "title": "last timestamp",
+                    "format": "double",
+                    "x-displayname": "Last Timestamp"
                 }
             }
         },
@@ -8742,11 +8728,26 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the log\n Optional: default is descending order",
                     "title": "sort order",
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "Sort Order"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -8862,11 +8863,26 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the event\n Optional: default is descending order",
                     "title": "sort order",
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "Sort Order"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/logSearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",

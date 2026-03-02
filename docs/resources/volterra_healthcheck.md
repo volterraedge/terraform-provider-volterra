@@ -22,13 +22,16 @@ resource "volterra_healthcheck" "example" {
 
   // One of the arguments from this list "dns_health_check dns_proxy_icmp_health_check dns_proxy_tcp_health_check dns_proxy_udp_health_check http_health_check tcp_health_check udp_icmp_health_check" must be set
 
-  udp_icmp_health_check = true
-  healthy_threshold     = ["2"]
-  interval              = ["10"]
-  timeout               = ["1"]
-  unhealthy_threshold   = ["5"]
-}
+  tcp_health_check {
+    expected_response = "00000034"
 
+    send_payload = "000000FF"
+  }
+  healthy_threshold   = ["2"]
+  interval            = ["10"]
+  timeout             = ["1"]
+  unhealthy_threshold = ["5"]
+}
 ```
 
 Argument Reference
@@ -78,7 +81,7 @@ Argument Reference
 
 ### Health Check Dns Health Check
 
-1.	Expected IP Address.
+1.  Expected IP Address.
 
 `expected_rcode` - (Required) Specifies an expected Rcode in the answer section of DNS Response, option [no-error, any](`String`).
 
@@ -110,7 +113,9 @@ Specifies send string and expected response payload pattern for UDP health Check
 
 ### Health Check Http Health Check
 
-1.	Request headers to remove.
+1.  Request headers to remove.
+
+`expected_response` - (Optional) If left empty, then response body is not considered for evaluating health check status. (`String`).
 
 `expected_status_codes` - (Optional) of which is single HTTP status code or a range with start and end values separated by "-". (`String`).
 
@@ -143,4 +148,4 @@ Use the origin server name..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured healthcheck.
+*   `id` - This is the id of the configured healthcheck.

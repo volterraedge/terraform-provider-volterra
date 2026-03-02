@@ -28,14 +28,14 @@ resource "volterra_known_label" "volterra_known_label" {
 Argument Reference
 ------------------
 
--	`key` - (Required) Key of the label (`String`).
--	`namespace` - (Required) Namespace in which to create the label (`String`).
--	`value` - (Required) Value of the label (`String`).
--	`description` - (Optional) Description of the label to be created (`String`).
+-   `key` - (Required) Key of the label (`String`).
+-   `namespace` - (Required) Namespace in which to create the label (`String`).
+-   `value` - (Required) Value of the label (`String`).
+-   `description` - (Optional) Description of the label to be created (`String`).
 
 Attribute Reference
 -------------------
 
--	`id` - ID of the known label returned
--	`key` - Key of the known label returned
--	`value` - Key of the known label returned
+-   `id` - ID of the known label returned
+-   `key` - Key of the known label returned
+-   `value` - Key of the known label returned

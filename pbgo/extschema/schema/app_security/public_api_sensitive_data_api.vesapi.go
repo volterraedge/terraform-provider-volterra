@@ -74,9 +74,7 @@ func NewAPISensitiveDataRuleSuggestionAPIGrpcClient(cc *grpc.ClientConn) server.
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetSuggestedSensitiveDataRule"] = ccl.doRPCGetSuggestedSensitiveDataRule
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -165,7 +163,6 @@ func (c *APISensitiveDataRuleSuggestionAPIRestClient) doRPCGetSuggestedSensitive
 	pbRsp := &GetSuggestedSensitiveDataRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedSensitiveDataRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -199,9 +196,7 @@ func NewAPISensitiveDataRuleSuggestionAPIRestClient(baseURL string, hc http.Clie
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetSuggestedSensitiveDataRule"] = ccl.doRPCGetSuggestedSensitiveDataRule
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -282,7 +277,6 @@ func (s *aPISensitiveDataRuleSuggestionAPISrv) GetSuggestedSensitiveDataRule(ctx
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedSensitiveDataRuleRsp", rsp)...)
 
 	return rsp, nil

@@ -74,7 +74,7 @@ resource "volterra_nfv_service" "example" {
     market_place_image {
       // One of the arguments from this list "AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
 
-      AWAFPayG200Mbps = true
+      BestPlusPayG200Mbps = true
     }
     nodes {
       aws_az_name = "us-west-2a"
@@ -108,7 +108,6 @@ resource "volterra_nfv_service" "example" {
 
   disable_ssh_access = true
 }
-
 ```
 
 Argument Reference
@@ -622,11 +621,11 @@ Select the BIG-IP bring your own license image to be used for this service.
 
 Select the BIG-IP pay as you go image to be used for this service.
 
-###### One of the arguments from this list "AWAFPayG200Mbps, AWAFPayG3Gbps, BestPlusPayG200Mbps, best_plus_payg_1gbps" must be set
+###### One of the arguments from this list "awaf_pay_g200_mbps, awaf_pay_g3_gbps, best_plus_pay_g200_mbps, best_plus_payg_1gbps" must be set
 
-`AWAFPayG200Mbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (`Bool`).
+`awaf_pay_g200_mbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (`Bool`).
 
-`AWAFPayG3Gbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (`Bool`).
+`awaf_pay_g3_gbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (`Bool`).
 
 ### Inside Vip Choice Automatic Vip
 
@@ -1031,4 +1030,4 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured nfv_service.
+*   `id` - This is the id of the configured nfv_service.

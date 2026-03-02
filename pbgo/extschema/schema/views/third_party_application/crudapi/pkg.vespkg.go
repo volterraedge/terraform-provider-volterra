@@ -20,55 +20,41 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.third_party_application.crudapi.ObjectListRspItem"] = ObjectListRspItemValidator()
 	vr["ves.io.schema.views.third_party_application.crudapi.ObjectReplaceReq"] = ObjectReplaceReqValidator()
 	vr["ves.io.schema.views.third_party_application.crudapi.ObjectReplaceRsp"] = ObjectReplaceRspValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.third_party_application.crudapi.API.Create"] = []string{
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.third_party_application.crudapi.API.Create"] = []string{
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.third_party_application.crudapi.API.Create"] = "ves.io.schema.views.third_party_application.crudapi.ObjectCreateReq"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.third_party_application.crudapi.API.Get"] = []string{
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.third_party_application.crudapi.API.List"] = []string{
 		"items.#.spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.third_party_application.crudapi.API.ListStream"] = []string{
 		"items.#.spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.third_party_application.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.third_party_application.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.third_party_application.crudapi.API.Replace"] = "ves.io.schema.views.third_party_application.crudapi.ObjectReplaceReq"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -78,7 +64,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	csr = mdr.PvtCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.third_party_application.Object"] = APISwaggerJSON
@@ -92,22 +77,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.third_party_application.crudapi.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.third_party_application.crudapi.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.third_party_application.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

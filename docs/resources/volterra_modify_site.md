@@ -27,7 +27,6 @@ resource "volterra_modify_site" "example" {
     "ves.io/fleet" = "fleet-car"
   }
 }
-
 ```
 
 Argument Reference
@@ -104,4 +103,4 @@ Attribute Reference
 
 ---
 
--	`id` - This is the id of Volterra site object.
+-   `id` - This is the id of Volterra site object.

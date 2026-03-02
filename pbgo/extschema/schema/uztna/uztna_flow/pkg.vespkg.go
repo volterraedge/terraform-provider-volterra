@@ -14,12 +14,9 @@ import (
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_flow.GeoMatch"] = GeoMatchValidator()
 	vr["ves.io.schema.uztna.uztna_flow.MatchingCriteria"] = MatchingCriteriaValidator()
-
 	vr["ves.io.schema.uztna.uztna_flow.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.uztna.uztna_flow.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.uztna_flow.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.uztna.uztna_flow.ApplicationTagging"] = ApplicationTaggingValidator()
 	vr["ves.io.schema.uztna.uztna_flow.AudienceUri"] = AudienceUriValidator()
 	vr["ves.io.schema.uztna.uztna_flow.Certificate"] = CertificateValidator()
@@ -32,17 +29,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_flow.UniformResourceLocator"] = UniformResourceLocatorValidator()
 	vr["ves.io.schema.uztna.uztna_flow.UniformResourceName"] = UniformResourceNameValidator()
 	vr["ves.io.schema.uztna.uztna_flow.WantEncryptedRequest"] = WantEncryptedRequestValidator()
-
 	vr["ves.io.schema.uztna.uztna_flow.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_flow.FlowType"] = FlowTypeValidator()
 	vr["ves.io.schema.uztna.uztna_flow.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_flow.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_flow.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.EntryFactory["ves.io.schema.uztna.uztna_flow.Object"] = NewEntryObject
 	mdr.EntryStoreMap["ves.io.schema.uztna.uztna_flow.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.uztna.uztna_flow.Object"] = reflect.TypeOf(&DBObject{})
@@ -51,24 +45,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.uztna.uztna_flow.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.uztna.uztna_flow.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.uztna.uztna_flow.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -77,20 +66,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -67,7 +67,6 @@ func (m *AppCertificate) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCertificateDRefInfo()
-
 }
 
 func (m *AppCertificate) GetCertificateDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *AppCertificate) GetCertificateDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCertificateDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *AppCertificate) GetCertificateDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateAppCertificate struct {
 }
 
 func (v *ValidateAppCertificate) CertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -180,22 +176,18 @@ func (v *ValidateAppCertificate) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate"]; exists {
 		vOpts := append(opts, db.WithValidateField("certificate"))
 		if err := fv(ctx, m.GetCertificate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAppCertificateValidator = func() *ValidateAppCertificate {
 	v := &ValidateAppCertificate{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -270,33 +262,27 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLocationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLocationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProtocolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProtocolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetUztnaDomainRefDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUztnaDomainRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetAppVhDRefInfo() ([]db.DRefInfo, error) {
@@ -321,7 +307,6 @@ func (m *CreateSpecType) GetAppVhDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppVhDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -340,7 +325,6 @@ func (m *CreateSpecType) GetAppVhDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -366,7 +350,6 @@ func (m *CreateSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -385,7 +368,6 @@ func (m *CreateSpecType) GetLocationDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -394,7 +376,6 @@ func (m *CreateSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOrigin() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOrigin().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOrigin().GetDRefInfo() FAILED")
@@ -404,7 +385,6 @@ func (m *CreateSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "origin." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -412,7 +392,6 @@ func (m *CreateSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocol() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProtocol().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfo() FAILED")
@@ -422,7 +401,6 @@ func (m *CreateSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "protocol." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *CreateSpecType) GetUztnaDomainRefDRefInfo() ([]db.DRefInfo, error) {
@@ -447,7 +425,6 @@ func (m *CreateSpecType) GetUztnaDomainRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUztnaDomainRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -466,7 +443,6 @@ func (m *CreateSpecType) GetUztnaDomainRefDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -475,7 +451,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -483,9 +458,7 @@ func (v *ValidateCreateSpecType) UrlValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -493,9 +466,7 @@ func (v *ValidateCreateSpecType) PortValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -535,9 +506,7 @@ func (v *ValidateCreateSpecType) AppTagsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ExtendedAppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -577,9 +546,7 @@ func (v *ValidateCreateSpecType) ExtendedAppTagsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AppVhValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -625,9 +592,7 @@ func (v *ValidateCreateSpecType) AppVhValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) UztnaDomainRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -673,9 +638,7 @@ func (v *ValidateCreateSpecType) UztnaDomainRefValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -735,99 +698,72 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_tags"))
 		if err := fv(ctx, m.GetAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_vh"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_vh"))
 		if err := fv(ctx, m.GetAppVh(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["application_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("application_vip"))
 		if err := fv(ctx, m.GetApplicationVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["extended_app_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("extended_app_tags"))
 		if err := fv(ctx, m.GetExtendedAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["location"]; exists {
 		vOpts := append(opts, db.WithValidateField("location"))
 		if err := fv(ctx, m.GetLocation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin"))
 		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uztna_domain_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("uztna_domain_ref"))
 		if err := fv(ctx, m.GetUztnaDomainRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -921,11 +857,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["location"] = vFn
-
 	v.FldValidators["protocol"] = ProtocolValidator().Validate
-
 	v.FldValidators["origin"] = OriginValidator().Validate
-
 	v.FldValidators["application_vip"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -983,33 +916,27 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLocationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLocationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProtocolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProtocolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetUztnaDomainRefDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUztnaDomainRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetAppVhDRefInfo() ([]db.DRefInfo, error) {
@@ -1034,7 +961,6 @@ func (m *GetSpecType) GetAppVhDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppVhDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1053,7 +979,6 @@ func (m *GetSpecType) GetAppVhDBEntries(ctx context.Context, d db.Interface) ([]
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1079,7 +1004,6 @@ func (m *GetSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1098,7 +1022,6 @@ func (m *GetSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1107,7 +1030,6 @@ func (m *GetSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOrigin() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOrigin().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOrigin().GetDRefInfo() FAILED")
@@ -1117,7 +1039,6 @@ func (m *GetSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "origin." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1125,7 +1046,6 @@ func (m *GetSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocol() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProtocol().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfo() FAILED")
@@ -1135,7 +1055,6 @@ func (m *GetSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "protocol." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GetSpecType) GetUztnaDomainRefDRefInfo() ([]db.DRefInfo, error) {
@@ -1160,7 +1079,6 @@ func (m *GetSpecType) GetUztnaDomainRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUztnaDomainRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1179,7 +1097,6 @@ func (m *GetSpecType) GetUztnaDomainRefDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1188,7 +1105,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -1196,9 +1112,7 @@ func (v *ValidateGetSpecType) UrlValidationRuleHandler(rules map[string]string) 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -1206,9 +1120,7 @@ func (v *ValidateGetSpecType) PortValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1248,9 +1160,7 @@ func (v *ValidateGetSpecType) AppTagsValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ExtendedAppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1290,9 +1200,7 @@ func (v *ValidateGetSpecType) ExtendedAppTagsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AppVhValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1338,9 +1246,7 @@ func (v *ValidateGetSpecType) AppVhValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) UztnaDomainRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1386,9 +1292,7 @@ func (v *ValidateGetSpecType) UztnaDomainRefValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1448,99 +1352,72 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_tags"))
 		if err := fv(ctx, m.GetAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_vh"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_vh"))
 		if err := fv(ctx, m.GetAppVh(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["application_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("application_vip"))
 		if err := fv(ctx, m.GetApplicationVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["extended_app_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("extended_app_tags"))
 		if err := fv(ctx, m.GetExtendedAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["location"]; exists {
 		vOpts := append(opts, db.WithValidateField("location"))
 		if err := fv(ctx, m.GetLocation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin"))
 		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uztna_domain_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("uztna_domain_ref"))
 		if err := fv(ctx, m.GetUztnaDomainRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1634,11 +1511,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["location"] = vFn
-
 	v.FldValidators["protocol"] = ProtocolValidator().Validate
-
 	v.FldValidators["origin"] = OriginValidator().Validate
-
 	v.FldValidators["application_vip"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -1696,33 +1570,27 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLocationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLocationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProtocolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProtocolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetUztnaDomainRefDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUztnaDomainRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetAppVhDRefInfo() ([]db.DRefInfo, error) {
@@ -1747,7 +1615,6 @@ func (m *GlobalSpecType) GetAppVhDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppVhDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1766,7 +1633,6 @@ func (m *GlobalSpecType) GetAppVhDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1792,7 +1658,6 @@ func (m *GlobalSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1811,7 +1676,6 @@ func (m *GlobalSpecType) GetLocationDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1820,7 +1684,6 @@ func (m *GlobalSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOrigin() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOrigin().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOrigin().GetDRefInfo() FAILED")
@@ -1830,7 +1693,6 @@ func (m *GlobalSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "origin." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1838,7 +1700,6 @@ func (m *GlobalSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocol() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProtocol().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfo() FAILED")
@@ -1848,7 +1709,6 @@ func (m *GlobalSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "protocol." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GlobalSpecType) GetUztnaDomainRefDRefInfo() ([]db.DRefInfo, error) {
@@ -1873,7 +1733,6 @@ func (m *GlobalSpecType) GetUztnaDomainRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUztnaDomainRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1892,7 +1751,6 @@ func (m *GlobalSpecType) GetUztnaDomainRefDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1901,7 +1759,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -1909,9 +1766,7 @@ func (v *ValidateGlobalSpecType) UrlValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -1919,9 +1774,7 @@ func (v *ValidateGlobalSpecType) PortValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1961,9 +1814,7 @@ func (v *ValidateGlobalSpecType) AppTagsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ExtendedAppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2003,9 +1854,7 @@ func (v *ValidateGlobalSpecType) ExtendedAppTagsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AppVhValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2051,9 +1900,7 @@ func (v *ValidateGlobalSpecType) AppVhValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) UztnaDomainRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2099,9 +1946,7 @@ func (v *ValidateGlobalSpecType) UztnaDomainRefValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2161,99 +2006,72 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_tags"))
 		if err := fv(ctx, m.GetAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_vh"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_vh"))
 		if err := fv(ctx, m.GetAppVh(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["application_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("application_vip"))
 		if err := fv(ctx, m.GetApplicationVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["extended_app_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("extended_app_tags"))
 		if err := fv(ctx, m.GetExtendedAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["location"]; exists {
 		vOpts := append(opts, db.WithValidateField("location"))
 		if err := fv(ctx, m.GetLocation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin"))
 		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uztna_domain_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("uztna_domain_ref"))
 		if err := fv(ctx, m.GetUztnaDomainRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2347,11 +2165,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["location"] = vFn
-
 	v.FldValidators["protocol"] = ProtocolValidator().Validate
-
 	v.FldValidators["origin"] = OriginValidator().Validate
-
 	v.FldValidators["application_vip"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -2409,15 +2224,12 @@ func (m *Origin) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSnatPoolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSnatPoolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *Origin) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
@@ -2442,7 +2254,6 @@ func (m *Origin) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetOriginPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2461,7 +2272,6 @@ func (m *Origin) GetOriginPoolDBEntries(ctx context.Context, d db.Interface) ([]
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2487,7 +2297,6 @@ func (m *Origin) GetSnatPoolDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSnatPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2506,7 +2315,6 @@ func (m *Origin) GetSnatPoolDBEntries(ctx context.Context, d db.Interface) ([]db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2515,7 +2323,6 @@ type ValidateOrigin struct {
 }
 
 func (v *ValidateOrigin) OriginPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2561,9 +2368,7 @@ func (v *ValidateOrigin) OriginPoolValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOrigin) SnatPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2623,30 +2428,24 @@ func (v *ValidateOrigin) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["origin_pool"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pool"))
 		if err := fv(ctx, m.GetOriginPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["snat_pool"]; exists {
 		vOpts := append(opts, db.WithValidateField("snat_pool"))
 		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginValidator = func() *ValidateOrigin {
 	v := &ValidateOrigin{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2727,7 +2526,6 @@ func (m *Protocol) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProtocolChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2737,11 +2535,8 @@ func (m *Protocol) GetProtocolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProtocolChoice().(type) {
 	case *Protocol_HTTP:
-
 		return nil, nil
-
 	case *Protocol_HTTPS:
-
 		drInfos, err := m.GetHTTPS().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHTTPS().GetDRefInfo() FAILED")
@@ -2751,19 +2546,13 @@ func (m *Protocol) GetProtocolChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "HTTPS." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Protocol_TCP:
-
 		return nil, nil
-
 	case *Protocol_UDP:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateProtocol struct {
@@ -2847,16 +2636,13 @@ func (v *ValidateProtocol) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProtocolValidator = func() *ValidateProtocol {
 	v := &ValidateProtocol{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2864,7 +2650,6 @@ var DefaultProtocolValidator = func() *ValidateProtocol {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhProtocolChoice := v.ProtocolChoiceValidationRuleHandler
 	rulesProtocolChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2875,7 +2660,6 @@ var DefaultProtocolValidator = func() *ValidateProtocol {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol_choice"] = vFn
-
 	v.FldValidators["protocol_choice.HTTPS"] = AppCertificateValidator().Validate
 
 	return v
@@ -2933,33 +2717,27 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLocationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLocationDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProtocolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProtocolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetUztnaDomainRefDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUztnaDomainRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetAppVhDRefInfo() ([]db.DRefInfo, error) {
@@ -2984,7 +2762,6 @@ func (m *ReplaceSpecType) GetAppVhDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppVhDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3003,7 +2780,6 @@ func (m *ReplaceSpecType) GetAppVhDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3029,7 +2805,6 @@ func (m *ReplaceSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3048,7 +2823,6 @@ func (m *ReplaceSpecType) GetLocationDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3057,7 +2831,6 @@ func (m *ReplaceSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOrigin() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOrigin().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOrigin().GetDRefInfo() FAILED")
@@ -3067,7 +2840,6 @@ func (m *ReplaceSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "origin." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -3075,7 +2847,6 @@ func (m *ReplaceSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocol() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProtocol().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfo() FAILED")
@@ -3085,7 +2856,6 @@ func (m *ReplaceSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "protocol." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *ReplaceSpecType) GetUztnaDomainRefDRefInfo() ([]db.DRefInfo, error) {
@@ -3110,7 +2880,6 @@ func (m *ReplaceSpecType) GetUztnaDomainRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUztnaDomainRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3129,7 +2898,6 @@ func (m *ReplaceSpecType) GetUztnaDomainRefDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3138,7 +2906,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -3146,9 +2913,7 @@ func (v *ValidateReplaceSpecType) UrlValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -3156,9 +2921,7 @@ func (v *ValidateReplaceSpecType) PortValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) AppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3198,9 +2961,7 @@ func (v *ValidateReplaceSpecType) AppTagsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ExtendedAppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3240,9 +3001,7 @@ func (v *ValidateReplaceSpecType) ExtendedAppTagsValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) AppVhValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3288,9 +3047,7 @@ func (v *ValidateReplaceSpecType) AppVhValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) UztnaDomainRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3336,9 +3093,7 @@ func (v *ValidateReplaceSpecType) UztnaDomainRefValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3398,99 +3153,72 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_tags"))
 		if err := fv(ctx, m.GetAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_vh"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_vh"))
 		if err := fv(ctx, m.GetAppVh(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["application_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("application_vip"))
 		if err := fv(ctx, m.GetApplicationVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["extended_app_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("extended_app_tags"))
 		if err := fv(ctx, m.GetExtendedAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["location"]; exists {
 		vOpts := append(opts, db.WithValidateField("location"))
 		if err := fv(ctx, m.GetLocation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin"))
 		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uztna_domain_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("uztna_domain_ref"))
 		if err := fv(ctx, m.GetUztnaDomainRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3584,11 +3312,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["location"] = vFn
-
 	v.FldValidators["protocol"] = ProtocolValidator().Validate
-
 	v.FldValidators["origin"] = OriginValidator().Validate
-
 	v.FldValidators["application_vip"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v

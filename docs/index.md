@@ -15,8 +15,8 @@ provider "volterra" {
   api_p12_file     = "/path/to/api_credential.p12"
   url              = "https://<tenant_name>.console.ves.volterra.io/api"
   limiter {
-    rate  = 10.0
-    burst = 20
+    rate  = 30.0
+    burst = 15
   }
 }
 ```
@@ -36,7 +36,7 @@ provider "volterra" {
 
 * `timeout` - Volterra api call timeout, by default its 20 seconds. This can also be sourced from `VOLT_API_TIMEOUT` env variable (`String`).
 
-* `limiter` -  (Optional) API rate limiting configuration using a token bucket algorithm. Controls how frequently API requests are allowed to happen by limiting the rate to a specified number of tokens per second with a maximum burst size. See [Limiter](#limiter) below for details.
+* `limiter` -  (Optional) Global API rate limiting configuration block. When not specified, requests are sent without rate limiting. Controls request timing across all API operations to prevent HTTP 429 errors. See [Limiter](#limiter) below for details.
 
 ### API Credential Options
 - Provide the path to the API P12 file using the `api_p12_file` variable.
@@ -59,8 +59,33 @@ provider "volterra" {
 
 ### Limiter
 
-API rate limiter configuration. Implements a token bucket algorithm that controls request frequency using the WaitN method, which blocks API requests until sufficient tokens are available. The bucket starts full and refills at the specified rate. In any sufficiently large time interval, the limiter restricts requests to the configured rate per second, with allowance for bursts up to the maximum burst size.
+The `limiter` block helps avoid HTTP 429 rate limit errors by controlling the timing of requests sent to the F5 Distributed Cloud API.
 
-`rate` - (Required) The rate at which tokens are refilled in the bucket, measured in tokens per second. This determines the sustained request rate allowed over time. When tokens are not available, requests will wait until they can be obtained. For example, a rate of 10.0 allows 10 requests per second on average. (`Float64`).
+`rate` - (Required) Request rate in **requests per minute**. Set this to match your backend rate quota. Controls how quickly tokens refill. Must be greater than 0 (`Float64`).
 
-`burst` - (Required) Burst returns the maximum burst size. Burst is the maximum number of tokens that can be consumed in a single call to Allow, Reserve, or Wait, so higher Burst values allow more events to happen at once. A zero Burst allows no events, unless limit == Inf. (`Int32`).
+`burst` - (Required) Maximum tokens that can accumulate. Determines how many requests can be sent in quick succession. We recommend calculating this value using the formula below. Minimum: 1 (`Int32`).
+
+**How limiter works:** Requests wait for available tokens before being sent. Tokens refill at the configured rate, with a burst capacity for handling temporary spikes.
+
+**Important consideration:** The provider uses a global rate limiter shared across all API operations, while the backend enforces separate limits per endpoint. During bulk operations (e.g., deleting 50+ resources), Terraform's parallelism (default 10, configurable via `-parallelism` flag) can cause many requests to target the same backend endpoint, potentially exceeding that specific endpoint's limit.
+
+**Recommended Configuration:**
+
+To avoid backend endpoint errors during bulk operations, calculate burst as:
+
+```
+burst = max(1, backendBurst / 6)
+```
+
+Example: If your backend quota is `rate=120/min, burst=30`, use `burst=5` in the provider.
+
+**Why this formula?** The provider has 6 API operation types sharing one limiter. This calculation provides a safety margin accounting for Terraform's parallelism (default 10, configurable higher) and token refill during operations, keeping requests within backend endpoint limits in typical scenarios.
+
+**Note:** Advanced users may experiment with higher burst values. If you encounter HTTP 429 errors during bulk operations, reduce burst using the formula above.
+
+---
+
+**Configuration Examples:**
+- Backend `rate=120, burst=30`: Use `rate = 120.0, burst = 5`
+- Backend `rate=60, burst=18`: Use `rate = 60.0, burst = 3`
+- Backend `rate=300, burst=60`: Use `rate = 300.0, burst = 10`

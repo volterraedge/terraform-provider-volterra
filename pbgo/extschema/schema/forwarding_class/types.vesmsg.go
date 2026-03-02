@@ -68,17 +68,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicerChoiceDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPolicerChoice().(type) {
 	case *CreateSpecType_NoPolicer:
-
 		return nil, nil
-
 	case *CreateSpecType_Policer:
-
 		vref := m.GetPolicer()
 		if vref == nil {
 			return nil, nil
@@ -94,7 +90,6 @@ func (m *CreateSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -106,13 +101,11 @@ func (m *CreateSpecType) GetPolicerChoiceDBEntries(ctx context.Context, d db.Int
 
 	switch m.GetPolicerChoice().(type) {
 	case *CreateSpecType_NoPolicer:
-
 	case *CreateSpecType_Policer:
 		refdType, err := d.TypeForEntryKind("", "", "policer.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: policer")
 		}
-
 		vref := m.GetPolicer()
 		if vref == nil {
 			return nil, nil
@@ -130,7 +123,6 @@ func (m *CreateSpecType) GetPolicerChoiceDBEntries(ctx context.Context, d db.Int
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -155,7 +147,6 @@ func (v *ValidateCreateSpecType) MarkingChoiceTosValueValidationRuleHandler(rule
 	}
 	return oValidatorFn_TosValue, nil
 }
-
 func (v *ValidateCreateSpecType) PolicerChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -163,7 +154,6 @@ func (v *ValidateCreateSpecType) PolicerChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) QueueingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -171,9 +161,7 @@ func (v *ValidateCreateSpecType) QueueingChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) InterfaceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(InterfaceGroupType)
@@ -201,14 +189,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_group"))
 		if err := fv(ctx, m.GetInterfaceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["marking_choice"]; exists {
@@ -255,7 +240,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policer_choice"]; exists {
@@ -291,7 +275,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["queueing_choice"]; exists {
@@ -327,16 +310,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -344,7 +324,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMarkingChoice := v.MarkingChoiceValidationRuleHandler
 	rulesMarkingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -355,7 +334,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["marking_choice"] = vFn
-
 	vrhMarkingChoiceTosValue := v.MarkingChoiceTosValueValidationRuleHandler
 	rulesMarkingChoiceTosValue := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "255",
@@ -365,9 +343,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.marking_choice_tos_value: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["marking_choice.tos_value"] = vFnMap["marking_choice.tos_value"]
-
 	vrhPolicerChoice := v.PolicerChoiceValidationRuleHandler
 	rulesPolicerChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -378,7 +354,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["policer_choice"] = vFn
-
 	vrhQueueingChoice := v.QueueingChoiceValidationRuleHandler
 	rulesQueueingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -400,7 +375,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_group"] = vFn
-
 	v.FldValidators["policer_choice.policer"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -464,25 +438,18 @@ func (v *ValidateDSCPMarkingType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["drop_precedence"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("drop_precedence"))
 		if err := fv(ctx, m.GetDropPrecedence(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dscp_class"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dscp_class"))
 		if err := fv(ctx, m.GetDscpClass(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -540,17 +507,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicerChoiceDRefInfo()
-
 }
 
 func (m *GetSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPolicerChoice().(type) {
 	case *GetSpecType_NoPolicer:
-
 		return nil, nil
-
 	case *GetSpecType_Policer:
-
 		vref := m.GetPolicer()
 		if vref == nil {
 			return nil, nil
@@ -566,7 +529,6 @@ func (m *GetSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -578,13 +540,11 @@ func (m *GetSpecType) GetPolicerChoiceDBEntries(ctx context.Context, d db.Interf
 
 	switch m.GetPolicerChoice().(type) {
 	case *GetSpecType_NoPolicer:
-
 	case *GetSpecType_Policer:
 		refdType, err := d.TypeForEntryKind("", "", "policer.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: policer")
 		}
-
 		vref := m.GetPolicer()
 		if vref == nil {
 			return nil, nil
@@ -602,7 +562,6 @@ func (m *GetSpecType) GetPolicerChoiceDBEntries(ctx context.Context, d db.Interf
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -627,7 +586,6 @@ func (v *ValidateGetSpecType) MarkingChoiceTosValueValidationRuleHandler(rules m
 	}
 	return oValidatorFn_TosValue, nil
 }
-
 func (v *ValidateGetSpecType) PolicerChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -635,7 +593,6 @@ func (v *ValidateGetSpecType) PolicerChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) QueueingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -643,9 +600,7 @@ func (v *ValidateGetSpecType) QueueingChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) InterfaceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(InterfaceGroupType)
@@ -673,14 +628,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_group"))
 		if err := fv(ctx, m.GetInterfaceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["marking_choice"]; exists {
@@ -727,7 +679,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policer_choice"]; exists {
@@ -763,7 +714,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["queueing_choice"]; exists {
@@ -799,16 +749,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -816,7 +763,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMarkingChoice := v.MarkingChoiceValidationRuleHandler
 	rulesMarkingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -827,7 +773,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["marking_choice"] = vFn
-
 	vrhMarkingChoiceTosValue := v.MarkingChoiceTosValueValidationRuleHandler
 	rulesMarkingChoiceTosValue := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "255",
@@ -837,9 +782,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.marking_choice_tos_value: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["marking_choice.tos_value"] = vFnMap["marking_choice.tos_value"]
-
 	vrhPolicerChoice := v.PolicerChoiceValidationRuleHandler
 	rulesPolicerChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -850,7 +793,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["policer_choice"] = vFn
-
 	vrhQueueingChoice := v.QueueingChoiceValidationRuleHandler
 	rulesQueueingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -872,7 +814,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_group"] = vFn
-
 	v.FldValidators["policer_choice.policer"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -925,17 +866,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicerChoiceDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPolicerChoice().(type) {
 	case *GlobalSpecType_NoPolicer:
-
 		return nil, nil
-
 	case *GlobalSpecType_Policer:
-
 		vref := m.GetPolicer()
 		if vref == nil {
 			return nil, nil
@@ -951,7 +888,6 @@ func (m *GlobalSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -963,13 +899,11 @@ func (m *GlobalSpecType) GetPolicerChoiceDBEntries(ctx context.Context, d db.Int
 
 	switch m.GetPolicerChoice().(type) {
 	case *GlobalSpecType_NoPolicer:
-
 	case *GlobalSpecType_Policer:
 		refdType, err := d.TypeForEntryKind("", "", "policer.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: policer")
 		}
-
 		vref := m.GetPolicer()
 		if vref == nil {
 			return nil, nil
@@ -987,7 +921,6 @@ func (m *GlobalSpecType) GetPolicerChoiceDBEntries(ctx context.Context, d db.Int
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -1012,7 +945,6 @@ func (v *ValidateGlobalSpecType) MarkingChoiceTosValueValidationRuleHandler(rule
 	}
 	return oValidatorFn_TosValue, nil
 }
-
 func (v *ValidateGlobalSpecType) PolicerChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1020,7 +952,6 @@ func (v *ValidateGlobalSpecType) PolicerChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) QueueingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1028,9 +959,7 @@ func (v *ValidateGlobalSpecType) QueueingChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) InterfaceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(InterfaceGroupType)
@@ -1058,14 +987,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_group"))
 		if err := fv(ctx, m.GetInterfaceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["marking_choice"]; exists {
@@ -1112,7 +1038,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policer_choice"]; exists {
@@ -1148,7 +1073,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["queueing_choice"]; exists {
@@ -1184,16 +1108,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1201,7 +1122,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMarkingChoice := v.MarkingChoiceValidationRuleHandler
 	rulesMarkingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1212,7 +1132,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["marking_choice"] = vFn
-
 	vrhMarkingChoiceTosValue := v.MarkingChoiceTosValueValidationRuleHandler
 	rulesMarkingChoiceTosValue := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "255",
@@ -1222,9 +1141,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.marking_choice_tos_value: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["marking_choice.tos_value"] = vFnMap["marking_choice.tos_value"]
-
 	vrhPolicerChoice := v.PolicerChoiceValidationRuleHandler
 	rulesPolicerChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1235,7 +1152,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["policer_choice"] = vFn
-
 	vrhQueueingChoice := v.QueueingChoiceValidationRuleHandler
 	rulesQueueingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1257,7 +1173,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_group"] = vFn
-
 	v.FldValidators["policer_choice.policer"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1310,17 +1225,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicerChoiceDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPolicerChoice().(type) {
 	case *ReplaceSpecType_NoPolicer:
-
 		return nil, nil
-
 	case *ReplaceSpecType_Policer:
-
 		vref := m.GetPolicer()
 		if vref == nil {
 			return nil, nil
@@ -1336,7 +1247,6 @@ func (m *ReplaceSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -1348,13 +1258,11 @@ func (m *ReplaceSpecType) GetPolicerChoiceDBEntries(ctx context.Context, d db.In
 
 	switch m.GetPolicerChoice().(type) {
 	case *ReplaceSpecType_NoPolicer:
-
 	case *ReplaceSpecType_Policer:
 		refdType, err := d.TypeForEntryKind("", "", "policer.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: policer")
 		}
-
 		vref := m.GetPolicer()
 		if vref == nil {
 			return nil, nil
@@ -1372,7 +1280,6 @@ func (m *ReplaceSpecType) GetPolicerChoiceDBEntries(ctx context.Context, d db.In
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -1397,7 +1304,6 @@ func (v *ValidateReplaceSpecType) MarkingChoiceTosValueValidationRuleHandler(rul
 	}
 	return oValidatorFn_TosValue, nil
 }
-
 func (v *ValidateReplaceSpecType) PolicerChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1405,7 +1311,6 @@ func (v *ValidateReplaceSpecType) PolicerChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) QueueingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1413,9 +1318,7 @@ func (v *ValidateReplaceSpecType) QueueingChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) InterfaceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(InterfaceGroupType)
@@ -1443,14 +1346,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_group"))
 		if err := fv(ctx, m.GetInterfaceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["marking_choice"]; exists {
@@ -1497,7 +1397,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policer_choice"]; exists {
@@ -1533,7 +1432,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["queueing_choice"]; exists {
@@ -1569,16 +1467,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1586,7 +1481,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMarkingChoice := v.MarkingChoiceValidationRuleHandler
 	rulesMarkingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1597,7 +1491,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["marking_choice"] = vFn
-
 	vrhMarkingChoiceTosValue := v.MarkingChoiceTosValueValidationRuleHandler
 	rulesMarkingChoiceTosValue := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "255",
@@ -1607,9 +1500,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.marking_choice_tos_value: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["marking_choice.tos_value"] = vFnMap["marking_choice.tos_value"]
-
 	vrhPolicerChoice := v.PolicerChoiceValidationRuleHandler
 	rulesPolicerChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1620,7 +1511,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["policer_choice"] = vFn
-
 	vrhQueueingChoice := v.QueueingChoiceValidationRuleHandler
 	rulesQueueingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1642,7 +1532,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_group"] = vFn
-
 	v.FldValidators["policer_choice.policer"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

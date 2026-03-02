@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_testing.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.api_sec.api_testing.Object"] = ObjectValidator()
 	vr["ves.io.schema.api_sec.api_testing.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.api_sec.api_testing.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.api_sec.api_testing.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.api_sec.api_testing.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_testing.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.api_sec.api_testing.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.api_sec.api_testing.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.api_sec.api_testing.ApiKey"] = ApiKeyValidator()
 	vr["ves.io.schema.api_sec.api_testing.BasicAuthentication"] = BasicAuthenticationValidator()
 	vr["ves.io.schema.api_sec.api_testing.Bearer"] = BearerValidator()
@@ -38,7 +35,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_testing.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.api_sec.api_testing.LoginEndpoint"] = LoginEndpointValidator()
 	vr["ves.io.schema.api_sec.api_testing.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -50,11 +46,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.api_sec.api_testing.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.api_sec.api_testing.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.api_sec.api_testing.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.api_testing.API.Create"] = []string{
 		"spec.domains.#.credentials.#.api_key.value.blindfold_secret_info_internal",
 		"spec.domains.#.credentials.#.api_key.value.secret_encoding_type",
@@ -73,9 +67,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.domains.#.credentials.#.login_endpoint.json_payload.vault_secret_info",
 		"spec.domains.#.credentials.#.login_endpoint.json_payload.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.api_testing.API.Create"] = "ves.io.schema.api_sec.api_testing.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.api_testing.API.Replace"] = []string{
 		"spec.domains.#.credentials.#.api_key.value.blindfold_secret_info_internal",
 		"spec.domains.#.credentials.#.api_key.value.secret_encoding_type",
@@ -94,23 +86,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.domains.#.credentials.#.login_endpoint.json_payload.vault_secret_info",
 		"spec.domains.#.credentials.#.login_endpoint.json_payload.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.api_testing.API.Replace"] = "ves.io.schema.api_sec.api_testing.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.api_sec.api_testing.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -119,9 +106,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.api_sec.api_testing.Object"] = APISwaggerJSON
@@ -135,22 +120,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.api_sec.api_testing.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.api_sec.api_testing.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.api_sec.api_testing.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

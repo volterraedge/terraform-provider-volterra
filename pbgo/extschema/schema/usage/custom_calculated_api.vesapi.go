@@ -42,7 +42,6 @@ func (c *CustomCalculatedUsageAPIGrpcClient) doRPCListCurrentUsage(ctx context.C
 	rsp, err := c.grpcClient.ListCurrentUsage(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomCalculatedUsageAPIGrpcClient) doRPCListMonthlyUsage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListMonthlyUsageReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomCalculatedUsageAPIGrpcClient(cc *grpc.ClientConn) server.CustomCli
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ListCurrentUsage"] = ccl.doRPCListCurrentUsage
-
 	rpcFns["ListMonthlyUsage"] = ccl.doRPCListMonthlyUsage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -175,7 +171,6 @@ func (c *CustomCalculatedUsageAPIRestClient) doRPCListCurrentUsage(ctx context.C
 	pbRsp := &ListCurrentUsageResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.usage.ListCurrentUsageResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -183,7 +178,6 @@ func (c *CustomCalculatedUsageAPIRestClient) doRPCListCurrentUsage(ctx context.C
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomCalculatedUsageAPIRestClient) doRPCListMonthlyUsage(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -258,7 +252,6 @@ func (c *CustomCalculatedUsageAPIRestClient) doRPCListMonthlyUsage(ctx context.C
 	pbRsp := &ListMonthlyUsageResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.usage.ListMonthlyUsageResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -292,11 +285,8 @@ func NewCustomCalculatedUsageAPIRestClient(baseURL string, hc http.Client) serve
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ListCurrentUsage"] = ccl.doRPCListCurrentUsage
-
 	rpcFns["ListMonthlyUsage"] = ccl.doRPCListMonthlyUsage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -381,7 +371,6 @@ func (s *customCalculatedUsageAPISrv) ListCurrentUsage(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.usage.ListCurrentUsageResp", rsp)...)
 
 	return rsp, nil
@@ -430,7 +419,6 @@ func (s *customCalculatedUsageAPISrv) ListMonthlyUsage(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.usage.ListMonthlyUsageResp", rsp)...)
 
 	return rsp, nil
@@ -825,10 +813,13 @@ var CustomCalculatedUsageAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace to be considered\n\nExample: - \"system\"-",
+                    "description": " Namespace to be considered\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "to": {
                     "type": "string",
@@ -892,10 +883,13 @@ var CustomCalculatedUsageAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace to be considered\n\nExample: - \"system\"-",
+                    "description": " Namespace to be considered\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },

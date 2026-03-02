@@ -78,9 +78,7 @@ func (v *ValidateAclResourceEntry) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["entries"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("entries"))
 		for idx, item := range m.GetEntries() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -88,16 +86,13 @@ func (v *ValidateAclResourceEntry) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAclResourceEntryValidator = func() *ValidateAclResourceEntry {
 	v := &ValidateAclResourceEntry{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["entries"] = EntryValidator().Validate
 
 	return v
@@ -123,7 +118,6 @@ func (m *ActionType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetLogOn().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ActionType.log_on")
 	}
@@ -221,16 +215,13 @@ func (v *ValidateActionType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultActionTypeValidator = func() *ValidateActionType {
 	v := &ValidateActionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["item_type.log_on"] = LogonItemTypeValidator().Validate
 
 	return v
@@ -294,9 +285,7 @@ func (v *ValidateActiveDirectoryAuth) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active_directory_query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active_directory_query"))
 		for idx, item := range m.GetActiveDirectoryQuery() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -304,36 +293,25 @@ func (v *ValidateActiveDirectoryAuth) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deny_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deny_name"))
 		if err := fv(ctx, m.GetDenyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expression"))
 		if err := fv(ctx, m.GetExpression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server"))
 		if err := fv(ctx, m.GetServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -402,43 +380,30 @@ func (v *ValidateActiveDirectoryQuery) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["deny_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deny_name"))
 		if err := fv(ctx, m.GetDenyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filter"))
 		if err := fv(ctx, m.GetFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_assign"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_assign"))
 		if err := fv(ctx, m.GetResourceAssign(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server"))
 		if err := fv(ctx, m.GetServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -507,27 +472,19 @@ func (v *ValidateAllowResourceAssign) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allow_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow_name"))
 		if err := fv(ctx, m.GetAllowName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deny_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deny_name"))
 		if err := fv(ctx, m.GetDenyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules_resource_assign"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rules_resource_assign"))
 		for idx, item := range m.GetRulesResourceAssign() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -535,18 +492,13 @@ func (v *ValidateAllowResourceAssign) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server"))
 		if err := fv(ctx, m.GetServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -615,25 +567,18 @@ func (v *ValidateConnectivityPolicyType) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connectivities"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connectivities"))
 		if err := fv(ctx, m.GetConnectivities(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connectivity_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connectivity_policy_name"))
 		if err := fv(ctx, m.GetConnectivityPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -664,7 +609,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPerSession().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.per_session")
 	}
@@ -716,32 +660,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connectivity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connectivity"))
 		if err := fv(ctx, m.GetConnectivity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["per_session"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_session"))
 		if err := fv(ctx, m.GetPerSession(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["per_session"] = PerSessionPolicyTypeValidator().Validate
 
 	return v
@@ -767,7 +703,6 @@ func (m *Custmization) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting Custmization.password")
 	}
@@ -819,32 +754,24 @@ func (v *ValidateCustmization) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_name"))
 		if err := fv(ctx, m.GetUserName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustmizationValidator = func() *ValidateCustmization {
 	v := &ValidateCustmization{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -908,50 +835,36 @@ func (v *ValidateEntry) Validate(ctx context.Context, pm interface{}, opts ...db
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination_end_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination_end_port"))
 		if err := fv(ctx, m.GetDestinationEndPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination_ip"))
 		if err := fv(ctx, m.GetDestinationIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination_start_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination_start_port"))
 		if err := fv(ctx, m.GetDestinationStartPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEntryValidator = func() *ValidateEntry {
 	v := &ValidateEntry{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["destination_ip"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -977,7 +890,6 @@ func (m *ExternalServers) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdminPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ExternalServers.admin_password")
 	}
@@ -1017,7 +929,6 @@ type ValidateExternalServers struct {
 }
 
 func (v *ValidateExternalServers) AdminUsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for admin_username")
@@ -1039,50 +950,36 @@ func (v *ValidateExternalServers) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_username"))
 		if err := fv(ctx, m.GetAdminUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_type"))
 		if err := fv(ctx, m.GetServerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultExternalServersValidator = func() *ValidateExternalServers {
 	v := &ValidateExternalServers{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1101,7 +998,6 @@ var DefaultExternalServersValidator = func() *ValidateExternalServers {
 		panic(errMsg)
 	}
 	v.FldValidators["admin_username"] = vFn
-
 	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -1127,7 +1023,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPerSession().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.per_session")
 	}
@@ -1179,32 +1074,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connectivity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connectivity"))
 		if err := fv(ctx, m.GetConnectivity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["per_session"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_session"))
 		if err := fv(ctx, m.GetPerSession(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["per_session"] = PerSessionPolicyTypeValidator().Validate
 
 	return v
@@ -1230,7 +1117,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPerSession().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.per_session")
 	}
@@ -1282,32 +1168,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connectivity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connectivity"))
 		if err := fv(ctx, m.GetConnectivity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["per_session"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_session"))
 		if err := fv(ctx, m.GetPerSession(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["per_session"] = PerSessionPolicyTypeValidator().Validate
 
 	return v
@@ -1371,34 +1249,25 @@ func (v *ValidateLeasePoolMember) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_address"))
 		if err := fv(ctx, m.GetEndAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_address"))
 		if err := fv(ctx, m.GetStartAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLeasePoolMemberValidator = func() *ValidateLeasePoolMember {
 	v := &ValidateLeasePoolMember{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["start_address"] = ves_io_schema.IpAddressTypeValidator().Validate
-
 	v.FldValidators["end_address"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -1424,7 +1293,6 @@ func (m *LogonItemType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetCustomization() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting LogonItemType.customization idx %v", idx)
@@ -1478,9 +1346,7 @@ func (v *ValidateLogonItemType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active_directory_auth"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active_directory_auth"))
 		for idx, item := range m.GetActiveDirectoryAuth() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1488,11 +1354,8 @@ func (v *ValidateLogonItemType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["customization"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("customization"))
 		for idx, item := range m.GetCustomization() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1500,16 +1363,13 @@ func (v *ValidateLogonItemType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLogonItemTypeValidator = func() *ValidateLogonItemType {
 	v := &ValidateLogonItemType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["customization"] = CustmizationValidator().Validate
 
 	return v
@@ -1535,13 +1395,11 @@ func (m *PerSessionPolicyType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetExternalServer() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting PerSessionPolicyType.external_server idx %v", idx)
 		}
 	}
-
 	if err := m.GetSequenceAction().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting PerSessionPolicyType.sequence_action")
 	}
@@ -1581,7 +1439,6 @@ type ValidatePerSessionPolicyType struct {
 }
 
 func (v *ValidatePerSessionPolicyType) ResourcesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1619,9 +1476,7 @@ func (v *ValidatePerSessionPolicyType) ResourcesValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePerSessionPolicyType) LeasePoolMemberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1659,9 +1514,7 @@ func (v *ValidatePerSessionPolicyType) LeasePoolMemberValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePerSessionPolicyType) ExternalServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1713,56 +1566,42 @@ func (v *ValidatePerSessionPolicyType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["external_server"]; exists {
 		vOpts := append(opts, db.WithValidateField("external_server"))
 		if err := fv(ctx, m.GetExternalServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["lease_pool_member"]; exists {
 		vOpts := append(opts, db.WithValidateField("lease_pool_member"))
 		if err := fv(ctx, m.GetLeasePoolMember(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["per_session_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_session_policy_name"))
 		if err := fv(ctx, m.GetPerSessionPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resources"]; exists {
 		vOpts := append(opts, db.WithValidateField("resources"))
 		if err := fv(ctx, m.GetResources(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sequence_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sequence_action"))
 		if err := fv(ctx, m.GetSequenceAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPerSessionPolicyTypeValidator = func() *ValidatePerSessionPolicyType {
 	v := &ValidatePerSessionPolicyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1809,7 +1648,6 @@ var DefaultPerSessionPolicyTypeValidator = func() *ValidatePerSessionPolicyType 
 		panic(errMsg)
 	}
 	v.FldValidators["external_server"] = vFn
-
 	v.FldValidators["sequence_action"] = SequenceActionValidator().Validate
 
 	return v
@@ -1835,7 +1673,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPerSession().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.per_session")
 	}
@@ -1887,32 +1724,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connectivity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connectivity"))
 		if err := fv(ctx, m.GetConnectivity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["per_session"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_session"))
 		if err := fv(ctx, m.GetPerSession(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["per_session"] = PerSessionPolicyTypeValidator().Validate
 
 	return v
@@ -2011,16 +1840,13 @@ func (v *ValidateResource) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResourceValidator = func() *ValidateResource {
 	v := &ValidateResource{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["resource_type.acl"] = AclResourceEntryValidator().Validate
 
 	return v
@@ -2084,9 +1910,7 @@ func (v *ValidateResourceAssign) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allow"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow"))
 		for idx, item := range m.GetAllow() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2094,9 +1918,7 @@ func (v *ValidateResourceAssign) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2165,9 +1987,7 @@ func (v *ValidateRules) Validate(ctx context.Context, pm interface{}, opts ...db
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["acls"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("acls"))
 		for idx, item := range m.GetAcls() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2175,11 +1995,8 @@ func (v *ValidateRules) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_access_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_access_rule"))
 		for idx, item := range m.GetNetworkAccessRule() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2187,18 +2004,13 @@ func (v *ValidateRules) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["web_top_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("web_top_name"))
 		if err := fv(ctx, m.GetWebTopName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2229,7 +2041,6 @@ func (m *SequenceAction) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetNextAction().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SequenceAction.next_action")
 	}
@@ -2281,32 +2092,24 @@ func (v *ValidateSequenceAction) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connectivity_access_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connectivity_access_policy_name"))
 		if err := fv(ctx, m.GetConnectivityAccessPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["next_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("next_action"))
 		if err := fv(ctx, m.GetNextAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSequenceActionValidator = func() *ValidateSequenceAction {
 	v := &ValidateSequenceAction{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["next_action"] = ActionTypeValidator().Validate
 
 	return v

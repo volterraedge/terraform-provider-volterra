@@ -32,7 +32,6 @@ resource "volterra_k8s_cluster_role_binding" "example" {
     user = "user1@example.com"
   }
 }
-
 ```
 
 Argument Reference
@@ -91,4 +90,4 @@ Name and Namespace of the service account.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured k8s_cluster_role_binding.
+*   `id` - This is the id of the configured k8s_cluster_role_binding.

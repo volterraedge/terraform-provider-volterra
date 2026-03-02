@@ -88,7 +88,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -167,7 +166,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -198,7 +196,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetInlineString().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.inline_string")
 	}
@@ -238,8 +235,61 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetSourceSpecifierDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAuthorizationServersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAuthorizationServersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceSpecifierDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSourceSpecifierDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
+func (m *GlobalSpecType) GetAuthorizationServersDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetAuthorizationServers()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.authorization_servers[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "authorization_server.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "authorization_servers",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+
+// GetAuthorizationServersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetAuthorizationServersDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "authorization_server.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: authorization_server")
+	}
+	for _, ref := range m.GetAuthorizationServers() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -249,7 +299,6 @@ func (m *GlobalSpecType) GetSourceSpecifierDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSourceSpecifier().(type) {
 	case *GlobalSpecType_RemoteJwks:
-
 		drInfos, err := m.GetRemoteJwks().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRemoteJwks().GetDRefInfo() FAILED")
@@ -259,15 +308,11 @@ func (m *GlobalSpecType) GetSourceSpecifierDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "remote_jwks." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_InlineString:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -275,7 +320,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) IssuerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for issuer")
@@ -297,9 +341,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["audiences"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("audiences"))
 		for idx, item := range m.GetAudiences() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -307,38 +349,35 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["authorization_servers"]; exists {
+		vOpts := append(opts, db.WithValidateField("authorization_servers"))
+		for idx, item := range m.GetAuthorizationServers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["bearer_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bearer_token"))
 		if err := fv(ctx, m.GetBearerToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["forward"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("forward"))
 		if err := fv(ctx, m.GetForward(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["forward_payload_header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("forward_payload_header"))
 		if err := fv(ctx, m.GetForwardPayloadHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["from_headers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("from_headers"))
 		for idx, item := range m.GetFromHeaders() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -346,11 +385,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["from_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("from_params"))
 		for idx, item := range m.GetFromParams() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -358,25 +394,27 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["issuer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("issuer"))
 		if err := fv(ctx, m.GetIssuer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["jwks_key_ids"]; exists {
+		vOpts := append(opts, db.WithValidateField("jwks_key_ids"))
+		for idx, item := range m.GetJwksKeyIds() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["payload_in_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("payload_in_metadata"))
 		if err := fv(ctx, m.GetPayloadInMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSourceSpecifier().(type) {
@@ -413,25 +451,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["validate_period"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("validate_period"))
 		if err := fv(ctx, m.GetValidatePeriod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -450,7 +482,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["issuer"] = vFn
-
 	v.FldValidators["source_specifier.inline_string"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -514,25 +545,18 @@ func (v *ValidateJwtHeader) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value_prefix"))
 		if err := fv(ctx, m.GetValuePrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -590,7 +614,6 @@ func (m *RemoteJwks) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetClusterDRefInfo()
-
 }
 
 func (m *RemoteJwks) GetClusterDRefInfo() ([]db.DRefInfo, error) {
@@ -615,7 +638,6 @@ func (m *RemoteJwks) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetClusterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -634,7 +656,6 @@ func (m *RemoteJwks) GetClusterDBEntries(ctx context.Context, d db.Interface) ([
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -655,18 +676,13 @@ func (v *ValidateRemoteJwks) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cache_duration_ms"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_duration_ms"))
 		if err := fv(ctx, m.GetCacheDurationMs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster"))
 		for idx, item := range m.GetCluster() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -674,27 +690,19 @@ func (v *ValidateRemoteJwks) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timeout"))
 		if err := fv(ctx, m.GetTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uri"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uri"))
 		if err := fv(ctx, m.GetUri(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -773,7 +781,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

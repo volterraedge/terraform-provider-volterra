@@ -74,9 +74,7 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Usage"] = ccl.doRPCUsage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -174,7 +172,6 @@ func (c *CustomDataAPIRestClient) doRPCUsage(ctx context.Context, callOpts *serv
 	pbRsp := &UsageResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.workload.UsageResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -208,9 +205,7 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Usage"] = ccl.doRPCUsage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -291,7 +286,6 @@ func (s *customDataAPISrv) Usage(ctx context.Context, in *UsageRequest) (*UsageR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.workload.UsageResponse", rsp)...)
 
 	return rsp, nil
@@ -532,6 +526,20 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "Unit",
             "x-ves-proto-enum": "ves.io.schema.UnitType"
         },
+        "viewsworkloadUsageType": {
+            "type": "string",
+            "description": "List of usage types that can be queried\n\nx-unit: \"Number of cores\"\nx-unit: \"Bytes\"\nx-unit: \"Bytes per second\"\nx-unit: \"Bytes per second\"",
+            "title": "Usage Type",
+            "enum": [
+                "CPU_USAGE",
+                "MEMORY_USAGE",
+                "DISK_READS",
+                "DISK_WRITES"
+            ],
+            "default": "CPU_USAGE",
+            "x-displayname": "Usage Type",
+            "x-ves-proto-enum": "ves.io.schema.views.workload.UsageType"
+        },
         "workloadUsageData": {
             "type": "object",
             "description": "Usage data contains the usage type and the corresponding metric",
@@ -541,7 +549,7 @@ var CustomDataAPISwaggerJSON string = `{
             "properties": {
                 "data": {
                     "type": "array",
-                    "description": " List of metric data ",
+                    "description": " List of metric data",
                     "title": "Data",
                     "items": {
                         "$ref": "#/definitions/workloadUsageTypeData"
@@ -551,7 +559,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "type": {
                     "description": " Usage Type",
                     "title": "Type",
-                    "$ref": "#/definitions/workloadUsageType",
+                    "$ref": "#/definitions/viewsworkloadUsageType",
                     "x-displayname": "Type"
                 },
                 "unit": {
@@ -601,7 +609,7 @@ var CustomDataAPISwaggerJSON string = `{
                     "minItems": 1,
                     "maxItems": 8,
                     "items": {
-                        "$ref": "#/definitions/workloadUsageType"
+                        "$ref": "#/definitions/viewsworkloadUsageType"
                     },
                     "x-displayname": "Field Selector",
                     "x-ves-required": "true",
@@ -614,7 +622,7 @@ var CustomDataAPISwaggerJSON string = `{
                 },
                 "filter": {
                     "type": "string",
-                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in UsageLabel {CONTAINER, POD, SITE} can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n     =  : equal to\n     != : not equal to\n     =~ : regex match\n     !~ : not regex match\n\n Optional: If not specified, all workloads usage in the given namespace will be aggregated based on the group_by field. \n\nExample: - \"{POD=\\\"pod-1\\\"}\"-",
+                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in UsageLabel {CONTAINER, POD, SITE} can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n     =  : equal to\n     != : not equal to\n     =~ : regex match\n     !~ : not regex match\n\n Optional: If not specified, all workloads usage in the given namespace will be aggregated based on the group_by field.\n\nExample: - \"{POD=\\\"pod-1\\\"}\"-",
                     "title": "Label Filter",
                     "x-displayname": "Filter",
                     "x-ves-example": "{POD=\\\"pod-1\\\"}"
@@ -701,20 +709,6 @@ var CustomDataAPISwaggerJSON string = `{
                     }
                 }
             }
-        },
-        "workloadUsageType": {
-            "type": "string",
-            "description": "List of usage types that can be queried\n\nx-unit: \"Number of cores\"\nx-unit: \"Bytes\"\nx-unit: \"Bytes per second\"\nx-unit: \"Bytes per second\"",
-            "title": "Usage Type",
-            "enum": [
-                "CPU_USAGE",
-                "MEMORY_USAGE",
-                "DISK_READS",
-                "DISK_WRITES"
-            ],
-            "default": "CPU_USAGE",
-            "x-displayname": "Usage Type",
-            "x-ves-proto-enum": "ves.io.schema.views.workload.UsageType"
         },
         "workloadUsageTypeData": {
             "type": "object",

@@ -13,16 +13,13 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.certified_hardware.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.certified_hardware.Object"] = ObjectValidator()
 	vr["ves.io.schema.certified_hardware.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.certified_hardware.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.certified_hardware.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.certified_hardware.ListRequest"] = ListRequestValidator()
 	vr["ves.io.schema.certified_hardware.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.certified_hardware.ListResponseItem"] = ListResponseItemValidator()
-
 	vr["ves.io.schema.certified_hardware.Aws"] = AwsValidator()
 	vr["ves.io.schema.certified_hardware.AwsImage"] = AwsImageValidator()
 	vr["ves.io.schema.certified_hardware.Azure"] = AzureValidator()
@@ -37,7 +34,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.certified_hardware.ImageType"] = ImageTypeValidator()
 	vr["ves.io.schema.certified_hardware.Marketplace"] = MarketplaceValidator()
 	vr["ves.io.schema.certified_hardware.NumaMem"] = NumaMemValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -49,25 +45,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.certified_hardware.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.certified_hardware.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.certified_hardware.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.certified_hardware.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -76,9 +67,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.certified_hardware.Object"] = APISwaggerJSON
@@ -92,22 +81,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.certified_hardware.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.certified_hardware.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.certified_hardware.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

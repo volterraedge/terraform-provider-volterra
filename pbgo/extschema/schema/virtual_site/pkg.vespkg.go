@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_site.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.virtual_site.Object"] = ObjectValidator()
 	vr["ves.io.schema.virtual_site.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.virtual_site.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.virtual_site.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.virtual_site.DeleteRequest"] = DeleteRequestValidator()
@@ -28,16 +26,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_site.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.virtual_site.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.virtual_site.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.virtual_site.SelecteeItemType"] = SelecteeItemTypeValidator()
 	vr["ves.io.schema.virtual_site.SelecteeRequest"] = SelecteeRequestValidator()
 	vr["ves.io.schema.virtual_site.SelecteeResponse"] = SelecteeResponseValidator()
-
 	vr["ves.io.schema.virtual_site.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.virtual_site.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.virtual_site.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.virtual_site.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -49,26 +44,21 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.virtual_site.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.virtual_site.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.virtual_site.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.virtual_site.API"] = "config"
 	sm["ves.io.schema.virtual_site.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -77,9 +67,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.virtual_site.Object"] = APISwaggerJSON
@@ -93,16 +81,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.virtual_site.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.virtual_site.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.virtual_site.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.virtual_site.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.virtual_site.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.virtual_site.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -113,22 +96,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.virtual_site.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -76,9 +76,7 @@ func (v *ValidateGlobalLogReceiverStatusData) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -86,11 +84,8 @@ func (v *ValidateGlobalLogReceiverStatusData) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["values"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("values"))
 		for idx, item := range m.GetValues() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -98,9 +93,7 @@ func (v *ValidateGlobalLogReceiverStatusData) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -157,7 +150,6 @@ type ValidateGlobalLogReceiverStatusRequest struct {
 }
 
 func (v *ValidateGlobalLogReceiverStatusRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -165,9 +157,7 @@ func (v *ValidateGlobalLogReceiverStatusRequest) NamespaceValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalLogReceiverStatusRequest) LabelFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -213,9 +203,7 @@ func (v *ValidateGlobalLogReceiverStatusRequest) LabelFilterValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalLogReceiverStatusRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -223,9 +211,7 @@ func (v *ValidateGlobalLogReceiverStatusRequest) StartTimeValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalLogReceiverStatusRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -233,9 +219,7 @@ func (v *ValidateGlobalLogReceiverStatusRequest) EndTimeValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalLogReceiverStatusRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -257,18 +241,13 @@ func (v *ValidateGlobalLogReceiverStatusRequest) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -276,51 +255,37 @@ func (v *ValidateGlobalLogReceiverStatusRequest) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalLogReceiverStatusRequestValidator = func() *ValidateGlobalLogReceiverStatusRequest {
 	v := &ValidateGlobalLogReceiverStatusRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -433,7 +398,6 @@ type ValidateGlobalLogReceiverStatusResponse struct {
 }
 
 func (v *ValidateGlobalLogReceiverStatusResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -455,9 +419,7 @@ func (v *ValidateGlobalLogReceiverStatusResponse) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["glr_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("glr_status"))
 		for idx, item := range m.GetGlrStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -465,25 +427,19 @@ func (v *ValidateGlobalLogReceiverStatusResponse) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalLogReceiverStatusResponseValidator = func() *ValidateGlobalLogReceiverStatusResponse {
 	v := &ValidateGlobalLogReceiverStatusResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -564,34 +520,24 @@ func (v *ValidateLabelFilter) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["op"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("op"))
 		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -660,25 +606,18 @@ func (v *ValidateStatusValue) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timestamp"))
 		if err := fv(ctx, m.GetTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

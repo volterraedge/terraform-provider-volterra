@@ -56,7 +56,6 @@ func (r *ObjectCreateReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // EntryConverter
 func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 	r.FromObject(e)
@@ -76,15 +75,11 @@ func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
 
 // CLIENT side
-
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -93,7 +88,6 @@ func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r.FromObject(e)
 	return r, nil
 }
-
 func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 	r := &ObjectReplaceReq{}
 	if e == nil {
@@ -105,12 +99,10 @@ func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 		// See if uid can be got from Metadata.Uid
 		obj := e.(*object.DBObject)
 		uid = obj.GetMetadata().GetUid()
-
 	}
 	r.ObjectUid = uid
 	return r, nil
 }
-
 func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	ccOpts := server.NewCRUDCallOpts()
 	for _, o := range opts {
@@ -120,7 +112,6 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
-
 func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	r := &ObjectListReq{
 		TenantFilter:      cco.TenantFilter,
@@ -146,7 +137,6 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	}
 	return r, nil
 }
-
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
 	return &ObjectDeleteReq{ObjectUid: uid}
 }
@@ -158,7 +148,6 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -180,11 +169,9 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -202,9 +189,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -228,7 +213,6 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -236,11 +220,9 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -257,11 +239,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -271,11 +251,9 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -285,9 +263,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -312,7 +288,6 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -328,11 +303,9 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
-
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -346,7 +319,6 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -389,7 +361,6 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -457,11 +428,9 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
-
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -543,9 +512,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
-
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -597,7 +564,6 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -605,11 +571,9 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -627,11 +591,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -641,11 +603,9 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -655,9 +615,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.registration.crudapi", ".")
@@ -748,7 +706,6 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -795,7 +752,6 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -824,7 +780,6 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
-
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.registration.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -835,7 +790,6 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
-
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.registration.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -846,7 +800,6 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
-
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.registration.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -857,11 +810,9 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.crudapi.API.List")
 	return oah.List(ctx, req)
 }
-
 func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (API_ListStreamClient, error) {
 	return nil, fmt.Errorf("ListStream Not implemented")
 }
-
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.registration.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -883,7 +834,6 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -904,11 +854,9 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -924,9 +872,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -947,7 +893,6 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -955,11 +900,9 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -977,11 +920,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -991,11 +932,9 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -1005,9 +944,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -1035,7 +972,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1047,7 +983,6 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -1077,7 +1012,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 	}
 	return nil
 }
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1098,7 +1032,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	obj := object.NewDBObject(nil)
 	req.ToObject(obj)
 	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-
 	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1110,7 +1043,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1141,9 +1073,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		return nil, status.Error(codes.ResourceExhausted, errors.Wrap(err, "Replace with NewObjectReplaceRsp").Error())
 	}
 	return rsp, nil
-
 }
-
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1168,7 +1098,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1180,7 +1109,6 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1193,17 +1121,16 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+		return nil, errors.Wrap(err, "List")
 	}
 	rsp, err := NewObjectListRsp(req, rsrcRsp.Items)
 	if err != nil {
-		merr = multierror.Append(merr, err)
+		return rsp, err
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
 	rsp.NextPage = rsrcRsp.NextPage
-	return rsp, merr
+	return rsp, nil
 }
-
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
 	var merr *multierror.Error
 	rsrcReq := &server.ResourceListRequest{
@@ -1215,6 +1142,7 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
 	if err != nil {
 		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+		return errors.ErrOrNil(merr)
 	}
 	streamSvr := &crudAPIListStreamServer{stream}
 	for item := range rsrcRsp.ItemsCh {
@@ -1225,7 +1153,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	}
 	return errors.ErrOrNil(merr)
 }
-
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1314,11 +1241,9 @@ func (r *ObjectGetReq) GetBackrefParam() (bool, []string) {
 func (r *ObjectDeleteReq) ToUid() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectCreateRsp) Key() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectGetRsp) GetBackrefs(ef db.NewEntryFunc) ([]db.Entry, error) {
 	brEnts := []db.Entry{}
 	bRefs := r.GetEntBackrefs()
@@ -1377,7 +1302,6 @@ func NewObjectCreateRsp(e db.Entry) (*ObjectCreateRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo := &ObjectReplaceRsp{}
 	switch e.(type) {
@@ -1391,7 +1315,6 @@ func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*ObjectGetRsp, error) {
 	rspo := &ObjectGetRsp{}
 	e := rsrcRsp.Entry
@@ -1426,7 +1349,6 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 	rspo.EntBackrefs = entBackrefs
 	return rspo, nil
 }
-
 func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*ObjectListRsp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("Nil ObjectListReq")
@@ -1452,7 +1374,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
 			continue
 		}
-
 		tenant := dbObj.GetSystemMetadata().GetTenant()
 		namespace := dbObj.GetMetadata().GetNamespace()
 		name := dbObj.GetMetadata().GetName()
@@ -1475,7 +1396,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 	}
 	return o, errs
 }
-
 func NewObjectDeleteRsp(ec ErrorCode) (*ObjectDeleteRsp, error) {
 	return &ObjectDeleteRsp{Err: ec}, nil
 }
@@ -2987,6 +2907,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/registrationInternetProxy",
                     "x-displayname": "Local HTTP/HTTPS proxy configuration"
                 },
+                "is_slo_static": {
+                    "type": "boolean",
+                    "description": " Indicates whether the SLO is static",
+                    "title": "Is SLO Static",
+                    "format": "boolean",
+                    "x-displayname": "Is SLO Static"
+                },
                 "machine_id": {
                     "type": "string",
                     "description": " Machine id - generated by operating system\n\nExample: - \"value\"-",
@@ -3084,7 +3011,7 @@ var APISwaggerJSON string = `{
         },
         "registrationObjectState": {
             "type": "string",
-            "description": "Defines states for registration object\n\nState isn't set\nObject was created (registration request was received and object created)\nRegistration was approved and waiting for configuration\nThis state can be set by user only if current state is NEW\nRegistration is approved and prepared for  to connect\nIt can't be set manually.\nRegistration isn't valid anymore and it will be deleted in near future\nThis state can be set by user anytime.\nRegistration is failed (vpm reported or timeout)\nDEPRECATED. Registration is reported as finished (workload was deployed)\nUser action is required\nRegistration is online\nOperating system upgrade is in progress\nMaintenance is in progress",
+            "description": "Defines states for registration object\n\nState isn't set\nObject was created (registration request was received and object created)\nRegistration was approved and waiting for configuration\nThis state can be set by user only if current state is NEW\nRegistration is approved and prepared for  to connect\nIt can't be set manually.\nRegistration isn't valid anymore and it will be deleted in near future\nThis state can be set by user anytime.\nRegistration is failed (vpm reported or timeout)\nDEPRECATED. Registration is reported as finished (workload was deployed)\nUser action is required\nRegistration is online\nOperating system upgrade is in progress\nMaintenance is in progress\nSite node(s) in failed state for a prolonged time period",
             "title": "ObjectState",
             "enum": [
                 "NOTSET",
@@ -3097,7 +3024,8 @@ var APISwaggerJSON string = `{
                 "PENDING",
                 "ONLINE",
                 "UPGRADING",
-                "MAINTENANCE"
+                "MAINTENANCE",
+                "FAILED_INACTIVE"
             ],
             "default": "NOTSET",
             "x-displayname": "Object State",
@@ -3223,7 +3151,7 @@ var APISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenstack Instance\nEquinix Instance",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenStack Instance\nEquinix Instance\nOpenShift Virtualization Instance",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -3249,7 +3177,8 @@ var APISwaggerJSON string = `{
                 "OCI",
                 "NUTANIX",
                 "OPENSTACK",
-                "EQUINIX"
+                "EQUINIX",
+                "OPENSHIFT_VIRTUALIZATION"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",
@@ -3504,7 +3433,7 @@ var APISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -3659,6 +3588,16 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-proto-message": "ves.io.schema.registration.GlobalSpecType",
             "properties": {
+                "connected_regions": {
+                    "type": "array",
+                    "description": " Optional.\n REs in selected region to which CEs connect, contains primary and backup RE region info\n\nExample: - \"value\"-",
+                    "title": "Connected Region",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Connected Regions",
+                    "x-ves-example": "value"
+                },
                 "infra": {
                     "description": " Infrastructure metadata section\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Infra",
@@ -3725,7 +3664,7 @@ var APISwaggerJSON string = `{
             "description": "Most recent observer status of object",
             "title": "Shape of the registration status",
             "x-displayname": "Status Type",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,2,3",
             "x-ves-proto-message": "ves.io.schema.registration.StatusType",
             "properties": {
                 "current_state": {
@@ -3739,6 +3678,19 @@ var APISwaggerJSON string = `{
                     "title": "object status",
                     "$ref": "#/definitions/ioschemaStatusType",
                     "x-displayname": "Object Status"
+                },
+                "parent_current_state": {
+                    "description": " It defines group, parent state of registration.",
+                    "title": "Parent current state of registration",
+                    "$ref": "#/definitions/siteSiteState",
+                    "x-displayname": "Registration parent state"
+                },
+                "state_update_timestamp": {
+                    "type": "string",
+                    "description": " Time of last registration state update",
+                    "title": "Modification timestamp for state of registration",
+                    "format": "date-time",
+                    "x-displayname": "Registration state update timestamp"
                 }
             }
         },
@@ -4326,6 +4278,40 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "siteSiteState": {
+            "type": "string",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.\nSite is in failed state for prolong period of time. Site Status Objects contain more details.\nSite resources are waiting to be updated. Check Status objects for more details\nAn Error occurred while updating cloud resources for F5XC managed site. Check Status objects for more details.\nSite resources orchestration is queued for F5XC managed site. Check Status objects for more details\nSite resources update is queued for F5XC managed site. Check Status objects for more details\nSite resources delete is queued for F5XC managed site. Check Status objects for more details",
+            "title": "SiteState",
+            "enum": [
+                "ONLINE",
+                "PROVISIONING",
+                "UPGRADING",
+                "STANDBY",
+                "FAILED",
+                "REREGISTRATION",
+                "WAITINGNODES",
+                "DECOMMISSIONING",
+                "WAITING_FOR_REGISTRATION",
+                "ORCHESTRATION_IN_PROGRESS",
+                "ORCHESTRATION_COMPLETE",
+                "ERROR_IN_ORCHESTRATION",
+                "DELETING_CLOUD_RESOURCES",
+                "DELETED_CLOUD_RESOURCES",
+                "ERROR_DELETING_CLOUD_RESOURCES",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_SUCCESS",
+                "VALIDATION_FAILED",
+                "FAILED_INACTIVE",
+                "UPDATING_CLOUD_RESOURCES",
+                "ERROR_UPDATING_CLOUD_RESOURCES",
+                "ORCHESTRATION_QUEUED",
+                "UPDATE_QUEUED",
+                "DELETE_QUEUED"
+            ],
+            "default": "ONLINE",
+            "x-displayname": "Site State",
+            "x-ves-proto-enum": "ves.io.schema.site.SiteState"
         },
         "siteStorageDevice": {
             "type": "object",

@@ -17,20 +17,16 @@ Example Usage
 
 ```hcl
 resource "volterra_ike_phase2_profile" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
+  name                 = "acmecorp-web"
+  namespace            = "staging"
   authentication_algos = ["authentication_algos"]
 
   encryption_algos = ["encryption_algos"]
 
   // One of the arguments from this list "ike_keylifetime_hours ike_keylifetime_minutes use_default_keylifetime" must be set
 
-  ike_keylifetime_hours {
-    duration = "duration"
-  }
+  use_default_keylifetime = true
 }
-
 ```
 
 Argument Reference
@@ -91,4 +87,4 @@ Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured ike_phase2_profile.
+*   `id` - This is the id of the configured ike_phase2_profile.

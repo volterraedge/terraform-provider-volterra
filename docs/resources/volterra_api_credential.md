@@ -32,7 +32,6 @@ resource "volterra_api_credential" "example" {
   virtual_k8s_namespace = "ns1"
   virtual_k8s_name = "vk8s1"
 }
-
 ```
 
 Argument Reference
@@ -61,6 +60,7 @@ Attribute Reference
 
 ---
 
--	`id` - This is the id of api credential.
+-   `id` - This is the id of api credential.
 
--	`data` - Data is the response format based on the API credential type. In case of API_CERTIFICATES, the response is the base64 encoded value of certificate in PKCS12 format. In case of KUBE_CONFIG, the response is the base64 encoded value of the k8s kubeconfig file with contents as requested - cluster,namespace and base64 encoded certificate, key and CA (`string`).
+-   `data` - Data is the response format based on the API credential type. In case of API_CERTIFICATES, the response is the base64 encoded value of certificate in PKCS12 format. In case of KUBE_CONFIG, the response is the base64 encoded value of the k8s kubeconfig file with contents as requested - cluster,namespace and base64 encoded certificate, key and CA (`string`).
+

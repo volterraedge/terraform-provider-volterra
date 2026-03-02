@@ -1,3 +1,7 @@
+//
+// Copyright (c) 2026 F5 Inc. All rights reserved.
+//
+
 package driftdetection
 
 import (
@@ -45,6 +49,8 @@ func FlattenAdvancedOptions(x *ves_io_schema_views_origin_pool.OriginPoolAdvance
 			"http2_options":                    FlattenHttp2Options(x.GetHttp2Options()),
 			"disable_lb_source_ip_persistance": isEmpty(x.GetDisableLbSourceIpPersistance()),
 			"enable_lb_source_ip_persistance":  isEmpty(x.GetEnableLbSourceIpPersistance()),
+			"max_requests_per_connection":      x.GetMaxRequestsPerConnection(),
+			"no_request_limit_per_connection":  isEmpty(x.GetNoRequestLimitPerConnection()),
 			"disable_outlier_detection":        isEmpty(x.GetDisableOutlierDetection()),
 			"outlier_detection":                FlattenOutlierDetection(x.GetOutlierDetection()),
 			"no_panic_threshold":               isEmpty(x.GetNoPanicThreshold()),

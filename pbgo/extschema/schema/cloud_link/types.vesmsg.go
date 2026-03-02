@@ -42,7 +42,6 @@ func (m *AWSBYOCListType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetConnections() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting AWSBYOCListType.connections idx %v", idx)
@@ -84,7 +83,6 @@ type ValidateAWSBYOCListType struct {
 }
 
 func (v *ValidateAWSBYOCListType) ConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -144,22 +142,18 @@ func (v *ValidateAWSBYOCListType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connections"]; exists {
 		vOpts := append(opts, db.WithValidateField("connections"))
 		if err := fv(ctx, m.GetConnections(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSBYOCListTypeValidator = func() *ValidateAWSBYOCListType {
 	v := &ValidateAWSBYOCListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -204,7 +198,6 @@ func (m *AWSBYOCType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAuthKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AWSBYOCType.auth_key")
 	}
@@ -258,9 +251,7 @@ func (v *ValidateAWSBYOCType) ResourceNameChoiceUserAssignedNameValidationRuleHa
 	}
 	return oValidatorFn_UserAssignedName, nil
 }
-
 func (v *ValidateAWSBYOCType) ConnectionIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_id")
@@ -268,9 +259,7 @@ func (v *ValidateAWSBYOCType) ConnectionIdValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSBYOCType) VlanValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan")
@@ -278,9 +267,7 @@ func (v *ValidateAWSBYOCType) VlanValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSBYOCType) BgpAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_asn")
@@ -288,9 +275,7 @@ func (v *ValidateAWSBYOCType) BgpAsnValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSBYOCType) AuthKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for auth_key")
@@ -299,19 +284,15 @@ func (v *ValidateAWSBYOCType) AuthKeyValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSBYOCType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -354,9 +335,7 @@ func (v *ValidateAWSBYOCType) TagsValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSBYOCType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -365,19 +344,15 @@ func (v *ValidateAWSBYOCType) MetadataValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSBYOCType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for region")
@@ -399,50 +374,35 @@ func (v *ValidateAWSBYOCType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["auth_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auth_key"))
 		if err := fv(ctx, m.GetAuthKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_asn"))
 		if err := fv(ctx, m.GetBgpAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_id"))
 		if err := fv(ctx, m.GetConnectionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_sitelink"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_sitelink"))
 		if err := fv(ctx, m.GetEnableSitelink(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ip_type"]; exists {
@@ -478,34 +438,24 @@ func (v *ValidateAWSBYOCType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jumbo_mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("jumbo_mtu"))
 		if err := fv(ctx, m.GetJumboMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetResourceNameChoice().(type) {
@@ -531,42 +481,31 @@ func (v *ValidateAWSBYOCType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_interface_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_interface_type"))
 		if err := fv(ctx, m.GetVirtualInterfaceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan"))
 		if err := fv(ctx, m.GetVlan(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSBYOCTypeValidator = func() *ValidateAWSBYOCType {
 	v := &ValidateAWSBYOCType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -574,7 +513,6 @@ var DefaultAWSBYOCTypeValidator = func() *ValidateAWSBYOCType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIpType := v.IpTypeValidationRuleHandler
 	rulesIpType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -585,7 +523,6 @@ var DefaultAWSBYOCTypeValidator = func() *ValidateAWSBYOCType {
 		panic(errMsg)
 	}
 	v.FldValidators["ip_type"] = vFn
-
 	vrhResourceNameChoiceUserAssignedName := v.ResourceNameChoiceUserAssignedNameValidationRuleHandler
 	rulesResourceNameChoiceUserAssignedName := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -595,7 +532,6 @@ var DefaultAWSBYOCTypeValidator = func() *ValidateAWSBYOCType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSBYOCType.resource_name_choice_user_assigned_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["resource_name_choice.user_assigned_name"] = vFnMap["resource_name_choice.user_assigned_name"]
 
 	vrhConnectionId := v.ConnectionIdValidationRuleHandler
@@ -687,9 +623,7 @@ var DefaultAWSBYOCTypeValidator = func() *ValidateAWSBYOCType {
 		panic(errMsg)
 	}
 	v.FldValidators["region"] = vFn
-
 	v.FldValidators["ip_type.ipv4"] = Ipv4TypeValidator().Validate
-
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
@@ -753,7 +687,6 @@ func (v *ValidateAWSF5XCManagedType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -784,7 +717,6 @@ func (m *AWSType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetByoc().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AWSType.byoc")
 	}
@@ -825,11 +757,9 @@ func (m *AWSType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAwsCredDRefInfo()
-
 }
 
 func (m *AWSType) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil
@@ -845,7 +775,6 @@ func (m *AWSType) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAwsCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -855,7 +784,6 @@ func (m *AWSType) GetAwsCredDBEntries(ctx context.Context, d db.Interface) ([]db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil
@@ -873,7 +801,6 @@ func (m *AWSType) GetAwsCredDBEntries(ctx context.Context, d db.Interface) ([]db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -888,7 +815,6 @@ func (v *ValidateAWSType) CloudLinkTypeValidationRuleHandler(rules map[string]st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSType) DirectConnectGatewayAsnChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -904,9 +830,7 @@ func (v *ValidateAWSType) DirectConnectGatewayAsnChoiceCustomAsnValidationRuleHa
 	}
 	return oValidatorFn_CustomAsn, nil
 }
-
 func (v *ValidateAWSType) AwsCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_cred")
@@ -915,11 +839,9 @@ func (v *ValidateAWSType) AwsCredValidationRuleHandler(rules map[string]string) 
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -939,14 +861,11 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_cred"))
 		if err := fv(ctx, m.GetAwsCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cloud_link_type"]; exists {
@@ -982,7 +901,6 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["direct_connect_gateway_asn_choice"]; exists {
@@ -1018,16 +936,13 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSTypeValidator = func() *ValidateAWSType {
 	v := &ValidateAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1035,7 +950,6 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloudLinkType := v.CloudLinkTypeValidationRuleHandler
 	rulesCloudLinkType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1046,7 +960,6 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud_link_type"] = vFn
-
 	vrhDirectConnectGatewayAsnChoice := v.DirectConnectGatewayAsnChoiceValidationRuleHandler
 	rulesDirectConnectGatewayAsnChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1057,7 +970,6 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["direct_connect_gateway_asn_choice"] = vFn
-
 	vrhDirectConnectGatewayAsnChoiceCustomAsn := v.DirectConnectGatewayAsnChoiceCustomAsnValidationRuleHandler
 	rulesDirectConnectGatewayAsnChoiceCustomAsn := map[string]string{
 		"ves.io.schema.rules.uint32.ranges": "64512-65534, 4200000000-4294967294",
@@ -1067,7 +979,6 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSType.direct_connect_gateway_asn_choice_custom_asn: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["direct_connect_gateway_asn_choice.custom_asn"] = vFnMap["direct_connect_gateway_asn_choice.custom_asn"]
 
 	vrhAwsCred := v.AwsCredValidationRuleHandler
@@ -1080,7 +991,6 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["aws_cred"] = vFn
-
 	v.FldValidators["cloud_link_type.byoc"] = AWSBYOCListTypeValidator().Validate
 
 	return v
@@ -1144,7 +1054,6 @@ func (v *ValidateAzureType) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -1175,7 +1084,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAws().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.aws")
 	}
@@ -1216,7 +1124,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudProviderDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1226,7 +1133,6 @@ func (m *CreateSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloudProvider().(type) {
 	case *CreateSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -1236,13 +1142,9 @@ func (m *CreateSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Azure:
-
 		return nil, nil
-
 	case *CreateSpecType_Gcp:
-
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -1252,11 +1154,9 @@ func (m *CreateSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -1270,7 +1170,6 @@ func (v *ValidateCreateSpecType) CloudProviderValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) EnableConnectionToReChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1337,7 +1236,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enable_connection_to_re_choice"]; exists {
@@ -1373,16 +1271,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1390,7 +1285,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloudProvider := v.CloudProviderValidationRuleHandler
 	rulesCloudProvider := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1401,7 +1295,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud_provider"] = vFn
-
 	vrhEnableConnectionToReChoice := v.EnableConnectionToReChoiceValidationRuleHandler
 	rulesEnableConnectionToReChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1412,10 +1305,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["enable_connection_to_re_choice"] = vFn
-
 	v.FldValidators["cloud_provider.aws"] = AWSTypeValidator().Validate
 	v.FldValidators["cloud_provider.gcp"] = GCPTypeValidator().Validate
-
 	v.FldValidators["enable_connection_to_re_choice.enabled"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
 	return v
@@ -1467,7 +1358,6 @@ type ValidateGCPBYOCListType struct {
 }
 
 func (v *ValidateGCPBYOCListType) ConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1527,22 +1417,18 @@ func (v *ValidateGCPBYOCListType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connections"]; exists {
 		vOpts := append(opts, db.WithValidateField("connections"))
 		if err := fv(ctx, m.GetConnections(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPBYOCListTypeValidator = func() *ValidateGCPBYOCListType {
 	v := &ValidateGCPBYOCListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1627,9 +1513,7 @@ func (v *ValidateGCPBYOCType) ProjectChoiceProjectValidationRuleHandler(rules ma
 	}
 	return oValidatorFn_Project, nil
 }
-
 func (v *ValidateGCPBYOCType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -1638,19 +1522,15 @@ func (v *ValidateGCPBYOCType) MetadataValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPBYOCType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for region")
@@ -1658,9 +1538,7 @@ func (v *ValidateGCPBYOCType) RegionValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPBYOCType) InterconnectAttachmentNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for interconnect_attachment_name")
@@ -1682,32 +1560,23 @@ func (v *ValidateGCPBYOCType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interconnect_attachment_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interconnect_attachment_name"))
 		if err := fv(ctx, m.GetInterconnectAttachmentName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["project_choice"]; exists {
@@ -1743,25 +1612,19 @@ func (v *ValidateGCPBYOCType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPBYOCTypeValidator = func() *ValidateGCPBYOCType {
 	v := &ValidateGCPBYOCType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1769,7 +1632,6 @@ var DefaultGCPBYOCTypeValidator = func() *ValidateGCPBYOCType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhProjectChoice := v.ProjectChoiceValidationRuleHandler
 	rulesProjectChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1780,7 +1642,6 @@ var DefaultGCPBYOCTypeValidator = func() *ValidateGCPBYOCType {
 		panic(errMsg)
 	}
 	v.FldValidators["project_choice"] = vFn
-
 	vrhProjectChoiceProject := v.ProjectChoiceProjectValidationRuleHandler
 	rulesProjectChoiceProject := map[string]string{
 		"ves.io.schema.rules.string.max_len": "30",
@@ -1791,7 +1652,6 @@ var DefaultGCPBYOCTypeValidator = func() *ValidateGCPBYOCType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GCPBYOCType.project_choice_project: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["project_choice.project"] = vFnMap["project_choice.project"]
 
 	vrhMetadata := v.MetadataValidationRuleHandler
@@ -1829,7 +1689,6 @@ var DefaultGCPBYOCTypeValidator = func() *ValidateGCPBYOCType {
 		panic(errMsg)
 	}
 	v.FldValidators["interconnect_attachment_name"] = vFn
-
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
@@ -1893,34 +1752,24 @@ func (v *ValidateGCPPartnerMetadata) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interconnect"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interconnect"))
 		if err := fv(ctx, m.GetInterconnect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["portal_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("portal_url"))
 		if err := fv(ctx, m.GetPortalUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1978,11 +1827,9 @@ func (m *GCPType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcpCredDRefInfo()
-
 }
 
 func (m *GCPType) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -1998,7 +1845,6 @@ func (m *GCPType) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetGcpCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2008,7 +1854,6 @@ func (m *GCPType) GetGcpCredDBEntries(ctx context.Context, d db.Interface) ([]db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -2026,7 +1871,6 @@ func (m *GCPType) GetGcpCredDBEntries(ctx context.Context, d db.Interface) ([]db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2041,9 +1885,7 @@ func (v *ValidateGCPType) CloudLinkTypeValidationRuleHandler(rules map[string]st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPType) GcpCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for gcp_cred")
@@ -2052,11 +1894,9 @@ func (v *ValidateGCPType) GcpCredValidationRuleHandler(rules map[string]string) 
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2099,25 +1939,19 @@ func (v *ValidateGCPType) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_cred"))
 		if err := fv(ctx, m.GetGcpCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPTypeValidator = func() *ValidateGCPType {
 	v := &ValidateGCPType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2125,7 +1959,6 @@ var DefaultGCPTypeValidator = func() *ValidateGCPType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloudLinkType := v.CloudLinkTypeValidationRuleHandler
 	rulesCloudLinkType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2147,7 +1980,6 @@ var DefaultGCPTypeValidator = func() *ValidateGCPType {
 		panic(errMsg)
 	}
 	v.FldValidators["gcp_cred"] = vFn
-
 	v.FldValidators["cloud_link_type.byoc"] = GCPBYOCListTypeValidator().Validate
 
 	return v
@@ -2173,7 +2005,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAws().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.aws")
 	}
@@ -2214,7 +2045,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudProviderDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2224,7 +2054,6 @@ func (m *GetSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloudProvider().(type) {
 	case *GetSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -2234,13 +2063,9 @@ func (m *GetSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Azure:
-
 		return nil, nil
-
 	case *GetSpecType_Gcp:
-
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -2250,11 +2075,9 @@ func (m *GetSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -2268,7 +2091,6 @@ func (v *ValidateGetSpecType) CloudProviderValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) EnableConnectionToReChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2276,9 +2098,7 @@ func (v *ValidateGetSpecType) EnableConnectionToReChoiceValidationRuleHandler(ru
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sites")
@@ -2300,14 +2120,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_link_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_link_state"))
 		if err := fv(ctx, m.GetCloudLinkState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cloud_provider"]; exists {
@@ -2354,7 +2171,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enable_connection_to_re_choice"]; exists {
@@ -2390,34 +2206,25 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sites"))
 		if err := fv(ctx, m.GetSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2425,7 +2232,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloudProvider := v.CloudProviderValidationRuleHandler
 	rulesCloudProvider := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2436,7 +2242,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud_provider"] = vFn
-
 	vrhEnableConnectionToReChoice := v.EnableConnectionToReChoiceValidationRuleHandler
 	rulesEnableConnectionToReChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2458,10 +2263,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["sites"] = vFn
-
 	v.FldValidators["cloud_provider.aws"] = AWSTypeValidator().Validate
 	v.FldValidators["cloud_provider.gcp"] = GCPTypeValidator().Validate
-
 	v.FldValidators["enable_connection_to_re_choice.enabled"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
 	return v
@@ -2487,7 +2290,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAws().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.aws")
 	}
@@ -2528,7 +2330,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudProviderDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2538,7 +2339,6 @@ func (m *GlobalSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloudProvider().(type) {
 	case *GlobalSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -2548,13 +2348,9 @@ func (m *GlobalSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Azure:
-
 		return nil, nil
-
 	case *GlobalSpecType_Gcp:
-
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -2564,11 +2360,9 @@ func (m *GlobalSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -2582,7 +2376,6 @@ func (v *ValidateGlobalSpecType) CloudProviderValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EnableConnectionToReChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2590,9 +2383,7 @@ func (v *ValidateGlobalSpecType) EnableConnectionToReChoiceValidationRuleHandler
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sites")
@@ -2614,14 +2405,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_link_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_link_state"))
 		if err := fv(ctx, m.GetCloudLinkState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cloud_provider"]; exists {
@@ -2668,7 +2456,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enable_connection_to_re_choice"]; exists {
@@ -2704,34 +2491,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sites"))
 		if err := fv(ctx, m.GetSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2739,7 +2517,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloudProvider := v.CloudProviderValidationRuleHandler
 	rulesCloudProvider := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2750,7 +2527,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud_provider"] = vFn
-
 	vrhEnableConnectionToReChoice := v.EnableConnectionToReChoiceValidationRuleHandler
 	rulesEnableConnectionToReChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2772,10 +2548,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["sites"] = vFn
-
 	v.FldValidators["cloud_provider.aws"] = AWSTypeValidator().Validate
 	v.FldValidators["cloud_provider.gcp"] = GCPTypeValidator().Validate
-
 	v.FldValidators["enable_connection_to_re_choice.enabled"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
 	return v
@@ -2827,7 +2601,6 @@ type ValidateIpv4Type struct {
 }
 
 func (v *ValidateIpv4Type) RouterPeerAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for router_peer_address")
@@ -2835,9 +2608,7 @@ func (v *ValidateIpv4Type) RouterPeerAddressValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIpv4Type) AwsRouterPeerAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_router_peer_address")
@@ -2859,32 +2630,24 @@ func (v *ValidateIpv4Type) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_router_peer_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_router_peer_address"))
 		if err := fv(ctx, m.GetAwsRouterPeerAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["router_peer_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("router_peer_address"))
 		if err := fv(ctx, m.GetRouterPeerAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpv4TypeValidator = func() *ValidateIpv4Type {
 	v := &ValidateIpv4Type{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2982,7 +2745,6 @@ func (v *ValidateIpv6Type) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -3013,7 +2775,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAws().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.aws")
 	}
@@ -3054,7 +2815,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudProviderDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3064,7 +2824,6 @@ func (m *ReplaceSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloudProvider().(type) {
 	case *ReplaceSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -3074,13 +2833,9 @@ func (m *ReplaceSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Azure:
-
 		return nil, nil
-
 	case *ReplaceSpecType_Gcp:
-
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -3090,11 +2845,9 @@ func (m *ReplaceSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -3108,7 +2861,6 @@ func (v *ValidateReplaceSpecType) CloudProviderValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) EnableConnectionToReChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3175,7 +2927,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enable_connection_to_re_choice"]; exists {
@@ -3211,16 +2962,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3228,7 +2976,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloudProvider := v.CloudProviderValidationRuleHandler
 	rulesCloudProvider := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3239,7 +2986,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud_provider"] = vFn
-
 	vrhEnableConnectionToReChoice := v.EnableConnectionToReChoiceValidationRuleHandler
 	rulesEnableConnectionToReChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3250,10 +2996,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["enable_connection_to_re_choice"] = vFn
-
 	v.FldValidators["cloud_provider.aws"] = AWSTypeValidator().Validate
 	v.FldValidators["cloud_provider.gcp"] = GCPTypeValidator().Validate
-
 	v.FldValidators["enable_connection_to_re_choice.enabled"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
 	return v

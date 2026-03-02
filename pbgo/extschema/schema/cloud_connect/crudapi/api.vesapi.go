@@ -56,7 +56,6 @@ func (r *ObjectCreateReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // EntryConverter
 func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 	r.FromObject(e)
@@ -76,15 +75,11 @@ func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
 
 // CLIENT side
-
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -93,7 +88,6 @@ func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r.FromObject(e)
 	return r, nil
 }
-
 func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 	r := &ObjectReplaceReq{}
 	if e == nil {
@@ -105,12 +99,10 @@ func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 		// See if uid can be got from Metadata.Uid
 		obj := e.(*object.DBObject)
 		uid = obj.GetMetadata().GetUid()
-
 	}
 	r.ObjectUid = uid
 	return r, nil
 }
-
 func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	ccOpts := server.NewCRUDCallOpts()
 	for _, o := range opts {
@@ -120,7 +112,6 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
-
 func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	r := &ObjectListReq{
 		TenantFilter:      cco.TenantFilter,
@@ -146,7 +137,6 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	}
 	return r, nil
 }
-
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
 	return &ObjectDeleteReq{ObjectUid: uid}
 }
@@ -158,7 +148,6 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -180,11 +169,9 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -202,9 +189,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -228,7 +213,6 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -236,11 +220,9 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -257,11 +239,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -271,11 +251,9 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -285,9 +263,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -312,7 +288,6 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -328,11 +303,9 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
-
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -346,7 +319,6 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -389,7 +361,6 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -457,11 +428,9 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
-
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -543,9 +512,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
-
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -597,7 +564,6 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -605,11 +571,9 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -627,11 +591,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -641,11 +603,9 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -655,9 +615,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.cloud_connect.crudapi", ".")
@@ -748,7 +706,6 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -795,7 +752,6 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -824,7 +780,6 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
-
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_connect.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -835,7 +790,6 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
-
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_connect.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -846,7 +800,6 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
-
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_connect.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -857,11 +810,9 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.List")
 	return oah.List(ctx, req)
 }
-
 func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (API_ListStreamClient, error) {
 	return nil, fmt.Errorf("ListStream Not implemented")
 }
-
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_connect.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -883,7 +834,6 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -904,11 +854,9 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -924,9 +872,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -947,7 +893,6 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -955,11 +900,9 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -977,11 +920,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -991,11 +932,9 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -1005,9 +944,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -1035,7 +972,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1047,7 +983,6 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -1077,7 +1012,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 	}
 	return nil
 }
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1098,7 +1032,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	obj := object.NewDBObject(nil)
 	req.ToObject(obj)
 	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-
 	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1110,7 +1043,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1141,9 +1073,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		return nil, status.Error(codes.ResourceExhausted, errors.Wrap(err, "Replace with NewObjectReplaceRsp").Error())
 	}
 	return rsp, nil
-
 }
-
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1168,7 +1098,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1180,7 +1109,6 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1193,17 +1121,16 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+		return nil, errors.Wrap(err, "List")
 	}
 	rsp, err := NewObjectListRsp(req, rsrcRsp.Items)
 	if err != nil {
-		merr = multierror.Append(merr, err)
+		return rsp, err
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
 	rsp.NextPage = rsrcRsp.NextPage
-	return rsp, merr
+	return rsp, nil
 }
-
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
 	var merr *multierror.Error
 	rsrcReq := &server.ResourceListRequest{
@@ -1215,6 +1142,7 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
 	if err != nil {
 		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+		return errors.ErrOrNil(merr)
 	}
 	streamSvr := &crudAPIListStreamServer{stream}
 	for item := range rsrcRsp.ItemsCh {
@@ -1225,7 +1153,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	}
 	return errors.ErrOrNil(merr)
 }
-
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1314,11 +1241,9 @@ func (r *ObjectGetReq) GetBackrefParam() (bool, []string) {
 func (r *ObjectDeleteReq) ToUid() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectCreateRsp) Key() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectGetRsp) GetBackrefs(ef db.NewEntryFunc) ([]db.Entry, error) {
 	brEnts := []db.Entry{}
 	bRefs := r.GetEntBackrefs()
@@ -1377,7 +1302,6 @@ func NewObjectCreateRsp(e db.Entry) (*ObjectCreateRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo := &ObjectReplaceRsp{}
 	switch e.(type) {
@@ -1391,7 +1315,6 @@ func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*ObjectGetRsp, error) {
 	rspo := &ObjectGetRsp{}
 	e := rsrcRsp.Entry
@@ -1435,7 +1358,6 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 	rspo.Status = statusObjs
 	return rspo, nil
 }
-
 func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*ObjectListRsp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("Nil ObjectListReq")
@@ -1461,7 +1383,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
 			continue
 		}
-
 		tenant := dbObj.GetSystemMetadata().GetTenant()
 		namespace := dbObj.GetMetadata().GetNamespace()
 		name := dbObj.GetMetadata().GetName()
@@ -1484,7 +1405,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 	}
 	return o, errs
 }
-
 func NewObjectDeleteRsp(ec ErrorCode) (*ObjectDeleteRsp, error) {
 	return &ObjectDeleteRsp{Err: ec}, nil
 }
@@ -2697,6 +2617,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "2"
                     }
+                },
+                "tgw_status": {
+                    "description": " AWS Transit Gateway Status Type",
+                    "title": "AWS Transit Gateway Status Type",
+                    "$ref": "#/definitions/cloud_connectAWSTGWStatusType",
+                    "x-displayname": "AWS TGW Status"
+                },
+                "transit_gateway_resource_share_status": {
+                    "description": " AWS Transit Gateway Resource Share Status",
+                    "title": "AWS Transit Gateway Resource Share Status Type",
+                    "$ref": "#/definitions/cloud_connectAWSTGWResourceShareType",
+                    "x-displayname": "AWS Transit Gateway Resource Share Status"
                 }
             }
         },
@@ -2826,7 +2758,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "vpc_attachments": {
-                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the Cloud Transit Gateway \nx-required",
+                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the Cloud Transit Gateway\nx-required",
                     "title": "Spoke VPCs",
                     "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
                 }
@@ -2958,6 +2890,11 @@ var APISwaggerJSON string = `{
                     "title": "Connect Peer Name",
                     "x-displayname": "Connect Peer Name"
                 },
+                "peer_gre_address": {
+                    "type": "string",
+                    "title": "Peer GRE Address",
+                    "x-displayname": "Peer GRE Address"
+                },
                 "tags": {
                     "type": "object",
                     "description": " Connect Peer Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
@@ -2968,6 +2905,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.map.max_pairs": "20",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
+                },
+                "transit_gateway_gre_address": {
+                    "type": "string",
+                    "title": "Transit Gateway GRE Address",
+                    "x-displayname": "Transit Gateway GRE Address"
                 }
             }
         },
@@ -2993,6 +2935,27 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.pattern": "^(rtb-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
+                }
+            }
+        },
+        "cloud_connectAWSProviderType": {
+            "type": "object",
+            "description": "Cloud Connect with AWS",
+            "title": "Cloud Connect with AWS",
+            "x-displayname": "AWS",
+            "x-ves-oneof-field-site_type": "[\"aws_tgw_site\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSProviderType",
+            "properties": {
+                "aws_tgw_site": {
+                    "description": "Exclusive with []\n",
+                    "title": "AWS TGW Site",
+                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
+                },
+                "securemesh_site_v2": {
+                    "title": "AWS SecureMesh Site Type",
+                    "$ref": "#/definitions/cloud_connectAWSSecureMeshSiteType",
+                    "x-displayname": "Secure Mesh Site v2"
                 }
             }
         },
@@ -3104,6 +3067,96 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectAWSSecureMeshSiteStatusType": {
+            "type": "object",
+            "title": "Cloud Connect Attached to AWS SecureMesh Site v2",
+            "x-displayname": "Cloud Connect to AWS Secure Mesh Site v2",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSSecureMeshSiteStatusType",
+            "properties": {
+                "attachment_status": {
+                    "type": "array",
+                    "title": "VPC Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
+                    },
+                    "x-displayname": "VPC Attachment Status"
+                },
+                "connect_attachment_status": {
+                    "type": "array",
+                    "title": "Connect Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSConnectAttachmentStatusType"
+                    },
+                    "x-displayname": "Connect Attachment Status"
+                },
+                "tgw_route_table_status": {
+                    "type": "array",
+                    "title": "Transit Gateway Route Table Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSTGWRouteTableStatusType"
+                    },
+                    "x-displayname": "Transit Gateway Route Table Status"
+                },
+                "tgw_status": {
+                    "title": "Transit Gateway Status Type",
+                    "$ref": "#/definitions/cloud_connectAWSTGWStatusType",
+                    "x-displayname": "Transit Gateway Status"
+                },
+                "transit_gateway_resource_share_status": {
+                    "title": "Transit Gateway Resource Share Status Type",
+                    "$ref": "#/definitions/cloud_connectAWSTGWResourceShareType",
+                    "x-displayname": "Transit Gateway Resource Share Status"
+                }
+            }
+        },
+        "cloud_connectAWSSecureMeshSiteType": {
+            "type": "object",
+            "description": "Cloud Connect AWS Secure Mesh Site Type",
+            "title": "Cloud Connect AWS Secure Mesh Site Type",
+            "x-displayname": "AWS Secure Mesh Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSSecureMeshSiteType",
+            "properties": {
+                "cloud_user_account_ref": {
+                    "description": " Reference to cloud user account to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Cloud User Account",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Cloud User Account Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "peers": {
+                    "type": "array",
+                    "description": " Peers",
+                    "title": "Peers",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectPeerType"
+                    },
+                    "x-displayname": "Peers"
+                },
+                "site": {
+                    "description": " Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Site",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the AWS SecureMesh Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "cloud_connectAWSTGWResourceReference": {
             "type": "object",
             "description": "AWS Transit Gateway Route Table Associations",
@@ -3140,6 +3193,73 @@ var APISwaggerJSON string = `{
                     "title": "Resource State",
                     "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
                     "x-displayname": "Resource State"
+                }
+            }
+        },
+        "cloud_connectAWSTGWResourceShareType": {
+            "type": "object",
+            "description": "AWS Resource Share Status Type",
+            "title": "AWS Resource Share Status Type",
+            "x-displayname": "AWS Resource Share Status",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWResourceShareType",
+            "properties": {
+                "allow_external_principles": {
+                    "type": "boolean",
+                    "description": " Manage Sharing Outside AWS Organization",
+                    "title": "Allow External Principles",
+                    "format": "boolean",
+                    "x-displayname": "Allow External Principles"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Attachment Deployment Status",
+                    "title": "Attachment Deployment Status",
+                    "x-displayname": "Attachment Deployment Status"
+                },
+                "owner_account_id": {
+                    "type": "string",
+                    "description": " Resource Share Owner Account ID",
+                    "title": "Resource Share Owner Account ID",
+                    "x-displayname": "Resource Share Owner Account ID"
+                },
+                "receiver_account_id": {
+                    "type": "array",
+                    "description": " Resource Share Acceptor Account ID",
+                    "title": "Resource Share Acceptor Account ID",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Resource Share Acceptor Account ID"
+                },
+                "resource_share_arn": {
+                    "type": "string",
+                    "description": " Resource Share ARN",
+                    "title": "Resource Share ARN",
+                    "x-displayname": "Resource Share ARN"
+                },
+                "resource_share_name": {
+                    "type": "string",
+                    "description": " Resource Share Name",
+                    "title": "Resource Share Name",
+                    "x-displayname": "Resource Share Name"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Resource Share State",
+                    "title": "Resource Share State",
+                    "x-displayname": "Resource Share State"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Resource Share Tags",
+                    "title": "Resource Share Tags",
+                    "x-displayname": "Resource Share Tags"
+                },
+                "transit_gateway_id": {
+                    "type": "string",
+                    "description": " Transit Gateway ID",
+                    "title": "Transit Gateway ID",
+                    "x-displayname": "Transit Gateway ID"
                 }
             }
         },
@@ -3256,6 +3376,71 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "cloud_connectAWSTGWStatusType": {
+            "type": "object",
+            "description": "AWS Transit Gateway Status Type",
+            "title": "AWS Transit Gateway Status Type",
+            "x-displayname": "AWS Transit Gateway Status",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWStatusType",
+            "properties": {
+                "amazon_asn": {
+                    "type": "string",
+                    "description": " AWS Side ASN of TGW",
+                    "title": "AWS Side ASN of TGW",
+                    "format": "int64",
+                    "x-displayname": "AWS Side ASN"
+                },
+                "arn": {
+                    "type": "string",
+                    "description": " TGW ARN",
+                    "title": "TGW ARN",
+                    "x-displayname": "ARN"
+                },
+                "cidrs": {
+                    "type": "array",
+                    "description": " x-displayName \"CIDRs\"\n TGW CIDRs",
+                    "title": "TGW CIDRs",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "string",
+                    "description": " TGW ID",
+                    "title": "TGW ID",
+                    "x-displayname": "ID"
+                },
+                "owner_account": {
+                    "type": "string",
+                    "description": " TGW Owner Account",
+                    "title": "TGW Owner",
+                    "x-displayname": "Owner Account"
+                },
+                "region": {
+                    "type": "string",
+                    "description": " TGW Region",
+                    "title": "TGW Region",
+                    "x-displayname": "Region"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " TGW State",
+                    "title": "TGW State",
+                    "x-displayname": "State"
+                },
+                "status_msg": {
+                    "type": "string",
+                    "description": " x-displayName \"Deployment Status\"\n TGW Deployment Status",
+                    "title": "TGW Deployment Status"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " TGW Tags",
+                    "title": "TGW Tags",
+                    "x-displayname": "Tags"
                 }
             }
         },
@@ -3730,6 +3915,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud_connect_deployment": "[\"cloud_connect_aws_site\",\"cloud_connect_azure_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CloudConnectStatusType",
             "properties": {
+                "cloud_connect_aws_securemesh_site": {
+                    "description": " Cloud Connect status attached with AWS SecureMesh Site",
+                    "title": "Cloud Connect Attached to AWS SecureMesh Site v2",
+                    "$ref": "#/definitions/cloud_connectAWSSecureMeshSiteStatusType",
+                    "x-displayname": "Cloud Connect to AWS Secure Mesh Site v2"
+                },
                 "cloud_connect_aws_site": {
                     "description": "Exclusive with [cloud_connect_azure_site]\n Cloud Connect to AWS Sites",
                     "title": "Cloud Connect Attached to AWS TGW Site",
@@ -4249,10 +4440,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -4618,7 +4809,7 @@ var APISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -4773,17 +4964,17 @@ var APISwaggerJSON string = `{
             "title": "Cloud Connect specification",
             "x-displayname": "Specification",
             "x-ves-oneof-field-bandwidth_option": "[\"bandwidth_500mbs\"]",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_provider\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GlobalSpecType",
             "properties": {
-                "aws_tgw_site": {
+                "aws_provider": {
                     "description": "Exclusive with [azure_vnet_site]\n",
                     "title": "AWS",
-                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "$ref": "#/definitions/cloud_connectAWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure_vnet_site": {
-                    "description": "Exclusive with [aws_tgw_site]\n",
+                    "description": "Exclusive with [aws_provider]\n",
                     "title": "Azure",
                     "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
                     "x-displayname": "Azure"

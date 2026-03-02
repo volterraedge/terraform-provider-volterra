@@ -79,25 +79,18 @@ func (v *ValidateContent) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subject"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subject"))
 		if err := fv(ctx, m.GetSubject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -166,43 +159,30 @@ func (v *ValidateCustomSupportTicket) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service"))
 		if err := fv(ctx, m.GetService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subscribe_content"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subscribe_content"))
 		if err := fv(ctx, m.GetSubscribeContent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unsubscribe_content"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unsubscribe_content"))
 		if err := fv(ctx, m.GetUnsubscribeContent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -271,23 +251,18 @@ func (v *ValidateFullyManagedActivationType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["notification_preference"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("notification_preference"))
 		if err := fv(ctx, m.GetNotificationPreference(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFullyManagedActivationTypeValidator = func() *ValidateFullyManagedActivationType {
 	v := &ValidateFullyManagedActivationType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["notification_preference"] = NotificationPreferenceValidator().Validate
 
 	return v
@@ -345,21 +320,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDependentServicesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDependentServicesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIncludedServicesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIncludedServicesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetApiGroupsDRefInfo() ([]db.DRefInfo, error) {
@@ -384,7 +355,6 @@ func (m *GetSpecType) GetApiGroupsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetApiGroupsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -403,7 +373,6 @@ func (m *GetSpecType) GetApiGroupsDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -429,7 +398,6 @@ func (m *GetSpecType) GetDependentServicesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDependentServicesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -448,7 +416,6 @@ func (m *GetSpecType) GetDependentServicesDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -474,7 +441,6 @@ func (m *GetSpecType) GetIncludedServicesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetIncludedServicesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -493,7 +459,6 @@ func (m *GetSpecType) GetIncludedServicesDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -508,9 +473,7 @@ func (v *ValidateGetSpecType) ActivationTypeChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DisplayNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for display_name")
@@ -518,9 +481,7 @@ func (v *ValidateGetSpecType) DisplayNameValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -566,9 +527,7 @@ func (v *ValidateGetSpecType) ApiGroupsValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DependentServicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -614,9 +573,7 @@ func (v *ValidateGetSpecType) DependentServicesValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) IncludedServicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -721,44 +678,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		if err := fv(ctx, m.GetApiGroups(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dependent_services"]; exists {
 		vOpts := append(opts, db.WithValidateField("dependent_services"))
 		if err := fv(ctx, m.GetDependentServices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["included_services"]; exists {
 		vOpts := append(opts, db.WithValidateField("included_services"))
 		if err := fv(ctx, m.GetIncludedServices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for idx, item := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -766,25 +711,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tier"))
 		if err := fv(ctx, m.GetTier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -792,7 +731,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhActivationTypeChoice := v.ActivationTypeChoiceValidationRuleHandler
 	rulesActivationTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -850,7 +788,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["included_services"] = vFn
-
 	v.FldValidators["activation_type_choice.self_activation"] = SelfActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.partially_managed_activation"] = PartiallyManagedActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.managed_activation"] = FullyManagedActivationTypeValidator().Validate
@@ -910,27 +847,22 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDependentServicesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDependentServicesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIncludedServicesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIncludedServicesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetApiGroupsDRefInfo() ([]db.DRefInfo, error) {
@@ -955,7 +887,6 @@ func (m *GlobalSpecType) GetApiGroupsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetApiGroupsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -974,7 +905,6 @@ func (m *GlobalSpecType) GetApiGroupsDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1000,7 +930,6 @@ func (m *GlobalSpecType) GetDependentServicesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDependentServicesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1019,7 +948,6 @@ func (m *GlobalSpecType) GetDependentServicesDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1045,7 +973,6 @@ func (m *GlobalSpecType) GetIncludedServicesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetIncludedServicesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1064,7 +991,6 @@ func (m *GlobalSpecType) GetIncludedServicesDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1090,7 +1016,6 @@ func (m *GlobalSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1109,7 +1034,6 @@ func (m *GlobalSpecType) GetPolicyDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1124,9 +1048,7 @@ func (v *ValidateGlobalSpecType) ActivationTypeChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DisplayNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for display_name")
@@ -1134,9 +1056,7 @@ func (v *ValidateGlobalSpecType) DisplayNameValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1182,9 +1102,7 @@ func (v *ValidateGlobalSpecType) ApiGroupsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1230,9 +1148,7 @@ func (v *ValidateGlobalSpecType) PolicyValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DependentServicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1278,9 +1194,7 @@ func (v *ValidateGlobalSpecType) DependentServicesValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IncludedServicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1385,79 +1299,62 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		if err := fv(ctx, m.GetApiGroups(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dependent_services"]; exists {
 		vOpts := append(opts, db.WithValidateField("dependent_services"))
 		if err := fv(ctx, m.GetDependentServices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deprecated"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deprecated"))
 		if err := fv(ctx, m.GetDeprecated(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["included_services"]; exists {
 		vOpts := append(opts, db.WithValidateField("included_services"))
 		if err := fv(ctx, m.GetIncludedServices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inheritable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inheritable"))
 		if err := fv(ctx, m.GetInheritable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy"]; exists {
 		vOpts := append(opts, db.WithValidateField("policy"))
 		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["restricted"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("restricted"))
 		if err := fv(ctx, m.GetRestricted(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["service_usage_type"]; exists {
+		vOpts := append(opts, db.WithValidateField("service_usage_type"))
+		if err := fv(ctx, m.GetServiceUsageType(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for idx, item := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1465,25 +1362,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tier"))
 		if err := fv(ctx, m.GetTier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1491,7 +1382,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhActivationTypeChoice := v.ActivationTypeChoiceValidationRuleHandler
 	rulesActivationTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1560,10 +1450,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["included_services"] = vFn
-
 	v.FldValidators["activation_type_choice.self_activation"] = SelfActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.partially_managed_activation"] = PartiallyManagedActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.managed_activation"] = FullyManagedActivationTypeValidator().Validate
+	v.FldValidators["service_usage_type"] = ServiceUsageTypeValidator().Validate
 
 	return v
 }()
@@ -1650,16 +1540,13 @@ func (v *ValidateNotificationPreference) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNotificationPreferenceValidator = func() *ValidateNotificationPreference {
 	v := &ValidateNotificationPreference{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["notification_type.support_ticket_option"] = SupportTicketOptionsValidator().Validate
 	v.FldValidators["notification_type.emails"] = ves_io_schema_pbac.EmailDLValidator().Validate
 
@@ -1724,23 +1611,18 @@ func (v *ValidatePartiallyManagedActivationType) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["support_ticket_option"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("support_ticket_option"))
 		if err := fv(ctx, m.GetSupportTicketOption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPartiallyManagedActivationTypeValidator = func() *ValidatePartiallyManagedActivationType {
 	v := &ValidatePartiallyManagedActivationType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["support_ticket_option"] = SupportTicketOptionsValidator().Validate
 
 	return v
@@ -1792,7 +1674,6 @@ type ValidateSelfActivationType struct {
 }
 
 func (v *ValidateSelfActivationType) DefaultTileNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for default_tile_name")
@@ -1814,23 +1695,18 @@ func (v *ValidateSelfActivationType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_tile_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_tile_name"))
 		if err := fv(ctx, m.GetDefaultTileName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSelfActivationTypeValidator = func() *ValidateSelfActivationType {
 	v := &ValidateSelfActivationType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1856,6 +1732,143 @@ var DefaultSelfActivationTypeValidator = func() *ValidateSelfActivationType {
 
 func SelfActivationTypeValidator() db.Validator {
 	return DefaultSelfActivationTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ServiceUsageType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServiceUsageType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServiceUsageType) DeepCopy() *ServiceUsageType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServiceUsageType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServiceUsageType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServiceUsageType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServiceUsageTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateServiceUsageType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServiceUsageType) UsageTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for usage_types")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]*UsageType, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := UsageTypeValidator().Validate(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for usage_types")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]*UsageType)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]*UsageType, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map usage_types")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items usage_types")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServiceUsageType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServiceUsageType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServiceUsageType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["billing_doc_link"]; exists {
+		vOpts := append(opts, db.WithValidateField("billing_doc_link"))
+		if err := fv(ctx, m.GetBillingDocLink(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["usage_types"]; exists {
+		vOpts := append(opts, db.WithValidateField("usage_types"))
+		if err := fv(ctx, m.GetUsageTypes(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServiceUsageTypeValidator = func() *ValidateServiceUsageType {
+	v := &ValidateServiceUsageType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUsageTypes := v.UsageTypesValidationRuleHandler
+	rulesUsageTypes := map[string]string{
+		"ves.io.schema.rules.map.keys.string.pattern": "^[A-Z](?:[A-Z0-9]*-)?[A-Z0-9]+(?:-[A-Z0-9]+)*$",
+	}
+	vFn, err = vrhUsageTypes(rulesUsageTypes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceUsageType.usage_types: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["usage_types"] = vFn
+
+	return v
+}()
+
+func ServiceUsageTypeValidator() db.Validator {
+	return DefaultServiceUsageTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1965,16 +1978,13 @@ func (v *ValidateSupportTicketOptions) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSupportTicketOptionsValidator = func() *ValidateSupportTicketOptions {
 	v := &ValidateSupportTicketOptions{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1982,7 +1992,6 @@ var DefaultSupportTicketOptionsValidator = func() *ValidateSupportTicketOptions 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSupportTicketCreationChoice := v.SupportTicketCreationChoiceValidationRuleHandler
 	rulesSupportTicketCreationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1999,6 +2008,86 @@ var DefaultSupportTicketOptionsValidator = func() *ValidateSupportTicketOptions 
 
 func SupportTicketOptionsValidator() db.Validator {
 	return DefaultSupportTicketOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UsageType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UsageType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UsageType) DeepCopy() *UsageType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UsageType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UsageType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UsageType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UsageTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUsageType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUsageType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UsageType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UsageType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["unit"]; exists {
+		vOpts := append(opts, db.WithValidateField("unit"))
+		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUsageTypeValidator = func() *ValidateUsageType {
+	v := &ValidateUsageType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UsageTypeValidator() db.Validator {
+	return DefaultUsageTypeValidator
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields

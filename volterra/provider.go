@@ -1,4 +1,4 @@
-// Copyright (c) 2023 F5 Inc. All rights reserved.
+// Copyright (c) 2026 F5 Inc. All rights reserved.
 package volterra
 
 import (
@@ -119,12 +119,26 @@ func Provider() *schema.Provider {
 						"rate": {
 							Type:        schema.TypeFloat,
 							Required:    true,
-							Description: "The maximum number of requests per second.",
+							Description: "The maximum number of requests per minute. This value will be converted to requests per second internally (rate/60). Must be greater than 0. Example: rate=60 allows 1 request per second, rate=0.5 allows 1 request every 2 minutes.",
+							ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+								v := val.(float64)
+								if v <= 0.0 {
+									errs = append(errs, fmt.Errorf("%q must be greater than 0, got: %f", key, v))
+								}
+								return
+							},
 						},
 						"burst": {
 							Type:        schema.TypeInt,
 							Required:    true,
-							Description: "The maximum burst size for requests.",
+							Description: "The maximum burst size for requests. Allows short bursts up to this many requests before rate limiting applies. Minimum value: 1.",
+							ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+								v := val.(int)
+								if v < 1 {
+									errs = append(errs, fmt.Errorf("%q must be at least 1, got: %d", key, v))
+								}
+								return
+							},
 						},
 					},
 				},
@@ -166,25 +180,17 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	config.timeout = d.Get("timeout").(string)
 
 	if v, ok := d.GetOk("limiter"); ok {
-		limiterMap, ok := v.(map[string]interface{})
-		if ok {
-			rateVal, ok := limiterMap["rate"].(float64)
-			if !ok {
-				rateVal = float64(rate.Inf)
-			}
-			burstVal, ok := limiterMap["burst"].(float64)
-			if !ok {
-				burstVal = 0
-			}
-			config.limiter = &ProviderLimiter{
-				Rate:  rate.Limit(rateVal),
-				Burst: int32(burstVal),
-			}
-		} else {
-			config.limiter = &ProviderLimiter{Rate: rate.Inf, Burst: 0}
+		limiterList := v.([]interface{})
+		limiterMap := limiterList[0].(map[string]interface{})
+		rateVal := limiterMap["rate"].(float64)
+		burstVal := int32(limiterMap["burst"].(int))
+
+		config.limiter = &ProviderLimiter{
+			Rate:  rate.Limit(rateVal),
+			Burst: burstVal,
 		}
 	} else {
-		config.limiter = &ProviderLimiter{Rate: rate.Inf, Burst: 0}
+		config.limiter = &ProviderLimiter{Rate: rate.Inf, Burst: 1}
 	}
 
 	if v, ok := d.GetOk("test"); ok {
@@ -193,9 +199,12 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	}
 
 	if v, ok := d.GetOk("api_p12_file"); ok {
+		if len(os.Getenv(EnvVarP12Password)) == 0 {
+			return nil, diag.FromErr(fmt.Errorf("environment variable %s must be set when api_p12_file is provided as provider config", EnvVarP12Password))
+		}
+
 		config.apiP12File = fmt.Sprintf("file:///%s", v.(string))
 		config.apiP12Password = os.Getenv(EnvVarP12Password)
-
 	} else if v, ok := d.GetOk("api_cert"); ok {
 		config.apiCert = fmt.Sprintf("file:///%s", v.(string))
 		if v, ok = d.GetOk("api_key"); !ok {
@@ -205,24 +214,28 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	} else {
 		apiP12Content := os.Getenv(EnvVarP12Content)
 		apiP12Contents, err := base64.StdEncoding.DecodeString(apiP12Content)
+
 		if err != nil {
 			return nil, diag.FromErr(fmt.Errorf("error decoding base64 content: %s", err))
 		}
 		if len(apiP12Content) == 0 {
 			return nil, diag.FromErr(fmt.Errorf("neither VES_P12_CONTENT, api_p12 bundle or api_cert/api_key is provided as provider config"))
-		} else {
-			tmp, err := os.CreateTemp(".", "volterra-cert")
-			if err != nil {
-				return nil, diag.FromErr(fmt.Errorf("error in creating temporary file : %s", err))
-			}
-			err = os.WriteFile(tmp.Name(), []byte(apiP12Contents), 0600)
-			if err != nil {
-				return nil, diag.FromErr(fmt.Errorf("error in writing credential on temp file : %s", err))
-			}
-			config.apiP12File = fmt.Sprintf("file:///%s", tmp.Name())
-			config.apiP12Password = os.Getenv(EnvVarP12Password)
-			defer cleanupTempFile(tmp.Name())
 		}
+
+		tmp, err := os.CreateTemp(".", "volterra-cert")
+		if err != nil {
+			return nil, diag.FromErr(fmt.Errorf("error in creating temporary file : %s", err))
+		}
+
+		err = os.WriteFile(tmp.Name(), []byte(apiP12Contents), 0600)
+		if err != nil {
+			return nil, diag.FromErr(fmt.Errorf("error in writing credential on temp file : %s", err))
+		}
+
+		defer cleanupTempFile(tmp.Name())
+
+		config.apiP12File = fmt.Sprintf("file:///%s", tmp.Name())
+		config.apiP12Password = os.Getenv(EnvVarP12Password)
 	}
 
 	if v, ok := d.GetOk("api_ca_cert"); ok {

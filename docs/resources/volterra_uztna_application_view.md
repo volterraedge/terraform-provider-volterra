@@ -38,7 +38,6 @@ resource "volterra_uztna_application_view" "example" {
 
   port = ["443"]
 }
-
 ```
 
 Argument Reference
@@ -111,4 +110,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_application_view.
+-   `id` - This is the id of the configured uztna_application_view.

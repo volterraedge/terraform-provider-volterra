@@ -67,7 +67,6 @@ type ValidateCDNAccessLogAggregationRequest struct {
 }
 
 func (v *ValidateCDNAccessLogAggregationRequest) AggsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -119,35 +118,25 @@ func (v *ValidateCDNAccessLogAggregationRequest) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		if err := fv(ctx, m.GetAggs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		for idx, item := range m.GetQuery() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -155,25 +144,19 @@ func (v *ValidateCDNAccessLogAggregationRequest) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNAccessLogAggregationRequestValidator = func() *ValidateCDNAccessLogAggregationRequest {
 	v := &ValidateCDNAccessLogAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -194,7 +177,6 @@ var DefaultCDNAccessLogAggregationRequestValidator = func() *ValidateCDNAccessLo
 		panic(errMsg)
 	}
 	v.FldValidators["aggs"] = vFn
-
 	v.FldValidators["query"] = CDNAccessLogFilterValidator().Validate
 
 	return v
@@ -246,7 +228,6 @@ type ValidateCDNAccessLogFilter struct {
 }
 
 func (v *ValidateCDNAccessLogFilter) TagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_views_cdn_loadbalancer_access_log.CDNAccessLogTag)
@@ -260,9 +241,7 @@ func (v *ValidateCDNAccessLogFilter) TagValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCDNAccessLogFilter) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -302,9 +281,7 @@ func (v *ValidateCDNAccessLogFilter) ValuesValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCDNAccessLogFilter) OperatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(CDNAccessLogOperatorType)
@@ -332,40 +309,30 @@ func (v *ValidateCDNAccessLogFilter) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["operator"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operator"))
 		if err := fv(ctx, m.GetOperator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tag"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tag"))
 		if err := fv(ctx, m.GetTag(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["values"]; exists {
 		vOpts := append(opts, db.WithValidateField("values"))
 		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNAccessLogFilterValidator = func() *ValidateCDNAccessLogFilter {
 	v := &ValidateCDNAccessLogFilter{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -459,7 +426,6 @@ type ValidateCDNAccessLogRequest struct {
 }
 
 func (v *ValidateCDNAccessLogRequest) QueryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -505,9 +471,7 @@ func (v *ValidateCDNAccessLogRequest) QueryValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCDNAccessLogRequest) LimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for limit")
@@ -515,9 +479,7 @@ func (v *ValidateCDNAccessLogRequest) LimitValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCDNAccessLogRequest) AggsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -569,75 +531,54 @@ func (v *ValidateCDNAccessLogRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		if err := fv(ctx, m.GetAggs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sort"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort"))
 		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNAccessLogRequestValidator = func() *ValidateCDNAccessLogRequest {
 	v := &ValidateCDNAccessLogRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -767,16 +708,13 @@ func (v *ValidateCDNAggregationRequest) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNAggregationRequestValidator = func() *ValidateCDNAggregationRequest {
 	v := &ValidateCDNAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggregation_type.date_aggregation"] = CDNDateAggregationValidator().Validate
 	v.FldValidators["aggregation_type.field_aggregation"] = CDNFieldAggregationValidator().Validate
 
@@ -829,7 +767,6 @@ type ValidateCDNDateAggregation struct {
 }
 
 func (v *ValidateCDNDateAggregation) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -837,9 +774,7 @@ func (v *ValidateCDNDateAggregation) StepValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCDNDateAggregation) SubAggsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -891,31 +826,24 @@ func (v *ValidateCDNDateAggregation) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		if err := fv(ctx, m.GetSubAggs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNDateAggregationValidator = func() *ValidateCDNDateAggregation {
 	v := &ValidateCDNDateAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1022,16 +950,13 @@ func (v *ValidateCDNDateSubAggregation) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNDateSubAggregationValidator = func() *ValidateCDNDateSubAggregation {
 	v := &ValidateCDNDateSubAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggregation_type.field_aggregation"] = CDNFieldAggregationValidator().Validate
 
 	return v
@@ -1083,7 +1008,6 @@ type ValidateCDNFieldAggregation struct {
 }
 
 func (v *ValidateCDNFieldAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_views_cdn_loadbalancer_access_log.CDNAccessLogTag)
@@ -1097,9 +1021,7 @@ func (v *ValidateCDNFieldAggregation) FieldValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCDNFieldAggregation) TopkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for topk")
@@ -1107,9 +1029,7 @@ func (v *ValidateCDNFieldAggregation) TopkValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCDNFieldAggregation) SubAggsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1161,40 +1081,30 @@ func (v *ValidateCDNFieldAggregation) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field"))
 		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		if err := fv(ctx, m.GetSubAggs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topk"))
 		if err := fv(ctx, m.GetTopk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNFieldAggregationValidator = func() *ValidateCDNFieldAggregation {
 	v := &ValidateCDNFieldAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1313,16 +1223,13 @@ func (v *ValidateCDNFieldSubAggregation) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNFieldSubAggregationValidator = func() *ValidateCDNFieldSubAggregation {
 	v := &ValidateCDNFieldSubAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggregation_type.field_aggregation"] = FieldAggregationValidator().Validate
 
 	return v
@@ -1386,9 +1293,7 @@ func (v *ValidateCDNLogAggregationResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1396,25 +1301,19 @@ func (v *ValidateCDNLogAggregationResponse) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNLogAggregationResponseValidator = func() *ValidateCDNLogAggregationResponse {
 	v := &ValidateCDNLogAggregationResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggs"] = ves_io_schema_log.LogAggregationDataValidator().Validate
 
 	return v
@@ -1478,9 +1377,7 @@ func (v *ValidateCDNLogResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aggs"))
 		for key, value := range m.GetAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1488,11 +1385,8 @@ func (v *ValidateCDNLogResponse) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["logs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("logs"))
 		for idx, item := range m.GetLogs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1500,27 +1394,20 @@ func (v *ValidateCDNLogResponse) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNLogResponseValidator = func() *ValidateCDNLogResponse {
 	v := &ValidateCDNLogResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["logs"] = LilacCDNAccessLogsResponseDataValidator().Validate
-
 	v.FldValidators["aggs"] = ves_io_schema_log.LogAggregationDataValidator().Validate
 
 	return v
@@ -1572,7 +1459,6 @@ type ValidateFieldAggregation struct {
 }
 
 func (v *ValidateFieldAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_views_cdn_loadbalancer_access_log.CDNAccessLogTag)
@@ -1586,9 +1472,7 @@ func (v *ValidateFieldAggregation) FieldValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateFieldAggregation) TopkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for topk")
@@ -1610,32 +1494,24 @@ func (v *ValidateFieldAggregation) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field"))
 		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topk"))
 		if err := fv(ctx, m.GetTopk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFieldAggregationValidator = func() *ValidateFieldAggregation {
 	v := &ValidateFieldAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1716,7 +1592,6 @@ type ValidateLilacCDNAccessLogsResponseData struct {
 }
 
 func (v *ValidateLilacCDNAccessLogsResponseData) TimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for timestamp")
@@ -1738,302 +1613,204 @@ func (v *ValidateLilacCDNAccessLogsResponseData) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cache_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_status"))
 		if err := fv(ctx, m.GetCacheStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cdn_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cdn_name"))
 		if err := fv(ctx, m.GetCdnName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["city_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("city_id"))
 		if err := fv(ctx, m.GetCityId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["city_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("city_name"))
 		if err := fv(ctx, m.GetCityName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_port"))
 		if err := fv(ctx, m.GetClientPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["country"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("country"))
 		if err := fv(ctx, m.GetCountry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["geo_location"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("geo_location"))
 		if err := fv(ctx, m.GetGeoLocation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host"))
 		if err := fv(ctx, m.GetHost(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_header"))
 		if err := fv(ctx, m.GetHostHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_version"))
 		if err := fv(ctx, m.GetHttpVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["referer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("referer"))
 		if err := fv(ctx, m.GetReferer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["req_content_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("req_content_type"))
 		if err := fv(ctx, m.GetReqContentType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["req_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("req_path"))
 		if err := fv(ctx, m.GetReqPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["req_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("req_size"))
 		if err := fv(ctx, m.GetReqSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_time"))
 		if err := fv(ctx, m.GetRequestTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rsp_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rsp_code"))
 		if err := fv(ctx, m.GetRspCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rsp_code_class"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rsp_code_class"))
 		if err := fv(ctx, m.GetRspCodeClass(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rsp_content_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rsp_content_type"))
 		if err := fv(ctx, m.GetRspContentType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rsp_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rsp_size"))
 		if err := fv(ctx, m.GetRspSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scheme"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["src_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("src_ip"))
 		if err := fv(ctx, m.GetSrcIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timestamp"))
 		if err := fv(ctx, m.GetTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_sni"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_sni"))
 		if err := fv(ctx, m.GetTlsSni(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_version"))
 		if err := fv(ctx, m.GetTlsVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_addr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_addr"))
 		if err := fv(ctx, m.GetUpstreamAddr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_connect_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_connect_time"))
 		if err := fv(ctx, m.GetUpstreamConnectTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_response_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_response_time"))
 		if err := fv(ctx, m.GetUpstreamResponseTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_status"))
 		if err := fv(ctx, m.GetUpstreamStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user"))
 		if err := fv(ctx, m.GetUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_agent"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_agent"))
 		if err := fv(ctx, m.GetUserAgent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLilacCDNAccessLogsResponseDataValidator = func() *ValidateLilacCDNAccessLogsResponseData {
 	v := &ValidateLilacCDNAccessLogsResponseData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2102,7 +1879,6 @@ type ValidateLilacCDNMetricsRequest struct {
 }
 
 func (v *ValidateLilacCDNMetricsRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -2110,9 +1886,7 @@ func (v *ValidateLilacCDNMetricsRequest) NamespaceValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNMetricsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -2120,9 +1894,7 @@ func (v *ValidateLilacCDNMetricsRequest) StartTimeValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNMetricsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -2130,9 +1902,7 @@ func (v *ValidateLilacCDNMetricsRequest) EndTimeValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNMetricsRequest) FieldSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -2192,26 +1962,19 @@ func (v *ValidateLilacCDNMetricsRequest) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["field_selector"]; exists {
 		vOpts := append(opts, db.WithValidateField("field_selector"))
 		if err := fv(ctx, m.GetFieldSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filter"))
 		for idx, item := range m.GetFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2219,11 +1982,8 @@ func (v *ValidateLilacCDNMetricsRequest) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2231,43 +1991,31 @@ func (v *ValidateLilacCDNMetricsRequest) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLilacCDNMetricsRequestValidator = func() *ValidateLilacCDNMetricsRequest {
 	v := &ValidateLilacCDNMetricsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2320,7 +2068,6 @@ var DefaultLilacCDNMetricsRequestValidator = func() *ValidateLilacCDNMetricsRequ
 		panic(errMsg)
 	}
 	v.FldValidators["field_selector"] = vFn
-
 	v.FldValidators["filter"] = LilacCDNMetricsFilterValidator().Validate
 
 	return v
@@ -2384,9 +2131,7 @@ func (v *ValidateLilacCDNMetricsResponse) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2394,18 +2139,13 @@ func (v *ValidateLilacCDNMetricsResponse) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2474,7 +2214,6 @@ func (v *ValidateSubscribeRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -2543,7 +2282,6 @@ func (v *ValidateSubscribeResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -2612,7 +2350,6 @@ func (v *ValidateUnsubscribeRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -2681,7 +2418,6 @@ func (v *ValidateUnsubscribeResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

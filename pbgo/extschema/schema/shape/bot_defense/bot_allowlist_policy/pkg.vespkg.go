@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.Object"] = ObjectValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.ListRequest"] = ListRequestValidator()
@@ -25,7 +23,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomReplaceRequest"] = CustomReplaceRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomReplaceResponse"] = CustomReplaceResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetContentRequest"] = GetContentRequestValidator()
@@ -35,11 +32,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.Policy"] = PolicyValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.PolicyVersionsRequest"] = PolicyVersionsRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.PolicyVersionsResponse"] = PolicyVersionsResponseValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -51,21 +46,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.shape.bot_defense.bot_allowlist_policy.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.shape.bot_defense.bot_allowlist_policy.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.shape.bot_defense.bot_allowlist_policy.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.shape.bot_defense.bot_allowlist_policy.API"] = "shape/bot"
 	sm["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI"] = "shape/bot"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -74,9 +65,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.shape.bot_defense.bot_allowlist_policy.Object"] = APISwaggerJSON
@@ -90,15 +79,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.shape.bot_defense.bot_allowlist_policy.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.shape.bot_defense.bot_allowlist_policy.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.shape.bot_defense.bot_allowlist_policy.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -109,22 +94,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

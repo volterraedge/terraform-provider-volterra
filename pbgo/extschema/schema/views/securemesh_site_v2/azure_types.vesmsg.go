@@ -73,19 +73,15 @@ func (m *AzureManagedMode) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *AzureManagedMode) GetAzureCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAzureCred()
 	if vref == nil {
 		return nil, nil
@@ -101,7 +97,6 @@ func (m *AzureManagedMode) GetAzureCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAzureCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +106,6 @@ func (m *AzureManagedMode) GetAzureCredDBEntries(ctx context.Context, d db.Inter
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetAzureCred()
 	if vref == nil {
 		return nil, nil
@@ -129,7 +123,6 @@ func (m *AzureManagedMode) GetAzureCredDBEntries(ctx context.Context, d db.Inter
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -140,7 +133,6 @@ func (m *AzureManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteType().(type) {
 	case *AzureManagedMode_SingleInterface:
-
 		drInfos, err := m.GetSingleInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSingleInterface().GetDRefInfo() FAILED")
@@ -150,9 +142,7 @@ func (m *AzureManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "single_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *AzureManagedMode_MultipleInterface:
-
 		drInfos, err := m.GetMultipleInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetMultipleInterface().GetDRefInfo() FAILED")
@@ -162,11 +152,9 @@ func (m *AzureManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "multiple_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateAzureManagedMode struct {
@@ -180,7 +168,6 @@ func (v *ValidateAzureManagedMode) CloudConnectAttachmentsValidationRuleHandler(
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedMode) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -188,9 +175,7 @@ func (v *ValidateAzureManagedMode) SiteTypeValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedMode) AzureRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_region")
@@ -198,9 +183,7 @@ func (v *ValidateAzureManagedMode) AzureRegionValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedMode) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
@@ -208,9 +191,7 @@ func (v *ValidateAzureManagedMode) ResourceGroupValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedMode) VnetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for vnet")
@@ -219,19 +200,15 @@ func (v *ValidateAzureManagedMode) VnetValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.AzureVnetChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedMode) AzureCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for azure_cred")
@@ -240,19 +217,15 @@ func (v *ValidateAzureManagedMode) AzureCredValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedMode) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -295,9 +268,7 @@ func (v *ValidateAzureManagedMode) TagsValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedMode) MachineTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for machine_type")
@@ -305,9 +276,7 @@ func (v *ValidateAzureManagedMode) MachineTypeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedMode) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
@@ -329,32 +298,23 @@ func (v *ValidateAzureManagedMode) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["accelerated_networking"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("accelerated_networking"))
 		if err := fv(ctx, m.GetAcceleratedNetworking(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["azure_cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_cred"))
 		if err := fv(ctx, m.GetAzureCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["azure_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_region"))
 		if err := fv(ctx, m.GetAzureRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cloud_connect_attachments"]; exists {
@@ -390,34 +350,24 @@ func (v *ValidateAzureManagedMode) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["machine_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("machine_type"))
 		if err := fv(ctx, m.GetMachineType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_group"))
 		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_type"]; exists {
@@ -453,33 +403,25 @@ func (v *ValidateAzureManagedMode) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet"))
 		if err := fv(ctx, m.GetVnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureManagedModeValidator = func() *ValidateAzureManagedMode {
 	v := &ValidateAzureManagedMode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -487,7 +429,6 @@ var DefaultAzureManagedModeValidator = func() *ValidateAzureManagedMode {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloudConnectAttachments := v.CloudConnectAttachmentsValidationRuleHandler
 	rulesCloudConnectAttachments := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -498,7 +439,6 @@ var DefaultAzureManagedModeValidator = func() *ValidateAzureManagedMode {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud_connect_attachments"] = vFn
-
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -592,10 +532,8 @@ var DefaultAzureManagedModeValidator = func() *ValidateAzureManagedMode {
 		panic(errMsg)
 	}
 	v.FldValidators["disk_size"] = vFn
-
 	v.FldValidators["site_type.single_interface"] = AzureSingleInterfaceValidator().Validate
 	v.FldValidators["site_type.multiple_interface"] = AzureMultipleInterfaceValidator().Validate
-
 	v.FldValidators["accelerated_networking"] = ves_io_schema_views.AcceleratedNetworkingTypeValidator().Validate
 
 	return v
@@ -648,7 +586,6 @@ func (m *AzureManagedNode) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -656,7 +593,6 @@ func (m *AzureManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInterfaceList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetInterfaceList() {
 		driSet, err := e.GetDRefInfo()
@@ -670,7 +606,6 @@ func (m *AzureManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateAzureManagedNode struct {
@@ -678,7 +613,6 @@ type ValidateAzureManagedNode struct {
 }
 
 func (v *ValidateAzureManagedNode) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
@@ -686,9 +620,7 @@ func (v *ValidateAzureManagedNode) TypeValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedNode) HostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
@@ -696,9 +628,7 @@ func (v *ValidateAzureManagedNode) HostnameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedNode) AzureAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_az")
@@ -706,9 +636,7 @@ func (v *ValidateAzureManagedNode) AzureAzValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureManagedNode) InterfaceListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -768,49 +696,36 @@ func (v *ValidateAzureManagedNode) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["azure_az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_az"))
 		if err := fv(ctx, m.GetAzureAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hostname"))
 		if err := fv(ctx, m.GetHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_list"))
 		if err := fv(ctx, m.GetInterfaceList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureManagedNodeValidator = func() *ValidateAzureManagedNode {
 	v := &ValidateAzureManagedNode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -917,7 +832,6 @@ func (m *AzureManagedNodeList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -925,7 +839,6 @@ func (m *AzureManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetNodeList() {
 		driSet, err := e.GetDRefInfo()
@@ -939,7 +852,6 @@ func (m *AzureManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateAzureManagedNodeList struct {
@@ -947,7 +859,6 @@ type ValidateAzureManagedNodeList struct {
 }
 
 func (v *ValidateAzureManagedNodeList) NodeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1007,22 +918,18 @@ func (v *ValidateAzureManagedNodeList) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("node_list"))
 		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureManagedNodeListValidator = func() *ValidateAzureManagedNodeList {
 	v := &ValidateAzureManagedNodeList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1094,7 +1001,6 @@ func (m *AzureMultipleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1102,7 +1008,6 @@ func (m *AzureMultipleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNodeList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
@@ -1112,7 +1017,6 @@ func (m *AzureMultipleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "node_list." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateAzureMultipleInterface struct {
@@ -1132,23 +1036,18 @@ func (v *ValidateAzureMultipleInterface) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_list"))
 		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureMultipleInterfaceValidator = func() *ValidateAzureMultipleInterface {
 	v := &ValidateAzureMultipleInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["node_list"] = AzureManagedNodeListValidator().Validate
 
 	return v
@@ -1201,7 +1100,6 @@ func (m *AzureOrchestratedInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkOptionDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1209,7 +1107,6 @@ func (m *AzureOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, 
 	if m.GetNetworkOption() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
@@ -1219,7 +1116,6 @@ func (m *AzureOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, 
 		dri.DRField = "network_option." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateAzureOrchestratedInterface struct {
@@ -1227,7 +1123,6 @@ type ValidateAzureOrchestratedInterface struct {
 }
 
 func (v *ValidateAzureOrchestratedInterface) NetworkOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for network_option")
@@ -1236,15 +1131,12 @@ func (v *ValidateAzureOrchestratedInterface) NetworkOptionValidationRuleHandler(
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureOrchestratedInterface) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -1266,23 +1158,17 @@ func (v *ValidateAzureOrchestratedInterface) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_option"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_option"))
 		if err := fv(ctx, m.GetNetworkOption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSiteToSiteConnectivityInterfaceChoice().(type) {
@@ -1308,25 +1194,19 @@ func (v *ValidateAzureOrchestratedInterface) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet"))
 		if err := fv(ctx, m.GetSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureOrchestratedInterfaceValidator = func() *ValidateAzureOrchestratedInterface {
 	v := &ValidateAzureOrchestratedInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1356,7 +1236,6 @@ var DefaultAzureOrchestratedInterfaceValidator = func() *ValidateAzureOrchestrat
 		panic(errMsg)
 	}
 	v.FldValidators["mtu"] = vFn
-
 	v.FldValidators["subnet"] = AzureSubnetChoiceTypeValidator().Validate
 
 	return v
@@ -1409,7 +1288,6 @@ func (m *AzureSingleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1417,7 +1295,6 @@ func (m *AzureSingleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNodeList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
@@ -1427,7 +1304,6 @@ func (m *AzureSingleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "node_list." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateAzureSingleInterface struct {
@@ -1447,23 +1323,18 @@ func (v *ValidateAzureSingleInterface) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_list"))
 		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSingleInterfaceValidator = func() *ValidateAzureSingleInterface {
 	v := &ValidateAzureSingleInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["node_list"] = AzureManagedNodeListValidator().Validate
 
 	return v
@@ -1525,6 +1396,7 @@ func (v *ValidateAzureSubnetChoiceType) ChoiceValidationRuleHandler(rules map[st
 func (v *ValidateAzureSubnetChoiceType) ChoiceSubnetParamValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return CloudSubnetParamTypeValidator().Validate, nil
 }
+
 func (v *ValidateAzureSubnetChoiceType) ChoiceExistingSubnetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return AzureSubnetTypeValidator().Validate, nil
 }
@@ -1576,16 +1448,13 @@ func (v *ValidateAzureSubnetChoiceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceType {
 	v := &ValidateAzureSubnetChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1593,7 +1462,6 @@ var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1604,7 +1472,6 @@ var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceSubnetParam := v.ChoiceSubnetParamValidationRuleHandler
 	rulesChoiceSubnetParam := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1623,7 +1490,6 @@ var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AzureSubnetChoiceType.choice_existing_subnet: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.subnet_param"] = vFnMap["choice.subnet_param"]
 	v.FldValidators["choice.existing_subnet"] = vFnMap["choice.existing_subnet"]
 
@@ -1676,7 +1542,6 @@ type ValidateAzureSubnetType struct {
 }
 
 func (v *ValidateAzureSubnetType) SubnetNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_name")
@@ -1711,25 +1576,19 @@ func (v *ValidateAzureSubnetType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_name"))
 		if err := fv(ctx, m.GetSubnetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSubnetTypeValidator = func() *ValidateAzureSubnetType {
 	v := &ValidateAzureSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1805,9 +1664,7 @@ func (v *ValidateCloudSubnetParamType) NameChoiceNameValidationRuleHandler(rules
 	}
 	return oValidatorFn_Name, nil
 }
-
 func (v *ValidateCloudSubnetParamType) Ipv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4")
@@ -1829,14 +1686,11 @@ func (v *ValidateCloudSubnetParamType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv4"))
 		if err := fv(ctx, m.GetIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNameChoice().(type) {
@@ -1862,16 +1716,13 @@ func (v *ValidateCloudSubnetParamType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCloudSubnetParamTypeValidator = func() *ValidateCloudSubnetParamType {
 	v := &ValidateCloudSubnetParamType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1879,7 +1730,6 @@ var DefaultCloudSubnetParamTypeValidator = func() *ValidateCloudSubnetParamType 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNameChoiceName := v.NameChoiceNameValidationRuleHandler
 	rulesNameChoiceName := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -1891,7 +1741,6 @@ var DefaultCloudSubnetParamTypeValidator = func() *ValidateCloudSubnetParamType 
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CloudSubnetParamType.name_choice_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["name_choice.name"] = vFnMap["name_choice.name"]
 
 	vrhIpv4 := v.Ipv4ValidationRuleHandler

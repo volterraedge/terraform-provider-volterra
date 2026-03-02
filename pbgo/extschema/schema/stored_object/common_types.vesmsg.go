@@ -31,7 +31,6 @@ func (m *CreateObjectRequest) ToJSON() (string, error) {
 func (m *CreateObjectRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *CreateObjectRequest) String() string {
 	if m == nil {
 		return ""
@@ -57,10 +56,8 @@ func (m *CreateObjectRequest) Redact(ctx context.Context) error {
 	switch x := m.Contents.(type) {
 	case *CreateObjectRequest_StringValue:
 		x.StringValue = ""
-
 	case *CreateObjectRequest_BytesValue:
 		x.BytesValue = []byte{}
-
 	}
 
 	return nil
@@ -104,6 +101,7 @@ func (v *ValidateCreateObjectRequest) ContentsStringValueValidationRuleHandler(r
 	}
 	return oValidatorFn_StringValue, nil
 }
+
 func (v *ValidateCreateObjectRequest) ContentsBytesValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_BytesValue, err := db.NewBytesValidationRuleHandler(rules)
 	if err != nil {
@@ -111,9 +109,7 @@ func (v *ValidateCreateObjectRequest) ContentsBytesValueValidationRuleHandler(ru
 	}
 	return oValidatorFn_BytesValue, nil
 }
-
 func (v *ValidateCreateObjectRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -121,9 +117,7 @@ func (v *ValidateCreateObjectRequest) NamespaceValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateObjectRequest) ObjectTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for object_type")
@@ -131,9 +125,7 @@ func (v *ValidateCreateObjectRequest) ObjectTypeValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateObjectRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -141,9 +133,7 @@ func (v *ValidateCreateObjectRequest) NameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateObjectRequest) ContentFormatValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for content_format")
@@ -151,9 +141,7 @@ func (v *ValidateCreateObjectRequest) ContentFormatValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateObjectRequest) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -175,14 +163,11 @@ func (v *ValidateCreateObjectRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["content_format"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_format"))
 		if err := fv(ctx, m.GetContentFormat(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetContents().(type) {
@@ -208,34 +193,24 @@ func (v *ValidateCreateObjectRequest) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetObjectAttributes().(type) {
@@ -283,25 +258,30 @@ func (v *ValidateCreateObjectRequest) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
+	case *CreateObjectRequest_MobileSdkSelfServe:
+		if fv, exists := v.FldValidators["object_attributes.mobile_sdk_self_serve"]; exists {
+			val := m.GetObjectAttributes().(*CreateObjectRequest_MobileSdkSelfServe).MobileSdkSelfServe
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_sdk_self_serve"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	if fv, exists := v.FldValidators["object_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_type"))
 		if err := fv(ctx, m.GetObjectType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	v := &ValidateCreateObjectRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -309,7 +289,6 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhContentsStringValue := v.ContentsStringValueValidationRuleHandler
 	rulesContentsStringValue := map[string]string{
 		"ves.io.schema.rules.string.max_len": "5242880",
@@ -328,7 +307,6 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateObjectRequest.contents_bytes_value: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["contents.string_value"] = vFnMap["contents.string_value"]
 	v.FldValidators["contents.bytes_value"] = vFnMap["contents.bytes_value"]
 
@@ -346,7 +324,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\", \"mobile-sdk-self-serve\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -390,10 +368,10 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["description"] = vFn
-
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_app_shield"] = MobileAppShieldAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_sdk_self_serve"] = MobileSDKAttributesValidator().Validate
 
 	return v
 }()
@@ -480,34 +458,25 @@ func (v *ValidateCreateObjectResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateObjectResponseValidator = func() *ValidateCreateObjectResponse {
 	v := &ValidateCreateObjectResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = StoredObjectDescriptorValidator().Validate
 
 	return v
@@ -559,7 +528,6 @@ type ValidateDeleteObjectRequest struct {
 }
 
 func (v *ValidateDeleteObjectRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -567,9 +535,7 @@ func (v *ValidateDeleteObjectRequest) NamespaceValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeleteObjectRequest) ObjectTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for object_type")
@@ -577,9 +543,7 @@ func (v *ValidateDeleteObjectRequest) ObjectTypeValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeleteObjectRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -587,9 +551,7 @@ func (v *ValidateDeleteObjectRequest) NameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeleteObjectRequest) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -611,59 +573,42 @@ func (v *ValidateDeleteObjectRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["force_delete"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("force_delete"))
 		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_type"))
 		if err := fv(ctx, m.GetObjectType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDeleteObjectRequestValidator = func() *ValidateDeleteObjectRequest {
 	v := &ValidateDeleteObjectRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -686,7 +631,7 @@ var DefaultDeleteObjectRequestValidator = func() *ValidateDeleteObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\", \"mobile-sdk-self-serve\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -781,9 +726,7 @@ func (v *ValidateDeleteObjectResponse) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["deleted_objects"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deleted_objects"))
 		for idx, item := range m.GetDeletedObjects() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -791,9 +734,7 @@ func (v *ValidateDeleteObjectResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -850,7 +791,6 @@ type ValidateGetObjectRequest struct {
 }
 
 func (v *ValidateGetObjectRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -858,9 +798,7 @@ func (v *ValidateGetObjectRequest) NamespaceValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetObjectRequest) ObjectTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for object_type")
@@ -868,9 +806,7 @@ func (v *ValidateGetObjectRequest) ObjectTypeValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetObjectRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -878,9 +814,7 @@ func (v *ValidateGetObjectRequest) NameValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetObjectRequest) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -902,50 +836,36 @@ func (v *ValidateGetObjectRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_type"))
 		if err := fv(ctx, m.GetObjectType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetObjectRequestValidator = func() *ValidateGetObjectRequest {
 	v := &ValidateGetObjectRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -968,7 +888,7 @@ var DefaultGetObjectRequestValidator = func() *ValidateGetObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\", \"mobile-sdk-self-serve\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1057,6 +977,7 @@ func (v *ValidateGetObjectResponse) ContentsStringValueValidationRuleHandler(rul
 	}
 	return oValidatorFn_StringValue, nil
 }
+
 func (v *ValidateGetObjectResponse) ContentsBytesValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_BytesValue, err := db.NewBytesValidationRuleHandler(rules)
 	if err != nil {
@@ -1078,14 +999,11 @@ func (v *ValidateGetObjectResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["content_format"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_format"))
 		if err := fv(ctx, m.GetContentFormat(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetContents().(type) {
@@ -1122,25 +1040,19 @@ func (v *ValidateGetObjectResponse) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetObjectResponseValidator = func() *ValidateGetObjectResponse {
 	v := &ValidateGetObjectResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1148,7 +1060,6 @@ var DefaultGetObjectResponseValidator = func() *ValidateGetObjectResponse {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhContentsStringValue := v.ContentsStringValueValidationRuleHandler
 	rulesContentsStringValue := map[string]string{
 		"ves.io.schema.rules.string.max_len": "5242880",
@@ -1167,10 +1078,8 @@ var DefaultGetObjectResponseValidator = func() *ValidateGetObjectResponse {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetObjectResponse.contents_bytes_value: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["contents.string_value"] = vFnMap["contents.string_value"]
 	v.FldValidators["contents.bytes_value"] = vFnMap["contents.bytes_value"]
-
 	v.FldValidators["metadata"] = StoredObjectDescriptorValidator().Validate
 
 	return v
@@ -1234,14 +1143,11 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetObjectAttributes().(type) {
@@ -1289,20 +1195,25 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
+	case *ListItemDescriptor_MobileSdkSelfServe:
+		if fv, exists := v.FldValidators["object_attributes.mobile_sdk_self_serve"]; exists {
+			val := m.GetObjectAttributes().(*ListItemDescriptor_MobileSdkSelfServe).MobileSdkSelfServe
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_sdk_self_serve"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["versions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("versions"))
 		for idx, item := range m.GetVersions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1310,20 +1221,17 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListItemDescriptorValidator = func() *ValidateListItemDescriptor {
 	v := &ValidateListItemDescriptor{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_app_shield"] = MobileAppShieldAttributesValidator().Validate
-
+	v.FldValidators["object_attributes.mobile_sdk_self_serve"] = MobileSDKAttributesValidator().Validate
 	v.FldValidators["versions"] = VersionDescriptorValidator().Validate
 
 	return v
@@ -1375,7 +1283,6 @@ type ValidateListObjectsRequest struct {
 }
 
 func (v *ValidateListObjectsRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1383,9 +1290,7 @@ func (v *ValidateListObjectsRequest) NamespaceValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateListObjectsRequest) ObjectTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for object_type")
@@ -1393,9 +1298,7 @@ func (v *ValidateListObjectsRequest) ObjectTypeValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateListObjectsRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -1417,59 +1320,42 @@ func (v *ValidateListObjectsRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["latest_version_only"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("latest_version_only"))
 		if err := fv(ctx, m.GetLatestVersionOnly(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_type"))
 		if err := fv(ctx, m.GetObjectType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_type"))
 		if err := fv(ctx, m.GetQueryType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 	v := &ValidateListObjectsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1491,7 +1377,7 @@ var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\"]",
+		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\", \"mobile-sdk-self-serve\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1573,9 +1459,7 @@ func (v *ValidateListObjectsResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1583,16 +1467,13 @@ func (v *ValidateListObjectsResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListObjectsResponseValidator = func() *ValidateListObjectsResponse {
 	v := &ValidateListObjectsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = ListItemDescriptorValidator().Validate
 
 	return v
@@ -1644,7 +1525,6 @@ type ValidateMobileAppShieldAttributes struct {
 }
 
 func (v *ValidateMobileAppShieldAttributes) OsTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(OSType)
@@ -1658,9 +1538,7 @@ func (v *ValidateMobileAppShieldAttributes) OsTypeValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMobileAppShieldAttributes) ReleaseVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for release_version")
@@ -1682,32 +1560,24 @@ func (v *ValidateMobileAppShieldAttributes) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["os_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("os_type"))
 		if err := fv(ctx, m.GetOsType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["release_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_version"))
 		if err := fv(ctx, m.GetReleaseVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMobileAppShieldAttributesValidator = func() *ValidateMobileAppShieldAttributes {
 	v := &ValidateMobileAppShieldAttributes{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1789,7 +1659,6 @@ type ValidateMobileIntegratorAttributes struct {
 }
 
 func (v *ValidateMobileIntegratorAttributes) OsTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(OSType)
@@ -1803,9 +1672,7 @@ func (v *ValidateMobileIntegratorAttributes) OsTypeValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMobileIntegratorAttributes) ReleaseVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for release_version")
@@ -1827,32 +1694,24 @@ func (v *ValidateMobileIntegratorAttributes) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["os_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("os_type"))
 		if err := fv(ctx, m.GetOsType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["release_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_version"))
 		if err := fv(ctx, m.GetReleaseVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMobileIntegratorAttributesValidator = func() *ValidateMobileIntegratorAttributes {
 	v := &ValidateMobileIntegratorAttributes{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1934,7 +1793,6 @@ type ValidateMobileSDKAttributes struct {
 }
 
 func (v *ValidateMobileSDKAttributes) OsTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(OSType)
@@ -1962,32 +1820,24 @@ func (v *ValidateMobileSDKAttributes) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["os_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("os_type"))
 		if err := fv(ctx, m.GetOsType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["release_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_version"))
 		if err := fv(ctx, m.GetReleaseVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMobileSDKAttributesValidator = func() *ValidateMobileSDKAttributes {
 	v := &ValidateMobileSDKAttributes{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2082,9 +1932,7 @@ func (v *ValidatePreSignedUrl) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2153,25 +2001,18 @@ func (v *ValidatePresignedUrlData) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2228,7 +2069,6 @@ type ValidateStoredObjectDescriptor struct {
 }
 
 func (v *ValidateStoredObjectDescriptor) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -2236,9 +2076,7 @@ func (v *ValidateStoredObjectDescriptor) UrlValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateStoredObjectDescriptor) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -2246,19 +2084,15 @@ func (v *ValidateStoredObjectDescriptor) DescriptionValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateStoredObjectDescriptor) CreationTimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var (
 		reqdValidatorFn db.ValidatorFunc
 		err             error
 	)
-
 	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for creation_timestamp")
 	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if reqdValidatorFn != nil {
 			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -2271,9 +2105,7 @@ func (v *ValidateStoredObjectDescriptor) CreationTimestampValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateStoredObjectDescriptor) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -2281,9 +2113,7 @@ func (v *ValidateStoredObjectDescriptor) NamespaceValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateStoredObjectDescriptor) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -2291,9 +2121,7 @@ func (v *ValidateStoredObjectDescriptor) NameValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateStoredObjectDescriptor) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -2315,41 +2143,29 @@ func (v *ValidateStoredObjectDescriptor) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creation_timestamp"))
 		if err := fv(ctx, m.GetCreationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetObjectAttributes().(type) {
@@ -2397,34 +2213,36 @@ func (v *ValidateStoredObjectDescriptor) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
+	case *StoredObjectDescriptor_MobileSdkSelfServe:
+		if fv, exists := v.FldValidators["object_attributes.mobile_sdk_self_serve"]; exists {
+			val := m.GetObjectAttributes().(*StoredObjectDescriptor_MobileSdkSelfServe).MobileSdkSelfServe
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_sdk_self_serve"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStoredObjectDescriptorValidator = func() *ValidateStoredObjectDescriptor {
 	v := &ValidateStoredObjectDescriptor{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2498,10 +2316,10 @@ var DefaultStoredObjectDescriptorValidator = func() *ValidateStoredObjectDescrip
 		panic(errMsg)
 	}
 	v.FldValidators["version"] = vFn
-
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_app_shield"] = MobileAppShieldAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_sdk_self_serve"] = MobileSDKAttributesValidator().Validate
 
 	return v
 }()
@@ -2552,7 +2370,6 @@ type ValidateVersionDescriptor struct {
 }
 
 func (v *ValidateVersionDescriptor) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -2560,19 +2377,15 @@ func (v *ValidateVersionDescriptor) DescriptionValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVersionDescriptor) CreationTimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var (
 		reqdValidatorFn db.ValidatorFunc
 		err             error
 	)
-
 	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for creation_timestamp")
 	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if reqdValidatorFn != nil {
 			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -2585,9 +2398,7 @@ func (v *ValidateVersionDescriptor) CreationTimestampValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVersionDescriptor) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -2609,59 +2420,42 @@ func (v *ValidateVersionDescriptor) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creation_timestamp"))
 		if err := fv(ctx, m.GetCreationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["latest_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("latest_version"))
 		if err := fv(ctx, m.GetLatestVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVersionDescriptorValidator = func() *ValidateVersionDescriptor {
 	v := &ValidateVersionDescriptor{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

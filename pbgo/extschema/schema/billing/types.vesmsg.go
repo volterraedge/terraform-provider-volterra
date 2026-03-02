@@ -76,9 +76,7 @@ func (v *ValidateBillingFeatureData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["duration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("duration"))
 		for idx, item := range m.GetDuration() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -86,18 +84,13 @@ func (v *ValidateBillingFeatureData) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -166,61 +159,42 @@ func (v *ValidateBillingFeatureId) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certified_hardware"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hardware"))
 		if err := fv(ctx, m.GetCertifiedHardware(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certified_hardware_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hardware_type"))
 		if err := fv(ctx, m.GetCertifiedHardwareType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["feature_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("feature_type"))
 		if err := fv(ctx, m.GetFeatureType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_flavor"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_flavor"))
 		if err := fv(ctx, m.GetNodeFlavor(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -233,6 +207,86 @@ var DefaultBillingFeatureIdValidator = func() *ValidateBillingFeatureId {
 
 func BillingFeatureIdValidator() db.Validator {
 	return DefaultBillingFeatureIdValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BillingMetricData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BillingMetricData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BillingMetricData) DeepCopy() *BillingMetricData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BillingMetricData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BillingMetricData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BillingMetricData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BillingMetricDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBillingMetricData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBillingMetricData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BillingMetricData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BillingMetricData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["unit"]; exists {
+		vOpts := append(opts, db.WithValidateField("unit"))
+		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["value"]; exists {
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBillingMetricDataValidator = func() *ValidateBillingMetricData {
+	v := &ValidateBillingMetricData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BillingMetricDataValidator() db.Validator {
+	return DefaultBillingMetricDataValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -289,9 +343,7 @@ func (v *ValidateBillingUsageData) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["duration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("duration"))
 		for idx, item := range m.GetDuration() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -299,18 +351,13 @@ func (v *ValidateBillingUsageData) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -379,79 +426,54 @@ func (v *ValidateBillingUsageId) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certified_hardware"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hardware"))
 		if err := fv(ctx, m.GetCertifiedHardware(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certified_hardware_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hardware_type"))
 		if err := fv(ctx, m.GetCertifiedHardwareType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["feature_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("feature_type"))
 		if err := fv(ctx, m.GetFeatureType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance"))
 		if err := fv(ctx, m.GetInstance(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pvc_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pvc_size"))
 		if err := fv(ctx, m.GetPvcSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -464,6 +486,209 @@ var DefaultBillingUsageIdValidator = func() *ValidateBillingUsageId {
 
 func BillingUsageIdValidator() db.Validator {
 	return DefaultBillingUsageIdValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BillingUsageSummaryRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BillingUsageSummaryRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BillingUsageSummaryRequest) DeepCopy() *BillingUsageSummaryRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BillingUsageSummaryRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BillingUsageSummaryRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BillingUsageSummaryRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BillingUsageSummaryRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBillingUsageSummaryRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBillingUsageSummaryRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateBillingUsageSummaryRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBillingUsageSummaryRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BillingUsageSummaryRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BillingUsageSummaryRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["end_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["start_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBillingUsageSummaryRequestValidator = func() *ValidateBillingUsageSummaryRequest {
+	v := &ValidateBillingUsageSummaryRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BillingUsageSummaryRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BillingUsageSummaryRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	return v
+}()
+
+func BillingUsageSummaryRequestValidator() db.Validator {
+	return DefaultBillingUsageSummaryRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BillingUsageSummaryResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BillingUsageSummaryResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BillingUsageSummaryResponse) DeepCopy() *BillingUsageSummaryResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BillingUsageSummaryResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BillingUsageSummaryResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BillingUsageSummaryResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BillingUsageSummaryResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBillingUsageSummaryResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBillingUsageSummaryResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BillingUsageSummaryResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BillingUsageSummaryResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["usage_summary_items"]; exists {
+		vOpts := append(opts, db.WithValidateField("usage_summary_items"))
+		for idx, item := range m.GetUsageSummaryItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBillingUsageSummaryResponseValidator = func() *ValidateBillingUsageSummaryResponse {
+	v := &ValidateBillingUsageSummaryResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BillingUsageSummaryResponseValidator() db.Validator {
+	return DefaultBillingUsageSummaryResponseValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -520,9 +745,7 @@ func (v *ValidateLoadBalancerMetricData) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -530,27 +753,19 @@ func (v *ValidateLoadBalancerMetricData) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit"))
 		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -619,34 +834,24 @@ func (v *ValidateMetricLabelFilter) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["op"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("op"))
 		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -715,25 +920,18 @@ func (v *ValidateMetricValue) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timestamp"))
 		if err := fv(ctx, m.GetTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -802,18 +1000,13 @@ func (v *ValidateSecretManagementData) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -821,9 +1014,7 @@ func (v *ValidateSecretManagementData) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -892,25 +1083,18 @@ func (v *ValidateSecretManagementId) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_namespace"))
 		if err := fv(ctx, m.GetApiNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_type"))
 		if err := fv(ctx, m.GetApiType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -979,34 +1163,24 @@ func (v *ValidateSecretManagementLabelFilter) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["op"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("op"))
 		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1075,25 +1249,18 @@ func (v *ValidateSiteId) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1162,9 +1329,7 @@ func (v *ValidateSiteTrafficData) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bytes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bytes"))
 		for idx, item := range m.GetBytes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1172,27 +1337,19 @@ func (v *ValidateSiteTrafficData) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dst_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dst_site"))
 		if err := fv(ctx, m.GetDstSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["src_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("src_site"))
 		if err := fv(ctx, m.GetSrcSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1261,9 +1418,7 @@ func (v *ValidateSiteUsageCount) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count_by_certified_hardware"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count_by_certified_hardware"))
 		for key, value := range m.GetCountByCertifiedHardware() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1271,9 +1426,7 @@ func (v *ValidateSiteUsageCount) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1342,18 +1495,13 @@ func (v *ValidateSyntheticMonitorInvocationsData) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1361,9 +1509,7 @@ func (v *ValidateSyntheticMonitorInvocationsData) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1432,16 +1578,12 @@ func (v *ValidateSyntheticMonitorInvocationsId) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["synthetic_monitor_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("synthetic_monitor_type"))
 		if err := fv(ctx, m.GetSyntheticMonitorType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1504,9 +1646,7 @@ func (v *ValidateUsageCountData) CountChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateUsageCountData) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for field")
@@ -1562,25 +1702,19 @@ func (v *ValidateUsageCountData) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["field"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field"))
 		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUsageCountDataValidator = func() *ValidateUsageCountData {
 	v := &ValidateUsageCountData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1588,7 +1722,6 @@ var DefaultUsageCountDataValidator = func() *ValidateUsageCountData {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCountChoice := v.CountChoiceValidationRuleHandler
 	rulesCountChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1616,6 +1749,178 @@ var DefaultUsageCountDataValidator = func() *ValidateUsageCountData {
 
 func UsageCountDataValidator() db.Validator {
 	return DefaultUsageCountDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UsageMetricData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UsageMetricData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UsageMetricData) DeepCopy() *UsageMetricData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UsageMetricData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UsageMetricData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UsageMetricData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UsageMetricDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUsageMetricData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUsageMetricData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UsageMetricData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UsageMetricData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["metric_value"]; exists {
+		vOpts := append(opts, db.WithValidateField("metric_value"))
+		if err := fv(ctx, m.GetMetricValue(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["unit"]; exists {
+		vOpts := append(opts, db.WithValidateField("unit"))
+		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUsageMetricDataValidator = func() *ValidateUsageMetricData {
+	v := &ValidateUsageMetricData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UsageMetricDataValidator() db.Validator {
+	return DefaultUsageMetricDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UsageSummaryItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UsageSummaryItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UsageSummaryItem) DeepCopy() *UsageSummaryItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UsageSummaryItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UsageSummaryItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UsageSummaryItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UsageSummaryItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUsageSummaryItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUsageSummaryItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UsageSummaryItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UsageSummaryItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["billing_metric_data"]; exists {
+		vOpts := append(opts, db.WithValidateField("billing_metric_data"))
+		if err := fv(ctx, m.GetBillingMetricData(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["service"]; exists {
+		vOpts := append(opts, db.WithValidateField("service"))
+		if err := fv(ctx, m.GetService(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["usage_metric_data"]; exists {
+		vOpts := append(opts, db.WithValidateField("usage_metric_data"))
+		if err := fv(ctx, m.GetUsageMetricData(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUsageSummaryItemValidator = func() *ValidateUsageSummaryItem {
+	v := &ValidateUsageSummaryItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UsageSummaryItemValidator() db.Validator {
+	return DefaultUsageSummaryItemValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1672,18 +1977,13 @@ func (v *ValidateVolterraNWTrafficData) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1691,9 +1991,7 @@ func (v *ValidateVolterraNWTrafficData) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1762,25 +2060,18 @@ func (v *ValidateVolterraNWTrafficId) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dst_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dst_site"))
 		if err := fv(ctx, m.GetDstSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["src_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("src_site"))
 		if err := fv(ctx, m.GetSrcSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1849,34 +2140,24 @@ func (v *ValidateVolterraNWTrafficLabelFilter) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["op"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("op"))
 		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

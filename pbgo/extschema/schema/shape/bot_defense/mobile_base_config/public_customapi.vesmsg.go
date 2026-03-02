@@ -64,7 +64,6 @@ type ValidateMobileBaseConfigurationFileRequest struct {
 }
 
 func (v *ValidateMobileBaseConfigurationFileRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -72,9 +71,7 @@ func (v *ValidateMobileBaseConfigurationFileRequest) NamespaceValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMobileBaseConfigurationFileRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -96,32 +93,24 @@ func (v *ValidateMobileBaseConfigurationFileRequest) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMobileBaseConfigurationFileRequestValidator = func() *ValidateMobileBaseConfigurationFileRequest {
 	v := &ValidateMobileBaseConfigurationFileRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -217,25 +206,18 @@ func (v *ValidateMobileBaseConfigurationFileResponse) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["content"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content"))
 		if err := fv(ctx, m.GetContent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

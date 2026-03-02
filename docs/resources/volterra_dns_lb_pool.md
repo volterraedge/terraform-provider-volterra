@@ -23,31 +23,30 @@ resource "volterra_dns_lb_pool" "example" {
 
   // One of the arguments from this list "a_pool aaaa_pool cname_pool mx_pool srv_pool" must be set
 
-  a_pool {
-    // One of the arguments from this list "disable_health_check health_check" must be set
-
-    disable_health_check = true
-
+  srv_pool {
     max_answers = "1"
 
     members {
-      disable = true
-
-      ip_endpoint = "8.8.8.8"
+      final_translation = true
 
       name = "web server 1"
+
+      port = "10"
 
       priority = "10"
 
       ratio = "10"
+
+      target = "my.example.com"
+
+      weight = "10"
     }
   }
 
   // One of the arguments from this list "ttl use_rrset_ttl" must be set
 
-  ttl = "3600"
+  use_rrset_ttl = true
 }
-
 ```
 
 Argument Reference
@@ -171,6 +170,12 @@ x-displayName: "AAAA".
 
 x-displayName: "CNAME".
 
+###### One of the arguments from this list "disable_health_check, health_check" must be set
+
+`disable_health_check` - (Optional) When health check is disabled, the pool member is presumed to be always healthy (`Bool`).
+
+`health_check` - (Optional) Select the health check to be applied to all the pool members. See [ref](#ref) below for details.
+
 `members` - (Required) x-required. See [Cname Pool Members ](#cname-pool-members) below for details.
 
 ### Pool Type Choice Mx Pool
@@ -220,4 +225,4 @@ x-required.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured dns_lb_pool.
+*   `id` - This is the id of the configured dns_lb_pool.

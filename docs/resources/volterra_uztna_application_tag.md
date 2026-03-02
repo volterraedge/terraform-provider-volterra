@@ -22,7 +22,6 @@ resource "volterra_uztna_application_tag" "example" {
 
   tag = ["APPGRP-MKTG"]
 }
-
 ```
 
 Argument Reference
@@ -49,4 +48,4 @@ Argument Reference
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_application_tag.
+-   `id` - This is the id of the configured uztna_application_tag.

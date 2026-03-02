@@ -41,7 +41,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetEnableForwardProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.enable_forward_proxy")
 	}
@@ -82,7 +81,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectorChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -92,7 +90,6 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectorChoice().(type) {
 	case *CreateSpecType_SliToSloSnat:
-
 		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
@@ -102,13 +99,9 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_slo_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_SliToSloDr:
-
 		return nil, nil
-
 	case *CreateSpecType_SliToGlobalDr:
-
 		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
@@ -118,9 +111,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_global_dr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_SliToGlobalSnat:
-
 		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
@@ -130,9 +121,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_global_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_SloToGlobalDr:
-
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -142,9 +131,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "slo_to_global_dr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_SloToGlobalSnat:
-
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
@@ -154,11 +141,9 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "slo_to_global_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -172,7 +157,6 @@ func (v *ValidateCreateSpecType) ConnectorChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -272,7 +256,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
@@ -308,16 +291,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -325,7 +305,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConnectorChoice := v.ConnectorChoiceValidationRuleHandler
 	rulesConnectorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -336,7 +315,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connector_choice"] = vFn
-
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -347,13 +325,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forward_proxy_choice"] = vFn
-
 	v.FldValidators["connector_choice.sli_to_slo_snat"] = SnatConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.sli_to_global_dr"] = ves_io_schema_views.GlobalConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.sli_to_global_snat"] = GlobalSnatConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.slo_to_global_dr"] = ves_io_schema_views.GlobalConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.slo_to_global_snat"] = GlobalSnatConnectorTypeValidator().Validate
-
 	v.FldValidators["forward_proxy_choice.enable_forward_proxy"] = ves_io_schema.ForwardProxyConfigTypeValidator().Validate
 
 	return v
@@ -406,7 +382,6 @@ func (m *DynamicReverseProxyListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDrpsDRefInfo()
-
 }
 
 func (m *DynamicReverseProxyListType) GetDrpsDRefInfo() ([]db.DRefInfo, error) {
@@ -432,7 +407,6 @@ func (m *DynamicReverseProxyListType) GetDrpsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDrpsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -460,7 +434,6 @@ func (m *DynamicReverseProxyListType) GetDrpsDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -469,7 +442,6 @@ type ValidateDynamicReverseProxyListType struct {
 }
 
 func (v *ValidateDynamicReverseProxyListType) DrpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -529,22 +501,18 @@ func (v *ValidateDynamicReverseProxyListType) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["drps"]; exists {
 		vOpts := append(opts, db.WithValidateField("drps"))
 		if err := fv(ctx, m.GetDrps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDynamicReverseProxyListTypeValidator = func() *ValidateDynamicReverseProxyListType {
 	v := &ValidateDynamicReverseProxyListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -589,7 +557,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetEnableForwardProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.enable_forward_proxy")
 	}
@@ -630,7 +597,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectorChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -640,7 +606,6 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectorChoice().(type) {
 	case *GetSpecType_SliToSloSnat:
-
 		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
@@ -650,13 +615,9 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_slo_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_SliToSloDr:
-
 		return nil, nil
-
 	case *GetSpecType_SliToGlobalDr:
-
 		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
@@ -666,9 +627,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_global_dr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_SliToGlobalSnat:
-
 		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
@@ -678,9 +637,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_global_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_SloToGlobalDr:
-
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -690,9 +647,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "slo_to_global_dr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_SloToGlobalSnat:
-
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
@@ -702,11 +657,9 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "slo_to_global_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -720,7 +673,6 @@ func (v *ValidateGetSpecType) ConnectorChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -820,7 +772,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
@@ -856,16 +807,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -873,7 +821,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConnectorChoice := v.ConnectorChoiceValidationRuleHandler
 	rulesConnectorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -884,7 +831,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connector_choice"] = vFn
-
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -895,13 +841,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forward_proxy_choice"] = vFn
-
 	v.FldValidators["connector_choice.sli_to_slo_snat"] = SnatConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.sli_to_global_dr"] = ves_io_schema_views.GlobalConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.sli_to_global_snat"] = GlobalSnatConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.slo_to_global_dr"] = ves_io_schema_views.GlobalConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.slo_to_global_snat"] = GlobalSnatConnectorTypeValidator().Validate
-
 	v.FldValidators["forward_proxy_choice.enable_forward_proxy"] = ves_io_schema.ForwardProxyConfigTypeValidator().Validate
 
 	return v
@@ -959,19 +903,15 @@ func (m *GlobalSnatConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSnatConfigDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSnatConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSnatConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetGlobalVn()
 	if vref == nil {
 		return nil, nil
@@ -987,7 +927,6 @@ func (m *GlobalSnatConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetGlobalVnDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -997,7 +936,6 @@ func (m *GlobalSnatConnectorType) GetGlobalVnDBEntries(ctx context.Context, d db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
 	}
-
 	vref := m.GetGlobalVn()
 	if vref == nil {
 		return nil, nil
@@ -1015,7 +953,6 @@ func (m *GlobalSnatConnectorType) GetGlobalVnDBEntries(ctx context.Context, d db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1024,7 +961,6 @@ func (m *GlobalSnatConnectorType) GetSnatConfigDRefInfo() ([]db.DRefInfo, error)
 	if m.GetSnatConfig() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSnatConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSnatConfig().GetDRefInfo() FAILED")
@@ -1034,7 +970,6 @@ func (m *GlobalSnatConnectorType) GetSnatConfigDRefInfo() ([]db.DRefInfo, error)
 		dri.DRField = "snat_config." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSnatConnectorType struct {
@@ -1042,7 +977,6 @@ type ValidateGlobalSnatConnectorType struct {
 }
 
 func (v *ValidateGlobalSnatConnectorType) GlobalVnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for global_vn")
@@ -1051,11 +985,9 @@ func (v *ValidateGlobalSnatConnectorType) GlobalVnValidationRuleHandler(rules ma
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1075,32 +1007,24 @@ func (v *ValidateGlobalSnatConnectorType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["global_vn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("global_vn"))
 		if err := fv(ctx, m.GetGlobalVn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["snat_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("snat_config"))
 		if err := fv(ctx, m.GetSnatConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSnatConnectorTypeValidator = func() *ValidateGlobalSnatConnectorType {
 	v := &ValidateGlobalSnatConnectorType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1119,7 +1043,6 @@ var DefaultGlobalSnatConnectorTypeValidator = func() *ValidateGlobalSnatConnecto
 		panic(errMsg)
 	}
 	v.FldValidators["global_vn"] = vFn
-
 	v.FldValidators["snat_config"] = SnatConnectorTypeValidator().Validate
 
 	return v
@@ -1145,7 +1068,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetForwardProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.forward_proxy")
 	}
@@ -1191,21 +1113,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInsideNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInsideNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOutsideNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOutsideNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
@@ -1230,7 +1148,6 @@ func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDynamicReverseProxyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1249,7 +1166,6 @@ func (m *GlobalSpecType) GetDynamicReverseProxyDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1275,7 +1191,6 @@ func (m *GlobalSpecType) GetInsideNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetInsideNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1294,7 +1209,6 @@ func (m *GlobalSpecType) GetInsideNetworkDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1320,7 +1234,6 @@ func (m *GlobalSpecType) GetOutsideNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetOutsideNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1339,7 +1252,6 @@ func (m *GlobalSpecType) GetOutsideNetworkDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1348,7 +1260,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ConnectorTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkConnectorType)
@@ -1362,9 +1273,7 @@ func (v *ValidateGlobalSpecType) ConnectorTypeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OutsideNetworkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.VirtualNetworkType)
@@ -1378,9 +1287,7 @@ func (v *ValidateGlobalSpecType) OutsideNetworkTypeValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OutsideNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1426,9 +1333,7 @@ func (v *ValidateGlobalSpecType) OutsideNetworkValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) InsideNetworkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.VirtualNetworkType)
@@ -1442,9 +1347,7 @@ func (v *ValidateGlobalSpecType) InsideNetworkTypeValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) InsideNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1490,9 +1393,7 @@ func (v *ValidateGlobalSpecType) InsideNetworkValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SnatPoolTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkConnectorSNATPoolType)
@@ -1506,9 +1407,7 @@ func (v *ValidateGlobalSpecType) SnatPoolTypeValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) NatPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1554,9 +1453,7 @@ func (v *ValidateGlobalSpecType) NatPoolValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DynamicReverseProxyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1616,100 +1513,72 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connector_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connector_type"))
 		if err := fv(ctx, m.GetConnectorType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dynamic_reverse_proxy"]; exists {
 		vOpts := append(opts, db.WithValidateField("dynamic_reverse_proxy"))
 		if err := fv(ctx, m.GetDynamicReverseProxy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["forward_proxy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("forward_proxy"))
 		if err := fv(ctx, m.GetForwardProxy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("inside_network"))
 		if err := fv(ctx, m.GetInsideNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_network_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_network_type"))
 		if err := fv(ctx, m.GetInsideNetworkType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nat_pool"]; exists {
 		vOpts := append(opts, db.WithValidateField("nat_pool"))
 		if err := fv(ctx, m.GetNatPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("outside_network"))
 		if err := fv(ctx, m.GetOutsideNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_network_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_network_type"))
 		if err := fv(ctx, m.GetOutsideNetworkType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_type"))
 		if err := fv(ctx, m.GetProxyType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["snat_pool_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("snat_pool_type"))
 		if err := fv(ctx, m.GetSnatPoolType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1809,7 +1678,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["dynamic_reverse_proxy"] = vFn
-
 	v.FldValidators["forward_proxy"] = ves_io_schema.ForwardProxyConfigTypeValidator().Validate
 
 	return v
@@ -1873,16 +1741,12 @@ func (v *ValidateNetworkConnectorStatus) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["installed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("installed"))
 		if err := fv(ctx, m.GetInstalled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1913,7 +1777,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetEnableForwardProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.enable_forward_proxy")
 	}
@@ -1954,7 +1817,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectorChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1964,7 +1826,6 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectorChoice().(type) {
 	case *ReplaceSpecType_SliToSloSnat:
-
 		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
@@ -1974,13 +1835,9 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_slo_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_SliToSloDr:
-
 		return nil, nil
-
 	case *ReplaceSpecType_SliToGlobalDr:
-
 		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
@@ -1990,9 +1847,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_global_dr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_SliToGlobalSnat:
-
 		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
@@ -2002,9 +1857,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_to_global_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_SloToGlobalDr:
-
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -2014,9 +1867,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "slo_to_global_dr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_SloToGlobalSnat:
-
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
@@ -2026,11 +1877,9 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "slo_to_global_snat." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -2044,7 +1893,6 @@ func (v *ValidateReplaceSpecType) ConnectorChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2144,7 +1992,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
@@ -2180,16 +2027,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2197,7 +2041,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConnectorChoice := v.ConnectorChoiceValidationRuleHandler
 	rulesConnectorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2208,7 +2051,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connector_choice"] = vFn
-
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2219,13 +2061,11 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forward_proxy_choice"] = vFn
-
 	v.FldValidators["connector_choice.sli_to_slo_snat"] = SnatConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.sli_to_global_dr"] = ves_io_schema_views.GlobalConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.sli_to_global_snat"] = GlobalSnatConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.slo_to_global_dr"] = ves_io_schema_views.GlobalConnectorTypeValidator().Validate
 	v.FldValidators["connector_choice.slo_to_global_snat"] = GlobalSnatConnectorTypeValidator().Validate
-
 	v.FldValidators["forward_proxy_choice.enable_forward_proxy"] = ves_io_schema.ForwardProxyConfigTypeValidator().Validate
 
 	return v
@@ -2278,17 +2118,13 @@ func (m *SnatConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoolChoiceDRefInfo()
-
 }
 
 func (m *SnatConnectorType) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPoolChoice().(type) {
 	case *SnatConnectorType_InterfaceIp:
-
 		return nil, nil
-
 	case *SnatConnectorType_SnatPoolAllocator:
-
 		vref := m.GetSnatPoolAllocator()
 		if vref == nil {
 			return nil, nil
@@ -2304,7 +2140,6 @@ func (m *SnatConnectorType) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -2316,13 +2151,11 @@ func (m *SnatConnectorType) GetPoolChoiceDBEntries(ctx context.Context, d db.Int
 
 	switch m.GetPoolChoice().(type) {
 	case *SnatConnectorType_InterfaceIp:
-
 	case *SnatConnectorType_SnatPoolAllocator:
 		refdType, err := d.TypeForEntryKind("", "", "address_allocator.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: address_allocator")
 		}
-
 		vref := m.GetSnatPoolAllocator()
 		if vref == nil {
 			return nil, nil
@@ -2340,7 +2173,6 @@ func (m *SnatConnectorType) GetPoolChoiceDBEntries(ctx context.Context, d db.Int
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -2357,7 +2189,6 @@ func (v *ValidateSnatConnectorType) PoolChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSnatConnectorType) RoutingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2424,7 +2255,6 @@ func (v *ValidateSnatConnectorType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["routing_choice"]; exists {
@@ -2460,16 +2290,13 @@ func (v *ValidateSnatConnectorType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSnatConnectorTypeValidator = func() *ValidateSnatConnectorType {
 	v := &ValidateSnatConnectorType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2477,7 +2304,6 @@ var DefaultSnatConnectorTypeValidator = func() *ValidateSnatConnectorType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPoolChoice := v.PoolChoiceValidationRuleHandler
 	rulesPoolChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2488,7 +2314,6 @@ var DefaultSnatConnectorTypeValidator = func() *ValidateSnatConnectorType {
 		panic(errMsg)
 	}
 	v.FldValidators["pool_choice"] = vFn
-
 	vrhRoutingChoice := v.RoutingChoiceValidationRuleHandler
 	rulesRoutingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2499,7 +2324,6 @@ var DefaultSnatConnectorTypeValidator = func() *ValidateSnatConnectorType {
 		panic(errMsg)
 	}
 	v.FldValidators["routing_choice"] = vFn
-
 	v.FldValidators["pool_choice.snat_pool_allocator"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

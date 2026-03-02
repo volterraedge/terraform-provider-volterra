@@ -65,7 +65,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFleetDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetFleetDRefInfo() ([]db.DRefInfo, error) {
@@ -90,7 +89,6 @@ func (m *GlobalSpecType) GetFleetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFleetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -109,7 +107,6 @@ func (m *GlobalSpecType) GetFleetDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -130,9 +127,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fleet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fleet"))
 		for idx, item := range m.GetFleet() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -140,20 +135,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["md5_hash"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("md5_hash"))
 		if err := fv(ctx, m.GetMd5Hash(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ref_set"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ref_set"))
 		for key, value := range m.GetRefSet() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -161,9 +150,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -221,7 +208,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -229,7 +215,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
@@ -239,7 +224,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSpecType struct {
@@ -259,16 +243,12 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

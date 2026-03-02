@@ -42,7 +42,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSearchLoadBalancers(ctx contex
 	rsp, err := c.grpcClient.SearchLoadBalancers(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSearchLoadBalancersAllNamespaces(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SearchLoadBalancersRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSearchLoadBalancersAllNamespac
 	rsp, err := c.grpcClient.SearchLoadBalancersAllNamespaces(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityEventsAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsAggregationQuery
 	rsp, err := c.grpcClient.SecurityEventsAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsAggregationQueryAllNamespaces(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityEventsAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsAggregationQuery
 	rsp, err := c.grpcClient.SecurityEventsAggregationQueryAllNamespaces(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityEventsCountRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsMetrics(ctx cont
 	rsp, err := c.grpcClient.SecurityEventsMetrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityEventsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +82,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsQuery(ctx contex
 	rsp, err := c.grpcClient.SecurityEventsQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsQueryAllNamespaces(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityEventsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +90,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsQueryAllNamespac
 	rsp, err := c.grpcClient.SecurityEventsQueryAllNamespaces(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityEventsScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -105,7 +98,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityEventsScrollQuery(ctx 
 	rsp, err := c.grpcClient.SecurityEventsScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityIncidentsAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityIncidentsAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -114,7 +106,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityIncidentsAggregationQu
 	rsp, err := c.grpcClient.SecurityIncidentsAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityIncidentsQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityIncidentsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -123,7 +114,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityIncidentsQuery(ctx con
 	rsp, err := c.grpcClient.SecurityIncidentsQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityIncidentsScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecurityIncidentsScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -132,7 +122,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSecurityIncidentsScrollQuery(c
 	rsp, err := c.grpcClient.SecurityIncidentsScrollQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSuspiciousUserLogsAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuspiciousUserLogsAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -141,7 +130,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSuspiciousUserLogsAggregationQ
 	rsp, err := c.grpcClient.SuspiciousUserLogsAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSuspiciousUserLogsQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuspiciousUserLogsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -150,7 +138,6 @@ func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSuspiciousUserLogsQuery(ctx co
 	rsp, err := c.grpcClient.SuspiciousUserLogsQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSuspiciousUserLogsScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuspiciousUserLogsScrollRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -191,35 +178,20 @@ func NewAppSecurityMonitoringAPIGrpcClient(cc *grpc.ClientConn) server.CustomCli
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SearchLoadBalancers"] = ccl.doRPCSearchLoadBalancers
-
 	rpcFns["SearchLoadBalancersAllNamespaces"] = ccl.doRPCSearchLoadBalancersAllNamespaces
-
 	rpcFns["SecurityEventsAggregationQuery"] = ccl.doRPCSecurityEventsAggregationQuery
-
 	rpcFns["SecurityEventsAggregationQueryAllNamespaces"] = ccl.doRPCSecurityEventsAggregationQueryAllNamespaces
-
 	rpcFns["SecurityEventsMetrics"] = ccl.doRPCSecurityEventsMetrics
-
 	rpcFns["SecurityEventsQuery"] = ccl.doRPCSecurityEventsQuery
-
 	rpcFns["SecurityEventsQueryAllNamespaces"] = ccl.doRPCSecurityEventsQueryAllNamespaces
-
 	rpcFns["SecurityEventsScrollQuery"] = ccl.doRPCSecurityEventsScrollQuery
-
 	rpcFns["SecurityIncidentsAggregationQuery"] = ccl.doRPCSecurityIncidentsAggregationQuery
-
 	rpcFns["SecurityIncidentsQuery"] = ccl.doRPCSecurityIncidentsQuery
-
 	rpcFns["SecurityIncidentsScrollQuery"] = ccl.doRPCSecurityIncidentsScrollQuery
-
 	rpcFns["SuspiciousUserLogsAggregationQuery"] = ccl.doRPCSuspiciousUserLogsAggregationQuery
-
 	rpcFns["SuspiciousUserLogsQuery"] = ccl.doRPCSuspiciousUserLogsQuery
-
 	rpcFns["SuspiciousUserLogsScrollQuery"] = ccl.doRPCSuspiciousUserLogsScrollQuery
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -308,7 +280,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSearchLoadBalancers(ctx contex
 	pbRsp := &SearchLoadBalancersResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SearchLoadBalancersResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -316,7 +287,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSearchLoadBalancers(ctx contex
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSearchLoadBalancersAllNamespaces(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -394,7 +364,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSearchLoadBalancersAllNamespac
 	pbRsp := &SearchLoadBalancersResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SearchLoadBalancersResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -402,7 +371,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSearchLoadBalancersAllNamespac
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -481,7 +449,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsAggregationQuery
 	pbRsp := &SecurityEventsAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityEventsAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -489,7 +456,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsAggregationQuery
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsAggregationQueryAllNamespaces(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -568,7 +534,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsAggregationQuery
 	pbRsp := &SecurityEventsAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityEventsAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -576,7 +541,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsAggregationQuery
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -660,7 +624,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsMetrics(ctx cont
 	pbRsp := &SecurityEventsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityEventsCountResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -668,7 +631,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsMetrics(ctx cont
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -714,8 +676,10 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsQuery(ctx contex
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
 		q.Add("sort_by", fmt.Sprintf("%v", req.SortBy))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -751,7 +715,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsQuery(ctx contex
 	pbRsp := &SecurityEventsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityEventsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -759,7 +722,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsQuery(ctx contex
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsQueryAllNamespaces(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -805,8 +767,10 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsQueryAllNamespac
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
 		q.Add("sort_by", fmt.Sprintf("%v", req.SortBy))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -842,7 +806,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsQueryAllNamespac
 	pbRsp := &SecurityEventsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityEventsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -850,7 +813,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsQueryAllNamespac
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -926,7 +888,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsScrollQuery(ctx 
 	pbRsp := &SecurityEventsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityEventsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -934,7 +895,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityEventsScrollQuery(ctx 
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1013,7 +973,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsAggregationQu
 	pbRsp := &SecurityIncidentsAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityIncidentsAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1021,7 +980,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsAggregationQu
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1067,8 +1025,10 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsQuery(ctx con
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
 		q.Add("sort_by", fmt.Sprintf("%v", req.SortBy))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1104,7 +1064,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsQuery(ctx con
 	pbRsp := &SecurityIncidentsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityIncidentsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1112,7 +1071,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsQuery(ctx con
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1188,7 +1146,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsScrollQuery(c
 	pbRsp := &SecurityIncidentsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityIncidentsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1196,7 +1153,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSecurityIncidentsScrollQuery(c
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1275,7 +1231,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsAggregationQ
 	pbRsp := &SuspiciousUserLogsAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SuspiciousUserLogsAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1283,7 +1238,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsAggregationQ
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1329,8 +1283,10 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsQuery(ctx co
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("query", fmt.Sprintf("%v", req.Query))
 		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
 		q.Add("sort", fmt.Sprintf("%v", req.Sort))
 		q.Add("sort_by", fmt.Sprintf("%v", req.SortBy))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1366,7 +1322,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsQuery(ctx co
 	pbRsp := &SuspiciousUserLogsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SuspiciousUserLogsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1374,7 +1329,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsQuery(ctx co
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1450,7 +1404,6 @@ func (c *AppSecurityMonitoringAPIRestClient) doRPCSuspiciousUserLogsScrollQuery(
 	pbRsp := &SuspiciousUserLogsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SuspiciousUserLogsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1484,35 +1437,20 @@ func NewAppSecurityMonitoringAPIRestClient(baseURL string, hc http.Client) serve
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SearchLoadBalancers"] = ccl.doRPCSearchLoadBalancers
-
 	rpcFns["SearchLoadBalancersAllNamespaces"] = ccl.doRPCSearchLoadBalancersAllNamespaces
-
 	rpcFns["SecurityEventsAggregationQuery"] = ccl.doRPCSecurityEventsAggregationQuery
-
 	rpcFns["SecurityEventsAggregationQueryAllNamespaces"] = ccl.doRPCSecurityEventsAggregationQueryAllNamespaces
-
 	rpcFns["SecurityEventsMetrics"] = ccl.doRPCSecurityEventsMetrics
-
 	rpcFns["SecurityEventsQuery"] = ccl.doRPCSecurityEventsQuery
-
 	rpcFns["SecurityEventsQueryAllNamespaces"] = ccl.doRPCSecurityEventsQueryAllNamespaces
-
 	rpcFns["SecurityEventsScrollQuery"] = ccl.doRPCSecurityEventsScrollQuery
-
 	rpcFns["SecurityIncidentsAggregationQuery"] = ccl.doRPCSecurityIncidentsAggregationQuery
-
 	rpcFns["SecurityIncidentsQuery"] = ccl.doRPCSecurityIncidentsQuery
-
 	rpcFns["SecurityIncidentsScrollQuery"] = ccl.doRPCSecurityIncidentsScrollQuery
-
 	rpcFns["SuspiciousUserLogsAggregationQuery"] = ccl.doRPCSuspiciousUserLogsAggregationQuery
-
 	rpcFns["SuspiciousUserLogsQuery"] = ccl.doRPCSuspiciousUserLogsQuery
-
 	rpcFns["SuspiciousUserLogsScrollQuery"] = ccl.doRPCSuspiciousUserLogsScrollQuery
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1645,7 +1583,6 @@ func (s *appSecurityMonitoringAPISrv) SearchLoadBalancers(ctx context.Context, i
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SearchLoadBalancersResponse", rsp)...)
 
 	return rsp, nil
@@ -1694,7 +1631,6 @@ func (s *appSecurityMonitoringAPISrv) SearchLoadBalancersAllNamespaces(ctx conte
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SearchLoadBalancersResponse", rsp)...)
 
 	return rsp, nil
@@ -1743,7 +1679,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityEventsAggregationQuery(ctx context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityEventsAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -1792,7 +1727,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityEventsAggregationQueryAllNamespace
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityEventsAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -1841,7 +1775,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityEventsMetrics(ctx context.Context,
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityEventsCountResponse", rsp)...)
 
 	return rsp, nil
@@ -1890,7 +1823,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityEventsQuery(ctx context.Context, i
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityEventsResponse", rsp)...)
 
 	return rsp, nil
@@ -1939,7 +1871,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityEventsQueryAllNamespaces(ctx conte
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityEventsResponse", rsp)...)
 
 	return rsp, nil
@@ -1988,7 +1919,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityEventsScrollQuery(ctx context.Cont
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityEventsResponse", rsp)...)
 
 	return rsp, nil
@@ -2037,7 +1967,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityIncidentsAggregationQuery(ctx cont
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityIncidentsAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -2086,7 +2015,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityIncidentsQuery(ctx context.Context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityIncidentsResponse", rsp)...)
 
 	return rsp, nil
@@ -2135,7 +2063,6 @@ func (s *appSecurityMonitoringAPISrv) SecurityIncidentsScrollQuery(ctx context.C
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityIncidentsResponse", rsp)...)
 
 	return rsp, nil
@@ -2184,7 +2111,6 @@ func (s *appSecurityMonitoringAPISrv) SuspiciousUserLogsAggregationQuery(ctx con
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SuspiciousUserLogsAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -2233,7 +2159,6 @@ func (s *appSecurityMonitoringAPISrv) SuspiciousUserLogsQuery(ctx context.Contex
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SuspiciousUserLogsResponse", rsp)...)
 
 	return rsp, nil
@@ -2282,7 +2207,6 @@ func (s *appSecurityMonitoringAPISrv) SuspiciousUserLogsScrollQuery(ctx context.
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SuspiciousUserLogsResponse", rsp)...)
 
 	return rsp, nil
@@ -3660,7 +3584,7 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/app_security/suspicious_user_logs/scroll": {
             "get": {
                 "summary": "Suspicious User Logs Scroll Query",
-                "description": "Scroll request is used to fetch large number of suspicious user logs in multiple batches with each SuspiciousUserLogsResponse\ncontaining no more than 500 messages. To scroll through more than 500 or all messages, one can use the\nSuspiciousUserLogsScrollRequest. Use the scroll_id returned in the SuspiciousUserLogsResponse to fetch the next batch of logs \nand one can continue this process till the scroll_id returned is \"\" which indicates no more logs to scroll.",
+                "description": "Scroll request is used to fetch large number of suspicious user logs in multiple batches with each SuspiciousUserLogsResponse\ncontaining no more than 500 messages. To scroll through more than 500 or all messages, one can use the\nSuspiciousUserLogsScrollRequest. Use the scroll_id returned in the SuspiciousUserLogsResponse to fetch the next batch of logs\nand one can continue this process till the scroll_id returned is \"\" which indicates no more logs to scroll.",
                 "operationId": "ves.io.schema.app_security.AppSecurityMonitoringAPI.SuspiciousUserLogsScrollQuery",
                 "responses": {
                     "200": {
@@ -3747,7 +3671,7 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
             },
             "post": {
                 "summary": "Suspicious User Logs Scroll Query",
-                "description": "Scroll request is used to fetch large number of suspicious user logs in multiple batches with each SuspiciousUserLogsResponse\ncontaining no more than 500 messages. To scroll through more than 500 or all messages, one can use the\nSuspiciousUserLogsScrollRequest. Use the scroll_id returned in the SuspiciousUserLogsResponse to fetch the next batch of logs \nand one can continue this process till the scroll_id returned is \"\" which indicates no more logs to scroll.",
+                "description": "Scroll request is used to fetch large number of suspicious user logs in multiple batches with each SuspiciousUserLogsResponse\ncontaining no more than 500 messages. To scroll through more than 500 or all messages, one can use the\nSuspiciousUserLogsScrollRequest. Use the scroll_id returned in the SuspiciousUserLogsResponse to fetch the next batch of logs\nand one can continue this process till the scroll_id returned is \"\" which indicates no more logs to scroll.",
                 "operationId": "ves.io.schema.app_security.AppSecurityMonitoringAPI.SuspiciousUserLogsScrollQuery",
                 "responses": {
                     "200": {
@@ -3906,6 +3830,29 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                 }
             }
         },
+        "app_securitySearchAfterSortValues": {
+            "type": "object",
+            "description": "These are timestamp and doc_id values returned by elastic search in the search request.\nClient is expected to set these values in a subsequent request to get the next page of results.",
+            "title": "SearchAfterSortValues",
+            "x-displayname": "Search After Sort Values",
+            "x-ves-proto-message": "ves.io.schema.app_security.SearchAfterSortValues",
+            "properties": {
+                "last_doc_id": {
+                    "type": "string",
+                    "description": " This is a unique uuid generated by elastic search\n\nExample: - \"-8881051689166072872\"-",
+                    "title": "last_doc_id",
+                    "x-displayname": "Last Doc ID",
+                    "x-ves-example": "-8881051689166072872"
+                },
+                "last_timestamp": {
+                    "type": "number",
+                    "description": "\n\nExample: - 1745695692759-",
+                    "title": "last timestamp",
+                    "format": "double",
+                    "x-displayname": "Last Timestamp"
+                }
+            }
+        },
         "app_securitySearchFilter": {
             "type": "object",
             "description": "Metric label filter can be specified to query specific metrics based on label match",
@@ -3947,7 +3894,8 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
             "title": "Search Label for VH list API",
             "enum": [
                 "REQUEST_ID",
-                "SOURCE_IP"
+                "SOURCE_IP",
+                "DOMAIN_NAME"
             ],
             "default": "REQUEST_ID",
             "x-displayname": "Search Label for VH List API",
@@ -3967,7 +3915,7 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
         },
         "app_securitySearchLoadBalancersRequest": {
             "type": "object",
-            "description": "Get a list of virtual hosts in all the namespaces matching filter provided in the request. \nThe filter can be a) Request ID b) Source IP",
+            "description": "Get a list of virtual hosts in all the namespaces matching filter provided in the request.\nThe filter can be a) Request ID b) Source IP",
             "title": "SearchLoadBalancersRequest",
             "x-displayname": "Search Load Balancers Request",
             "x-ves-proto-message": "ves.io.schema.app_security.SearchLoadBalancersRequest",
@@ -4186,7 +4134,7 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
             "properties": {
                 "count": {
                     "type": "string",
-                    "description": " the number of security events for virtual host in the given namespace \n\nExample: - 15-",
+                    "description": " the number of security events for virtual host in the given namespace\n\nExample: - 15-",
                     "format": "uint64",
                     "x-displayname": "Count"
                 },
@@ -4261,6 +4209,14 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " Optional: default is descending order",
                     "title": "sort order",
@@ -4272,6 +4228,13 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     "description": " Optional: default is sort by last_event_time",
                     "title": "sort by",
                     "x-displayname": "Sort By"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/app_securitySearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -4307,6 +4270,13 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Events",
                     "x-ves-example": "value"
+                },
+                "last_sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n Currently, timestamp and doc_id are the supported sort values.\n Empty list indicates no more messages to scroll (EOF).\n Note: This is stateless and hence more performant than the scroll API.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "last sort values",
+                    "$ref": "#/definitions/app_securitySearchAfterSortValues",
+                    "x-displayname": "Last Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "scroll_id": {
                     "type": "string",
@@ -4473,6 +4443,14 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " Optional: default is descending order",
                     "title": "sort order",
@@ -4484,6 +4462,13 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     "description": " Optional: default is sort by last_event_time",
                     "title": "sort by",
                     "x-displayname": "Sort By"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/app_securitySearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -4519,6 +4504,13 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Incidents",
                     "x-ves-example": "value"
+                },
+                "last_sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n Currently, timestamp and doc_id are the supported sort values.\n Empty list indicates no more messages to scroll (EOF).\n Note: This is stateless and hence more performant than the scroll API.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "last sort values",
+                    "$ref": "#/definitions/app_securitySearchAfterSortValues",
+                    "x-displayname": "Last Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "scroll_id": {
                     "type": "string",
@@ -4685,6 +4677,14 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     "x-displayname": "Scroll",
                     "x-ves-example": "true"
                 },
+                "search_after": {
+                    "type": "boolean",
+                    "description": " Search After is used to retrieve large number of log messages (or all log messages) that matches the query.\n If search_after is set to true, the sort_values in the response can be used in the API to fetch the next\n batch of logs. The number of messages in each batch is determined by the limit field.\n Note: Search After is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "search after",
+                    "format": "boolean",
+                    "x-displayname": "Search After",
+                    "x-ves-example": "true"
+                },
                 "sort": {
                     "description": " Optional: default is descending order",
                     "title": "sort order",
@@ -4696,6 +4696,13 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     "description": " Optional: default is sort by last_event_time",
                     "title": "sort by",
                     "x-displayname": "Sort By"
+                },
+                "sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "sort values",
+                    "$ref": "#/definitions/app_securitySearchAfterSortValues",
+                    "x-displayname": "Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "start_time": {
                     "type": "string",
@@ -4721,6 +4728,13 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     "description": " Aggregations provide summary/analytics data over the security events response. If the number of security events that matched the query\n is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.",
                     "title": "aggregations",
                     "x-displayname": "Aggregations"
+                },
+                "last_sort_values": {
+                    "description": " List of sort values that can be used to retrieve the next batch of log messages.\n Currently, timestamp and doc_id are the supported sort values.\n Empty list indicates no more messages to scroll (EOF).\n Note: This is stateless and hence more performant than the scroll API.\n\nExample: - \"{last_timestamp1745695692759, last_doc_id: -8881051689166072872}\"-",
+                    "title": "last sort values",
+                    "$ref": "#/definitions/app_securitySearchAfterSortValues",
+                    "x-displayname": "Last Sort Values",
+                    "x-ves-example": "{last_timestamp: 1745695692759, last_doc_id: -8881051689166072872}"
                 },
                 "logs": {
                     "type": "array",
@@ -4751,7 +4765,7 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
         },
         "app_securitySuspiciousUserLogsScrollRequest": {
             "type": "object",
-            "description": "Scroll request is used to fetch large number of suspicious user logs in multiple batches with each SuspiciousUserLogsResponse\ncontaining no more than 500 messages. To scroll through more than 500 or all messages, one can use the\nSuspiciousUserLogsScrollRequest. Use the scroll_id returned in the SuspiciousUserLogsResponse to fetch the next batch of logs \nand one can continue this process till the scroll_id returned is \"\" which indicates no more logs to scroll.",
+            "description": "Scroll request is used to fetch large number of suspicious user logs in multiple batches with each SuspiciousUserLogsResponse\ncontaining no more than 500 messages. To scroll through more than 500 or all messages, one can use the\nSuspiciousUserLogsScrollRequest. Use the scroll_id returned in the SuspiciousUserLogsResponse to fetch the next batch of logs\nand one can continue this process till the scroll_id returned is \"\" which indicates no more logs to scroll.",
             "title": "Suspicious User Logs Scroll Request",
             "x-displayname": "Suspicious User Logs Scroll Request",
             "x-ves-proto-message": "ves.io.schema.app_security.SuspiciousUserLogsScrollRequest",
@@ -6006,7 +6020,7 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
         },
         "schemaapp_securityKeyField": {
             "type": "string",
-            "description": "x-displayName: \"Key Field\"\nSecurity events can be aggregated based on these fields.\n\n - CITY: x-displayName: \"City\"\n - COUNTRY: x-displayName: \"Country\"\n - SEC_EVENT_TYPE: x-displayName: \"Security Event Type\"\n - SRC_SITE: x-displayName: \"Source Site\"\n - VH_NAME: x-displayName: \"Virtual Host Name\"\n - VH_TYPE: x-displayName: \"Virtual Host Type\"\n - USER: x-displayName: \"User\"\n - SUSPICIOUS_USER_COUNTRY: x-displayName: \"Suspicious User Country\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more countries.\n - SUSPICIOUS_USER_REGION: x-displayName: \"Suspicious User Region\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more regions.\n - SUSPICIOUS_USER_ASN: x-displayName: \"Suspicious User ASN\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more ASNs.\n - SUSPICIOUS_USER_SRC_IP: x-displayName: \"Suspicious User Source IP\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more source IP address.\n - SUSPICIOUS_USER_SRC_SITE: x-displayName: \"Suspicious User Source Site\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more sites.\n - SUSPICIOUS_USER_TLS_FINGERPRINT: x-displayName: \"Suspicious User JA3 TLS Fingerprint\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating with one or more JA3 TLS fingerprints.\n - VIOLATION: x-displayName: \"Violation\"\nMapped to violations.name\n - ATTACK_TYPE: x-displayName: \"Attack Type\"\nMapped to attack_types.name\n - SIGNATURE: x-displayName: \"Signature\"\nMapped to signatures.id_name\n - THREAT_CAMPAIGN: x-displayName: \"Threat Campaign\"\nMapped to threat_campaigns.id_name\n - URI: x-displayName: \"URI\"\nMapped to req_path\n - BOT_CLASSIFICATION: x-displayName: \"BOT Classification\"\nMapped to bot_info.classification\n - AUTOMATION_TYPE: x-displayName: \"BOT Defense Automation type\"\nMapped to bot_defense.automation_type\n - DOMAIN: x-displayName: \"DOMAIN\"\n - BOT_TYPE: x-displayName: \"BOT_TYPE\"\nMapped to bot_info.type\n - BOT_NAME: x-displayName: \"BOT_NAME\"\nMapped to bot_info.name\n - SRC_IP: x-displayName: \"SRC_IP\"\n - TLS_FINGERPRINT: x-displayName: \"JA3 TLS Fingerprint\"\n - ASN: x-displayName: \"ASN\"\n - API_EP: x-displayName: \"API_EP\"\nMapped to api_endpoint\n - BROWSER_TYPE: x-displayName: \"BROWSER_TYPE\"\n - DEVICE_TYPE: x-displayName: \"DEVICE_TYPE\"\n - METHOD: x-displayName: \"METHOD\"\n - RESP_CODE: x-displayName: \"RESP_CODE\"\nMapped to rsp_code\n - RESP_CODE_DETAILS: x-displayName: \"RESP_CODE_DETAILS\"\nMapped to rsp_code_details\n - SEC_EVENT_NAME: x-displayName: \"SEC_EVENT_NAME\"\n - WAF_MODE: x-displayName: \"WAF_MODE\"\n - SIGNATURE_NAME: x-displayName: \"SIGNATURE_NAME\"\nMapped to signatures.name\n - SIGNATURE_ID: x-displayName: \"SIGNATURE_ID\"\nMapped to signatures.id\n - SIGNATURE_STATE: x-displayName: \"SIGNATURE_STATE\"\nMapped to signatures.state\n - SIGNATURE_ACCURACY: x-displayName: \"SIGNATURE_ACCURACY\"\nMapped to signatures.accuracy\n - VIOLATION_STATE: x-displayName: \"VIOLATION_STATE\"\nMapped to violations.state\n - THREAT_CAMPAIGN_NAME: x-displayName: \"THREAT_CAMPAIGN_NAME\"\nMapped to threat_campaigns.name\n - THREAT_CAMPAIGN_ID: x-displayName: \"THREAT_CAMPAIGN_ID\"\nMapped to threat_campaigns.id\n - THREAT_CAMPAIGN_STATE: x-displayName: \"THREAT_CAMPAIGN_STATE\"\nMapped to threat_campaigns.state\n - VIOLATION_RATING: x-displayName: \"VIOLATION_RATING\"\n - SERVICE_POLICY: x-displayName: \"Service Policy\"\nMapped to policy_hits.policy_hits.policy\n - TLS_CIPHER_SUITE: x-displayName: \"TLS Cipher Suite\"\n - TLS_VERSION: x-displayName: \"TLS version\"\n - BOT_DEFENSE_INSIGHT: x-displayName: \"Bot Defense Insight\"\nMapped to bot_defense.insight\n - BOT_DEFENSE_RECOMMENDATION: x-displayName: \"Bot Defense Recommendation\"\nMapped to bot_defense.recommendation\n - BOT_ANOMALY: x-displayName: \"Bot Anomaly\"\nMapped to bot_info.anomaly\n - SERVICE_POLICY_RESULT: x-displayName: \"Service Policy Result\"\nMapped to policy_hits.policy_hits.result\n - SIGNATURE_CONTEXT: x-displayName: \"Signature Context\"\nMapped to signatures.context\n - ACTION: x-displayName: \"Action\"\n - NAMESPACE: x-displayName: \"Namespace\"\n - REQ_RISK: x-displayName: \"Request Risk\"\n - REQ_RISK_REASON: x-displayName: \"Request Risk Reason\"\n - JA4_TLS_FINGERPRINT: x-displayName: \"JA4 TLS Fingerprint\"\n - SUSPICIOUS_USER_JA4_TLS_FINGERPRINT: x-displayName: \"Suspicious User JA4 TLS Fingerprint\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating with one or more JA4 TLS fingerprints.\n - MALWARE_NAME: x-displayName: \"Malware Name\"\nMapped to malware_info.name\n - MALWARE_TYPE: x-displayName: \"Malware Type\"\nMapped to malware_info.type\n - MALWARE_SCAN_RESULT: x-displayName: \"Malware Scan Result\"\nMapped to malware_info.scan_result\n - MALWARE_RECOMMENDED_ACTION: x-displayName: \"Malware Recommended Action\"\nMapped to malware_info.recommended_action",
+            "description": "x-displayName: \"Key Field\"\nSecurity events can be aggregated based on these fields.\n\n - CITY: x-displayName: \"City\"\n - COUNTRY: x-displayName: \"Country\"\n - SEC_EVENT_TYPE: x-displayName: \"Security Event Type\"\n - SRC_SITE: x-displayName: \"Source Site\"\n - VH_NAME: x-displayName: \"Virtual Host Name\"\n - VH_TYPE: x-displayName: \"Virtual Host Type\"\n - USER: x-displayName: \"User\"\n - SUSPICIOUS_USER_COUNTRY: x-displayName: \"Suspicious User Country\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more countries.\n - SUSPICIOUS_USER_REGION: x-displayName: \"Suspicious User Region\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more regions.\n - SUSPICIOUS_USER_ASN: x-displayName: \"Suspicious User ASN\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more ASNs.\n - SUSPICIOUS_USER_SRC_IP: x-displayName: \"Suspicious User Source IP\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more source IP address.\n - SUSPICIOUS_USER_SRC_SITE: x-displayName: \"Suspicious User Source Site\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating from one or more sites.\n - SUSPICIOUS_USER_TLS_FINGERPRINT: x-displayName: \"Suspicious User JA3 TLS Fingerprint\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating with one or more JA3 TLS fingerprints.\n - VIOLATION: x-displayName: \"Violation\"\nMapped to violations.name\n - ATTACK_TYPE: x-displayName: \"Attack Type\"\nMapped to attack_types.name\n - SIGNATURE: x-displayName: \"Signature\"\nMapped to signatures.id_name\n - THREAT_CAMPAIGN: x-displayName: \"Threat Campaign\"\nMapped to threat_campaigns.id_name\n - URI: x-displayName: \"URI\"\nMapped to req_path\n - BOT_CLASSIFICATION: x-displayName: \"BOT Classification\"\nMapped to bot_info.classification\n - AUTOMATION_TYPE: x-displayName: \"BOT Defense Automation type\"\nMapped to bot_defense.automation_type\n - DOMAIN: x-displayName: \"DOMAIN\"\n - BOT_TYPE: x-displayName: \"BOT_TYPE\"\nMapped to bot_info.type\n - BOT_NAME: x-displayName: \"BOT_NAME\"\nMapped to bot_info.name\n - SRC_IP: x-displayName: \"SRC_IP\"\n - TLS_FINGERPRINT: x-displayName: \"JA3 TLS Fingerprint\"\n - ASN: x-displayName: \"ASN\"\n - API_EP: x-displayName: \"API_EP\"\nMapped to api_endpoint\n - BROWSER_TYPE: x-displayName: \"BROWSER_TYPE\"\n - DEVICE_TYPE: x-displayName: \"DEVICE_TYPE\"\n - METHOD: x-displayName: \"METHOD\"\n - RESP_CODE: x-displayName: \"RESP_CODE\"\nMapped to rsp_code\n - RESP_CODE_DETAILS: x-displayName: \"RESP_CODE_DETAILS\"\nMapped to rsp_code_details\n - SEC_EVENT_NAME: x-displayName: \"SEC_EVENT_NAME\"\n - WAF_MODE: x-displayName: \"WAF_MODE\"\n - SIGNATURE_NAME: x-displayName: \"SIGNATURE_NAME\"\nMapped to signatures.name\n - SIGNATURE_ID: x-displayName: \"SIGNATURE_ID\"\nMapped to signatures.id\n - SIGNATURE_STATE: x-displayName: \"SIGNATURE_STATE\"\nMapped to signatures.state\n - SIGNATURE_ACCURACY: x-displayName: \"SIGNATURE_ACCURACY\"\nMapped to signatures.accuracy\n - VIOLATION_STATE: x-displayName: \"VIOLATION_STATE\"\nMapped to violations.state\n - THREAT_CAMPAIGN_NAME: x-displayName: \"THREAT_CAMPAIGN_NAME\"\nMapped to threat_campaigns.name\n - THREAT_CAMPAIGN_ID: x-displayName: \"THREAT_CAMPAIGN_ID\"\nMapped to threat_campaigns.id\n - THREAT_CAMPAIGN_STATE: x-displayName: \"THREAT_CAMPAIGN_STATE\"\nMapped to threat_campaigns.state\n - VIOLATION_RATING: x-displayName: \"VIOLATION_RATING\"\n - SERVICE_POLICY: x-displayName: \"Service Policy\"\nMapped to policy_hits.policy_hits.policy\n - TLS_CIPHER_SUITE: x-displayName: \"TLS Cipher Suite\"\n - TLS_VERSION: x-displayName: \"TLS version\"\n - BOT_DEFENSE_INSIGHT: x-displayName: \"Bot Defense Insight\"\nMapped to bot_defense.insight\n - BOT_DEFENSE_RECOMMENDATION: x-displayName: \"Bot Defense Recommendation\"\nMapped to bot_defense.recommendation\n - BOT_ANOMALY: x-displayName: \"Bot Anomaly\"\nMapped to bot_info.anomaly\n - SERVICE_POLICY_RESULT: x-displayName: \"Service Policy Result\"\nMapped to policy_hits.policy_hits.result\n - SIGNATURE_CONTEXT: x-displayName: \"Signature Context\"\nMapped to signatures.context\n - ACTION: x-displayName: \"Action\"\n - NAMESPACE: x-displayName: \"Namespace\"\n - REQ_RISK: x-displayName: \"Request Risk\"\n - REQ_RISK_REASON: x-displayName: \"Request Risk Reason\"\n - JA4_TLS_FINGERPRINT: x-displayName: \"JA4 TLS Fingerprint\"\n - SUSPICIOUS_USER_JA4_TLS_FINGERPRINT: x-displayName: \"Suspicious User JA4 TLS Fingerprint\"\nThis field is applicable only for DDoS security events, where a ddos event\nmay be detected based on requests originating with one or more JA4 TLS fingerprints.\n - MALWARE_NAME: x-displayName: \"Malware Name\"\nMapped to malware_info.name\n - MALWARE_TYPE: x-displayName: \"Malware Type\"\nMapped to malware_info.type\n - MALWARE_SCAN_RESULT: x-displayName: \"Malware Scan Result\"\nMapped to malware_info.scan_result\n - MALWARE_RECOMMENDED_ACTION: x-displayName: \"Malware Recommended Action\"\nMapped to malware_info.recommended_action\n - THREAT_LEVEL: x-displayName: \"Threat level\"",
             "title": "Key Field",
             "enum": [
                 "CITY",
@@ -6069,7 +6083,8 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                 "MALWARE_NAME",
                 "MALWARE_TYPE",
                 "MALWARE_SCAN_RESULT",
-                "MALWARE_RECOMMENDED_ACTION"
+                "MALWARE_RECOMMENDED_ACTION",
+                "THREAT_LEVEL"
             ],
             "default": "CITY"
         },

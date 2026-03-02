@@ -34,7 +34,6 @@ resource "volterra_uztna_gateway" "example" {
     ipv4 = "ipv4"
   }
 }
-
 ```
 
 Argument Reference
@@ -87,4 +86,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_gateway.
+-   `id` - This is the id of the configured uztna_gateway.

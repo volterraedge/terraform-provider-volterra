@@ -76,34 +76,24 @@ func (v *ValidateCreateRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -172,16 +162,12 @@ func (v *ValidateCreateResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_key"))
 		if err := fv(ctx, m.GetLabelKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -250,25 +236,18 @@ func (v *ValidateDeleteRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -337,7 +316,6 @@ func (v *ValidateDeleteResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -406,34 +384,24 @@ func (v *ValidateGetRequest) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -502,9 +470,7 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_key"))
 		for idx, item := range m.GetLabelKey() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -512,9 +478,7 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -583,25 +547,18 @@ func (v *ValidateLabelKeyType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

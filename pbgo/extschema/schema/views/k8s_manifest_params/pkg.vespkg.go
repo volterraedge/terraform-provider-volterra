@@ -13,15 +13,12 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.k8s_manifest_params.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.k8s_manifest_params.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.k8s_manifest_params.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.k8s_manifest_params.BigIpBareMetalDeviceK8sParams"] = BigIpBareMetalDeviceK8SParamsValidator()
 	vr["ves.io.schema.views.k8s_manifest_params.BigIpBareMetalK8sType"] = BigIpBareMetalK8STypeValidator()
 	vr["ves.io.schema.views.k8s_manifest_params.DeploymentStatusType"] = DeploymentStatusTypeValidator()
 	vr["ves.io.schema.views.k8s_manifest_params.GlobalSpecType"] = GlobalSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -33,19 +30,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.k8s_manifest_params.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.k8s_manifest_params.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.k8s_manifest_params.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -54,20 +47,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

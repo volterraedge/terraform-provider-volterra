@@ -14,26 +14,21 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nginx.one.nginx_server.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.nginx.one.nginx_server.Object"] = ObjectValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.nginx.one.nginx_server.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.ListRequest"] = ListRequestValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.ListResponseItem"] = ListResponseItemValidator()
-
 	vr["ves.io.schema.nginx.one.nginx_server.GetDataplaneServerResponse"] = GetDataplaneServerResponseValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.GetDataplaneServersRequest"] = GetDataplaneServersRequestValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.GetDataplaneServersResponse"] = GetDataplaneServersResponseValidator()
-
 	vr["ves.io.schema.nginx.one.nginx_server.DataplaneReference"] = DataplaneReferenceValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.Location"] = LocationValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.Server"] = ServerValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -45,26 +40,21 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.nginx.one.nginx_server.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.nginx.one.nginx_server.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.nginx.one.nginx_server.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.nginx.one.nginx_server.API"] = "config"
 	sm["ves.io.schema.nginx.one.nginx_server.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -73,9 +63,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.nginx.one.nginx_server.Object"] = APISwaggerJSON
@@ -89,16 +77,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.nginx.one.nginx_server.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.nginx.one.nginx_server.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.nginx.one.nginx_server.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.nginx.one.nginx_server.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.nginx.one.nginx_server.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.nginx.one.nginx_server.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -109,22 +92,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.nginx.one.nginx_server.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

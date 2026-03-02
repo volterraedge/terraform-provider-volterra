@@ -66,7 +66,6 @@ type ValidateCreateJiraIssueRequest struct {
 }
 
 func (v *ValidateCreateJiraIssueRequest) ProjectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for project")
@@ -74,9 +73,7 @@ func (v *ValidateCreateJiraIssueRequest) ProjectValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateJiraIssueRequest) IssueTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for issue_type")
@@ -84,9 +81,7 @@ func (v *ValidateCreateJiraIssueRequest) IssueTypeValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateJiraIssueRequest) SummaryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for summary")
@@ -108,50 +103,36 @@ func (v *ValidateCreateJiraIssueRequest) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["issue_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("issue_type"))
 		if err := fv(ctx, m.GetIssueType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["project"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("project"))
 		if err := fv(ctx, m.GetProject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("summary"))
 		if err := fv(ctx, m.GetSummary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateJiraIssueRequestValidator = func() *ValidateCreateJiraIssueRequest {
 	v := &ValidateCreateJiraIssueRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -242,7 +223,6 @@ type ValidatePrivateCreateTicketRequest struct {
 }
 
 func (v *ValidatePrivateCreateTicketRequest) SpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for spec")
@@ -251,11 +231,9 @@ func (v *ValidatePrivateCreateTicketRequest) SpecValidationRuleHandler(rules map
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := PrivateCreateTicketSpecValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -275,23 +253,18 @@ func (v *ValidatePrivateCreateTicketRequest) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPrivateCreateTicketRequestValidator = func() *ValidatePrivateCreateTicketRequest {
 	v := &ValidatePrivateCreateTicketRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -366,15 +339,12 @@ func (m *PrivateCreateTicketResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -382,7 +352,6 @@ func (m *PrivateCreateTicketResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -392,7 +361,6 @@ func (m *PrivateCreateTicketResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -400,7 +368,6 @@ func (m *PrivateCreateTicketResponse) GetSystemMetadataDRefInfo() ([]db.DRefInfo
 	if m.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -410,7 +377,6 @@ func (m *PrivateCreateTicketResponse) GetSystemMetadataDRefInfo() ([]db.DRefInfo
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidatePrivateCreateTicketResponse struct {
@@ -430,9 +396,7 @@ func (v *ValidatePrivateCreateTicketResponse) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["errors"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("errors"))
 		for idx, item := range m.GetErrors() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -440,47 +404,33 @@ func (v *ValidatePrivateCreateTicketResponse) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPrivateCreateTicketResponseValidator = func() *ValidatePrivateCreateTicketResponse {
 	v := &ValidatePrivateCreateTicketResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = TicketResponseSpecValidator().Validate
 
 	return v
@@ -538,9 +488,7 @@ func (v *ValidatePrivateCreateTicketSpec) TicketValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePrivateCreateTicketSpec) ServiceFeatureValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_feature")
@@ -548,9 +496,7 @@ func (v *ValidatePrivateCreateTicketSpec) ServiceFeatureValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePrivateCreateTicketSpec) TicketTrackingSystemValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ticket_tracking_system")
@@ -572,9 +518,7 @@ func (v *ValidatePrivateCreateTicketSpec) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -582,25 +526,18 @@ func (v *ValidatePrivateCreateTicketSpec) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_feature"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_feature"))
 		if err := fv(ctx, m.GetServiceFeature(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ticket"]; exists {
@@ -625,25 +562,19 @@ func (v *ValidatePrivateCreateTicketSpec) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ticket_tracking_system"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ticket_tracking_system"))
 		if err := fv(ctx, m.GetTicketTrackingSystem(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPrivateCreateTicketSpecValidator = func() *ValidatePrivateCreateTicketSpec {
 	v := &ValidatePrivateCreateTicketSpec{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -651,7 +582,6 @@ var DefaultPrivateCreateTicketSpecValidator = func() *ValidatePrivateCreateTicke
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTicket := v.TicketValidationRuleHandler
 	rulesTicket := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -684,7 +614,6 @@ var DefaultPrivateCreateTicketSpecValidator = func() *ValidatePrivateCreateTicke
 		panic(errMsg)
 	}
 	v.FldValidators["ticket_tracking_system"] = vFn
-
 	v.FldValidators["ticket.jira_issue"] = CreateJiraIssueRequestValidator().Validate
 
 	return v
@@ -736,7 +665,6 @@ type ValidateSearchTicketRequest struct {
 }
 
 func (v *ValidateSearchTicketRequest) ServiceFeatureValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_feature")
@@ -758,41 +686,30 @@ func (v *ValidateSearchTicketRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_feature"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_feature"))
 		if err := fv(ctx, m.GetServiceFeature(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSearchTicketRequestValidator = func() *ValidateSearchTicketRequest {
 	v := &ValidateSearchTicketRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -862,7 +779,6 @@ func (m *SearchTicketResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetItemsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -870,7 +786,6 @@ func (m *SearchTicketResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItems() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
@@ -884,7 +799,6 @@ func (m *SearchTicketResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateSearchTicketResponse struct {
@@ -904,9 +818,7 @@ func (v *ValidateSearchTicketResponse) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -914,16 +826,13 @@ func (v *ValidateSearchTicketResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSearchTicketResponseValidator = func() *ValidateSearchTicketResponse {
 	v := &ValidateSearchTicketResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = SearchTicketResponseItemValidator().Validate
 
 	return v
@@ -976,7 +885,6 @@ func (m *SearchTicketResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -984,7 +892,6 @@ func (m *SearchTicketResponseItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -994,7 +901,6 @@ func (m *SearchTicketResponseItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSearchTicketResponseItem struct {
@@ -1014,43 +920,31 @@ func (v *ValidateSearchTicketResponseItem) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSearchTicketResponseItemValidator = func() *ValidateSearchTicketResponseItem {
 	v := &ValidateSearchTicketResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = TicketResponseSpecValidator().Validate
 
 	return v
@@ -1103,7 +997,6 @@ func (m *TicketResponseSpec) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTicketTrackingSystemDRefInfo()
-
 }
 
 func (m *TicketResponseSpec) GetTicketTrackingSystemDRefInfo() ([]db.DRefInfo, error) {
@@ -1128,7 +1021,6 @@ func (m *TicketResponseSpec) GetTicketTrackingSystemDRefInfo() ([]db.DRefInfo, e
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTicketTrackingSystemDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1147,7 +1039,6 @@ func (m *TicketResponseSpec) GetTicketTrackingSystemDBEntries(ctx context.Contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1156,7 +1047,6 @@ type ValidateTicketResponseSpec struct {
 }
 
 func (v *ValidateTicketResponseSpec) TicketTrackingSystemValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1202,9 +1092,7 @@ func (v *ValidateTicketResponseSpec) TicketTrackingSystemValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTicketResponseSpec) AuthorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for author")
@@ -1226,41 +1114,29 @@ func (v *ValidateTicketResponseSpec) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["author"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("author"))
 		if err := fv(ctx, m.GetAuthor(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["external_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("external_id"))
 		if err := fv(ctx, m.GetExternalId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["external_link"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("external_link"))
 		if err := fv(ctx, m.GetExternalLink(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_feature"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_feature"))
 		if err := fv(ctx, m.GetServiceFeature(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetTicket().(type) {
@@ -1275,33 +1151,25 @@ func (v *ValidateTicketResponseSpec) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ticket_tracking_system"]; exists {
 		vOpts := append(opts, db.WithValidateField("ticket_tracking_system"))
 		if err := fv(ctx, m.GetTicketTrackingSystem(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ticket_tracking_system_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ticket_tracking_system_type"))
 		if err := fv(ctx, m.GetTicketTrackingSystemType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTicketResponseSpecValidator = func() *ValidateTicketResponseSpec {
 	v := &ValidateTicketResponseSpec{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1395,23 +1263,17 @@ func (v *ValidateUnlinkTicketsRequest) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_feature"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_feature"))
 		if err := fv(ctx, m.GetServiceFeature(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetUnlinkChoice().(type) {
@@ -1437,9 +1299,7 @@ func (v *ValidateUnlinkTicketsRequest) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1508,7 +1368,6 @@ func (v *ValidateUnlinkTicketsResponse) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

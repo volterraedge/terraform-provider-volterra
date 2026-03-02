@@ -22,12 +22,8 @@ resource "volterra_cloud_credentials" "example" {
 
   // One of the arguments from this list "aws_assume_role aws_secret_key azure_client_secret azure_pfx_certificate gcp_cred_file" must be set
 
-  azure_pfx_certificate {
-    certificate_url = "value"
-
-    client_id = "value"
-
-    password {
+  gcp_cred_file {
+    credential_file {
       blindfold_secret_info_internal {
         decryption_provider = "value"
 
@@ -40,21 +36,20 @@ resource "volterra_cloud_credentials" "example" {
 
       // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "value"
+      vault_secret_info {
+        key = "key_pem"
 
-        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        location = "v1/data/vhost_key"
 
-        store_provider = "value"
+        provider = "vault-vh-provider"
+
+        secret_encoding = "secret_encoding"
+
+        version = "1"
       }
     }
-
-    subscription_id = "value"
-
-    tenant_id = "value"
   }
 }
-
 ```
 
 Argument Reference
@@ -309,4 +304,4 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cloud_credentials.
+*   `id` - This is the id of the configured cloud_credentials.

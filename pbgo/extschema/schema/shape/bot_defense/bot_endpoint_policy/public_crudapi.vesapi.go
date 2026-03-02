@@ -356,7 +356,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -897,22 +896,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	tenant := server.TenantFromContext(ctx)
 	rsrcReq := &server.ResourceGetRequest{IsPublic: true, Tenant: tenant, Namespace: req.GetNamespace(), Name: req.GetName()}
 	switch req.ResponseFormat {
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -971,7 +964,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1069,7 +1061,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1081,7 +1072,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1094,7 +1084,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1116,7 +1105,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1131,19 +1119,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1175,7 +1159,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1195,7 +1178,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1205,7 +1187,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1217,7 +1198,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1226,9 +1206,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1237,7 +1215,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -1701,7 +1678,7 @@ var APISwaggerJSON string = `{
         },
         "bot_defenseComparisonOperator": {
             "type": "string",
-            "description": "Select from one of the Comparison Operator.\n\n - EXACT: exact value\n\n - CONTAIN: contain value\n\n - START_WITH: start with value \n\n - END_WITH: end with value \n",
+            "description": "Select from one of the Comparison Operator.\n\n - EXACT: exact value\n\n - CONTAIN: contain value\n\n - START_WITH: start with value\n\n - END_WITH: end with value\n",
             "title": "Domain Comparison Operator",
             "enum": [
                 "EXACT",
@@ -1759,6 +1736,27 @@ var APISwaggerJSON string = `{
                     "title": "NOT PRESENT",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "NOT PRESENT"
+                }
+            }
+        },
+        "bot_defenseCookieDefinition": {
+            "type": "object",
+            "description": "Cookie name and description records for endpoint policies.",
+            "title": "Cookie Definition",
+            "x-displayname": "Cookies",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.CookieDefinition",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human‐readable explanation of what the cookie does.",
+                    "title": "Cookie Description",
+                    "x-displayname": "Description"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of the cookie.",
+                    "title": "Cookie Name",
+                    "x-displayname": "Name"
                 }
             }
         },
@@ -1852,6 +1850,18 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "bot_defenseDeploymentMode": {
+            "type": "string",
+            "description": "Deployment Mode\n\nBy default, the mode will be Reverse Proxy\nYou need to submit an XC support ticket to request for API mode",
+            "title": "DeploymentMode",
+            "enum": [
+                "REVERSE_PROXY",
+                "API_MODE"
+            ],
+            "default": "REVERSE_PROXY",
+            "x-displayname": "Deployment Mode",
+            "x-ves-proto-enum": "ves.io.schema.shape.bot_defense.DeploymentMode"
         },
         "bot_defenseDomainMatcher": {
             "type": "object",
@@ -2025,6 +2035,43 @@ var APISwaggerJSON string = `{
             "title": "Header Operator Empty Type",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.HeaderOperatorEmptyType"
+        },
+        "bot_defenseKnownBotAllowDenyActionType": {
+            "type": "object",
+            "title": "KnownBotAllowDenyActionType",
+            "x-displayname": "Known Bot Allow And/Or Deny Action Type",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.KnownBotAllowDenyActionType",
+            "properties": {
+                "allow_list": {
+                    "type": "array",
+                    "description": " Select Known Bots to allow to proceed to the origin.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Allow List",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Allow Known Bots",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "deny_list": {
+                    "type": "array",
+                    "description": " Deny list actions will only take effect when the Mitigation Action above is set (e.g., block, redirect, transform). If mitigation action above is set to Continue, Known bots will be flagged.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Deny List",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Deny Known Bots",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "text_block": {
+                    "type": "string",
+                    "title": "All others text_block",
+                    "x-displayname": "All others (not in Allow or Deny)"
+                }
+            }
         },
         "bot_defenseMatcherType": {
             "type": "object",
@@ -2239,10 +2286,17 @@ var APISwaggerJSON string = `{
             "description": "Protected Application Endpoint.",
             "title": "ProtectedMobileEndpoint",
             "x-displayname": "Protected Mobile Endpoints",
-            "x-ves-displayorder": "1,16,3,4,5,19,21,22,23,8,9",
+            "x-ves-displayorder": "1,16,3,4,5,19,21,22,23,8,30,9",
+            "x-ves-oneof-field-known_bot_controls_action_type": "[\"allow_deny\",\"regular_request\"]",
             "x-ves-oneof-field-mobile_client_action_type": "[\"block\",\"continue\",\"transform\"]",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.ProtectedMobileEndpoint",
             "properties": {
+                "allow_deny": {
+                    "description": "Exclusive with [regular_request]\n Define known bots to allow to the origin or to explicitly deny, regardless of bot detection rules that may be set (e.g., rate limiting) for request that contain valid telemetry .",
+                    "title": "Allow and/or Deny Specific Known Bots",
+                    "$ref": "#/definitions/bot_defenseKnownBotAllowDenyActionType",
+                    "x-displayname": "Allow and/or Deny Specific Known Bots "
+                },
                 "block": {
                     "description": "Exclusive with [continue transform]\n Responsewith custom block message",
                     "title": "Block",
@@ -2320,6 +2374,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/bot_defenseQueryOperator",
                     "x-displayname": "Query"
                 },
+                "regular_request": {
+                    "description": "Exclusive with [allow_deny]\n Known bots will be processed defined in the mitigation action above. If known bots that have valid telemetry, they will be allowed to the origin.",
+                    "title": "Regular requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Treat Known Bots as Regular Requests"
+                },
                 "request_body": {
                     "description": " request body matcher",
                     "title": "Request Body",
@@ -2381,10 +2441,17 @@ var APISwaggerJSON string = `{
             "description": "Protected Application Endpoint.",
             "title": "ProtectedWebEndpoint",
             "x-displayname": "Protected Web Endpoints",
-            "x-ves-displayorder": "1,18,3,4,5,19,20,22,23,8,9",
+            "x-ves-displayorder": "1,18,3,4,5,19,20,22,23,8,30,9",
+            "x-ves-oneof-field-known_bot_controls_action_type": "[\"allow_deny\",\"regular_request\"]",
             "x-ves-oneof-field-web_client_action_type": "[\"block\",\"continue\",\"redirect\",\"transform\"]",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.ProtectedWebEndpoint",
             "properties": {
+                "allow_deny": {
+                    "description": "Exclusive with [regular_request]\n Define known bots to allow to the origin or to explicitly deny, regardless of bot detection rules that may be set (e.g., rate limiting) for request that contain valid telemetry .",
+                    "title": "Allow and/or Deny Specific Known Bots",
+                    "$ref": "#/definitions/bot_defenseKnownBotAllowDenyActionType",
+                    "x-displayname": "Allow and/or Deny Specific Known Bots "
+                },
                 "block": {
                     "description": "Exclusive with [continue redirect transform]\n Responsewith custom block message",
                     "title": "Block",
@@ -2463,6 +2530,12 @@ var APISwaggerJSON string = `{
                     "title": "Redirect",
                     "$ref": "#/definitions/bot_defenseWebClientRedirectMitigationActionType",
                     "x-displayname": "Redirect"
+                },
+                "regular_request": {
+                    "description": "Exclusive with [allow_deny]\n Known bots will be processed defined in the mitigation action above. If known bots that have valid telemetry, they will be allowed to the origin.",
+                    "title": "Regular requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Treat Known Bots as Regular Requests"
                 },
                 "request_body": {
                     "description": " request body matcher",
@@ -2848,7 +2921,7 @@ var APISwaggerJSON string = `{
         },
         "bot_defenseResponseCodeOperator": {
             "type": "string",
-            "description": "\n - CODE_EQUALS: EQUALS value\n\n - CODE_NOT_EQUAL_TO: NOT_EQUAL_TO value\n\n - CODE_LESS_THAN: LESS_THAN value \n\n - CODE_GREATER_THAN: GREATER_THAN value \n\n - CODE_LESS_THAN_OR_EQUAlS_TO: LESS_THAN_OR_EQUAlS_TO value \n\n - CODE_GREATER_THAN_OR_EQUAlS_TO: GREATER_THAN_OR_EQUAlS_TO value \n",
+            "description": "\n - CODE_EQUALS: EQUALS value\n\n - CODE_NOT_EQUAL_TO: NOT_EQUAL_TO value\n\n - CODE_LESS_THAN: LESS_THAN value\n\n - CODE_GREATER_THAN: GREATER_THAN value\n\n - CODE_LESS_THAN_OR_EQUAlS_TO: LESS_THAN_OR_EQUAlS_TO value\n\n - CODE_GREATER_THAN_OR_EQUAlS_TO: GREATER_THAN_OR_EQUAlS_TO value\n",
             "title": "Response Code Comparison Operator",
             "enum": [
                 "CODE_EQUALS",
@@ -3249,6 +3322,52 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bot_defensebot_endpoint_policyGetSpecType": {
+            "type": "object",
+            "description": "Get Bot Endpoint Policy",
+            "title": "Get Bot Endpoint Policy",
+            "x-displayname": "Get Bot Endpoint Policy",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetSpecType",
+            "properties": {
+                "cookies": {
+                    "type": "array",
+                    "description": " The cookie names and corresponding descriptions for this policy",
+                    "items": {
+                        "$ref": "#/definitions/bot_defenseCookieDefinition"
+                    },
+                    "x-displayname": "Cookies"
+                },
+                "deployment_mode": {
+                    "description": " Deployment Mode",
+                    "$ref": "#/definitions/bot_defenseDeploymentMode",
+                    "x-displayname": "Deployment Mode"
+                },
+                "endpoint_policy_content": {
+                    "description": " Protected Endpoints List for Endpoint Type",
+                    "$ref": "#/definitions/bot_defenseProtectedEndpoints",
+                    "x-displayname": "Protected Endpoints"
+                },
+                "latest_version": {
+                    "type": "string",
+                    "description": " The version number to Endpoint Policy Version for the latest version",
+                    "x-displayname": "Version"
+                }
+            }
+        },
+        "bot_defensebot_endpoint_policyReplaceSpecType": {
+            "type": "object",
+            "description": "Replace Bot Endpoint Policy",
+            "title": "Replace Bot Endpoint Policy",
+            "x-displayname": "Replace Bot Endpoint Policy",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceSpecType",
+            "properties": {
+                "endpoint_policy_content": {
+                    "description": " Protected Endpoints List for Endpoint Type",
+                    "$ref": "#/definitions/bot_defenseProtectedEndpoints",
+                    "x-displayname": "Protected Endpoints"
+                }
+            }
+        },
         "bot_endpoint_policyGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -3298,7 +3417,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the bot endpoint policy object",
                     "title": "spec",
-                    "$ref": "#/definitions/bot_endpoint_policyGetSpecType",
+                    "$ref": "#/definitions/bot_defensebot_endpoint_policyGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "status": {
@@ -3331,25 +3450,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "bot_endpoint_policyGetSpecType": {
-            "type": "object",
-            "description": "Get Bot Endpoint Policy",
-            "title": "Get Bot Endpoint Policy",
-            "x-displayname": "Get Bot Endpoint Policy",
-            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetSpecType",
-            "properties": {
-                "endpoint_policy_content": {
-                    "description": " Protected Endpoints List for Endpoint Type",
-                    "$ref": "#/definitions/bot_defenseProtectedEndpoints",
-                    "x-displayname": "Protected Endpoints"
-                },
-                "latest_version": {
-                    "type": "string",
-                    "description": " The version number to Endpoint Policy Version for the latest version",
-                    "x-displayname": "Version"
-                }
-            }
         },
         "bot_endpoint_policyListResponse": {
             "type": "object",
@@ -3407,7 +3507,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/bot_endpoint_policyGetSpecType",
+                    "$ref": "#/definitions/bot_defensebot_endpoint_policyGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -3489,7 +3589,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the bot endpoint policy object",
                     "title": "spec",
-                    "$ref": "#/definitions/bot_endpoint_policyReplaceSpecType",
+                    "$ref": "#/definitions/bot_defensebot_endpoint_policyReplaceSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -3497,20 +3597,6 @@ var APISwaggerJSON string = `{
         "bot_endpoint_policyReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceResponse"
-        },
-        "bot_endpoint_policyReplaceSpecType": {
-            "type": "object",
-            "description": "Replace Bot Endpoint Policy",
-            "title": "Replace Bot Endpoint Policy",
-            "x-displayname": "Replace Bot Endpoint Policy",
-            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceSpecType",
-            "properties": {
-                "endpoint_policy_content": {
-                    "description": " Protected Endpoints List for Endpoint Type",
-                    "$ref": "#/definitions/bot_defenseProtectedEndpoints",
-                    "x-displayname": "Protected Endpoints"
-                }
-            }
         },
         "bot_endpoint_policyStatusObject": {
             "type": "object",
@@ -4428,10 +4514,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",

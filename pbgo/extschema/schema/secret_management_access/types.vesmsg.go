@@ -40,7 +40,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.access_info")
 	}
@@ -86,15 +85,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -102,7 +98,6 @@ func (m *CreateSpecType) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAccessInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAccessInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAccessInfo().GetDRefInfo() FAILED")
@@ -112,7 +107,6 @@ func (m *CreateSpecType) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "access_info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -120,7 +114,6 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -130,7 +123,6 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -138,7 +130,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ProviderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for provider_name")
@@ -146,9 +137,7 @@ func (v *ValidateCreateSpecType) ProviderNameValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AccessInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_info")
@@ -157,11 +146,9 @@ func (v *ValidateCreateSpecType) AccessInfoValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.HostAccessInfoTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -181,41 +168,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_info"))
 		if err := fv(ctx, m.GetAccessInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_name"))
 		if err := fv(ctx, m.GetProviderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -247,7 +223,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["access_info"] = vFn
-
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
 	return v
@@ -273,7 +248,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.access_info")
 	}
@@ -319,15 +293,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -335,7 +306,6 @@ func (m *GetSpecType) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAccessInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAccessInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAccessInfo().GetDRefInfo() FAILED")
@@ -345,7 +315,6 @@ func (m *GetSpecType) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "access_info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -353,7 +322,6 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -363,7 +331,6 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -371,7 +338,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ProviderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for provider_name")
@@ -379,9 +345,7 @@ func (v *ValidateGetSpecType) ProviderNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AccessInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_info")
@@ -390,11 +354,9 @@ func (v *ValidateGetSpecType) AccessInfoValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.HostAccessInfoTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -414,41 +376,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_info"))
 		if err := fv(ctx, m.GetAccessInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_name"))
 		if err := fv(ctx, m.GetProviderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -480,7 +431,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["access_info"] = vFn
-
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
 	return v
@@ -506,7 +456,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.access_info")
 	}
@@ -552,15 +501,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -568,7 +514,6 @@ func (m *GlobalSpecType) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAccessInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAccessInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAccessInfo().GetDRefInfo() FAILED")
@@ -578,7 +523,6 @@ func (m *GlobalSpecType) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "access_info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -586,7 +530,6 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -596,7 +539,6 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -604,7 +546,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ProviderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for provider_name")
@@ -612,9 +553,7 @@ func (v *ValidateGlobalSpecType) ProviderNameValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AccessInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_info")
@@ -623,11 +562,9 @@ func (v *ValidateGlobalSpecType) AccessInfoValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.HostAccessInfoTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -647,41 +584,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_info"))
 		if err := fv(ctx, m.GetAccessInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_name"))
 		if err := fv(ctx, m.GetProviderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -713,7 +639,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["access_info"] = vFn
-
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
 	return v
@@ -739,7 +664,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.access_info")
 	}
@@ -785,15 +709,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -801,7 +722,6 @@ func (m *ReplaceSpecType) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAccessInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAccessInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAccessInfo().GetDRefInfo() FAILED")
@@ -811,7 +731,6 @@ func (m *ReplaceSpecType) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "access_info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -819,7 +738,6 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -829,7 +747,6 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -837,7 +754,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ProviderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for provider_name")
@@ -845,9 +761,7 @@ func (v *ValidateReplaceSpecType) ProviderNameValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) AccessInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_info")
@@ -856,11 +770,9 @@ func (v *ValidateReplaceSpecType) AccessInfoValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.HostAccessInfoTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -880,41 +792,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_info"))
 		if err := fv(ctx, m.GetAccessInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_name"))
 		if err := fv(ctx, m.GetProviderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -946,7 +847,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["access_info"] = vFn
-
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
 	return v

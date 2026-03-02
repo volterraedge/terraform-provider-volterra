@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.virtual_host.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2696,10 +2673,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -4221,7 +4198,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_MANAGEMENT is used for management purposes",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -4236,7 +4213,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
                 "VIRTUAL_NETWORK_IP_FABRIC",
-                "VIRTUAL_NETWORK_SEGMENT"
+                "VIRTUAL_NETWORK_SEGMENT",
+                "VIRTUAL_NETWORK_MANAGEMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -4349,10 +4327,11 @@ var APISwaggerJSON string = `{
             "description": "Creates virtual host in a given namespace.",
             "title": "Create virtual host",
             "x-displayname": "Create Virtual Host",
-            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82",
+            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
@@ -4522,6 +4501,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "96"
                     }
                 },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n Sets the maximum number of requests a downstream client can send\n over a single connection to Envoy.\n Enter a value \u003e=1 to define the request limit per connection.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
                 "no_authentication": {
                     "description": "Exclusive with [authentication]\n Disable Authentication",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4531,6 +4520,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [captcha_challenge js_challenge]\n No challenge is enabled for this virtual host",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Challenge"
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "non_default_loadbalancer": {
                     "description": "Exclusive with [default_loadbalancer]\n",
@@ -4746,12 +4740,13 @@ var APISwaggerJSON string = `{
             "description": "Get virtual host from a given namespace.",
             "title": "Get virtual host",
             "x-displayname": "Get Virtual Host",
-            "x-ves-displayorder": "10,15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82",
+            "x-ves-displayorder": "10,15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-ddos_auto_mitigation_action": "[\"block\",\"ddos_js_challenge\",\"l7_ddos_action_default\",\"l7_ddos_captcha_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-dns_zone_state_choice": "[\"not_ready\",\"ready\"]",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
@@ -4970,6 +4965,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "96"
                     }
                 },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n Sets the maximum number of requests a downstream client can send\n over a single connection to Envoy.\n Enter a value \u003e=1 to define the request limit per connection.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
                 "no_authentication": {
                     "description": "Exclusive with [authentication]\n Disable Authentication",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4979,6 +4984,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [captcha_challenge js_challenge]\n No challenge is enabled for this virtual host",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Challenge"
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "non_default_loadbalancer": {
                     "description": "Exclusive with [default_loadbalancer]\n",
@@ -5229,10 +5239,11 @@ var APISwaggerJSON string = `{
             "description": "Replace a given virtual host in a given namespace.",
             "title": "Replace virtual host",
             "x-displayname": "Replace Virtual Host",
-            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82",
+            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
@@ -5402,6 +5413,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "96"
                     }
                 },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n Sets the maximum number of requests a downstream client can send\n over a single connection to Envoy.\n Enter a value \u003e=1 to define the request limit per connection.\n\nExample: - \"100\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-example": "100",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
                 "no_authentication": {
                     "description": "Exclusive with [authentication]\n Disable Authentication",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -5411,6 +5432,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [captcha_challenge js_challenge]\n No challenge is enabled for this virtual host",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Challenge"
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "non_default_loadbalancer": {
                     "description": "Exclusive with [default_loadbalancer]\n",
@@ -5884,6 +5910,25 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-content_choice": "[\"download_delivery\",\"live_streaming\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.CdnServiceType",
             "properties": {
+                "cdn_auth_token": {
+                    "description": " Token that is used to establish trust between HTTP Load Balancer and CDN Load Balancer",
+                    "title": "CDN Authentication Token",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "CDN Authentication Token"
+                },
+                "dns_zones": {
+                    "type": "array",
+                    "description": " Internal reference to dns_zone object for internal cdnlb when caching is enabled for httplb\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "DNS Zone refs",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "DNS Zone",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
                 "download_delivery": {
                     "description": "Exclusive with [live_streaming]\n Content type is download delivery",
                     "title": "Download Delivery",
@@ -6928,7 +6973,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostVirtualHostType": {
             "type": "string",
-            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server\n - UDP_LOAD_BALANCER: UDP LoadBalancer\n\nVirtual Host used as Load Balancer\n - THIRD_PARTY_APPLICATION: THIRD PARTY Virtual Server\n\nVirtual Host representing a Third Party Application",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server\n - UDP_LOAD_BALANCER: UDP LoadBalancer\n\nVirtual Host used as Load Balancer\n - TMM_PROXY: TMM Proxy\n\nVirtual Host for TMM Proxy\n - THIRD_PARTY_APPLICATION: THIRD PARTY Virtual Server\n\nVirtual Host representing a Third Party Application",
             "title": "VirtualHostType",
             "enum": [
                 "VIRTUAL_SERVICE",

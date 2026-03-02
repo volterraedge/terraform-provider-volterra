@@ -66,7 +66,6 @@ type ValidateBigIPAWSType struct {
 }
 
 func (v *ValidateBigIPAWSType) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_region")
@@ -74,9 +73,7 @@ func (v *ValidateBigIPAWSType) AwsRegionValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPAWSType) AwsNamePrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_name_prefix")
@@ -84,9 +81,7 @@ func (v *ValidateBigIPAWSType) AwsNamePrefixValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPAWSType) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
@@ -94,9 +89,7 @@ func (v *ValidateBigIPAWSType) VpcIdValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPAWSType) AdminUsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for admin_username")
@@ -104,9 +97,7 @@ func (v *ValidateBigIPAWSType) AdminUsernameValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPAWSType) VipAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vip_address")
@@ -114,9 +105,7 @@ func (v *ValidateBigIPAWSType) VipAddressValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPAWSType) DevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -162,9 +151,7 @@ func (v *ValidateBigIPAWSType) DevicesValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPAWSType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
@@ -172,9 +159,7 @@ func (v *ValidateBigIPAWSType) SshKeyValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPAWSType) VolterraSubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -234,71 +219,49 @@ func (v *ValidateBigIPAWSType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_username"))
 		if err := fv(ctx, m.GetAdminUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["automatic_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("automatic_vip"))
 		if err := fv(ctx, m.GetAutomaticVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_name_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_name_prefix"))
 		if err := fv(ctx, m.GetAwsNamePrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("devices"))
 		if err := fv(ctx, m.GetDevices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mp_ami_image"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mp_ami_image"))
 		if err := fv(ctx, m.GetMpAmiImage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -306,42 +269,31 @@ func (v *ValidateBigIPAWSType) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip_address"))
 		if err := fv(ctx, m.GetVipAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_subnet_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("volterra_subnet_ids"))
 		if err := fv(ctx, m.GetVolterraSubnetIds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBigIPAWSTypeValidator = func() *ValidateBigIPAWSType {
 	v := &ValidateBigIPAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -489,7 +441,6 @@ type ValidateBigIPDeviceType struct {
 }
 
 func (v *ValidateBigIPDeviceType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -497,9 +448,7 @@ func (v *ValidateBigIPDeviceType) NameValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPDeviceType) InstanceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for instance_type")
@@ -507,9 +456,7 @@ func (v *ValidateBigIPDeviceType) InstanceTypeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPDeviceType) PrivateSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for private_subnet_id")
@@ -517,9 +464,7 @@ func (v *ValidateBigIPDeviceType) PrivateSubnetIdValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPDeviceType) WorkloadSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for workload_subnet_id")
@@ -527,9 +472,7 @@ func (v *ValidateBigIPDeviceType) WorkloadSubnetIdValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPDeviceType) MgmtSubnetCidrValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mgmt_subnet_cidr")
@@ -537,9 +480,7 @@ func (v *ValidateBigIPDeviceType) MgmtSubnetCidrValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIPDeviceType) MgmtSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mgmt_subnet_id")
@@ -561,68 +502,48 @@ func (v *ValidateBigIPDeviceType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["instance_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_type"))
 		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mgmt_subnet_cidr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mgmt_subnet_cidr"))
 		if err := fv(ctx, m.GetMgmtSubnetCidr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mgmt_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mgmt_subnet_id"))
 		if err := fv(ctx, m.GetMgmtSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_subnet_id"))
 		if err := fv(ctx, m.GetPrivateSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["workload_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("workload_subnet_id"))
 		if err := fv(ctx, m.GetWorkloadSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBigIPDeviceTypeValidator = func() *ValidateBigIPDeviceType {
 	v := &ValidateBigIPDeviceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

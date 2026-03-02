@@ -42,7 +42,6 @@ func (c *CustomDataAPIGrpcClient) doRPCDnsZoneMetrics(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.DnsZoneMetrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCDnsZoneRequestLogs(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DnsZoneRequestLogRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DnsZoneMetrics"] = ccl.doRPCDnsZoneMetrics
-
 	rpcFns["DnsZoneRequestLogs"] = ccl.doRPCDnsZoneRequestLogs
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -182,7 +178,6 @@ func (c *CustomDataAPIRestClient) doRPCDnsZoneMetrics(ctx context.Context, callO
 	pbRsp := &DnsZoneMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.DnsZoneMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -190,7 +185,6 @@ func (c *CustomDataAPIRestClient) doRPCDnsZoneMetrics(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCDnsZoneRequestLogs(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -270,7 +264,6 @@ func (c *CustomDataAPIRestClient) doRPCDnsZoneRequestLogs(ctx context.Context, c
 	pbRsp := &DnsZoneRequestLogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.DnsZoneRequestLogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -304,11 +297,8 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DnsZoneMetrics"] = ccl.doRPCDnsZoneMetrics
-
 	rpcFns["DnsZoneRequestLogs"] = ccl.doRPCDnsZoneRequestLogs
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -393,7 +383,6 @@ func (s *customDataAPISrv) DnsZoneMetrics(ctx context.Context, in *DnsZoneMetric
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.DnsZoneMetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -442,7 +431,6 @@ func (s *customDataAPISrv) DnsZoneRequestLogs(ctx context.Context, in *DnsZoneRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.DnsZoneRequestLogResponse", rsp)...)
 
 	return rsp, nil
@@ -675,7 +663,7 @@ var CustomDataAPISwaggerJSON string = `{
                 },
                 "filter": {
                     "type": "string",
-                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in Label can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels. \n\nExample: - \"{COUNTRY_CODE=\\\"CH\\\"}\"-",
+                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in Label can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels.\n\nExample: - \"{COUNTRY_CODE=\\\"CH\\\"}\"-",
                     "title": "Label Filter",
                     "x-displayname": "Filter",
                     "x-ves-example": "{COUNTRY_CODE=\\\"CH\\\"}"
@@ -908,6 +896,15 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-displayname": "Response code",
                     "x-ves-example": "NOERROR"
                 },
+                "responses": {
+                    "type": "array",
+                    "description": " Responses to the DNS query\n\nExample: - [\"25b8:2ce6:bc5b:dc9f:751a:32a4:d647:7265\"]-",
+                    "title": "Responses",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Responses"
+                },
                 "timestamp": {
                     "type": "string",
                     "description": " Format: unix_timestamp|rfc 3339\n\nExample: - \"2022-10-21T01:05:32.713Z\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -1040,7 +1037,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "schemadns_zoneLabel": {
             "type": "string",
-            "description": "Labels is used to select one or more fields for the data\n\nIdentifies the country code .\nIdentifies the domain.\nIdentifies the query type.\nIdentifies the response code.\nIdentifies the dns zone name.\nIdentifies the client subnet.",
+            "description": "Labels is used to select one or more fields for the data\n\nIdentifies the country code .\nIdentifies the domain.\nIdentifies the query type.\nIdentifies the response code.\nIdentifies the dns zone name.\nIdentifies the client subnet.\nIdentifies the answers to a DNS query",
             "title": "Labels",
             "enum": [
                 "COUNTRY_CODE",
@@ -1048,7 +1045,8 @@ var CustomDataAPISwaggerJSON string = `{
                 "QUERY_TYPE",
                 "RESPONSE_CODE",
                 "DNS_ZONE_NAME",
-                "CLIENT_SUBNET"
+                "CLIENT_SUBNET",
+                "ANSWERS"
             ],
             "default": "COUNTRY_CODE",
             "x-displayname": "Labels",

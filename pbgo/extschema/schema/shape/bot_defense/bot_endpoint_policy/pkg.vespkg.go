@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.Object"] = ObjectValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.ListRequest"] = ListRequestValidator()
@@ -25,21 +23,20 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomReplaceRequest"] = CustomReplaceRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomReplaceResponse"] = CustomReplaceResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetContentRequest"] = GetContentRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetContentResponse"] = GetContentResponseValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetMobileBaseConfigFileRequest"] = GetMobileBaseConfigFileRequestValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetMobileBaseConfigFileResponse"] = GetMobileBaseConfigFileResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetPoliciesAndVersionsListRequest"] = GetPoliciesAndVersionsListRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetPoliciesAndVersionsListResponse"] = GetPoliciesAndVersionsListResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.Policy"] = PolicyValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.PolicyVersionsRequest"] = PolicyVersionsRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.PolicyVersionsResponse"] = PolicyVersionsResponseValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -51,33 +48,27 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.shape.bot_defense.bot_endpoint_policy.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.shape.bot_defense.bot_endpoint_policy.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.API.Replace"] = []string{
 		"spec.endpoint_policy_content.protected_mobile_endpoints.protected_mobile_endpoints.#.metadata.disable",
 		"spec.endpoint_policy_content.protected_web_endpoints.protected_web_endpoints.#.metadata.disable",
 		"spec.pc_graph_draft_policy_id",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.CustomReplace"] = []string{
 		"spec.endpoint_policy_content.protected_mobile_endpoints.protected_mobile_endpoints.#.metadata.disable",
 		"spec.endpoint_policy_content.protected_web_endpoints.protected_web_endpoints.#.metadata.disable",
 		"spec.pc_graph_draft_policy_id",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.shape.bot_defense.bot_endpoint_policy.API"] = "shape/bot"
 	sm["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI"] = "shape/bot"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -86,9 +77,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.Object"] = APISwaggerJSON
@@ -102,15 +91,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.shape.bot_defense.bot_endpoint_policy.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.shape.bot_defense.bot_endpoint_policy.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -121,22 +106,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

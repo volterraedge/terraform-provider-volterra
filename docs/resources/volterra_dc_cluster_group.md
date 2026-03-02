@@ -21,7 +21,6 @@ resource "volterra_dc_cluster_group" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -46,4 +45,4 @@ Argument Reference
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured dc_cluster_group.
+-   `id` - This is the id of the configured dc_cluster_group.

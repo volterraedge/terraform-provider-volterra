@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.CascadeDelete(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCEvaluateAPIAccess(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &EvaluateAPIAccessReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCEvaluateAPIAccess(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.EvaluateAPIAccess(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCEvaluateBatchAPIAccess(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &EvaluateBatchAPIAccessReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCEvaluateBatchAPIAccess(ctx context.Context, y
 	rsp, err := c.grpcClient.EvaluateBatchAPIAccess(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCLookupUserRoles(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LookupUserRolesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomAPIGrpcClient) doRPCLookupUserRoles(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.LookupUserRoles(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuggestValuesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -110,17 +106,11 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
-
 	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
-
 	rpcFns["EvaluateBatchAPIAccess"] = ccl.doRPCEvaluateBatchAPIAccess
-
 	rpcFns["LookupUserRoles"] = ccl.doRPCLookupUserRoles
-
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -206,7 +196,6 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.CascadeDeleteResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -214,7 +203,6 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -293,7 +281,6 @@ func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOp
 	pbRsp := &EvaluateAPIAccessResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.EvaluateAPIAccessResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -301,7 +288,6 @@ func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCEvaluateBatchAPIAccess(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -378,7 +364,6 @@ func (c *CustomAPIRestClient) doRPCEvaluateBatchAPIAccess(ctx context.Context, c
 	pbRsp := &EvaluateBatchAPIAccessResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.EvaluateBatchAPIAccessResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -386,7 +371,6 @@ func (c *CustomAPIRestClient) doRPCEvaluateBatchAPIAccess(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCLookupUserRoles(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -461,7 +445,6 @@ func (c *CustomAPIRestClient) doRPCLookupUserRoles(ctx context.Context, callOpts
 	pbRsp := &LookupUserRolesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.LookupUserRolesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -469,7 +452,6 @@ func (c *CustomAPIRestClient) doRPCLookupUserRoles(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -547,7 +529,6 @@ func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *
 	pbRsp := &SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -581,17 +562,11 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
-
 	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
-
 	rpcFns["EvaluateBatchAPIAccess"] = ccl.doRPCEvaluateBatchAPIAccess
-
 	rpcFns["LookupUserRoles"] = ccl.doRPCLookupUserRoles
-
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -688,7 +663,6 @@ func (s *customAPISrv) CascadeDelete(ctx context.Context, in *CascadeDeleteReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.CascadeDeleteResponse", rsp)...)
 
 	return rsp, nil
@@ -737,7 +711,6 @@ func (s *customAPISrv) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAcc
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.EvaluateAPIAccessResp", rsp)...)
 
 	return rsp, nil
@@ -786,7 +759,6 @@ func (s *customAPISrv) EvaluateBatchAPIAccess(ctx context.Context, in *EvaluateB
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.EvaluateBatchAPIAccessResp", rsp)...)
 
 	return rsp, nil
@@ -835,7 +807,6 @@ func (s *customAPISrv) LookupUserRoles(ctx context.Context, in *LookupUserRolesR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.LookupUserRolesResp", rsp)...)
 
 	return rsp, nil
@@ -884,7 +855,6 @@ func (s *customAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesResp", rsp)...)
 
 	return rsp, nil
@@ -1478,7 +1448,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "result": {
                     "type": "boolean",
-                    "description": " Result after evaluation ",
+                    "description": " Result after evaluation",
                     "title": "result",
                     "format": "boolean",
                     "x-displayname": "Result"

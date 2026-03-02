@@ -78,16 +78,12 @@ func (v *ValidateAlwaysAllowJwt) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allow_missing_or_failed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow_missing_or_failed"))
 		if err := fv(ctx, m.GetAllowMissingOrFailed(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -156,7 +152,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -225,7 +220,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -283,7 +277,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRulesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -291,7 +284,6 @@ func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
@@ -305,7 +297,6 @@ func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -325,27 +316,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["absent_token_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("absent_token_action"))
 		if err := fv(ctx, m.GetAbsentTokenAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_action"))
 		if err := fv(ctx, m.GetDefaultAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rules"))
 		for idx, item := range m.GetRules() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -353,20 +336,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["rules"] = RequirementRuleValidator().Validate
-
 	v.FldValidators["default_action"] = ves_io_schema.ActionValidator().Validate
-
 	v.FldValidators["absent_token_action"] = ves_io_schema.ActionValidator().Validate
 
 	return v
@@ -419,7 +397,6 @@ func (m *JwtRequirement) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRequiresTypeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -429,7 +406,6 @@ func (m *JwtRequirement) GetRequiresTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRequiresType().(type) {
 	case *JwtRequirement_Provider:
-
 		drInfos, err := m.GetProvider().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetProvider().GetDRefInfo() FAILED")
@@ -439,9 +415,7 @@ func (m *JwtRequirement) GetRequiresTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "provider." + dri.DRField
 		}
 		return drInfos, err
-
 	case *JwtRequirement_ProviderAndAudiences:
-
 		drInfos, err := m.GetProviderAndAudiences().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetProviderAndAudiences().GetDRefInfo() FAILED")
@@ -451,15 +425,11 @@ func (m *JwtRequirement) GetRequiresTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "provider_and_audiences." + dri.DRField
 		}
 		return drInfos, err
-
 	case *JwtRequirement_AllowMissingOrFailed:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateJwtRequirement struct {
@@ -514,16 +484,13 @@ func (v *ValidateJwtRequirement) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultJwtRequirementValidator = func() *ValidateJwtRequirement {
 	v := &ValidateJwtRequirement{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["requires_type.provider"] = ProviderValidator().Validate
 	v.FldValidators["requires_type.provider_and_audiences"] = ProviderWithAudiencesValidator().Validate
 
@@ -577,7 +544,6 @@ func (m *Provider) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProviderDRefInfo()
-
 }
 
 func (m *Provider) GetProviderDRefInfo() ([]db.DRefInfo, error) {
@@ -602,7 +568,6 @@ func (m *Provider) GetProviderDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetProviderDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -621,7 +586,6 @@ func (m *Provider) GetProviderDBEntries(ctx context.Context, d db.Interface) ([]
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -630,7 +594,6 @@ type ValidateProvider struct {
 }
 
 func (v *ValidateProvider) ProviderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -690,22 +653,18 @@ func (v *ValidateProvider) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProviderValidator = func() *ValidateProvider {
 	v := &ValidateProvider{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -775,7 +734,6 @@ func (m *ProviderWithAudiences) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProviderDRefInfo()
-
 }
 
 func (m *ProviderWithAudiences) GetProviderDRefInfo() ([]db.DRefInfo, error) {
@@ -800,7 +758,6 @@ func (m *ProviderWithAudiences) GetProviderDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetProviderDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -819,7 +776,6 @@ func (m *ProviderWithAudiences) GetProviderDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -828,7 +784,6 @@ type ValidateProviderWithAudiences struct {
 }
 
 func (v *ValidateProviderWithAudiences) ProviderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -888,9 +843,7 @@ func (v *ValidateProviderWithAudiences) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["audiences"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("audiences"))
 		for idx, item := range m.GetAudiences() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -898,24 +851,19 @@ func (v *ValidateProviderWithAudiences) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProviderWithAudiencesValidator = func() *ValidateProviderWithAudiences {
 	v := &ValidateProviderWithAudiences{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -996,7 +944,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -1054,7 +1001,6 @@ func (m *RequirementRule) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRequiresDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1062,7 +1008,6 @@ func (m *RequirementRule) GetRequiresDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRequires() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRequires().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRequires().GetDRefInfo() FAILED")
@@ -1072,7 +1017,6 @@ func (m *RequirementRule) GetRequiresDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "requires." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateRequirementRule struct {
@@ -1080,7 +1024,6 @@ type ValidateRequirementRule struct {
 }
 
 func (v *ValidateRequirementRule) MatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for match")
@@ -1089,19 +1032,15 @@ func (v *ValidateRequirementRule) MatchValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.RouteMatchValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRequirementRule) RequiresValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for requires")
@@ -1110,7 +1049,6 @@ func (v *ValidateRequirementRule) RequiresValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1130,32 +1068,24 @@ func (v *ValidateRequirementRule) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["match"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match"))
 		if err := fv(ctx, m.GetMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["requires"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("requires"))
 		if err := fv(ctx, m.GetRequires(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRequirementRuleValidator = func() *ValidateRequirementRule {
 	v := &ValidateRequirementRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

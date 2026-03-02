@@ -20,7 +20,6 @@ resource "volterra_cdn_cache_rule" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -78,29 +77,29 @@ Available operators.
 
 ###### One of the arguments from this list "Contains, DoesNotContain, DoesNotEndWith, DoesNotEqual, DoesNotStartWith, Endswith, Equals, MatchRegex, Startswith" must be set
 
-`Contains` - (Optional) Field must contain (`String`).
+`Contains` - (Optional) The header value must include the specified value as a substring. (`String`).
 
-`DoesNotContain` - (Optional) Field must not contain (`String`).
+`DoesNotContain` - (Optional) The header value must not include the specified value as a substring. (`String`).
 
-`DoesNotEndWith` - (Optional) Field must not end with (`String`).
+`DoesNotEndWith` - (Optional) The header value must not end with the specified value. (`String`).
 
-`DoesNotEqual` - (Optional) Field must not equal (`String`).
+`DoesNotEqual` - (Optional) The header value must not match the specified value. (`String`).
 
-`DoesNotStartWith` - (Optional) Field must not start with (`String`).
+`DoesNotStartWith` - (Optional) The header value must not begin with the specified value. (`String`).
 
-`Endswith` - (Optional) Field must end with (`String`).
+`Endswith` - (Optional) The header value must end with the specified value. (`String`).
 
-`Equals` - (Optional) Field must exactly match (`String`).
+`Equals` - (Optional) The header value must exactly match the specified value. (`String`).
 
-`MatchRegex` - (Optional) Field matches PCRE 1 compliant regular expression (`String`).
+`MatchRegex` - (Optional) The header value must match the specified regular expression pattern. (`String`).
 
-`Startswith` - (Optional) Field must start with (`String`).
+`Startswith` - (Optional) The header value must begin with the specified value. (`String`).
 
 ### Cache Rule Expression Cache Headers
 
 Configure cache rule headers to match the criteria.
 
-`name` - (Required) Name of the header (`String`).
+`name` - (Required) Select the name of the header from the list (`String`).
 
 `operator` - (Optional) Available operators. See [Cache Headers Operator ](#cache-headers-operator) below for details.
 
@@ -108,7 +107,7 @@ Configure cache rule headers to match the criteria.
 
 Note that all specified cookie matcher predicates must evaluate to true..
 
-`name` - (Required) A case-sensitive cookie name. (`String`).
+`name` - (Required) Enter the name of the cookie to match (`String`).
 
 `operator` - (Optional) x-displayName: "Operator". See [Cookie Matcher Operator ](#cookie-matcher-operator) below for details.
 
@@ -122,7 +121,7 @@ URI path of route.
 
 List of (key, value) query parameters.
 
-`key` - (Required) In the above example, assignee_username is the key (`String`).
+`key` - (Required) The name of the query parameter to match (`String`).
 
 `operator` - (Optional) x-displayName: "Operator". See [Query Parameters Operator ](#query-parameters-operator) below for details.
 
@@ -140,23 +139,23 @@ x-displayName: "Operator".
 
 ###### One of the arguments from this list "Contains, DoesNotContain, DoesNotEndWith, DoesNotEqual, DoesNotStartWith, Endswith, Equals, MatchRegex, Startswith" must be set
 
-`Contains` - (Optional) Field must contain (`String`).
+`Contains` - (Optional) The cookie value must include the specified value as a substring. (`String`).
 
-`DoesNotContain` - (Optional) Field must not contain (`String`).
+`DoesNotContain` - (Optional) The cookie value must not include the specified value as a substring. (`String`).
 
-`DoesNotEndWith` - (Optional) Field must not end with (`String`).
+`DoesNotEndWith` - (Optional) The cookie value must not end with the specified value. (`String`).
 
-`DoesNotEqual` - (Optional) Field must not equal (`String`).
+`DoesNotEqual` - (Optional) The cookie value must not match the specified value. (`String`).
 
-`DoesNotStartWith` - (Optional) Field must not start with (`String`).
+`DoesNotStartWith` - (Optional) The cookie value must not begin with the specified value. (`String`).
 
-`Endswith` - (Optional) Field must end with (`String`).
+`Endswith` - (Optional) The cookie value must end with the specified value. (`String`).
 
-`Equals` - (Optional) Field must exactly match (`String`).
+`Equals` - (Optional) The cookie value must exactly match the specified value. (`String`).
 
-`MatchRegex` - (Optional) Field matches PCRE 1 compliant regular expression (`String`).
+`MatchRegex` - (Optional) The cookie value must match the specified regular expression pattern in PCRE format. (`String`).
 
-`Startswith` - (Optional) Field must start with (`String`).
+`Startswith` - (Optional) The cookie value must begin with the specified value. (`String`).
 
 ### Eligible For Cache Scheme Proxy Host Request Uri
 
@@ -184,23 +183,23 @@ A specification of path match.
 
 ###### One of the arguments from this list "Contains, DoesNotContain, DoesNotEndWith, DoesNotEqual, DoesNotStartWith, Endswith, Equals, MatchRegex, Startswith" must be set
 
-`Contains` - (Optional) Field must contain (`String`).
+`Contains` - (Optional) The path must include the specified value as a substring, up to the filename. (`String`).
 
-`DoesNotContain` - (Optional) Field must not contain (`String`).
+`DoesNotContain` - (Optional) The path must not include the specified value as a substring, up to the filename. (`String`).
 
-`DoesNotEndWith` - (Optional) Field must not end with (`String`).
+`DoesNotEndWith` - (Optional) The path must not end with the specified value, up to the filename. (`String`).
 
-`DoesNotEqual` - (Optional) Field must not equal (`String`).
+`DoesNotEqual` - (Optional) The path must not match the specified value, up to the filename. (`String`).
 
-`DoesNotStartWith` - (Optional) Field must not start with (`String`).
+`DoesNotStartWith` - (Optional) The path must not begin with the specified value, up to the filename. (`String`).
 
-`Endswith` - (Optional) Field must end with (`String`).
+`Endswith` - (Optional) The path must end with the specified value, up to the filename. (`String`).
 
-`Equals` - (Optional) Field must exactly match (`String`).
+`Equals` - (Optional) The path must exactly match the specified value, up to the filename. (`String`).
 
-`MatchRegex` - (Optional) Field matches PCRE 1 compliant regular expression (`String`).
+`MatchRegex` - (Optional) The path must match the specified regular expression pattern in PCRE format. (`String`).
 
-`Startswith` - (Optional) Field must start with (`String`).
+`Startswith` - (Optional) The path must begin with the specified value, up to the filename. (`String`).
 
 ### Query Parameters Operator
 
@@ -208,23 +207,23 @@ x-displayName: "Operator".
 
 ###### One of the arguments from this list "Contains, DoesNotContain, DoesNotEndWith, DoesNotEqual, DoesNotStartWith, Endswith, Equals, MatchRegex, Startswith" must be set
 
-`Contains` - (Optional) Field must contain (`String`).
+`Contains` - (Optional) The query parameter value must include the specified value as a substring. (`String`).
 
-`DoesNotContain` - (Optional) Field must not contain (`String`).
+`DoesNotContain` - (Optional) The query parameter value must not include the specified value as a substring. (`String`).
 
-`DoesNotEndWith` - (Optional) Field must not end with (`String`).
+`DoesNotEndWith` - (Optional) The query parameter value must not end with the specified value. (`String`).
 
-`DoesNotEqual` - (Optional) Field must not equal (`String`).
+`DoesNotEqual` - (Optional) The query parameter value must not match the specified value. (`String`).
 
-`DoesNotStartWith` - (Optional) Field must not start with (`String`).
+`DoesNotStartWith` - (Optional) The query parameter value must not begin with the specified value. (`String`).
 
-`Endswith` - (Optional) Field must end with (`String`).
+`Endswith` - (Optional) The query parameter value must end with the specified value. (`String`).
 
-`Equals` - (Optional) Field must exactly match (`String`).
+`Equals` - (Optional) The query parameter value must exactly match the specified value. (`String`).
 
-`MatchRegex` - (Optional) Field matches PCRE 1 compliant regular expression (`String`).
+`MatchRegex` - (Optional) The query parameter value must match the specified regular expression pattern in PCRE format. (`String`).
 
-`Startswith` - (Optional) Field must start with (`String`).
+`Startswith` - (Optional) The query parameter value must begin with the specified value. (`String`).
 
 ### Rule Expression List Cache Rule Expression
 
@@ -241,4 +240,4 @@ The Cache Rule Expression Terms that are ANDed.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cdn_cache_rule.
+*   `id` - This is the id of the configured cdn_cache_rule.

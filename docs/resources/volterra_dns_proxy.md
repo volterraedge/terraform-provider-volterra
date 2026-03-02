@@ -68,21 +68,26 @@ resource "volterra_dns_proxy" "example" {
     origin_servers {
       // One of the arguments from this list "k8s_service public_ip public_name" must be set
 
-      public_name {
-        dns_name = "value"
+      public_ip {
+        // One of the arguments from this list "ip ipv6" must be set
 
-        refresh_interval = "20"
+        ip = "8.8.8.8"
       }
 
       // One of the arguments from this list "no_preference site_preferences" can be set
 
-      no_preference = true
+      site_preferences {
+        refs {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
     }
   }
 
   transport_type = ["transport_type"]
 }
-
 ```
 
 Argument Reference
@@ -112,7 +117,7 @@ Argument Reference
 
 `lb_algorithm` - (Optional) The algorithm used for load balance request between origin servers. See [Lb Algorithm ](#lb-algorithm) below for details.
 
-`origin_servers` - (Required) Origin Servers for DNS Proxy . See [Origin Servers ](#origin-servers) below for details.
+`origin_servers` - (Required) Origin Servers for DNS Proxy. See [Origin Servers ](#origin-servers) below for details.
 
 `protocol_inspection` - (Optional) Options for enabling and configuring protocol inspection configuration. See [ref](#ref) below for details.
 
@@ -150,7 +155,7 @@ The algorithm used for load balance request between origin servers.
 
 ### Origin Servers
 
-Origin Servers for DNS Proxy .
+Origin Servers for DNS Proxy.
 
 `health_checks` - (Required) x-required. See [Origin Servers Health Checks ](#origin-servers-health-checks) below for details.
 
@@ -280,7 +285,7 @@ Specify origin server with public IP.
 
 ###### One of the arguments from this list "ip, ipv6" must be set
 
-`ip` - (Optional) Public IPV4 address (`String`).
+`ip`- (Optional) Public IPV4 address (`String`).
 
 `ipv6` - (Optional) Public IPV6 address (`String`).
 
@@ -539,4 +544,4 @@ Use the default VIP, system allocated or configured in the virtual network.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured dns_proxy.
+*   `id` - This is the id of the configured dns_proxy.

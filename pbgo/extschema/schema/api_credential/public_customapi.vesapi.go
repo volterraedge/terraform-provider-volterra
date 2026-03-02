@@ -42,7 +42,22 @@ func (c *CustomAPIGrpcClient) doRPCActivate(ctx context.Context, yamlReq string,
 	rsp, err := c.grpcClient.Activate(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCActivateKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ActivateKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCActivateKubeConfigServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ActivateKubeConfigServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCActivateServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +66,14 @@ func (c *CustomAPIGrpcClient) doRPCActivateServiceCredentials(ctx context.Contex
 	rsp, err := c.grpcClient.ActivateServiceCredentials(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCActivateSiteGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ActivateSiteGlobalKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCBulkRevoke(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &BulkRevokeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +82,6 @@ func (c *CustomAPIGrpcClient) doRPCBulkRevoke(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.BulkRevoke(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCBulkRevokeServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &BulkRevokeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +90,6 @@ func (c *CustomAPIGrpcClient) doRPCBulkRevokeServiceCredentials(ctx context.Cont
 	rsp, err := c.grpcClient.BulkRevokeServiceCredentials(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CreateRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +98,22 @@ func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Create(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCCreateKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateKubeConfigRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.CreateKubeConfigRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.CreateKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCCreateKubeConfigServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateKubeConfigServiceCredentialsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.CreateKubeConfigServiceCredentialsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.CreateKubeConfigServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCCreateServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CreateServiceCredentialsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +122,14 @@ func (c *CustomAPIGrpcClient) doRPCCreateServiceCredentials(ctx context.Context,
 	rsp, err := c.grpcClient.CreateServiceCredentials(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCCreateSiteGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateSiteGlobalKubeConfigRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.CreateSiteGlobalKubeConfigRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.CreateSiteGlobalKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +138,22 @@ func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts
 	rsp, err := c.grpcClient.Get(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCGetKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCGetKubeConfigServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetKubeConfigServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCGetScimToken(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ScimTokenRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -105,7 +162,6 @@ func (c *CustomAPIGrpcClient) doRPCGetScimToken(ctx context.Context, yamlReq str
 	rsp, err := c.grpcClient.GetScimToken(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -114,7 +170,14 @@ func (c *CustomAPIGrpcClient) doRPCGetServiceCredentials(ctx context.Context, ya
 	rsp, err := c.grpcClient.GetServiceCredentials(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCGetSiteGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetSiteGlobalKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -123,7 +186,22 @@ func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opt
 	rsp, err := c.grpcClient.List(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCListKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCListKubeConfigServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListKubeConfigServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCListServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -132,7 +210,14 @@ func (c *CustomAPIGrpcClient) doRPCListServiceCredentials(ctx context.Context, y
 	rsp, err := c.grpcClient.ListServiceCredentials(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCListSiteGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListSiteGlobalKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCRecreateScimToken(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RecreateScimTokenRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -141,7 +226,6 @@ func (c *CustomAPIGrpcClient) doRPCRecreateScimToken(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.RecreateScimToken(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRenew(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RenewRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -150,7 +234,6 @@ func (c *CustomAPIGrpcClient) doRPCRenew(ctx context.Context, yamlReq string, op
 	rsp, err := c.grpcClient.Renew(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRenewServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RenewRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -159,7 +242,6 @@ func (c *CustomAPIGrpcClient) doRPCRenewServiceCredentials(ctx context.Context, 
 	rsp, err := c.grpcClient.RenewServiceCredentials(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCReplaceServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ReplaceServiceCredentialsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -168,7 +250,6 @@ func (c *CustomAPIGrpcClient) doRPCReplaceServiceCredentials(ctx context.Context
 	rsp, err := c.grpcClient.ReplaceServiceCredentials(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRevoke(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -177,7 +258,22 @@ func (c *CustomAPIGrpcClient) doRPCRevoke(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Revoke(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *CustomAPIGrpcClient) doRPCRevokeKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.RevokeKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCRevokeKubeConfigServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.RevokeKubeConfigServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCRevokeScimToken(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ScimTokenRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -186,13 +282,20 @@ func (c *CustomAPIGrpcClient) doRPCRevokeScimToken(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.RevokeScimToken(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRevokeServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.RevokeServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCRevokeSiteGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.RevokeSiteGlobalKubeConfig(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -227,43 +330,39 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Activate"] = ccl.doRPCActivate
-
+	rpcFns["ActivateKubeConfig"] = ccl.doRPCActivateKubeConfig
+	rpcFns["ActivateKubeConfigServiceCredentials"] = ccl.doRPCActivateKubeConfigServiceCredentials
 	rpcFns["ActivateServiceCredentials"] = ccl.doRPCActivateServiceCredentials
-
+	rpcFns["ActivateSiteGlobalKubeConfig"] = ccl.doRPCActivateSiteGlobalKubeConfig
 	rpcFns["BulkRevoke"] = ccl.doRPCBulkRevoke
-
 	rpcFns["BulkRevokeServiceCredentials"] = ccl.doRPCBulkRevokeServiceCredentials
-
 	rpcFns["Create"] = ccl.doRPCCreate
-
+	rpcFns["CreateKubeConfig"] = ccl.doRPCCreateKubeConfig
+	rpcFns["CreateKubeConfigServiceCredentials"] = ccl.doRPCCreateKubeConfigServiceCredentials
 	rpcFns["CreateServiceCredentials"] = ccl.doRPCCreateServiceCredentials
-
+	rpcFns["CreateSiteGlobalKubeConfig"] = ccl.doRPCCreateSiteGlobalKubeConfig
 	rpcFns["Get"] = ccl.doRPCGet
-
+	rpcFns["GetKubeConfig"] = ccl.doRPCGetKubeConfig
+	rpcFns["GetKubeConfigServiceCredentials"] = ccl.doRPCGetKubeConfigServiceCredentials
 	rpcFns["GetScimToken"] = ccl.doRPCGetScimToken
-
 	rpcFns["GetServiceCredentials"] = ccl.doRPCGetServiceCredentials
-
+	rpcFns["GetSiteGlobalKubeConfig"] = ccl.doRPCGetSiteGlobalKubeConfig
 	rpcFns["List"] = ccl.doRPCList
-
+	rpcFns["ListKubeConfig"] = ccl.doRPCListKubeConfig
+	rpcFns["ListKubeConfigServiceCredentials"] = ccl.doRPCListKubeConfigServiceCredentials
 	rpcFns["ListServiceCredentials"] = ccl.doRPCListServiceCredentials
-
+	rpcFns["ListSiteGlobalKubeConfig"] = ccl.doRPCListSiteGlobalKubeConfig
 	rpcFns["RecreateScimToken"] = ccl.doRPCRecreateScimToken
-
 	rpcFns["Renew"] = ccl.doRPCRenew
-
 	rpcFns["RenewServiceCredentials"] = ccl.doRPCRenewServiceCredentials
-
 	rpcFns["ReplaceServiceCredentials"] = ccl.doRPCReplaceServiceCredentials
-
 	rpcFns["Revoke"] = ccl.doRPCRevoke
-
+	rpcFns["RevokeKubeConfig"] = ccl.doRPCRevokeKubeConfig
+	rpcFns["RevokeKubeConfigServiceCredentials"] = ccl.doRPCRevokeKubeConfigServiceCredentials
 	rpcFns["RevokeScimToken"] = ccl.doRPCRevokeScimToken
-
 	rpcFns["RevokeServiceCredentials"] = ccl.doRPCRevokeServiceCredentials
-
+	rpcFns["RevokeSiteGlobalKubeConfig"] = ccl.doRPCRevokeSiteGlobalKubeConfig
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -350,7 +449,6 @@ func (c *CustomAPIRestClient) doRPCActivate(ctx context.Context, callOpts *serve
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -358,7 +456,170 @@ func (c *CustomAPIRestClient) doRPCActivate(ctx context.Context, callOpts *serve
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCActivateKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &StatusResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCActivateKubeConfigServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &StatusResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCActivateServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -434,7 +695,6 @@ func (c *CustomAPIRestClient) doRPCActivateServiceCredentials(ctx context.Contex
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -442,7 +702,88 @@ func (c *CustomAPIRestClient) doRPCActivateServiceCredentials(ctx context.Contex
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCActivateSiteGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &StatusResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCBulkRevoke(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -517,7 +858,6 @@ func (c *CustomAPIRestClient) doRPCBulkRevoke(ctx context.Context, callOpts *ser
 	pbRsp := &BulkRevokeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.BulkRevokeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -525,7 +865,6 @@ func (c *CustomAPIRestClient) doRPCBulkRevoke(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCBulkRevokeServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -600,7 +939,6 @@ func (c *CustomAPIRestClient) doRPCBulkRevokeServiceCredentials(ctx context.Cont
 	pbRsp := &BulkRevokeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.BulkRevokeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -608,7 +946,6 @@ func (c *CustomAPIRestClient) doRPCBulkRevokeServiceCredentials(ctx context.Cont
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -686,7 +1023,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -694,7 +1030,181 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCCreateKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &CreateKubeConfigRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.CreateKubeConfigRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("vk8s_cluster_name", fmt.Sprintf("%v", req.Vk8SClusterName))
+		q.Add("vk8s_namespace", fmt.Sprintf("%v", req.Vk8SNamespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CreateResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCCreateKubeConfigServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &CreateKubeConfigServiceCredentialsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.CreateKubeConfigServiceCredentialsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		for _, item := range req.NamespaceRoles {
+			q.Add("namespace_roles", fmt.Sprintf("%v", item))
+		}
+		for _, item := range req.UserGroupNames {
+			q.Add("user_group_names", fmt.Sprintf("%v", item))
+		}
+		q.Add("vk8s_kubeconfig", fmt.Sprintf("%v", req.Vk8SKubeconfig))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CreateResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -782,7 +1292,6 @@ func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context,
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -790,7 +1299,96 @@ func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context,
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCCreateSiteGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &CreateSiteGlobalKubeConfigRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.CreateSiteGlobalKubeConfigRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		for _, item := range req.NamespaceRoles {
+			q.Add("namespace_roles", fmt.Sprintf("%v", item))
+		}
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+		for _, item := range req.UserGroupNames {
+			q.Add("user_group_names", fmt.Sprintf("%v", item))
+		}
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CreateResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -866,7 +1464,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -874,7 +1471,170 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCGetKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCGetKubeConfigServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetServiceCredentialsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetServiceCredentialsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCGetScimToken(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -949,7 +1709,6 @@ func (c *CustomAPIRestClient) doRPCGetScimToken(ctx context.Context, callOpts *s
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -957,7 +1716,6 @@ func (c *CustomAPIRestClient) doRPCGetScimToken(ctx context.Context, callOpts *s
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1033,7 +1791,6 @@ func (c *CustomAPIRestClient) doRPCGetServiceCredentials(ctx context.Context, ca
 	pbRsp := &GetServiceCredentialsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetServiceCredentialsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1041,7 +1798,88 @@ func (c *CustomAPIRestClient) doRPCGetServiceCredentials(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCGetSiteGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetServiceCredentialsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetServiceCredentialsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1116,7 +1954,6 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1124,7 +1961,168 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCListKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &ListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCListKubeConfigServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListServiceCredentialsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListServiceCredentialsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCListServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1199,7 +2197,6 @@ func (c *CustomAPIRestClient) doRPCListServiceCredentials(ctx context.Context, c
 	pbRsp := &ListServiceCredentialsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListServiceCredentialsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1207,7 +2204,87 @@ func (c *CustomAPIRestClient) doRPCListServiceCredentials(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCListSiteGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &ListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListServiceCredentialsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListServiceCredentialsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCRecreateScimToken(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1283,7 +2360,6 @@ func (c *CustomAPIRestClient) doRPCRecreateScimToken(ctx context.Context, callOp
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1291,7 +2367,6 @@ func (c *CustomAPIRestClient) doRPCRecreateScimToken(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRenew(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1368,7 +2443,6 @@ func (c *CustomAPIRestClient) doRPCRenew(ctx context.Context, callOpts *server.C
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1376,7 +2450,6 @@ func (c *CustomAPIRestClient) doRPCRenew(ctx context.Context, callOpts *server.C
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRenewServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1453,7 +2526,6 @@ func (c *CustomAPIRestClient) doRPCRenewServiceCredentials(ctx context.Context, 
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1461,7 +2533,6 @@ func (c *CustomAPIRestClient) doRPCRenewServiceCredentials(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCReplaceServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1541,7 +2612,6 @@ func (c *CustomAPIRestClient) doRPCReplaceServiceCredentials(ctx context.Context
 	pbRsp := &ReplaceServiceCredentialsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ReplaceServiceCredentialsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1549,7 +2619,6 @@ func (c *CustomAPIRestClient) doRPCReplaceServiceCredentials(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRevoke(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1625,7 +2694,6 @@ func (c *CustomAPIRestClient) doRPCRevoke(ctx context.Context, callOpts *server.
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1633,7 +2701,170 @@ func (c *CustomAPIRestClient) doRPCRevoke(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCRevokeKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &StatusResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCRevokeKubeConfigServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &StatusResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCRevokeScimToken(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1708,7 +2939,6 @@ func (c *CustomAPIRestClient) doRPCRevokeScimToken(ctx context.Context, callOpts
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1716,7 +2946,6 @@ func (c *CustomAPIRestClient) doRPCRevokeScimToken(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRevokeServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1792,7 +3021,88 @@ func (c *CustomAPIRestClient) doRPCRevokeServiceCredentials(ctx context.Context,
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCRevokeSiteGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &StatusResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1826,43 +3136,39 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Activate"] = ccl.doRPCActivate
-
+	rpcFns["ActivateKubeConfig"] = ccl.doRPCActivateKubeConfig
+	rpcFns["ActivateKubeConfigServiceCredentials"] = ccl.doRPCActivateKubeConfigServiceCredentials
 	rpcFns["ActivateServiceCredentials"] = ccl.doRPCActivateServiceCredentials
-
+	rpcFns["ActivateSiteGlobalKubeConfig"] = ccl.doRPCActivateSiteGlobalKubeConfig
 	rpcFns["BulkRevoke"] = ccl.doRPCBulkRevoke
-
 	rpcFns["BulkRevokeServiceCredentials"] = ccl.doRPCBulkRevokeServiceCredentials
-
 	rpcFns["Create"] = ccl.doRPCCreate
-
+	rpcFns["CreateKubeConfig"] = ccl.doRPCCreateKubeConfig
+	rpcFns["CreateKubeConfigServiceCredentials"] = ccl.doRPCCreateKubeConfigServiceCredentials
 	rpcFns["CreateServiceCredentials"] = ccl.doRPCCreateServiceCredentials
-
+	rpcFns["CreateSiteGlobalKubeConfig"] = ccl.doRPCCreateSiteGlobalKubeConfig
 	rpcFns["Get"] = ccl.doRPCGet
-
+	rpcFns["GetKubeConfig"] = ccl.doRPCGetKubeConfig
+	rpcFns["GetKubeConfigServiceCredentials"] = ccl.doRPCGetKubeConfigServiceCredentials
 	rpcFns["GetScimToken"] = ccl.doRPCGetScimToken
-
 	rpcFns["GetServiceCredentials"] = ccl.doRPCGetServiceCredentials
-
+	rpcFns["GetSiteGlobalKubeConfig"] = ccl.doRPCGetSiteGlobalKubeConfig
 	rpcFns["List"] = ccl.doRPCList
-
+	rpcFns["ListKubeConfig"] = ccl.doRPCListKubeConfig
+	rpcFns["ListKubeConfigServiceCredentials"] = ccl.doRPCListKubeConfigServiceCredentials
 	rpcFns["ListServiceCredentials"] = ccl.doRPCListServiceCredentials
-
+	rpcFns["ListSiteGlobalKubeConfig"] = ccl.doRPCListSiteGlobalKubeConfig
 	rpcFns["RecreateScimToken"] = ccl.doRPCRecreateScimToken
-
 	rpcFns["Renew"] = ccl.doRPCRenew
-
 	rpcFns["RenewServiceCredentials"] = ccl.doRPCRenewServiceCredentials
-
 	rpcFns["ReplaceServiceCredentials"] = ccl.doRPCReplaceServiceCredentials
-
 	rpcFns["Revoke"] = ccl.doRPCRevoke
-
+	rpcFns["RevokeKubeConfig"] = ccl.doRPCRevokeKubeConfig
+	rpcFns["RevokeKubeConfigServiceCredentials"] = ccl.doRPCRevokeKubeConfigServiceCredentials
 	rpcFns["RevokeScimToken"] = ccl.doRPCRevokeScimToken
-
 	rpcFns["RevokeServiceCredentials"] = ccl.doRPCRevokeServiceCredentials
-
+	rpcFns["RevokeSiteGlobalKubeConfig"] = ccl.doRPCRevokeSiteGlobalKubeConfig
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1877,9 +3183,21 @@ func (c *customAPIInprocClient) Activate(ctx context.Context, in *GetRequest, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Activate")
 	return c.CustomAPIServer.Activate(ctx, in)
 }
+func (c *customAPIInprocClient) ActivateKubeConfig(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ActivateKubeConfig")
+	return c.CustomAPIServer.ActivateKubeConfig(ctx, in)
+}
+func (c *customAPIInprocClient) ActivateKubeConfigServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ActivateKubeConfigServiceCredentials")
+	return c.CustomAPIServer.ActivateKubeConfigServiceCredentials(ctx, in)
+}
 func (c *customAPIInprocClient) ActivateServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials")
 	return c.CustomAPIServer.ActivateServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) ActivateSiteGlobalKubeConfig(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ActivateSiteGlobalKubeConfig")
+	return c.CustomAPIServer.ActivateSiteGlobalKubeConfig(ctx, in)
 }
 func (c *customAPIInprocClient) BulkRevoke(ctx context.Context, in *BulkRevokeRequest, opts ...grpc.CallOption) (*BulkRevokeResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.BulkRevoke")
@@ -1893,13 +3211,33 @@ func (c *customAPIInprocClient) Create(ctx context.Context, in *CreateRequest, o
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Create")
 	return c.CustomAPIServer.Create(ctx, in)
 }
+func (c *customAPIInprocClient) CreateKubeConfig(ctx context.Context, in *CreateKubeConfigRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.CreateKubeConfig")
+	return c.CustomAPIServer.CreateKubeConfig(ctx, in)
+}
+func (c *customAPIInprocClient) CreateKubeConfigServiceCredentials(ctx context.Context, in *CreateKubeConfigServiceCredentialsRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.CreateKubeConfigServiceCredentials")
+	return c.CustomAPIServer.CreateKubeConfigServiceCredentials(ctx, in)
+}
 func (c *customAPIInprocClient) CreateServiceCredentials(ctx context.Context, in *CreateServiceCredentialsRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials")
 	return c.CustomAPIServer.CreateServiceCredentials(ctx, in)
 }
+func (c *customAPIInprocClient) CreateSiteGlobalKubeConfig(ctx context.Context, in *CreateSiteGlobalKubeConfigRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.CreateSiteGlobalKubeConfig")
+	return c.CustomAPIServer.CreateSiteGlobalKubeConfig(ctx, in)
+}
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Get")
 	return c.CustomAPIServer.Get(ctx, in)
+}
+func (c *customAPIInprocClient) GetKubeConfig(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.GetKubeConfig")
+	return c.CustomAPIServer.GetKubeConfig(ctx, in)
+}
+func (c *customAPIInprocClient) GetKubeConfigServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetServiceCredentialsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.GetKubeConfigServiceCredentials")
+	return c.CustomAPIServer.GetKubeConfigServiceCredentials(ctx, in)
 }
 func (c *customAPIInprocClient) GetScimToken(ctx context.Context, in *ScimTokenRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.GetScimToken")
@@ -1909,13 +3247,29 @@ func (c *customAPIInprocClient) GetServiceCredentials(ctx context.Context, in *G
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.GetServiceCredentials")
 	return c.CustomAPIServer.GetServiceCredentials(ctx, in)
 }
+func (c *customAPIInprocClient) GetSiteGlobalKubeConfig(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetServiceCredentialsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.GetSiteGlobalKubeConfig")
+	return c.CustomAPIServer.GetSiteGlobalKubeConfig(ctx, in)
+}
 func (c *customAPIInprocClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.List")
 	return c.CustomAPIServer.List(ctx, in)
 }
+func (c *customAPIInprocClient) ListKubeConfig(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ListKubeConfig")
+	return c.CustomAPIServer.ListKubeConfig(ctx, in)
+}
+func (c *customAPIInprocClient) ListKubeConfigServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListServiceCredentialsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ListKubeConfigServiceCredentials")
+	return c.CustomAPIServer.ListKubeConfigServiceCredentials(ctx, in)
+}
 func (c *customAPIInprocClient) ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListServiceCredentialsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials")
 	return c.CustomAPIServer.ListServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) ListSiteGlobalKubeConfig(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListServiceCredentialsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ListSiteGlobalKubeConfig")
+	return c.CustomAPIServer.ListSiteGlobalKubeConfig(ctx, in)
 }
 func (c *customAPIInprocClient) RecreateScimToken(ctx context.Context, in *RecreateScimTokenRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RecreateScimToken")
@@ -1937,6 +3291,14 @@ func (c *customAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Revoke")
 	return c.CustomAPIServer.Revoke(ctx, in)
 }
+func (c *customAPIInprocClient) RevokeKubeConfig(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeKubeConfig")
+	return c.CustomAPIServer.RevokeKubeConfig(ctx, in)
+}
+func (c *customAPIInprocClient) RevokeKubeConfigServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeKubeConfigServiceCredentials")
+	return c.CustomAPIServer.RevokeKubeConfigServiceCredentials(ctx, in)
+}
 func (c *customAPIInprocClient) RevokeScimToken(ctx context.Context, in *ScimTokenRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeScimToken")
 	return c.CustomAPIServer.RevokeScimToken(ctx, in)
@@ -1944,6 +3306,10 @@ func (c *customAPIInprocClient) RevokeScimToken(ctx context.Context, in *ScimTok
 func (c *customAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials")
 	return c.CustomAPIServer.RevokeServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) RevokeSiteGlobalKubeConfig(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeSiteGlobalKubeConfig")
+	return c.CustomAPIServer.RevokeSiteGlobalKubeConfig(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -2011,7 +3377,102 @@ func (s *customAPISrv) Activate(ctx context.Context, in *GetRequest) (*StatusRes
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
+	return rsp, nil
+}
+func (s *customAPISrv) ActivateKubeConfig(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *StatusResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ActivateKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ActivateKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ActivateKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ActivateKubeConfigServiceCredentials(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *StatusResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ActivateKubeConfigServiceCredentials' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ActivateKubeConfigServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ActivateKubeConfigServiceCredentials(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2060,7 +3521,54 @@ func (s *customAPISrv) ActivateServiceCredentials(ctx context.Context, in *GetRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
+	return rsp, nil
+}
+func (s *customAPISrv) ActivateSiteGlobalKubeConfig(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *StatusResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ActivateSiteGlobalKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ActivateSiteGlobalKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ActivateSiteGlobalKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2109,7 +3617,6 @@ func (s *customAPISrv) BulkRevoke(ctx context.Context, in *BulkRevokeRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.BulkRevokeResponse", rsp)...)
 
 	return rsp, nil
@@ -2158,7 +3665,6 @@ func (s *customAPISrv) BulkRevokeServiceCredentials(ctx context.Context, in *Bul
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.BulkRevokeResponse", rsp)...)
 
 	return rsp, nil
@@ -2207,7 +3713,102 @@ func (s *customAPISrv) Create(ctx context.Context, in *CreateRequest) (*CreateRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
 
+	return rsp, nil
+}
+func (s *customAPISrv) CreateKubeConfig(ctx context.Context, in *CreateKubeConfigRequest) (*CreateResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *CreateResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateKubeConfigRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.CreateKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.CreateKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CreateKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) CreateKubeConfigServiceCredentials(ctx context.Context, in *CreateKubeConfigServiceCredentialsRequest) (*CreateResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *CreateResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateKubeConfigServiceCredentialsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.CreateKubeConfigServiceCredentials' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.CreateKubeConfigServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CreateKubeConfigServiceCredentials(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
 
 	return rsp, nil
@@ -2256,7 +3857,54 @@ func (s *customAPISrv) CreateServiceCredentials(ctx context.Context, in *CreateS
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
 
+	return rsp, nil
+}
+func (s *customAPISrv) CreateSiteGlobalKubeConfig(ctx context.Context, in *CreateSiteGlobalKubeConfigRequest) (*CreateResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *CreateResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateSiteGlobalKubeConfigRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.CreateSiteGlobalKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.CreateSiteGlobalKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CreateSiteGlobalKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
 
 	return rsp, nil
@@ -2305,8 +3953,103 @@ func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, e
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetKubeConfig(ctx context.Context, in *GetRequest) (*GetResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.GetKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetKubeConfigServiceCredentials(ctx context.Context, in *GetRequest) (*GetServiceCredentialsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetServiceCredentialsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetKubeConfigServiceCredentials' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.GetKubeConfigServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetKubeConfigServiceCredentials(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetServiceCredentialsResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -2354,7 +4097,6 @@ func (s *customAPISrv) GetScimToken(ctx context.Context, in *ScimTokenRequest) (
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetResponse", rsp)...)
 
 	return rsp, nil
@@ -2403,7 +4145,54 @@ func (s *customAPISrv) GetServiceCredentials(ctx context.Context, in *GetRequest
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetServiceCredentialsResponse", rsp)...)
 
+	return rsp, nil
+}
+func (s *customAPISrv) GetSiteGlobalKubeConfig(ctx context.Context, in *GetRequest) (*GetServiceCredentialsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetServiceCredentialsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetSiteGlobalKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.GetSiteGlobalKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetSiteGlobalKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetServiceCredentialsResponse", rsp)...)
 
 	return rsp, nil
@@ -2452,8 +4241,103 @@ func (s *customAPISrv) List(ctx context.Context, in *ListRequest) (*ListResponse
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ListKubeConfig(ctx context.Context, in *ListRequest) (*ListResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ListKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ListKubeConfigServiceCredentials(ctx context.Context, in *ListRequest) (*ListServiceCredentialsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListServiceCredentialsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListKubeConfigServiceCredentials' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ListKubeConfigServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListKubeConfigServiceCredentials(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListServiceCredentialsResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -2501,7 +4385,54 @@ func (s *customAPISrv) ListServiceCredentials(ctx context.Context, in *ListReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListServiceCredentialsResponse", rsp)...)
 
+	return rsp, nil
+}
+func (s *customAPISrv) ListSiteGlobalKubeConfig(ctx context.Context, in *ListRequest) (*ListServiceCredentialsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListServiceCredentialsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListSiteGlobalKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ListSiteGlobalKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListSiteGlobalKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListServiceCredentialsResponse", rsp)...)
 
 	return rsp, nil
@@ -2550,7 +4481,6 @@ func (s *customAPISrv) RecreateScimToken(ctx context.Context, in *RecreateScimTo
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.CreateResponse", rsp)...)
 
 	return rsp, nil
@@ -2599,7 +4529,6 @@ func (s *customAPISrv) Renew(ctx context.Context, in *RenewRequest) (*StatusResp
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2648,7 +4577,6 @@ func (s *customAPISrv) RenewServiceCredentials(ctx context.Context, in *RenewReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2697,7 +4625,6 @@ func (s *customAPISrv) ReplaceServiceCredentials(ctx context.Context, in *Replac
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ReplaceServiceCredentialsResponse", rsp)...)
 
 	return rsp, nil
@@ -2746,7 +4673,102 @@ func (s *customAPISrv) Revoke(ctx context.Context, in *GetRequest) (*StatusRespo
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
+	return rsp, nil
+}
+func (s *customAPISrv) RevokeKubeConfig(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *StatusResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.RevokeKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RevokeKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RevokeKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) RevokeKubeConfigServiceCredentials(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *StatusResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.RevokeKubeConfigServiceCredentials' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RevokeKubeConfigServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RevokeKubeConfigServiceCredentials(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2795,7 +4817,6 @@ func (s *customAPISrv) RevokeScimToken(ctx context.Context, in *ScimTokenRequest
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2844,7 +4865,54 @@ func (s *customAPISrv) RevokeServiceCredentials(ctx context.Context, in *GetRequ
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
+	return rsp, nil
+}
+func (s *customAPISrv) RevokeSiteGlobalKubeConfig(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *StatusResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.RevokeSiteGlobalKubeConfig' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.RevokeSiteGlobalKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RevokeSiteGlobalKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
 
 	return rsp, nil
@@ -2858,7 +4926,7 @@ var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "API/Service credential custom API",
-        "description": "F5XC supports 2 variation of credentials - \n1. My Credentials or API credentials\n2. Service Credentials\n\nCredentials created via My credential or API credential inherits same user that of the creator\nand it gets same RBAC applied to the user. So when this credential is used in APIs, it will \nhave same response/audit as creator of the credential is. Generate this credential if you want to\nautomate or access APIs via CLI as yourself.\n\nservice credential on the other hand will have a separte service user associated and RBAC can be\nmanaged differently per namespace than that of the original user creating it.\n\nFor each these credentials, user can request credential in 3 different formats as required by\ntheir usecase:\n\n* API certificate - a password protected P12 certificate bundle\n* virtual K8s kubeconfig - a kubeconfig to access a cluster with embedded user access with client certificate.\n* API token - an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e",
+        "description": "F5XC supports 2 variation of credentials -\n1. My Credentials or API credentials\n2. Service Credentials\n\nCredentials created via My credential or API credential inherits same user that of the creator\nand it gets same RBAC applied to the user. So when this credential is used in APIs, it will\nhave same response/audit as creator of the credential is. Generate this credential if you want to\nautomate or access APIs via CLI as yourself.\n\nservice credential on the other hand will have a separte service user associated and RBAC can be\nmanaged differently per namespace than that of the original user creating it.\n\nFor each these credentials, user can request credential in 3 different formats as required by\ntheir usecase:\n\n* API certificate - a password protected P12 certificate bundle\n* virtual K8s kubeconfig - a kubeconfig to access a cluster with embedded user access with client certificate.\n* API token - an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e",
         "version": "version not set"
     },
     "schemes": [
@@ -2873,6 +4941,91 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/activate/site_global_kube_configs": {
+            "post": {
+                "summary": "Activate Site Global KubeConfig",
+                "description": "This method is used for activating or deactivating a Site Global KubeConfig service credential.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.ActivateSiteGlobalKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialStatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-activatesiteglobalkubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ActivateSiteGlobalKubeConfig"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/bulk_revoke/api_credentials": {
             "post": {
                 "summary": "Bulk Revoke API credentials",
@@ -3041,6 +5194,349 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/system/revoke/site_global_kube_configs": {
+            "post": {
+                "summary": "Revoke Site Global KubeConfig",
+                "description": "This method revokes or deletes a Site Global KubeConfig service credential.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.RevokeSiteGlobalKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialStatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-revokesiteglobalkubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RevokeSiteGlobalKubeConfig"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site_global_kube_configs": {
+            "get": {
+                "summary": "List Site Global KubeConfig",
+                "description": "This request lists all Site Global KubeConfig service credentials created by the user in the system namespace.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.ListSiteGlobalKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialListServiceCredentialsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"value\"\nValue of namespace is always \"system\".",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-listsiteglobalkubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ListSiteGlobalKubeConfig"
+            },
+            "post": {
+                "summary": "Create Site Global KubeConfig",
+                "description": "This request is used to create a new Site Global KubeConfig.\nThe user can specify various attributes such as the name, expiry, namespace, namespace role, user group, and site of the service user.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.CreateSiteGlobalKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialCreateResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialCreateSiteGlobalKubeConfigRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-createsiteglobalkubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.CreateSiteGlobalKubeConfig"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site_global_kube_configs/{name}": {
+            "get": {
+                "summary": "Get Site Global KubeConfig",
+                "description": "This method retrieves a Site Global KubeConfig based on its name.\nIt returns the service credential object by querying the tenant's system namespace for the specified service credential name.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.GetSiteGlobalKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetServiceCredentialsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "Credential name\n\nx-required\nx-example: \"value\"\nName of API credential.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-getsiteglobalkubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.GetSiteGlobalKubeConfig"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/activate/api_credentials": {
             "post": {
                 "summary": "Activate API credential",
@@ -3128,6 +5624,99 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-activate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Activate"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/activate/kube_configs": {
+            "post": {
+                "summary": "Activate KubeConfig",
+                "description": "For KubeConfig credential activation/deactivation.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.ActivateKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialStatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-activatekubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ActivateKubeConfig"
             },
             "x-displayname": "API Credential",
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
@@ -3225,6 +5814,99 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/activate/service_kube_configs": {
+            "post": {
+                "summary": "Activate KubeConfig Service Credentials",
+                "description": "Activates or deactivates a KubeConfig service credential",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.ActivateKubeConfigServiceCredentials",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialStatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-activatekubeconfigservicecredentials"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ActivateKubeConfigServiceCredentials"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/api_credentials": {
             "get": {
                 "summary": "List API Credentials",
@@ -3307,7 +5989,7 @@ var CustomAPISwaggerJSON string = `{
             },
             "post": {
                 "summary": "Create API Credentials",
-                "description": "user can request 3 types of credential for themselves. \nAPI_TOKEN, API_CERTIFICATE and KUBE_CONFIG.\n\nan API_TOKEN is an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e\nin the create request expiry can be set additionally. F5XC also supports renew and revoke of API_TOKENs.\nan API_CERTIFICATE is a password protected P12 certificate bundle document and can be used as client certificate.\nwhen sending create request, user can request with an expiry and password. F5XC Identity Authority (IA)\nmints new certificate with required credentials and is shared in the response as API Certificate. \na virtual K8s kubeconfig can be generate with type KUBE_CONFIG. Create request can specify cluster, namespace and expiry\nwith embedded user access with client certificate.\n\nrequest can specify name, expiry and type of credential required. since this credential inherits the creator's RBAC\nservice will determine the user from request context.",
+                "description": "user can request 3 types of credential for themselves.\nAPI_TOKEN, API_CERTIFICATE and KUBE_CONFIG.\n\nan API_TOKEN is an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e\nin the create request expiry can be set additionally. F5XC also supports renew and revoke of API_TOKENs.\nan API_CERTIFICATE is a password protected P12 certificate bundle document and can be used as client certificate.\nwhen sending create request, user can request with an expiry and password. F5XC Identity Authority (IA)\nmints new certificate with required credentials and is shared in the response as API Certificate.\na virtual K8s kubeconfig can be generate with type KUBE_CONFIG. Create request can specify cluster, namespace and expiry\nwith embedded user access with client certificate.\n\nrequest can specify name, expiry and type of credential required. since this credential inherits the creator's RBAC\nservice will determine the user from request context.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Create",
                 "responses": {
                     "200": {
@@ -3483,6 +6165,272 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Get"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/kube_configs": {
+            "get": {
+                "summary": "List KubeConfig",
+                "description": "Returns a list of KubeConfig credential types created by the user.\nThis query searches the tenant's system namespace.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.ListKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-listkubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ListKubeConfig"
+            },
+            "post": {
+                "summary": "Create KubeConfig",
+                "description": "A virtual k8s KubeConfig can be generated. In the request, users can specify the cluster, namespace, and expiry,\nalong with embedded user access using client certificates.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.CreateKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialCreateResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"system\"\nThe value of the namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialCreateKubeConfigRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-createkubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.CreateKubeConfig"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/kube_configs/{name}": {
+            "get": {
+                "summary": "Get KubeConfig",
+                "description": "Retrieves a KubeConfig credential by its name.\nThis query returns the API credential object and searches the tenant's system namespace for a KubeConfig credential with the specified name.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.GetKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Credential name\n\nx-required\nx-example: \"value\"\nName of API credential.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-getkubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.GetKubeConfig"
             },
             "x-displayname": "API Credential",
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
@@ -3764,6 +6712,99 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/revoke/kube_configs": {
+            "post": {
+                "summary": "Revoke KubeConfig",
+                "description": "For KubeConfig credential revoke/deletion.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.RevokeKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialStatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-revokekubeconfig"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RevokeKubeConfig"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/revoke/scim_token": {
             "post": {
                 "summary": "Revoke SCIM API credential",
@@ -3943,6 +6984,99 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-revokeservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/revoke/service_kube_configs": {
+            "post": {
+                "summary": "Revoke KubeConfig Service Credentials",
+                "description": "Revokes or deletes a KubeConfig service credential.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.RevokeKubeConfigServiceCredentials",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialStatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-revokekubeconfigservicecredentials"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RevokeKubeConfigServiceCredentials"
             },
             "x-displayname": "API Credential",
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
@@ -4476,6 +7610,272 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "API Credential",
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/service_kube_configs": {
+            "get": {
+                "summary": "List KubeConfig Service Credentials",
+                "description": "Retrieves a list of KubeConfig service credentials created by the user in the system namespace.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.ListKubeConfigServiceCredentials",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialListServiceCredentialsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-listkubeconfigservicecredentials"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ListKubeConfigServiceCredentials"
+            },
+            "post": {
+                "summary": "Create KubeConfig Service Credentials",
+                "description": "Creates a new KubeConfig service credential record.\nUsers can specify the name, expiry, namespace, namespace roles, user groups, and cluster name.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.CreateKubeConfigServiceCredentials",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialCreateResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialCreateKubeConfigServiceCredentialsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-createkubeconfigservicecredentials"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.CreateKubeConfigServiceCredentials"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/service_kube_configs/{name}": {
+            "get": {
+                "summary": "Get KubeConfig Service Credentials",
+                "description": "Retrieves a KubeConfig service credential by its name.\nReturns the service credential object. The query searches the tenant's system namespace for the specified KubeConfig service credential.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.GetKubeConfigServiceCredentials",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetServiceCredentialsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Credential name\n\nx-required\nx-example: \"value\"\nName of API credential.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-getkubeconfigservicecredentials"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.GetKubeConfigServiceCredentials"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -4577,6 +7977,123 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "api_credentialCreateKubeConfigRequest": {
+            "type": "object",
+            "description": "CreateKubeConfigRequest represents the request format for generating a KubeConfig.",
+            "title": "Create KubeConfig Request",
+            "x-displayname": "Create KubeConfig Request",
+            "x-ves-displayorder": "1,2,3,4",
+            "x-ves-proto-message": "ves.io.schema.api_credential.CreateKubeConfigRequest",
+            "properties": {
+                "expiration_days": {
+                    "type": "integer",
+                    "description": "Qty of days of self credential expiration.\n\nExample: -\"30\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 90\n",
+                    "title": "Expiry in Days",
+                    "format": "int64",
+                    "x-displayname": "Expiry in Days",
+                    "x-ves-example": "30",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "90"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of KubeConfig credential record. It will be saved in metadata.\n\nExample: -\"svc-cred-app1\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "svc-cred-app1"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "The value of the namespace is always \"system\".\n\nExample: -\"system\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system"
+                },
+                "vk8s_cluster_name": {
+                    "type": "string",
+                    "description": "Specifies the name of the virtual k8s cluster.\n\nExample: -\"vk8s-product-app1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "Virtual k8s Cluster Name",
+                    "x-displayname": "vK8s Cluster",
+                    "x-ves-example": "vk8s-product-app1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                },
+                "vk8s_namespace": {
+                    "type": "string",
+                    "description": "Specifies the virtual Kubernetes namespace name.\n\nExample: -\"app-ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "Virtual k8s Namespace",
+                    "x-displayname": "vK8s Namespace",
+                    "x-ves-example": "app-ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                }
+            }
+        },
+        "api_credentialCreateKubeConfigServiceCredentialsRequest": {
+            "type": "object",
+            "description": "Specifies the request format for creating KubeConfig service credentials.",
+            "title": "Create KubeConfig Service Credentials Request",
+            "x-displayname": "Create KubeConfig Service Credentials Request",
+            "x-ves-proto-message": "ves.io.schema.api_credential.CreateKubeConfigServiceCredentialsRequest",
+            "properties": {
+                "expiration_days": {
+                    "type": "integer",
+                    "description": " The number of days before the KubeConfig service credential expires.\n\nExample: - \"30\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 90\n",
+                    "title": "Expiry in Days",
+                    "format": "int64",
+                    "x-displayname": "Expiry in Days",
+                    "x-ves-example": "30",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "90"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of KubeConfig service credential record. It will be saved in metadata.\n\nExample: - \"svc-cred-app1\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "svc-cred-app1"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Value of namespace is always \"system\".\n\nExample: - \"system\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system"
+                },
+                "namespace_roles": {
+                    "type": "array",
+                    "description": " Specifies a list of namespace roles assigned to the KubeConfig service credentials.\n\nExample: - \"[{\"namespace\":\"system\",\"role\":\"ves-io-monitor-role\"}]\"-",
+                    "title": "Roles",
+                    "items": {
+                        "$ref": "#/definitions/schemaNamespaceRoleType"
+                    },
+                    "x-displayname": "List of Roles",
+                    "x-ves-example": "[{\"namespace\":\"system\",\"role\":\"ves-io-monitor-role\"}]"
+                },
+                "user_group_names": {
+                    "type": "array",
+                    "description": " List of user groups assigned to KubeConfig service credential\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "User Groups Names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
+                },
+                "vk8s_kubeconfig": {
+                    "description": " Specifies the parameters for the Service KubeConfig.",
+                    "title": "vk8s_kubeconfig",
+                    "$ref": "#/definitions/api_credentialVk8sKubeconfigType",
+                    "x-displayname": "Service KubeConfig Specification"
+                }
+            }
+        },
         "api_credentialCreateRequest": {
             "type": "object",
             "description": "CreateRequest is the request format for generating api credential.",
@@ -4629,7 +8146,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "data": {
                     "type": "string",
-                    "description": " data is the response format based on the API credential type.\n In case of API_CERTIFICATES, the response is the base64 encoded value of \n certificate in PKCS12 format.\n In case of KUBE_CONFIG, the response is the base64 encoded value of the K8s kubeconfig file\n with contents as requested - cluster,namespace and base64 encoded certificate, key and CA.\n\nExample: - \"value\"-",
+                    "description": " data is the response format based on the API credential type.\n In case of API_CERTIFICATES, the response is the base64 encoded value of\n certificate in PKCS12 format.\n In case of KUBE_CONFIG, the response is the base64 encoded value of the K8s kubeconfig file\n with contents as requested - cluster,namespace and base64 encoded certificate, key and CA.\n\nExample: - \"value\"-",
                     "title": "Credentials",
                     "x-displayname": "Credentials",
                     "x-ves-example": "value"
@@ -4751,6 +8268,72 @@ var CustomAPISwaggerJSON string = `{
                     "title": "vk8s_kubeconfig",
                     "$ref": "#/definitions/api_credentialVk8sKubeconfigType",
                     "x-displayname": "Service Kube Config Specification"
+                }
+            }
+        },
+        "api_credentialCreateSiteGlobalKubeConfigRequest": {
+            "type": "object",
+            "description": "CreateSiteGlobalKubeConfigRequest represents the request structure for creating Site Global Kube Config service credentials.",
+            "title": "Create Site Global KubeConfig Service Credentials Request",
+            "x-displayname": "Create Site Global KubeConfig Service Credentials Request",
+            "x-ves-proto-message": "ves.io.schema.api_credential.CreateSiteGlobalKubeConfigRequest",
+            "properties": {
+                "expiration_days": {
+                    "type": "integer",
+                    "description": " Qty of days of service credential expiration.\n\nExample: - \"30\"-",
+                    "title": "Expiry in days",
+                    "format": "int64",
+                    "x-displayname": "Expiry in days",
+                    "x-ves-example": "30"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of site global kube config service credential record. It will be saved in metadata.\n\nExample: - \"svc-cred-app1\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "svc-cred-app1"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Value of namespace is always \"system\".\n\nExample: - \"system\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system"
+                },
+                "namespace_roles": {
+                    "type": "array",
+                    "description": " A list of roles per namespace that will be assigned to the service credentials.\n\nExample: - \"[\"ves-io-monitor-role\", \"ves-io-uam-admin-role\"]\"-",
+                    "title": "Roles",
+                    "items": {
+                        "$ref": "#/definitions/schemaNamespaceRoleType"
+                    },
+                    "x-displayname": "List of roles",
+                    "x-ves-example": "[\"ves-io-monitor-role\", \"ves-io-uam-admin-role\"]"
+                },
+                "site": {
+                    "type": "string",
+                    "description": " Name of the site for which KubeConfig is being requested.\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "Site",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Site",
+                    "x-ves-example": "ce398",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "user_group_names": {
+                    "type": "array",
+                    "description": " A list of user groups assigned to this service credential.\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "User Groups Names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
                 }
             }
         },
@@ -5821,7 +9404,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },

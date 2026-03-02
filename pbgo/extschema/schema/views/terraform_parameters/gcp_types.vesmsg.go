@@ -78,90 +78,79 @@ func (v *ValidateGCPInstanceType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["encryption"]; exists {
+		vOpts := append(opts, db.WithValidateField("encryption"))
+		if err := fv(ctx, m.GetEncryption(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["image_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("image_id"))
 		if err := fv(ctx, m.GetImageId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_type"))
 		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["kms_key_resource_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("kms_key_resource_id"))
+		if err := fv(ctx, m.GetKmsKeyResourceId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["kms_key_ring_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("kms_key_ring_id"))
+		if err := fv(ctx, m.GetKmsKeyRingId(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["master_node_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("master_node_count"))
 		if err := fv(ctx, m.GetMasterNodeCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_subnet_id"))
 		if err := fv(ctx, m.GetPrivateSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_subnet_id"))
 		if err := fv(ctx, m.GetPublicSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_node_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_node_id"))
 		if err := fv(ctx, m.GetVoltNodeId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_region_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_region_id"))
 		if err := fv(ctx, m.GetVoltRegionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_node_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("worker_node_count"))
 		if err := fv(ctx, m.GetWorkerNodeCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zones"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zones"))
 		for idx, item := range m.GetZones() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -169,18 +158,14 @@ func (v *ValidateGCPInstanceType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPInstanceTypeValidator = func() *ValidateGCPInstanceType {
 	v := &ValidateGCPInstanceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["public_subnet_id"] = GCPSubnetChoiceValidator().Validate
-
 	v.FldValidators["private_subnet_id"] = GCPSubnetChoiceValidator().Validate
 
 	return v
@@ -244,25 +229,18 @@ func (v *ValidateGCPInterconnectType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["adn_dns_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("adn_dns_ip"))
 		if err := fv(ctx, m.GetAdnDnsIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_network_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_network_name"))
 		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -331,43 +309,31 @@ func (v *ValidateGCPSubnetChoice) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["existing_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("existing_subnet"))
 		if err := fv(ctx, m.GetExistingSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_type"))
 		if err := fv(ctx, m.GetInterfaceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_param"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_param"))
 		if err := fv(ctx, m.GetSubnetParam(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPSubnetChoiceValidator = func() *ValidateGCPSubnetChoice {
 	v := &ValidateGCPSubnetChoice{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["subnet_param"] = GCPSubnetParamTypeValidator().Validate
-
 	v.FldValidators["existing_subnet"] = ves_io_schema_views.GCPSubnetTypeValidator().Validate
 
 	return v
@@ -431,41 +397,30 @@ func (v *ValidateGCPSubnetParamType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["network_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_name"))
 		if err := fv(ctx, m.GetNetworkName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet"))
 		if err := fv(ctx, m.GetSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPSubnetParamTypeValidator = func() *ValidateGCPSubnetParamType {
 	v := &ValidateGCPSubnetParamType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["subnet"] = ves_io_schema_views.GCPSubnetParamsTypeValidator().Validate
 
 	return v
@@ -529,43 +484,31 @@ func (v *ValidateGCPVPCNetworkChoice) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["existing_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("existing_network"))
 		if err := fv(ctx, m.GetExistingNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_type"))
 		if err := fv(ctx, m.GetInterfaceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_param"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_param"))
 		if err := fv(ctx, m.GetNetworkParam(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPVPCNetworkChoiceValidator = func() *ValidateGCPVPCNetworkChoice {
 	v := &ValidateGCPVPCNetworkChoice{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["network_param"] = ves_io_schema_views.GCPVPCNetworkParamsTypeValidator().Validate
-
 	v.FldValidators["existing_network"] = ves_io_schema_views.GCPVPCNetworkTypeValidator().Validate
 
 	return v
@@ -584,7 +527,6 @@ func (m *GCPVpcSiteType) ToJSON() (string, error) {
 func (m *GCPVpcSiteType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *GCPVpcSiteType) String() string {
 	if m == nil {
 		return ""
@@ -656,99 +598,67 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
 		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
 		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hw"))
 		if err := fv(ctx, m.GetCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gateway_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gateway_type"))
 		if err := fv(ctx, m.GetGatewayType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_name"))
 		if err := fv(ctx, m.GetGcpName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_region"))
 		if err := fv(ctx, m.GetGcpRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_vpc_network_inside"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_vpc_network_inside"))
 		if err := fv(ctx, m.GetGcpVpcNetworkInside(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_vpc_network_outside"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_vpc_network_outside"))
 		if err := fv(ctx, m.GetGcpVpcNetworkOutside(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interconnect"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interconnect"))
 		if err := fv(ctx, m.GetInterconnect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -756,96 +666,65 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["manual_routing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("manual_routing"))
 		if err := fv(ctx, m.GetManualRouting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
 		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node"))
 		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_inside"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_inside"))
 		if err := fv(ctx, m.GetSubnetInside(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_outside"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_outside"))
 		if err := fv(ctx, m.GetSubnetOutside(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("worker_nodes"))
 		if err := fv(ctx, m.GetWorkerNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPVpcSiteTypeValidator = func() *ValidateGCPVpcSiteType {
 	v := &ValidateGCPVpcSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["gcp_vpc_network_outside"] = GCPVPCNetworkChoiceValidator().Validate
-
 	v.FldValidators["subnet_outside"] = GCPSubnetChoiceValidator().Validate
-
 	v.FldValidators["node"] = GCPInstanceTypeValidator().Validate
-
 	v.FldValidators["subnet_inside"] = GCPSubnetChoiceValidator().Validate
-
 	v.FldValidators["gcp_vpc_network_inside"] = GCPVPCNetworkChoiceValidator().Validate
 
 	return v

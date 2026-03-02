@@ -30,7 +30,6 @@ resource "volterra_bigip_site" "example" {
     public_ip = "192.168.0.156"
   }
 }
-
 ```
 
 Argument Reference
@@ -109,4 +108,4 @@ Will assign latest available F5XC Software Version.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured bigip_site.
+*   `id` - This is the id of the configured bigip_site.

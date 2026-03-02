@@ -11,18 +11,17 @@ import (
 	"time"
 
 	google_protobuf "github.com/gogo/protobuf/types"
+	"github.com/google/uuid"
 	multierror "github.com/hashicorp/go-multierror"
 
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/db/sro"
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/store"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-	"github.com/google/uuid"
-	"gopkg.volterra.us/stdlib/db/sro"
 )
 
 const (
@@ -121,7 +120,6 @@ func (o *Object) Redact(ctx context.Context) error {
 	if o == nil {
 		return nil
 	}
-
 	if err := o.GetSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting Object.spec")
 	}
@@ -172,9 +170,7 @@ type DBObject struct {
 
 // GetObjectIndexers returns the associated store.Indexers for Object
 func GetObjectIndexers() store.Indexers {
-
 	return nil
-
 }
 
 func (e *DBObject) GetDB() (*db.DB, error) {
@@ -381,9 +377,7 @@ func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (e *DBObject) ToStore() store.Entry {
@@ -431,7 +425,6 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -441,7 +434,6 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -449,7 +441,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -459,7 +450,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // Implement sro.SRO interface
@@ -642,7 +632,6 @@ func (o *StatusObject) GetVtrpStale() bool {
 func (o *StatusObject) SetVtrpStale(isStale bool) {
 	o.GetMetadata().SetVtrpStale(isStale)
 }
-
 func (o *StatusObject) GetStatusObjConditions() []sro.StatusObjectCondition {
 	if o == nil {
 		return nil
@@ -905,47 +894,33 @@ func (v *ValidateObject) Validate(ctx context.Context, pm interface{}, opts ...d
 	if e == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, e.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, e.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectValidator = func() *ValidateObject {
 	v := &ValidateObject{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = SpecTypeValidator().Validate
-
 	return v
 }()
 
@@ -1029,9 +1004,7 @@ type DBStatusObject struct {
 
 // GetStatusObjectIndexers returns the associated store.Indexers for StatusObject
 func GetStatusObjectIndexers() store.Indexers {
-
 	return nil
-
 }
 
 func (e *DBStatusObject) GetDB() (*db.DB, error) {
@@ -1068,7 +1041,6 @@ func (e *DBStatusObject) UnmarshalBytes(b []byte) error {
 }
 
 func (e *DBStatusObject) Sample(r *rand.Rand) (db.Entry, error) {
-
 	o := &StatusObject{}
 
 	return &DBStatusObject{o, e.tbl}, nil
@@ -1189,7 +1161,6 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 	}
 	return drInfos, nil
-
 }
 
 func (e *DBStatusObject) ToStore() store.Entry {
@@ -1294,6 +1265,46 @@ type ValidateStatusObject struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateStatusObject) CbipClustersStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemsValidatorFn := func(ctx context.Context, elems []*CBIPClusterStatus, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := CBIPClusterStatusValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cbip_clusters_status")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CBIPClusterStatus)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CBIPClusterStatus, got %T", val)
+		}
+
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cbip_clusters_status")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cbip_clusters_status")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	e, ok := pm.(*StatusObject)
 	if !ok {
@@ -1305,18 +1316,19 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 	if e == nil {
 		return nil
 	}
-
+	if fv, exists := v.FldValidators["cbip_clusters_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("cbip_clusters_status"))
+		if err := fv(ctx, e.GetCbipClustersStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["cbip_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cbip_status"))
 		if err := fv(ctx, e.GetCbipStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["conditions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("conditions"))
 		for idx, item := range e.GetConditions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1324,20 +1336,14 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_refs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_refs"))
 		for idx, item := range e.GetObjectRefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1345,31 +1351,39 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ver_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ver_status"))
 		if err := fv(ctx, e.GetVerStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
-
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vrhCbipClustersStatus := v.CbipClustersStatusValidationRuleHandler
+	rulesCbipClustersStatus := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhCbipClustersStatus(rulesCbipClustersStatus)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StatusObject.cbip_clusters_status: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cbip_clusters_status"] = vFn
 	v.FldValidators["ver_status"] = VerStatusTypeValidator().Validate
-
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
-
 	v.FldValidators["cbip_status"] = CBIPStatusTypeValidator().Validate
-
 	return v
 }()
 

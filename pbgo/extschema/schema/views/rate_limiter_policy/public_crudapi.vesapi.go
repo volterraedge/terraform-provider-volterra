@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.rate_limiter_policy.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2859,6 +2836,47 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policySegmentPolicyType": {
+            "type": "object",
+            "description": "Configure source and destination segment for policy",
+            "title": "Segment Choice",
+            "x-displayname": "Configure Segments",
+            "x-ves-oneof-field-dst_segment_choice": "[\"dst_any\",\"dst_segments\",\"intra_segment\"]",
+            "x-ves-oneof-field-src_segment_choice": "[\"src_any\",\"src_segments\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.SegmentPolicyType",
+            "properties": {
+                "dst_any": {
+                    "description": "Exclusive with [dst_segments intra_segment]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "dst_segments": {
+                    "description": "Exclusive with [dst_any intra_segment]\n Traffic is matched against destination segment in selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                },
+                "intra_segment": {
+                    "description": "Exclusive with [dst_any dst_segments]\n Traffic is matched for source and destination on the same segment",
+                    "title": "Intra Segment Policy",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Intra Segment"
+                },
+                "src_any": {
+                    "description": "Exclusive with [src_segments]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "src_segments": {
+                    "description": "Exclusive with [src_any]\n Source traffic is matched against selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                }
+            }
+        },
         "policyTransformer": {
             "type": "string",
             "description": "Transformers to be applied on the part of the request before matching.\n\n - TRANSFORMER_NONE: transformer none\n\nNo transformers enabled\n - LOWER_CASE: lower case\n\nConvert string to lower case\n - UPPER_CASE: upper case\n\nConvert string to upper case\n - BASE64_DECODE: base64 decode\n\nDecode string assuming base64 encoding\n - NORMALIZE_PATH: normalize path\n\nNormalize URL path so that /a/b/../c will be transformed to /a/c\n - REMOVE_WHITESPACE: remove whitespace\n\nRemove whitespaces\n - URL_DECODE: URL decode\n\nDecode string assuming URL encoding as per rfc1738\n - TRIM_LEFT: trim left\n\nRemove whitespace from the left side of the input string\n - TRIM_RIGHT: trim right\n\nRemove whitespace from the right side of the input string\n - TRIM: trim\n\nRemove whitespace from the both sides of the input string",
@@ -3289,10 +3307,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -3980,6 +3998,13 @@ var APISwaggerJSON string = `{
             "x-displayname": "Path Matcher",
             "x-ves-proto-message": "ves.io.schema.policy.PathMatcherType",
             "properties": {
+                "encoded_path_matcher": {
+                    "type": "boolean",
+                    "description": "Match against the encoded, escaped path",
+                    "title": "Encoded_Path",
+                    "format": "boolean",
+                    "x-displayname": "Match Encoded Path"
+                },
                 "exact_values": {
                     "type": "array",
                     "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -4211,6 +4236,34 @@ var APISwaggerJSON string = `{
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
                     "$ref": "#/definitions/schemapolicyPathMatcherType"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "title": "Segments",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
+                }
+            }
+        },
+        "viewsSegmentRefList": {
+            "type": "object",
+            "description": "List of references to Segments",
+            "title": "Segment List",
+            "x-displayname": "Segment List",
+            "x-ves-proto-message": "ves.io.schema.views.SegmentRefList",
+            "properties": {
+                "segments": {
+                    "type": "array",
+                    "description": " Select list of segments\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segments",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Segments",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

@@ -72,27 +72,22 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticV6RoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticV6RoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -117,7 +112,6 @@ func (m *CreateSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -136,7 +130,6 @@ func (m *CreateSpecType) GetSiteDBEntries(ctx context.Context, d db.Interface) (
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -145,7 +138,6 @@ func (m *CreateSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticRoutes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
@@ -159,7 +151,6 @@ func (m *CreateSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -167,7 +158,6 @@ func (m *CreateSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticV6Routes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticV6Routes() {
 		driSet, err := e.GetDRefInfo()
@@ -181,7 +171,6 @@ func (m *CreateSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -206,7 +195,6 @@ func (m *CreateSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -225,7 +213,6 @@ func (m *CreateSpecType) GetVirtualNetworkDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -234,7 +221,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -280,9 +266,7 @@ func (v *ValidateCreateSpecType) SiteValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -328,9 +312,7 @@ func (v *ValidateCreateSpecType) VirtualNetworkValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -376,9 +358,7 @@ func (v *ValidateCreateSpecType) StaticRoutesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) StaticV6RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -424,9 +404,7 @@ func (v *ValidateCreateSpecType) StaticV6RoutesValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) NameserverV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v4")
@@ -434,9 +412,7 @@ func (v *ValidateCreateSpecType) NameserverV4ValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SecondaryNameserverV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v4")
@@ -444,9 +420,7 @@ func (v *ValidateCreateSpecType) SecondaryNameserverV4ValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
@@ -454,9 +428,7 @@ func (v *ValidateCreateSpecType) NameserverV6ValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SecondaryNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v6")
@@ -478,82 +450,60 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v4"))
 		if err := fv(ctx, m.GetNameserverV4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
 		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secondary_nameserver_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v4"))
 		if err := fv(ctx, m.GetSecondaryNameserverV4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secondary_nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v6"))
 		if err := fv(ctx, m.GetSecondaryNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_v6_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_v6_routes"))
 		if err := fv(ctx, m.GetStaticV6Routes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -707,27 +657,22 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticV6RoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticV6RoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -752,7 +697,6 @@ func (m *GetSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -771,7 +715,6 @@ func (m *GetSpecType) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -780,7 +723,6 @@ func (m *GetSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticRoutes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
@@ -794,7 +736,6 @@ func (m *GetSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -802,7 +743,6 @@ func (m *GetSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticV6Routes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticV6Routes() {
 		driSet, err := e.GetDRefInfo()
@@ -816,7 +756,6 @@ func (m *GetSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -841,7 +780,6 @@ func (m *GetSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -860,7 +798,6 @@ func (m *GetSpecType) GetVirtualNetworkDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -869,7 +806,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -915,9 +851,7 @@ func (v *ValidateGetSpecType) SiteValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -963,9 +897,7 @@ func (v *ValidateGetSpecType) VirtualNetworkValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1011,9 +943,7 @@ func (v *ValidateGetSpecType) StaticRoutesValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) StaticV6RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1059,9 +989,7 @@ func (v *ValidateGetSpecType) StaticV6RoutesValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) NameserverV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v4")
@@ -1069,9 +997,7 @@ func (v *ValidateGetSpecType) NameserverV4ValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SecondaryNameserverV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v4")
@@ -1079,9 +1005,7 @@ func (v *ValidateGetSpecType) SecondaryNameserverV4ValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
@@ -1089,9 +1013,7 @@ func (v *ValidateGetSpecType) NameserverV6ValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SecondaryNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v6")
@@ -1113,82 +1035,60 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v4"))
 		if err := fv(ctx, m.GetNameserverV4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
 		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secondary_nameserver_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v4"))
 		if err := fv(ctx, m.GetSecondaryNameserverV4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secondary_nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v6"))
 		if err := fv(ctx, m.GetSecondaryNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_v6_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_v6_routes"))
 		if err := fv(ctx, m.GetStaticV6Routes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1342,27 +1242,22 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticV6RoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticV6RoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -1387,7 +1282,6 @@ func (m *GlobalSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1406,7 +1300,6 @@ func (m *GlobalSpecType) GetSiteDBEntries(ctx context.Context, d db.Interface) (
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1415,7 +1308,6 @@ func (m *GlobalSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticRoutes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
@@ -1429,7 +1321,6 @@ func (m *GlobalSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1437,7 +1328,6 @@ func (m *GlobalSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticV6Routes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticV6Routes() {
 		driSet, err := e.GetDRefInfo()
@@ -1451,7 +1341,6 @@ func (m *GlobalSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -1476,7 +1365,6 @@ func (m *GlobalSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1495,7 +1383,6 @@ func (m *GlobalSpecType) GetVirtualNetworkDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1504,7 +1391,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1550,9 +1436,7 @@ func (v *ValidateGlobalSpecType) SiteValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1598,9 +1482,7 @@ func (v *ValidateGlobalSpecType) VirtualNetworkValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1646,9 +1528,7 @@ func (v *ValidateGlobalSpecType) StaticRoutesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) StaticV6RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1694,9 +1574,7 @@ func (v *ValidateGlobalSpecType) StaticV6RoutesValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) NameserverV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v4")
@@ -1704,9 +1582,7 @@ func (v *ValidateGlobalSpecType) NameserverV4ValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SecondaryNameserverV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v4")
@@ -1714,9 +1590,7 @@ func (v *ValidateGlobalSpecType) SecondaryNameserverV4ValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
@@ -1724,9 +1598,7 @@ func (v *ValidateGlobalSpecType) NameserverV6ValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SecondaryNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v6")
@@ -1748,82 +1620,60 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v4"))
 		if err := fv(ctx, m.GetNameserverV4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
 		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secondary_nameserver_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v4"))
 		if err := fv(ctx, m.GetSecondaryNameserverV4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secondary_nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v6"))
 		if err := fv(ctx, m.GetSecondaryNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_v6_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_v6_routes"))
 		if err := fv(ctx, m.GetStaticV6Routes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1977,27 +1827,22 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticV6RoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticV6RoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -2022,7 +1867,6 @@ func (m *ReplaceSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2041,7 +1885,6 @@ func (m *ReplaceSpecType) GetSiteDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2050,7 +1893,6 @@ func (m *ReplaceSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticRoutes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
@@ -2064,7 +1906,6 @@ func (m *ReplaceSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2072,7 +1913,6 @@ func (m *ReplaceSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticV6Routes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticV6Routes() {
 		driSet, err := e.GetDRefInfo()
@@ -2086,7 +1926,6 @@ func (m *ReplaceSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -2111,7 +1950,6 @@ func (m *ReplaceSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2130,7 +1968,6 @@ func (m *ReplaceSpecType) GetVirtualNetworkDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2139,7 +1976,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2185,9 +2021,7 @@ func (v *ValidateReplaceSpecType) SiteValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2233,9 +2067,7 @@ func (v *ValidateReplaceSpecType) VirtualNetworkValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2281,9 +2113,7 @@ func (v *ValidateReplaceSpecType) StaticRoutesValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) StaticV6RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2329,9 +2159,7 @@ func (v *ValidateReplaceSpecType) StaticV6RoutesValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) NameserverV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v4")
@@ -2339,9 +2167,7 @@ func (v *ValidateReplaceSpecType) NameserverV4ValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SecondaryNameserverV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v4")
@@ -2349,9 +2175,7 @@ func (v *ValidateReplaceSpecType) SecondaryNameserverV4ValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
@@ -2359,9 +2183,7 @@ func (v *ValidateReplaceSpecType) NameserverV6ValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SecondaryNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v6")
@@ -2383,82 +2205,60 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v4"))
 		if err := fv(ctx, m.GetNameserverV4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
 		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secondary_nameserver_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v4"))
 		if err := fv(ctx, m.GetSecondaryNameserverV4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secondary_nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v6"))
 		if err := fv(ctx, m.GetSecondaryNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_v6_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_v6_routes"))
 		if err := fv(ctx, m.GetStaticV6Routes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

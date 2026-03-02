@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Create(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDelete(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DeleteRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCDelete(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Delete(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts
 	rsp, err := c.grpcClient.Get(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCReplace(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ReplaceRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,15 +98,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Delete"] = ccl.doRPCDelete
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["Replace"] = ccl.doRPCReplace
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -197,7 +189,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	pbRsp := &Response{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.rrset.Response", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -205,7 +196,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -283,7 +273,6 @@ func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.
 	pbRsp := &Response{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.rrset.Response", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -291,7 +280,6 @@ func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -369,7 +357,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &Response{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.rrset.Response", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -377,7 +364,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -456,7 +442,6 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 	pbRsp := &Response{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.rrset.Response", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -490,15 +475,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Delete"] = ccl.doRPCDelete
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["Replace"] = ccl.doRPCReplace
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -594,7 +574,6 @@ func (s *customAPISrv) Create(ctx context.Context, in *CreateRequest) (*Response
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.rrset.Response", rsp)...)
 
 	return rsp, nil
@@ -643,7 +622,6 @@ func (s *customAPISrv) Delete(ctx context.Context, in *DeleteRequest) (*Response
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.rrset.Response", rsp)...)
 
 	return rsp, nil
@@ -692,7 +670,6 @@ func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*Response, erro
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.rrset.Response", rsp)...)
 
 	return rsp, nil
@@ -744,7 +721,6 @@ func (s *customAPISrv) Replace(ctx context.Context, in *ReplaceRequest) (*Respon
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.rrset.Response", rsp)...)
 
 	return rsp, nil
@@ -2583,7 +2559,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "digest": {
                     "type": "string",
-                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record.\n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
                     "title": "Digest",
                     "minLength": 40,
                     "maxLength": 40,
@@ -2606,7 +2582,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "fingerprint": {
                     "type": "string",
-                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record. \n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
+                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record.\n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
                     "title": "Fingerprint",
                     "minLength": 40,
                     "maxLength": 40,
@@ -2629,7 +2605,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "digest": {
                     "type": "string",
-                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record.\n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
                     "title": "Digest",
                     "minLength": 64,
                     "maxLength": 64,
@@ -2652,7 +2628,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "fingerprint": {
                     "type": "string",
-                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record. \n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
+                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record.\n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
                     "title": "Fingerprint",
                     "minLength": 64,
                     "maxLength": 64,
@@ -2675,7 +2651,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "digest": {
                     "type": "string",
-                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"b4a9b28d142d91968ca232b95dfca771ee66f99924148b85026dfa686f6288d0edbfa71c98a798fda71e130f48e8f0f8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 96\n  ves.io.schema.rules.string.min_len: 96\n",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record.\n\nExample: - \"b4a9b28d142d91968ca232b95dfca771ee66f99924148b85026dfa686f6288d0edbfa71c98a798fda71e130f48e8f0f8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 96\n  ves.io.schema.rules.string.min_len: 96\n",
                     "title": "Digest",
                     "minLength": 96,
                     "maxLength": 96,
@@ -2902,7 +2878,7 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "certificate_usage": {
-                    "description": " x-example: \n TLSA Record Certificate Usage.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " x-example:\n TLSA Record Certificate Usage.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Certificate Usage",
                     "$ref": "#/definitions/dns_zoneTLSARecordCertificateUsage",
                     "x-displayname": "Certificate Usage",

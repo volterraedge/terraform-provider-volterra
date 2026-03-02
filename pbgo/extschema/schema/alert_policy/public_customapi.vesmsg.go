@@ -76,25 +76,18 @@ func (v *ValidateAlertPolicyMatch) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_name"))
 		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_status"))
 		if err := fv(ctx, m.GetPolicyStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -151,7 +144,6 @@ type ValidateAlertPolicyMatchRequest struct {
 }
 
 func (v *ValidateAlertPolicyMatchRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -159,9 +151,7 @@ func (v *ValidateAlertPolicyMatchRequest) NamespaceValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAlertPolicyMatchRequest) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -218,31 +208,24 @@ func (v *ValidateAlertPolicyMatchRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
 		vOpts := append(opts, db.WithValidateField("labels"))
 		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAlertPolicyMatchRequestValidator = func() *ValidateAlertPolicyMatchRequest {
 	v := &ValidateAlertPolicyMatchRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -335,9 +318,7 @@ func (v *ValidateAlertPolicyMatchResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["alert_match"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("alert_match"))
 		for idx, item := range m.GetAlertMatch() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -345,9 +326,7 @@ func (v *ValidateAlertPolicyMatchResponse) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

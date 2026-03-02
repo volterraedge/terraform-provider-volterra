@@ -1,4 +1,4 @@
-// Copyright (c) 2023 F5 Inc. All rights reserved.
+// Copyright (c) 2026 F5 Inc. All rights reserved.
 package volterra
 
 import (
@@ -249,16 +249,23 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  allow_all_response_codes  = true
 		  default_anonymization     = true
 		  use_default_blocking_page = true
+		  
 
 		  detection_settings  {
 		    signature_selection_setting {
 		      default_attack_type_settings        = true
 		      high_medium_low_accuracy_signatures = true
 		    }
+			default_bot_setting = true
 
 		    enable_suppression         = true
 		    enable_threat_campaigns    = true
 		    default_violation_settings = true
+			violations_view {
+				name = "view1"
+				description = "test view"
+				enabled_by_default = "enabled"
+			}
 		  }
 		}
 		resource "volterra_service_policy" "allow_ns" {
@@ -371,6 +378,7 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
   			max_request_header_size             = 80
   			request_headers_to_remove           = []
   			response_headers_to_remove          = []
+			no_request_limit_per_connection     = true
 
 			request_headers_to_add {
 				append = false

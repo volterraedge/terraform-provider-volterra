@@ -74,9 +74,7 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ReapplyConfig"] = ccl.doRPCReapplyConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -162,7 +160,6 @@ func (c *CustomDataAPIRestClient) doRPCReapplyConfig(ctx context.Context, callOp
 	pbRsp := &ReapplyConfigResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_link.ReapplyConfigResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,9 +193,7 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ReapplyConfig"] = ccl.doRPCReapplyConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -279,7 +274,6 @@ func (s *customDataAPISrv) ReapplyConfig(ctx context.Context, in *ReapplyConfigR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_link.ReapplyConfigResponse", rsp)...)
 
 	return rsp, nil

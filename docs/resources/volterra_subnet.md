@@ -35,12 +35,11 @@ resource "volterra_subnet" "example" {
       dhcp_networks {
         // One of the arguments from this list "network_prefix network_prefix_ipv6" can be set
 
-        network_prefix = "10.1.1.0/24"
+        network_prefix_ipv6 = "2001::1/64"
       }
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -72,11 +71,11 @@ Argument Reference
 
 `isolated_nw` - (Optional) x-displayName: "Not Connected to Other Network" (`Bool`).
 
-`site_subnet_params` - (Required) Configure subnet parameters per site . See [Site Subnet Params ](#site-subnet-params) below for details.
+`site_subnet_params` - (Required) Configure subnet parameters per site. See [Site Subnet Params ](#site-subnet-params) below for details.
 
 ### Site Subnet Params
 
-Configure subnet parameters per site .
+Configure subnet parameters per site.
 
 ###### One of the arguments from this list "dhcp, static_ip" can be set
 
@@ -133,4 +132,4 @@ List of networks from which DHCP server can allocate IP addresses.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured subnet.
+*   `id` - This is the id of the configured subnet.

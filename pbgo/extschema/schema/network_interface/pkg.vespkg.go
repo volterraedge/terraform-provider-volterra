@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.network_interface.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.network_interface.Object"] = ObjectValidator()
 	vr["ves.io.schema.network_interface.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.network_interface.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.network_interface.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.network_interface.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.network_interface.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.network_interface.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.network_interface.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.network_interface.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.network_interface.DHCPIPV6NetworkType"] = DHCPIPV6NetworkTypeValidator()
 	vr["ves.io.schema.network_interface.DHCPIPV6PoolType"] = DHCPIPV6PoolTypeValidator()
@@ -65,7 +62,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.network_interface.StaticIpParametersNodeType"] = StaticIpParametersNodeTypeValidator()
 	vr["ves.io.schema.network_interface.TunnelInterfaceType"] = TunnelInterfaceTypeValidator()
 	vr["ves.io.schema.network_interface.VhostInterfaceType"] = VhostInterfaceTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -77,11 +73,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.network_interface.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.network_interface.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.network_interface.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.network_interface.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.network_interface.CreateRequest.spec.interface_choice.ethernet_interface.ipv6_address_choice.ipv6_auto_config",
@@ -92,7 +86,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.network_interface.API.Create"] = []string{
 		"spec.ethernet_interface.dhcp_server.dhcp_networks.#.network_prefix_allocator",
 		"spec.ethernet_interface.dhcp_server.dhcp_networks.#.pools.#.exclude",
@@ -109,21 +102,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tunnel_interface.inside_network",
 		"spec.tunnel_interface.static_ip.fleet_static_ip",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.network_interface.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.network_interface.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.network_interface.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.ethernet_interface.ipv6_address_choice",
@@ -138,14 +128,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.network_interface.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.network_interface.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.network_interface.ReplaceRequest.spec.interface_choice.ethernet_interface.ipv6_address_choice.ipv6_auto_config",
@@ -156,7 +144,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.network_interface.API.Replace"] = []string{
 		"spec.ethernet_interface.dhcp_server.dhcp_networks.#.network_prefix_allocator",
 		"spec.ethernet_interface.dhcp_server.dhcp_networks.#.pools.#.exclude",
@@ -172,28 +159,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tunnel_interface.inside_network",
 		"spec.tunnel_interface.static_ip.fleet_static_ip",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.network_interface.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.network_interface.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -202,9 +184,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.network_interface.Object"] = APISwaggerJSON
@@ -218,22 +198,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.network_interface.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.network_interface.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.network_interface.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -43,7 +43,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.enable_api_discovery")
 	}
@@ -89,27 +88,22 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceDiscoveryDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceDiscoveryDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -119,11 +113,8 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetApiDefinitionChoice().(type) {
 	case *GetSpecType_DisableApiDefinition:
-
 		return nil, nil
-
 	case *GetSpecType_ApiSpecification:
-
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
@@ -133,11 +124,9 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "api_specification." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -147,11 +136,8 @@ func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetApiDiscoveryChoice().(type) {
 	case *GetSpecType_DisableApiDiscovery:
-
 		return nil, nil
-
 	case *GetSpecType_EnableApiDiscovery:
-
 		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
@@ -161,11 +147,9 @@ func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "enable_api_discovery." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -175,11 +159,8 @@ func (m *GetSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetSensitiveDataPolicyChoice().(type) {
 	case *GetSpecType_DefaultSensitiveDataPolicy:
-
 		return nil, nil
-
 	case *GetSpecType_SensitiveDataPolicy:
-
 		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
@@ -189,15 +170,12 @@ func (m *GetSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "sensitive_data_policy." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetServiceDiscoveryDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetServiceDiscovery()
 	if vref == nil {
 		return nil, nil
@@ -213,7 +191,6 @@ func (m *GetSpecType) GetServiceDiscoveryDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetServiceDiscoveryDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -223,7 +200,6 @@ func (m *GetSpecType) GetServiceDiscoveryDBEntries(ctx context.Context, d db.Int
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
 	}
-
 	vref := m.GetServiceDiscovery()
 	if vref == nil {
 		return nil, nil
@@ -241,7 +217,6 @@ func (m *GetSpecType) GetServiceDiscoveryDBEntries(ctx context.Context, d db.Int
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -256,7 +231,6 @@ func (v *ValidateGetSpecType) ApiDefinitionChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -264,7 +238,6 @@ func (v *ValidateGetSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -272,9 +245,7 @@ func (v *ValidateGetSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -314,9 +285,7 @@ func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ServiceDiscoveryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for service_discovery")
@@ -325,19 +294,15 @@ func (v *ValidateGetSpecType) ServiceDiscoveryValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) BigipVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bigip_version")
@@ -345,9 +310,7 @@ func (v *ValidateGetSpecType) BigipVersionValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(BigIpVirtualServerType)
@@ -361,9 +324,7 @@ func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
@@ -419,7 +380,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
@@ -455,60 +415,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["awaf_enforcement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("awaf_enforcement_mode"))
 		if err := fv(ctx, m.GetAwafEnforcementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["awaf_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("awaf_policy_name"))
 		if err := fv(ctx, m.GetAwafPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bigip_hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_hostname"))
 		if err := fv(ctx, m.GetBigipHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bigip_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_version"))
 		if err := fv(ctx, m.GetBigipVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bigip_vs_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_vs_description"))
 		if err := fv(ctx, m.GetBigipVsDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sensitive_data_policy_choice"]; exists {
@@ -544,43 +486,31 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_discovery"))
 		if err := fv(ctx, m.GetServiceDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -588,7 +518,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhApiDefinitionChoice := v.ApiDefinitionChoiceValidationRuleHandler
 	rulesApiDefinitionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -599,7 +528,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_definition_choice"] = vFn
-
 	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
 	rulesApiDiscoveryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -610,7 +538,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_discovery_choice"] = vFn
-
 	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
 	rulesSensitiveDataPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -680,11 +607,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_name"] = vFn
-
 	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
-
 	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
-
 	v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"] = ves_io_schema_views_common_security.SensitiveDataPolicySettingsValidator().Validate
 
 	return v
@@ -710,7 +634,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.enable_api_discovery")
 	}
@@ -756,33 +679,27 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceDiscoveryDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceDiscoveryDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -792,11 +709,8 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetApiDefinitionChoice().(type) {
 	case *GlobalSpecType_DisableApiDefinition:
-
 		return nil, nil
-
 	case *GlobalSpecType_ApiSpecification:
-
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
@@ -806,11 +720,9 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "api_specification." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -820,11 +732,8 @@ func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetApiDiscoveryChoice().(type) {
 	case *GlobalSpecType_DisableApiDiscovery:
-
 		return nil, nil
-
 	case *GlobalSpecType_EnableApiDiscovery:
-
 		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
@@ -834,11 +743,9 @@ func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "enable_api_discovery." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -848,11 +755,8 @@ func (m *GlobalSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 	switch m.GetSensitiveDataPolicyChoice().(type) {
 	case *GlobalSpecType_DefaultSensitiveDataPolicy:
-
 		return nil, nil
-
 	case *GlobalSpecType_SensitiveDataPolicy:
-
 		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
@@ -862,15 +766,12 @@ func (m *GlobalSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 			dri.DRField = "sensitive_data_policy." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetServiceDiscoveryDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetServiceDiscovery()
 	if vref == nil {
 		return nil, nil
@@ -886,7 +787,6 @@ func (m *GlobalSpecType) GetServiceDiscoveryDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetServiceDiscoveryDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -896,7 +796,6 @@ func (m *GlobalSpecType) GetServiceDiscoveryDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
 	}
-
 	vref := m.GetServiceDiscovery()
 	if vref == nil {
 		return nil, nil
@@ -914,12 +813,10 @@ func (m *GlobalSpecType) GetServiceDiscoveryDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -935,7 +832,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -945,7 +841,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -963,7 +858,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -978,7 +872,6 @@ func (v *ValidateGlobalSpecType) ApiDefinitionChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -986,7 +879,6 @@ func (v *ValidateGlobalSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -994,9 +886,7 @@ func (v *ValidateGlobalSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1036,9 +926,7 @@ func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ServiceDiscoveryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for service_discovery")
@@ -1047,19 +935,15 @@ func (v *ValidateGlobalSpecType) ServiceDiscoveryValidationRuleHandler(rules map
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BigipVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bigip_version")
@@ -1067,9 +951,7 @@ func (v *ValidateGlobalSpecType) BigipVersionValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(BigIpVirtualServerType)
@@ -1083,9 +965,7 @@ func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PartitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for partition")
@@ -1093,9 +973,7 @@ func (v *ValidateGlobalSpecType) PartitionValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ClusterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster")
@@ -1103,9 +981,7 @@ func (v *ValidateGlobalSpecType) ClusterValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
@@ -1113,9 +989,7 @@ func (v *ValidateGlobalSpecType) ServerNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SubPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sub_path")
@@ -1171,7 +1045,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
@@ -1207,78 +1080,54 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["awaf_enforcement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("awaf_enforcement_mode"))
 		if err := fv(ctx, m.GetAwafEnforcementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["awaf_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("awaf_policy_name"))
 		if err := fv(ctx, m.GetAwafPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bigip_hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_hostname"))
 		if err := fv(ctx, m.GetBigipHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bigip_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_version"))
 		if err := fv(ctx, m.GetBigipVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bigip_vs_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_vs_description"))
 		if err := fv(ctx, m.GetBigipVsDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster"))
 		if err := fv(ctx, m.GetCluster(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["partition"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("partition"))
 		if err := fv(ctx, m.GetPartition(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sensitive_data_policy_choice"]; exists {
@@ -1314,61 +1163,43 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_discovery"))
 		if err := fv(ctx, m.GetServiceDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_path"))
 		if err := fv(ctx, m.GetSubPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1376,7 +1207,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhApiDefinitionChoice := v.ApiDefinitionChoiceValidationRuleHandler
 	rulesApiDefinitionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1387,7 +1217,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_definition_choice"] = vFn
-
 	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
 	rulesApiDiscoveryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1398,7 +1227,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_discovery_choice"] = vFn
-
 	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
 	rulesSensitiveDataPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1501,13 +1329,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["sub_path"] = vFn
-
 	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
-
 	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
-
 	v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"] = ves_io_schema_views_common_security.SensitiveDataPolicySettingsValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1533,7 +1357,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.enable_api_discovery")
 	}
@@ -1579,21 +1402,17 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1603,11 +1422,8 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetApiDefinitionChoice().(type) {
 	case *ReplaceSpecType_DisableApiDefinition:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ApiSpecification:
-
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
@@ -1617,11 +1433,9 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "api_specification." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1631,11 +1445,8 @@ func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetApiDiscoveryChoice().(type) {
 	case *ReplaceSpecType_DisableApiDiscovery:
-
 		return nil, nil
-
 	case *ReplaceSpecType_EnableApiDiscovery:
-
 		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
@@ -1645,11 +1456,9 @@ func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "enable_api_discovery." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1659,11 +1468,8 @@ func (m *ReplaceSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo,
 	}
 	switch m.GetSensitiveDataPolicyChoice().(type) {
 	case *ReplaceSpecType_DefaultSensitiveDataPolicy:
-
 		return nil, nil
-
 	case *ReplaceSpecType_SensitiveDataPolicy:
-
 		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
@@ -1673,11 +1479,9 @@ func (m *ReplaceSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "sensitive_data_policy." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1691,7 +1495,6 @@ func (v *ValidateReplaceSpecType) ApiDefinitionChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1699,7 +1502,6 @@ func (v *ValidateReplaceSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1755,7 +1557,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
@@ -1791,7 +1592,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sensitive_data_policy_choice"]; exists {
@@ -1827,16 +1627,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1844,7 +1641,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhApiDefinitionChoice := v.ApiDefinitionChoiceValidationRuleHandler
 	rulesApiDefinitionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1855,7 +1651,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_definition_choice"] = vFn
-
 	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
 	rulesApiDiscoveryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1866,7 +1661,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_discovery_choice"] = vFn
-
 	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
 	rulesSensitiveDataPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1877,11 +1671,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["sensitive_data_policy_choice"] = vFn
-
 	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
-
 	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
-
 	v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"] = ves_io_schema_views_common_security.SensitiveDataPolicySettingsValidator().Validate
 
 	return v

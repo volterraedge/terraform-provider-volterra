@@ -66,7 +66,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ViolationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -126,22 +125,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["violations"]; exists {
 		vOpts := append(opts, db.WithValidateField("violations"))
 		if err := fv(ctx, m.GetViolations(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -152,7 +147,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhViolations := v.ViolationsValidationRuleHandler
 	rulesViolations := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "40",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "256",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhViolations(rulesViolations)
@@ -211,7 +208,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ViolationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -271,22 +267,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["violations"]; exists {
 		vOpts := append(opts, db.WithValidateField("violations"))
 		if err := fv(ctx, m.GetViolations(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -297,7 +289,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhViolations := v.ViolationsValidationRuleHandler
 	rulesViolations := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "40",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "256",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhViolations(rulesViolations)
@@ -356,7 +350,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ViolationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -416,22 +409,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["violations"]; exists {
 		vOpts := append(opts, db.WithValidateField("violations"))
 		if err := fv(ctx, m.GetViolations(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -442,7 +431,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhViolations := v.ViolationsValidationRuleHandler
 	rulesViolations := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "40",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "256",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhViolations(rulesViolations)
@@ -501,7 +492,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ViolationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -561,22 +551,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["violations"]; exists {
 		vOpts := append(opts, db.WithValidateField("violations"))
 		if err := fv(ctx, m.GetViolations(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -587,7 +573,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhViolations := v.ViolationsValidationRuleHandler
 	rulesViolations := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "40",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "256",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhViolations(rulesViolations)
@@ -652,9 +640,7 @@ func (v *ValidateViolationDefaultSettings) DefaultStateChoiceValidationRuleHandl
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateViolationDefaultSettings) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_app_firewall.AppFirewallViolationType)
@@ -668,9 +654,7 @@ func (v *ValidateViolationDefaultSettings) NameValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateViolationDefaultSettings) TitleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for title")
@@ -726,52 +710,37 @@ func (v *ValidateViolationDefaultSettings) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_internal"))
 		if err := fv(ctx, m.GetIsInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["title"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("title"))
 		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultViolationDefaultSettingsValidator = func() *ValidateViolationDefaultSettings {
 	v := &ValidateViolationDefaultSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -779,7 +748,6 @@ var DefaultViolationDefaultSettingsValidator = func() *ValidateViolationDefaultS
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDefaultStateChoice := v.DefaultStateChoiceValidationRuleHandler
 	rulesDefaultStateChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -793,7 +761,9 @@ var DefaultViolationDefaultSettingsValidator = func() *ValidateViolationDefaultS
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.enum.not_in":       "[0]",
+		"ves.io.schema.rules.message.required":  "true",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {

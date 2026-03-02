@@ -64,7 +64,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -110,9 +109,7 @@ func (v *ValidateCreateSpecType) RulesValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) CompliancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -172,48 +169,36 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		if err := fv(ctx, m.GetCompliances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_pii"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_pii"))
 		if err := fv(ctx, m.GetIsPii(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_sensitive_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_sensitive_data"))
 		if err := fv(ctx, m.GetIsSensitiveData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -353,16 +338,13 @@ func (v *ValidateDetectionMethod) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDetectionMethodValidator = func() *ValidateDetectionMethod {
 	v := &ValidateDetectionMethod{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -370,7 +352,6 @@ var DefaultDetectionMethodValidator = func() *ValidateDetectionMethod {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMethodChoice := v.MethodChoiceValidationRuleHandler
 	rulesMethodChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -496,16 +477,13 @@ func (v *ValidateDetectionRule) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDetectionRuleValidator = func() *ValidateDetectionRule {
 	v := &ValidateDetectionRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -513,7 +491,6 @@ var DefaultDetectionRuleValidator = func() *ValidateDetectionRule {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPatternChoice := v.PatternChoiceValidationRuleHandler
 	rulesPatternChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -524,7 +501,6 @@ var DefaultDetectionRuleValidator = func() *ValidateDetectionRule {
 		panic(errMsg)
 	}
 	v.FldValidators["pattern_choice"] = vFn
-
 	v.FldValidators["pattern_choice.key_pattern"] = RulePatternTypeValidator().Validate
 	v.FldValidators["pattern_choice.value_pattern"] = RulePatternTypeValidator().Validate
 	v.FldValidators["pattern_choice.key_value_pattern"] = KeyValuePatternValidator().Validate
@@ -578,7 +554,6 @@ type ValidateExactValues struct {
 }
 
 func (v *ValidateExactValues) ExactValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -632,22 +607,18 @@ func (v *ValidateExactValues) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["exact_values"]; exists {
 		vOpts := append(opts, db.WithValidateField("exact_values"))
 		if err := fv(ctx, m.GetExactValues(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultExactValuesValidator = func() *ValidateExactValues {
 	v := &ValidateExactValues{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -718,7 +689,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -764,9 +734,7 @@ func (v *ValidateGetSpecType) RulesValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) CompliancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -826,57 +794,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		if err := fv(ctx, m.GetCompliances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_pii"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_pii"))
 		if err := fv(ctx, m.GetIsPii(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_sensitive_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_sensitive_data"))
 		if err := fv(ctx, m.GetIsSensitiveData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -912,7 +865,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["compliances"] = vFn
-
 	v.FldValidators["type"] = OriginTypeValidator().Validate
 
 	return v
@@ -964,7 +916,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1010,9 +961,7 @@ func (v *ValidateGlobalSpecType) RulesValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CompliancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1072,66 +1021,48 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		if err := fv(ctx, m.GetCompliances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_pii"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_pii"))
 		if err := fv(ctx, m.GetIsPii(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_sensitive_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_sensitive_data"))
 		if err := fv(ctx, m.GetIsSensitiveData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1167,9 +1098,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["compliances"] = vFn
-
 	v.FldValidators["method"] = DetectionMethodValidator().Validate
-
 	v.FldValidators["type"] = OriginTypeValidator().Validate
 
 	return v
@@ -1221,7 +1150,6 @@ type ValidateKeyValuePattern struct {
 }
 
 func (v *ValidateKeyValuePattern) KeyPatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for key_pattern")
@@ -1230,19 +1158,15 @@ func (v *ValidateKeyValuePattern) KeyPatternValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := RulePatternTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateKeyValuePattern) ValuePatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for value_pattern")
@@ -1251,11 +1175,9 @@ func (v *ValidateKeyValuePattern) ValuePatternValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := RulePatternTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1275,32 +1197,24 @@ func (v *ValidateKeyValuePattern) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key_pattern"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_pattern"))
 		if err := fv(ctx, m.GetKeyPattern(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value_pattern"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value_pattern"))
 		if err := fv(ctx, m.GetValuePattern(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultKeyValuePatternValidator = func() *ValidateKeyValuePattern {
 	v := &ValidateKeyValuePattern{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1434,16 +1348,13 @@ func (v *ValidateOriginType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginTypeValidator = func() *ValidateOriginType {
 	v := &ValidateOriginType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1451,7 +1362,6 @@ var DefaultOriginTypeValidator = func() *ValidateOriginType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTypeChoice := v.TypeChoiceValidationRuleHandler
 	rulesTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1512,7 +1422,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1558,9 +1467,7 @@ func (v *ValidateReplaceSpecType) RulesValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) CompliancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1620,48 +1527,36 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		if err := fv(ctx, m.GetCompliances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_pii"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_pii"))
 		if err := fv(ctx, m.GetIsPii(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_sensitive_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_sensitive_data"))
 		if err := fv(ctx, m.GetIsSensitiveData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1761,6 +1656,7 @@ func (v *ValidateRulePatternType) TypeChoiceRegexValueValidationRuleHandler(rule
 	}
 	return oValidatorFn_RegexValue, nil
 }
+
 func (v *ValidateRulePatternType) TypeChoiceSubstringValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SubstringValue, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1827,16 +1723,13 @@ func (v *ValidateRulePatternType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRulePatternTypeValidator = func() *ValidateRulePatternType {
 	v := &ValidateRulePatternType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1844,7 +1737,6 @@ var DefaultRulePatternTypeValidator = func() *ValidateRulePatternType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTypeChoice := v.TypeChoiceValidationRuleHandler
 	rulesTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1855,7 +1747,6 @@ var DefaultRulePatternTypeValidator = func() *ValidateRulePatternType {
 		panic(errMsg)
 	}
 	v.FldValidators["type_choice"] = vFn
-
 	vrhTypeChoiceRegexValue := v.TypeChoiceRegexValueValidationRuleHandler
 	rulesTypeChoiceRegexValue := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "1024",
@@ -1875,10 +1766,8 @@ var DefaultRulePatternTypeValidator = func() *ValidateRulePatternType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RulePatternType.type_choice_substring_value: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["type_choice.regex_value"] = vFnMap["type_choice.regex_value"]
 	v.FldValidators["type_choice.substring_value"] = vFnMap["type_choice.substring_value"]
-
 	v.FldValidators["type_choice.exact_values"] = ExactValuesValidator().Validate
 
 	return v

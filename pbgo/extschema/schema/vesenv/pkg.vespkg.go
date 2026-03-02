@@ -9,15 +9,10 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
-
 	vr["ves.io.schema.vesenv.AddonServiceChoice"] = AddonServiceChoiceValidator()
-
 	vr["ves.io.schema.vesenv.APIGroupChoice"] = APIGroupChoiceValidator()
-
 	vr["ves.io.schema.vesenv.RouteTargetChoice"] = RouteTargetChoiceValidator()
-
 	vr["ves.io.schema.vesenv.ServiceChoice"] = ServiceChoiceValidator()
-
 	vr["ves.io.schema.vesenv.APIGroupElementInfo"] = APIGroupElementInfoValidator()
 	vr["ves.io.schema.vesenv.APIGroupElementItem"] = APIGroupElementItemValidator()
 	vr["ves.io.schema.vesenv.APIGroupNameMap"] = APIGroupNameMapValidator()
@@ -33,25 +28,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.vesenv.ServiceInfo"] = ServiceInfoValidator()
 	vr["ves.io.schema.vesenv.ServiceSlugChoice"] = ServiceSlugChoiceValidator()
 	vr["ves.io.schema.vesenv.ServiceSlugInfo"] = ServiceSlugInfoValidator()
-
 	vr["ves.io.schema.vesenv.QuotaResourceKeyChoice"] = QuotaResourceKeyChoiceValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -60,20 +49,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

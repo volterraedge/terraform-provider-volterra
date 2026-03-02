@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.external_connector.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2244,13 +2221,16 @@ var APISwaggerJSON string = `{
         },
         "external_connectorConnectionTypeGRE": {
             "type": "object",
-            "description": "x-displayName: \"GRE\"\nExternal Connector with GRE tunnel",
+            "description": "External Connector with GRE tunnel",
             "title": "GRE",
+            "x-displayname": "GRE",
+            "x-ves-proto-message": "ves.io.schema.views.external_connector.ConnectionTypeGRE",
             "properties": {
                 "gre_parameters": {
-                    "description": "x-displayName: \"GRE Tunnel Parameters\"\nGRE configuration parameters required for GRE Connection type",
+                    "description": " GRE configuration parameters required for GRE Connection type",
                     "title": "GRE Parameters",
-                    "$ref": "#/definitions/external_connectorGRETunnelParameters"
+                    "$ref": "#/definitions/external_connectorGRETunnelParameters",
+                    "x-displayname": "GRE Tunnel Parameters"
                 }
             }
         },
@@ -2334,7 +2314,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create external_connector configuration",
             "x-ves-displayorder": "1,2",
-            "x-ves-oneof-field-connection_type": "[\"ipsec\"]",
+            "x-ves-oneof-field-connection_type": "[\"gre\",\"ipsec\"]",
             "x-ves-proto-message": "ves.io.schema.views.external_connector.CreateSpecType",
             "properties": {
                 "ce_site_reference": {
@@ -2346,8 +2326,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "gre": {
+                    "description": "Exclusive with [ipsec]\n External Connector with GRE tunnel",
+                    "$ref": "#/definitions/external_connectorConnectionTypeGRE",
+                    "x-displayname": "GRE"
+                },
                 "ipsec": {
-                    "description": "Exclusive with []\n External Connector with IPSec tunnel",
+                    "description": "Exclusive with [gre]\n External Connector with IPSec tunnel",
                     "$ref": "#/definitions/external_connectorConnectionTypeIPSec",
                     "x-displayname": "IPSec"
                 }
@@ -2404,42 +2389,63 @@ var APISwaggerJSON string = `{
         },
         "external_connectorGRETunnelParameters": {
             "type": "object",
-            "description": "x-displayName: \"GRE Tunnel Parameters\"\nGRE configuration parameters required for GRE Connection type",
+            "description": "GRE configuration parameters required for GRE Connection type",
             "title": "GRE Tunnel Parameters",
+            "x-displayname": "GRE Tunnel Parameters",
+            "x-ves-oneof-field-tunnel_source_vn": "[\"segment\",\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-proto-message": "ves.io.schema.views.external_connector.GRETunnelParameters",
             "properties": {
                 "peer_ip_address": {
-                    "description": "x-displayName: \"Peer IP Address\"\nConfigure tunnel remote endpoint's IP address",
+                    "description": " Configure tunnel remote endpoint's IP address",
                     "title": "Tunnel Peer IP address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "Peer IP Address"
                 },
                 "segment": {
-                    "description": "x-displayName: \"Segment\"\nInterface belongs to user configured inside network segment",
+                    "description": "Exclusive with [site_local_inside_network site_local_network]\n Interface belongs to user configured inside network segment",
                     "title": "Segment",
-                    "$ref": "#/definitions/schemaSegmentRefType"
+                    "$ref": "#/definitions/schemaSegmentRefType",
+                    "x-displayname": "Segment"
                 },
                 "site_local_inside_network": {
-                    "description": "x-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [segment site_local_network]\n Interface belongs to site local network inside",
                     "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Network Inside"
                 },
                 "site_local_network": {
-                    "description": "x-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "Exclusive with [segment site_local_inside_network]\n Interface belongs to site local network (outside)",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Network (Outside)"
                 },
                 "tunnel_eps": {
                     "type": "array",
-                    "description": "x-displayName: \"Tunnel Endpoint\"\nx-required\nConfigure tunnel parameters, source, destination, IP addresses.",
+                    "description": " Configure tunnel parameters, source, destination, IP addresses.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Tunnel Endpoint",
+                    "minItems": 1,
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/external_connectorTunnelEndpoint"
+                    },
+                    "x-displayname": "Tunnel Endpoint",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 },
                 "tunnel_mtu": {
                     "type": "integer",
-                    "description": "x-displayName: \"Tunnel MTU\"\nConfigure MTU for the GRE tunnel interface.",
+                    "description": " Configure MTU for the GRE tunnel interface.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 512\n  ves.io.schema.rules.uint32.lte: 1370\n",
                     "title": "Tunnel MTU",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Tunnel MTU",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "512",
+                        "ves.io.schema.rules.uint32.lte": "1370"
+                    }
                 }
             }
         },
@@ -2539,7 +2545,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get external_connector configuration",
             "x-ves-displayorder": "1,2",
-            "x-ves-oneof-field-connection_type": "[\"ipsec\"]",
+            "x-ves-oneof-field-connection_type": "[\"gre\",\"ipsec\"]",
             "x-ves-proto-message": "ves.io.schema.views.external_connector.GetSpecType",
             "properties": {
                 "ce_site_reference": {
@@ -2551,8 +2557,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "gre": {
+                    "description": "Exclusive with [ipsec]\n External Connector with GRE tunnel",
+                    "$ref": "#/definitions/external_connectorConnectionTypeGRE",
+                    "x-displayname": "GRE"
+                },
                 "ipsec": {
-                    "description": "Exclusive with []\n External Connector with IPSec tunnel",
+                    "description": "Exclusive with [gre]\n External Connector with IPSec tunnel",
                     "$ref": "#/definitions/external_connectorConnectionTypeIPSec",
                     "x-displayname": "IPSec"
                 }
@@ -2570,7 +2581,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.external_connector.IkeParameters",
             "properties": {
                 "dpd_disabled": {
-                    "description": "Exclusive with [dpd_keep_alive_timer]\n Disabled Dead Peer Detection ",
+                    "description": "Exclusive with [dpd_keep_alive_timer]\n Disabled Dead Peer Detection",
                     "title": "Disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disabled"
@@ -2792,7 +2803,7 @@ var APISwaggerJSON string = `{
             "title": "ReplaceSpecType",
             "x-displayname": "Replace external_connector configuration",
             "x-ves-displayorder": "1,2",
-            "x-ves-oneof-field-connection_type": "[\"ipsec\"]",
+            "x-ves-oneof-field-connection_type": "[\"gre\",\"ipsec\"]",
             "x-ves-proto-message": "ves.io.schema.views.external_connector.ReplaceSpecType",
             "properties": {
                 "ce_site_reference": {
@@ -2804,8 +2815,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "gre": {
+                    "description": "Exclusive with [ipsec]\n External Connector with GRE tunnel",
+                    "$ref": "#/definitions/external_connectorConnectionTypeGRE",
+                    "x-displayname": "GRE"
+                },
                 "ipsec": {
-                    "description": "Exclusive with []\n External Connector with IPSec tunnel",
+                    "description": "Exclusive with [gre]\n External Connector with IPSec tunnel",
                     "$ref": "#/definitions/external_connectorConnectionTypeIPSec",
                     "x-displayname": "IPSec"
                 }
@@ -2946,7 +2962,7 @@ var APISwaggerJSON string = `{
                 },
                 "tunnel_eps": {
                     "type": "array",
-                    "description": " Configure tunnel parameters, local and remote IP addresses \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Configure tunnel parameters, local and remote IP addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Tunnel Endpoint",
                     "minItems": 1,
                     "maxItems": 4,
@@ -3064,10 +3080,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",

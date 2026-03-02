@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCreateHTTPLoadBalancer(ctx context.Context, y
 	rsp, err := c.grpcClient.CreateHTTPLoadBalancer(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCreateTCPLoadBalancer(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CreateTCPLoadBalancerRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCCreateTCPLoadBalancer(ctx context.Context, ya
 	rsp, err := c.grpcClient.CreateTCPLoadBalancer(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDisableVisibility(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DisableVisibilityRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCDisableVisibility(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.DisableVisibility(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCEnableVisibility(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &EnableVisibilityRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomAPIGrpcClient) doRPCEnableVisibility(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.EnableVisibility(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListDiscoveredServices(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListServicesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *CustomAPIGrpcClient) doRPCListDiscoveredServices(ctx context.Context, y
 	rsp, err := c.grpcClient.ListDiscoveredServices(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuggestValuesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -119,19 +114,12 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CreateHTTPLoadBalancer"] = ccl.doRPCCreateHTTPLoadBalancer
-
 	rpcFns["CreateTCPLoadBalancer"] = ccl.doRPCCreateTCPLoadBalancer
-
 	rpcFns["DisableVisibility"] = ccl.doRPCDisableVisibility
-
 	rpcFns["EnableVisibility"] = ccl.doRPCEnableVisibility
-
 	rpcFns["ListDiscoveredServices"] = ccl.doRPCListDiscoveredServices
-
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -219,7 +207,6 @@ func (c *CustomAPIRestClient) doRPCCreateHTTPLoadBalancer(ctx context.Context, c
 	pbRsp := &CreateHTTPLoadBalancerResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.CreateHTTPLoadBalancerResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -227,7 +214,6 @@ func (c *CustomAPIRestClient) doRPCCreateHTTPLoadBalancer(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCreateTCPLoadBalancer(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -304,7 +290,6 @@ func (c *CustomAPIRestClient) doRPCCreateTCPLoadBalancer(ctx context.Context, ca
 	pbRsp := &CreateTCPLoadBalancerResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.CreateTCPLoadBalancerResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -312,7 +297,6 @@ func (c *CustomAPIRestClient) doRPCCreateTCPLoadBalancer(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDisableVisibility(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -388,7 +372,6 @@ func (c *CustomAPIRestClient) doRPCDisableVisibility(ctx context.Context, callOp
 	pbRsp := &DisableVisibilityResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.DisableVisibilityResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -396,7 +379,6 @@ func (c *CustomAPIRestClient) doRPCDisableVisibility(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCEnableVisibility(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -472,7 +454,6 @@ func (c *CustomAPIRestClient) doRPCEnableVisibility(ctx context.Context, callOpt
 	pbRsp := &EnableVisibilityResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.EnableVisibilityResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -480,7 +461,6 @@ func (c *CustomAPIRestClient) doRPCEnableVisibility(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListDiscoveredServices(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -557,7 +537,6 @@ func (c *CustomAPIRestClient) doRPCListDiscoveredServices(ctx context.Context, c
 	pbRsp := &ListServicesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.ListServicesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -565,7 +544,6 @@ func (c *CustomAPIRestClient) doRPCListDiscoveredServices(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -643,7 +621,6 @@ func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *
 	pbRsp := &SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -677,19 +654,12 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CreateHTTPLoadBalancer"] = ccl.doRPCCreateHTTPLoadBalancer
-
 	rpcFns["CreateTCPLoadBalancer"] = ccl.doRPCCreateTCPLoadBalancer
-
 	rpcFns["DisableVisibility"] = ccl.doRPCDisableVisibility
-
 	rpcFns["EnableVisibility"] = ccl.doRPCEnableVisibility
-
 	rpcFns["ListDiscoveredServices"] = ccl.doRPCListDiscoveredServices
-
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -793,7 +763,6 @@ func (s *customAPISrv) CreateHTTPLoadBalancer(ctx context.Context, in *CreateHTT
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.CreateHTTPLoadBalancerResponse", rsp)...)
 
 	return rsp, nil
@@ -845,7 +814,6 @@ func (s *customAPISrv) CreateTCPLoadBalancer(ctx context.Context, in *CreateTCPL
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.CreateTCPLoadBalancerResponse", rsp)...)
 
 	return rsp, nil
@@ -894,7 +862,6 @@ func (s *customAPISrv) DisableVisibility(ctx context.Context, in *DisableVisibil
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.DisableVisibilityResponse", rsp)...)
 
 	return rsp, nil
@@ -943,7 +910,6 @@ func (s *customAPISrv) EnableVisibility(ctx context.Context, in *EnableVisibilit
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.EnableVisibilityResponse", rsp)...)
 
 	return rsp, nil
@@ -992,7 +958,6 @@ func (s *customAPISrv) ListDiscoveredServices(ctx context.Context, in *ListServi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.ListServicesResponse", rsp)...)
 
 	return rsp, nil
@@ -1041,7 +1006,6 @@ func (s *customAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.SuggestValuesResp", rsp)...)
 
 	return rsp, nil
@@ -1373,7 +1337,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/discovered_services/{name}/disable_visibility": {
             "post": {
                 "summary": "Disable visibility in all workspaces",
-                "description": "Disable Visibility of the service in all workspaces. This will remove the discovered service\nfrom being visible in other wokspaces like WAAP.",
+                "description": "Disable Visibility of the service in all workspaces. This will remove the discovered service\nfrom being visible in other workspaces like WAAP.",
                 "operationId": "ves.io.schema.discovered_service.CustomAPI.DisableVisibility",
                 "responses": {
                     "200": {
@@ -2755,10 +2719,10 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -3218,7 +3182,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "TCP Load Balancers"
                 },
                 "third_party": {
-                    "description": "Exclusive with [consul_service k8s_service n1_discovered_server virtual_server]\n Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\n See Tech Docs for details setup instractions.",
+                    "description": "Exclusive with [consul_service k8s_service n1_discovered_server virtual_server]\n Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\n See Tech Docs for details setup instructions.",
                     "$ref": "#/definitions/discovered_serviceThirdPartyApplicationDiscovery",
                     "x-displayname": "Discovery"
                 },

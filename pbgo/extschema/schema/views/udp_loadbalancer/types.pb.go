@@ -11,6 +11,7 @@ import (
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 	io "io"
@@ -119,7 +120,18 @@ type GlobalSpecType struct {
 	// Per packet load balancing:
 	// If disabled (default): First packet identified by source IP/port and local IP/port is sent to an upstream server as the load balancing algorithm dictates, and subsequent packets with the same identity are forwarded to the same upstream server without rechecking the algorithm
 	// If enabled: Each packet is directed to an upstream server as the load balancing algorithm dictates.
-	EnablePerPacketLoadBalancing bool `protobuf:"varint,23,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
+	EnablePerPacketLoadBalancing *schema.Empty `protobuf:"bytes,24,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
+	// Service Policies
+	//
+	// x-displayName: "Service Policies"
+	// x-required
+	// Service policies provide the ability to configure security controls such as IP Allow/Deny lists, Geo IP filtering and Custom rules
+	//
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*GlobalSpecType_ServicePoliciesFromNamespace
+	//	*GlobalSpecType_NoServicePolicies
+	//	*GlobalSpecType_ActiveServicePolicies
+	ServicePolicyChoice isGlobalSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -201,6 +213,12 @@ type isGlobalSpecType_LoadbalancerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_ServicePolicyChoice interface {
+	isGlobalSpecType_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_ListenPort struct {
 	ListenPort uint32 `protobuf:"varint,3,opt,name=listen_port,json=listenPort,proto3,oneof" json:"listen_port,omitempty"`
@@ -241,6 +259,15 @@ type GlobalSpecType_DoNotRetractCluster struct {
 type GlobalSpecType_Udp struct {
 	Udp *schema.Empty `protobuf:"bytes,22,opt,name=udp,proto3,oneof" json:"udp,omitempty"`
 }
+type GlobalSpecType_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,28,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type GlobalSpecType_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,29,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type GlobalSpecType_ActiveServicePolicies struct {
+	ActiveServicePolicies *common_waf.ServicePolicyList `protobuf:"bytes,30,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
 
 func (*GlobalSpecType_ListenPort) isGlobalSpecType_PortChoice()                               {}
 func (*GlobalSpecType_PortRanges) isGlobalSpecType_PortChoice()                               {}
@@ -255,6 +282,9 @@ func (*GlobalSpecType_HashPolicyChoiceSourceIpStickiness) isGlobalSpecType_HashP
 func (*GlobalSpecType_RetractCluster) isGlobalSpecType_ClusterRetractChoice()                 {}
 func (*GlobalSpecType_DoNotRetractCluster) isGlobalSpecType_ClusterRetractChoice()            {}
 func (*GlobalSpecType_Udp) isGlobalSpecType_LoadbalancerType()                                {}
+func (*GlobalSpecType_ServicePoliciesFromNamespace) isGlobalSpecType_ServicePolicyChoice()    {}
+func (*GlobalSpecType_NoServicePolicies) isGlobalSpecType_ServicePolicyChoice()               {}
+func (*GlobalSpecType_ActiveServicePolicies) isGlobalSpecType_ServicePolicyChoice()           {}
 
 func (m *GlobalSpecType) GetPortChoice() isGlobalSpecType_PortChoice {
 	if m != nil {
@@ -283,6 +313,12 @@ func (m *GlobalSpecType) GetClusterRetractChoice() isGlobalSpecType_ClusterRetra
 func (m *GlobalSpecType) GetLoadbalancerType() isGlobalSpecType_LoadbalancerType {
 	if m != nil {
 		return m.LoadbalancerType
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetServicePolicyChoice() isGlobalSpecType_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
 	}
 	return nil
 }
@@ -406,11 +442,32 @@ func (m *GlobalSpecType) GetUdp() *schema.Empty {
 	return nil
 }
 
-func (m *GlobalSpecType) GetEnablePerPacketLoadBalancing() bool {
+func (m *GlobalSpecType) GetEnablePerPacketLoadBalancing() *schema.Empty {
 	if m != nil {
 		return m.EnablePerPacketLoadBalancing
 	}
-	return false
+	return nil
+}
+
+func (m *GlobalSpecType) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetActiveServicePolicies() *common_waf.ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
 }
 
 func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
@@ -457,6 +514,9 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_RetractCluster)(nil),
 		(*GlobalSpecType_DoNotRetractCluster)(nil),
 		(*GlobalSpecType_Udp)(nil),
+		(*GlobalSpecType_ServicePoliciesFromNamespace)(nil),
+		(*GlobalSpecType_NoServicePolicies)(nil),
+		(*GlobalSpecType_ActiveServicePolicies)(nil),
 	}
 }
 
@@ -492,7 +552,12 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to LoadbalancerType:
 	//	*CreateSpecType_Udp
 	LoadbalancerType             isCreateSpecType_LoadbalancerType `protobuf_oneof:"loadbalancer_type"`
-	EnablePerPacketLoadBalancing bool                              `protobuf:"varint,23,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
+	EnablePerPacketLoadBalancing *schema.Empty                     `protobuf:"bytes,24,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*CreateSpecType_ServicePoliciesFromNamespace
+	//	*CreateSpecType_NoServicePolicies
+	//	*CreateSpecType_ActiveServicePolicies
+	ServicePolicyChoice isCreateSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -553,6 +618,12 @@ type isCreateSpecType_LoadbalancerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_ServicePolicyChoice interface {
+	isCreateSpecType_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_ListenPort struct {
 	ListenPort uint32 `protobuf:"varint,3,opt,name=listen_port,json=listenPort,proto3,oneof" json:"listen_port,omitempty"`
@@ -593,6 +664,15 @@ type CreateSpecType_DoNotRetractCluster struct {
 type CreateSpecType_Udp struct {
 	Udp *schema.Empty `protobuf:"bytes,22,opt,name=udp,proto3,oneof" json:"udp,omitempty"`
 }
+type CreateSpecType_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,28,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type CreateSpecType_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,29,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type CreateSpecType_ActiveServicePolicies struct {
+	ActiveServicePolicies *common_waf.ServicePolicyList `protobuf:"bytes,30,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
 
 func (*CreateSpecType_ListenPort) isCreateSpecType_PortChoice()                               {}
 func (*CreateSpecType_PortRanges) isCreateSpecType_PortChoice()                               {}
@@ -607,6 +687,9 @@ func (*CreateSpecType_HashPolicyChoiceSourceIpStickiness) isCreateSpecType_HashP
 func (*CreateSpecType_RetractCluster) isCreateSpecType_ClusterRetractChoice()                 {}
 func (*CreateSpecType_DoNotRetractCluster) isCreateSpecType_ClusterRetractChoice()            {}
 func (*CreateSpecType_Udp) isCreateSpecType_LoadbalancerType()                                {}
+func (*CreateSpecType_ServicePoliciesFromNamespace) isCreateSpecType_ServicePolicyChoice()    {}
+func (*CreateSpecType_NoServicePolicies) isCreateSpecType_ServicePolicyChoice()               {}
+func (*CreateSpecType_ActiveServicePolicies) isCreateSpecType_ServicePolicyChoice()           {}
 
 func (m *CreateSpecType) GetPortChoice() isCreateSpecType_PortChoice {
 	if m != nil {
@@ -635,6 +718,12 @@ func (m *CreateSpecType) GetClusterRetractChoice() isCreateSpecType_ClusterRetra
 func (m *CreateSpecType) GetLoadbalancerType() isCreateSpecType_LoadbalancerType {
 	if m != nil {
 		return m.LoadbalancerType
+	}
+	return nil
+}
+func (m *CreateSpecType) GetServicePolicyChoice() isCreateSpecType_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
 	}
 	return nil
 }
@@ -758,11 +847,32 @@ func (m *CreateSpecType) GetUdp() *schema.Empty {
 	return nil
 }
 
-func (m *CreateSpecType) GetEnablePerPacketLoadBalancing() bool {
+func (m *CreateSpecType) GetEnablePerPacketLoadBalancing() *schema.Empty {
 	if m != nil {
 		return m.EnablePerPacketLoadBalancing
 	}
-	return false
+	return nil
+}
+
+func (m *CreateSpecType) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetActiveServicePolicies() *common_waf.ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
@@ -781,6 +891,9 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_RetractCluster)(nil),
 		(*CreateSpecType_DoNotRetractCluster)(nil),
 		(*CreateSpecType_Udp)(nil),
+		(*CreateSpecType_ServicePoliciesFromNamespace)(nil),
+		(*CreateSpecType_NoServicePolicies)(nil),
+		(*CreateSpecType_ActiveServicePolicies)(nil),
 	}
 }
 
@@ -816,7 +929,12 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to LoadbalancerType:
 	//	*ReplaceSpecType_Udp
 	LoadbalancerType             isReplaceSpecType_LoadbalancerType `protobuf_oneof:"loadbalancer_type"`
-	EnablePerPacketLoadBalancing bool                               `protobuf:"varint,23,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
+	EnablePerPacketLoadBalancing *schema.Empty                      `protobuf:"bytes,24,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*ReplaceSpecType_ServicePoliciesFromNamespace
+	//	*ReplaceSpecType_NoServicePolicies
+	//	*ReplaceSpecType_ActiveServicePolicies
+	ServicePolicyChoice isReplaceSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -877,6 +995,12 @@ type isReplaceSpecType_LoadbalancerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_ServicePolicyChoice interface {
+	isReplaceSpecType_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_ListenPort struct {
 	ListenPort uint32 `protobuf:"varint,3,opt,name=listen_port,json=listenPort,proto3,oneof" json:"listen_port,omitempty"`
@@ -917,6 +1041,15 @@ type ReplaceSpecType_DoNotRetractCluster struct {
 type ReplaceSpecType_Udp struct {
 	Udp *schema.Empty `protobuf:"bytes,22,opt,name=udp,proto3,oneof" json:"udp,omitempty"`
 }
+type ReplaceSpecType_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,28,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type ReplaceSpecType_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,29,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type ReplaceSpecType_ActiveServicePolicies struct {
+	ActiveServicePolicies *common_waf.ServicePolicyList `protobuf:"bytes,30,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
 
 func (*ReplaceSpecType_ListenPort) isReplaceSpecType_PortChoice()                               {}
 func (*ReplaceSpecType_PortRanges) isReplaceSpecType_PortChoice()                               {}
@@ -931,6 +1064,9 @@ func (*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) isReplaceSpecType_Has
 func (*ReplaceSpecType_RetractCluster) isReplaceSpecType_ClusterRetractChoice()                 {}
 func (*ReplaceSpecType_DoNotRetractCluster) isReplaceSpecType_ClusterRetractChoice()            {}
 func (*ReplaceSpecType_Udp) isReplaceSpecType_LoadbalancerType()                                {}
+func (*ReplaceSpecType_ServicePoliciesFromNamespace) isReplaceSpecType_ServicePolicyChoice()    {}
+func (*ReplaceSpecType_NoServicePolicies) isReplaceSpecType_ServicePolicyChoice()               {}
+func (*ReplaceSpecType_ActiveServicePolicies) isReplaceSpecType_ServicePolicyChoice()           {}
 
 func (m *ReplaceSpecType) GetPortChoice() isReplaceSpecType_PortChoice {
 	if m != nil {
@@ -959,6 +1095,12 @@ func (m *ReplaceSpecType) GetClusterRetractChoice() isReplaceSpecType_ClusterRet
 func (m *ReplaceSpecType) GetLoadbalancerType() isReplaceSpecType_LoadbalancerType {
 	if m != nil {
 		return m.LoadbalancerType
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetServicePolicyChoice() isReplaceSpecType_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
 	}
 	return nil
 }
@@ -1082,11 +1224,32 @@ func (m *ReplaceSpecType) GetUdp() *schema.Empty {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetEnablePerPacketLoadBalancing() bool {
+func (m *ReplaceSpecType) GetEnablePerPacketLoadBalancing() *schema.Empty {
 	if m != nil {
 		return m.EnablePerPacketLoadBalancing
 	}
-	return false
+	return nil
+}
+
+func (m *ReplaceSpecType) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetActiveServicePolicies() *common_waf.ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
@@ -1105,6 +1268,9 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_RetractCluster)(nil),
 		(*ReplaceSpecType_DoNotRetractCluster)(nil),
 		(*ReplaceSpecType_Udp)(nil),
+		(*ReplaceSpecType_ServicePoliciesFromNamespace)(nil),
+		(*ReplaceSpecType_NoServicePolicies)(nil),
+		(*ReplaceSpecType_ActiveServicePolicies)(nil),
 	}
 }
 
@@ -1139,11 +1305,16 @@ type GetSpecType struct {
 	ClusterRetractChoice isGetSpecType_ClusterRetractChoice `protobuf_oneof:"cluster_retract_choice"`
 	// Types that are valid to be assigned to LoadbalancerType:
 	//	*GetSpecType_Udp
-	LoadbalancerType             isGetSpecType_LoadbalancerType   `protobuf_oneof:"loadbalancer_type"`
-	EnablePerPacketLoadBalancing bool                             `protobuf:"varint,23,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
-	HostName                     string                           `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
-	DnsInfo                      []*virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
-	InternetVipInfo              []*views.InternetVIPInfo         `protobuf:"bytes,1100,rep,name=internet_vip_info,json=internetVipInfo,proto3" json:"internet_vip_info,omitempty"`
+	LoadbalancerType             isGetSpecType_LoadbalancerType `protobuf_oneof:"loadbalancer_type"`
+	EnablePerPacketLoadBalancing *schema.Empty                  `protobuf:"bytes,24,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*GetSpecType_ServicePoliciesFromNamespace
+	//	*GetSpecType_NoServicePolicies
+	//	*GetSpecType_ActiveServicePolicies
+	ServicePolicyChoice isGetSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
+	HostName            string                            `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
+	DnsInfo             []*virtual_host_dns_info.DnsInfo  `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
+	InternetVipInfo     []*views.InternetVIPInfo          `protobuf:"bytes,1100,rep,name=internet_vip_info,json=internetVipInfo,proto3" json:"internet_vip_info,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -1204,6 +1375,12 @@ type isGetSpecType_LoadbalancerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_ServicePolicyChoice interface {
+	isGetSpecType_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_ListenPort struct {
 	ListenPort uint32 `protobuf:"varint,3,opt,name=listen_port,json=listenPort,proto3,oneof" json:"listen_port,omitempty"`
@@ -1244,6 +1421,15 @@ type GetSpecType_DoNotRetractCluster struct {
 type GetSpecType_Udp struct {
 	Udp *schema.Empty `protobuf:"bytes,22,opt,name=udp,proto3,oneof" json:"udp,omitempty"`
 }
+type GetSpecType_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,28,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type GetSpecType_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,29,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type GetSpecType_ActiveServicePolicies struct {
+	ActiveServicePolicies *common_waf.ServicePolicyList `protobuf:"bytes,30,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
 
 func (*GetSpecType_ListenPort) isGetSpecType_PortChoice()                               {}
 func (*GetSpecType_PortRanges) isGetSpecType_PortChoice()                               {}
@@ -1258,6 +1444,9 @@ func (*GetSpecType_HashPolicyChoiceSourceIpStickiness) isGetSpecType_HashPolicyC
 func (*GetSpecType_RetractCluster) isGetSpecType_ClusterRetractChoice()                 {}
 func (*GetSpecType_DoNotRetractCluster) isGetSpecType_ClusterRetractChoice()            {}
 func (*GetSpecType_Udp) isGetSpecType_LoadbalancerType()                                {}
+func (*GetSpecType_ServicePoliciesFromNamespace) isGetSpecType_ServicePolicyChoice()    {}
+func (*GetSpecType_NoServicePolicies) isGetSpecType_ServicePolicyChoice()               {}
+func (*GetSpecType_ActiveServicePolicies) isGetSpecType_ServicePolicyChoice()           {}
 
 func (m *GetSpecType) GetPortChoice() isGetSpecType_PortChoice {
 	if m != nil {
@@ -1286,6 +1475,12 @@ func (m *GetSpecType) GetClusterRetractChoice() isGetSpecType_ClusterRetractChoi
 func (m *GetSpecType) GetLoadbalancerType() isGetSpecType_LoadbalancerType {
 	if m != nil {
 		return m.LoadbalancerType
+	}
+	return nil
+}
+func (m *GetSpecType) GetServicePolicyChoice() isGetSpecType_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
 	}
 	return nil
 }
@@ -1409,11 +1604,32 @@ func (m *GetSpecType) GetUdp() *schema.Empty {
 	return nil
 }
 
-func (m *GetSpecType) GetEnablePerPacketLoadBalancing() bool {
+func (m *GetSpecType) GetEnablePerPacketLoadBalancing() *schema.Empty {
 	if m != nil {
 		return m.EnablePerPacketLoadBalancing
 	}
-	return false
+	return nil
+}
+
+func (m *GetSpecType) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetActiveServicePolicies() *common_waf.ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
 }
 
 func (m *GetSpecType) GetHostName() string {
@@ -1453,6 +1669,9 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_RetractCluster)(nil),
 		(*GetSpecType_DoNotRetractCluster)(nil),
 		(*GetSpecType_Udp)(nil),
+		(*GetSpecType_ServicePoliciesFromNamespace)(nil),
+		(*GetSpecType_NoServicePolicies)(nil),
+		(*GetSpecType_ActiveServicePolicies)(nil),
 	}
 }
 
@@ -1475,103 +1694,115 @@ func init() {
 }
 
 var fileDescriptor_4d17f0d50ee479ed = []byte{
-	// 1535 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x99, 0x4d, 0x6c, 0x1b, 0x4d,
-	0x19, 0xc7, 0x3d, 0xf6, 0xbe, 0xb1, 0x3d, 0xce, 0x87, 0x33, 0x49, 0xcc, 0xbe, 0x49, 0xd8, 0xb8,
-	0xd1, 0x2b, 0x9a, 0x56, 0xae, 0x3f, 0x12, 0xda, 0xd2, 0x82, 0x0a, 0xdd, 0x94, 0x36, 0x09, 0xa5,
-	0x4d, 0xb7, 0x55, 0x2a, 0x85, 0x4a, 0xab, 0xf1, 0xee, 0xc4, 0x5e, 0xb2, 0xde, 0x59, 0x76, 0xc7,
-	0x2e, 0x39, 0x54, 0xaa, 0x72, 0x40, 0x1c, 0x51, 0x2f, 0xf4, 0xc8, 0x11, 0x71, 0xe2, 0xcc, 0xf6,
-	0x10, 0x71, 0x42, 0x08, 0x09, 0x1f, 0x23, 0x4e, 0xd4, 0xb9, 0xb4, 0x3d, 0xf5, 0x88, 0x72, 0x29,
-	0xda, 0x59, 0xdb, 0x89, 0x9d, 0x4d, 0x68, 0x81, 0x03, 0xf4, 0xf5, 0x6d, 0x3e, 0x9e, 0xff, 0x7f,
-	0x9e, 0x9d, 0xec, 0x3c, 0xbf, 0x89, 0x17, 0x16, 0x1b, 0xc4, 0xcd, 0x1b, 0xb4, 0xe0, 0x6a, 0x55,
-	0x52, 0xc3, 0x85, 0x86, 0x41, 0x9e, 0xba, 0x85, 0xba, 0x6e, 0xab, 0x26, 0xc5, 0x7a, 0x19, 0x9b,
-	0xd8, 0xd2, 0x88, 0x53, 0x60, 0x3b, 0x36, 0x71, 0xf3, 0xb6, 0x43, 0x19, 0x45, 0x5f, 0x05, 0x8a,
-	0x7c, 0xa0, 0xc8, 0x73, 0x45, 0xbe, 0x5f, 0x31, 0x7d, 0xa9, 0x62, 0xb0, 0x6a, 0xbd, 0x9c, 0xd7,
-	0x68, 0xad, 0x50, 0xa1, 0x15, 0x5a, 0xe0, 0xe2, 0x72, 0x7d, 0x8b, 0xf7, 0x78, 0x87, 0xb7, 0x02,
-	0xd3, 0xe9, 0xb9, 0x0a, 0xa5, 0x15, 0x93, 0x1c, 0x45, 0x31, 0xa3, 0x46, 0x5c, 0x86, 0x6b, 0x76,
-	0x3b, 0x60, 0xa6, 0x37, 0x4f, 0x6a, 0x33, 0x83, 0x5a, 0xed, 0x94, 0xa6, 0xbf, 0xec, 0x9d, 0x3c,
-	0x96, 0xed, 0xf4, 0x6c, 0xdf, 0xf3, 0x61, 0xd3, 0xd0, 0x31, 0x23, 0xed, 0xd9, 0xec, 0xc9, 0xa7,
-	0x57, 0x7b, 0xad, 0xe7, 0xc2, 0xf6, 0xe7, 0xf8, 0x02, 0xdf, 0xea, 0x0f, 0x70, 0x58, 0x1d, 0x9b,
-	0x6a, 0x95, 0xba, 0xac, 0x27, 0xae, 0x78, 0x7a, 0x9c, 0xaa, 0x5b, 0xae, 0x6a, 0x58, 0x5b, 0xb4,
-	0x40, 0xcb, 0x3f, 0x25, 0x1a, 0x0b, 0x14, 0xf3, 0xbf, 0x48, 0xc3, 0xd1, 0x3b, 0x26, 0x2d, 0x63,
-	0xf3, 0xa1, 0x4d, 0xb4, 0x47, 0x3b, 0x36, 0x41, 0xdf, 0x83, 0x71, 0x9d, 0xd6, 0xb0, 0x61, 0xb9,
-	0x22, 0xc8, 0xc6, 0x16, 0x92, 0xf2, 0xfc, 0x1f, 0xde, 0xee, 0xc5, 0x92, 0x2f, 0xc0, 0xd0, 0xbc,
-	0xe0, 0x44, 0xab, 0xc0, 0xef, 0x7d, 0xf1, 0x02, 0x44, 0xd3, 0xd9, 0x4e, 0x4b, 0x04, 0x4a, 0x47,
-	0x82, 0x8a, 0x70, 0xd2, 0x5f, 0xa9, 0x41, 0x4d, 0x46, 0x1c, 0x07, 0xab, 0x35, 0x6c, 0xe1, 0x0a,
-	0xd1, 0xc5, 0x2f, 0xb2, 0x60, 0x21, 0xa1, 0x20, 0xdd, 0x72, 0x37, 0xda, 0x53, 0x3f, 0x0e, 0x66,
-	0x50, 0x1e, 0xa6, 0x4c, 0xc3, 0x65, 0xc4, 0x52, 0x6d, 0xea, 0x30, 0x31, 0x96, 0x05, 0x0b, 0x23,
-	0x72, 0xca, 0xf7, 0x1e, 0xba, 0x28, 0x88, 0x1f, 0x3e, 0xc4, 0x56, 0x22, 0x0a, 0x0c, 0x22, 0xd6,
-	0xa9, 0xc3, 0xd0, 0x1a, 0x4c, 0xf9, 0x81, 0xaa, 0x83, 0xad, 0x0a, 0x71, 0x45, 0x21, 0x0b, 0x16,
-	0x92, 0xf2, 0x79, 0x9e, 0x8b, 0x13, 0x13, 0x9f, 0x0b, 0xed, 0x56, 0x53, 0xf8, 0x81, 0xdf, 0x12,
-	0x9c, 0x68, 0x1a, 0xb4, 0x87, 0xf6, 0x05, 0xe0, 0x7b, 0xf9, 0x6a, 0x85, 0x8b, 0xd1, 0xcf, 0xe0,
-	0x24, 0x75, 0x8c, 0x8a, 0xe1, 0xaf, 0x4d, 0x4d, 0x57, 0x7d, 0x4a, 0x8c, 0x4a, 0x95, 0xb9, 0xe2,
-	0x50, 0x36, 0xb6, 0x90, 0x5a, 0xbc, 0x90, 0x0f, 0x7b, 0x0d, 0xef, 0x73, 0xc1, 0x3a, 0xa5, 0xe6,
-	0x63, 0x83, 0x55, 0x1f, 0x73, 0x85, 0x3c, 0xd9, 0xdd, 0x95, 0xf4, 0xb1, 0x5d, 0x41, 0xb4, 0x1b,
-	0xeb, 0x06, 0x81, 0x2e, 0xba, 0x0d, 0xd3, 0x3a, 0x55, 0x2d, 0xca, 0x54, 0xac, 0x37, 0x88, 0xc3,
-	0x0c, 0x97, 0x88, 0x89, 0x2c, 0x58, 0x48, 0x2d, 0x4e, 0xf6, 0x2d, 0xf7, 0xc3, 0x9a, 0xcd, 0x76,
-	0x64, 0x61, 0xcf, 0x03, 0x60, 0x05, 0x28, 0xa3, 0x3a, 0xbd, 0x47, 0xd9, 0xcd, 0x8e, 0x06, 0x3d,
-	0x81, 0x73, 0x5d, 0x03, 0x95, 0x5a, 0xaa, 0x5d, 0x2f, 0x9b, 0x86, 0xa6, 0xea, 0x64, 0x0b, 0xd7,
-	0x4d, 0xa6, 0x36, 0x0c, 0x5b, 0x4c, 0x9e, 0x6e, 0xbb, 0x02, 0x94, 0x99, 0xae, 0xfc, 0xbe, 0xb5,
-	0xce, 0xc5, 0xb7, 0x02, 0xed, 0x86, 0x61, 0xa3, 0x27, 0x70, 0x22, 0xc4, 0x5d, 0x84, 0xdc, 0xf1,
-	0xab, 0xd0, 0x7d, 0xe9, 0xa6, 0x16, 0x98, 0x75, 0x13, 0x1f, 0x3f, 0xb1, 0x0e, 0x7a, 0x0c, 0xd3,
-	0x47, 0xee, 0x5a, 0xdd, 0x65, 0xb4, 0x26, 0xa6, 0x3e, 0xc6, 0x7a, 0x99, 0xc7, 0xca, 0x42, 0x33,
-	0xb0, 0x1e, 0xc3, 0xbd, 0x13, 0x68, 0x13, 0x4a, 0x55, 0xec, 0x56, 0x55, 0x9b, 0x9a, 0x86, 0xb6,
-	0xa3, 0x6a, 0x55, 0x6a, 0x68, 0x44, 0x75, 0x68, 0xdd, 0xd2, 0x55, 0x87, 0x96, 0x0d, 0x4b, 0x1c,
-	0x39, 0x63, 0x4f, 0xa2, 0xca, 0xb4, 0xaf, 0x5e, 0xe7, 0xe2, 0x65, 0xae, 0x55, 0x7c, 0xa9, 0xe2,
-	0x2b, 0x11, 0x81, 0x73, 0x21, 0xde, 0x26, 0xc1, 0x2e, 0x53, 0xb1, 0xc6, 0x8c, 0x06, 0x11, 0x47,
-	0xcf, 0xf8, 0x3b, 0xc6, 0xf7, 0x9f, 0x81, 0x37, 0x7e, 0xda, 0x51, 0x65, 0xa6, 0x7f, 0x95, 0xbb,
-	0xbe, 0xc9, 0x4d, 0xee, 0x81, 0x1e, 0xc0, 0x2f, 0xc3, 0x1e, 0x01, 0x5b, 0x3a, 0xad, 0x89, 0x63,
-	0x67, 0x66, 0x9f, 0x39, 0x91, 0x3d, 0x57, 0xa1, 0x6d, 0x78, 0x3e, 0xc4, 0xd2, 0xa5, 0x75, 0x47,
-	0x23, 0xaa, 0x61, 0xab, 0x2e, 0x33, 0xb4, 0x6d, 0xc3, 0x22, 0xae, 0x2b, 0xa6, 0xcf, 0x5c, 0x60,
-	0xbe, 0x7f, 0x81, 0x87, 0xdc, 0x63, 0xd5, 0x7e, 0xd8, 0x75, 0x40, 0x37, 0xe0, 0xb0, 0xa1, 0x9b,
-	0x44, 0xf5, 0x8b, 0x2b, 0xad, 0x33, 0x71, 0x9c, 0x9f, 0xe7, 0x99, 0xbf, 0x79, 0x40, 0xb8, 0x5c,
-	0x2c, 0x16, 0xff, 0xe1, 0x81, 0xc8, 0x2f, 0x5f, 0x81, 0x48, 0xe7, 0x7c, 0xff, 0xfe, 0x1d, 0x50,
-	0x52, 0xbe, 0xe0, 0x51, 0x10, 0x8f, 0x56, 0xe0, 0x98, 0x43, 0x98, 0x83, 0x35, 0xa6, 0x6a, 0x66,
-	0xdd, 0x65, 0xc4, 0x11, 0x27, 0x3e, 0x66, 0x5b, 0x63, 0xca, 0x68, 0x5b, 0xb7, 0x1c, 0xc8, 0xd0,
-	0x23, 0x98, 0x69, 0x9f, 0xb4, 0x7e, 0xc3, 0xc9, 0x8f, 0x33, 0x9c, 0xe0, 0x47, 0x4e, 0xe9, 0x75,
-	0x5d, 0x80, 0xb1, 0xba, 0x6e, 0x8b, 0x99, 0x33, 0x36, 0x4a, 0x50, 0xfc, 0x10, 0x74, 0x1b, 0x66,
-	0x89, 0x85, 0xcb, 0x26, 0x51, 0x6d, 0xe2, 0xa8, 0x36, 0xd6, 0xb6, 0x09, 0xe3, 0x00, 0x53, 0x03,
-	0x82, 0x19, 0x56, 0x45, 0xfc, 0x06, 0x2f, 0x8b, 0xb3, 0x41, 0xdc, 0x3a, 0x71, 0xd6, 0x79, 0xd4,
-	0x5d, 0x8a, 0x75, 0xb9, 0x13, 0x83, 0x36, 0xe1, 0x08, 0x87, 0x86, 0x61, 0x31, 0xe2, 0x58, 0xd8,
-	0x14, 0xdf, 0xc4, 0xf9, 0xe2, 0xf3, 0xe1, 0xe5, 0x89, 0x97, 0x77, 0x85, 0x6c, 0xf9, 0xc5, 0x5c,
-	0x4e, 0xff, 0xee, 0x59, 0xaf, 0x58, 0x19, 0xf6, 0xbb, 0xab, 0xed, 0x1e, 0x9a, 0x85, 0x49, 0x4e,
-	0x07, 0x0b, 0xd7, 0x88, 0xf8, 0xd6, 0xf7, 0x4d, 0x2a, 0x09, 0x7f, 0xe4, 0x1e, 0xae, 0x11, 0xb4,
-	0x02, 0x13, 0x1d, 0x6c, 0x88, 0xef, 0xe2, 0xbc, 0x26, 0xe6, 0x4e, 0x2c, 0x1a, 0xc2, 0x98, 0xfc,
-	0x2d, 0xcb, 0x5d, 0xb5, 0xb6, 0xa8, 0x12, 0xd7, 0x83, 0x06, 0x7a, 0x00, 0xc7, 0x83, 0x0c, 0x08,
-	0x2f, 0x4d, 0x81, 0xe5, 0x5f, 0x12, 0xdc, 0x32, 0xfc, 0xcc, 0xaf, 0xb6, 0xc3, 0x37, 0x56, 0xd7,
-	0xb9, 0xd5, 0x58, 0x47, 0xbf, 0x61, 0xd8, 0xfe, 0xc0, 0xf5, 0xea, 0x1f, 0x3d, 0xa0, 0xc3, 0x2c,
-	0x9c, 0x90, 0xb1, 0x6b, 0x68, 0xd9, 0x65, 0x6a, 0x6d, 0x19, 0x95, 0xba, 0x83, 0x7d, 0xb2, 0xa2,
-	0x64, 0x29, 0x77, 0x39, 0xb7, 0x98, 0xbb, 0x92, 0xbb, 0x0a, 0xe7, 0x61, 0xc6, 0xdf, 0xcf, 0x6c,
-	0x77, 0x43, 0xfd, 0x50, 0xe6, 0x50, 0x13, 0x25, 0x16, 0x4b, 0xb9, 0xd2, 0x62, 0x6e, 0x71, 0x09,
-	0xce, 0xc2, 0xcc, 0x4d, 0xbd, 0xe1, 0xdf, 0x2a, 0xf4, 0x3e, 0xa3, 0x68, 0xe9, 0xaa, 0x9c, 0x6d,
-	0x13, 0x27, 0x38, 0x38, 0x68, 0x7c, 0xcf, 0x03, 0xb1, 0xa6, 0x07, 0xa2, 0x2d, 0x0f, 0x80, 0xa5,
-	0xdf, 0xbc, 0x02, 0x40, 0xbe, 0xd0, 0x53, 0xd0, 0x82, 0xb0, 0xa9, 0x3d, 0x0f, 0x24, 0x9b, 0x1e,
-	0x88, 0xb7, 0x3c, 0x90, 0xbc, 0x96, 0x2b, 0x15, 0x73, 0xdf, 0xc9, 0x95, 0x4a, 0xf2, 0x45, 0x88,
-	0x4e, 0x1e, 0x46, 0x34, 0xb9, 0xe7, 0x81, 0x91, 0xa6, 0x07, 0x86, 0x5b, 0x1e, 0x48, 0x94, 0x96,
-	0x72, 0xa5, 0xcb, 0xb9, 0xd2, 0x15, 0x39, 0x07, 0x33, 0xed, 0x57, 0xf6, 0xe8, 0x15, 0x0e, 0xe2,
-	0x51, 0xd3, 0x03, 0xa8, 0xe5, 0x81, 0xa1, 0xd2, 0xb5, 0x5c, 0x76, 0xb1, 0xf8, 0xde, 0x03, 0x40,
-	0xfe, 0x26, 0x1c, 0x3f, 0x7e, 0x3d, 0x52, 0xfd, 0x9b, 0x01, 0x4a, 0xec, 0x79, 0x20, 0xd3, 0xf4,
-	0xc0, 0xd4, 0x9a, 0x90, 0x88, 0xa6, 0x63, 0x6b, 0x42, 0x22, 0x9e, 0x4e, 0xac, 0x09, 0x89, 0xe1,
-	0xf4, 0xc8, 0x9a, 0x90, 0x40, 0xe9, 0x89, 0x35, 0x21, 0x31, 0x95, 0xce, 0xcc, 0xff, 0x7a, 0x18,
-	0x8e, 0x2e, 0x3b, 0x04, 0x33, 0xd2, 0xbd, 0x08, 0x88, 0x7d, 0x17, 0x81, 0x23, 0xc8, 0x9f, 0x0b,
-	0x41, 0x76, 0x1f, 0xa5, 0xcf, 0x85, 0x50, 0xba, 0x0f, 0xbe, 0x9f, 0x7e, 0x55, 0xf8, 0xc9, 0x7f,
-	0x09, 0xd7, 0x03, 0x30, 0x7f, 0x4e, 0x60, 0x7e, 0xf2, 0x1f, 0x81, 0xf9, 0x73, 0xe7, 0xf1, 0xb9,
-	0x30, 0x1e, 0xf7, 0x22, 0xf7, 0xfb, 0x9f, 0x84, 0xdc, 0x10, 0xd2, 0xfe, 0xe8, 0xdf, 0x21, 0xed,
-	0xff, 0x0c, 0x60, 0xaf, 0x8f, 0xff, 0xf9, 0x46, 0xdf, 0x3f, 0x41, 0xb2, 0xd4, 0x5b, 0xf2, 0xc7,
-	0x76, 0x0f, 0xc1, 0xf1, 0x01, 0xf9, 0xbb, 0x21, 0x05, 0xff, 0xfc, 0xb1, 0x82, 0x1f, 0x6f, 0x97,
-	0xfb, 0xdd, 0x43, 0x70, 0x22, 0x50, 0xce, 0x85, 0x22, 0x20, 0xb3, 0x7b, 0x08, 0x42, 0xc6, 0xe5,
-	0x6f, 0x9f, 0x0a, 0x81, 0xe9, 0xdd, 0x43, 0x70, 0xca, 0x9c, 0x7c, 0x31, 0x0c, 0x06, 0x53, 0xbb,
-	0x87, 0xe0, 0xe4, 0xf0, 0xbf, 0x20, 0xc3, 0xcb, 0x61, 0x38, 0xa6, 0x10, 0xdb, 0xc4, 0xda, 0x00,
-	0x0d, 0x03, 0x34, 0x0c, 0xd0, 0x30, 0x40, 0xc3, 0x00, 0x0d, 0x03, 0x34, 0x70, 0x34, 0xfc, 0x75,
-	0x04, 0xa6, 0xee, 0x10, 0x36, 0xc0, 0xc2, 0x00, 0x0b, 0x03, 0x2c, 0x0c, 0xb0, 0xf0, 0xb5, 0xc1,
-	0xc2, 0xff, 0xf3, 0xcf, 0x66, 0x03, 0xa2, 0x9d, 0x41, 0x34, 0xf9, 0x25, 0x68, 0xbe, 0x96, 0x22,
-	0xfb, 0xaf, 0xa5, 0xc8, 0xfb, 0xd7, 0x12, 0x78, 0xde, 0x92, 0xc0, 0x6f, 0x5b, 0x12, 0xf8, 0x53,
-	0x4b, 0x02, 0xcd, 0x96, 0x04, 0xf6, 0x5b, 0x12, 0xf8, 0x7b, 0x4b, 0x02, 0x6f, 0x5a, 0x52, 0xe4,
-	0x7d, 0x4b, 0x02, 0xbf, 0x3a, 0x90, 0x22, 0x7b, 0x07, 0x12, 0x68, 0x1e, 0x48, 0x91, 0xfd, 0x03,
-	0x29, 0xb2, 0xb9, 0x59, 0xa1, 0xf6, 0x76, 0x25, 0xdf, 0x01, 0x54, 0xbe, 0xee, 0x16, 0x78, 0x63,
-	0x8b, 0x3a, 0xb5, 0x4b, 0xb6, 0x43, 0x1b, 0x86, 0x4e, 0x9c, 0x4b, 0x9d, 0xe9, 0x82, 0x5d, 0xae,
-	0xd0, 0x02, 0xf9, 0x39, 0x6b, 0x7f, 0xaf, 0x3b, 0xf3, 0xfb, 0x68, 0x79, 0x88, 0x7f, 0xb1, 0x5b,
-	0xfa, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7d, 0x48, 0x5d, 0x38, 0x4e, 0x1d, 0x00, 0x00,
+	// 1720 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4f, 0x6c, 0xdb, 0xd6,
+	0x19, 0xd7, 0x93, 0x18, 0x5b, 0x7a, 0x8e, 0x6d, 0xf9, 0xd9, 0x56, 0x19, 0xdb, 0xa5, 0x15, 0xa3,
+	0x58, 0xdc, 0x80, 0xd1, 0xbf, 0x34, 0x4d, 0xd3, 0x0d, 0xdd, 0x42, 0x77, 0xa9, 0xed, 0x65, 0xad,
+	0xcb, 0x04, 0x09, 0x90, 0x65, 0x20, 0x28, 0xf2, 0x49, 0x7a, 0x33, 0xc5, 0xc7, 0x91, 0x4f, 0xca,
+	0x7c, 0xe8, 0xd0, 0xf9, 0xb4, 0xdb, 0x86, 0x9e, 0x76, 0xdc, 0x71, 0xd8, 0x69, 0xd7, 0x8d, 0x3d,
+	0x18, 0x3b, 0x0d, 0xc3, 0x0e, 0x3a, 0x1a, 0x3b, 0x2d, 0xca, 0x25, 0xed, 0x29, 0xc7, 0xc1, 0x97,
+	0x0e, 0x7c, 0xa4, 0x64, 0x49, 0xa6, 0x8d, 0x78, 0xd9, 0x06, 0x2c, 0xd0, 0xed, 0xfd, 0xf9, 0x7e,
+	0xbf, 0xef, 0xd3, 0x47, 0xbe, 0xf7, 0xfb, 0xd9, 0x20, 0x2c, 0xb5, 0xb1, 0x57, 0x20, 0xb4, 0xe8,
+	0x19, 0x0d, 0xdc, 0xd4, 0x8b, 0x6d, 0x82, 0x9f, 0x78, 0xc5, 0x96, 0xe9, 0x68, 0x16, 0xd5, 0xcd,
+	0xaa, 0x6e, 0xe9, 0xb6, 0x81, 0xdd, 0x22, 0xdb, 0x73, 0xb0, 0x57, 0x70, 0x5c, 0xca, 0x28, 0x7a,
+	0x2b, 0x44, 0x14, 0x42, 0x44, 0x81, 0x23, 0x0a, 0xa3, 0x88, 0xa5, 0x6b, 0x75, 0xc2, 0x1a, 0xad,
+	0x6a, 0xc1, 0xa0, 0xcd, 0x62, 0x9d, 0xd6, 0x69, 0x91, 0x83, 0xab, 0xad, 0x1a, 0x9f, 0xf1, 0x09,
+	0x1f, 0x85, 0xa4, 0x4b, 0xab, 0x75, 0x4a, 0xeb, 0x16, 0x3e, 0x8e, 0x62, 0xa4, 0x89, 0x3d, 0xa6,
+	0x37, 0x9d, 0x28, 0x60, 0x79, 0xb8, 0x4e, 0xea, 0x30, 0x42, 0xed, 0xa8, 0xa4, 0xa5, 0x4b, 0xc3,
+	0x9b, 0x03, 0xd5, 0x2e, 0xad, 0x8c, 0xfc, 0x3e, 0xdd, 0x22, 0xa6, 0xce, 0x70, 0xb4, 0x9b, 0x3f,
+	0xf9, 0xeb, 0xb5, 0x61, 0xea, 0x1b, 0x71, 0xfd, 0x31, 0x68, 0xb3, 0x49, 0x6d, 0xed, 0x89, 0x5e,
+	0x1b, 0x18, 0x6a, 0x83, 0x69, 0x57, 0xe3, 0x60, 0x83, 0x01, 0xdf, 0x1a, 0x0d, 0x70, 0x59, 0x4b,
+	0xb7, 0xb4, 0x06, 0xf5, 0xd8, 0x50, 0x5c, 0xe9, 0xf4, 0x38, 0xcd, 0xb4, 0x3d, 0x8d, 0xd8, 0x35,
+	0x5a, 0xa4, 0xd5, 0x9f, 0x60, 0x83, 0x85, 0x88, 0xb5, 0x5f, 0xcd, 0xc3, 0x99, 0x8f, 0x2c, 0x5a,
+	0xd5, 0xad, 0x7b, 0x0e, 0x36, 0xee, 0xef, 0x39, 0x18, 0x7d, 0x07, 0x4e, 0x9a, 0xb4, 0xa9, 0x13,
+	0xdb, 0x13, 0x41, 0x3e, 0xb5, 0x9e, 0x51, 0xd6, 0xfe, 0xf4, 0xd5, 0x41, 0x2a, 0xf3, 0x05, 0x98,
+	0x58, 0x13, 0xdc, 0x64, 0x03, 0x04, 0xb3, 0x0b, 0x5f, 0x80, 0x64, 0x36, 0xdf, 0x1b, 0x89, 0x40,
+	0xed, 0x41, 0x50, 0x09, 0x2e, 0x04, 0x99, 0xda, 0xd4, 0x62, 0xd8, 0x75, 0x75, 0xad, 0xa9, 0xdb,
+	0x7a, 0x1d, 0x9b, 0xe2, 0x85, 0x3c, 0x58, 0x4f, 0xab, 0xc8, 0xb4, 0xbd, 0x07, 0xd1, 0xd6, 0x0f,
+	0xc3, 0x1d, 0x54, 0x80, 0x53, 0x16, 0xf1, 0x18, 0xb6, 0x35, 0x87, 0xba, 0x4c, 0x4c, 0xe5, 0xc1,
+	0xfa, 0xb4, 0x32, 0x15, 0x70, 0x4f, 0x5c, 0x15, 0xc4, 0x6f, 0xbe, 0x49, 0x6d, 0x26, 0x54, 0x18,
+	0x46, 0xec, 0x50, 0x97, 0xa1, 0x6d, 0x38, 0x15, 0x04, 0x6a, 0xae, 0x6e, 0xd7, 0xb1, 0x27, 0x0a,
+	0x79, 0xb0, 0x9e, 0x51, 0xae, 0xf0, 0x5a, 0xdc, 0x94, 0xf8, 0xb9, 0x10, 0x8d, 0x3a, 0xc2, 0xf7,
+	0x82, 0x91, 0xe0, 0x26, 0xb3, 0x20, 0x5a, 0x3a, 0x14, 0x40, 0xc0, 0x15, 0xa0, 0x55, 0x0e, 0x46,
+	0x3f, 0x85, 0x0b, 0xd4, 0x25, 0x75, 0x12, 0xe4, 0xa6, 0x96, 0xa7, 0x3d, 0xc1, 0xa4, 0xde, 0x60,
+	0x9e, 0x38, 0x91, 0x4f, 0xad, 0x4f, 0x55, 0xde, 0x2e, 0xc4, 0xbd, 0xbd, 0x9f, 0x70, 0xc0, 0x0e,
+	0xa5, 0xd6, 0x43, 0xc2, 0x1a, 0x0f, 0x39, 0x42, 0x59, 0xe8, 0x77, 0x25, 0x3b, 0xd0, 0x15, 0x44,
+	0xfb, 0xb1, 0x5e, 0x18, 0xe8, 0xa1, 0x3b, 0x30, 0x6b, 0x52, 0xcd, 0xa6, 0x4c, 0xd3, 0xcd, 0x36,
+	0x76, 0x19, 0xf1, 0xb0, 0x98, 0xce, 0x83, 0xf5, 0xa9, 0xca, 0xc2, 0x48, 0xba, 0xef, 0x37, 0x1d,
+	0xb6, 0xa7, 0x08, 0x07, 0x3e, 0x00, 0x9b, 0x40, 0x9d, 0x31, 0xe9, 0xc7, 0x94, 0xdd, 0xee, 0x61,
+	0xd0, 0x63, 0xb8, 0xda, 0x27, 0xd0, 0xa8, 0xad, 0x39, 0xad, 0xaa, 0x45, 0x0c, 0xcd, 0xc4, 0x35,
+	0xbd, 0x65, 0x31, 0xad, 0x4d, 0x1c, 0x31, 0x73, 0x3a, 0xed, 0x26, 0x50, 0x97, 0xfb, 0xf0, 0x4f,
+	0xec, 0x1d, 0x0e, 0xfe, 0x30, 0xc4, 0x3e, 0x20, 0x0e, 0x7a, 0x0c, 0xe7, 0x63, 0xd8, 0x45, 0xc8,
+	0x19, 0xdf, 0x8a, 0xed, 0x4b, 0xbf, 0xb4, 0x90, 0xac, 0x5f, 0xf8, 0xdc, 0x89, 0x3c, 0xe8, 0x21,
+	0xcc, 0x1e, 0xb3, 0x1b, 0x2d, 0x8f, 0xd1, 0xa6, 0x38, 0xf5, 0x32, 0xd4, 0x1b, 0x3c, 0x56, 0x11,
+	0x3a, 0x21, 0xf5, 0xac, 0x3e, 0xbc, 0x81, 0x1e, 0x41, 0xa9, 0xa1, 0x7b, 0x0d, 0xcd, 0xa1, 0x16,
+	0x31, 0xf6, 0x34, 0xa3, 0x41, 0x89, 0x81, 0x35, 0x97, 0xb6, 0x6c, 0x53, 0x73, 0x69, 0x95, 0xd8,
+	0xe2, 0xf4, 0x19, 0x3d, 0x49, 0xaa, 0x4b, 0x01, 0x7a, 0x87, 0x83, 0x37, 0x38, 0x56, 0x0d, 0xa0,
+	0x6a, 0x80, 0x44, 0x18, 0xae, 0xc6, 0x70, 0x5b, 0x58, 0xf7, 0x98, 0xa6, 0x1b, 0x8c, 0xb4, 0xb1,
+	0x38, 0x73, 0xc6, 0x73, 0x9c, 0x3c, 0xfc, 0x0c, 0x3c, 0x0f, 0xca, 0x4e, 0xaa, 0xcb, 0xa3, 0x59,
+	0xee, 0x06, 0x24, 0xb7, 0x39, 0x07, 0xfa, 0x14, 0x5e, 0x8a, 0xfb, 0x09, 0xba, 0x6d, 0xd2, 0xa6,
+	0x38, 0x7b, 0x66, 0xf5, 0xb9, 0x13, 0xd5, 0x73, 0x14, 0xda, 0x85, 0x57, 0x62, 0x28, 0x3d, 0xda,
+	0x72, 0x0d, 0xac, 0x11, 0x47, 0xf3, 0x18, 0x31, 0x76, 0x89, 0x8d, 0x3d, 0x4f, 0xcc, 0x9e, 0x99,
+	0x60, 0x6d, 0x34, 0xc1, 0x3d, 0xce, 0xb1, 0xe5, 0xdc, 0xeb, 0x33, 0xa0, 0x0f, 0xe0, 0x45, 0x62,
+	0x5a, 0x58, 0x0b, 0xee, 0x64, 0xda, 0x62, 0xe2, 0x1c, 0x3f, 0xcf, 0xcb, 0x7f, 0xf7, 0x81, 0x70,
+	0xa3, 0x54, 0x2a, 0xfd, 0xd3, 0x07, 0x89, 0x5f, 0x7e, 0x09, 0x12, 0xbd, 0xf3, 0xfd, 0x87, 0xaf,
+	0x81, 0x3a, 0x15, 0x00, 0xee, 0x87, 0xf1, 0x68, 0x13, 0xce, 0xba, 0x98, 0xb9, 0xba, 0xc1, 0x34,
+	0xc3, 0x6a, 0x79, 0x0c, 0xbb, 0xe2, 0xfc, 0xcb, 0xb4, 0x35, 0xa5, 0xce, 0x44, 0xb8, 0x8d, 0x10,
+	0x86, 0xee, 0xc3, 0x5c, 0x74, 0xd2, 0x46, 0x09, 0x17, 0x5e, 0x8e, 0x70, 0x9e, 0x1f, 0x39, 0x75,
+	0x98, 0x75, 0x1d, 0xa6, 0x5a, 0xa6, 0x23, 0xe6, 0xce, 0x68, 0x94, 0xa0, 0x06, 0x21, 0x08, 0xc3,
+	0x3c, 0xb6, 0xf5, 0xaa, 0x85, 0x35, 0x07, 0xbb, 0x9a, 0xa3, 0x1b, 0xbb, 0x98, 0x71, 0xdd, 0xd3,
+	0x42, 0xe1, 0x23, 0x76, 0x5d, 0x14, 0x5f, 0xa2, 0x12, 0x75, 0x25, 0xa4, 0xd9, 0xc1, 0xee, 0x0e,
+	0x27, 0xb9, 0x4b, 0x75, 0x53, 0xe9, 0x51, 0xa0, 0x1f, 0xc3, 0x55, 0x0f, 0xbb, 0xed, 0xe0, 0x91,
+	0xf2, 0x07, 0x4c, 0xb0, 0xa7, 0xd5, 0x5c, 0xda, 0xd4, 0x6c, 0xbd, 0x89, 0x3d, 0x47, 0x37, 0xb0,
+	0xb8, 0x72, 0x46, 0xb1, 0x17, 0xd4, 0x95, 0x08, 0xbe, 0x13, 0xa1, 0xef, 0xb8, 0xb4, 0xf9, 0x71,
+	0x0f, 0x8b, 0xee, 0xc0, 0x79, 0x9b, 0x6a, 0xa3, 0x19, 0xc4, 0x37, 0xcf, 0xa4, 0x9c, 0xb3, 0xe9,
+	0xbd, 0x61, 0x52, 0xb4, 0x0b, 0xdf, 0x08, 0x4f, 0xc9, 0x49, 0x2e, 0x89, 0x73, 0x95, 0x63, 0x8f,
+	0xfe, 0xb1, 0x64, 0x16, 0x06, 0x19, 0xf7, 0xee, 0x12, 0x8f, 0x6d, 0x5e, 0x50, 0x17, 0x43, 0xce,
+	0xd1, 0x64, 0x8f, 0xe0, 0x34, 0x97, 0x67, 0x62, 0x33, 0xec, 0xda, 0xba, 0x25, 0x3e, 0x9f, 0xe4,
+	0x39, 0xd6, 0xe2, 0x6f, 0x74, 0xae, 0x88, 0x2a, 0xae, 0x05, 0xfa, 0xa7, 0x64, 0x7f, 0xff, 0xd9,
+	0x30, 0x58, 0xbd, 0x18, 0x4c, 0xb7, 0xa2, 0x19, 0x5a, 0x81, 0x19, 0x2e, 0xa8, 0x41, 0x7b, 0xc5,
+	0xaf, 0x02, 0xde, 0x8c, 0x9a, 0x0e, 0x56, 0x82, 0x9e, 0xa1, 0x4d, 0x98, 0xee, 0x29, 0xad, 0xf8,
+	0xf5, 0x24, 0x97, 0x11, 0xf9, 0x44, 0xd2, 0x18, 0x59, 0x2e, 0x7c, 0x68, 0x7b, 0x5b, 0x76, 0x8d,
+	0xaa, 0x93, 0x66, 0x38, 0x40, 0x9f, 0xc2, 0xb9, 0xb0, 0x02, 0xcc, 0x6f, 0xf3, 0x90, 0xf2, 0x6f,
+	0x69, 0x4e, 0x19, 0x7f, 0x4d, 0x6e, 0x45, 0xe1, 0x0f, 0xb6, 0x76, 0x38, 0xd5, 0x6c, 0x0f, 0xff,
+	0x80, 0x38, 0xc1, 0xc2, 0xfb, 0xfb, 0xe0, 0xcf, 0x3e, 0xf8, 0x39, 0xcc, 0xc3, 0x79, 0x45, 0xf7,
+	0x88, 0x91, 0xdf, 0xa0, 0x76, 0x8d, 0xd4, 0x5b, 0xae, 0x1e, 0x98, 0x18, 0x94, 0x29, 0xcb, 0x37,
+	0xe4, 0x8a, 0xfc, 0xae, 0x7c, 0x13, 0xae, 0xc1, 0x5c, 0xf0, 0x92, 0xe5, 0xfb, 0x6f, 0x59, 0x10,
+	0xca, 0x5c, 0x6a, 0xa1, 0x74, 0xa5, 0x2c, 0x97, 0x2b, 0x72, 0xe5, 0x1d, 0x28, 0xc2, 0x6c, 0xd4,
+	0xf6, 0x7c, 0xbf, 0xef, 0xc9, 0xca, 0xcd, 0x75, 0x00, 0x57, 0x60, 0xee, 0xb6, 0xd9, 0x0e, 0xac,
+	0x9d, 0x39, 0x92, 0x22, 0x59, 0xbe, 0xa9, 0xe4, 0x23, 0xfd, 0x0e, 0xaf, 0x21, 0x34, 0x77, 0xe0,
+	0x83, 0x54, 0xc7, 0x07, 0xc9, 0xae, 0x0f, 0xc0, 0xf5, 0xdf, 0x7e, 0x09, 0x80, 0xf2, 0xf6, 0x90,
+	0x3c, 0x84, 0x61, 0x8b, 0x07, 0x3e, 0xc8, 0x74, 0x7c, 0x30, 0xd9, 0xf5, 0x41, 0xe6, 0x96, 0x5c,
+	0x2e, 0xc9, 0xef, 0xc9, 0xe5, 0xb2, 0x72, 0x15, 0xa2, 0x93, 0x57, 0x1b, 0x5a, 0x38, 0xf0, 0xc1,
+	0x74, 0xc7, 0x07, 0x17, 0xbb, 0x3e, 0x48, 0x97, 0xaf, 0xcb, 0xe5, 0x1b, 0x72, 0xf9, 0x5d, 0x45,
+	0x86, 0xb9, 0xe8, 0x02, 0x38, 0xbe, 0x10, 0xc2, 0x78, 0xd4, 0xf1, 0x01, 0xea, 0xfa, 0x60, 0xa2,
+	0x7c, 0x4b, 0xce, 0x57, 0x4a, 0x2f, 0x7c, 0x00, 0x94, 0x37, 0xe1, 0xdc, 0xa0, 0x47, 0xe5, 0x86,
+	0x0d, 0xa5, 0x0f, 0x7c, 0x90, 0xeb, 0xf8, 0x60, 0x51, 0xb9, 0x06, 0x17, 0x87, 0xde, 0xe3, 0xa1,
+	0xdc, 0x2b, 0x1d, 0x1f, 0x2c, 0x07, 0xb9, 0x2b, 0xef, 0xc9, 0x95, 0x5b, 0xf2, 0xf5, 0xd2, 0xb6,
+	0x90, 0x4e, 0x66, 0x53, 0xdb, 0x42, 0x7a, 0x32, 0x9b, 0xde, 0x16, 0xd2, 0x17, 0xb3, 0xd3, 0xdb,
+	0x42, 0x1a, 0x65, 0xe7, 0xb7, 0x85, 0xf4, 0x62, 0x36, 0xb7, 0x2d, 0xa4, 0xdf, 0xc8, 0x8a, 0xdb,
+	0x42, 0x7a, 0x39, 0xbb, 0xb2, 0xf6, 0x8b, 0x59, 0x38, 0xb3, 0xe1, 0x62, 0x9d, 0xe1, 0xbe, 0x23,
+	0x13, 0x47, 0x1c, 0xd9, 0xb1, 0xdb, 0xba, 0x1c, 0xe3, 0x9d, 0x46, 0xec, 0xd2, 0xe5, 0x18, 0xbb,
+	0x34, 0xe2, 0x82, 0xce, 0xef, 0xd9, 0x7e, 0xf4, 0x1f, 0xf2, 0x4d, 0x63, 0x87, 0xf4, 0x3a, 0x39,
+	0xa4, 0xc7, 0xaf, 0xe4, 0x90, 0x5e, 0x77, 0x63, 0x74, 0x39, 0xce, 0x18, 0x0d, 0x7b, 0x9f, 0xef,
+	0x9e, 0xcb, 0xfb, 0xc4, 0x58, 0x9e, 0x1f, 0xfc, 0x3b, 0x96, 0xe7, 0xd5, 0x9d, 0xce, 0xe3, 0x57,
+	0x73, 0x3a, 0x63, 0x83, 0x73, 0x5e, 0x83, 0xf3, 0xfe, 0xdc, 0x5f, 0x3f, 0x18, 0xf9, 0xbb, 0x5d,
+	0x91, 0x86, 0x75, 0x75, 0x76, 0xff, 0x08, 0x0c, 0x2e, 0x28, 0xdf, 0x8e, 0x51, 0xd5, 0x2b, 0x03,
+	0xaa, 0x3a, 0x19, 0x69, 0xea, 0xfe, 0x11, 0x38, 0x11, 0xa8, 0xc8, 0xb1, 0x3a, 0x9b, 0xdb, 0x3f,
+	0x02, 0x31, 0xeb, 0xca, 0x3b, 0xa7, 0x2a, 0xed, 0xd2, 0xfe, 0x11, 0x38, 0x65, 0x4f, 0xb9, 0x1a,
+	0xa7, 0xb8, 0x8b, 0xfb, 0x47, 0xe0, 0xe4, 0xb2, 0x52, 0x39, 0x4d, 0x7e, 0x2f, 0xed, 0x1f, 0x81,
+	0xf8, 0xad, 0x73, 0x68, 0xf0, 0xfe, 0x2c, 0x9c, 0x55, 0xb1, 0x63, 0xe9, 0xc6, 0x58, 0x84, 0xc7,
+	0x22, 0x3c, 0x16, 0xe1, 0xb1, 0x08, 0x8f, 0x45, 0x78, 0x2c, 0xc2, 0x63, 0x11, 0xfe, 0x9f, 0x8a,
+	0xf0, 0x1f, 0xb3, 0x70, 0xea, 0x23, 0xcc, 0xc6, 0x02, 0x3c, 0x16, 0xe0, 0xb1, 0x00, 0x8f, 0x05,
+	0x78, 0x2c, 0xc0, 0x63, 0x01, 0x1e, 0x4d, 0xf6, 0x7f, 0xfc, 0xaf, 0xf8, 0xb1, 0x77, 0xf8, 0x2f,
+	0x7a, 0x07, 0xe5, 0x37, 0xa0, 0xf3, 0x54, 0x4a, 0x1c, 0x3e, 0x95, 0x12, 0x2f, 0x9e, 0x4a, 0xe0,
+	0xf3, 0xae, 0x04, 0x7e, 0xd7, 0x95, 0xc0, 0x5f, 0xba, 0x12, 0xe8, 0x74, 0x25, 0x70, 0xd8, 0x95,
+	0xc0, 0x3f, 0xba, 0x12, 0x78, 0xde, 0x95, 0x12, 0x2f, 0xba, 0x12, 0xf8, 0xf5, 0x33, 0x29, 0x71,
+	0xf0, 0x4c, 0x02, 0x9d, 0x67, 0x52, 0xe2, 0xf0, 0x99, 0x94, 0x78, 0xf4, 0xa8, 0x4e, 0x9d, 0xdd,
+	0x7a, 0xa1, 0x67, 0x05, 0x0a, 0x2d, 0xaf, 0xc8, 0x07, 0x35, 0xea, 0x36, 0xaf, 0x39, 0x2e, 0x6d,
+	0x13, 0x13, 0xbb, 0xd7, 0x7a, 0xdb, 0x45, 0xa7, 0x5a, 0xa7, 0x45, 0xfc, 0x33, 0x16, 0x7d, 0x76,
+	0x71, 0xe6, 0xd7, 0x31, 0xd5, 0x09, 0xfe, 0xe1, 0xc5, 0xf5, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff,
+	0xea, 0xb2, 0xae, 0xf3, 0x4c, 0x23, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -1660,7 +1891,16 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.LoadbalancerType.Equal(that1.LoadbalancerType) {
 		return false
 	}
-	if this.EnablePerPacketLoadBalancing != that1.EnablePerPacketLoadBalancing {
+	if !this.EnablePerPacketLoadBalancing.Equal(that1.EnablePerPacketLoadBalancing) {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
 		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
@@ -1999,6 +2239,78 @@ func (this *GlobalSpecType_Udp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2085,7 +2397,16 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if !this.LoadbalancerType.Equal(that1.LoadbalancerType) {
 		return false
 	}
-	if this.EnablePerPacketLoadBalancing != that1.EnablePerPacketLoadBalancing {
+	if !this.EnablePerPacketLoadBalancing.Equal(that1.EnablePerPacketLoadBalancing) {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
 		return false
 	}
 	return true
@@ -2402,6 +2723,78 @@ func (this *CreateSpecType_Udp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(CreateSpecType_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2488,7 +2881,16 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if !this.LoadbalancerType.Equal(that1.LoadbalancerType) {
 		return false
 	}
-	if this.EnablePerPacketLoadBalancing != that1.EnablePerPacketLoadBalancing {
+	if !this.EnablePerPacketLoadBalancing.Equal(that1.EnablePerPacketLoadBalancing) {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
 		return false
 	}
 	return true
@@ -2805,6 +3207,78 @@ func (this *ReplaceSpecType_Udp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2891,7 +3365,16 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if !this.LoadbalancerType.Equal(that1.LoadbalancerType) {
 		return false
 	}
-	if this.EnablePerPacketLoadBalancing != that1.EnablePerPacketLoadBalancing {
+	if !this.EnablePerPacketLoadBalancing.Equal(that1.EnablePerPacketLoadBalancing) {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
 		return false
 	}
 	if this.HostName != that1.HostName {
@@ -3227,11 +3710,83 @@ func (this *GetSpecType_Udp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(GetSpecType_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(GetSpecType_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(GetSpecType_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 26)
+	s := make([]string, 0, 29)
 	s = append(s, "&udp_loadbalancer.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "DnsVolterraManaged: "+fmt.Sprintf("%#v", this.DnsVolterraManaged)+",\n")
@@ -3254,7 +3809,12 @@ func (this *GlobalSpecType) GoString() string {
 	if this.LoadbalancerType != nil {
 		s = append(s, "LoadbalancerType: "+fmt.Sprintf("%#v", this.LoadbalancerType)+",\n")
 	}
-	s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
+	if this.EnablePerPacketLoadBalancing != nil {
+		s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
+	}
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
+	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
 	}
@@ -3372,11 +3932,35 @@ func (this *GlobalSpecType_Udp) GoString() string {
 		`Udp:` + fmt.Sprintf("%#v", this.Udp) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.GlobalSpecType_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.GlobalSpecType_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.GlobalSpecType_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 22)
+	s := make([]string, 0, 25)
 	s = append(s, "&udp_loadbalancer.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.PortChoice != nil {
@@ -3399,7 +3983,12 @@ func (this *CreateSpecType) GoString() string {
 	if this.LoadbalancerType != nil {
 		s = append(s, "LoadbalancerType: "+fmt.Sprintf("%#v", this.LoadbalancerType)+",\n")
 	}
-	s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
+	if this.EnablePerPacketLoadBalancing != nil {
+		s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
+	}
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -3507,11 +4096,35 @@ func (this *CreateSpecType_Udp) GoString() string {
 		`Udp:` + fmt.Sprintf("%#v", this.Udp) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.CreateSpecType_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.CreateSpecType_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.CreateSpecType_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 22)
+	s := make([]string, 0, 25)
 	s = append(s, "&udp_loadbalancer.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.PortChoice != nil {
@@ -3534,7 +4147,12 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.LoadbalancerType != nil {
 		s = append(s, "LoadbalancerType: "+fmt.Sprintf("%#v", this.LoadbalancerType)+",\n")
 	}
-	s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
+	if this.EnablePerPacketLoadBalancing != nil {
+		s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
+	}
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -3642,11 +4260,35 @@ func (this *ReplaceSpecType_Udp) GoString() string {
 		`Udp:` + fmt.Sprintf("%#v", this.Udp) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.ReplaceSpecType_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.ReplaceSpecType_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.ReplaceSpecType_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 25)
+	s := make([]string, 0, 28)
 	s = append(s, "&udp_loadbalancer.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.PortChoice != nil {
@@ -3669,7 +4311,12 @@ func (this *GetSpecType) GoString() string {
 	if this.LoadbalancerType != nil {
 		s = append(s, "LoadbalancerType: "+fmt.Sprintf("%#v", this.LoadbalancerType)+",\n")
 	}
-	s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
+	if this.EnablePerPacketLoadBalancing != nil {
+		s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
+	}
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
+	}
 	s = append(s, "HostName: "+fmt.Sprintf("%#v", this.HostName)+",\n")
 	if this.DnsInfo != nil {
 		s = append(s, "DnsInfo: "+fmt.Sprintf("%#v", this.DnsInfo)+",\n")
@@ -3784,6 +4431,30 @@ func (this *GetSpecType_Udp) GoString() string {
 		`Udp:` + fmt.Sprintf("%#v", this.Udp) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.GetSpecType_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.GetSpecType_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&udp_loadbalancer.GetSpecType_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -3867,17 +4538,28 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc2
 	}
-	if m.EnablePerPacketLoadBalancing {
-		i--
-		if m.EnablePerPacketLoadBalancing {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.EnablePerPacketLoadBalancing != nil {
+		{
+			size, err := m.EnablePerPacketLoadBalancing.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
 		dAtA[i] = 0x1
 		i--
-		dAtA[i] = 0xb8
+		dAtA[i] = 0xc2
 	}
 	if m.LoadbalancerType != nil {
 		{
@@ -4232,6 +4914,75 @@ func (m *GlobalSpecType_Udp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4252,17 +5003,28 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.EnablePerPacketLoadBalancing {
-		i--
-		if m.EnablePerPacketLoadBalancing {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.EnablePerPacketLoadBalancing != nil {
+		{
+			size, err := m.EnablePerPacketLoadBalancing.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
 		dAtA[i] = 0x1
 		i--
-		dAtA[i] = 0xb8
+		dAtA[i] = 0xc2
 	}
 	if m.LoadbalancerType != nil {
 		{
@@ -4617,6 +5379,75 @@ func (m *CreateSpecType_Udp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4637,17 +5468,28 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.EnablePerPacketLoadBalancing {
-		i--
-		if m.EnablePerPacketLoadBalancing {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.EnablePerPacketLoadBalancing != nil {
+		{
+			size, err := m.EnablePerPacketLoadBalancing.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
 		dAtA[i] = 0x1
 		i--
-		dAtA[i] = 0xb8
+		dAtA[i] = 0xc2
 	}
 	if m.LoadbalancerType != nil {
 		{
@@ -5002,6 +5844,75 @@ func (m *ReplaceSpecType_Udp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5063,17 +5974,28 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xca
 	}
-	if m.EnablePerPacketLoadBalancing {
-		i--
-		if m.EnablePerPacketLoadBalancing {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.EnablePerPacketLoadBalancing != nil {
+		{
+			size, err := m.EnablePerPacketLoadBalancing.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
 		dAtA[i] = 0x1
 		i--
-		dAtA[i] = 0xb8
+		dAtA[i] = 0xc2
 	}
 	if m.LoadbalancerType != nil {
 		{
@@ -5428,6 +6350,75 @@ func (m *GetSpecType_Udp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -5478,8 +6469,12 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.LoadbalancerType != nil {
 		n += m.LoadbalancerType.Size()
 	}
-	if m.EnablePerPacketLoadBalancing {
-		n += 3
+	if m.EnablePerPacketLoadBalancing != nil {
+		l = m.EnablePerPacketLoadBalancing.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
@@ -5655,6 +6650,42 @@ func (m *GlobalSpecType_Udp) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5694,8 +6725,12 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.LoadbalancerType != nil {
 		n += m.LoadbalancerType.Size()
 	}
-	if m.EnablePerPacketLoadBalancing {
-		n += 3
+	if m.EnablePerPacketLoadBalancing != nil {
+		l = m.EnablePerPacketLoadBalancing.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
 	}
 	return n
 }
@@ -5851,6 +6886,42 @@ func (m *CreateSpecType_Udp) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5890,8 +6961,12 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.LoadbalancerType != nil {
 		n += m.LoadbalancerType.Size()
 	}
-	if m.EnablePerPacketLoadBalancing {
-		n += 3
+	if m.EnablePerPacketLoadBalancing != nil {
+		l = m.EnablePerPacketLoadBalancing.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
 	}
 	return n
 }
@@ -6047,6 +7122,42 @@ func (m *ReplaceSpecType_Udp) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6086,8 +7197,12 @@ func (m *GetSpecType) Size() (n int) {
 	if m.LoadbalancerType != nil {
 		n += m.LoadbalancerType.Size()
 	}
-	if m.EnablePerPacketLoadBalancing {
-		n += 3
+	if m.EnablePerPacketLoadBalancing != nil {
+		l = m.EnablePerPacketLoadBalancing.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
 	}
 	l = len(m.HostName)
 	if l > 0 {
@@ -6259,6 +7374,42 @@ func (m *GetSpecType_Udp) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -6295,7 +7446,8 @@ func (this *GlobalSpecType) String() string {
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`LoadbalancerType:` + fmt.Sprintf("%v", this.LoadbalancerType) + `,`,
-		`EnablePerPacketLoadBalancing:` + fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing) + `,`,
+		`EnablePerPacketLoadBalancing:` + strings.Replace(fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing), "Empty", "schema.Empty", 1) + `,`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
@@ -6434,6 +7586,36 @@ func (this *GlobalSpecType_Udp) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "common_waf.ServicePolicyList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -6453,7 +7635,8 @@ func (this *CreateSpecType) String() string {
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`LoadbalancerType:` + fmt.Sprintf("%v", this.LoadbalancerType) + `,`,
-		`EnablePerPacketLoadBalancing:` + fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing) + `,`,
+		`EnablePerPacketLoadBalancing:` + strings.Replace(fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing), "Empty", "schema.Empty", 1) + `,`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6588,6 +7771,36 @@ func (this *CreateSpecType_Udp) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "common_waf.ServicePolicyList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -6607,7 +7820,8 @@ func (this *ReplaceSpecType) String() string {
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`LoadbalancerType:` + fmt.Sprintf("%v", this.LoadbalancerType) + `,`,
-		`EnablePerPacketLoadBalancing:` + fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing) + `,`,
+		`EnablePerPacketLoadBalancing:` + strings.Replace(fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing), "Empty", "schema.Empty", 1) + `,`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6742,6 +7956,36 @@ func (this *ReplaceSpecType_Udp) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "common_waf.ServicePolicyList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -6771,7 +8015,8 @@ func (this *GetSpecType) String() string {
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`LoadbalancerType:` + fmt.Sprintf("%v", this.LoadbalancerType) + `,`,
-		`EnablePerPacketLoadBalancing:` + fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing) + `,`,
+		`EnablePerPacketLoadBalancing:` + strings.Replace(fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing), "Empty", "schema.Empty", 1) + `,`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
 		`InternetVipInfo:` + repeatedStringForInternetVipInfo + `,`,
@@ -6905,6 +8150,36 @@ func (this *GetSpecType_Udp) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_Udp{`,
 		`Udp:` + strings.Replace(fmt.Sprintf("%v", this.Udp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "common_waf.ServicePolicyList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7488,11 +8763,11 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.LoadbalancerType = &GlobalSpecType_Udp{v}
 			iNdEx = postIndex
-		case 23:
-			if wireType != 0 {
+		case 24:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EnablePerPacketLoadBalancing", wireType)
 			}
-			var v int
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -7502,12 +8777,133 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= int(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			m.EnablePerPacketLoadBalancing = bool(v != 0)
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.EnablePerPacketLoadBalancing == nil {
+				m.EnablePerPacketLoadBalancing = &schema.Empty{}
+			}
+			if err := m.EnablePerPacketLoadBalancing.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -8239,11 +9635,11 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.LoadbalancerType = &CreateSpecType_Udp{v}
 			iNdEx = postIndex
-		case 23:
-			if wireType != 0 {
+		case 24:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EnablePerPacketLoadBalancing", wireType)
 			}
-			var v int
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -8253,12 +9649,133 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= int(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			m.EnablePerPacketLoadBalancing = bool(v != 0)
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.EnablePerPacketLoadBalancing == nil {
+				m.EnablePerPacketLoadBalancing = &schema.Empty{}
+			}
+			if err := m.EnablePerPacketLoadBalancing.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CreateSpecType_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CreateSpecType_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CreateSpecType_ActiveServicePolicies{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -8854,11 +10371,11 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.LoadbalancerType = &ReplaceSpecType_Udp{v}
 			iNdEx = postIndex
-		case 23:
-			if wireType != 0 {
+		case 24:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EnablePerPacketLoadBalancing", wireType)
 			}
-			var v int
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -8868,12 +10385,133 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= int(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			m.EnablePerPacketLoadBalancing = bool(v != 0)
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.EnablePerPacketLoadBalancing == nil {
+				m.EnablePerPacketLoadBalancing = &schema.Empty{}
+			}
+			if err := m.EnablePerPacketLoadBalancing.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &ReplaceSpecType_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &ReplaceSpecType_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &ReplaceSpecType_ActiveServicePolicies{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -9469,11 +11107,11 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.LoadbalancerType = &GetSpecType_Udp{v}
 			iNdEx = postIndex
-		case 23:
-			if wireType != 0 {
+		case 24:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EnablePerPacketLoadBalancing", wireType)
 			}
-			var v int
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -9483,12 +11121,133 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= int(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			m.EnablePerPacketLoadBalancing = bool(v != 0)
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.EnablePerPacketLoadBalancing == nil {
+				m.EnablePerPacketLoadBalancing = &schema.Empty{}
+			}
+			if err := m.EnablePerPacketLoadBalancing.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GetSpecType_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GetSpecType_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GetSpecType_ActiveServicePolicies{v}
+			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HostName", wireType)

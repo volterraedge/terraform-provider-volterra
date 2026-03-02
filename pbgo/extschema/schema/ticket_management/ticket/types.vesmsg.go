@@ -67,7 +67,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTicketTrackingSystemDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetTicketTrackingSystemDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *GlobalSpecType) GetTicketTrackingSystemDRefInfo() ([]db.DRefInfo, error
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTicketTrackingSystemDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *GlobalSpecType) GetTicketTrackingSystemDBEntries(ctx context.Context, d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ServiceFeatureValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_feature")
@@ -128,9 +124,7 @@ func (v *ValidateGlobalSpecType) ServiceFeatureValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ExternalIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for external_id")
@@ -138,9 +132,7 @@ func (v *ValidateGlobalSpecType) ExternalIdValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TicketTrackingSystemValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -186,9 +178,7 @@ func (v *ValidateGlobalSpecType) TicketTrackingSystemValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AuthorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for author")
@@ -196,9 +186,7 @@ func (v *ValidateGlobalSpecType) AuthorValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IssueKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for issue_key")
@@ -220,58 +208,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["author"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("author"))
 		if err := fv(ctx, m.GetAuthor(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["external_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("external_id"))
 		if err := fv(ctx, m.GetExternalId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["issue_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("issue_key"))
 		if err := fv(ctx, m.GetIssueKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_feature"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_feature"))
 		if err := fv(ctx, m.GetServiceFeature(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ticket_tracking_system"]; exists {
 		vOpts := append(opts, db.WithValidateField("ticket_tracking_system"))
 		if err := fv(ctx, m.GetTicketTrackingSystem(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

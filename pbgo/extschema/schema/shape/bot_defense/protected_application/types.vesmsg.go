@@ -81,25 +81,18 @@ func (v *ValidateApiEndpoint) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["telemetry_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("telemetry_prefix"))
 		if err := fv(ctx, m.GetTelemetryPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -168,7 +161,6 @@ func (v *ValidateApiKeyRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -237,16 +229,12 @@ func (v *ValidateApiKeyResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_key"))
 		if err := fv(ctx, m.GetApiKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -303,7 +291,6 @@ type ValidateConnectorConfigRequest struct {
 }
 
 func (v *ValidateConnectorConfigRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -311,9 +298,7 @@ func (v *ValidateConnectorConfigRequest) NamespaceValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateConnectorConfigRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -335,32 +320,24 @@ func (v *ValidateConnectorConfigRequest) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConnectorConfigRequestValidator = func() *ValidateConnectorConfigRequest {
 	v := &ValidateConnectorConfigRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -454,25 +431,18 @@ func (v *ValidateConnectorConfigResponse) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("config"))
 		if err := fv(ctx, m.GetConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -535,9 +505,7 @@ func (v *ValidateCreateSpecType) ConnectorTypeChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(BotDefenseRegion)
@@ -665,25 +633,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -691,7 +653,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConnectorTypeChoice := v.ConnectorTypeChoiceValidationRuleHandler
 	rulesConnectorTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -714,7 +675,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["region"] = vFn
-
 	v.FldValidators["connector_type_choice.cloudfront"] = ves_io_schema_shape_bot_defense_protected_application_cloudfront.CloudfrontTypeValidator().Validate
 	v.FldValidators["connector_type_choice.cloudflare"] = ves_io_schema_shape_bot_defense_protected_application_cloudflare.CloudflareTypeValidator().Validate
 
@@ -768,7 +728,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectorTypeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -778,7 +737,6 @@ func (m *GetSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectorTypeChoice().(type) {
 	case *GetSpecType_XcMesh:
-
 		drInfos, err := m.GetXcMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfo() FAILED")
@@ -788,43 +746,25 @@ func (m *GetSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "xc_mesh." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_BigIpIapp:
-
 		return nil, nil
-
 	case *GetSpecType_CustomConnector:
-
 		return nil, nil
-
 	case *GetSpecType_Cloudfront:
-
 		return nil, nil
-
 	case *GetSpecType_Cloudflare:
-
 		return nil, nil
-
 	case *GetSpecType_NotApplicableConnector:
-
 		return nil, nil
-
 	case *GetSpecType_AdobeCommerceConnector:
-
 		return nil, nil
-
 	case *GetSpecType_F5BigIp:
-
 		return nil, nil
-
 	case *GetSpecType_SalesforceCommerceConnector:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -838,9 +778,7 @@ func (v *ValidateGetSpecType) ConnectorTypeChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(BotDefenseRegion)
@@ -868,14 +806,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_id"))
 		if err := fv(ctx, m.GetAppId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["connector_type_choice"]; exists {
@@ -988,43 +923,31 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reload_header_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reload_header_name"))
 		if err := fv(ctx, m.GetReloadHeaderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1032,7 +955,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConnectorTypeChoice := v.ConnectorTypeChoiceValidationRuleHandler
 	rulesConnectorTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1055,7 +977,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["region"] = vFn
-
 	v.FldValidators["connector_type_choice.xc_mesh"] = XCMeshConnectorValidator().Validate
 	v.FldValidators["connector_type_choice.cloudfront"] = ves_io_schema_shape_bot_defense_protected_application_cloudfront.CloudfrontTypeValidator().Validate
 	v.FldValidators["connector_type_choice.cloudflare"] = ves_io_schema_shape_bot_defense_protected_application_cloudflare.CloudflareTypeValidator().Validate
@@ -1110,7 +1031,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectorTypeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1120,7 +1040,6 @@ func (m *GlobalSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetConnectorTypeChoice().(type) {
 	case *GlobalSpecType_XcMesh:
-
 		drInfos, err := m.GetXcMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfo() FAILED")
@@ -1130,43 +1049,25 @@ func (m *GlobalSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "xc_mesh." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_BigIpIapp:
-
 		return nil, nil
-
 	case *GlobalSpecType_CustomConnector:
-
 		return nil, nil
-
 	case *GlobalSpecType_Cloudfront:
-
 		return nil, nil
-
 	case *GlobalSpecType_Cloudflare:
-
 		return nil, nil
-
 	case *GlobalSpecType_NotApplicableConnector:
-
 		return nil, nil
-
 	case *GlobalSpecType_AdobeCommerceConnector:
-
 		return nil, nil
-
 	case *GlobalSpecType_F5BigIp:
-
 		return nil, nil
-
 	case *GlobalSpecType_SalesforceCommerceConnector:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -1180,9 +1081,7 @@ func (v *ValidateGlobalSpecType) ConnectorTypeChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(BotDefenseRegion)
@@ -1210,14 +1109,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_id"))
 		if err := fv(ctx, m.GetAppId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["connector_type_choice"]; exists {
@@ -1330,43 +1226,31 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reload_header_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reload_header_name"))
 		if err := fv(ctx, m.GetReloadHeaderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1374,7 +1258,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConnectorTypeChoice := v.ConnectorTypeChoiceValidationRuleHandler
 	rulesConnectorTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1397,7 +1280,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["region"] = vFn
-
 	v.FldValidators["connector_type_choice.xc_mesh"] = XCMeshConnectorValidator().Validate
 	v.FldValidators["connector_type_choice.cloudfront"] = ves_io_schema_shape_bot_defense_protected_application_cloudfront.CloudfrontTypeValidator().Validate
 	v.FldValidators["connector_type_choice.cloudflare"] = ves_io_schema_shape_bot_defense_protected_application_cloudflare.CloudflareTypeValidator().Validate
@@ -1463,34 +1345,24 @@ func (v *ValidateRegion) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mobile_endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mobile_endpoint"))
 		if err := fv(ctx, m.GetMobileEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["web_endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("web_endpoint"))
 		if err := fv(ctx, m.GetWebEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1559,7 +1431,6 @@ func (v *ValidateRegionsListRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -1628,9 +1499,7 @@ func (v *ValidateRegionsListResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["regions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("regions"))
 		for idx, item := range m.GetRegions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1638,9 +1507,7 @@ func (v *ValidateRegionsListResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1698,7 +1565,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectorTypeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1708,7 +1574,6 @@ func (m *ReplaceSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetConnectorTypeChoice().(type) {
 	case *ReplaceSpecType_XcMesh:
-
 		drInfos, err := m.GetXcMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfo() FAILED")
@@ -1718,43 +1583,25 @@ func (m *ReplaceSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "xc_mesh." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_BigIpIapp:
-
 		return nil, nil
-
 	case *ReplaceSpecType_CustomConnector:
-
 		return nil, nil
-
 	case *ReplaceSpecType_Cloudfront:
-
 		return nil, nil
-
 	case *ReplaceSpecType_Cloudflare:
-
 		return nil, nil
-
 	case *ReplaceSpecType_NotApplicableConnector:
-
 		return nil, nil
-
 	case *ReplaceSpecType_AdobeCommerceConnector:
-
 		return nil, nil
-
 	case *ReplaceSpecType_F5BigIp:
-
 		return nil, nil
-
 	case *ReplaceSpecType_SalesforceCommerceConnector:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1893,16 +1740,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1910,7 +1754,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConnectorTypeChoice := v.ConnectorTypeChoiceValidationRuleHandler
 	rulesConnectorTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1921,7 +1764,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connector_type_choice"] = vFn
-
 	v.FldValidators["connector_type_choice.xc_mesh"] = XCMeshConnectorValidator().Validate
 	v.FldValidators["connector_type_choice.cloudfront"] = ves_io_schema_shape_bot_defense_protected_application_cloudfront.CloudfrontTypeValidator().Validate
 	v.FldValidators["connector_type_choice.cloudflare"] = ves_io_schema_shape_bot_defense_protected_application_cloudflare.CloudflareTypeValidator().Validate
@@ -1975,7 +1817,6 @@ type ValidateTemplateConnectorRequest struct {
 }
 
 func (v *ValidateTemplateConnectorRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1983,9 +1824,7 @@ func (v *ValidateTemplateConnectorRequest) NamespaceValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTemplateConnectorRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -2007,32 +1846,24 @@ func (v *ValidateTemplateConnectorRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTemplateConnectorRequestValidator = func() *ValidateTemplateConnectorRequest {
 	v := &ValidateTemplateConnectorRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2126,25 +1957,18 @@ func (v *ValidateTemplateConnectorResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["template"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("template"))
 		if err := fv(ctx, m.GetTemplate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2202,11 +2026,9 @@ func (m *XCMeshConnector) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetHttpLoadBalancerDRefInfo()
-
 }
 
 func (m *XCMeshConnector) GetHttpLoadBalancerDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetHttpLoadBalancer()
 	if vref == nil {
 		return nil, nil
@@ -2222,7 +2044,6 @@ func (m *XCMeshConnector) GetHttpLoadBalancerDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetHttpLoadBalancerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2232,7 +2053,6 @@ func (m *XCMeshConnector) GetHttpLoadBalancerDBEntries(ctx context.Context, d db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: http_loadbalancer")
 	}
-
 	vref := m.GetHttpLoadBalancer()
 	if vref == nil {
 		return nil, nil
@@ -2250,7 +2070,6 @@ func (m *XCMeshConnector) GetHttpLoadBalancerDBEntries(ctx context.Context, d db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2271,23 +2090,18 @@ func (v *ValidateXCMeshConnector) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_load_balancer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_load_balancer"))
 		if err := fv(ctx, m.GetHttpLoadBalancer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultXCMeshConnectorValidator = func() *ValidateXCMeshConnector {
 	v := &ValidateXCMeshConnector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["http_load_balancer"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

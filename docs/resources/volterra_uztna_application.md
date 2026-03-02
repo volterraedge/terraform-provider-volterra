@@ -38,7 +38,6 @@ resource "volterra_uztna_application" "example" {
     tenant    = "acmecorp"
   }
 }
-
 ```
 
 Argument Reference
@@ -153,4 +152,4 @@ IPv6 Address.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_application.
+-   `id` - This is the id of the configured uztna_application.

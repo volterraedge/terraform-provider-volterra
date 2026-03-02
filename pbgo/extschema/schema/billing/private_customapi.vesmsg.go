@@ -64,7 +64,6 @@ type ValidateBillingFeatureRequest struct {
 }
 
 func (v *ValidateBillingFeatureRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -72,9 +71,7 @@ func (v *ValidateBillingFeatureRequest) StartTimeValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBillingFeatureRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -82,9 +79,7 @@ func (v *ValidateBillingFeatureRequest) EndTimeValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBillingFeatureRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -106,18 +101,13 @@ func (v *ValidateBillingFeatureRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -125,11 +115,8 @@ func (v *ValidateBillingFeatureRequest) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		for idx, item := range m.GetLabelFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -137,43 +124,31 @@ func (v *ValidateBillingFeatureRequest) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBillingFeatureRequestValidator = func() *ValidateBillingFeatureRequest {
 	v := &ValidateBillingFeatureRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -264,7 +239,6 @@ type ValidateBillingFeatureResponse struct {
 }
 
 func (v *ValidateBillingFeatureResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -286,9 +260,7 @@ func (v *ValidateBillingFeatureResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -296,25 +268,19 @@ func (v *ValidateBillingFeatureResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBillingFeatureResponseValidator = func() *ValidateBillingFeatureResponse {
 	v := &ValidateBillingFeatureResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -383,7 +349,6 @@ type ValidateBillingUsageRequest struct {
 }
 
 func (v *ValidateBillingUsageRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -391,9 +356,7 @@ func (v *ValidateBillingUsageRequest) StartTimeValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBillingUsageRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -401,9 +364,7 @@ func (v *ValidateBillingUsageRequest) EndTimeValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBillingUsageRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -425,18 +386,13 @@ func (v *ValidateBillingUsageRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -444,11 +400,8 @@ func (v *ValidateBillingUsageRequest) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		for idx, item := range m.GetLabelFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -456,43 +409,31 @@ func (v *ValidateBillingUsageRequest) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBillingUsageRequestValidator = func() *ValidateBillingUsageRequest {
 	v := &ValidateBillingUsageRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -583,7 +524,6 @@ type ValidateBillingUsageResponse struct {
 }
 
 func (v *ValidateBillingUsageResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -605,9 +545,7 @@ func (v *ValidateBillingUsageResponse) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -615,25 +553,19 @@ func (v *ValidateBillingUsageResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBillingUsageResponseValidator = func() *ValidateBillingUsageResponse {
 	v := &ValidateBillingUsageResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -702,7 +634,6 @@ type ValidateLoadBalancerMetricsRequest struct {
 }
 
 func (v *ValidateLoadBalancerMetricsRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -710,9 +641,7 @@ func (v *ValidateLoadBalancerMetricsRequest) NamespaceValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLoadBalancerMetricsRequest) MetricSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -752,9 +681,7 @@ func (v *ValidateLoadBalancerMetricsRequest) MetricSelectorValidationRuleHandler
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLoadBalancerMetricsRequest) GroupByValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -808,57 +735,42 @@ func (v *ValidateLoadBalancerMetricsRequest) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		if err := fv(ctx, m.GetGroupBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric_selector"]; exists {
 		vOpts := append(opts, db.WithValidateField("metric_selector"))
 		if err := fv(ctx, m.GetMetricSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLoadBalancerMetricsRequestValidator = func() *ValidateLoadBalancerMetricsRequest {
 	v := &ValidateLoadBalancerMetricsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -967,9 +879,7 @@ func (v *ValidateLoadBalancerMetricsResponse) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -977,9 +887,7 @@ func (v *ValidateLoadBalancerMetricsResponse) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1036,7 +944,6 @@ type ValidateSecretManagementRequest struct {
 }
 
 func (v *ValidateSecretManagementRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -1044,9 +951,7 @@ func (v *ValidateSecretManagementRequest) StartTimeValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecretManagementRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -1054,9 +959,7 @@ func (v *ValidateSecretManagementRequest) EndTimeValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecretManagementRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -1078,18 +981,13 @@ func (v *ValidateSecretManagementRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1097,11 +995,8 @@ func (v *ValidateSecretManagementRequest) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		for idx, item := range m.GetLabelFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1109,43 +1004,31 @@ func (v *ValidateSecretManagementRequest) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecretManagementRequestValidator = func() *ValidateSecretManagementRequest {
 	v := &ValidateSecretManagementRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1236,7 +1119,6 @@ type ValidateSecretManagementResponse struct {
 }
 
 func (v *ValidateSecretManagementResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -1258,9 +1140,7 @@ func (v *ValidateSecretManagementResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1268,25 +1148,19 @@ func (v *ValidateSecretManagementResponse) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecretManagementResponseValidator = func() *ValidateSecretManagementResponse {
 	v := &ValidateSecretManagementResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1355,7 +1229,6 @@ type ValidateSiteTrafficRequest struct {
 }
 
 func (v *ValidateSiteTrafficRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -1363,9 +1236,7 @@ func (v *ValidateSiteTrafficRequest) StartTimeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSiteTrafficRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -1387,41 +1258,30 @@ func (v *ValidateSiteTrafficRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteTrafficRequestValidator = func() *ValidateSiteTrafficRequest {
 	v := &ValidateSiteTrafficRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1513,9 +1373,7 @@ func (v *ValidateSiteTrafficResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1523,9 +1381,7 @@ func (v *ValidateSiteTrafficResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1582,7 +1438,6 @@ type ValidateSyntheticMonitorInvocationsRequest struct {
 }
 
 func (v *ValidateSyntheticMonitorInvocationsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -1590,9 +1445,7 @@ func (v *ValidateSyntheticMonitorInvocationsRequest) StartTimeValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSyntheticMonitorInvocationsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -1600,9 +1453,7 @@ func (v *ValidateSyntheticMonitorInvocationsRequest) EndTimeValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSyntheticMonitorInvocationsRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -1610,9 +1461,7 @@ func (v *ValidateSyntheticMonitorInvocationsRequest) StepValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSyntheticMonitorInvocationsRequest) GroupByValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1672,58 +1521,42 @@ func (v *ValidateSyntheticMonitorInvocationsRequest) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		if err := fv(ctx, m.GetGroupBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSyntheticMonitorInvocationsRequestValidator = func() *ValidateSyntheticMonitorInvocationsRequest {
 	v := &ValidateSyntheticMonitorInvocationsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1825,7 +1658,6 @@ type ValidateSyntheticMonitorInvocationsResponse struct {
 }
 
 func (v *ValidateSyntheticMonitorInvocationsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -1847,9 +1679,7 @@ func (v *ValidateSyntheticMonitorInvocationsResponse) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1857,25 +1687,19 @@ func (v *ValidateSyntheticMonitorInvocationsResponse) Validate(ctx context.Conte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSyntheticMonitorInvocationsResponseValidator = func() *ValidateSyntheticMonitorInvocationsResponse {
 	v := &ValidateSyntheticMonitorInvocationsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1944,7 +1768,6 @@ type ValidateUsageCountRequest struct {
 }
 
 func (v *ValidateUsageCountRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1952,9 +1775,7 @@ func (v *ValidateUsageCountRequest) NamespaceValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUsageCountRequest) FieldSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2008,40 +1829,30 @@ func (v *ValidateUsageCountRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_selector"]; exists {
 		vOpts := append(opts, db.WithValidateField("field_selector"))
 		if err := fv(ctx, m.GetFieldSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("time"))
 		if err := fv(ctx, m.GetTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUsageCountRequestValidator = func() *ValidateUsageCountRequest {
 	v := &ValidateUsageCountRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2137,9 +1948,7 @@ func (v *ValidateUsageCountResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2147,16 +1956,13 @@ func (v *ValidateUsageCountResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUsageCountResponseValidator = func() *ValidateUsageCountResponse {
 	v := &ValidateUsageCountResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["data"] = UsageCountDataValidator().Validate
 
 	return v
@@ -2208,7 +2014,6 @@ type ValidateVolterraNetworkTrafficRequest struct {
 }
 
 func (v *ValidateVolterraNetworkTrafficRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -2216,9 +2021,7 @@ func (v *ValidateVolterraNetworkTrafficRequest) StartTimeValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVolterraNetworkTrafficRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -2226,9 +2029,7 @@ func (v *ValidateVolterraNetworkTrafficRequest) EndTimeValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVolterraNetworkTrafficRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -2250,18 +2051,13 @@ func (v *ValidateVolterraNetworkTrafficRequest) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2269,11 +2065,8 @@ func (v *ValidateVolterraNetworkTrafficRequest) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		for idx, item := range m.GetLabelFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2281,43 +2074,31 @@ func (v *ValidateVolterraNetworkTrafficRequest) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVolterraNetworkTrafficRequestValidator = func() *ValidateVolterraNetworkTrafficRequest {
 	v := &ValidateVolterraNetworkTrafficRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2408,7 +2189,6 @@ type ValidateVolterraNetworkTrafficResponse struct {
 }
 
 func (v *ValidateVolterraNetworkTrafficResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -2430,9 +2210,7 @@ func (v *ValidateVolterraNetworkTrafficResponse) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2440,25 +2218,19 @@ func (v *ValidateVolterraNetworkTrafficResponse) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVolterraNetworkTrafficResponseValidator = func() *ValidateVolterraNetworkTrafficResponse {
 	v := &ValidateVolterraNetworkTrafficResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

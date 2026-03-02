@@ -74,9 +74,7 @@ func NewCustomPrivateCDNUsageAPIGrpcClient(cc *grpc.ClientConn) server.CustomCli
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["LilacCDNUsage"] = ccl.doRPCLilacCDNUsage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -174,7 +172,6 @@ func (c *CustomPrivateCDNUsageAPIRestClient) doRPCLilacCDNUsage(ctx context.Cont
 	pbRsp := &LilacCDNMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.LilacCDNMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -208,9 +205,7 @@ func NewCustomPrivateCDNUsageAPIRestClient(baseURL string, hc http.Client) serve
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["LilacCDNUsage"] = ccl.doRPCLilacCDNUsage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

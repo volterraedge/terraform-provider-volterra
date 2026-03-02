@@ -27,6 +27,451 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AggregationIPv4) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AggregationIPv4) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AggregationIPv4) DeepCopy() *AggregationIPv4 {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AggregationIPv4{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AggregationIPv4) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AggregationIPv4) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AggregationIPv4Validator().Validate(ctx, m, opts...)
+}
+
+type ValidateAggregationIPv4 struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAggregationIPv4) IpPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_prefix")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAggregationIPv4) OptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for options")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*AggregationOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := AggregationOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for options")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AggregationOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AggregationOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated options")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items options")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAggregationIPv4) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AggregationIPv4)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AggregationIPv4 got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["ip_prefix"]; exists {
+		vOpts := append(opts, db.WithValidateField("ip_prefix"))
+		if err := fv(ctx, m.GetIpPrefix(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["options"]; exists {
+		vOpts := append(opts, db.WithValidateField("options"))
+		if err := fv(ctx, m.GetOptions(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAggregationIPv4Validator = func() *ValidateAggregationIPv4 {
+	v := &ValidateAggregationIPv4{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpPrefix := v.IpPrefixValidationRuleHandler
+	rulesIpPrefix := map[string]string{
+		"ves.io.schema.rules.string.ipv4_prefix": "true",
+	}
+	vFn, err = vrhIpPrefix(rulesIpPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AggregationIPv4.ip_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_prefix"] = vFn
+
+	vrhOptions := v.OptionsValidationRuleHandler
+	rulesOptions := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhOptions(rulesOptions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AggregationIPv4.options: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["options"] = vFn
+
+	return v
+}()
+
+func AggregationIPv4Validator() db.Validator {
+	return DefaultAggregationIPv4Validator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AggregationIPv6) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AggregationIPv6) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AggregationIPv6) DeepCopy() *AggregationIPv6 {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AggregationIPv6{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AggregationIPv6) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AggregationIPv6) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AggregationIPv6Validator().Validate(ctx, m, opts...)
+}
+
+type ValidateAggregationIPv6 struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAggregationIPv6) IpPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_prefix")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAggregationIPv6) OptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for options")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*AggregationOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := AggregationOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for options")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AggregationOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AggregationOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated options")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items options")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAggregationIPv6) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AggregationIPv6)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AggregationIPv6 got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["ip_prefix"]; exists {
+		vOpts := append(opts, db.WithValidateField("ip_prefix"))
+		if err := fv(ctx, m.GetIpPrefix(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["options"]; exists {
+		vOpts := append(opts, db.WithValidateField("options"))
+		if err := fv(ctx, m.GetOptions(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAggregationIPv6Validator = func() *ValidateAggregationIPv6 {
+	v := &ValidateAggregationIPv6{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpPrefix := v.IpPrefixValidationRuleHandler
+	rulesIpPrefix := map[string]string{
+		"ves.io.schema.rules.string.ipv6_prefix": "true",
+	}
+	vFn, err = vrhIpPrefix(rulesIpPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AggregationIPv6.ip_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_prefix"] = vFn
+
+	vrhOptions := v.OptionsValidationRuleHandler
+	rulesOptions := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhOptions(rulesOptions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AggregationIPv6.options: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["options"] = vFn
+
+	return v
+}()
+
+func AggregationIPv6Validator() db.Validator {
+	return DefaultAggregationIPv6Validator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AggregationOption) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AggregationOption) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AggregationOption) DeepCopy() *AggregationOption {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AggregationOption{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AggregationOption) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AggregationOption) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AggregationOptionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAggregationOption struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAggregationOption) AggregationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for aggregation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAggregationOption) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AggregationOption)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AggregationOption got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aggregation_choice"]; exists {
+		val := m.GetAggregationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("aggregation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAggregationChoice().(type) {
+	case *AggregationOption_SummaryOnly:
+		if fv, exists := v.FldValidators["aggregation_choice.summary_only"]; exists {
+			val := m.GetAggregationChoice().(*AggregationOption_SummaryOnly).SummaryOnly
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_choice"),
+				db.WithValidateField("summary_only"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAggregationOptionValidator = func() *ValidateAggregationOption {
+	v := &ValidateAggregationOption{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhAggregationChoice := v.AggregationChoiceValidationRuleHandler
+	rulesAggregationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAggregationChoice(rulesAggregationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AggregationOption.aggregation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aggregation_choice"] = vFn
+
+	return v
+}()
+
+func AggregationOptionValidator() db.Validator {
+	return DefaultAggregationOptionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BFD) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -67,7 +512,6 @@ type ValidateBFD struct {
 }
 
 func (v *ValidateBFD) TransmitIntervalMillisecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for transmit_interval_milliseconds")
@@ -75,9 +519,7 @@ func (v *ValidateBFD) TransmitIntervalMillisecondsValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBFD) ReceiveIntervalMillisecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for receive_interval_milliseconds")
@@ -85,9 +527,7 @@ func (v *ValidateBFD) ReceiveIntervalMillisecondsValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBFD) MultiplierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for multiplier")
@@ -109,41 +549,30 @@ func (v *ValidateBFD) Validate(ctx context.Context, pm interface{}, opts ...db.V
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["multiplier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multiplier"))
 		if err := fv(ctx, m.GetMultiplier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receive_interval_milliseconds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("receive_interval_milliseconds"))
 		if err := fv(ctx, m.GetReceiveIntervalMilliseconds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transmit_interval_milliseconds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transmit_interval_milliseconds"))
 		if err := fv(ctx, m.GetTransmitIntervalMilliseconds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBFDValidator = func() *ValidateBFD {
 	v := &ValidateBFD{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -155,8 +584,8 @@ var DefaultBFDValidator = func() *ValidateBFD {
 	vrhTransmitIntervalMilliseconds := v.TransmitIntervalMillisecondsValidationRuleHandler
 	rulesTransmitIntervalMilliseconds := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "255000",
+		"ves.io.schema.rules.uint32.gte":       "300",
+		"ves.io.schema.rules.uint32.lte":       "60000",
 	}
 	vFn, err = vrhTransmitIntervalMilliseconds(rulesTransmitIntervalMilliseconds)
 	if err != nil {
@@ -168,8 +597,8 @@ var DefaultBFDValidator = func() *ValidateBFD {
 	vrhReceiveIntervalMilliseconds := v.ReceiveIntervalMillisecondsValidationRuleHandler
 	rulesReceiveIntervalMilliseconds := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "255000",
+		"ves.io.schema.rules.uint32.gte":       "300",
+		"ves.io.schema.rules.uint32.lte":       "60000",
 	}
 	vFn, err = vrhReceiveIntervalMilliseconds(rulesReceiveIntervalMilliseconds)
 	if err != nil {
@@ -181,7 +610,7 @@ var DefaultBFDValidator = func() *ValidateBFD {
 	vrhMultiplier := v.MultiplierValidationRuleHandler
 	rulesMultiplier := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.gte":       "2",
 		"ves.io.schema.rules.uint32.lte":       "255",
 	}
 	vFn, err = vrhMultiplier(rulesMultiplier)
@@ -196,6 +625,86 @@ var DefaultBFDValidator = func() *ValidateBFD {
 
 func BFDValidator() db.Validator {
 	return DefaultBFDValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BfdPeerStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BfdPeerStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BfdPeerStatusType) DeepCopy() *BfdPeerStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BfdPeerStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BfdPeerStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BfdPeerStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BfdPeerStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBfdPeerStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBfdPeerStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BfdPeerStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BfdPeerStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["state"]; exists {
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["state_change_timestamp"]; exists {
+		vOpts := append(opts, db.WithValidateField("state_change_timestamp"))
+		if err := fv(ctx, m.GetStateChangeTimestamp(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBfdPeerStatusTypeValidator = func() *ValidateBfdPeerStatusType {
+	v := &ValidateBfdPeerStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BfdPeerStatusTypeValidator() db.Validator {
+	return DefaultBfdPeerStatusTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -254,9 +763,7 @@ func (v *ValidateBgpParameters) RouterIdChoiceIpAddressValidationRuleHandler(rul
 	}
 	return oValidatorFn_IpAddress, nil
 }
-
 func (v *ValidateBgpParameters) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
@@ -264,9 +771,7 @@ func (v *ValidateBgpParameters) AsnValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBgpParameters) BgpRouterIdKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_router_id_key")
@@ -288,41 +793,29 @@ func (v *ValidateBgpParameters) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_router_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_router_id"))
 		if err := fv(ctx, m.GetBgpRouterId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_router_id_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_router_id_key"))
 		if err := fv(ctx, m.GetBgpRouterIdKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_router_id_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_router_id_type"))
 		if err := fv(ctx, m.GetBgpRouterIdType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["router_id_choice"]; exists {
@@ -369,16 +862,13 @@ func (v *ValidateBgpParameters) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpParametersValidator = func() *ValidateBgpParameters {
 	v := &ValidateBgpParameters{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -386,7 +876,6 @@ var DefaultBgpParametersValidator = func() *ValidateBgpParameters {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRouterIdChoice := v.RouterIdChoiceValidationRuleHandler
 	rulesRouterIdChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -397,7 +886,6 @@ var DefaultBgpParametersValidator = func() *ValidateBgpParameters {
 		panic(errMsg)
 	}
 	v.FldValidators["router_id_choice"] = vFn
-
 	vrhRouterIdChoiceIpAddress := v.RouterIdChoiceIpAddressValidationRuleHandler
 	rulesRouterIdChoiceIpAddress := map[string]string{
 		"ves.io.schema.rules.string.ipv4": "true",
@@ -407,7 +895,6 @@ var DefaultBgpParametersValidator = func() *ValidateBgpParameters {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BgpParameters.router_id_choice_ip_address: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["router_id_choice.ip_address"] = vFnMap["router_id_choice.ip_address"]
 
 	vrhAsn := v.AsnValidationRuleHandler
@@ -432,7 +919,6 @@ var DefaultBgpParametersValidator = func() *ValidateBgpParameters {
 		panic(errMsg)
 	}
 	v.FldValidators["bgp_router_id_key"] = vFn
-
 	v.FldValidators["bgp_router_id"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -451,7 +937,6 @@ func (m *BgpPeer) ToJSON() (string, error) {
 func (m *BgpPeer) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *BgpPeer) String() string {
 	if m == nil {
 		return ""
@@ -475,10 +960,8 @@ func (m *BgpPeer) Redact(ctx context.Context) error {
 	}
 
 	switch x := m.AuthChoice.(type) {
-
 	case *BgpPeer_Md5AuthKey:
 		x.Md5AuthKey = "Redacted"
-
 	}
 
 	return nil
@@ -522,15 +1005,12 @@ func (m *BgpPeer) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRoutingPoliciesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRoutingPoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *BgpPeer) GetInterfaceRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -555,7 +1035,6 @@ func (m *BgpPeer) GetInterfaceRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetInterfaceRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -574,7 +1053,6 @@ func (m *BgpPeer) GetInterfaceRefsDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -583,7 +1061,6 @@ func (m *BgpPeer) GetRoutingPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRoutingPolicies() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRoutingPolicies().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRoutingPolicies().GetDRefInfo() FAILED")
@@ -593,7 +1070,6 @@ func (m *BgpPeer) GetRoutingPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "routing_policies." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateBgpPeer struct {
@@ -607,9 +1083,7 @@ func (v *ValidateBgpPeer) BfdChoiceValidationRuleHandler(rules map[string]string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateBgpPeer) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
@@ -617,9 +1091,7 @@ func (v *ValidateBgpPeer) AsnValidationRuleHandler(rules map[string]string) (db.
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBgpPeer) BgpPeerAddressKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_key")
@@ -627,9 +1099,7 @@ func (v *ValidateBgpPeer) BgpPeerAddressKeyValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBgpPeer) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -637,9 +1107,7 @@ func (v *ValidateBgpPeer) PortValidationRuleHandler(rules map[string]string) (db
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBgpPeer) BgpPeerSubnetOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_subnet_offset")
@@ -647,9 +1115,7 @@ func (v *ValidateBgpPeer) BgpPeerSubnetOffsetValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBgpPeer) FamiliesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -695,9 +1161,7 @@ func (v *ValidateBgpPeer) FamiliesValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBgpPeer) InterfaceRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -757,32 +1221,23 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["all_inside_interfaces"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("all_inside_interfaces"))
 		if err := fv(ctx, m.GetAllInsideInterfaces(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["all_outside_interfaces"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("all_outside_interfaces"))
 		if err := fv(ctx, m.GetAllOutsideInterfaces(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetAuthChoice().(type) {
@@ -808,7 +1263,6 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bfd_choice"]; exists {
@@ -844,95 +1298,67 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peer_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
 		if err := fv(ctx, m.GetBgpPeerAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peer_address_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address_key"))
 		if err := fv(ctx, m.GetBgpPeerAddressKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peer_address_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address_type"))
 		if err := fv(ctx, m.GetBgpPeerAddressType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peer_subnet_offset"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peer_subnet_offset"))
 		if err := fv(ctx, m.GetBgpPeerSubnetOffset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["families"]; exists {
 		vOpts := append(opts, db.WithValidateField("families"))
 		if err := fv(ctx, m.GetFamilies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_refs"))
 		if err := fv(ctx, m.GetInterfaceRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["passive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("passive"))
 		if err := fv(ctx, m.GetPassive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routing_policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("routing_policies"))
 		if err := fv(ctx, m.GetRoutingPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 	v := &ValidateBgpPeer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -940,7 +1366,6 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBfdChoice := v.BfdChoiceValidationRuleHandler
 	rulesBfdChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1019,11 +1444,8 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_refs"] = vFn
-
 	v.FldValidators["bfd_choice.bfd_enabled"] = BFDValidator().Validate
-
 	v.FldValidators["bgp_peer_address"] = ves_io_schema.IpAddressTypeValidator().Validate
-
 	v.FldValidators["routing_policies"] = BgpRoutePoliciesValidator().Validate
 
 	return v
@@ -1087,122 +1509,90 @@ func (v *ValidateBgpPeerStatusType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["advertised_prefix_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advertised_prefix_count"))
 		if err := fv(ctx, m.GetAdvertisedPrefixCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["bfd_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("bfd_status"))
+		if err := fv(ctx, m.GetBfdStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["connection_flap_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_flap_count"))
 		if err := fv(ctx, m.GetConnectionFlapCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_name"))
 		if err := fv(ctx, m.GetInterfaceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_address"))
 		if err := fv(ctx, m.GetLocalAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peer_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peer_address"))
 		if err := fv(ctx, m.GetPeerAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peer_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peer_asn"))
 		if err := fv(ctx, m.GetPeerAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peer_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peer_port"))
 		if err := fv(ctx, m.GetPeerPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peer_router_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peer_router_id"))
 		if err := fv(ctx, m.GetPeerRouterId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol_status"))
 		if err := fv(ctx, m.GetProtocolStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["received_prefix_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("received_prefix_count"))
 		if err := fv(ctx, m.GetReceivedPrefixCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["up_down"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("up_down"))
 		if err := fv(ctx, m.GetUpDown(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["up_down_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("up_down_timestamp"))
 		if err := fv(ctx, m.GetUpDownTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpPeerStatusTypeValidator = func() *ValidateBgpPeerStatusType {
 	v := &ValidateBgpPeerStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["peer_address"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -1255,7 +1645,6 @@ func (m *BgpRoutePolicies) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRoutePolicyDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1263,7 +1652,6 @@ func (m *BgpRoutePolicies) GetRoutePolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRoutePolicy() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRoutePolicy() {
 		driSet, err := e.GetDRefInfo()
@@ -1277,7 +1665,6 @@ func (m *BgpRoutePolicies) GetRoutePolicyDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateBgpRoutePolicies struct {
@@ -1285,7 +1672,6 @@ type ValidateBgpRoutePolicies struct {
 }
 
 func (v *ValidateBgpRoutePolicies) RoutePolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1345,22 +1731,18 @@ func (v *ValidateBgpRoutePolicies) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_policy"]; exists {
 		vOpts := append(opts, db.WithValidateField("route_policy"))
 		if err := fv(ctx, m.GetRoutePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpRoutePoliciesValidator = func() *ValidateBgpRoutePolicies {
 	v := &ValidateBgpRoutePolicies{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1430,7 +1812,6 @@ func (m *BgpRoutePolicy) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetObjectRefsDRefInfo()
-
 }
 
 func (m *BgpRoutePolicy) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -1455,7 +1836,6 @@ func (m *BgpRoutePolicy) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetObjectRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1474,7 +1854,6 @@ func (m *BgpRoutePolicy) GetObjectRefsDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1483,7 +1862,6 @@ type ValidateBgpRoutePolicy struct {
 }
 
 func (v *ValidateBgpRoutePolicy) ObjectRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1567,7 +1945,6 @@ func (v *ValidateBgpRoutePolicy) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetNodeChoice().(type) {
@@ -1593,24 +1970,19 @@ func (v *ValidateBgpRoutePolicy) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("object_refs"))
 		if err := fv(ctx, m.GetObjectRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpRoutePolicyValidator = func() *ValidateBgpRoutePolicy {
 	v := &ValidateBgpRoutePolicy{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1682,7 +2054,6 @@ func (m *BgpStatusType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTunnelDRefInfo()
-
 }
 
 func (m *BgpStatusType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
@@ -1707,7 +2078,6 @@ func (m *BgpStatusType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTunnelDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1726,7 +2096,6 @@ func (m *BgpStatusType) GetTunnelDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1735,7 +2104,6 @@ type ValidateBgpStatusType struct {
 }
 
 func (v *ValidateBgpStatusType) TunnelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1795,27 +2163,19 @@ func (v *ValidateBgpStatusType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["local_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_asn"))
 		if err := fv(ctx, m.GetLocalAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_router_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_router_id"))
 		if err := fv(ctx, m.GetLocalRouterId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peer_status_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peer_status_list"))
 		for idx, item := range m.GetPeerStatusList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1823,24 +2183,19 @@ func (v *ValidateBgpStatusType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel"]; exists {
 		vOpts := append(opts, db.WithValidateField("tunnel"))
 		if err := fv(ctx, m.GetTunnel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpStatusTypeValidator = func() *ValidateBgpStatusType {
 	v := &ValidateBgpStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1859,7 +2214,6 @@ var DefaultBgpStatusTypeValidator = func() *ValidateBgpStatusType {
 		panic(errMsg)
 	}
 	v.FldValidators["tunnel"] = vFn
-
 	v.FldValidators["peer_status_list"] = BgpPeerStatusTypeValidator().Validate
 
 	return v
@@ -1885,7 +2239,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetPeers() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting CreateSpecType.peers idx %v", idx)
@@ -1933,15 +2286,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1949,7 +2299,6 @@ func (m *CreateSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPeers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
@@ -1963,7 +2312,6 @@ func (m *CreateSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1971,7 +2319,6 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -1981,7 +2328,6 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -1989,7 +2335,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) WhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for where")
@@ -1998,19 +2343,15 @@ func (v *ValidateCreateSpecType) WhereValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SiteVirtualSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) BgpParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bgp_parameters")
@@ -2019,19 +2360,15 @@ func (v *ValidateCreateSpecType) BgpParametersValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BgpParametersValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2091,40 +2428,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bgp_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_parameters"))
 		if err := fv(ctx, m.GetBgpParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peers"]; exists {
 		vOpts := append(opts, db.WithValidateField("peers"))
 		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2271,16 +2598,13 @@ func (v *ValidateFamilyInet) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFamilyInetValidator = func() *ValidateFamilyInet {
 	v := &ValidateFamilyInet{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2288,7 +2612,6 @@ var DefaultFamilyInetValidator = func() *ValidateFamilyInet {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
 	rulesEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2299,6 +2622,7 @@ var DefaultFamilyInetValidator = func() *ValidateFamilyInet {
 		panic(errMsg)
 	}
 	v.FldValidators["enable_choice"] = vFn
+	v.FldValidators["enable_choice.enable"] = UnicastIPv4Validator().Validate
 
 	return v
 }()
@@ -2403,16 +2727,13 @@ func (v *ValidateFamilyInet6) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFamilyInet6Validator = func() *ValidateFamilyInet6 {
 	v := &ValidateFamilyInet6{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2420,7 +2741,6 @@ var DefaultFamilyInet6Validator = func() *ValidateFamilyInet6 {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
 	rulesEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2431,6 +2751,7 @@ var DefaultFamilyInet6Validator = func() *ValidateFamilyInet6 {
 		panic(errMsg)
 	}
 	v.FldValidators["enable_choice"] = vFn
+	v.FldValidators["enable_choice.enable"] = UnicastIPv6Validator().Validate
 
 	return v
 }()
@@ -2535,16 +2856,13 @@ func (v *ValidateFamilyInet6Vpn) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFamilyInet6VpnValidator = func() *ValidateFamilyInet6Vpn {
 	v := &ValidateFamilyInet6Vpn{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2552,7 +2870,6 @@ var DefaultFamilyInet6VpnValidator = func() *ValidateFamilyInet6Vpn {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
 	rulesEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2667,16 +2984,13 @@ func (v *ValidateFamilyInetvpn) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFamilyInetvpnValidator = func() *ValidateFamilyInetvpn {
 	v := &ValidateFamilyInetvpn{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2684,7 +2998,6 @@ var DefaultFamilyInetvpnValidator = func() *ValidateFamilyInetvpn {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
 	rulesEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2695,7 +3008,6 @@ var DefaultFamilyInetvpnValidator = func() *ValidateFamilyInetvpn {
 		panic(errMsg)
 	}
 	v.FldValidators["enable_choice"] = vFn
-
 	v.FldValidators["enable_choice.enable"] = FamilyInetvpnParametersValidator().Validate
 
 	return v
@@ -2801,16 +3113,13 @@ func (v *ValidateFamilyInetvpnParameters) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFamilyInetvpnParametersValidator = func() *ValidateFamilyInetvpnParameters {
 	v := &ValidateFamilyInetvpnParameters{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2818,7 +3127,6 @@ var DefaultFamilyInetvpnParametersValidator = func() *ValidateFamilyInetvpnParam
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSrChoice := v.SrChoiceValidationRuleHandler
 	rulesSrChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2933,16 +3241,13 @@ func (v *ValidateFamilyRtarget) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFamilyRtargetValidator = func() *ValidateFamilyRtarget {
 	v := &ValidateFamilyRtarget{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2950,7 +3255,6 @@ var DefaultFamilyRtargetValidator = func() *ValidateFamilyRtarget {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
 	rulesEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3065,16 +3369,13 @@ func (v *ValidateFamilyUuidvpn) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFamilyUuidvpnValidator = func() *ValidateFamilyUuidvpn {
 	v := &ValidateFamilyUuidvpn{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3082,7 +3383,6 @@ var DefaultFamilyUuidvpnValidator = func() *ValidateFamilyUuidvpn {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
 	rulesEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3117,7 +3417,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetPeers() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting GetSpecType.peers idx %v", idx)
@@ -3165,15 +3464,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3181,7 +3477,6 @@ func (m *GetSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPeers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
@@ -3195,7 +3490,6 @@ func (m *GetSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3203,7 +3497,6 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -3213,7 +3506,6 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -3221,7 +3513,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) WhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for where")
@@ -3230,19 +3521,15 @@ func (v *ValidateGetSpecType) WhereValidationRuleHandler(rules map[string]string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SiteVirtualSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) BgpParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bgp_parameters")
@@ -3251,19 +3538,15 @@ func (v *ValidateGetSpecType) BgpParametersValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BgpParametersValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3323,40 +3606,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bgp_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_parameters"))
 		if err := fv(ctx, m.GetBgpParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peers"]; exists {
 		vOpts := append(opts, db.WithValidateField("peers"))
 		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3423,19 +3696,16 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetBgpPeers() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting GlobalSpecType.bgp_peers idx %v", idx)
 		}
 	}
-
 	for idx, e := range m.GetPeers() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting GlobalSpecType.peers idx %v", idx)
 		}
 	}
-
 	for idx, e := range m.GetBgpPeersV6() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting GlobalSpecType.bgp_peers_v6 idx %v", idx)
@@ -3483,39 +3753,32 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetBgpPeersV6DRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetBgpPeersV6DRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkInterfaceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkInterfaceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3523,7 +3786,6 @@ func (m *GlobalSpecType) GetBgpPeersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetBgpPeers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetBgpPeers() {
 		driSet, err := e.GetDRefInfo()
@@ -3537,7 +3799,6 @@ func (m *GlobalSpecType) GetBgpPeersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3545,7 +3806,6 @@ func (m *GlobalSpecType) GetBgpPeersV6DRefInfo() ([]db.DRefInfo, error) {
 	if m.GetBgpPeersV6() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetBgpPeersV6() {
 		driSet, err := e.GetDRefInfo()
@@ -3559,7 +3819,6 @@ func (m *GlobalSpecType) GetBgpPeersV6DRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
@@ -3584,7 +3843,6 @@ func (m *GlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3603,7 +3861,6 @@ func (m *GlobalSpecType) GetNetworkInterfaceDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3612,7 +3869,6 @@ func (m *GlobalSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPeers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
@@ -3626,11 +3882,9 @@ func (m *GlobalSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3646,7 +3900,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3656,7 +3909,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3674,7 +3926,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3683,7 +3934,6 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -3693,7 +3943,6 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -3701,7 +3950,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) WhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for where")
@@ -3710,19 +3958,15 @@ func (v *ValidateGlobalSpecType) WhereValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SiteVirtualSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BgpParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bgp_parameters")
@@ -3731,19 +3975,15 @@ func (v *ValidateGlobalSpecType) BgpParametersValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BgpParametersValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BgpPeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3789,9 +4029,7 @@ func (v *ValidateGlobalSpecType) BgpPeersValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) NetworkInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3837,9 +4075,7 @@ func (v *ValidateGlobalSpecType) NetworkInterfaceValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3885,9 +4121,7 @@ func (v *ValidateGlobalSpecType) PeersValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BgpPeersV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3947,91 +4181,66 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bgp_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_parameters"))
 		if err := fv(ctx, m.GetBgpParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peers"]; exists {
 		vOpts := append(opts, db.WithValidateField("bgp_peers"))
 		if err := fv(ctx, m.GetBgpPeers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peers_v6"]; exists {
 		vOpts := append(opts, db.WithValidateField("bgp_peers_v6"))
 		if err := fv(ctx, m.GetBgpPeersV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_interface"]; exists {
 		vOpts := append(opts, db.WithValidateField("network_interface"))
 		if err := fv(ctx, m.GetNetworkInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peers"]; exists {
 		vOpts := append(opts, db.WithValidateField("peers"))
 		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["target_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("target_service"))
 		if err := fv(ctx, m.GetTargetService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_version"))
 		if err := fv(ctx, m.GetViewVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4110,7 +4319,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bgp_peers_v6"] = vFn
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -4163,7 +4371,6 @@ func (m *InterfaceList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfacesDRefInfo()
-
 }
 
 func (m *InterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
@@ -4189,7 +4396,6 @@ func (m *InterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetInterfacesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4217,7 +4423,6 @@ func (m *InterfaceList) GetInterfacesDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4226,7 +4431,6 @@ type ValidateInterfaceList struct {
 }
 
 func (v *ValidateInterfaceList) InterfacesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4286,22 +4490,18 @@ func (v *ValidateInterfaceList) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interfaces"]; exists {
 		vOpts := append(opts, db.WithValidateField("interfaces"))
 		if err := fv(ctx, m.GetInterfaces(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInterfaceListValidator = func() *ValidateInterfaceList {
 	v := &ValidateInterfaceList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4385,9 +4585,7 @@ func (v *ValidateNodes) Validate(ctx context.Context, pm interface{}, opts ...db
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node"))
 		for idx, item := range m.GetNode() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4395,9 +4593,7 @@ func (v *ValidateNodes) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -4428,7 +4624,6 @@ func (m *Peer) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetExternal().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting Peer.external")
 	}
@@ -4474,15 +4669,12 @@ func (m *Peer) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTypeChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTypeChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -4492,11 +4684,8 @@ func (m *Peer) GetEnableChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetEnableChoice().(type) {
 	case *Peer_Disable:
-
 		return nil, nil
-
 	case *Peer_RoutingPolicies:
-
 		drInfos, err := m.GetRoutingPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutingPolicies().GetDRefInfo() FAILED")
@@ -4506,11 +4695,9 @@ func (m *Peer) GetEnableChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "routing_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -4520,7 +4707,6 @@ func (m *Peer) GetTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetTypeChoice().(type) {
 	case *Peer_External:
-
 		drInfos, err := m.GetExternal().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetExternal().GetDRefInfo() FAILED")
@@ -4530,15 +4716,11 @@ func (m *Peer) GetTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "external." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Peer_Internal:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidatePeer struct {
@@ -4552,7 +4734,6 @@ func (v *ValidatePeer) BfdChoiceValidationRuleHandler(rules map[string]string) (
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePeer) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4560,7 +4741,6 @@ func (v *ValidatePeer) EnableChoiceValidationRuleHandler(rules map[string]string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePeer) PassiveChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4568,7 +4748,6 @@ func (v *ValidatePeer) PassiveChoiceValidationRuleHandler(rules map[string]strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePeer) TypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4576,9 +4755,7 @@ func (v *ValidatePeer) TypeChoiceValidationRuleHandler(rules map[string]string) 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePeer) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -4587,11 +4764,9 @@ func (v *ValidatePeer) MetadataValidationRuleHandler(rules map[string]string) (d
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -4645,7 +4820,6 @@ func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enable_choice"]; exists {
@@ -4681,25 +4855,18 @@ func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["passive_choice"]; exists {
@@ -4735,16 +4902,12 @@ func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["target_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("target_service"))
 		if err := fv(ctx, m.GetTargetService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["type_choice"]; exists {
@@ -4780,16 +4943,13 @@ func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPeerValidator = func() *ValidatePeer {
 	v := &ValidatePeer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4797,7 +4957,6 @@ var DefaultPeerValidator = func() *ValidatePeer {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBfdChoice := v.BfdChoiceValidationRuleHandler
 	rulesBfdChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4808,7 +4967,6 @@ var DefaultPeerValidator = func() *ValidatePeer {
 		panic(errMsg)
 	}
 	v.FldValidators["bfd_choice"] = vFn
-
 	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
 	rulesEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4819,7 +4977,6 @@ var DefaultPeerValidator = func() *ValidatePeer {
 		panic(errMsg)
 	}
 	v.FldValidators["enable_choice"] = vFn
-
 	vrhPassiveChoice := v.PassiveChoiceValidationRuleHandler
 	rulesPassiveChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4830,7 +4987,6 @@ var DefaultPeerValidator = func() *ValidatePeer {
 		panic(errMsg)
 	}
 	v.FldValidators["passive_choice"] = vFn
-
 	vrhTypeChoice := v.TypeChoiceValidationRuleHandler
 	rulesTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4852,11 +5008,8 @@ var DefaultPeerValidator = func() *ValidatePeer {
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
-
 	v.FldValidators["bfd_choice.bfd_enabled"] = BFDValidator().Validate
-
 	v.FldValidators["enable_choice.routing_policies"] = BgpRoutePoliciesValidator().Validate
-
 	v.FldValidators["type_choice.external"] = PeerExternalValidator().Validate
 	v.FldValidators["type_choice.internal"] = PeerInternalValidator().Validate
 
@@ -4876,7 +5029,6 @@ func (m *PeerExternal) ToJSON() (string, error) {
 func (m *PeerExternal) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *PeerExternal) String() string {
 	if m == nil {
 		return ""
@@ -4900,10 +5052,8 @@ func (m *PeerExternal) Redact(ctx context.Context) error {
 	}
 
 	switch x := m.AuthChoice.(type) {
-
 	case *PeerExternal_Md5AuthKey:
 		x.Md5AuthKey = "Redacted"
-
 	}
 
 	return nil
@@ -4942,7 +5092,6 @@ func (m *PeerExternal) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -4952,7 +5101,6 @@ func (m *PeerExternal) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *PeerExternal_Interface:
-
 		vref := m.GetInterface()
 		if vref == nil {
 			return nil, nil
@@ -4968,9 +5116,7 @@ func (m *PeerExternal) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *PeerExternal_InterfaceList:
-
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
@@ -4980,19 +5126,13 @@ func (m *PeerExternal) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "interface_list." + dri.DRField
 		}
 		return drInfos, err
-
 	case *PeerExternal_InsideInterfaces:
-
 		return nil, nil
-
 	case *PeerExternal_OutsideInterfaces:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidatePeerExternal struct {
@@ -5014,6 +5154,7 @@ func (v *ValidatePeerExternal) AddressChoiceAddressValidationRuleHandler(rules m
 	}
 	return oValidatorFn_Address, nil
 }
+
 func (v *ValidatePeerExternal) AddressChoiceSubnetBeginOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SubnetBeginOffset, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -5021,6 +5162,7 @@ func (v *ValidatePeerExternal) AddressChoiceSubnetBeginOffsetValidationRuleHandl
 	}
 	return oValidatorFn_SubnetBeginOffset, nil
 }
+
 func (v *ValidatePeerExternal) AddressChoiceSubnetEndOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SubnetEndOffset, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -5028,7 +5170,6 @@ func (v *ValidatePeerExternal) AddressChoiceSubnetEndOffsetValidationRuleHandler
 	}
 	return oValidatorFn_SubnetEndOffset, nil
 }
-
 func (v *ValidatePeerExternal) AddressChoiceV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5044,6 +5185,7 @@ func (v *ValidatePeerExternal) AddressChoiceV6AddressIpv6ValidationRuleHandler(r
 	}
 	return oValidatorFn_AddressIpv6, nil
 }
+
 func (v *ValidatePeerExternal) AddressChoiceV6SubnetBeginOffsetV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SubnetBeginOffsetV6, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -5051,6 +5193,7 @@ func (v *ValidatePeerExternal) AddressChoiceV6SubnetBeginOffsetV6ValidationRuleH
 	}
 	return oValidatorFn_SubnetBeginOffsetV6, nil
 }
+
 func (v *ValidatePeerExternal) AddressChoiceV6SubnetEndOffsetV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SubnetEndOffsetV6, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -5058,7 +5201,6 @@ func (v *ValidatePeerExternal) AddressChoiceV6SubnetEndOffsetV6ValidationRuleHan
 	}
 	return oValidatorFn_SubnetEndOffsetV6, nil
 }
-
 func (v *ValidatePeerExternal) InterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5066,9 +5208,7 @@ func (v *ValidatePeerExternal) InterfaceChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePeerExternal) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
@@ -5076,9 +5216,7 @@ func (v *ValidatePeerExternal) AsnValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePeerExternal) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -5189,7 +5327,6 @@ func (v *ValidatePeerExternal) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["address_choice_v6"]; exists {
@@ -5269,16 +5406,12 @@ func (v *ValidatePeerExternal) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetAuthChoice().(type) {
@@ -5304,25 +5437,18 @@ func (v *ValidatePeerExternal) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["family_inet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("family_inet"))
 		if err := fv(ctx, m.GetFamilyInet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["family_inet_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("family_inet_v6"))
 		if err := fv(ctx, m.GetFamilyInetV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["interface_choice"]; exists {
@@ -5380,25 +5506,19 @@ func (v *ValidatePeerExternal) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
 	v := &ValidatePeerExternal{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5406,7 +5526,6 @@ var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
 	rulesAddressChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5417,7 +5536,6 @@ var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
 		panic(errMsg)
 	}
 	v.FldValidators["address_choice"] = vFn
-
 	vrhAddressChoiceAddress := v.AddressChoiceAddressValidationRuleHandler
 	rulesAddressChoiceAddress := map[string]string{
 		"ves.io.schema.rules.string.ipv4": "true",
@@ -5447,11 +5565,9 @@ var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerExternal.address_choice_subnet_end_offset: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["address_choice.address"] = vFnMap["address_choice.address"]
 	v.FldValidators["address_choice.subnet_begin_offset"] = vFnMap["address_choice.subnet_begin_offset"]
 	v.FldValidators["address_choice.subnet_end_offset"] = vFnMap["address_choice.subnet_end_offset"]
-
 	vrhAddressChoiceV6 := v.AddressChoiceV6ValidationRuleHandler
 	rulesAddressChoiceV6 := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5462,7 +5578,6 @@ var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
 		panic(errMsg)
 	}
 	v.FldValidators["address_choice_v6"] = vFn
-
 	vrhAddressChoiceV6AddressIpv6 := v.AddressChoiceV6AddressIpv6ValidationRuleHandler
 	rulesAddressChoiceV6AddressIpv6 := map[string]string{
 		"ves.io.schema.rules.string.ipv6": "true",
@@ -5492,11 +5607,9 @@ var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerExternal.address_choice_v6_subnet_end_offset_v6: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["address_choice_v6.address_ipv6"] = vFnMap["address_choice_v6.address_ipv6"]
 	v.FldValidators["address_choice_v6.subnet_begin_offset_v6"] = vFnMap["address_choice_v6.subnet_begin_offset_v6"]
 	v.FldValidators["address_choice_v6.subnet_end_offset_v6"] = vFnMap["address_choice_v6.subnet_end_offset_v6"]
-
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5531,12 +5644,9 @@ var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["interface_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["interface_choice.interface_list"] = InterfaceListValidator().Validate
-
 	v.FldValidators["family_inet"] = FamilyInetValidator().Validate
-
 	v.FldValidators["family_inet_v6"] = FamilyInet6Validator().Validate
 
 	return v
@@ -5588,7 +5698,6 @@ type ValidatePeerFamilyParameters struct {
 }
 
 func (v *ValidatePeerFamilyParameters) FamilyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for family")
@@ -5610,32 +5719,36 @@ func (v *ValidatePeerFamilyParameters) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["enable_srv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_srv6"))
 		if err := fv(ctx, m.GetEnableSrv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["family"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("family"))
 		if err := fv(ctx, m.GetFamily(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["unicast_ipv4"]; exists {
+		vOpts := append(opts, db.WithValidateField("unicast_ipv4"))
+		if err := fv(ctx, m.GetUnicastIpv4(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["unicast_ipv6"]; exists {
+		vOpts := append(opts, db.WithValidateField("unicast_ipv6"))
+		if err := fv(ctx, m.GetUnicastIpv6(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPeerFamilyParametersValidator = func() *ValidatePeerFamilyParameters {
 	v := &ValidatePeerFamilyParameters{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5654,6 +5767,8 @@ var DefaultPeerFamilyParametersValidator = func() *ValidatePeerFamilyParameters 
 		panic(errMsg)
 	}
 	v.FldValidators["family"] = vFn
+	v.FldValidators["unicast_ipv4"] = UnicastIPv4Validator().Validate
+	v.FldValidators["unicast_ipv6"] = UnicastIPv6Validator().Validate
 
 	return v
 }()
@@ -5718,6 +5833,7 @@ func (v *ValidatePeerInternal) AddressChoiceAddressValidationRuleHandler(rules m
 	}
 	return oValidatorFn_Address, nil
 }
+
 func (v *ValidatePeerInternal) AddressChoiceDnsNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_DnsName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -5725,9 +5841,7 @@ func (v *ValidatePeerInternal) AddressChoiceDnsNameValidationRuleHandler(rules m
 	}
 	return oValidatorFn_DnsName, nil
 }
-
 func (v *ValidatePeerInternal) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -5794,43 +5908,30 @@ func (v *ValidatePeerInternal) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["family_inet6vpn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("family_inet6vpn"))
 		if err := fv(ctx, m.GetFamilyInet6Vpn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["family_inetvpn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("family_inetvpn"))
 		if err := fv(ctx, m.GetFamilyInetvpn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["family_rtarget"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("family_rtarget"))
 		if err := fv(ctx, m.GetFamilyRtarget(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["family_uuidvpn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("family_uuidvpn"))
 		if err := fv(ctx, m.GetFamilyUuidvpn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMtlsChoice().(type) {
@@ -5856,25 +5957,19 @@ func (v *ValidatePeerInternal) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
 	v := &ValidatePeerInternal{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5882,7 +5977,6 @@ var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
 	rulesAddressChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5893,7 +5987,6 @@ var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
 		panic(errMsg)
 	}
 	v.FldValidators["address_choice"] = vFn
-
 	vrhAddressChoiceAddress := v.AddressChoiceAddressValidationRuleHandler
 	rulesAddressChoiceAddress := map[string]string{
 		"ves.io.schema.rules.string.ipv4": "true",
@@ -5912,7 +6005,6 @@ var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerInternal.address_choice_dns_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["address_choice.address"] = vFnMap["address_choice.address"]
 	v.FldValidators["address_choice.dns_name"] = vFnMap["address_choice.dns_name"]
 
@@ -5927,13 +6019,9 @@ var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["family_inetvpn"] = FamilyInetvpnValidator().Validate
-
 	v.FldValidators["family_rtarget"] = FamilyRtargetValidator().Validate
-
 	v.FldValidators["family_inet6vpn"] = FamilyInet6VpnValidator().Validate
-
 	v.FldValidators["family_uuidvpn"] = FamilyUuidvpnValidator().Validate
 
 	return v
@@ -5959,7 +6047,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetPeers() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting ReplaceSpecType.peers idx %v", idx)
@@ -6007,15 +6094,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -6023,7 +6107,6 @@ func (m *ReplaceSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPeers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
@@ -6037,7 +6120,6 @@ func (m *ReplaceSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -6045,7 +6127,6 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -6055,7 +6136,6 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -6063,7 +6143,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) WhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for where")
@@ -6072,19 +6151,15 @@ func (v *ValidateReplaceSpecType) WhereValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SiteVirtualSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) BgpParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bgp_parameters")
@@ -6093,19 +6168,15 @@ func (v *ValidateReplaceSpecType) BgpParametersValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BgpParametersValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6165,40 +6236,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bgp_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_parameters"))
 		if err := fv(ctx, m.GetBgpParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peers"]; exists {
 		vOpts := append(opts, db.WithValidateField("peers"))
 		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6247,6 +6308,284 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UnicastIPv4) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UnicastIPv4) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UnicastIPv4) DeepCopy() *UnicastIPv4 {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UnicastIPv4{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UnicastIPv4) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UnicastIPv4) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UnicastIPv4Validator().Validate(ctx, m, opts...)
+}
+
+type ValidateUnicastIPv4 struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUnicastIPv4) AggregationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for aggregation")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*AggregationIPv4, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := AggregationIPv4Validator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for aggregation")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AggregationIPv4)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AggregationIPv4, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated aggregation")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items aggregation")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUnicastIPv4) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UnicastIPv4)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UnicastIPv4 got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["aggregation"]; exists {
+		vOpts := append(opts, db.WithValidateField("aggregation"))
+		if err := fv(ctx, m.GetAggregation(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUnicastIPv4Validator = func() *ValidateUnicastIPv4 {
+	v := &ValidateUnicastIPv4{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAggregation := v.AggregationValidationRuleHandler
+	rulesAggregation := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhAggregation(rulesAggregation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UnicastIPv4.aggregation: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aggregation"] = vFn
+
+	return v
+}()
+
+func UnicastIPv4Validator() db.Validator {
+	return DefaultUnicastIPv4Validator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UnicastIPv6) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UnicastIPv6) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UnicastIPv6) DeepCopy() *UnicastIPv6 {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UnicastIPv6{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UnicastIPv6) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UnicastIPv6) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UnicastIPv6Validator().Validate(ctx, m, opts...)
+}
+
+type ValidateUnicastIPv6 struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUnicastIPv6) AggregationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for aggregation")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*AggregationIPv6, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := AggregationIPv6Validator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for aggregation")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AggregationIPv6)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AggregationIPv6, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated aggregation")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items aggregation")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUnicastIPv6) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UnicastIPv6)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UnicastIPv6 got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["aggregation"]; exists {
+		vOpts := append(opts, db.WithValidateField("aggregation"))
+		if err := fv(ctx, m.GetAggregation(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUnicastIPv6Validator = func() *ValidateUnicastIPv6 {
+	v := &ValidateUnicastIPv6{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAggregation := v.AggregationValidationRuleHandler
+	rulesAggregation := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhAggregation(rulesAggregation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UnicastIPv6.aggregation: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aggregation"] = vFn
+
+	return v
+}()
+
+func UnicastIPv6Validator() db.Validator {
+	return DefaultUnicastIPv6Validator
 }
 
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {

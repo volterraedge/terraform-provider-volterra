@@ -46,7 +46,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCustomNetworkConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.custom_network_config")
 	}
@@ -92,25 +91,19 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkCfgChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkCfgChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
-
 		return nil, nil
-
 	case *CreateSpecType_LogReceiver:
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -126,7 +119,6 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -138,13 +130,11 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
-
 	case *CreateSpecType_LogReceiver:
 		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
 		}
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -162,7 +152,6 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -175,11 +164,8 @@ func (m *CreateSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetNetworkCfgChoice().(type) {
 	case *CreateSpecType_DefaultNetworkConfig:
-
 		return nil, nil
-
 	case *CreateSpecType_CustomNetworkConfig:
-
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -189,11 +175,9 @@ func (m *CreateSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "custom_network_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -207,7 +191,6 @@ func (v *ValidateCreateSpecType) BlockedServicesChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) BondChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -215,7 +198,6 @@ func (v *ValidateCreateSpecType) BondChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -223,7 +205,6 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) NetworkCfgChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -231,9 +212,7 @@ func (v *ValidateCreateSpecType) NetworkCfgChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -273,9 +252,7 @@ func (v *ValidateCreateSpecType) WorkerNodesValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -283,9 +260,7 @@ func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) VolterraCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_certified_hw")
@@ -293,9 +268,7 @@ func (v *ValidateCreateSpecType) VolterraCertifiedHwValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) MasterNodeConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -355,14 +328,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
@@ -398,7 +368,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bond_choice"]; exists {
@@ -434,25 +403,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
 		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
@@ -488,15 +450,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["master_node_configuration"]; exists {
 		vOpts := append(opts, db.WithValidateField("master_node_configuration"))
 		if err := fv(ctx, m.GetMasterNodeConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_cfg_choice"]; exists {
@@ -532,69 +491,49 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["os"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
 		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sw"))
 		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_certified_hw"))
 		if err := fv(ctx, m.GetVolterraCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("worker_nodes"))
 		if err := fv(ctx, m.GetWorkerNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -602,7 +541,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
 	rulesBlockedServicesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -613,7 +551,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
-
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -624,7 +561,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bond_choice"] = vFn
-
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -635,7 +571,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
 	vrhNetworkCfgChoice := v.NetworkCfgChoiceValidationRuleHandler
 	rulesNetworkCfgChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -695,25 +630,15 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["master_node_configuration"] = vFn
-
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
-
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
-
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["network_cfg_choice.custom_network_config"] = SmsNetworkConfigurationValidator().Validate
-
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
-
 	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
-
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
-
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
@@ -739,7 +664,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCustomNetworkConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.custom_network_config")
 	}
@@ -785,25 +709,19 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkCfgChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkCfgChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
-
 		return nil, nil
-
 	case *GetSpecType_LogReceiver:
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -819,7 +737,6 @@ func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -831,13 +748,11 @@ func (m *GetSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.I
 
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
-
 	case *GetSpecType_LogReceiver:
 		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
 		}
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -855,7 +770,6 @@ func (m *GetSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.I
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -868,11 +782,8 @@ func (m *GetSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetNetworkCfgChoice().(type) {
 	case *GetSpecType_DefaultNetworkConfig:
-
 		return nil, nil
-
 	case *GetSpecType_CustomNetworkConfig:
-
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -882,11 +793,9 @@ func (m *GetSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "custom_network_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -900,7 +809,6 @@ func (v *ValidateGetSpecType) BlockedServicesChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) BondChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -908,7 +816,6 @@ func (v *ValidateGetSpecType) BondChoiceValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -916,7 +823,6 @@ func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) NetworkCfgChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -924,9 +830,7 @@ func (v *ValidateGetSpecType) NetworkCfgChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -966,9 +870,7 @@ func (v *ValidateGetSpecType) WorkerNodesValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
@@ -976,9 +878,7 @@ func (v *ValidateGetSpecType) VolterraSoftwareVersionValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
@@ -986,9 +886,7 @@ func (v *ValidateGetSpecType) OperatingSystemVersionValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -996,9 +894,7 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VolterraCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_certified_hw")
@@ -1006,9 +902,7 @@ func (v *ValidateGetSpecType) VolterraCertifiedHwValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) MasterNodeConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1068,14 +962,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
@@ -1111,7 +1002,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bond_choice"]; exists {
@@ -1147,25 +1037,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
 		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
@@ -1201,15 +1084,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["master_node_configuration"]; exists {
 		vOpts := append(opts, db.WithValidateField("master_node_configuration"))
 		if err := fv(ctx, m.GetMasterNodeConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_cfg_choice"]; exists {
@@ -1245,78 +1125,55 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
 		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
 		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_state"))
 		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_certified_hw"))
 		if err := fv(ctx, m.GetVolterraCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
 		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("worker_nodes"))
 		if err := fv(ctx, m.GetWorkerNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1324,7 +1181,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
 	rulesBlockedServicesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1335,7 +1191,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
-
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1346,7 +1201,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bond_choice"] = vFn
-
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1357,7 +1211,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
 	vrhNetworkCfgChoice := v.NetworkCfgChoiceValidationRuleHandler
 	rulesNetworkCfgChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1439,21 +1292,13 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["master_node_configuration"] = vFn
-
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
-
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
-
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["network_cfg_choice.custom_network_config"] = SmsNetworkConfigurationValidator().Validate
-
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
-
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
@@ -1479,7 +1324,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCustomNetworkConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.custom_network_config")
 	}
@@ -1525,31 +1369,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkCfgChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkCfgChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GlobalSpecType_LogsStreamingDisabled:
-
 		return nil, nil
-
 	case *GlobalSpecType_LogReceiver:
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -1565,7 +1402,6 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -1577,13 +1413,11 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GlobalSpecType_LogsStreamingDisabled:
-
 	case *GlobalSpecType_LogReceiver:
 		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
 		}
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -1601,7 +1435,6 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -1614,11 +1447,8 @@ func (m *GlobalSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetNetworkCfgChoice().(type) {
 	case *GlobalSpecType_DefaultNetworkConfig:
-
 		return nil, nil
-
 	case *GlobalSpecType_CustomNetworkConfig:
-
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -1628,15 +1458,12 @@ func (m *GlobalSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "custom_network_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1652,7 +1479,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1662,7 +1488,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1680,7 +1505,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1695,7 +1519,6 @@ func (v *ValidateGlobalSpecType) BlockedServicesChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BondChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1703,7 +1526,6 @@ func (v *ValidateGlobalSpecType) BondChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1711,7 +1533,6 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) NetworkCfgChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1719,9 +1540,7 @@ func (v *ValidateGlobalSpecType) NetworkCfgChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1761,9 +1580,7 @@ func (v *ValidateGlobalSpecType) WorkerNodesValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
@@ -1771,9 +1588,7 @@ func (v *ValidateGlobalSpecType) VolterraSoftwareVersionValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
@@ -1781,9 +1596,7 @@ func (v *ValidateGlobalSpecType) OperatingSystemVersionValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -1791,9 +1604,7 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VolterraCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_certified_hw")
@@ -1801,9 +1612,7 @@ func (v *ValidateGlobalSpecType) VolterraCertifiedHwValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) MasterNodeConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1863,14 +1672,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
@@ -1906,7 +1712,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bond_choice"]; exists {
@@ -1942,25 +1747,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
 		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
@@ -1996,15 +1794,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["master_node_configuration"]; exists {
 		vOpts := append(opts, db.WithValidateField("master_node_configuration"))
 		if err := fv(ctx, m.GetMasterNodeConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_cfg_choice"]; exists {
@@ -2040,96 +1835,67 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
 		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["os"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
 		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sw"))
 		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_certified_hw"))
 		if err := fv(ctx, m.GetVolterraCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
 		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("worker_nodes"))
 		if err := fv(ctx, m.GetWorkerNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2137,7 +1903,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
 	rulesBlockedServicesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2148,7 +1913,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
-
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2159,7 +1923,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bond_choice"] = vFn
-
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2170,7 +1933,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
 	vrhNetworkCfgChoice := v.NetworkCfgChoiceValidationRuleHandler
 	rulesNetworkCfgChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2252,27 +2014,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["master_node_configuration"] = vFn
-
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
-
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
-
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["network_cfg_choice.custom_network_config"] = SmsNetworkConfigurationValidator().Validate
-
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
-
 	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
-
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
-
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2325,7 +2076,6 @@ func (m *Interface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2335,7 +2085,6 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *Interface_EthernetInterface:
-
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -2345,17 +2094,11 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ethernet_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Interface_DedicatedInterface:
-
 		return nil, nil
-
 	case *Interface_DedicatedManagementInterface:
-
 		return nil, nil
-
 	case *Interface_LoopbackInterface:
-
 		drInfos, err := m.GetLoopbackInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLoopbackInterface().GetDRefInfo() FAILED")
@@ -2365,11 +2108,9 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "loopback_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateInterface struct {
@@ -2383,7 +2124,6 @@ func (v *ValidateInterface) DcClusterGroupConnectivityInterfaceChoiceValidationR
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) InterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2391,9 +2131,7 @@ func (v *ValidateInterface) InterfaceChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -2401,9 +2139,7 @@ func (v *ValidateInterface) DescriptionValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2494,16 +2230,12 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["interface_choice"]; exists {
@@ -2561,24 +2293,19 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
 		vOpts := append(opts, db.WithValidateField("labels"))
 		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInterfaceValidator = func() *ValidateInterface {
 	v := &ValidateInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2586,7 +2313,6 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDcClusterGroupConnectivityInterfaceChoice := v.DcClusterGroupConnectivityInterfaceChoiceValidationRuleHandler
 	rulesDcClusterGroupConnectivityInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2597,7 +2323,6 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 		panic(errMsg)
 	}
 	v.FldValidators["dc_cluster_group_connectivity_interface_choice"] = vFn
-
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2634,7 +2359,6 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 		panic(errMsg)
 	}
 	v.FldValidators["labels"] = vFn
-
 	v.FldValidators["interface_choice.ethernet_interface"] = ves_io_schema_network_interface.EthernetInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_interface"] = ves_io_schema_network_interface.DedicatedInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = ves_io_schema_network_interface.DedicatedManagementInterfaceTypeValidator().Validate
@@ -2690,7 +2414,6 @@ func (m *InterfaceListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfacesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2698,7 +2421,6 @@ func (m *InterfaceListType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInterfaces() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetInterfaces() {
 		driSet, err := e.GetDRefInfo()
@@ -2712,7 +2434,6 @@ func (m *InterfaceListType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateInterfaceListType struct {
@@ -2720,7 +2441,6 @@ type ValidateInterfaceListType struct {
 }
 
 func (v *ValidateInterfaceListType) InterfacesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2780,22 +2500,18 @@ func (v *ValidateInterfaceListType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interfaces"]; exists {
 		vOpts := append(opts, db.WithValidateField("interfaces"))
 		if err := fv(ctx, m.GetInterfaces(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInterfaceListTypeValidator = func() *ValidateInterfaceListType {
 	v := &ValidateInterfaceListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2841,7 +2557,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCustomNetworkConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.custom_network_config")
 	}
@@ -2887,25 +2602,19 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkCfgChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkCfgChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
-
 		return nil, nil
-
 	case *ReplaceSpecType_LogReceiver:
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -2921,7 +2630,6 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error)
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -2933,13 +2641,11 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d 
 
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
-
 	case *ReplaceSpecType_LogReceiver:
 		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
 		}
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -2957,7 +2663,6 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d 
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -2970,11 +2675,8 @@ func (m *ReplaceSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetNetworkCfgChoice().(type) {
 	case *ReplaceSpecType_DefaultNetworkConfig:
-
 		return nil, nil
-
 	case *ReplaceSpecType_CustomNetworkConfig:
-
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -2984,11 +2686,9 @@ func (m *ReplaceSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "custom_network_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -3002,7 +2702,6 @@ func (v *ValidateReplaceSpecType) BlockedServicesChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) BondChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3010,7 +2709,6 @@ func (v *ValidateReplaceSpecType) BondChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3018,7 +2716,6 @@ func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) NetworkCfgChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3026,9 +2723,7 @@ func (v *ValidateReplaceSpecType) NetworkCfgChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3068,9 +2763,7 @@ func (v *ValidateReplaceSpecType) WorkerNodesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -3078,9 +2771,7 @@ func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) VolterraCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_certified_hw")
@@ -3088,9 +2779,7 @@ func (v *ValidateReplaceSpecType) VolterraCertifiedHwValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) MasterNodeConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3150,14 +2839,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
@@ -3193,7 +2879,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bond_choice"]; exists {
@@ -3229,25 +2914,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
 		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
@@ -3283,15 +2961,12 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["master_node_configuration"]; exists {
 		vOpts := append(opts, db.WithValidateField("master_node_configuration"))
 		if err := fv(ctx, m.GetMasterNodeConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_cfg_choice"]; exists {
@@ -3327,69 +3002,49 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["os"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
 		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sw"))
 		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_certified_hw"))
 		if err := fv(ctx, m.GetVolterraCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("worker_nodes"))
 		if err := fv(ctx, m.GetWorkerNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3397,7 +3052,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
 	rulesBlockedServicesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3408,7 +3062,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
-
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3419,7 +3072,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bond_choice"] = vFn
-
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3430,7 +3082,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
 	vrhNetworkCfgChoice := v.NetworkCfgChoiceValidationRuleHandler
 	rulesNetworkCfgChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3490,25 +3141,15 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["master_node_configuration"] = vFn
-
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
-
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
-
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["network_cfg_choice.custom_network_config"] = SmsNetworkConfigurationValidator().Validate
-
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
-
 	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
-
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
-
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
@@ -3534,7 +3175,6 @@ func (m *SmsNetworkConfiguration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SmsNetworkConfiguration.global_network_list")
 	}
@@ -3580,39 +3220,32 @@ func (m *SmsNetworkConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSliChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSliChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSloChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSloChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3622,11 +3255,8 @@ func (m *SmsNetworkConfiguration) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo
 	}
 	switch m.GetForwardProxyChoice().(type) {
 	case *SmsNetworkConfiguration_NoForwardProxy:
-
 		return nil, nil
-
 	case *SmsNetworkConfiguration_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -3636,15 +3266,11 @@ func (m *SmsNetworkConfiguration) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *SmsNetworkConfiguration_ForwardProxyAllowAll:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3654,11 +3280,8 @@ func (m *SmsNetworkConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInf
 	}
 	switch m.GetGlobalNetworkChoice().(type) {
 	case *SmsNetworkConfiguration_NoGlobalNetwork:
-
 		return nil, nil
-
 	case *SmsNetworkConfiguration_GlobalNetworkList:
-
 		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
@@ -3668,11 +3291,9 @@ func (m *SmsNetworkConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInf
 			dri.DRField = "global_network_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3682,11 +3303,8 @@ func (m *SmsNetworkConfiguration) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *SmsNetworkConfiguration_DefaultInterfaceConfig:
-
 		return nil, nil
-
 	case *SmsNetworkConfiguration_InterfaceList:
-
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
@@ -3696,11 +3314,9 @@ func (m *SmsNetworkConfiguration) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "interface_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3710,11 +3326,8 @@ func (m *SmsNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 	}
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *SmsNetworkConfiguration_NoNetworkPolicy:
-
 		return nil, nil
-
 	case *SmsNetworkConfiguration_ActiveNetworkPolicies:
-
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -3724,9 +3337,7 @@ func (m *SmsNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 			dri.DRField = "active_network_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	case *SmsNetworkConfiguration_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -3736,11 +3347,9 @@ func (m *SmsNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3750,11 +3359,8 @@ func (m *SmsNetworkConfiguration) GetSliChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetSliChoice().(type) {
 	case *SmsNetworkConfiguration_DefaultSliConfig:
-
 		return nil, nil
-
 	case *SmsNetworkConfiguration_SliConfig:
-
 		drInfos, err := m.GetSliConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliConfig().GetDRefInfo() FAILED")
@@ -3764,11 +3370,9 @@ func (m *SmsNetworkConfiguration) GetSliChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "sli_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3778,11 +3382,8 @@ func (m *SmsNetworkConfiguration) GetSloChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetSloChoice().(type) {
 	case *SmsNetworkConfiguration_DefaultConfig:
-
 		return nil, nil
-
 	case *SmsNetworkConfiguration_SloConfig:
-
 		drInfos, err := m.GetSloConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloConfig().GetDRefInfo() FAILED")
@@ -3792,11 +3393,9 @@ func (m *SmsNetworkConfiguration) GetSloChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "slo_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateSmsNetworkConfiguration struct {
@@ -3810,7 +3409,6 @@ func (v *ValidateSmsNetworkConfiguration) ForwardProxyChoiceValidationRuleHandle
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3818,7 +3416,6 @@ func (v *ValidateSmsNetworkConfiguration) GlobalNetworkChoiceValidationRuleHandl
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) InterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3826,7 +3423,6 @@ func (v *ValidateSmsNetworkConfiguration) InterfaceChoiceValidationRuleHandler(r
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3834,7 +3430,6 @@ func (v *ValidateSmsNetworkConfiguration) NetworkPolicyChoiceValidationRuleHandl
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3842,7 +3437,6 @@ func (v *ValidateSmsNetworkConfiguration) SiteMeshGroupChoiceValidationRuleHandl
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) SloChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3850,9 +3444,7 @@ func (v *ValidateSmsNetworkConfiguration) SloChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) BgpRouterIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_router_id")
@@ -3860,9 +3452,7 @@ func (v *ValidateSmsNetworkConfiguration) BgpRouterIdValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) BgpPeerAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address")
@@ -3870,9 +3460,7 @@ func (v *ValidateSmsNetworkConfiguration) BgpPeerAddressValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) TunnelDeadTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_dead_timeout")
@@ -3880,9 +3468,7 @@ func (v *ValidateSmsNetworkConfiguration) TunnelDeadTimeoutValidationRuleHandler
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSmsNetworkConfiguration) BgpPeerAddressV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_v6")
@@ -3904,32 +3490,23 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bgp_peer_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
 		if err := fv(ctx, m.GetBgpPeerAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peer_address_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address_v6"))
 		if err := fv(ctx, m.GetBgpPeerAddressV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_router_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_router_id"))
 		if err := fv(ctx, m.GetBgpRouterId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
@@ -3976,7 +3553,6 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["global_network_choice"]; exists {
@@ -4012,7 +3588,6 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["interface_choice"]; exists {
@@ -4048,7 +3623,6 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
@@ -4095,7 +3669,6 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
@@ -4131,7 +3704,6 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetSliChoice().(type) {
@@ -4157,7 +3729,6 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["slo_choice"]; exists {
@@ -4193,34 +3764,25 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_dead_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_dead_timeout"))
 		if err := fv(ctx, m.GetTunnelDeadTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip_vrrp_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip_vrrp_mode"))
 		if err := fv(ctx, m.GetVipVrrpMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfiguration {
 	v := &ValidateSmsNetworkConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4228,7 +3790,6 @@ var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfigur
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4239,7 +3800,6 @@ var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["forward_proxy_choice"] = vFn
-
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4250,7 +3810,6 @@ var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["global_network_choice"] = vFn
-
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4261,7 +3820,6 @@ var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["interface_choice"] = vFn
-
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4272,7 +3830,6 @@ var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["network_policy_choice"] = vFn
-
 	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
 	rulesSiteMeshGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4283,7 +3840,6 @@ var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["site_mesh_group_choice"] = vFn
-
 	vrhSloChoice := v.SloChoiceValidationRuleHandler
 	rulesSloChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4339,18 +3895,12 @@ var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["bgp_peer_address_v6"] = vFn
-
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
-
 	v.FldValidators["interface_choice.interface_list"] = InterfaceListTypeValidator().Validate
-
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
-
 	v.FldValidators["sli_choice.sli_config"] = VnConfigurationValidator().Validate
-
 	v.FldValidators["slo_choice.slo_config"] = VnConfigurationValidator().Validate
 
 	return v
@@ -4403,7 +3953,6 @@ func (m *StaticRoutesListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetStaticRoutesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -4411,7 +3960,6 @@ func (m *StaticRoutesListType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetStaticRoutes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
@@ -4425,7 +3973,6 @@ func (m *StaticRoutesListType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateStaticRoutesListType struct {
@@ -4433,7 +3980,6 @@ type ValidateStaticRoutesListType struct {
 }
 
 func (v *ValidateStaticRoutesListType) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4493,22 +4039,18 @@ func (v *ValidateStaticRoutesListType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStaticRoutesListTypeValidator = func() *ValidateStaticRoutesListType {
 	v := &ValidateStaticRoutesListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4586,37 +4128,29 @@ func (m *VnConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDcClusterGroupInterfaceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDcClusterGroupInterfaceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticRouteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticRouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticV6RouteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticV6RouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *VnConfiguration) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *VnConfiguration_NoDcClusterGroup:
-
 		return nil, nil
-
 	case *VnConfiguration_DcClusterGroup:
-
 		vref := m.GetDcClusterGroup()
 		if vref == nil {
 			return nil, nil
@@ -4632,7 +4166,6 @@ func (m *VnConfiguration) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, erro
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -4644,13 +4177,11 @@ func (m *VnConfiguration) GetDcClusterGroupChoiceDBEntries(ctx context.Context, 
 
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *VnConfiguration_NoDcClusterGroup:
-
 	case *VnConfiguration_DcClusterGroup:
 		refdType, err := d.TypeForEntryKind("", "", "dc_cluster_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: dc_cluster_group")
 		}
-
 		vref := m.GetDcClusterGroup()
 		if vref == nil {
 			return nil, nil
@@ -4668,7 +4199,6 @@ func (m *VnConfiguration) GetDcClusterGroupChoiceDBEntries(ctx context.Context, 
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -4697,7 +4227,6 @@ func (m *VnConfiguration) GetDcClusterGroupInterfaceDRefInfo() ([]db.DRefInfo, e
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDcClusterGroupInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4725,7 +4254,6 @@ func (m *VnConfiguration) GetDcClusterGroupInterfaceDBEntries(ctx context.Contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4736,11 +4264,8 @@ func (m *VnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetStaticRouteChoice().(type) {
 	case *VnConfiguration_NoStaticRoutes:
-
 		return nil, nil
-
 	case *VnConfiguration_StaticRoutes:
-
 		drInfos, err := m.GetStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticRoutes().GetDRefInfo() FAILED")
@@ -4750,11 +4275,9 @@ func (m *VnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "static_routes." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -4764,11 +4287,8 @@ func (m *VnConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetStaticV6RouteChoice().(type) {
 	case *VnConfiguration_NoV6StaticRoutes:
-
 		return nil, nil
-
 	case *VnConfiguration_StaticV6Routes:
-
 		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
@@ -4778,11 +4298,9 @@ func (m *VnConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "static_v6_routes." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateVnConfiguration struct {
@@ -4796,7 +4314,6 @@ func (v *ValidateVnConfiguration) DcClusterGroupChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateVnConfiguration) StaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4804,7 +4321,6 @@ func (v *ValidateVnConfiguration) StaticRouteChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateVnConfiguration) StaticV6RouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4812,9 +4328,7 @@ func (v *ValidateVnConfiguration) StaticV6RouteChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateVnConfiguration) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -4857,9 +4371,7 @@ func (v *ValidateVnConfiguration) LabelsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVnConfiguration) VipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vip")
@@ -4867,9 +4379,7 @@ func (v *ValidateVnConfiguration) VipValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVnConfiguration) NameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver")
@@ -4877,9 +4387,7 @@ func (v *ValidateVnConfiguration) NameserverValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVnConfiguration) DcClusterGroupInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4925,9 +4433,7 @@ func (v *ValidateVnConfiguration) DcClusterGroupInterfaceValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVnConfiguration) VipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vip_v6")
@@ -4935,9 +4441,7 @@ func (v *ValidateVnConfiguration) VipV6ValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVnConfiguration) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
@@ -4993,41 +4497,30 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dc_cluster_group_interface"]; exists {
 		vOpts := append(opts, db.WithValidateField("dc_cluster_group_interface"))
 		if err := fv(ctx, m.GetDcClusterGroupInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
 		vOpts := append(opts, db.WithValidateField("labels"))
 		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver"))
 		if err := fv(ctx, m.GetNameserver(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
 		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["static_route_choice"]; exists {
@@ -5063,7 +4556,6 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["static_v6_route_choice"]; exists {
@@ -5099,34 +4591,25 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip"))
 		if err := fv(ctx, m.GetVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip_v6"))
 		if err := fv(ctx, m.GetVipV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 	v := &ValidateVnConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5134,7 +4617,6 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDcClusterGroupChoice := v.DcClusterGroupChoiceValidationRuleHandler
 	rulesDcClusterGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5145,7 +4627,6 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["dc_cluster_group_choice"] = vFn
-
 	vrhStaticRouteChoice := v.StaticRouteChoiceValidationRuleHandler
 	rulesStaticRouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5156,7 +4637,6 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["static_route_choice"] = vFn
-
 	vrhStaticV6RouteChoice := v.StaticV6RouteChoiceValidationRuleHandler
 	rulesStaticV6RouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5238,11 +4718,8 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["nameserver_v6"] = vFn
-
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
-
 	v.FldValidators["static_v6_route_choice.static_v6_routes"] = ves_io_schema_virtual_network.StaticV6RoutesListTypeValidator().Validate
 
 	return v

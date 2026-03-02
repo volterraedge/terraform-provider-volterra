@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.nat_policy.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2035,7 +2012,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{namespace}/nat_policys/{name}": {
             "get": {
                 "summary": "Get NAT Policy",
-                "description": "NAT Policy Get specification fetches the configuration from store which contains the \nrules, Match Criteria, Action applied on the NAT policy along with Virtual subnet pool\nand NAT Pool",
+                "description": "NAT Policy Get specification fetches the configuration from store which contains the\nrules, Match Criteria, Action applied on the NAT policy along with Virtual subnet pool\nand NAT Pool",
                 "operationId": "ves.io.schema.nat_policy.API.Get",
                 "responses": {
                     "200": {
@@ -2531,7 +2508,7 @@ var APISwaggerJSON string = `{
         },
         "nat_policyGetSpecType": {
             "type": "object",
-            "description": "NAT Policy Get specification fetches the configuration from store which contains the \nrules, Match Criteria, Action applied on the NAT policy along with Virtual subnet pool\nand NAT Pool",
+            "description": "NAT Policy Get specification fetches the configuration from store which contains the\nrules, Match Criteria, Action applied on the NAT policy along with Virtual subnet pool\nand NAT Pool",
             "title": "Get NAT Policy",
             "x-displayname": "Get NAT Policy",
             "x-ves-oneof-field-applies_to_choice": "[\"site\"]",
@@ -2685,7 +2662,7 @@ var APISwaggerJSON string = `{
             "description": "Match criteria of the packet to apply the NAT Rule",
             "title": "Match Criteria",
             "x-displayname": "Match Criteria",
-            "x-ves-oneof-field-network_choice": "[\"segment\",\"virtual_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"site_local_inside_network\",\"site_local_network\"]",
             "x-ves-oneof-field-protocol_choice": "[\"any\",\"icmp\",\"tcp\",\"udp\"]",
             "x-ves-proto-message": "ves.io.schema.nat_policy.MatchCriteriaType",
             "properties": {
@@ -2708,33 +2685,23 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip_prefix": "true"
                     }
                 },
-                "destination_port": {
-                    "description": " Destination port of the packet to match",
-                    "title": "destination port",
-                    "$ref": "#/definitions/schemaPortMatcherType",
-                    "x-displayname": "Destination Port"
-                },
                 "icmp": {
                     "description": "Exclusive with [any tcp udp]\n Match ICMP Protocol",
                     "title": "ICMP Protocol",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "ICMP"
                 },
-                "protocol": {
-                    "description": " Protocol of the packet to match\n\nExample: - \"ALL\"-\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n",
-                    "title": "protocol",
-                    "$ref": "#/definitions/schemaProtocolEnumType",
-                    "x-displayname": "Protocol",
-                    "x-ves-example": "ALL",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.defined_only": "true"
-                    }
+                "site_local_inside_network": {
+                    "description": "Exclusive with [site_local_network]\n",
+                    "title": "Site Local Network Inside",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside Virtual Network"
                 },
-                "segment": {
-                    "description": "Exclusive with [virtual_network]\n When there is no segment connector, this field need not be specified. When there is segment connector configured and if packet is destined to destination segment, destination segment needs to be configured here",
-                    "title": "Destination Segment",
-                    "$ref": "#/definitions/schemaSegmentRefType",
-                    "x-displayname": "Destination Segment"
+                "site_local_network": {
+                    "description": "Exclusive with [site_local_inside_network]\n",
+                    "title": "Site Local Network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Outside Virtual Network"
                 },
                 "source_cidr": {
                     "type": "array",
@@ -2749,12 +2716,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip_prefix": "true"
                     }
                 },
-                "source_port": {
-                    "description": " Source port of the packet to match",
-                    "title": "source port",
-                    "$ref": "#/definitions/schemaPortMatcherType",
-                    "x-displayname": "Source Port"
-                },
                 "tcp": {
                     "description": "Exclusive with [any icmp udp]\n Match TCP Protocol",
                     "title": "TCP Protocol",
@@ -2766,12 +2727,6 @@ var APISwaggerJSON string = `{
                     "title": "UDP Protocol",
                     "$ref": "#/definitions/nat_policyPortConfiguration",
                     "x-displayname": "UDP"
-                },
-                "virtual_network": {
-                    "description": "Exclusive with [segment]\n When there is no network connector, this field need not be specified. When there is network connector configured and if packet is destined to destination network, destination network needs to be configured here",
-                    "title": "Destination Virtual Network",
-                    "$ref": "#/definitions/schemaVirtualNetworkReferenceType",
-                    "x-displayname": "Destination Virtual Network"
                 }
             }
         },
@@ -2856,7 +2811,7 @@ var APISwaggerJSON string = `{
             "title": "Rule Specification",
             "x-displayname": "Rule Specification",
             "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
-            "x-ves-oneof-field-scope_choice": "[\"cloud_connect\",\"network_interface\",\"segment\",\"virtual_network\"]",
+            "x-ves-oneof-field-scope_choice": "[\"cloud_connect\",\"node_interface\",\"segment\",\"virtual_network\"]",
             "x-ves-proto-message": "ves.io.schema.nat_policy.RuleType",
             "properties": {
                 "action": {
@@ -2870,7 +2825,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "cloud_connect": {
-                    "description": "Exclusive with [network_interface segment virtual_network]\n NAT rule is applied to packet coming from cloud connect",
+                    "description": "Exclusive with [node_interface segment virtual_network]\n NAT rule is applied to packet coming from cloud connect",
                     "title": "cloud connect",
                     "$ref": "#/definitions/schemaCloudConnectRefType",
                     "x-displayname": "Cloud Connect"
@@ -2904,20 +2859,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "network_interface": {
-                    "description": "Exclusive with [cloud_connect segment virtual_network]\n NAT rule is applied to packet coming from interface",
-                    "title": "interface",
-                    "$ref": "#/definitions/schemaNetworkInterfaceRefType",
-                    "x-displayname": "Interface"
+                "node_interface": {
+                    "description": "Exclusive with [cloud_connect segment virtual_network]\n NAT rule is applied to packet coming from one or more interfaces of nodes",
+                    "title": "node interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 },
                 "segment": {
-                    "description": "Exclusive with [cloud_connect network_interface virtual_network]\n NAT rule is applied to packet in the segment",
+                    "description": "Exclusive with [cloud_connect node_interface virtual_network]\n NAT rule is applied to packet in the segment",
                     "title": "segment",
                     "$ref": "#/definitions/schemaSegmentRefType",
                     "x-displayname": "Segment"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [cloud_connect network_interface segment]\n NAT rule is applied to packet in the virtual network",
+                    "description": "Exclusive with [cloud_connect node_interface segment]\n NAT rule is applied to packet in the virtual network",
                     "title": "virtual network",
                     "$ref": "#/definitions/schemaVirtualNetworkReferenceType",
                     "x-displayname": "Virtual Network"
@@ -3042,10 +2997,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -3163,59 +3118,66 @@ var APISwaggerJSON string = `{
         },
         "schemaNetworkInterfaceRefType": {
             "type": "object",
-            "description": "Reference to Network Interface Object",
+            "description": "x-displayName: \"NetworkInterface Reference Type\"\nReference to Network Interface Object",
             "title": "NetworkInterfaceRefType",
-            "x-displayname": "NetworkInterface Reference Type",
-            "x-ves-proto-message": "ves.io.schema.NetworkInterfaceRefType",
             "properties": {
                 "refs": {
                     "type": "array",
-                    "description": " Reference to Network Interface Object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": "x-displayName: \"Network Interface\"\nx-required\nReference to Network Interface Object",
                     "title": "Network Interface",
-                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Network Interface",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
             }
         },
         "schemaNodeInterfaceInfo": {
             "type": "object",
-            "description": "x-displayName: \"NodeInterfaceInfo\"\nOn a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "description": "On a multinode site, this list holds the nodes and corresponding tunnel transport interface",
             "title": "NodeInterfaceInfo",
+            "x-displayname": "NodeInterfaceInfo",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceInfo",
             "properties": {
                 "interface": {
                     "type": "array",
-                    "description": "x-displayName: \"Interface\"\nInterface reference on this node",
+                    "description": " Interface reference on this node\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Interface",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Interface",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 },
                 "node": {
                     "type": "string",
-                    "description": "x-displayName: \"Node\"\nx-example: \"master-0\"\nNode name on this site",
-                    "title": "Node"
+                    "description": " Node name on this site\n\nExample: - \"master-0\"-",
+                    "title": "Node",
+                    "x-displayname": "Node",
+                    "x-ves-example": "master-0"
                 }
             }
         },
         "schemaNodeInterfaceType": {
             "type": "object",
-            "description": "x-displayName: \"NodeInterfaceType\"\nOn multinode site, this type holds the information about per node interfaces",
+            "description": "On multinode site, this type holds the information about per node interfaces",
             "title": "NodeInterfaceType",
+            "x-displayname": "NodeInterfaceType",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceType",
             "properties": {
                 "list": {
                     "type": "array",
-                    "description": "x-displayName: \"Node Interface Info\"\nOn a multinode site, this list holds the nodes and corresponding networking_interface",
+                    "description": " On a multinode site, this list holds the nodes and corresponding networking_interface\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
                     "title": "NodeInterfaceInfo",
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/schemaNodeInterfaceInfo"
+                    },
+                    "x-displayname": "Node Interface Info",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
                     }
                 }
             }
@@ -3457,7 +3419,7 @@ var APISwaggerJSON string = `{
         },
         "schemaProtocolEnumType": {
             "type": "string",
-            "description": "Protocols like TCP, UDP\n",
+            "description": "x-displayName: \"Protocols\"\nProtocols like TCP, UDP\n\n - ALL: x-displayName: \"ALL\"\n - ICMP: x-displayName: \"ICMP\"\n - TCP: x-displayName: \"TCP\"\n - UDP: x-displayName: \"UDP\"",
             "title": "Allowed Protocols",
             "enum": [
                 "ALL",
@@ -3465,9 +3427,7 @@ var APISwaggerJSON string = `{
                 "TCP",
                 "UDP"
             ],
-            "default": "ALL",
-            "x-displayname": "Protocols",
-            "x-ves-proto-enum": "ves.io.schema.ProtocolEnumType"
+            "default": "ALL"
         },
         "schemaSegmentRefType": {
             "type": "object",

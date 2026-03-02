@@ -64,7 +64,6 @@ type ValidateGetApiEndpointPathsSuggestionsRequest struct {
 }
 
 func (v *ValidateGetApiEndpointPathsSuggestionsRequest) BasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for base_path")
@@ -72,9 +71,7 @@ func (v *ValidateGetApiEndpointPathsSuggestionsRequest) BasePathValidationRuleHa
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetApiEndpointPathsSuggestionsRequest) MatchValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for match_value")
@@ -96,50 +93,36 @@ func (v *ValidateGetApiEndpointPathsSuggestionsRequest) Validate(ctx context.Con
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["base_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("base_path"))
 		if err := fv(ctx, m.GetBasePath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["match_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match_value"))
 		if err := fv(ctx, m.GetMatchValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetApiEndpointPathsSuggestionsRequestValidator = func() *ValidateGetApiEndpointPathsSuggestionsRequest {
 	v := &ValidateGetApiEndpointPathsSuggestionsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -219,7 +202,6 @@ type ValidateGetBasePathSuggestionsRequest struct {
 }
 
 func (v *ValidateGetBasePathSuggestionsRequest) MatchValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for match_value")
@@ -241,41 +223,30 @@ func (v *ValidateGetBasePathSuggestionsRequest) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["match_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match_value"))
 		if err := fv(ctx, m.GetMatchValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetBasePathSuggestionsRequestValidator = func() *ValidateGetBasePathSuggestionsRequest {
 	v := &ValidateGetBasePathSuggestionsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -344,7 +315,6 @@ type ValidateGetMethodsSuggestionsRequest struct {
 }
 
 func (v *ValidateGetMethodsSuggestionsRequest) BasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for base_path")
@@ -352,9 +322,7 @@ func (v *ValidateGetMethodsSuggestionsRequest) BasePathValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetMethodsSuggestionsRequest) ApiEndpointPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for api_endpoint_path")
@@ -376,50 +344,36 @@ func (v *ValidateGetMethodsSuggestionsRequest) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoint_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_endpoint_path"))
 		if err := fv(ctx, m.GetApiEndpointPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["base_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("base_path"))
 		if err := fv(ctx, m.GetBasePath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetMethodsSuggestionsRequestValidator = func() *ValidateGetMethodsSuggestionsRequest {
 	v := &ValidateGetMethodsSuggestionsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

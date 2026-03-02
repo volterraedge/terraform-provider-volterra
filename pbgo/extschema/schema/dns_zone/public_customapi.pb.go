@@ -2292,7 +2292,7 @@ type CustomAPIClient interface {
 	ImportF5CSZone(ctx context.Context, in *ImportF5CSZoneRequest, opts ...grpc.CallOption) (*ImportF5CSZoneResponse, error)
 	// Import DNS Zone
 	//
-	// x-displayName: "Import DNS Zone"
+	// x-displayName: "Import AXFR for Primary Zone"
 	// Import DNS Zone via AXFR
 	ImportAXFR(ctx context.Context, in *ImportAXFRRequest, opts ...grpc.CallOption) (*ImportAXFRResponse, error)
 	// Get remote zone file
@@ -2416,7 +2416,7 @@ type CustomAPIServer interface {
 	ImportF5CSZone(context.Context, *ImportF5CSZoneRequest) (*ImportF5CSZoneResponse, error)
 	// Import DNS Zone
 	//
-	// x-displayName: "Import DNS Zone"
+	// x-displayName: "Import AXFR for Primary Zone"
 	// Import DNS Zone via AXFR
 	ImportAXFR(context.Context, *ImportAXFRRequest) (*ImportAXFRResponse, error)
 	// Get remote zone file

@@ -31,24 +31,22 @@ resource "volterra_tgw_info" "example" {
 			az = "us-east-2a"
 	}
 }
-
 ```
 
 ### Argument Reference
 
 ---
 
--	`name` - (Required) The value of aws_tgw_site name has to follow DNS-1035 format. (`String`).
+-   `name` - (Required) The value of aws_tgw_site name has to follow DNS-1035 format. (`String`).
 
--	`namespace` - (Required) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
+-   `namespace` - (Required) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
 
--	`tgw_id` - (Required) List of vpc ip prefixes
+-   `tgw_id` - (Required) List of vpc ip prefixes
 
--	`vpc_id` - (Required) List of vpc ip prefixes
+-   `vpc_id` - (Required) List of vpc ip prefixes
 
--	`subnet_ids` - (Required) List of subnetIds associated with the aws_tgw_site
-
-	-	`az` - (Required) Name of the AZ in which the subnet exists (`String`).
-	-	`outside_subnet_id` - (Required) Outside Subnet Id.
-	-	`inside_subnet_id` - (Required) Inside Subnet Id.
-	-	`workload_subnet_id` - (Required) Workload Subnet Id.
+-   `subnet_ids` - (Required) List of subnetIds associated with the aws_tgw_site
+    -   `az` - (Required) Name of the AZ in which the subnet exists (`String`).
+    -   `outside_subnet_id` - (Required) Outside Subnet Id.
+    -   `inside_subnet_id` - (Required) Inside Subnet Id.
+    -   `workload_subnet_id` - (Required) Workload Subnet Id.

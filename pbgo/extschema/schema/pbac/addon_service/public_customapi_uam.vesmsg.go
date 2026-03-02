@@ -76,52 +76,36 @@ func (v *ValidateAddonServiceActivationStatus) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_status"))
 		if err := fv(ctx, m.GetAccessStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["addon_service_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addon_service_status"))
 		if err := fv(ctx, m.GetAddonServiceStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tier"))
 		if err := fv(ctx, m.GetTier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -190,16 +174,12 @@ func (v *ValidateGetActivationStatusReq) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["addon_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addon_service"))
 		if err := fv(ctx, m.GetAddonService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -268,16 +248,12 @@ func (v *ValidateGetActivationStatusResp) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -346,16 +322,12 @@ func (v *ValidateGetAddonServiceDetailsReq) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -459,52 +431,37 @@ func (v *ValidateGetAddonServiceDetailsResp) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["addon_service_group_display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addon_service_group_display_name"))
 		if err := fv(ctx, m.GetAddonServiceGroupDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["addon_service_group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addon_service_group_name"))
 		if err := fv(ctx, m.GetAddonServiceGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tier"))
 		if err := fv(ctx, m.GetTier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetAddonServiceDetailsRespValidator = func() *ValidateGetAddonServiceDetailsResp {
 	v := &ValidateGetAddonServiceDetailsResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["activation_type_choice.self_activation"] = SelfActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.partially_managed_activation"] = PartiallyManagedActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.managed_activation"] = FullyManagedActivationTypeValidator().Validate
@@ -570,16 +527,12 @@ func (v *ValidateGetAllServiceTiersActivationStatusReq) Validate(ctx context.Con
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["addon_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addon_service"))
 		if err := fv(ctx, m.GetAddonService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -648,9 +601,7 @@ func (v *ValidateGetAllServiceTiersActivationStatusResp) Validate(ctx context.Co
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["activation_states"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("activation_states"))
 		for key, value := range m.GetActivationStates() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -658,9 +609,7 @@ func (v *ValidateGetAllServiceTiersActivationStatusResp) Validate(ctx context.Co
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

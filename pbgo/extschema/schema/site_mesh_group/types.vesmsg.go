@@ -27,6 +27,163 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *BFD) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BFD) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BFD) DeepCopy() *BFD {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BFD{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BFD) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BFD) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BFDValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBFD struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBFD) TransmitIntervalMillisecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for transmit_interval_milliseconds")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateBFD) ReceiveIntervalMillisecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for receive_interval_milliseconds")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateBFD) MultiplierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for multiplier")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBFD) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BFD)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BFD got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["multiplier"]; exists {
+		vOpts := append(opts, db.WithValidateField("multiplier"))
+		if err := fv(ctx, m.GetMultiplier(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["receive_interval_milliseconds"]; exists {
+		vOpts := append(opts, db.WithValidateField("receive_interval_milliseconds"))
+		if err := fv(ctx, m.GetReceiveIntervalMilliseconds(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["transmit_interval_milliseconds"]; exists {
+		vOpts := append(opts, db.WithValidateField("transmit_interval_milliseconds"))
+		if err := fv(ctx, m.GetTransmitIntervalMilliseconds(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBFDValidator = func() *ValidateBFD {
+	v := &ValidateBFD{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTransmitIntervalMilliseconds := v.TransmitIntervalMillisecondsValidationRuleHandler
+	rulesTransmitIntervalMilliseconds := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "300",
+		"ves.io.schema.rules.uint32.lte":       "60000",
+	}
+	vFn, err = vrhTransmitIntervalMilliseconds(rulesTransmitIntervalMilliseconds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BFD.transmit_interval_milliseconds: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["transmit_interval_milliseconds"] = vFn
+
+	vrhReceiveIntervalMilliseconds := v.ReceiveIntervalMillisecondsValidationRuleHandler
+	rulesReceiveIntervalMilliseconds := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "300",
+		"ves.io.schema.rules.uint32.lte":       "60000",
+	}
+	vFn, err = vrhReceiveIntervalMilliseconds(rulesReceiveIntervalMilliseconds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BFD.receive_interval_milliseconds: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["receive_interval_milliseconds"] = vFn
+
+	vrhMultiplier := v.MultiplierValidationRuleHandler
+	rulesMultiplier := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "2",
+		"ves.io.schema.rules.uint32.lte":       "255",
+	}
+	vFn, err = vrhMultiplier(rulesMultiplier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BFD.multiplier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["multiplier"] = vFn
+
+	return v
+}()
+
+func BFDValidator() db.Validator {
+	return DefaultBFDValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -73,21 +230,17 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
@@ -112,7 +265,6 @@ func (m *CreateSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -131,7 +283,6 @@ func (m *CreateSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -142,11 +293,8 @@ func (m *CreateSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetMeshChoice().(type) {
 	case *CreateSpecType_HubMesh:
-
 		return nil, nil
-
 	case *CreateSpecType_SpokeMesh:
-
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -156,15 +304,11 @@ func (m *CreateSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "spoke_mesh." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_FullMesh:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *CreateSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -189,7 +333,6 @@ func (m *CreateSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -208,7 +351,6 @@ func (m *CreateSpecType) GetVirtualSiteDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -216,6 +358,13 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) BfdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bfd_choice")
+	}
+	return validatorFn, nil
+}
 func (v *ValidateCreateSpecType) ReFallbackValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -223,9 +372,7 @@ func (v *ValidateCreateSpecType) ReFallbackValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(SiteMeshGroupType)
@@ -239,9 +386,7 @@ func (v *ValidateCreateSpecType) TypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -287,9 +432,7 @@ func (v *ValidateCreateSpecType) VirtualSiteValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) HubValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -350,12 +493,45 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["bfd_choice"]; exists {
+		val := m.GetBfdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bfd_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBfdChoice().(type) {
+	case *CreateSpecType_BfdDisabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_disabled"]; exists {
+			val := m.GetBfdChoice().(*CreateSpecType_BfdDisabled).BfdDisabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BfdEnabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_enabled"]; exists {
+			val := m.GetBfdChoice().(*CreateSpecType_BfdEnabled).BfdEnabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["hub"]; exists {
 		vOpts := append(opts, db.WithValidateField("hub"))
 		if err := fv(ctx, m.GetHub(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMeshChoice().(type) {
@@ -392,7 +568,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["re_fallback"]; exists {
@@ -428,33 +603,25 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -462,7 +629,16 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
+	vrhBfdChoice := v.BfdChoiceValidationRuleHandler
+	rulesBfdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBfdChoice(rulesBfdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.bfd_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bfd_choice"] = vFn
 	vrhReFallback := v.ReFallbackValidationRuleHandler
 	rulesReFallback := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -506,7 +682,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hub"] = vFn
-
+	v.FldValidators["bfd_choice.bfd_enabled"] = BFDValidator().Validate
 	v.FldValidators["mesh_choice.spoke_mesh"] = SpokeMeshGroupTypeValidator().Validate
 
 	return v
@@ -594,9 +770,7 @@ func (v *ValidateFullMeshGroupType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -659,21 +833,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
@@ -698,7 +868,6 @@ func (m *GetSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -717,7 +886,6 @@ func (m *GetSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([]db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -728,11 +896,8 @@ func (m *GetSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetMeshChoice().(type) {
 	case *GetSpecType_HubMesh:
-
 		return nil, nil
-
 	case *GetSpecType_SpokeMesh:
-
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -742,15 +907,11 @@ func (m *GetSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "spoke_mesh." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_FullMesh:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -775,7 +936,6 @@ func (m *GetSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -794,7 +954,6 @@ func (m *GetSpecType) GetVirtualSiteDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -802,6 +961,13 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) BfdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bfd_choice")
+	}
+	return validatorFn, nil
+}
 func (v *ValidateGetSpecType) ReFallbackValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -809,9 +975,7 @@ func (v *ValidateGetSpecType) ReFallbackValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(SiteMeshGroupType)
@@ -825,9 +989,7 @@ func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -873,9 +1035,7 @@ func (v *ValidateGetSpecType) VirtualSiteValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) HubValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -936,12 +1096,45 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["bfd_choice"]; exists {
+		val := m.GetBfdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bfd_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBfdChoice().(type) {
+	case *GetSpecType_BfdDisabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_disabled"]; exists {
+			val := m.GetBfdChoice().(*GetSpecType_BfdDisabled).BfdDisabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BfdEnabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_enabled"]; exists {
+			val := m.GetBfdChoice().(*GetSpecType_BfdEnabled).BfdEnabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["hub"]; exists {
 		vOpts := append(opts, db.WithValidateField("hub"))
 		if err := fv(ctx, m.GetHub(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMeshChoice().(type) {
@@ -978,7 +1171,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["re_fallback"]; exists {
@@ -1014,42 +1206,31 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1057,7 +1238,16 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
+	vrhBfdChoice := v.BfdChoiceValidationRuleHandler
+	rulesBfdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBfdChoice(rulesBfdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.bfd_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bfd_choice"] = vFn
 	vrhReFallback := v.ReFallbackValidationRuleHandler
 	rulesReFallback := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1101,7 +1291,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hub"] = vFn
-
+	v.FldValidators["bfd_choice.bfd_enabled"] = BFDValidator().Validate
 	v.FldValidators["mesh_choice.spoke_mesh"] = SpokeMeshGroupTypeValidator().Validate
 
 	return v
@@ -1159,21 +1349,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
@@ -1198,7 +1384,6 @@ func (m *GlobalSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1217,7 +1402,6 @@ func (m *GlobalSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1228,11 +1412,8 @@ func (m *GlobalSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetMeshChoice().(type) {
 	case *GlobalSpecType_HubMesh:
-
 		return nil, nil
-
 	case *GlobalSpecType_SpokeMesh:
-
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -1242,15 +1423,11 @@ func (m *GlobalSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "spoke_mesh." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_FullMesh:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -1275,7 +1452,6 @@ func (m *GlobalSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1294,7 +1470,6 @@ func (m *GlobalSpecType) GetVirtualSiteDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1302,6 +1477,13 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) BfdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bfd_choice")
+	}
+	return validatorFn, nil
+}
 func (v *ValidateGlobalSpecType) ReFallbackValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1309,9 +1491,7 @@ func (v *ValidateGlobalSpecType) ReFallbackValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(SiteMeshGroupType)
@@ -1325,9 +1505,7 @@ func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1373,9 +1551,7 @@ func (v *ValidateGlobalSpecType) VirtualSiteValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) HubValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1436,12 +1612,45 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["bfd_choice"]; exists {
+		val := m.GetBfdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bfd_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBfdChoice().(type) {
+	case *GlobalSpecType_BfdDisabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_disabled"]; exists {
+			val := m.GetBfdChoice().(*GlobalSpecType_BfdDisabled).BfdDisabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BfdEnabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_enabled"]; exists {
+			val := m.GetBfdChoice().(*GlobalSpecType_BfdEnabled).BfdEnabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["hub"]; exists {
 		vOpts := append(opts, db.WithValidateField("hub"))
 		if err := fv(ctx, m.GetHub(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMeshChoice().(type) {
@@ -1478,7 +1687,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["re_fallback"]; exists {
@@ -1514,42 +1722,31 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1557,7 +1754,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
+	vrhBfdChoice := v.BfdChoiceValidationRuleHandler
+	rulesBfdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBfdChoice(rulesBfdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.bfd_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bfd_choice"] = vFn
 	vrhReFallback := v.ReFallbackValidationRuleHandler
 	rulesReFallback := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1601,7 +1807,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hub"] = vFn
-
+	v.FldValidators["bfd_choice.bfd_enabled"] = BFDValidator().Validate
 	v.FldValidators["mesh_choice.spoke_mesh"] = SpokeMeshGroupTypeValidator().Validate
 
 	return v
@@ -1689,9 +1895,7 @@ func (v *ValidateHubFullMeshGroupType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1754,21 +1958,17 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
@@ -1793,7 +1993,6 @@ func (m *ReplaceSpecType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1812,7 +2011,6 @@ func (m *ReplaceSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) (
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1823,11 +2021,8 @@ func (m *ReplaceSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetMeshChoice().(type) {
 	case *ReplaceSpecType_HubMesh:
-
 		return nil, nil
-
 	case *ReplaceSpecType_SpokeMesh:
-
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -1837,15 +2032,11 @@ func (m *ReplaceSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "spoke_mesh." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_FullMesh:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ReplaceSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -1870,7 +2061,6 @@ func (m *ReplaceSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1889,7 +2079,6 @@ func (m *ReplaceSpecType) GetVirtualSiteDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1897,6 +2086,13 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) BfdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bfd_choice")
+	}
+	return validatorFn, nil
+}
 func (v *ValidateReplaceSpecType) ReFallbackValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1904,9 +2100,7 @@ func (v *ValidateReplaceSpecType) ReFallbackValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(SiteMeshGroupType)
@@ -1920,9 +2114,7 @@ func (v *ValidateReplaceSpecType) TypeValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1968,9 +2160,7 @@ func (v *ValidateReplaceSpecType) VirtualSiteValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) HubValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2031,12 +2221,45 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["bfd_choice"]; exists {
+		val := m.GetBfdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bfd_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBfdChoice().(type) {
+	case *ReplaceSpecType_BfdDisabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_disabled"]; exists {
+			val := m.GetBfdChoice().(*ReplaceSpecType_BfdDisabled).BfdDisabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BfdEnabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_enabled"]; exists {
+			val := m.GetBfdChoice().(*ReplaceSpecType_BfdEnabled).BfdEnabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["hub"]; exists {
 		vOpts := append(opts, db.WithValidateField("hub"))
 		if err := fv(ctx, m.GetHub(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMeshChoice().(type) {
@@ -2073,7 +2296,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["re_fallback"]; exists {
@@ -2109,33 +2331,25 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2143,7 +2357,16 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
+	vrhBfdChoice := v.BfdChoiceValidationRuleHandler
+	rulesBfdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBfdChoice(rulesBfdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.bfd_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bfd_choice"] = vFn
 	vrhReFallback := v.ReFallbackValidationRuleHandler
 	rulesReFallback := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2187,7 +2410,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hub"] = vFn
-
+	v.FldValidators["bfd_choice.bfd_enabled"] = BFDValidator().Validate
 	v.FldValidators["mesh_choice.spoke_mesh"] = SpokeMeshGroupTypeValidator().Validate
 
 	return v
@@ -2240,11 +2463,9 @@ func (m *SpokeMeshGroupType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetHubMeshGroupDRefInfo()
-
 }
 
 func (m *SpokeMeshGroupType) GetHubMeshGroupDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetHubMeshGroup()
 	if vref == nil {
 		return nil, nil
@@ -2260,7 +2481,6 @@ func (m *SpokeMeshGroupType) GetHubMeshGroupDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetHubMeshGroupDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2270,7 +2490,6 @@ func (m *SpokeMeshGroupType) GetHubMeshGroupDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: site_mesh_group")
 	}
-
 	vref := m.GetHubMeshGroup()
 	if vref == nil {
 		return nil, nil
@@ -2288,7 +2507,6 @@ func (m *SpokeMeshGroupType) GetHubMeshGroupDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2297,7 +2515,6 @@ type ValidateSpokeMeshGroupType struct {
 }
 
 func (v *ValidateSpokeMeshGroupType) HubMeshGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for hub_mesh_group")
@@ -2306,11 +2523,9 @@ func (v *ValidateSpokeMeshGroupType) HubMeshGroupValidationRuleHandler(rules map
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2330,14 +2545,11 @@ func (v *ValidateSpokeMeshGroupType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["hub_mesh_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hub_mesh_group"))
 		if err := fv(ctx, m.GetHubMeshGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSpokeHubMeshChoice().(type) {
@@ -2363,16 +2575,13 @@ func (v *ValidateSpokeMeshGroupType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpokeMeshGroupTypeValidator = func() *ValidateSpokeMeshGroupType {
 	v := &ValidateSpokeMeshGroupType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2397,6 +2606,41 @@ var DefaultSpokeMeshGroupTypeValidator = func() *ValidateSpokeMeshGroupType {
 
 func SpokeMeshGroupTypeValidator() db.Validator {
 	return DefaultSpokeMeshGroupTypeValidator
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetBfdChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BfdChoice.(type) {
+	case nil:
+		o.BfdChoice = nil
+
+	case *CreateSpecType_BfdDisabled:
+		o.BfdChoice = &GlobalSpecType_BfdDisabled{BfdDisabled: of.BfdDisabled}
+
+	case *CreateSpecType_BfdEnabled:
+		o.BfdChoice = &GlobalSpecType_BfdEnabled{BfdEnabled: of.BfdEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetBfdChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BfdChoice.(type) {
+	case nil:
+		r.BfdChoice = nil
+
+	case *GlobalSpecType_BfdDisabled:
+		r.BfdChoice = &CreateSpecType_BfdDisabled{BfdDisabled: of.BfdDisabled}
+
+	case *GlobalSpecType_BfdEnabled:
+		r.BfdChoice = &CreateSpecType_BfdEnabled{BfdEnabled: of.BfdEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -2479,6 +2723,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.GetBfdChoiceFromGlobalSpecType(f)
 	m.Hub = f.GetHub()
 	m.GetMeshChoiceFromGlobalSpecType(f)
 	m.GetReFallbackFromGlobalSpecType(f)
@@ -2501,6 +2746,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	m1.SetBfdChoiceToGlobalSpecType(f)
 	f.Hub = m1.Hub
 	m1.SetMeshChoiceToGlobalSpecType(f)
 	m1.SetReFallbackToGlobalSpecType(f)
@@ -2514,6 +2760,41 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetBfdChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BfdChoice.(type) {
+	case nil:
+		o.BfdChoice = nil
+
+	case *GetSpecType_BfdDisabled:
+		o.BfdChoice = &GlobalSpecType_BfdDisabled{BfdDisabled: of.BfdDisabled}
+
+	case *GetSpecType_BfdEnabled:
+		o.BfdChoice = &GlobalSpecType_BfdEnabled{BfdEnabled: of.BfdEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetBfdChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BfdChoice.(type) {
+	case nil:
+		r.BfdChoice = nil
+
+	case *GlobalSpecType_BfdDisabled:
+		r.BfdChoice = &GetSpecType_BfdDisabled{BfdDisabled: of.BfdDisabled}
+
+	case *GlobalSpecType_BfdEnabled:
+		r.BfdChoice = &GetSpecType_BfdEnabled{BfdEnabled: of.BfdEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -2596,6 +2877,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.GetBfdChoiceFromGlobalSpecType(f)
 	m.Hub = f.GetHub()
 	m.GetMeshChoiceFromGlobalSpecType(f)
 	m.GetReFallbackFromGlobalSpecType(f)
@@ -2619,6 +2901,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	m1.SetBfdChoiceToGlobalSpecType(f)
 	f.Hub = m1.Hub
 	m1.SetMeshChoiceToGlobalSpecType(f)
 	m1.SetReFallbackToGlobalSpecType(f)
@@ -2633,6 +2916,41 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetBfdChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BfdChoice.(type) {
+	case nil:
+		o.BfdChoice = nil
+
+	case *ReplaceSpecType_BfdDisabled:
+		o.BfdChoice = &GlobalSpecType_BfdDisabled{BfdDisabled: of.BfdDisabled}
+
+	case *ReplaceSpecType_BfdEnabled:
+		o.BfdChoice = &GlobalSpecType_BfdEnabled{BfdEnabled: of.BfdEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetBfdChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BfdChoice.(type) {
+	case nil:
+		r.BfdChoice = nil
+
+	case *GlobalSpecType_BfdDisabled:
+		r.BfdChoice = &ReplaceSpecType_BfdDisabled{BfdDisabled: of.BfdDisabled}
+
+	case *GlobalSpecType_BfdEnabled:
+		r.BfdChoice = &ReplaceSpecType_BfdEnabled{BfdEnabled: of.BfdEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -2715,6 +3033,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
+	m.GetBfdChoiceFromGlobalSpecType(f)
 	m.Hub = f.GetHub()
 	m.GetMeshChoiceFromGlobalSpecType(f)
 	m.GetReFallbackFromGlobalSpecType(f)
@@ -2737,6 +3056,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	m1.SetBfdChoiceToGlobalSpecType(f)
 	f.Hub = m1.Hub
 	m1.SetMeshChoiceToGlobalSpecType(f)
 	m1.SetReFallbackToGlobalSpecType(f)

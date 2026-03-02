@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_network.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.virtual_network.Object"] = ObjectValidator()
 	vr["ves.io.schema.virtual_network.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.virtual_network.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.virtual_network.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.virtual_network.DeleteRequest"] = DeleteRequestValidator()
@@ -28,12 +26,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_network.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.virtual_network.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.virtual_network.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.virtual_network.SIDCounterData"] = SIDCounterDataValidator()
 	vr["ves.io.schema.virtual_network.SIDCounterRequest"] = SIDCounterRequestValidator()
 	vr["ves.io.schema.virtual_network.SIDCounterResponse"] = SIDCounterResponseValidator()
 	vr["ves.io.schema.virtual_network.SIDCounterTypeData"] = SIDCounterTypeDataValidator()
-
 	vr["ves.io.schema.virtual_network.ActivePBRPoliciesType"] = ActivePBRPoliciesTypeValidator()
 	vr["ves.io.schema.virtual_network.AnyCastVIPFleetType"] = AnyCastVIPFleetTypeValidator()
 	vr["ves.io.schema.virtual_network.CreateSpecType"] = CreateSpecTypeValidator()
@@ -55,7 +51,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_network.VoltADNPrivateNetworkReInfoType"] = VoltADNPrivateNetworkReInfoTypeValidator()
 	vr["ves.io.schema.virtual_network.VoltADNPrivateNetworkTenantInfoType"] = VoltADNPrivateNetworkTenantInfoTypeValidator()
 	vr["ves.io.schema.virtual_network.VoltADNPrivateNetworkType"] = VoltADNPrivateNetworkTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -67,11 +62,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.virtual_network.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.virtual_network.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.virtual_network.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_network.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.virtual_network.CreateRequest.spec.network_choice.srv6_network.snat_pool_choice.site_snat_pool.node_snat_pool.ipv6_prefixes",
@@ -82,11 +75,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_network.API.Create"] = []string{
 		"spec.srv6_network",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.virtual_network.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
@@ -97,14 +88,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_network.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_network.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
@@ -127,14 +116,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_network.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_network.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.virtual_network.ReplaceRequest.spec.network_choice.srv6_network.snat_pool_choice.site_snat_pool.node_snat_pool.ipv6_prefixes",
@@ -145,12 +132,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_network.API.Replace"] = []string{
 		"spec.private_network",
 		"spec.srv6_network",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.virtual_network.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
@@ -161,22 +146,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.virtual_network.API"] = "config"
 	sm["ves.io.schema.virtual_network.CustomDataAPI"] = "data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -185,9 +166,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.virtual_network.Object"] = APISwaggerJSON
@@ -201,16 +180,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.virtual_network.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.virtual_network.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.virtual_network.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.virtual_network.Object"] = CustomDataAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.virtual_network.CustomDataAPI"] = NewCustomDataAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.virtual_network.CustomDataAPI"] = NewCustomDataAPIRestClient
 		if isExternal {
@@ -221,22 +195,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.virtual_network.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

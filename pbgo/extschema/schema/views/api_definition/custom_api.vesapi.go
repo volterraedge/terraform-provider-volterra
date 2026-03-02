@@ -44,7 +44,6 @@ func (c *CustomAPIGrpcClient) doRPCGetApiEndpointPathsSuggestions(ctx context.Co
 	rsp, err := c.grpcClient.GetApiEndpointPathsSuggestions(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetBasePathSuggestions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetBasePathSuggestionsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *CustomAPIGrpcClient) doRPCGetBasePathSuggestions(ctx context.Context, y
 	rsp, err := c.grpcClient.GetBasePathSuggestions(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetMethodsSuggestions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetMethodsSuggestionsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -94,13 +92,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetApiEndpointPathsSuggestions"] = ccl.doRPCGetApiEndpointPathsSuggestions
-
 	rpcFns["GetBasePathSuggestions"] = ccl.doRPCGetBasePathSuggestions
-
 	rpcFns["GetMethodsSuggestions"] = ccl.doRPCGetMethodsSuggestions
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -189,7 +183,6 @@ func (c *CustomAPIRestClient) doRPCGetApiEndpointPathsSuggestions(ctx context.Co
 	pbRsp := &ves_io_schema.SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -197,7 +190,6 @@ func (c *CustomAPIRestClient) doRPCGetApiEndpointPathsSuggestions(ctx context.Co
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetBasePathSuggestions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -274,7 +266,6 @@ func (c *CustomAPIRestClient) doRPCGetBasePathSuggestions(ctx context.Context, c
 	pbRsp := &ves_io_schema.SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -282,7 +273,6 @@ func (c *CustomAPIRestClient) doRPCGetBasePathSuggestions(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetMethodsSuggestions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -360,7 +350,6 @@ func (c *CustomAPIRestClient) doRPCGetMethodsSuggestions(ctx context.Context, ca
 	pbRsp := &ves_io_schema.SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -394,13 +383,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetApiEndpointPathsSuggestions"] = ccl.doRPCGetApiEndpointPathsSuggestions
-
 	rpcFns["GetBasePathSuggestions"] = ccl.doRPCGetBasePathSuggestions
-
 	rpcFns["GetMethodsSuggestions"] = ccl.doRPCGetMethodsSuggestions
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

@@ -18,34 +18,28 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.rule_suggestion.GetSuggestedRateLimitRuleRsp"] = GetSuggestedRateLimitRuleRspValidator()
 	vr["ves.io.schema.api_sec.rule_suggestion.GetSuggestedSensitiveDataRuleReq"] = GetSuggestedSensitiveDataRuleReqValidator()
 	vr["ves.io.schema.api_sec.rule_suggestion.GetSuggestedSensitiveDataRuleRsp"] = GetSuggestedSensitiveDataRuleRspValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.api_sec.rule_suggestion.RuleSuggestionAPI.GetSuggestedAPIEndpointProtectionRule"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "rule.client_matcher.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.api_sec.rule_suggestion.RuleSuggestionAPI.GetSuggestedRateLimitRule"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "rule.client_matcher.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.api_sec.rule_suggestion.RuleSuggestionAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
@@ -53,7 +47,6 @@ func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -62,14 +55,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.api_sec.rule_suggestion.Object"] = RuleSuggestionAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.api_sec.rule_suggestion.RuleSuggestionAPI"] = NewRuleSuggestionAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.api_sec.rule_suggestion.RuleSuggestionAPI"] = NewRuleSuggestionAPIRestClient
 		if isExternal {
@@ -80,22 +69,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.api_sec.rule_suggestion.RuleSuggestionAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewRuleSuggestionAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

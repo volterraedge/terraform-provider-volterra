@@ -56,7 +56,6 @@ func (r *ObjectCreateReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // EntryConverter
 func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 	r.FromObject(e)
@@ -76,15 +75,11 @@ func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
 
 // CLIENT side
-
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -93,7 +88,6 @@ func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r.FromObject(e)
 	return r, nil
 }
-
 func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 	r := &ObjectReplaceReq{}
 	if e == nil {
@@ -105,12 +99,10 @@ func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 		// See if uid can be got from Metadata.Uid
 		obj := e.(*object.DBObject)
 		uid = obj.GetMetadata().GetUid()
-
 	}
 	r.ObjectUid = uid
 	return r, nil
 }
-
 func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	ccOpts := server.NewCRUDCallOpts()
 	for _, o := range opts {
@@ -120,7 +112,6 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
-
 func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	r := &ObjectListReq{
 		TenantFilter:      cco.TenantFilter,
@@ -146,7 +137,6 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	}
 	return r, nil
 }
-
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
 	return &ObjectDeleteReq{ObjectUid: uid}
 }
@@ -158,7 +148,6 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -180,11 +169,9 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -202,9 +189,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -228,7 +213,6 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -236,11 +220,9 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -257,11 +239,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -271,11 +251,9 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -285,9 +263,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -312,7 +288,6 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -328,11 +303,9 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
-
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -346,7 +319,6 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -389,7 +361,6 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -457,11 +428,9 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
-
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -543,9 +512,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
-
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -597,7 +564,6 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -605,11 +571,9 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -627,11 +591,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -641,11 +603,9 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -655,9 +615,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.app_firewall.crudapi", ".")
@@ -748,7 +706,6 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -795,7 +752,6 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -824,7 +780,6 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_firewall.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
-
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.app_firewall.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -835,7 +790,6 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_firewall.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
-
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.app_firewall.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -846,7 +800,6 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_firewall.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
-
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.app_firewall.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -857,11 +810,9 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_firewall.crudapi.API.List")
 	return oah.List(ctx, req)
 }
-
 func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (API_ListStreamClient, error) {
 	return nil, fmt.Errorf("ListStream Not implemented")
 }
-
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.app_firewall.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -883,7 +834,6 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -904,11 +854,9 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -924,9 +872,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -947,7 +893,6 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -955,11 +900,9 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -977,11 +920,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -991,11 +932,9 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -1005,9 +944,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -1035,7 +972,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1047,7 +983,6 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -1077,7 +1012,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 	}
 	return nil
 }
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1098,7 +1032,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	obj := object.NewDBObject(nil)
 	req.ToObject(obj)
 	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-
 	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1110,7 +1043,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1141,9 +1073,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		return nil, status.Error(codes.ResourceExhausted, errors.Wrap(err, "Replace with NewObjectReplaceRsp").Error())
 	}
 	return rsp, nil
-
 }
-
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1168,7 +1098,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1180,7 +1109,6 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1193,17 +1121,16 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+		return nil, errors.Wrap(err, "List")
 	}
 	rsp, err := NewObjectListRsp(req, rsrcRsp.Items)
 	if err != nil {
-		merr = multierror.Append(merr, err)
+		return rsp, err
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
 	rsp.NextPage = rsrcRsp.NextPage
-	return rsp, merr
+	return rsp, nil
 }
-
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
 	var merr *multierror.Error
 	rsrcReq := &server.ResourceListRequest{
@@ -1215,6 +1142,7 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
 	if err != nil {
 		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+		return errors.ErrOrNil(merr)
 	}
 	streamSvr := &crudAPIListStreamServer{stream}
 	for item := range rsrcRsp.ItemsCh {
@@ -1225,7 +1153,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	}
 	return errors.ErrOrNil(merr)
 }
-
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1314,11 +1241,9 @@ func (r *ObjectGetReq) GetBackrefParam() (bool, []string) {
 func (r *ObjectDeleteReq) ToUid() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectCreateRsp) Key() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectGetRsp) GetBackrefs(ef db.NewEntryFunc) ([]db.Entry, error) {
 	brEnts := []db.Entry{}
 	bRefs := r.GetEntBackrefs()
@@ -1377,7 +1302,6 @@ func NewObjectCreateRsp(e db.Entry) (*ObjectCreateRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo := &ObjectReplaceRsp{}
 	switch e.(type) {
@@ -1391,7 +1315,6 @@ func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*ObjectGetRsp, error) {
 	rspo := &ObjectGetRsp{}
 	e := rsrcRsp.Entry
@@ -1435,7 +1358,6 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 	rspo.Status = statusObjs
 	return rspo, nil
 }
-
 func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*ObjectListRsp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("Nil ObjectListReq")
@@ -1461,7 +1383,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
 			continue
 		}
-
 		tenant := dbObj.GetSystemMetadata().GetTenant()
 		namespace := dbObj.GetMetadata().GetNamespace()
 		name := dbObj.GetMetadata().GetName()
@@ -1484,7 +1405,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 	}
 	return o, errs
 }
-
 func NewObjectDeleteRsp(ec ErrorCode) (*ObjectDeleteRsp, error) {
 	return &ObjectDeleteRsp{Err: ec}, nil
 }
@@ -2656,42 +2576,47 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "app_firewallAIEnhancementsConfig": {
+            "type": "object",
+            "description": "Actions complimented by the additional intelligence of the F5 AI Powered Risk-based analysis",
+            "title": "AI Enhancements Config",
+            "x-displayname": "AI Enhancements Config",
+            "x-ves-oneof-field-risk_score_action_choice": "[\"mitigate_high_medium_risk_action\",\"mitigate_high_risk_action\"]",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AIEnhancementsConfig",
+            "properties": {
+                "mitigate_high_medium_risk_action": {
+                    "description": "Exclusive with [mitigate_high_risk_action]\n Mitigate requests if the risk score is High or Medium",
+                    "title": "Mitigate High and Medium Risk",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Mitigate High and Medium Risk"
+                },
+                "mitigate_high_risk_action": {
+                    "description": "Exclusive with [mitigate_high_medium_risk_action]\n Mitigate requests only if the risk score is classified as High",
+                    "title": "Mitigate High Risk Only",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Mitigate High Risk Only"
+                }
+            }
+        },
         "app_firewallAiRiskBasedBlocking": {
             "type": "object",
-            "description": "All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning,\nThreat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and\nonly high-risk requests will be blocked by default. This feature is in preview mode.",
+            "description": "x-displayName: \"Risk-Based Blocking (Powered by AI) - Preview\"\nAll Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning,\nThreat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and\nonly high-risk requests will be blocked by default. This feature is in preview mode.",
             "title": "AI Risk Based Blocking",
-            "x-displayname": "Risk-Based Blocking (Powered by AI) - Preview",
-            "x-ves-proto-message": "ves.io.schema.app_firewall.AiRiskBasedBlocking",
             "properties": {
                 "high_risk_action": {
-                    "description": " High-risk HTTP transactions are associated with attack attempts or requests that violate the application firewall policy.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"High Risk\"\nx-required\nHigh-risk HTTP transactions are associated with attack attempts or requests that violate the application firewall policy.",
                     "title": "high_risk_action",
-                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction",
-                    "x-displayname": "High Risk",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
                 },
                 "low_risk_action": {
-                    "description": " Low-risk HTTP transactions are associated with findings that do not present an actual threat to the protected application.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Low Risk\"\nx-required\nLow-risk HTTP transactions are associated with findings that do not present an actual threat to the protected application.",
                     "title": "low_risk_action",
-                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction",
-                    "x-displayname": "Low Risk",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
                 },
                 "medium_risk_action": {
-                    "description": " Medium-risk HTTP transactions are associated with suspicious requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Medium Risk\"\nx-required\nMedium-risk HTTP transactions are associated with suspicious requests.",
                     "title": "medium_risk_action",
-                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction",
-                    "x-displayname": "Medium Risk",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
                 }
             }
         },
@@ -2788,7 +2713,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_name": {
                     "type": "string",
-                    "description": " Masks the cookie value. The setting does not mask the cookie name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Masks the cookie value. The setting does not mask the cookie name.\n Wildcard matching can be used by prefixing or suffixing the cookie name\n with a wildcard asterisk (*), or by using only an asterisk to match any cookie name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "cookie_name",
                     "maxLength": 256,
                     "x-displayname": "Cookie Name",
@@ -2810,7 +2735,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "header_name": {
                     "type": "string",
-                    "description": " Masks the HTTP header value. The setting does not mask the HTTP header name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
+                    "description": " Masks the HTTP header value. The setting does not mask the HTTP header name.\n Wildcard matching can be used by prefixing or suffixing the HTTP header name\n with a wildcard asterisk (*), or by using only an asterisk to match any HTTP header name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "header_name",
                     "x-displayname": "Header Name",
                     "x-ves-example": "value",
@@ -2831,7 +2756,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "query_param_name": {
                     "type": "string",
-                    "description": " Masks the query parameter value. The setting does not mask the query parameter name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Masks the query parameter value. The setting does not mask the query parameter name.\n Wildcard matching can be used by prefixing or suffixing the query parameter name\n with a wildcard asterisk (*), or by using only an asterisk to match any query parameter name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "query_param_name",
                     "maxLength": 256,
                     "x-displayname": "Query Parameter Name",
@@ -3112,6 +3037,19 @@ var APISwaggerJSON string = `{
                     "title": "Custom Violation Settings",
                     "$ref": "#/definitions/app_firewallViolationSettings",
                     "x-displayname": "Custom"
+                },
+                "violations_view": {
+                    "type": "array",
+                    "description": " List of violation checks that are performed on HTTP request to ensure the requests are properly formatted, detection of evasion techniques and other violations.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Violations configuration settings for view only",
+                    "items": {
+                        "$ref": "#/definitions/app_firewallViolationConfigView"
+                    },
+                    "x-displayname": "Violations",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3123,16 +3061,11 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-anonymization_setting": "[\"custom_anonymization\",\"default_anonymization\",\"disable_anonymization\"]",
             "x-ves-oneof-field-blocking_page_choice": "[\"blocking_page\",\"use_default_blocking_page\"]",
             "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
-            "x-ves-oneof-field-detection_setting_choice": "[\"ai_risk_based_blocking\",\"default_detection_settings\",\"detection_settings\"]",
+            "x-ves-oneof-field-detection_setting_choice": "[\"default_detection_settings\",\"detection_settings\"]",
             "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\"]",
+            "x-ves-oneof-field-enhance_with_ai_choice": "[\"disable_ai_enhancements\",\"enable_ai_enhancements\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.GlobalSpecType",
             "properties": {
-                "ai_risk_based_blocking": {
-                    "description": "Exclusive with [default_detection_settings detection_settings]\n All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning,\n Threat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and\n only high-risk requests will be blocked by default. This feature is in preview mode.",
-                    "title": "AI Risk Based Blocking",
-                    "$ref": "#/definitions/app_firewallAiRiskBasedBlocking",
-                    "x-displayname": "Risk-Based Blocking (Powered by AI) - Preview"
-                },
                 "allow_all_response_codes": {
                     "description": "Exclusive with [allowed_response_codes]\n All HTTP response status codes are allowed",
                     "title": "Default",
@@ -3182,22 +3115,34 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default"
                 },
                 "default_detection_settings": {
-                    "description": "Exclusive with [ai_risk_based_blocking detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
+                    "description": "Exclusive with [detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
                     "title": "Default Detection Settings",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default"
                 },
                 "detection_settings": {
-                    "description": "Exclusive with [ai_risk_based_blocking default_detection_settings]\n Define Custom Security Policy settings",
+                    "description": "Exclusive with [default_detection_settings]\n Define Custom Security Policy settings",
                     "title": "Custom Detection Settings",
                     "$ref": "#/definitions/app_firewallDetectionSetting",
                     "x-displayname": "Custom"
+                },
+                "disable_ai_enhancements": {
+                    "description": "Exclusive with [enable_ai_enhancements]\n Risk-base AI evaluations will not factor into enforcement actions",
+                    "title": "Disable AI Enhancements",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "disable_anonymization": {
                     "description": "Exclusive with [custom_anonymization default_anonymization]\n Disable masking of sensitive parameters in logs",
                     "title": "DisableAnonymization",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
+                },
+                "enable_ai_enhancements": {
+                    "description": "Exclusive with [disable_ai_enhancements]\n Evaluations for enforcement actions will be complimented by the additional intelligence\n of the F5 AI Powered Risk-based analysis",
+                    "title": "Enable AI Enhancements",
+                    "$ref": "#/definitions/app_firewallAIEnhancementsConfig",
+                    "x-displayname": "Enable"
                 },
                 "monitoring": {
                     "description": "Exclusive with [blocking]\n Log threats",
@@ -3215,15 +3160,13 @@ var APISwaggerJSON string = `{
         },
         "app_firewallRiskBasedBlockingAction": {
             "type": "string",
-            "description": "Action to be performed on the request\n\nLog and block\nLog only",
+            "description": "x-displayName: \"Risk Based Blocking Action\"\nAction to be performed on the request\n\n - AI_BLOCK: x-displayName: \"Block\"\nLog and block\n - AI_REPORT: x-displayName: \"Report\"\nLog only",
             "title": "Risk Based Blocking Action",
             "enum": [
                 "AI_BLOCK",
                 "AI_REPORT"
             ],
-            "default": "AI_BLOCK",
-            "x-displayname": "Risk Based Blocking Action",
-            "x-ves-proto-enum": "ves.io.schema.app_firewall.RiskBasedBlockingAction"
+            "default": "AI_BLOCK"
         },
         "app_firewallSignatureSelectionSetting": {
             "type": "object",
@@ -3334,6 +3277,64 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "app_firewallViolationConfigView": {
+            "type": "object",
+            "description": "Custom configuration for a violation",
+            "title": "Violation Config will be used by UI for view only",
+            "x-displayname": "Violation Configuration",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.ViolationConfigView",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "enabled": {
+                    "type": "boolean",
+                    "title": "user customised state",
+                    "format": "boolean",
+                    "x-displayname": "State"
+                },
+                "enabled_by_default": {
+                    "type": "string",
+                    "description": " Violations that are enabled by default by F5 are advisable to leave enabled",
+                    "title": "enabled_by_default",
+                    "x-displayname": "Enabled by Default"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "code",
+                    "x-displayname": "Name"
+                },
+                "title": {
+                    "type": "string",
+                    "title": "name",
+                    "x-displayname": "Title"
+                }
+            }
+        },
+        "app_firewallViolationConfiguration": {
+            "type": "object",
+            "description": "x-displayName: \"Violation Configuration\"\nApp Firewall violation configuration changes to be applied",
+            "title": "Violation Configuration",
+            "properties": {
+                "disabled": {
+                    "description": "x-displayName: \"Disabled\"\nDisables the specific violation",
+                    "title": "disabled violation",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enabled": {
+                    "description": "x-displayName: \"Enabled\"\nEnables the specific violation",
+                    "title": "enabled violation",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Violation\"\nx-example: \"VIOL_MANDATORY_HEADER\"\nx-required",
+                    "title": "Violation"
                 }
             }
         },
@@ -3615,10 +3616,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -4034,7 +4035,7 @@ var APISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },

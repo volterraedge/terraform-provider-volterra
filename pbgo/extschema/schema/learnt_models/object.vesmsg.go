@@ -76,16 +76,12 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

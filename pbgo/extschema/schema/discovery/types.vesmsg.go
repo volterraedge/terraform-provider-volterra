@@ -41,7 +41,6 @@ func (m *CbipAdminCredentials) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CbipAdminCredentials.password")
 	}
@@ -81,7 +80,6 @@ type ValidateCbipAdminCredentials struct {
 }
 
 func (v *ValidateCbipAdminCredentials) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
@@ -89,9 +87,7 @@ func (v *ValidateCbipAdminCredentials) UsernameValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCbipAdminCredentials) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -100,11 +96,9 @@ func (v *ValidateCbipAdminCredentials) PasswordValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -124,32 +118,24 @@ func (v *ValidateCbipAdminCredentials) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCbipAdminCredentialsValidator = func() *ValidateCbipAdminCredentials {
 	v := &ValidateCbipAdminCredentials{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -232,13 +218,11 @@ func (m *CbipCertificateAuthority) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetServerValidationChoiceDRefInfo()
-
 }
 
 func (m *CbipCertificateAuthority) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetServerValidationChoice().(type) {
 	case *CbipCertificateAuthority_TrustedCa:
-
 		vref := m.GetTrustedCa()
 		if vref == nil {
 			return nil, nil
@@ -254,11 +238,8 @@ func (m *CbipCertificateAuthority) GetServerValidationChoiceDRefInfo() ([]db.DRe
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *CbipCertificateAuthority_SkipServerVerification:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -274,7 +255,6 @@ func (m *CbipCertificateAuthority) GetServerValidationChoiceDBEntries(ctx contex
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
 		}
-
 		vref := m.GetTrustedCa()
 		if vref == nil {
 			return nil, nil
@@ -292,9 +272,7 @@ func (m *CbipCertificateAuthority) GetServerValidationChoiceDBEntries(ctx contex
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *CbipCertificateAuthority_SkipServerVerification:
-
 	}
 
 	return entries, nil
@@ -359,16 +337,13 @@ func (v *ValidateCbipCertificateAuthority) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCbipCertificateAuthorityValidator = func() *ValidateCbipCertificateAuthority {
 	v := &ValidateCbipCertificateAuthority{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -376,7 +351,6 @@ var DefaultCbipCertificateAuthorityValidator = func() *ValidateCbipCertificateAu
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServerValidationChoice := v.ServerValidationChoiceValidationRuleHandler
 	rulesServerValidationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -387,7 +361,6 @@ var DefaultCbipCertificateAuthorityValidator = func() *ValidateCbipCertificateAu
 		panic(errMsg)
 	}
 	v.FldValidators["server_validation_choice"] = vFn
-
 	v.FldValidators["server_validation_choice.trusted_ca"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -413,13 +386,11 @@ func (m *CbipCluster) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetCbipDevices() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting CbipCluster.cbip_devices idx %v", idx)
 		}
 	}
-
 	if err := m.GetAdminCredentials().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CbipCluster.admin_credentials")
 	}
@@ -465,15 +436,12 @@ func (m *CbipCluster) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCbipDevicesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCbipDevicesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -481,7 +449,6 @@ func (m *CbipCluster) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo, erro
 	if m.GetCbipCertificateAuthority() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCbipCertificateAuthority().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCbipCertificateAuthority().GetDRefInfo() FAILED")
@@ -491,7 +458,6 @@ func (m *CbipCluster) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo, erro
 		dri.DRField = "cbip_certificate_authority." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -499,7 +465,6 @@ func (m *CbipCluster) GetCbipDevicesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCbipDevices() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetCbipDevices() {
 		driSet, err := e.GetDRefInfo()
@@ -513,7 +478,6 @@ func (m *CbipCluster) GetCbipDevicesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCbipCluster struct {
@@ -521,7 +485,6 @@ type ValidateCbipCluster struct {
 }
 
 func (v *ValidateCbipCluster) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -530,19 +493,15 @@ func (v *ValidateCbipCluster) MetadataValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCbipCluster) CbipDevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -588,9 +547,7 @@ func (v *ValidateCbipCluster) CbipDevicesValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCbipCluster) CbipMgmtIpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -630,9 +587,7 @@ func (v *ValidateCbipCluster) CbipMgmtIpsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCbipCluster) AdminCredentialsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for admin_credentials")
@@ -641,19 +596,15 @@ func (v *ValidateCbipCluster) AdminCredentialsValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CbipAdminCredentialsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCbipCluster) CbipCertificateAuthorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cbip_certificate_authority")
@@ -662,11 +613,26 @@ func (v *ValidateCbipCluster) CbipCertificateAuthorityValidationRuleHandler(rule
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CbipCertificateAuthorityValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
+		return nil
+	}
 
+	return validatorFn, nil
+}
+func (v *ValidateCbipCluster) MgmtPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for mgmt_port")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ManagementPortValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
 		return nil
 	}
 
@@ -686,57 +652,41 @@ func (v *ValidateCbipCluster) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_credentials"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_credentials"))
 		if err := fv(ctx, m.GetAdminCredentials(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cbip_certificate_authority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cbip_certificate_authority"))
 		if err := fv(ctx, m.GetCbipCertificateAuthority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cbip_devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("cbip_devices"))
 		if err := fv(ctx, m.GetCbipDevices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cbip_mgmt_ips"]; exists {
 		vOpts := append(opts, db.WithValidateField("cbip_mgmt_ips"))
 		if err := fv(ctx, m.GetCbipMgmtIps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mgmt_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mgmt_port"))
 		if err := fv(ctx, m.GetMgmtPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNamespaceMappingChoice().(type) {
@@ -762,25 +712,19 @@ func (v *ValidateCbipCluster) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_server_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_server_filter"))
 		if err := fv(ctx, m.GetVirtualServerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCbipClusterValidator = func() *ValidateCbipCluster {
 	v := &ValidateCbipCluster{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -850,11 +794,18 @@ var DefaultCbipClusterValidator = func() *ValidateCbipCluster {
 	}
 	v.FldValidators["cbip_certificate_authority"] = vFn
 
+	vrhMgmtPort := v.MgmtPortValidationRuleHandler
+	rulesMgmtPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMgmtPort(rulesMgmtPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CbipCluster.mgmt_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mgmt_port"] = vFn
 	v.FldValidators["namespace_mapping_choice.namespace_mapping"] = NamespaceMappingValidator().Validate
-
 	v.FldValidators["virtual_server_filter"] = VirtualServerFilterValidator().Validate
-
-	v.FldValidators["mgmt_port"] = ManagementPortValidator().Validate
 
 	return v
 }()
@@ -879,7 +830,6 @@ func (m *CbipDeviceConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdminCredentials().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CbipDeviceConfig.admin_credentials")
 	}
@@ -920,7 +870,6 @@ func (m *CbipDeviceConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCbipCertificateAuthorityDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -928,7 +877,6 @@ func (m *CbipDeviceConfig) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo,
 	if m.GetCbipCertificateAuthority() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCbipCertificateAuthority().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCbipCertificateAuthority().GetDRefInfo() FAILED")
@@ -938,7 +886,6 @@ func (m *CbipDeviceConfig) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo,
 		dri.DRField = "cbip_certificate_authority." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCbipDeviceConfig struct {
@@ -946,7 +893,6 @@ type ValidateCbipDeviceConfig struct {
 }
 
 func (v *ValidateCbipDeviceConfig) CbipMgmtIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cbip_mgmt_ip")
@@ -954,9 +900,7 @@ func (v *ValidateCbipDeviceConfig) CbipMgmtIpValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCbipDeviceConfig) AdminCredentialsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for admin_credentials")
@@ -965,19 +909,15 @@ func (v *ValidateCbipDeviceConfig) AdminCredentialsValidationRuleHandler(rules m
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CbipAdminCredentialsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCbipDeviceConfig) CbipCertificateAuthorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cbip_certificate_authority")
@@ -986,11 +926,9 @@ func (v *ValidateCbipDeviceConfig) CbipCertificateAuthorityValidationRuleHandler
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CbipCertificateAuthorityValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1010,32 +948,23 @@ func (v *ValidateCbipDeviceConfig) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_credentials"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_credentials"))
 		if err := fv(ctx, m.GetAdminCredentials(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cbip_certificate_authority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cbip_certificate_authority"))
 		if err := fv(ctx, m.GetCbipCertificateAuthority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cbip_mgmt_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cbip_mgmt_ip"))
 		if err := fv(ctx, m.GetCbipMgmtIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNamespaceMappingChoice().(type) {
@@ -1061,25 +990,19 @@ func (v *ValidateCbipDeviceConfig) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_server_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_server_filter"))
 		if err := fv(ctx, m.GetVirtualServerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCbipDeviceConfigValidator = func() *ValidateCbipDeviceConfig {
 	v := &ValidateCbipDeviceConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1121,9 +1044,7 @@ var DefaultCbipDeviceConfigValidator = func() *ValidateCbipDeviceConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["cbip_certificate_authority"] = vFn
-
 	v.FldValidators["namespace_mapping_choice.namespace_mapping"] = NamespaceMappingValidator().Validate
-
 	v.FldValidators["virtual_server_filter"] = VirtualServerFilterValidator().Validate
 
 	return v
@@ -1149,7 +1070,6 @@ func (m *CbipDiscoveryType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetCbipClusters() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting CbipDiscoveryType.cbip_clusters idx %v", idx)
@@ -1197,15 +1117,12 @@ func (m *CbipDiscoveryType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServerCaDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServerCaDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1213,7 +1130,6 @@ func (m *CbipDiscoveryType) GetCbipClustersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCbipClusters() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetCbipClusters() {
 		driSet, err := e.GetDRefInfo()
@@ -1227,7 +1143,6 @@ func (m *CbipDiscoveryType) GetCbipClustersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *CbipDiscoveryType) GetServerCaDRefInfo() ([]db.DRefInfo, error) {
@@ -1252,7 +1167,6 @@ func (m *CbipDiscoveryType) GetServerCaDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetServerCaDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1271,7 +1185,6 @@ func (m *CbipDiscoveryType) GetServerCaDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1280,7 +1193,6 @@ type ValidateCbipDiscoveryType struct {
 }
 
 func (v *ValidateCbipDiscoveryType) CbipClustersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1326,9 +1238,7 @@ func (v *ValidateCbipDiscoveryType) CbipClustersValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCbipDiscoveryType) ServerCaValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1388,39 +1298,30 @@ func (v *ValidateCbipDiscoveryType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cbip_clusters"]; exists {
 		vOpts := append(opts, db.WithValidateField("cbip_clusters"))
 		if err := fv(ctx, m.GetCbipClusters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_lb_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_lb_domain"))
 		if err := fv(ctx, m.GetInternalLbDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_ca"]; exists {
 		vOpts := append(opts, db.WithValidateField("server_ca"))
 		if err := fv(ctx, m.GetServerCa(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCbipDiscoveryTypeValidator = func() *ValidateCbipDiscoveryType {
 	v := &ValidateCbipDiscoveryType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1477,11 +1378,9 @@ func (m *ConsulAccessInfo) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetConnectionInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ConsulAccessInfo.connection_info")
 	}
-
 	if err := m.GetHttpBasicAuthInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ConsulAccessInfo.http_basic_auth_info")
 	}
@@ -1533,43 +1432,31 @@ func (v *ValidateConsulAccessInfo) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connection_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_info"))
 		if err := fv(ctx, m.GetConnectionInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_basic_auth_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_basic_auth_info"))
 		if err := fv(ctx, m.GetHttpBasicAuthInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scheme"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConsulAccessInfoValidator = func() *ValidateConsulAccessInfo {
 	v := &ValidateConsulAccessInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["connection_info"] = RestConfigTypeValidator().Validate
-
 	v.FldValidators["http_basic_auth_info"] = ConsulHttpBasicAuthInfoTypeValidator().Validate
 
 	return v
@@ -1595,7 +1482,6 @@ func (m *ConsulDiscoveryType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ConsulDiscoveryType.access_info")
 	}
@@ -1635,7 +1521,6 @@ type ValidateConsulDiscoveryType struct {
 }
 
 func (v *ValidateConsulDiscoveryType) AccessInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_info")
@@ -1644,15 +1529,12 @@ func (v *ValidateConsulDiscoveryType) AccessInfoValidationRuleHandler(rules map[
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateConsulDiscoveryType) PublishInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for publish_info")
@@ -1661,11 +1543,9 @@ func (v *ValidateConsulDiscoveryType) PublishInfoValidationRuleHandler(rules map
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ConsulVipDiscoveryInfoTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1685,14 +1565,11 @@ func (v *ValidateConsulDiscoveryType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_info"))
 		if err := fv(ctx, m.GetAccessInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNamespaceMappingChoice().(type) {
@@ -1718,25 +1595,19 @@ func (v *ValidateConsulDiscoveryType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["publish_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("publish_info"))
 		if err := fv(ctx, m.GetPublishInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConsulDiscoveryTypeValidator = func() *ValidateConsulDiscoveryType {
 	v := &ValidateConsulDiscoveryType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1766,7 +1637,6 @@ var DefaultConsulDiscoveryTypeValidator = func() *ValidateConsulDiscoveryType {
 		panic(errMsg)
 	}
 	v.FldValidators["publish_info"] = vFn
-
 	v.FldValidators["namespace_mapping_choice.namespace_mapping"] = ConsulNamespaceMappingValidator().Validate
 
 	return v
@@ -1792,7 +1662,6 @@ func (m *ConsulHttpBasicAuthInfoType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPasswdUrl().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ConsulHttpBasicAuthInfoType.passwd_url")
 	}
@@ -1832,7 +1701,6 @@ type ValidateConsulHttpBasicAuthInfoType struct {
 }
 
 func (v *ValidateConsulHttpBasicAuthInfoType) UserNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user_name")
@@ -1854,32 +1722,24 @@ func (v *ValidateConsulHttpBasicAuthInfoType) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["passwd_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("passwd_url"))
 		if err := fv(ctx, m.GetPasswdUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_name"))
 		if err := fv(ctx, m.GetUserName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConsulHttpBasicAuthInfoTypeValidator = func() *ValidateConsulHttpBasicAuthInfoType {
 	v := &ValidateConsulHttpBasicAuthInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1898,7 +1758,6 @@ var DefaultConsulHttpBasicAuthInfoTypeValidator = func() *ValidateConsulHttpBasi
 		panic(errMsg)
 	}
 	v.FldValidators["user_name"] = vFn
-
 	v.FldValidators["passwd_url"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -1950,7 +1809,6 @@ type ValidateConsulNamespaceMapping struct {
 }
 
 func (v *ValidateConsulNamespaceMapping) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2010,22 +1868,18 @@ func (v *ValidateConsulNamespaceMapping) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
 		vOpts := append(opts, db.WithValidateField("items"))
 		if err := fv(ctx, m.GetItems(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConsulNamespaceMappingValidator = func() *ValidateConsulNamespaceMapping {
 	v := &ValidateConsulNamespaceMapping{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2097,7 +1951,6 @@ type ValidateConsulNamespaceMappingItem struct {
 }
 
 func (v *ValidateConsulNamespaceMappingItem) NamespaceRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace_regex")
@@ -2119,32 +1972,24 @@ func (v *ValidateConsulNamespaceMappingItem) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_regex"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_regex"))
 		if err := fv(ctx, m.GetNamespaceRegex(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConsulNamespaceMappingItemValidator = func() *ValidateConsulNamespaceMappingItem {
 	v := &ValidateConsulNamespaceMappingItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2268,16 +2113,13 @@ func (v *ValidateConsulVipDiscoveryInfoType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConsulVipDiscoveryInfoTypeValidator = func() *ValidateConsulVipDiscoveryInfoType {
 	v := &ValidateConsulVipDiscoveryInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2285,7 +2127,6 @@ var DefaultConsulVipDiscoveryInfoTypeValidator = func() *ValidateConsulVipDiscov
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPublishChoice := v.PublishChoiceValidationRuleHandler
 	rulesPublishChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2320,15 +2161,12 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetDiscoveryK8S().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.discovery_k8s")
 	}
-
 	if err := m.GetDiscoveryConsul().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.discovery_consul")
 	}
-
 	if err := m.GetDiscoveryCbip().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.discovery_cbip")
 	}
@@ -2374,15 +2212,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2392,15 +2227,10 @@ func (m *CreateSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDiscoveryChoice().(type) {
 	case *CreateSpecType_DiscoveryK8S:
-
 		return nil, nil
-
 	case *CreateSpecType_DiscoveryConsul:
-
 		return nil, nil
-
 	case *CreateSpecType_DiscoveryCbip:
-
 		drInfos, err := m.GetDiscoveryCbip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDiscoveryCbip().GetDRefInfo() FAILED")
@@ -2410,15 +2240,11 @@ func (m *CreateSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "discovery_cbip." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_DiscoveryThirdParty:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2426,7 +2252,6 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -2436,7 +2261,6 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -2458,7 +2282,6 @@ func (v *ValidateCreateSpecType) ClusterIdentifierChoiceClusterIdValidationRuleH
 	}
 	return oValidatorFn_ClusterId, nil
 }
-
 func (v *ValidateCreateSpecType) DiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2466,9 +2289,7 @@ func (v *ValidateCreateSpecType) DiscoveryChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) WhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for where")
@@ -2477,11 +2298,9 @@ func (v *ValidateCreateSpecType) WhereValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.NetworkSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2535,7 +2354,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["discovery_choice"]; exists {
@@ -2593,25 +2411,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2619,7 +2431,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClusterIdentifierChoice := v.ClusterIdentifierChoiceValidationRuleHandler
 	rulesClusterIdentifierChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2630,7 +2441,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_identifier_choice"] = vFn
-
 	vrhClusterIdentifierChoiceClusterId := v.ClusterIdentifierChoiceClusterIdValidationRuleHandler
 	rulesClusterIdentifierChoiceClusterId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -2640,9 +2450,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.cluster_identifier_choice_cluster_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["cluster_identifier_choice.cluster_id"] = vFnMap["cluster_identifier_choice.cluster_id"]
-
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2664,7 +2472,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["where"] = vFn
-
 	v.FldValidators["discovery_choice.discovery_k8s"] = K8SDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_consul"] = ConsulDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_cbip"] = CbipDiscoveryTypeValidator().Validate
@@ -2719,7 +2526,6 @@ type ValidateDiscoveredServiceType struct {
 }
 
 func (v *ValidateDiscoveredServiceType) ServiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_name")
@@ -2727,9 +2533,7 @@ func (v *ValidateDiscoveredServiceType) ServiceNameValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDiscoveredServiceType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -2737,9 +2541,7 @@ func (v *ValidateDiscoveredServiceType) NamespaceValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDiscoveredServiceType) ServiceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_type")
@@ -2747,9 +2549,7 @@ func (v *ValidateDiscoveredServiceType) ServiceTypeValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDiscoveredServiceType) ClusterIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_ip")
@@ -2757,9 +2557,7 @@ func (v *ValidateDiscoveredServiceType) ClusterIpValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDiscoveredServiceType) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2802,9 +2600,7 @@ func (v *ValidateDiscoveredServiceType) LabelsValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDiscoveredServiceType) PortMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapUint32KeyRules(rules)
 	itemKeyFn, err := db.NewUint32ValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2847,9 +2643,7 @@ func (v *ValidateDiscoveredServiceType) PortMapValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDiscoveredServiceType) ClusterIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_ipv6")
@@ -2871,44 +2665,31 @@ func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cluster_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster_ip"))
 		if err := fv(ctx, m.GetClusterIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster_ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster_ipv6"))
 		if err := fv(ctx, m.GetClusterIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
 		vOpts := append(opts, db.WithValidateField("labels"))
 		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pods"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pods"))
 		for idx, item := range m.GetPods() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2916,19 +2697,14 @@ func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port_map"]; exists {
 		vOpts := append(opts, db.WithValidateField("port_map"))
 		if err := fv(ctx, m.GetPortMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ports"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ports"))
 		for idx, item := range m.GetPorts() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2936,34 +2712,25 @@ func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_name"))
 		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_type"))
 		if err := fv(ctx, m.GetServiceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDiscoveredServiceTypeValidator = func() *ValidateDiscoveredServiceType {
 	v := &ValidateDiscoveredServiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3052,7 +2819,6 @@ var DefaultDiscoveredServiceTypeValidator = func() *ValidateDiscoveredServiceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_ipv6"] = vFn
-
 	v.FldValidators["ports"] = PortInfoTypeValidator().Validate
 
 	return v
@@ -3078,15 +2844,12 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetDiscoveryK8S().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.discovery_k8s")
 	}
-
 	if err := m.GetDiscoveryConsul().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.discovery_consul")
 	}
-
 	if err := m.GetDiscoveryCbip().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.discovery_cbip")
 	}
@@ -3132,15 +2895,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3150,15 +2910,10 @@ func (m *GetSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDiscoveryChoice().(type) {
 	case *GetSpecType_DiscoveryK8S:
-
 		return nil, nil
-
 	case *GetSpecType_DiscoveryConsul:
-
 		return nil, nil
-
 	case *GetSpecType_DiscoveryCbip:
-
 		drInfos, err := m.GetDiscoveryCbip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDiscoveryCbip().GetDRefInfo() FAILED")
@@ -3168,15 +2923,11 @@ func (m *GetSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "discovery_cbip." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_DiscoveryThirdParty:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3184,7 +2935,6 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -3194,7 +2944,6 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -3216,7 +2965,6 @@ func (v *ValidateGetSpecType) ClusterIdentifierChoiceClusterIdValidationRuleHand
 	}
 	return oValidatorFn_ClusterId, nil
 }
-
 func (v *ValidateGetSpecType) DiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3224,9 +2972,7 @@ func (v *ValidateGetSpecType) DiscoveryChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) WhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for where")
@@ -3235,19 +2981,15 @@ func (v *ValidateGetSpecType) WhereValidationRuleHandler(rules map[string]string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.NetworkSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.DiscoveryType)
@@ -3309,7 +3051,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["discovery_choice"]; exists {
@@ -3367,43 +3108,31 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["publish_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("publish_vip"))
 		if err := fv(ctx, m.GetPublishVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3411,7 +3140,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClusterIdentifierChoice := v.ClusterIdentifierChoiceValidationRuleHandler
 	rulesClusterIdentifierChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3422,7 +3150,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_identifier_choice"] = vFn
-
 	vrhClusterIdentifierChoiceClusterId := v.ClusterIdentifierChoiceClusterIdValidationRuleHandler
 	rulesClusterIdentifierChoiceClusterId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -3432,9 +3159,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.cluster_identifier_choice_cluster_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["cluster_identifier_choice.cluster_id"] = vFnMap["cluster_identifier_choice.cluster_id"]
-
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3467,12 +3192,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["type"] = vFn
-
 	v.FldValidators["discovery_choice.discovery_k8s"] = K8SDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_consul"] = ConsulDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_cbip"] = CbipDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_third_party"] = ThirdPartyDiscoveryTypeValidator().Validate
-
 	v.FldValidators["publish_vip"] = VipDiscoveryInfoTypeValidator().Validate
 
 	return v
@@ -3498,23 +3221,18 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetK8S().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.k8s")
 	}
-
 	if err := m.GetConsul().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.consul")
 	}
-
 	if err := m.GetDiscoveryK8S().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.discovery_k8s")
 	}
-
 	if err := m.GetDiscoveryConsul().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.discovery_consul")
 	}
-
 	if err := m.GetDiscoveryCbip().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.discovery_cbip")
 	}
@@ -3560,21 +3278,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3584,15 +3298,10 @@ func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDiscoveryChoice().(type) {
 	case *GlobalSpecType_DiscoveryK8S:
-
 		return nil, nil
-
 	case *GlobalSpecType_DiscoveryConsul:
-
 		return nil, nil
-
 	case *GlobalSpecType_DiscoveryCbip:
-
 		drInfos, err := m.GetDiscoveryCbip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDiscoveryCbip().GetDRefInfo() FAILED")
@@ -3602,19 +3311,14 @@ func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "discovery_cbip." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_DiscoveryThirdParty:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3630,7 +3334,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3640,7 +3343,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3658,7 +3360,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3667,7 +3368,6 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -3677,7 +3377,6 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -3699,7 +3398,6 @@ func (v *ValidateGlobalSpecType) ClusterIdentifierChoiceClusterIdValidationRuleH
 	}
 	return oValidatorFn_ClusterId, nil
 }
-
 func (v *ValidateGlobalSpecType) DiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3707,9 +3405,7 @@ func (v *ValidateGlobalSpecType) DiscoveryChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) WhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for where")
@@ -3718,19 +3414,15 @@ func (v *ValidateGlobalSpecType) WhereValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.NetworkSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.DiscoveryType)
@@ -3744,9 +3436,7 @@ func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ClusterIdentifierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_identifier")
@@ -3792,16 +3482,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster_identifier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster_identifier"))
 		if err := fv(ctx, m.GetClusterIdentifier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_identifier_choice"]; exists {
@@ -3837,7 +3523,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["discovery_choice"]; exists {
@@ -3895,52 +3580,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["publish_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("publish_vip"))
 		if err := fv(ctx, m.GetPublishVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3948,7 +3618,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClusterIdentifierChoice := v.ClusterIdentifierChoiceValidationRuleHandler
 	rulesClusterIdentifierChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3959,7 +3628,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_identifier_choice"] = vFn
-
 	vrhClusterIdentifierChoiceClusterId := v.ClusterIdentifierChoiceClusterIdValidationRuleHandler
 	rulesClusterIdentifierChoiceClusterId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -3969,9 +3637,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.cluster_identifier_choice_cluster_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["cluster_identifier_choice.cluster_id"] = vFnMap["cluster_identifier_choice.cluster_id"]
-
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4015,17 +3681,13 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_identifier"] = vFn
-
 	v.FldValidators["access_info.k8s"] = K8SAccessInfoValidator().Validate
 	v.FldValidators["access_info.consul"] = ConsulAccessInfoValidator().Validate
-
 	v.FldValidators["discovery_choice.discovery_k8s"] = K8SDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_consul"] = ConsulDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_cbip"] = CbipDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_third_party"] = ThirdPartyDiscoveryTypeValidator().Validate
-
 	v.FldValidators["publish_vip"] = VipDiscoveryInfoTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -4051,11 +3713,9 @@ func (m *K8SAccessInfo) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetKubeconfigUrl().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting K8SAccessInfo.kubeconfig_url")
 	}
-
 	if err := m.GetConnectionInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting K8SAccessInfo.connection_info")
 	}
@@ -4101,7 +3761,6 @@ func (v *ValidateK8SAccessInfo) ConfigTypeValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateK8SAccessInfo) K8SPodNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4168,7 +3827,6 @@ func (v *ValidateK8SAccessInfo) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["k8s_pod_network_choice"]; exists {
@@ -4204,16 +3862,13 @@ func (v *ValidateK8SAccessInfo) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultK8SAccessInfoValidator = func() *ValidateK8SAccessInfo {
 	v := &ValidateK8SAccessInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4221,7 +3876,6 @@ var DefaultK8SAccessInfoValidator = func() *ValidateK8SAccessInfo {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConfigType := v.ConfigTypeValidationRuleHandler
 	rulesConfigType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4232,7 +3886,6 @@ var DefaultK8SAccessInfoValidator = func() *ValidateK8SAccessInfo {
 		panic(errMsg)
 	}
 	v.FldValidators["config_type"] = vFn
-
 	vrhK8SPodNetworkChoice := v.K8SPodNetworkChoiceValidationRuleHandler
 	rulesK8SPodNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4243,7 +3896,6 @@ var DefaultK8SAccessInfoValidator = func() *ValidateK8SAccessInfo {
 		panic(errMsg)
 	}
 	v.FldValidators["k8s_pod_network_choice"] = vFn
-
 	v.FldValidators["config_type.kubeconfig_url"] = ves_io_schema.SecretTypeValidator().Validate
 	v.FldValidators["config_type.connection_info"] = RestConfigTypeValidator().Validate
 
@@ -4296,7 +3948,6 @@ type ValidateK8SDelegationType struct {
 }
 
 func (v *ValidateK8SDelegationType) SubdomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subdomain")
@@ -4304,9 +3955,7 @@ func (v *ValidateK8SDelegationType) SubdomainValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateK8SDelegationType) DnsModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(K8SDNSMode)
@@ -4334,32 +3983,24 @@ func (v *ValidateK8SDelegationType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_mode"))
 		if err := fv(ctx, m.GetDnsMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subdomain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subdomain"))
 		if err := fv(ctx, m.GetSubdomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultK8SDelegationTypeValidator = func() *ValidateK8SDelegationType {
 	v := &ValidateK8SDelegationType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4414,7 +4055,6 @@ func (m *K8SDiscoveryType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting K8SDiscoveryType.access_info")
 	}
@@ -4454,7 +4094,6 @@ type ValidateK8SDiscoveryType struct {
 }
 
 func (v *ValidateK8SDiscoveryType) AccessInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_info")
@@ -4463,19 +4102,15 @@ func (v *ValidateK8SDiscoveryType) AccessInfoValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := K8SAccessInfoValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateK8SDiscoveryType) PublishInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for publish_info")
@@ -4484,11 +4119,9 @@ func (v *ValidateK8SDiscoveryType) PublishInfoValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := K8SVipDiscoveryInfoTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -4508,14 +4141,11 @@ func (v *ValidateK8SDiscoveryType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_info"))
 		if err := fv(ctx, m.GetAccessInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNamespaceMappingChoice().(type) {
@@ -4541,25 +4171,19 @@ func (v *ValidateK8SDiscoveryType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["publish_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("publish_info"))
 		if err := fv(ctx, m.GetPublishInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultK8SDiscoveryTypeValidator = func() *ValidateK8SDiscoveryType {
 	v := &ValidateK8SDiscoveryType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4589,7 +4213,6 @@ var DefaultK8SDiscoveryTypeValidator = func() *ValidateK8SDiscoveryType {
 		panic(errMsg)
 	}
 	v.FldValidators["publish_info"] = vFn
-
 	v.FldValidators["namespace_mapping_choice.namespace_mapping"] = K8SNamespaceMappingValidator().Validate
 
 	return v
@@ -4641,7 +4264,6 @@ type ValidateK8SNamespaceMapping struct {
 }
 
 func (v *ValidateK8SNamespaceMapping) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4701,22 +4323,18 @@ func (v *ValidateK8SNamespaceMapping) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
 		vOpts := append(opts, db.WithValidateField("items"))
 		if err := fv(ctx, m.GetItems(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultK8SNamespaceMappingValidator = func() *ValidateK8SNamespaceMapping {
 	v := &ValidateK8SNamespaceMapping{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4788,7 +4406,6 @@ type ValidateK8SNamespaceMappingItem struct {
 }
 
 func (v *ValidateK8SNamespaceMappingItem) NamespaceRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace_regex")
@@ -4810,32 +4427,24 @@ func (v *ValidateK8SNamespaceMappingItem) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_regex"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_regex"))
 		if err := fv(ctx, m.GetNamespaceRegex(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultK8SNamespaceMappingItemValidator = func() *ValidateK8SNamespaceMappingItem {
 	v := &ValidateK8SNamespaceMappingItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4905,7 +4514,6 @@ type ValidateK8SPublishType struct {
 }
 
 func (v *ValidateK8SPublishType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -4927,23 +4535,18 @@ func (v *ValidateK8SPublishType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultK8SPublishTypeValidator = func() *ValidateK8SPublishType {
 	v := &ValidateK8SPublishType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5089,16 +4692,13 @@ func (v *ValidateK8SVipDiscoveryInfoType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultK8SVipDiscoveryInfoTypeValidator = func() *ValidateK8SVipDiscoveryInfoType {
 	v := &ValidateK8SVipDiscoveryInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5106,7 +4706,6 @@ var DefaultK8SVipDiscoveryInfoTypeValidator = func() *ValidateK8SVipDiscoveryInf
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPublishChoice := v.PublishChoiceValidationRuleHandler
 	rulesPublishChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5117,7 +4716,6 @@ var DefaultK8SVipDiscoveryInfoTypeValidator = func() *ValidateK8SVipDiscoveryInf
 		panic(errMsg)
 	}
 	v.FldValidators["publish_choice"] = vFn
-
 	v.FldValidators["publish_choice.publish"] = K8SPublishTypeValidator().Validate
 	v.FldValidators["publish_choice.dns_delegation"] = K8SDelegationTypeValidator().Validate
 
@@ -5170,7 +4768,6 @@ type ValidateManagementPort struct {
 }
 
 func (v *ValidateManagementPort) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -5192,23 +4789,18 @@ func (v *ValidateManagementPort) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultManagementPortValidator = func() *ValidateManagementPort {
 	v := &ValidateManagementPort{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5219,8 +4811,9 @@ var DefaultManagementPortValidator = func() *ValidateManagementPort {
 
 	vrhPort := v.PortValidationRuleHandler
 	rulesPort := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "1",
-		"ves.io.schema.rules.uint32.lte": "65535",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "65535",
 	}
 	vFn, err = vrhPort(rulesPort)
 	if err != nil {
@@ -5278,7 +4871,6 @@ type ValidateNamespaceMapping struct {
 }
 
 func (v *ValidateNamespaceMapping) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5338,22 +4930,18 @@ func (v *ValidateNamespaceMapping) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
 		vOpts := append(opts, db.WithValidateField("items"))
 		if err := fv(ctx, m.GetItems(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNamespaceMappingValidator = func() *ValidateNamespaceMapping {
 	v := &ValidateNamespaceMapping{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5425,7 +5013,6 @@ type ValidateNamespaceMappingItem struct {
 }
 
 func (v *ValidateNamespaceMappingItem) PartitionRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for partition_regex")
@@ -5447,32 +5034,24 @@ func (v *ValidateNamespaceMappingItem) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["partition_regex"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("partition_regex"))
 		if err := fv(ctx, m.GetPartitionRegex(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNamespaceMappingItemValidator = func() *ValidateNamespaceMappingItem {
 	v := &ValidateNamespaceMappingItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5483,8 +5062,9 @@ var DefaultNamespaceMappingItemValidator = func() *ValidateNamespaceMappingItem 
 
 	vrhPartitionRegex := v.PartitionRegexValidationRuleHandler
 	rulesPartitionRegex := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.regex":   "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.regex":     "true",
 	}
 	vFn, err = vrhPartitionRegex(rulesPartitionRegex)
 	if err != nil {
@@ -5554,25 +5134,18 @@ func (v *ValidatePodInfoType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pod_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pod_name"))
 		if err := fv(ctx, m.GetPodName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -5629,7 +5202,6 @@ type ValidatePortInfoType struct {
 }
 
 func (v *ValidatePortInfoType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -5637,9 +5209,7 @@ func (v *ValidatePortInfoType) PortValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePortInfoType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -5647,9 +5217,7 @@ func (v *ValidatePortInfoType) ProtocolValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePortInfoType) TargetPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for target_port")
@@ -5671,41 +5239,30 @@ func (v *ValidatePortInfoType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["target_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("target_port"))
 		if err := fv(ctx, m.GetTargetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPortInfoTypeValidator = func() *ValidatePortInfoType {
 	v := &ValidatePortInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5774,15 +5331,12 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetDiscoveryK8S().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.discovery_k8s")
 	}
-
 	if err := m.GetDiscoveryConsul().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.discovery_consul")
 	}
-
 	if err := m.GetDiscoveryCbip().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.discovery_cbip")
 	}
@@ -5828,15 +5382,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -5846,15 +5397,10 @@ func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDiscoveryChoice().(type) {
 	case *ReplaceSpecType_DiscoveryK8S:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DiscoveryConsul:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DiscoveryCbip:
-
 		drInfos, err := m.GetDiscoveryCbip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDiscoveryCbip().GetDRefInfo() FAILED")
@@ -5864,15 +5410,11 @@ func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "discovery_cbip." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_DiscoveryThirdParty:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -5880,7 +5422,6 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
@@ -5890,7 +5431,6 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "where." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -5912,7 +5452,6 @@ func (v *ValidateReplaceSpecType) ClusterIdentifierChoiceClusterIdValidationRule
 	}
 	return oValidatorFn_ClusterId, nil
 }
-
 func (v *ValidateReplaceSpecType) DiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5920,9 +5459,7 @@ func (v *ValidateReplaceSpecType) DiscoveryChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) WhereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for where")
@@ -5931,11 +5468,9 @@ func (v *ValidateReplaceSpecType) WhereValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.NetworkSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -5989,7 +5524,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["discovery_choice"]; exists {
@@ -6047,25 +5581,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["where"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("where"))
 		if err := fv(ctx, m.GetWhere(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6073,7 +5601,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClusterIdentifierChoice := v.ClusterIdentifierChoiceValidationRuleHandler
 	rulesClusterIdentifierChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6084,7 +5611,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_identifier_choice"] = vFn
-
 	vrhClusterIdentifierChoiceClusterId := v.ClusterIdentifierChoiceClusterIdValidationRuleHandler
 	rulesClusterIdentifierChoiceClusterId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -6094,9 +5620,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.cluster_identifier_choice_cluster_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["cluster_identifier_choice.cluster_id"] = vFnMap["cluster_identifier_choice.cluster_id"]
-
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6118,7 +5642,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["where"] = vFn
-
 	v.FldValidators["discovery_choice.discovery_k8s"] = K8SDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_consul"] = ConsulDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_cbip"] = CbipDiscoveryTypeValidator().Validate
@@ -6147,7 +5670,6 @@ func (m *RestConfigType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting RestConfigType.tls_info")
 	}
@@ -6187,7 +5709,6 @@ type ValidateRestConfigType struct {
 }
 
 func (v *ValidateRestConfigType) ApiServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for api_server")
@@ -6209,32 +5730,24 @@ func (v *ValidateRestConfigType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_server"))
 		if err := fv(ctx, m.GetApiServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_info"))
 		if err := fv(ctx, m.GetTlsInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRestConfigTypeValidator = func() *ValidateRestConfigType {
 	v := &ValidateRestConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6255,7 +5768,6 @@ var DefaultRestConfigTypeValidator = func() *ValidateRestConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_server"] = vFn
-
 	v.FldValidators["tls_info"] = TLSClientConfigTypeValidator().Validate
 
 	return v
@@ -6281,15 +5793,12 @@ func (m *TLSClientConfigType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCertificateUrl().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TLSClientConfigType.certificate_url")
 	}
-
 	if err := m.GetKeyUrl().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TLSClientConfigType.key_url")
 	}
-
 	if err := m.GetCaCertificateUrl().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TLSClientConfigType.ca_certificate_url")
 	}
@@ -6329,7 +5838,6 @@ type ValidateTLSClientConfigType struct {
 }
 
 func (v *ValidateTLSClientConfigType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
@@ -6337,9 +5845,7 @@ func (v *ValidateTLSClientConfigType) ServerNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTLSClientConfigType) CertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate")
@@ -6347,9 +5853,7 @@ func (v *ValidateTLSClientConfigType) CertificateValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTLSClientConfigType) TrustedCaUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_url")
@@ -6371,68 +5875,48 @@ func (v *ValidateTLSClientConfigType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ca_certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ca_certificate_url"))
 		if err := fv(ctx, m.GetCaCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate"))
 		if err := fv(ctx, m.GetCertificate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_url"))
 		if err := fv(ctx, m.GetCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_url"))
 		if err := fv(ctx, m.GetKeyUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trusted_ca_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trusted_ca_url"))
 		if err := fv(ctx, m.GetTrustedCaUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTLSClientConfigTypeValidator = func() *ValidateTLSClientConfigType {
 	v := &ValidateTLSClientConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6476,11 +5960,8 @@ var DefaultTLSClientConfigTypeValidator = func() *ValidateTLSClientConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["trusted_ca_url"] = vFn
-
 	v.FldValidators["certificate_url"] = ves_io_schema.SecretTypeValidator().Validate
-
 	v.FldValidators["key_url"] = ves_io_schema.SecretTypeValidator().Validate
-
 	v.FldValidators["ca_certificate_url"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -6532,7 +6013,6 @@ type ValidateThirdPartyDiscoveryType struct {
 }
 
 func (v *ValidateThirdPartyDiscoveryType) ApplicationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6572,9 +6052,7 @@ func (v *ValidateThirdPartyDiscoveryType) ApplicationsValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThirdPartyDiscoveryType) SourceCidrValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6628,39 +6106,30 @@ func (v *ValidateThirdPartyDiscoveryType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["applications"]; exists {
 		vOpts := append(opts, db.WithValidateField("applications"))
 		if err := fv(ctx, m.GetApplications(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["source_cidr"]; exists {
 		vOpts := append(opts, db.WithValidateField("source_cidr"))
 		if err := fv(ctx, m.GetSourceCidr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThirdPartyDiscoveryTypeValidator = func() *ValidateThirdPartyDiscoveryType {
 	v := &ValidateThirdPartyDiscoveryType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6760,18 +6229,13 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connected"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connected"))
 		if err := fv(ctx, m.GetConnected(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["services"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("services"))
 		for idx, item := range m.GetServices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -6779,34 +6243,25 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVerStatusTypeValidator = func() *ValidateVerStatusType {
 	v := &ValidateVerStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["services"] = DiscoveredServiceTypeValidator().Validate
 
 	return v
@@ -6858,7 +6313,6 @@ type ValidateVipDiscoveryInfoType struct {
 }
 
 func (v *ValidateVipDiscoveryInfoType) SubdomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subdomain")
@@ -6866,9 +6320,7 @@ func (v *ValidateVipDiscoveryInfoType) SubdomainValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVipDiscoveryInfoType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -6890,59 +6342,42 @@ func (v *ValidateVipDiscoveryInfoType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_mode"))
 		if err := fv(ctx, m.GetDnsMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["publish_virtual_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("publish_virtual_ip"))
 		if err := fv(ctx, m.GetPublishVirtualIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subdomain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subdomain"))
 		if err := fv(ctx, m.GetSubdomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVipDiscoveryInfoTypeValidator = func() *ValidateVipDiscoveryInfoType {
 	v := &ValidateVipDiscoveryInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7022,7 +6457,6 @@ type ValidateVirtualServerFilter struct {
 }
 
 func (v *ValidateVirtualServerFilter) NameRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name_regex")
@@ -7030,9 +6464,7 @@ func (v *ValidateVirtualServerFilter) NameRegexValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServerFilter) DescriptionRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description_regex")
@@ -7040,9 +6472,7 @@ func (v *ValidateVirtualServerFilter) DescriptionRegexValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServerFilter) ProtocolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7082,9 +6512,7 @@ func (v *ValidateVirtualServerFilter) ProtocolsValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServerFilter) PortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
@@ -7106,58 +6534,42 @@ func (v *ValidateVirtualServerFilter) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description_regex"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description_regex"))
 		if err := fv(ctx, m.GetDescriptionRegex(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["discover_disabled_virtual_servers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discover_disabled_virtual_servers"))
 		if err := fv(ctx, m.GetDiscoverDisabledVirtualServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name_regex"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name_regex"))
 		if err := fv(ctx, m.GetNameRegex(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port_ranges"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port_ranges"))
 		if err := fv(ctx, m.GetPortRanges(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocols"]; exists {
 		vOpts := append(opts, db.WithValidateField("protocols"))
 		if err := fv(ctx, m.GetProtocols(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVirtualServerFilterValidator = func() *ValidateVirtualServerFilter {
 	v := &ValidateVirtualServerFilter{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

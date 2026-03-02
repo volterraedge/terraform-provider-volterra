@@ -20,7 +20,6 @@ resource "volterra_rate_limiter_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -97,6 +96,20 @@ x-displayName: "Country List".
 `country_codes` - (Required) List of Country Codes (`List of Strings`).
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
+
+### Dst Segment Choice Dst Any
+
+Traffic is not matched against any segment.
+
+### Dst Segment Choice Dst Segments
+
+Traffic is matched against destination segment in selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
+
+### Dst Segment Choice Intra Segment
+
+Traffic is matched for source and destination on the same segment.
 
 ### Ip Choice Any Ip
 
@@ -200,6 +213,8 @@ Specification for the rule including match preicates and actions..
 
 `path` - (Optional)path. See [Spec Path ](#spec-path) below for details.
 
+`segment_policy` - (Optional) Skip the configuration or set option as Any to ignore corresponding segment match. See [Spec Segment Policy ](#spec-segment-policy) below for details.
+
 ### Server Choice Server Name Matcher
 
 regular expressions..
@@ -252,6 +267,8 @@ http_method.
 
 path.
 
+`encoded_path_matcher` - (Optional)Match against the encoded, escaped path (`Bool`).
+
 `exact_values` - (Optional) A list of exact path values to match the input HTTP path against. (`String`).
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
@@ -264,7 +281,35 @@ path.
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
+### Spec Segment Policy
+
+Skip the configuration or set option as Any to ignore corresponding segment match.
+
+###### One of the arguments from this list "dst_any, dst_segments, intra_segment" can be set
+
+`dst_any` - (Optional) Traffic is not matched against any segment (`Bool`).
+
+`dst_segments` - (Optional) Traffic is matched against destination segment in selected segments. See [Dst Segment Choice Dst Segments ](#dst-segment-choice-dst-segments) below for details.
+
+`intra_segment` - (Optional) Traffic is matched for source and destination on the same segment (`Bool`).
+
+###### One of the arguments from this list "src_any, src_segments" can be set
+
+`src_any` - (Optional) Traffic is not matched against any segment (`Bool`).
+
+`src_segments` - (Optional) Source traffic is matched against selected segments. See [Src Segment Choice Src Segments ](#src-segment-choice-src-segments) below for details.
+
+### Src Segment Choice Src Any
+
+Traffic is not matched against any segment.
+
+### Src Segment Choice Src Segments
+
+Source traffic is matched against selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
+
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured rate_limiter_policy.
+*   `id` - This is the id of the configured rate_limiter_policy.

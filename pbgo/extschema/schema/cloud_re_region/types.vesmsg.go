@@ -68,7 +68,6 @@ func (m *AWSType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -76,7 +75,6 @@ func (m *AWSType) GetNodesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetNodes() {
 		driSet, err := e.GetDRefInfo()
@@ -90,7 +88,6 @@ func (m *AWSType) GetNodesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateAWSType struct {
@@ -98,7 +95,6 @@ type ValidateAWSType struct {
 }
 
 func (v *ValidateAWSType) TgwSubnetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for tgw_subnet")
@@ -107,11 +103,9 @@ func (v *ValidateAWSType) TgwSubnetValidationRuleHandler(rules map[string]string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.IpSubnetTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -131,18 +125,13 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["inside_gre_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_gre_subnet"))
 		if err := fv(ctx, m.GetInsideGreSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nodes"))
 		for idx, item := range m.GetNodes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -150,20 +139,14 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_subnet"))
 		if err := fv(ctx, m.GetTgwSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgws"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgws"))
 		for idx, item := range m.GetTgws() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -171,16 +154,13 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSTypeValidator = func() *ValidateAWSType {
 	v := &ValidateAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -199,11 +179,8 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["tgw_subnet"] = vFn
-
 	v.FldValidators["tgws"] = TGWTypeValidator().Validate
-
 	v.FldValidators["nodes"] = NodeTypeValidator().Validate
-
 	v.FldValidators["inside_gre_subnet"] = ves_io_schema.IpSubnetTypeValidator().Validate
 
 	return v
@@ -256,7 +233,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -266,7 +242,6 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloud().(type) {
 	case *GlobalSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -276,11 +251,9 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -294,9 +267,7 @@ func (v *ValidateGlobalSpecType) CloudValidationRuleHandler(rules map[string]str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for region")
@@ -341,25 +312,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -367,7 +332,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -389,7 +353,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["region"] = vFn
-
 	v.FldValidators["cloud.aws"] = AWSTypeValidator().Validate
 
 	return v
@@ -442,11 +405,9 @@ func (m *NodeType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteDRefInfo()
-
 }
 
 func (m *NodeType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -462,7 +423,6 @@ func (m *NodeType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -472,7 +432,6 @@ func (m *NodeType) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.E
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -490,7 +449,6 @@ func (m *NodeType) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.E
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -511,43 +469,31 @@ func (v *ValidateNodeType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNodeTypeValidator = func() *ValidateNodeType {
 	v := &ValidateNodeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["address"] = ves_io_schema.IpAddressTypeValidator().Validate
-
 	v.FldValidators["site"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -611,41 +557,30 @@ func (v *ValidateTGWType) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_subnet"))
 		if err := fv(ctx, m.GetTgwSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTGWTypeValidator = func() *ValidateTGWType {
 	v := &ValidateTGWType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["tgw_subnet"] = ves_io_schema.IpSubnetTypeValidator().Validate
 
 	return v

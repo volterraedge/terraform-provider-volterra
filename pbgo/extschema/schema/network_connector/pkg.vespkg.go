@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.network_connector.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.network_connector.Object"] = ObjectValidator()
 	vr["ves.io.schema.network_connector.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.network_connector.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.network_connector.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.network_connector.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.network_connector.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.network_connector.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.network_connector.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.network_connector.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.network_connector.DynamicReverseProxyListType"] = DynamicReverseProxyListTypeValidator()
 	vr["ves.io.schema.network_connector.GetSpecType"] = GetSpecTypeValidator()
@@ -36,7 +33,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.network_connector.NetworkConnectorStatus"] = NetworkConnectorStatusValidator()
 	vr["ves.io.schema.network_connector.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.network_connector.SnatConnectorType"] = SnatConnectorTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -48,11 +44,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.network_connector.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.network_connector.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.network_connector.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.network_connector.API.Create"] = []string{
 		"spec.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
 		"spec.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
@@ -65,9 +59,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.sli_to_slo_snat.snat_pool_allocator",
 		"spec.slo_to_global_snat",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.network_connector.API.Create"] = "ves.io.schema.network_connector.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.network_connector.API.Replace"] = []string{
 		"spec.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
 		"spec.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
@@ -80,23 +72,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.sli_to_slo_snat.snat_pool_allocator",
 		"spec.slo_to_global_snat",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.network_connector.API.Replace"] = "ves.io.schema.network_connector.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.network_connector.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -105,9 +92,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.network_connector.Object"] = APISwaggerJSON
@@ -121,22 +106,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.network_connector.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.network_connector.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.network_connector.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -69,11 +69,9 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAsnDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil
@@ -89,7 +87,6 @@ func (m *CreateSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAsnDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -99,7 +96,6 @@ func (m *CreateSpecType) GetAsnDBEntries(ctx context.Context, d db.Interface) ([
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: infraprotect_asn")
 	}
-
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil
@@ -117,7 +113,6 @@ func (m *CreateSpecType) GetAsnDBEntries(ctx context.Context, d db.Interface) ([
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -126,7 +121,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for asn")
@@ -135,19 +129,15 @@ func (v *ValidateCreateSpecType) AsnValidationRuleHandler(rules map[string]strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix")
@@ -169,32 +159,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -276,7 +258,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAsnDRefInfo()
-
 }
 
 // SetStateChangeTimestamp sets the field
@@ -285,7 +266,6 @@ func (m *GetSpecType) SetStateChangeTimestamp(in *google_protobuf.Timestamp) {
 }
 
 func (m *GetSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil
@@ -301,7 +281,6 @@ func (m *GetSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAsnDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -311,7 +290,6 @@ func (m *GetSpecType) GetAsnDBEntries(ctx context.Context, d db.Interface) ([]db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: infraprotect_asn")
 	}
-
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil
@@ -329,7 +307,6 @@ func (m *GetSpecType) GetAsnDBEntries(ctx context.Context, d db.Interface) ([]db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -344,7 +321,6 @@ func (v *ValidateGetSpecType) IrrOverrideValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) IrrStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -352,7 +328,6 @@ func (v *ValidateGetSpecType) IrrStatusValidationRuleHandler(rules map[string]st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ReviewTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -360,7 +335,6 @@ func (v *ValidateGetSpecType) ReviewTypeValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) RpkiStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -368,9 +342,7 @@ func (v *ValidateGetSpecType) RpkiStatusValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for asn")
@@ -379,19 +351,15 @@ func (v *ValidateGetSpecType) AsnValidationRuleHandler(rules map[string]string) 
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix")
@@ -413,23 +381,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["customer_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("customer_asn"))
 		if err := fv(ctx, m.GetCustomerAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["irr_override"]; exists {
@@ -465,7 +427,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["irr_status"]; exists {
@@ -512,16 +473,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["review_type"]; exists {
@@ -579,7 +536,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["rpki_status"]; exists {
@@ -637,25 +593,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state_change_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state_change_timestamp"))
 		if err := fv(ctx, m.GetStateChangeTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -663,7 +613,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIrrOverride := v.IrrOverrideValidationRuleHandler
 	rulesIrrOverride := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -674,7 +623,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["irr_override"] = vFn
-
 	vrhIrrStatus := v.IrrStatusValidationRuleHandler
 	rulesIrrStatus := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -685,7 +633,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["irr_status"] = vFn
-
 	vrhReviewType := v.ReviewTypeValidationRuleHandler
 	rulesReviewType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -696,7 +643,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["review_type"] = vFn
-
 	vrhRpkiStatus := v.RpkiStatusValidationRuleHandler
 	rulesRpkiStatus := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -781,7 +727,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAsnDRefInfo()
-
 }
 
 // SetStateChangeTimestamp sets the field
@@ -790,7 +735,6 @@ func (m *GlobalSpecType) SetStateChangeTimestamp(in *google_protobuf.Timestamp) 
 }
 
 func (m *GlobalSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil
@@ -806,7 +750,6 @@ func (m *GlobalSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAsnDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -816,7 +759,6 @@ func (m *GlobalSpecType) GetAsnDBEntries(ctx context.Context, d db.Interface) ([
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: infraprotect_asn")
 	}
-
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil
@@ -834,7 +776,6 @@ func (m *GlobalSpecType) GetAsnDBEntries(ctx context.Context, d db.Interface) ([
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -849,7 +790,6 @@ func (v *ValidateGlobalSpecType) IrrOverrideValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IrrStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -857,7 +797,6 @@ func (v *ValidateGlobalSpecType) IrrStatusValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ReviewTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -865,7 +804,6 @@ func (v *ValidateGlobalSpecType) ReviewTypeValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) RpkiStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -873,9 +811,7 @@ func (v *ValidateGlobalSpecType) RpkiStatusValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for asn")
@@ -884,19 +820,15 @@ func (v *ValidateGlobalSpecType) AsnValidationRuleHandler(rules map[string]strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix")
@@ -918,23 +850,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["customer_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("customer_asn"))
 		if err := fv(ctx, m.GetCustomerAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["irr_override"]; exists {
@@ -970,7 +896,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["irr_status"]; exists {
@@ -1017,16 +942,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["review_type"]; exists {
@@ -1084,7 +1005,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["rpki_status"]; exists {
@@ -1142,25 +1062,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state_change_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state_change_timestamp"))
 		if err := fv(ctx, m.GetStateChangeTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1168,7 +1082,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIrrOverride := v.IrrOverrideValidationRuleHandler
 	rulesIrrOverride := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1179,7 +1092,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["irr_override"] = vFn
-
 	vrhIrrStatus := v.IrrStatusValidationRuleHandler
 	rulesIrrStatus := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1190,7 +1102,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["irr_status"] = vFn
-
 	vrhReviewType := v.ReviewTypeValidationRuleHandler
 	rulesReviewType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1201,7 +1112,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["review_type"] = vFn
-
 	vrhRpkiStatus := v.RpkiStatusValidationRuleHandler
 	rulesRpkiStatus := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1297,7 +1207,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

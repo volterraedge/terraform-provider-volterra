@@ -13,17 +13,14 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.waf_suppression_rule.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.waf_suppression_rule.Object"] = ObjectValidator()
 	vr["ves.io.schema.waf_suppression_rule.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.waf_suppression_rule.Context"] = ContextValidator()
 	vr["ves.io.schema.waf_suppression_rule.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.waf_suppression_rule.Detections"] = DetectionsValidator()
 	vr["ves.io.schema.waf_suppression_rule.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.waf_suppression_rule.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.waf_suppression_rule.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -35,19 +32,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.waf_suppression_rule.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.waf_suppression_rule.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.waf_suppression_rule.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -56,20 +49,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

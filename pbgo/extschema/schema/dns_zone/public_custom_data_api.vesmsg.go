@@ -64,7 +64,6 @@ type ValidateDnsZoneMetricsRequest struct {
 }
 
 func (v *ValidateDnsZoneMetricsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -72,9 +71,7 @@ func (v *ValidateDnsZoneMetricsRequest) StartTimeValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDnsZoneMetricsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -82,9 +79,7 @@ func (v *ValidateDnsZoneMetricsRequest) EndTimeValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDnsZoneMetricsRequest) LimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for limit")
@@ -92,9 +87,7 @@ func (v *ValidateDnsZoneMetricsRequest) LimitValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDnsZoneMetricsRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -116,27 +109,19 @@ func (v *ValidateDnsZoneMetricsRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filter"))
 		if err := fv(ctx, m.GetFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -144,61 +129,43 @@ func (v *ValidateDnsZoneMetricsRequest) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sort"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort"))
 		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDnsZoneMetricsRequestValidator = func() *ValidateDnsZoneMetricsRequest {
 	v := &ValidateDnsZoneMetricsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -301,7 +268,6 @@ type ValidateDnsZoneMetricsResponse struct {
 }
 
 func (v *ValidateDnsZoneMetricsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -323,9 +289,7 @@ func (v *ValidateDnsZoneMetricsResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -333,34 +297,25 @@ func (v *ValidateDnsZoneMetricsResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDnsZoneMetricsResponseValidator = func() *ValidateDnsZoneMetricsResponse {
 	v := &ValidateDnsZoneMetricsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -429,7 +384,6 @@ type ValidateDnsZoneRequestLogRequest struct {
 }
 
 func (v *ValidateDnsZoneRequestLogRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -437,9 +391,7 @@ func (v *ValidateDnsZoneRequestLogRequest) StartTimeValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDnsZoneRequestLogRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -447,9 +399,7 @@ func (v *ValidateDnsZoneRequestLogRequest) EndTimeValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDnsZoneRequestLogRequest) LimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for limit")
@@ -471,68 +421,48 @@ func (v *ValidateDnsZoneRequestLogRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filter"))
 		if err := fv(ctx, m.GetFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("limit"))
 		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sort"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sort"))
 		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDnsZoneRequestLogRequestValidator = func() *ValidateDnsZoneRequestLogRequest {
 	v := &ValidateDnsZoneRequestLogRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -636,9 +566,7 @@ func (v *ValidateDnsZoneRequestLogResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["logs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("logs"))
 		for idx, item := range m.GetLogs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -646,25 +574,19 @@ func (v *ValidateDnsZoneRequestLogResponse) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_hits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_hits"))
 		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDnsZoneRequestLogResponseValidator = func() *ValidateDnsZoneRequestLogResponse {
 	v := &ValidateDnsZoneRequestLogResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["logs"] = DnsZoneRequestLogsResponseDataValidator().Validate
 
 	return v
@@ -716,7 +638,6 @@ type ValidateDnsZoneRequestLogsResponseData struct {
 }
 
 func (v *ValidateDnsZoneRequestLogsResponseData) TimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for timestamp")
@@ -738,77 +659,63 @@ func (v *ValidateDnsZoneRequestLogsResponseData) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["client_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_subnet"))
 		if err := fv(ctx, m.GetClientSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["country_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("country_code"))
 		if err := fv(ctx, m.GetCountryCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_type"))
 		if err := fv(ctx, m.GetQueryType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["response_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_code"))
 		if err := fv(ctx, m.GetResponseCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["responses"]; exists {
+		vOpts := append(opts, db.WithValidateField("responses"))
+		for idx, item := range m.GetResponses() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timestamp"))
 		if err := fv(ctx, m.GetTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDnsZoneRequestLogsResponseDataValidator = func() *ValidateDnsZoneRequestLogsResponseData {
 	v := &ValidateDnsZoneRequestLogsResponseData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -889,9 +796,7 @@ func (v *ValidateMetricsData) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -899,11 +804,8 @@ func (v *ValidateMetricsData) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		for idx, item := range m.GetValue() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -911,9 +813,7 @@ func (v *ValidateMetricsData) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

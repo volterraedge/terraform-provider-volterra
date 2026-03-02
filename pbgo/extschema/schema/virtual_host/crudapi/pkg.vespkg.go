@@ -20,69 +20,55 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.crudapi.ObjectListRspItem"] = ObjectListRspItemValidator()
 	vr["ves.io.schema.virtual_host.crudapi.ObjectReplaceReq"] = ObjectReplaceReqValidator()
 	vr["ves.io.schema.virtual_host.crudapi.ObjectReplaceRsp"] = ObjectReplaceRspValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
 		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
 		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = "ves.io.schema.virtual_host.crudapi.ObjectCreateReq"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Get"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
 		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.List"] = []string{
 		"items.#.spec.gc_spec.cdn_service.cache_ttl",
 		"items.#.spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.spec.gc_spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.ListStream"] = []string{
 		"items.#.spec.gc_spec.cdn_service.cache_ttl",
 		"items.#.spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.spec.gc_spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
 		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
 		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -92,7 +78,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	csr = mdr.PvtCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.virtual_host.Object"] = APISwaggerJSON
@@ -106,22 +91,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.virtual_host.crudapi.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.virtual_host.crudapi.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.virtual_host.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

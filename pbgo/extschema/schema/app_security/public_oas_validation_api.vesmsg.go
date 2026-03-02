@@ -67,7 +67,6 @@ type ValidateGetSuggestedOasValidationRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedOasValidationRuleReq) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
@@ -75,9 +74,7 @@ func (v *ValidateGetSuggestedOasValidationRuleReq) PathValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedOasValidationRuleReq) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpMethod)
@@ -105,9 +102,7 @@ func (v *ValidateGetSuggestedOasValidationRuleReq) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		for idx, item := range m.GetApiGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -115,52 +110,37 @@ func (v *ValidateGetSuggestedOasValidationRuleReq) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedOasValidationRuleReqValidator = func() *ValidateGetSuggestedOasValidationRuleReq {
 	v := &ValidateGetSuggestedOasValidationRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -279,25 +259,19 @@ func (v *ValidateGetSuggestedOasValidationRuleRsp) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedOasValidationRuleRspValidator = func() *ValidateGetSuggestedOasValidationRuleRsp {
 	v := &ValidateGetSuggestedOasValidationRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["api_validation_choice.custom_oas_validation"] = ves_io_schema_views_common_waf.OpenApiValidationRuleValidator().Validate
 	v.FldValidators["api_validation_choice.all_endpoints_oas_validation"] = ves_io_schema_views_common_waf.OpenApiValidationAllSpecEndpointsSettingsValidator().Validate
 

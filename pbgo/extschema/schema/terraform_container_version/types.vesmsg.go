@@ -76,25 +76,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["container_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("container_version"))
 		if err := fv(ctx, m.GetContainerVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

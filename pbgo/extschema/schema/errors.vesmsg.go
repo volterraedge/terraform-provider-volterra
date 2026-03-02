@@ -76,34 +76,24 @@ func (v *ValidateErrorType) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("code"))
 		if err := fv(ctx, m.GetCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_obj"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_obj"))
 		if err := fv(ctx, m.GetErrorObj(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["message"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("message"))
 		if err := fv(ctx, m.GetMessage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

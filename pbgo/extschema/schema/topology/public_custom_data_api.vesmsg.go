@@ -70,15 +70,12 @@ func (m *AWSNetworkMetaData) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTransitGatewayDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTransitGatewayDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -86,7 +83,6 @@ func (m *AWSNetworkMetaData) GetMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMetadata().GetDRefInfo() FAILED")
@@ -96,7 +92,6 @@ func (m *AWSNetworkMetaData) GetMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -104,7 +99,6 @@ func (m *AWSNetworkMetaData) GetTransitGatewayDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetTransitGateway() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTransitGateway().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTransitGateway().GetDRefInfo() FAILED")
@@ -114,7 +108,6 @@ func (m *AWSNetworkMetaData) GetTransitGatewayDRefInfo() ([]db.DRefInfo, error) 
 		dri.DRField = "transit_gateway." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateAWSNetworkMetaData struct {
@@ -134,25 +127,18 @@ func (v *ValidateAWSNetworkMetaData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway"))
 		if err := fv(ctx, m.GetTransitGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -221,16 +207,12 @@ func (v *ValidateDCClusterGroupSummaryInfo) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["sites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sites"))
 		if err := fv(ctx, m.GetSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -299,7 +281,6 @@ func (v *ValidateDCClusterGroupsSummaryRequest) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -368,32 +349,24 @@ func (v *ValidateDCClusterTopologyRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dc_cluster_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dc_cluster_group"))
 		if err := fv(ctx, m.GetDcClusterGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric_selector"))
 		if err := fv(ctx, m.GetMetricSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDCClusterTopologyRequestValidator = func() *ValidateDCClusterTopologyRequest {
 	v := &ValidateDCClusterTopologyRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metric_selector"] = MetricSelectorValidator().Validate
 
 	return v
@@ -457,9 +430,7 @@ func (v *ValidateEdge) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["links"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("links"))
 		for idx, item := range m.GetLinks() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -467,36 +438,25 @@ func (v *ValidateEdge) Validate(ctx context.Context, pm interface{}, opts ...db.
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_id1"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_id1"))
 		if err := fv(ctx, m.GetNodeId1(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_id2"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_id2"))
 		if err := fv(ctx, m.GetNodeId2(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -565,25 +525,18 @@ func (v *ValidateEdgeInfoSummary) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -652,52 +605,36 @@ func (v *ValidateLinkInfo) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dst_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dst_id"))
 		if err := fv(ctx, m.GetDstId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["src_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("src_id"))
 		if err := fv(ctx, m.GetSrcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -766,34 +703,24 @@ func (v *ValidateLinkInfoSummary) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -862,18 +789,13 @@ func (v *ValidateLinkTypeData) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("info"))
 		if err := fv(ctx, m.GetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -881,9 +803,7 @@ func (v *ValidateLinkTypeData) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -952,9 +872,7 @@ func (v *ValidateMetricData) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -962,27 +880,19 @@ func (v *ValidateMetricData) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit"))
 		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1039,7 +949,6 @@ type ValidateMetricSelector struct {
 }
 
 func (v *ValidateMetricSelector) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -1047,9 +956,7 @@ func (v *ValidateMetricSelector) StartTimeValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMetricSelector) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -1057,9 +964,7 @@ func (v *ValidateMetricSelector) EndTimeValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMetricSelector) NodeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1105,9 +1010,7 @@ func (v *ValidateMetricSelector) NodeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMetricSelector) EdgeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1153,9 +1056,7 @@ func (v *ValidateMetricSelector) EdgeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMetricSelector) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -1177,57 +1078,42 @@ func (v *ValidateMetricSelector) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["edge"]; exists {
 		vOpts := append(opts, db.WithValidateField("edge"))
 		if err := fv(ctx, m.GetEdge(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node"]; exists {
 		vOpts := append(opts, db.WithValidateField("node"))
 		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMetricSelectorValidator = func() *ValidateMetricSelector {
 	v := &ValidateMetricSelector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1352,9 +1238,7 @@ func (v *ValidateMetricTypeData) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1362,11 +1246,8 @@ func (v *ValidateMetricTypeData) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["values"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("values"))
 		for idx, item := range m.GetValues() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1374,9 +1255,7 @@ func (v *ValidateMetricTypeData) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1439,15 +1318,12 @@ func (m *NetworkRouteTableData) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSubnetDataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSubnetDataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1455,7 +1331,6 @@ func (m *NetworkRouteTableData) GetRouteTableDataDRefInfo() ([]db.DRefInfo, erro
 	if m.GetRouteTableData() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRouteTableData().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRouteTableData().GetDRefInfo() FAILED")
@@ -1465,7 +1340,6 @@ func (m *NetworkRouteTableData) GetRouteTableDataDRefInfo() ([]db.DRefInfo, erro
 		dri.DRField = "route_table_data." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1473,7 +1347,6 @@ func (m *NetworkRouteTableData) GetSubnetDataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSubnetData() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSubnetData() {
 		driSet, err := e.GetDRefInfo()
@@ -1487,7 +1360,6 @@ func (m *NetworkRouteTableData) GetSubnetDataDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateNetworkRouteTableData struct {
@@ -1507,18 +1379,13 @@ func (v *ValidateNetworkRouteTableData) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_table_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table_data"))
 		if err := fv(ctx, m.GetRouteTableData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_data"))
 		for idx, item := range m.GetSubnetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1526,9 +1393,7 @@ func (v *ValidateNetworkRouteTableData) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1597,18 +1462,13 @@ func (v *ValidateNetworkRouteTableMetaData) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_table_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table_metadata"))
 		if err := fv(ctx, m.GetRouteTableMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_metadata"))
 		for idx, item := range m.GetSubnetMetadata() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1616,9 +1476,7 @@ func (v *ValidateNetworkRouteTableMetaData) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1675,7 +1533,6 @@ type ValidateNetworkRouteTablesRequest struct {
 }
 
 func (v *ValidateNetworkRouteTablesRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
@@ -1697,18 +1554,13 @@ func (v *ValidateNetworkRouteTablesRequest) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["regions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("regions"))
 		for idx, item := range m.GetRegions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1716,11 +1568,8 @@ func (v *ValidateNetworkRouteTablesRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_table_ids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table_ids"))
 		for idx, item := range m.GetRouteTableIds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1728,20 +1577,14 @@ func (v *ValidateNetworkRouteTablesRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_cidrs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_cidrs"))
 		for idx, item := range m.GetSubnetCidrs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1749,11 +1592,8 @@ func (v *ValidateNetworkRouteTablesRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_ids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_ids"))
 		for idx, item := range m.GetSubnetIds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1761,16 +1601,13 @@ func (v *ValidateNetworkRouteTablesRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkRouteTablesRequestValidator = func() *ValidateNetworkRouteTablesRequest {
 	v := &ValidateNetworkRouteTablesRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1840,7 +1677,6 @@ func (m *NetworkRouteTablesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRoutesDataDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1848,7 +1684,6 @@ func (m *NetworkRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, err
 	if m.GetRoutesData() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRoutesData() {
 		driSet, err := e.GetDRefInfo()
@@ -1862,7 +1697,6 @@ func (m *NetworkRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, err
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateNetworkRouteTablesResponse struct {
@@ -1882,9 +1716,7 @@ func (v *ValidateNetworkRouteTablesResponse) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["routes_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("routes_data"))
 		for idx, item := range m.GetRoutesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1892,9 +1724,7 @@ func (v *ValidateNetworkRouteTablesResponse) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1952,7 +1782,6 @@ func (m *NetworkRoutesData) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRouteTablesDataDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1960,7 +1789,6 @@ func (m *NetworkRoutesData) GetRouteTablesDataDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetRouteTablesData() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRouteTablesData() {
 		driSet, err := e.GetDRefInfo()
@@ -1974,7 +1802,6 @@ func (m *NetworkRoutesData) GetRouteTablesDataDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateNetworkRoutesData struct {
@@ -1994,18 +1821,13 @@ func (v *ValidateNetworkRoutesData) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["network_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_id"))
 		if err := fv(ctx, m.GetNetworkId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_tables_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_tables_data"))
 		for idx, item := range m.GetRouteTablesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2013,9 +1835,7 @@ func (v *ValidateNetworkRoutesData) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2084,45 +1904,31 @@ func (v *ValidateNetworkRoutesMetaData) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_resource_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_resource_id"))
 		if err := fv(ctx, m.GetCloudResourceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_type"))
 		if err := fv(ctx, m.GetNetworkType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["regions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("regions"))
 		for idx, item := range m.GetRegions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2130,11 +1936,8 @@ func (v *ValidateNetworkRoutesMetaData) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_tables_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_tables_metadata"))
 		for idx, item := range m.GetRouteTablesMetadata() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2142,9 +1945,7 @@ func (v *ValidateNetworkRoutesMetaData) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2213,9 +2014,7 @@ func (v *ValidateNetworkSummaryInfo) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_tables"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_tables"))
 		for idx, item := range m.GetRouteTables() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2223,9 +2022,7 @@ func (v *ValidateNetworkSummaryInfo) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2283,7 +2080,6 @@ func (m *Node) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeTypeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2293,7 +2089,6 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetNodeType().(type) {
 	case *Node_Site:
-
 		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
@@ -2303,9 +2098,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Node_TransitGateway:
-
 		drInfos, err := m.GetTransitGateway().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTransitGateway().GetDRefInfo() FAILED")
@@ -2315,9 +2108,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "transit_gateway." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Node_Network:
-
 		drInfos, err := m.GetNetwork().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNetwork().GetDRefInfo() FAILED")
@@ -2327,9 +2118,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "network." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Node_Subnet:
-
 		drInfos, err := m.GetSubnet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSubnet().GetDRefInfo() FAILED")
@@ -2339,9 +2128,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "subnet." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Node_Instance:
-
 		drInfos, err := m.GetInstance().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInstance().GetDRefInfo() FAILED")
@@ -2351,9 +2138,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "instance." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Node_SiteMeshGroup:
-
 		drInfos, err := m.GetSiteMeshGroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteMeshGroup().GetDRefInfo() FAILED")
@@ -2363,15 +2148,11 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site_mesh_group." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Node_DcClusterGroup:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateNode struct {
@@ -2391,23 +2172,17 @@ func (v *ValidateNode) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNodeType().(type) {
@@ -2488,16 +2263,13 @@ func (v *ValidateNode) Validate(ctx context.Context, pm interface{}, opts ...db.
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNodeValidator = func() *ValidateNode {
 	v := &ValidateNode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["node_type.instance"] = NodeTypeInstanceValidator().Validate
 	v.FldValidators["node_type.site_mesh_group"] = NodeTypeSiteMeshGroupValidator().Validate
 
@@ -2562,72 +2334,49 @@ func (v *ValidateNodeMetaData) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_resource_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_resource_id"))
 		if err := fv(ctx, m.GetCloudResourceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["level"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("level"))
 		if err := fv(ctx, m.GetLevel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["owner_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("owner_id"))
 		if err := fv(ctx, m.GetOwnerId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_type"))
 		if err := fv(ctx, m.GetProviderType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2635,9 +2384,7 @@ func (v *ValidateNodeMetaData) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2706,25 +2453,18 @@ func (v *ValidateNodeTypeDCClusterGroup) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("info"))
 		if err := fv(ctx, m.GetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("summary"))
 		if err := fv(ctx, m.GetSummary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2782,7 +2522,6 @@ func (m *NodeTypeInstance) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2790,7 +2529,6 @@ func (m *NodeTypeInstance) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
@@ -2800,7 +2538,6 @@ func (m *NodeTypeInstance) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateNodeTypeInstance struct {
@@ -2820,18 +2557,13 @@ func (v *ValidateNodeTypeInstance) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("info"))
 		if err := fv(ctx, m.GetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2839,16 +2571,13 @@ func (v *ValidateNodeTypeInstance) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNodeTypeInstanceValidator = func() *ValidateNodeTypeInstance {
 	v := &ValidateNodeTypeInstance{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["info"] = InstanceTypeValidator().Validate
 
 	return v
@@ -2901,7 +2630,6 @@ func (m *NodeTypeNetwork) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2909,7 +2637,6 @@ func (m *NodeTypeNetwork) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
@@ -2919,7 +2646,6 @@ func (m *NodeTypeNetwork) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateNodeTypeNetwork struct {
@@ -2939,18 +2665,13 @@ func (v *ValidateNodeTypeNetwork) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("info"))
 		if err := fv(ctx, m.GetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2958,18 +2679,13 @@ func (v *ValidateNodeTypeNetwork) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("summary"))
 		if err := fv(ctx, m.GetSummary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3027,7 +2743,6 @@ func (m *NodeTypeSite) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3035,7 +2750,6 @@ func (m *NodeTypeSite) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
@@ -3045,7 +2759,6 @@ func (m *NodeTypeSite) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateNodeTypeSite struct {
@@ -3065,18 +2778,13 @@ func (v *ValidateNodeTypeSite) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("info"))
 		if err := fv(ctx, m.GetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3084,18 +2792,13 @@ func (v *ValidateNodeTypeSite) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("summary"))
 		if err := fv(ctx, m.GetSummary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3153,7 +2856,6 @@ func (m *NodeTypeSiteMeshGroup) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3161,7 +2863,6 @@ func (m *NodeTypeSiteMeshGroup) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
@@ -3171,7 +2872,6 @@ func (m *NodeTypeSiteMeshGroup) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateNodeTypeSiteMeshGroup struct {
@@ -3191,32 +2891,24 @@ func (v *ValidateNodeTypeSiteMeshGroup) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("info"))
 		if err := fv(ctx, m.GetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("summary"))
 		if err := fv(ctx, m.GetSummary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNodeTypeSiteMeshGroupValidator = func() *ValidateNodeTypeSiteMeshGroup {
 	v := &ValidateNodeTypeSiteMeshGroup{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["info"] = SiteMeshGroupTypeValidator().Validate
 
 	return v
@@ -3269,7 +2961,6 @@ func (m *NodeTypeSubnet) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3277,7 +2968,6 @@ func (m *NodeTypeSubnet) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
@@ -3287,7 +2977,6 @@ func (m *NodeTypeSubnet) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateNodeTypeSubnet struct {
@@ -3307,18 +2996,13 @@ func (v *ValidateNodeTypeSubnet) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("info"))
 		if err := fv(ctx, m.GetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3326,18 +3010,13 @@ func (v *ValidateNodeTypeSubnet) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("summary"))
 		if err := fv(ctx, m.GetSummary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3395,7 +3074,6 @@ func (m *NodeTypeTransitGateway) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3403,7 +3081,6 @@ func (m *NodeTypeTransitGateway) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
@@ -3413,7 +3090,6 @@ func (m *NodeTypeTransitGateway) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateNodeTypeTransitGateway struct {
@@ -3433,18 +3109,13 @@ func (v *ValidateNodeTypeTransitGateway) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("info"))
 		if err := fv(ctx, m.GetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric"))
 		for idx, item := range m.GetMetric() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3452,9 +3123,7 @@ func (v *ValidateNodeTypeTransitGateway) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -3512,7 +3181,6 @@ func (m *RouteTableData) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRouteTableDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3520,7 +3188,6 @@ func (m *RouteTableData) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRouteTable() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRouteTable().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRouteTable().GetDRefInfo() FAILED")
@@ -3530,7 +3197,6 @@ func (m *RouteTableData) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "route_table." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateRouteTableData struct {
@@ -3550,25 +3216,18 @@ func (v *ValidateRouteTableData) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_table"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table"))
 		if err := fv(ctx, m.GetRouteTable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3637,27 +3296,19 @@ func (v *ValidateRouteTableMetaData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_resource_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_resource_id"))
 		if err := fv(ctx, m.GetCloudResourceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -3665,9 +3316,7 @@ func (v *ValidateRouteTableMetaData) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -3724,7 +3373,6 @@ type ValidateRouteTableRequest struct {
 }
 
 func (v *ValidateRouteTableRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -3746,23 +3394,18 @@ func (v *ValidateRouteTableRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRouteTableRequestValidator = func() *ValidateRouteTableRequest {
 	v := &ValidateRouteTableRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3832,7 +3475,6 @@ func (m *RouteTableResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRouteTableDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3840,7 +3482,6 @@ func (m *RouteTableResponse) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRouteTable() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRouteTable().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRouteTable().GetDRefInfo() FAILED")
@@ -3850,7 +3491,6 @@ func (m *RouteTableResponse) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "route_table." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateRouteTableResponse struct {
@@ -3870,25 +3510,18 @@ func (v *ValidateRouteTableResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_table"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table"))
 		if err := fv(ctx, m.GetRouteTable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3957,9 +3590,7 @@ func (v *ValidateSiteMeshGroupSummaryInfo) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["edge_status_summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("edge_status_summary"))
 		for idx, item := range m.GetEdgeStatusSummary() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3967,11 +3598,8 @@ func (v *ValidateSiteMeshGroupSummaryInfo) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["link_status_summary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("link_status_summary"))
 		for idx, item := range m.GetLinkStatusSummary() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3979,27 +3607,19 @@ func (v *ValidateSiteMeshGroupSummaryInfo) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["other_connected_site_mesh_group_sites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("other_connected_site_mesh_group_sites"))
 		if err := fv(ctx, m.GetOtherConnectedSiteMeshGroupSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sites"))
 		if err := fv(ctx, m.GetSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -4068,7 +3688,6 @@ func (v *ValidateSiteMeshGroupsSummaryRequest) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -4137,32 +3756,24 @@ func (v *ValidateSiteMeshTopologyRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metric_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric_selector"))
 		if err := fv(ctx, m.GetMetricSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_mesh_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_mesh_group"))
 		if err := fv(ctx, m.GetSiteMeshGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteMeshTopologyRequestValidator = func() *ValidateSiteMeshTopologyRequest {
 	v := &ValidateSiteMeshTopologyRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metric_selector"] = MetricSelectorValidator().Validate
 
 	return v
@@ -4214,7 +3825,6 @@ type ValidateSiteNetworksRequest struct {
 }
 
 func (v *ValidateSiteNetworksRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -4236,23 +3846,18 @@ func (v *ValidateSiteNetworksRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteNetworksRequestValidator = func() *ValidateSiteNetworksRequest {
 	v := &ValidateSiteNetworksRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4322,7 +3927,6 @@ func (m *SiteNetworksResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudNetworkMetaDataDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -4332,7 +3936,6 @@ func (m *SiteNetworksResponse) GetCloudNetworkMetaDataDRefInfo() ([]db.DRefInfo,
 	}
 	switch m.GetCloudNetworkMetaData().(type) {
 	case *SiteNetworksResponse_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -4342,11 +3945,9 @@ func (m *SiteNetworksResponse) GetCloudNetworkMetaDataDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateSiteNetworksResponse struct {
@@ -4379,11 +3980,8 @@ func (v *ValidateSiteNetworksResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routes_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("routes_metadata"))
 		for idx, item := range m.GetRoutesMetadata() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4391,9 +3989,7 @@ func (v *ValidateSiteNetworksResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -4462,9 +4058,7 @@ func (v *ValidateSiteSummaryInfo) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["availability_zone"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("availability_zone"))
 		for idx, item := range m.GetAvailabilityZone() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4472,20 +4066,14 @@ func (v *ValidateSiteSummaryInfo) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_count"))
 		if err := fv(ctx, m.GetNodeCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_info"))
 		for idx, item := range m.GetNodeInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4493,9 +4081,7 @@ func (v *ValidateSiteSummaryInfo) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -4564,68 +4150,48 @@ func (v *ValidateSiteTopologyRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["group_dc_cluster_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_dc_cluster_nodes"))
 		if err := fv(ctx, m.GetGroupDcClusterNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_site_mesh_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_site_mesh_nodes"))
 		if err := fv(ctx, m.GetGroupSiteMeshNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["level"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("level"))
 		if err := fv(ctx, m.GetLevel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric_selector"))
 		if err := fv(ctx, m.GetMetricSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_id"))
 		if err := fv(ctx, m.GetNodeId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteTopologyRequestValidator = func() *ValidateSiteTopologyRequest {
 	v := &ValidateSiteTopologyRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metric_selector"] = MetricSelectorValidator().Validate
 
 	return v
@@ -4678,7 +4244,6 @@ func (m *SubnetData) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSubnetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -4686,7 +4251,6 @@ func (m *SubnetData) GetSubnetDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSubnet() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSubnet().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSubnet().GetDRefInfo() FAILED")
@@ -4696,7 +4260,6 @@ func (m *SubnetData) GetSubnetDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "subnet." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSubnetData struct {
@@ -4716,25 +4279,18 @@ func (v *ValidateSubnetData) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet"))
 		if err := fv(ctx, m.GetSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -4803,9 +4359,7 @@ func (v *ValidateSubnetMetaData) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cidr_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr_v4"))
 		for idx, item := range m.GetCidrV4() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4813,11 +4367,8 @@ func (v *ValidateSubnetMetaData) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cidr_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr_v6"))
 		for idx, item := range m.GetCidrV6() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4825,27 +4376,19 @@ func (v *ValidateSubnetMetaData) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cloud_resource_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_resource_id"))
 		if err := fv(ctx, m.GetCloudResourceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -4914,9 +4457,7 @@ func (v *ValidateSubnetSummaryInfo) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_tables"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_tables"))
 		for idx, item := range m.GetRouteTables() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4924,9 +4465,7 @@ func (v *ValidateSubnetSummaryInfo) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -4983,7 +4522,6 @@ type ValidateTGWRouteTablesRequest struct {
 }
 
 func (v *ValidateTGWRouteTablesRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
@@ -5005,9 +4543,7 @@ func (v *ValidateTGWRouteTablesRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attachment_ids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachment_ids"))
 		for idx, item := range m.GetAttachmentIds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5015,20 +4551,14 @@ func (v *ValidateTGWRouteTablesRequest) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_table_ids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table_ids"))
 		for idx, item := range m.GetRouteTableIds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5036,16 +4566,13 @@ func (v *ValidateTGWRouteTablesRequest) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTGWRouteTablesRequestValidator = func() *ValidateTGWRouteTablesRequest {
 	v := &ValidateTGWRouteTablesRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5115,7 +4642,6 @@ func (m *TGWRouteTablesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRoutesDataDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -5123,7 +4649,6 @@ func (m *TGWRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetRoutesData() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRoutesData() {
 		driSet, err := e.GetDRefInfo()
@@ -5137,7 +4662,6 @@ func (m *TGWRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateTGWRouteTablesResponse struct {
@@ -5157,9 +4681,7 @@ func (v *ValidateTGWRouteTablesResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["routes_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("routes_data"))
 		for idx, item := range m.GetRoutesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5167,9 +4689,7 @@ func (v *ValidateTGWRouteTablesResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -5227,7 +4747,6 @@ func (m *TopologyResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -5235,7 +4754,6 @@ func (m *TopologyResponse) GetNodesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetNodes() {
 		driSet, err := e.GetDRefInfo()
@@ -5249,7 +4767,6 @@ func (m *TopologyResponse) GetNodesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateTopologyResponse struct {
@@ -5257,7 +4774,6 @@ type ValidateTopologyResponse struct {
 }
 
 func (v *ValidateTopologyResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -5279,9 +4795,7 @@ func (v *ValidateTopologyResponse) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["edges"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("edges"))
 		for idx, item := range m.GetEdges() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5289,11 +4803,8 @@ func (v *ValidateTopologyResponse) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nodes"))
 		for idx, item := range m.GetNodes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5301,25 +4812,19 @@ func (v *ValidateTopologyResponse) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTopologyResponseValidator = func() *ValidateTopologyResponse {
 	v := &ValidateTopologyResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5338,7 +4843,6 @@ var DefaultTopologyResponseValidator = func() *ValidateTopologyResponse {
 		panic(errMsg)
 	}
 	v.FldValidators["step"] = vFn
-
 	v.FldValidators["nodes"] = NodeValidator().Validate
 
 	return v

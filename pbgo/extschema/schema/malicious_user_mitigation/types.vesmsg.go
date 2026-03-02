@@ -76,23 +76,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mitigation_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mitigation_type"))
 		if err := fv(ctx, m.GetMitigationType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["mitigation_type"] = MaliciousUserMitigationTypeValidator().Validate
 
 	return v
@@ -156,23 +151,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mitigation_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mitigation_type"))
 		if err := fv(ctx, m.GetMitigationType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["mitigation_type"] = MaliciousUserMitigationTypeValidator().Validate
 
 	return v
@@ -236,23 +226,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mitigation_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mitigation_type"))
 		if err := fv(ctx, m.GetMitigationType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["mitigation_type"] = MaliciousUserMitigationTypeValidator().Validate
 
 	return v
@@ -391,16 +376,13 @@ func (v *ValidateMaliciousUserMitigationAction) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMaliciousUserMitigationActionValidator = func() *ValidateMaliciousUserMitigationAction {
 	v := &ValidateMaliciousUserMitigationAction{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -408,7 +390,6 @@ var DefaultMaliciousUserMitigationActionValidator = func() *ValidateMaliciousUse
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMitigationAction := v.MitigationActionValidationRuleHandler
 	rulesMitigationAction := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -469,7 +450,6 @@ type ValidateMaliciousUserMitigationRule struct {
 }
 
 func (v *ValidateMaliciousUserMitigationRule) ThreatLevelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for threat_level")
@@ -478,19 +458,15 @@ func (v *ValidateMaliciousUserMitigationRule) ThreatLevelValidationRuleHandler(r
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := MaliciousUserThreatLevelValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMaliciousUserMitigationRule) MitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for mitigation_action")
@@ -499,11 +475,9 @@ func (v *ValidateMaliciousUserMitigationRule) MitigationActionValidationRuleHand
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := MaliciousUserMitigationActionValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -523,32 +497,24 @@ func (v *ValidateMaliciousUserMitigationRule) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mitigation_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mitigation_action"))
 		if err := fv(ctx, m.GetMitigationAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["threat_level"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("threat_level"))
 		if err := fv(ctx, m.GetThreatLevel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMaliciousUserMitigationRuleValidator = func() *ValidateMaliciousUserMitigationRule {
 	v := &ValidateMaliciousUserMitigationRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -628,7 +594,6 @@ type ValidateMaliciousUserMitigationType struct {
 }
 
 func (v *ValidateMaliciousUserMitigationType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -688,22 +653,18 @@ func (v *ValidateMaliciousUserMitigationType) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMaliciousUserMitigationTypeValidator = func() *ValidateMaliciousUserMitigationType {
 	v := &ValidateMaliciousUserMitigationType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -840,16 +801,13 @@ func (v *ValidateMaliciousUserThreatLevel) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMaliciousUserThreatLevelValidator = func() *ValidateMaliciousUserThreatLevel {
 	v := &ValidateMaliciousUserThreatLevel{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -857,7 +815,6 @@ var DefaultMaliciousUserThreatLevelValidator = func() *ValidateMaliciousUserThre
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhThreatLevel := v.ThreatLevelValidationRuleHandler
 	rulesThreatLevel := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -930,23 +887,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mitigation_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mitigation_type"))
 		if err := fv(ctx, m.GetMitigationType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["mitigation_type"] = MaliciousUserMitigationTypeValidator().Validate
 
 	return v

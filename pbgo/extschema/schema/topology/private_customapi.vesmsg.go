@@ -13,6 +13,9 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -21,6 +24,256 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetAWSTransitGatewayRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetAWSTransitGatewayRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetAWSTransitGatewayRequest) DeepCopy() *GetAWSTransitGatewayRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetAWSTransitGatewayRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetAWSTransitGatewayRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetAWSTransitGatewayRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetAWSTransitGatewayRequestValidator().Validate(ctx, m, opts...)
+}
+
+func (m *GetAWSTransitGatewayRequest) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCredDRefInfo()
+}
+
+func (m *GetAWSTransitGatewayRequest) GetCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_user_account.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_user_account.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetAWSTransitGatewayRequest) GetCredDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_user_account.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_user_account")
+	}
+	vref := m.GetCred()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cloud_user_account.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+type ValidateGetAWSTransitGatewayRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetAWSTransitGatewayRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetAWSTransitGatewayRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetAWSTransitGatewayRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["cred"]; exists {
+		vOpts := append(opts, db.WithValidateField("cred"))
+		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["region"]; exists {
+		vOpts := append(opts, db.WithValidateField("region"))
+		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["tgw_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("tgw_id"))
+		if err := fv(ctx, m.GetTgwId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetAWSTransitGatewayRequestValidator = func() *ValidateGetAWSTransitGatewayRequest {
+	v := &ValidateGetAWSTransitGatewayRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func GetAWSTransitGatewayRequestValidator() db.Validator {
+	return DefaultGetAWSTransitGatewayRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetAWSTransitGatewayResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetAWSTransitGatewayResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetAWSTransitGatewayResponse) DeepCopy() *GetAWSTransitGatewayResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetAWSTransitGatewayResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetAWSTransitGatewayResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetAWSTransitGatewayResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetAWSTransitGatewayResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetAWSTransitGatewayResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetAWSTransitGatewayResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetAWSTransitGatewayResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetAWSTransitGatewayResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["account_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("account_id"))
+		if err := fv(ctx, m.GetAccountId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["amazon_asn"]; exists {
+		vOpts := append(opts, db.WithValidateField("amazon_asn"))
+		if err := fv(ctx, m.GetAmazonAsn(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["arn"]; exists {
+		vOpts := append(opts, db.WithValidateField("arn"))
+		if err := fv(ctx, m.GetArn(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["cidrs"]; exists {
+		vOpts := append(opts, db.WithValidateField("cidrs"))
+		for idx, item := range m.GetCidrs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["id"]; exists {
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["tags"]; exists {
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetAWSTransitGatewayResponseValidator = func() *ValidateGetAWSTransitGatewayResponse {
+	v := &ValidateGetAWSTransitGatewayResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetAWSTransitGatewayResponseValidator() db.Validator {
+	return DefaultGetAWSTransitGatewayResponseValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -76,34 +329,24 @@ func (v *ValidateListCloudNetworkTagKeysRequest) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_type"))
 		if err := fv(ctx, m.GetCloudType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_key"))
 		if err := fv(ctx, m.GetQueryKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -172,9 +415,7 @@ func (v *ValidateListCloudNetworkTagKeysResponse) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["keys"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("keys"))
 		for idx, item := range m.GetKeys() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -182,9 +423,7 @@ func (v *ValidateListCloudNetworkTagKeysResponse) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -253,43 +492,30 @@ func (v *ValidateListCloudNetworkTagValuesRequest) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_type"))
 		if err := fv(ctx, m.GetCloudType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_key"))
 		if err := fv(ctx, m.GetQueryKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_value"))
 		if err := fv(ctx, m.GetQueryValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -358,9 +584,7 @@ func (v *ValidateListCloudNetworkTagValuesResponse) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["values"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("values"))
 		for idx, item := range m.GetValues() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -368,9 +592,7 @@ func (v *ValidateListCloudNetworkTagValuesResponse) Validate(ctx context.Context
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -439,34 +661,24 @@ func (v *ValidateListCloudSubnetTagKeysRequest) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_type"))
 		if err := fv(ctx, m.GetCloudType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_key"))
 		if err := fv(ctx, m.GetQueryKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -535,9 +747,7 @@ func (v *ValidateListCloudSubnetTagKeysResponse) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["keys"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("keys"))
 		for idx, item := range m.GetKeys() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -545,9 +755,7 @@ func (v *ValidateListCloudSubnetTagKeysResponse) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -616,43 +824,30 @@ func (v *ValidateListCloudSubnetTagValuesRequest) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_type"))
 		if err := fv(ctx, m.GetCloudType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_key"))
 		if err := fv(ctx, m.GetQueryKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_value"))
 		if err := fv(ctx, m.GetQueryValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -721,9 +916,7 @@ func (v *ValidateListCloudSubnetTagValuesResponse) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["values"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("values"))
 		for idx, item := range m.GetValues() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -731,9 +924,7 @@ func (v *ValidateListCloudSubnetTagValuesResponse) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

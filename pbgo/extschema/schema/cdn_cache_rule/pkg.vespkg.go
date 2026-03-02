@@ -13,9 +13,7 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cdn_cache_rule.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.cdn_cache_rule.Object"] = ObjectValidator()
-
 	vr["ves.io.schema.cdn_cache_rule.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.cdn_cache_rule.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.cdn_cache_rule.DeleteRequest"] = DeleteRequestValidator()
@@ -26,7 +24,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cdn_cache_rule.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.cdn_cache_rule.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cdn_cache_rule.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.cdn_cache_rule.CDNCacheRule"] = CDNCacheRuleValidator()
 	vr["ves.io.schema.cdn_cache_rule.CDNCacheRuleExpression"] = CDNCacheRuleExpressionValidator()
 	vr["ves.io.schema.cdn_cache_rule.CDNCacheRuleExpressionList"] = CDNCacheRuleExpressionListValidator()
@@ -37,11 +34,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cdn_cache_rule.CacheOperator"] = CacheOperatorValidator()
 	vr["ves.io.schema.cdn_cache_rule.CacheQueryParameterMatcherType"] = CacheQueryParameterMatcherTypeValidator()
 	vr["ves.io.schema.cdn_cache_rule.CacheTTLEnableProps"] = CacheTTLEnablePropsValidator()
+	vr["ves.io.schema.cdn_cache_rule.CookieMatcherCacheOperator"] = CookieMatcherCacheOperatorValidator()
 	vr["ves.io.schema.cdn_cache_rule.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.cdn_cache_rule.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.cdn_cache_rule.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.cdn_cache_rule.HeaderCacheOperator"] = HeaderCacheOperatorValidator()
+	vr["ves.io.schema.cdn_cache_rule.QueryParamCacheOperator"] = QueryParamCacheOperatorValidator()
 	vr["ves.io.schema.cdn_cache_rule.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -49,25 +48,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.cdn_cache_rule.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.cdn_cache_rule.Object"] = reflect.TypeOf(&DBObject{})
 	mdr.EntryIndexers["ves.io.schema.cdn_cache_rule.Object"] = GetObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.cdn_cache_rule.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -76,9 +70,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.cdn_cache_rule.Object"] = APISwaggerJSON
@@ -92,22 +84,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.cdn_cache_rule.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.cdn_cache_rule.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.cdn_cache_rule.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

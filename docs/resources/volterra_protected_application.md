@@ -22,10 +22,122 @@ resource "volterra_protected_application" "example" {
 
   // One of the arguments from this list "adobe_commerce_connector big_ip_iapp cloudflare cloudfront custom_connector f5_big_ip not_applicable_connector salesforce_commerce_connector" must be set
 
-  salesforce_commerce_connector = true
-  region                        = ["US"]
-}
+  cloudfront {
+    aws_account_no = "123456789012"
 
+    // One of the arguments from this list "aws_configuration_id_selector aws_configuration_tag_selector disable_aws_configuration" must be set
+
+    disable_aws_configuration = true
+    continue_mitigation_action_hdr = "x-f5-bot-inference"
+    data_sample = "1024"
+
+    // One of the arguments from this list "disable_js_insert js_insert_all_pages js_insert_all_pages_except js_insertion_rules manual_js_insert" must be set
+
+    js_insertion_rules {
+      exclude_list {
+        // One of the arguments from this list "any_domain domain" must be set
+
+        any_domain = true
+
+        metadata {
+          description = "Virtual Host for acmecorp website"
+
+          disable = true
+
+          name = "acmecorp-web"
+        }
+
+        path {
+          // One of the arguments from this list "path prefix regex" must be set
+
+          prefix = "/register/"
+        }
+      }
+
+      javascript_location = "javascript_location"
+
+      javascript_mode = "javascript_mode"
+
+      js_download_path = "/common.js"
+
+      rules {
+        // One of the arguments from this list "any_domain domain" must be set
+
+        domain {
+          // One of the arguments from this list "exact_value regex_value suffix_value" must be set
+
+          exact_value = "abc.zyz.com"
+        }
+
+        metadata {
+          description = "Virtual Host for acmecorp website"
+
+          disable = true
+
+          name = "acmecorp-web"
+        }
+
+        path = "/id/1"
+
+        // One of the arguments from this list "exact_path glob prefix" must be set
+
+        prefix = "/register/"
+      }
+    }
+    js_download_path = "/common.js"
+    loglevel = "loglevel"
+
+    // One of the arguments from this list "disable_mobile_sdk mobile_sdk_config" must be set
+
+    disable_mobile_sdk = true
+    protected_endpoints {
+      // One of the arguments from this list "mobile_client web_client web_mobile_client" must be set
+
+      web_client {
+        // One of the arguments from this list "block continue redirect" must be set
+
+        continue {
+          // One of the arguments from this list "add_header no_header" can be set
+
+          no_header = true
+        }
+      }
+
+      // One of the arguments from this list "any_domain domain" can be set
+
+      any_domain = true
+
+      // One of the arguments from this list "flow_label undefined_flow_label" can be set
+
+      undefined_flow_label = true
+      http_methods = ["http_methods"]
+      metadata {
+        description = "Virtual Host for acmecorp website"
+
+        disable = true
+
+        name = "acmecorp-web"
+      }
+      path = "/id/1"
+      query = "(^|[^\\\\w])action=login([^\\\\w]|$)"
+    }
+    timeout = "300"
+    trusted_clients {
+      // One of the arguments from this list "http_header ip_prefix" must be set
+
+      ip_prefix = "192.168.20.0/24"
+
+      metadata {
+        description = "Virtual Host for acmecorp website"
+
+        disable = true
+
+        name = "acmecorp-web"
+      }
+    }
+  }
+  region = "US"
+}
 ```
 
 Argument Reference
@@ -860,4 +972,4 @@ Respond with a redirect.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured protected_application.
+*   `id` - This is the id of the configured protected_application.

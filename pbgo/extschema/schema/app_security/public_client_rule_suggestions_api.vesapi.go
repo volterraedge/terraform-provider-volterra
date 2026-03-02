@@ -42,7 +42,6 @@ func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedBlockClientRule(ct
 	rsp, err := c.grpcClient.GetSuggestedBlockClientRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedBlockClientRuleForCDN(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedBlockClientRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedBlockClientRuleFor
 	rsp, err := c.grpcClient.GetSuggestedBlockClientRuleForCDN(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedDDoSMitigationRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedDDoSMitigtionRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedDDoSMitigationRule
 	rsp, err := c.grpcClient.GetSuggestedDDoSMitigationRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedDDoSMitigationRuleForCDN(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedDDoSMitigtionRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedDDoSMitigationRule
 	rsp, err := c.grpcClient.GetSuggestedDDoSMitigationRuleForCDN(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedTrustClientRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedTrustClientRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedTrustClientRule(ct
 	rsp, err := c.grpcClient.GetSuggestedTrustClientRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityClientRuleAPIGrpcClient) doRPCGetSuggestedTrustClientRuleForCDN(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedTrustClientRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -119,19 +114,12 @@ func NewAppSecurityClientRuleAPIGrpcClient(cc *grpc.ClientConn) server.CustomCli
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetSuggestedBlockClientRule"] = ccl.doRPCGetSuggestedBlockClientRule
-
 	rpcFns["GetSuggestedBlockClientRuleForCDN"] = ccl.doRPCGetSuggestedBlockClientRuleForCDN
-
 	rpcFns["GetSuggestedDDoSMitigationRule"] = ccl.doRPCGetSuggestedDDoSMitigationRule
-
 	rpcFns["GetSuggestedDDoSMitigationRuleForCDN"] = ccl.doRPCGetSuggestedDDoSMitigationRuleForCDN
-
 	rpcFns["GetSuggestedTrustClientRule"] = ccl.doRPCGetSuggestedTrustClientRule
-
 	rpcFns["GetSuggestedTrustClientRuleForCDN"] = ccl.doRPCGetSuggestedTrustClientRuleForCDN
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -222,7 +210,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedBlockClientRule(ct
 	pbRsp := &GetSuggestedBlockClientRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedBlockClientRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -230,7 +217,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedBlockClientRule(ct
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedBlockClientRuleForCDN(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -310,7 +296,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedBlockClientRuleFor
 	pbRsp := &GetSuggestedBlockClientRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedBlockClientRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -318,7 +303,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedBlockClientRuleFor
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedDDoSMitigationRule(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -401,7 +385,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedDDoSMitigationRule
 	pbRsp := &GetSuggestedDDoSMitigtionRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedDDoSMitigtionRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -409,7 +392,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedDDoSMitigationRule
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedDDoSMitigationRuleForCDN(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -492,7 +474,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedDDoSMitigationRule
 	pbRsp := &GetSuggestedDDoSMitigtionRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedDDoSMitigtionRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -500,7 +481,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedDDoSMitigationRule
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedTrustClientRule(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -586,7 +566,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedTrustClientRule(ct
 	pbRsp := &GetSuggestedTrustClientRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedTrustClientRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -594,7 +573,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedTrustClientRule(ct
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedTrustClientRuleForCDN(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -680,7 +658,6 @@ func (c *AppSecurityClientRuleAPIRestClient) doRPCGetSuggestedTrustClientRuleFor
 	pbRsp := &GetSuggestedTrustClientRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedTrustClientRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -714,19 +691,12 @@ func NewAppSecurityClientRuleAPIRestClient(baseURL string, hc http.Client) serve
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetSuggestedBlockClientRule"] = ccl.doRPCGetSuggestedBlockClientRule
-
 	rpcFns["GetSuggestedBlockClientRuleForCDN"] = ccl.doRPCGetSuggestedBlockClientRuleForCDN
-
 	rpcFns["GetSuggestedDDoSMitigationRule"] = ccl.doRPCGetSuggestedDDoSMitigationRule
-
 	rpcFns["GetSuggestedDDoSMitigationRuleForCDN"] = ccl.doRPCGetSuggestedDDoSMitigationRuleForCDN
-
 	rpcFns["GetSuggestedTrustClientRule"] = ccl.doRPCGetSuggestedTrustClientRule
-
 	rpcFns["GetSuggestedTrustClientRuleForCDN"] = ccl.doRPCGetSuggestedTrustClientRuleForCDN
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -827,7 +797,6 @@ func (s *appSecurityClientRuleAPISrv) GetSuggestedBlockClientRule(ctx context.Co
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedBlockClientRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -876,7 +845,6 @@ func (s *appSecurityClientRuleAPISrv) GetSuggestedBlockClientRuleForCDN(ctx cont
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedBlockClientRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -925,7 +893,6 @@ func (s *appSecurityClientRuleAPISrv) GetSuggestedDDoSMitigationRule(ctx context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedDDoSMitigtionRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -974,7 +941,6 @@ func (s *appSecurityClientRuleAPISrv) GetSuggestedDDoSMitigationRuleForCDN(ctx c
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedDDoSMitigtionRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -1023,7 +989,6 @@ func (s *appSecurityClientRuleAPISrv) GetSuggestedTrustClientRule(ctx context.Co
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedTrustClientRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -1072,7 +1037,6 @@ func (s *appSecurityClientRuleAPISrv) GetSuggestedTrustClientRuleForCDN(ctx cont
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedTrustClientRuleRsp", rsp)...)
 
 	return rsp, nil

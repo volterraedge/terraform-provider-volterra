@@ -22,29 +22,20 @@ resource "volterra_network_connector" "example" {
 
   // One of the arguments from this list "sli_to_global_dr sli_to_global_snat sli_to_slo_dr sli_to_slo_snat slo_to_global_dr slo_to_global_snat" must be set
 
-  slo_to_global_snat {
-    global_vn {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+  sli_to_slo_snat {
+    // One of the arguments from this list "interface_ip snat_pool snat_pool_allocator" must be set
 
-    snat_config {
-      // One of the arguments from this list "interface_ip snat_pool snat_pool_allocator" must be set
+    interface_ip = true
 
-      interface_ip = true
+    // One of the arguments from this list "default_gw_snat dynamic_routing" must be set
 
-      // One of the arguments from this list "default_gw_snat dynamic_routing" must be set
-
-      default_gw_snat = true
-    }
+    default_gw_snat = true
   }
 
   // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
 
   disable_forward_proxy = true
 }
-
 ```
 
 Argument Reference
@@ -385,4 +376,4 @@ F5XC Root CA Certificate for validating upstream server certificate.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured network_connector.
+*   `id` - This is the id of the configured network_connector.

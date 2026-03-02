@@ -20,15 +20,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.crudapi.ObjectListRspItem"] = ObjectListRspItemValidator()
 	vr["ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq"] = ObjectReplaceReqValidator()
 	vr["ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceRsp"] = ObjectReplaceRspValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
@@ -37,7 +34,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
@@ -46,9 +42,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Get"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
@@ -57,7 +51,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.List"] = []string{
 		"items.#.spec.gc_spec.api_rate_limit_legacy",
 		"items.#.spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
@@ -66,7 +59,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"items.#.spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.ListStream"] = []string{
 		"items.#.spec.gc_spec.api_rate_limit_legacy",
 		"items.#.spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
@@ -75,7 +67,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"items.#.spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
@@ -84,7 +75,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
@@ -93,17 +83,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -113,7 +99,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	csr = mdr.PvtCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.http_loadbalancer.Object"] = APISwaggerJSON
@@ -127,22 +112,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.http_loadbalancer.crudapi.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.http_loadbalancer.crudapi.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.http_loadbalancer.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

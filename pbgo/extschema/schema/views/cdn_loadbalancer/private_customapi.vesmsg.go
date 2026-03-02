@@ -64,7 +64,6 @@ type ValidateUpdateServiceDomainsRequest struct {
 }
 
 func (v *ValidateUpdateServiceDomainsRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -72,9 +71,7 @@ func (v *ValidateUpdateServiceDomainsRequest) NamespaceValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateServiceDomainsRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -82,9 +79,7 @@ func (v *ValidateUpdateServiceDomainsRequest) NameValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateServiceDomainsRequest) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant")
@@ -106,27 +101,19 @@ func (v *ValidateUpdateServiceDomainsRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_domains"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_domains"))
 		for idx, item := range m.GetServiceDomains() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -134,25 +121,19 @@ func (v *ValidateUpdateServiceDomainsRequest) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateServiceDomainsRequestValidator = func() *ValidateUpdateServiceDomainsRequest {
 	v := &ValidateUpdateServiceDomainsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -255,7 +236,6 @@ func (v *ValidateUpdateServiceDomainsResponse) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

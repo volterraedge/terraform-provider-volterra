@@ -22,9 +22,8 @@ resource "volterra_virtual_network" "example" {
 
   // One of the arguments from this list "global_network legacy_type site_local_inside_network site_local_network srv6_network" must be set
 
-  site_local_inside_network = true
+  global_network = true
 }
-
 ```
 
 Argument Reference
@@ -285,4 +284,4 @@ Import Route Targets for connectivity to the Internet..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured virtual_network.
+*   `id` - This is the id of the configured virtual_network.

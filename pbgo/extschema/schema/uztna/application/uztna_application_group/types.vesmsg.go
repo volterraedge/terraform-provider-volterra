@@ -67,7 +67,6 @@ func (m *ApplicationTags) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetApptagListDRefInfo()
-
 }
 
 func (m *ApplicationTags) GetApptagListDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *ApplicationTags) GetApptagListDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetApptagListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *ApplicationTags) GetApptagListDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateApplicationTags struct {
 }
 
 func (v *ValidateApplicationTags) ApptagListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -180,22 +176,18 @@ func (v *ValidateApplicationTags) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["apptag_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("apptag_list"))
 		if err := fv(ctx, m.GetApptagList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApplicationTagsValidator = func() *ValidateApplicationTags {
 	v := &ValidateApplicationTags{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -267,7 +259,6 @@ func (m *Applications) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAppListDRefInfo()
-
 }
 
 func (m *Applications) GetAppListDRefInfo() ([]db.DRefInfo, error) {
@@ -292,7 +283,6 @@ func (m *Applications) GetAppListDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -311,7 +301,6 @@ func (m *Applications) GetAppListDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -320,7 +309,6 @@ type ValidateApplications struct {
 }
 
 func (v *ValidateApplications) AppListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -380,22 +368,18 @@ func (v *ValidateApplications) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_list"))
 		if err := fv(ctx, m.GetAppList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApplicationsValidator = func() *ValidateApplications {
 	v := &ValidateApplications{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -472,15 +456,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAppsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAppsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -488,7 +469,6 @@ func (m *CreateSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAppTags() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAppTags().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfo() FAILED")
@@ -498,7 +478,6 @@ func (m *CreateSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "app_tags." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -506,7 +485,6 @@ func (m *CreateSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApps() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetApps().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApps().GetDRefInfo() FAILED")
@@ -516,7 +494,6 @@ func (m *CreateSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "apps." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -524,7 +501,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) AppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for app_tags")
@@ -533,19 +509,15 @@ func (v *ValidateCreateSpecType) AppTagsValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApplicationTagsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AppsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for apps")
@@ -554,11 +526,9 @@ func (v *ValidateCreateSpecType) AppsValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApplicationsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -578,32 +548,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_tags"))
 		if err := fv(ctx, m.GetAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apps"))
 		if err := fv(ctx, m.GetApps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -689,15 +651,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAppsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAppsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -705,7 +664,6 @@ func (m *GetSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAppTags() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAppTags().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfo() FAILED")
@@ -715,7 +673,6 @@ func (m *GetSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "app_tags." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -723,7 +680,6 @@ func (m *GetSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApps() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetApps().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApps().GetDRefInfo() FAILED")
@@ -733,7 +689,6 @@ func (m *GetSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "apps." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -741,7 +696,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) AppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for app_tags")
@@ -750,19 +704,15 @@ func (v *ValidateGetSpecType) AppTagsValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApplicationTagsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AppsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for apps")
@@ -771,11 +721,9 @@ func (v *ValidateGetSpecType) AppsValidationRuleHandler(rules map[string]string)
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApplicationsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -795,32 +743,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_tags"))
 		if err := fv(ctx, m.GetAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apps"))
 		if err := fv(ctx, m.GetApps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -906,15 +846,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAppsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAppsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -922,7 +859,6 @@ func (m *GlobalSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAppTags() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAppTags().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfo() FAILED")
@@ -932,7 +868,6 @@ func (m *GlobalSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "app_tags." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -940,7 +875,6 @@ func (m *GlobalSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApps() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetApps().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApps().GetDRefInfo() FAILED")
@@ -950,7 +884,6 @@ func (m *GlobalSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "apps." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -958,7 +891,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) AppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for app_tags")
@@ -967,19 +899,15 @@ func (v *ValidateGlobalSpecType) AppTagsValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApplicationTagsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AppsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for apps")
@@ -988,11 +916,9 @@ func (v *ValidateGlobalSpecType) AppsValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApplicationsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1012,32 +938,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_tags"))
 		if err := fv(ctx, m.GetAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apps"))
 		if err := fv(ctx, m.GetApps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1123,15 +1041,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAppsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAppsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1139,7 +1054,6 @@ func (m *ReplaceSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAppTags() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAppTags().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfo() FAILED")
@@ -1149,7 +1063,6 @@ func (m *ReplaceSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "app_tags." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1157,7 +1070,6 @@ func (m *ReplaceSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApps() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetApps().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApps().GetDRefInfo() FAILED")
@@ -1167,7 +1079,6 @@ func (m *ReplaceSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "apps." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1175,7 +1086,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) AppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for app_tags")
@@ -1184,19 +1094,15 @@ func (v *ValidateReplaceSpecType) AppTagsValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApplicationTagsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) AppsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for apps")
@@ -1205,11 +1111,9 @@ func (v *ValidateReplaceSpecType) AppsValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ApplicationsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1229,32 +1133,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_tags"))
 		if err := fv(ctx, m.GetAppTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apps"))
 		if err := fv(ctx, m.GetApps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

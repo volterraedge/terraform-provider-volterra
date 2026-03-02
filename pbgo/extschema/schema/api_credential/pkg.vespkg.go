@@ -14,19 +14,19 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_credential.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.api_credential.Object"] = ObjectValidator()
 	vr["ves.io.schema.api_credential.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.api_credential.ValidateTokenRequest"] = ValidateTokenRequestValidator()
 	vr["ves.io.schema.api_credential.ValidateTokenResponse"] = ValidateTokenResponseValidator()
-
 	vr["ves.io.schema.api_credential.ApiCertificateType"] = ApiCertificateTypeValidator()
 	vr["ves.io.schema.api_credential.BulkRevokeRequest"] = BulkRevokeRequestValidator()
 	vr["ves.io.schema.api_credential.BulkRevokeResponse"] = BulkRevokeResponseValidator()
+	vr["ves.io.schema.api_credential.CreateKubeConfigRequest"] = CreateKubeConfigRequestValidator()
+	vr["ves.io.schema.api_credential.CreateKubeConfigServiceCredentialsRequest"] = CreateKubeConfigServiceCredentialsRequestValidator()
 	vr["ves.io.schema.api_credential.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.api_credential.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.api_credential.CreateServiceCredentialsRequest"] = CreateServiceCredentialsRequestValidator()
+	vr["ves.io.schema.api_credential.CreateSiteGlobalKubeConfigRequest"] = CreateSiteGlobalKubeConfigRequestValidator()
 	vr["ves.io.schema.api_credential.CustomCreateSpecType"] = CustomCreateSpecTypeValidator()
 	vr["ves.io.schema.api_credential.DeleteRequest"] = DeleteRequestValidator()
 	vr["ves.io.schema.api_credential.ExpiredSelector"] = ExpiredSelectorValidator()
@@ -47,9 +47,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_credential.SiteKubeconfigType"] = SiteKubeconfigTypeValidator()
 	vr["ves.io.schema.api_credential.StatusResponse"] = StatusResponseValidator()
 	vr["ves.io.schema.api_credential.Vk8sKubeconfigType"] = Vk8SKubeconfigTypeValidator()
-
 	vr["ves.io.schema.api_credential.GlobalSpecType"] = GlobalSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -61,26 +59,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.api_credential.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.api_credential.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.api_credential.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken"] = "ves.io.schema.api_credential.ValidateTokenRequest"
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_credential.CustomAPI.Create"] = "ves.io.schema.api_credential.CreateRequest"
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"] = "ves.io.schema.api_credential.CreateServiceCredentialsRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.api_credential.CustomAPI"] = "web"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -89,14 +80,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.api_credential.Object"] = CustomPrivateAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.api_credential.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.api_credential.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
 		if isExternal {
@@ -107,16 +94,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.api_credential.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.api_credential.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.api_credential.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.api_credential.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -127,22 +109,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.api_credential.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

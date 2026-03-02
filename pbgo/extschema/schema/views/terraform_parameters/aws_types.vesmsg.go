@@ -67,7 +67,6 @@ type ValidateAWSInstanceType struct {
 }
 
 func (v *ValidateAWSInstanceType) EbsVolumeSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ebs_volume_size")
@@ -89,104 +88,84 @@ func (v *ValidateAWSInstanceType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ami_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ami_id"))
 		if err := fv(ctx, m.GetAmiId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ebs_volume_az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ebs_volume_az"))
 		if err := fv(ctx, m.GetEbsVolumeAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ebs_volume_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ebs_volume_size"))
 		if err := fv(ctx, m.GetEbsVolumeSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["encryption"]; exists {
+		vOpts := append(opts, db.WithValidateField("encryption"))
+		if err := fv(ctx, m.GetEncryption(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["instance_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_type"))
 		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["kms_key"]; exists {
+		vOpts := append(opts, db.WithValidateField("kms_key"))
+		if err := fv(ctx, m.GetKmsKey(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["node_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_count"))
 		if err := fv(ctx, m.GetNodeCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_subnet_id"))
 		if err := fv(ctx, m.GetPrivateSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_subnet_id"))
 		if err := fv(ctx, m.GetPublicSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_node_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_node_id"))
 		if err := fv(ctx, m.GetVoltNodeId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_vpc_id"))
 		if err := fv(ctx, m.GetVoltVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSInstanceTypeValidator = func() *ValidateAWSInstanceType {
 	v := &ValidateAWSInstanceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -256,7 +235,6 @@ type ValidateAWSTGWInfoType struct {
 }
 
 func (v *ValidateAWSTGWInfoType) TgwAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_asn")
@@ -264,9 +242,7 @@ func (v *ValidateAWSTGWInfoType) TgwAsnValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSTGWInfoType) VolterraSiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_site_asn")
@@ -288,50 +264,36 @@ func (v *ValidateAWSTGWInfoType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["new_tgw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("new_tgw"))
 		if err := fv(ctx, m.GetNewTgw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_asn"))
 		if err := fv(ctx, m.GetTgwAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_id"))
 		if err := fv(ctx, m.GetTgwId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))
 		if err := fv(ctx, m.GetVolterraSiteAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSTGWInfoTypeValidator = func() *ValidateAWSTGWInfoType {
 	v := &ValidateAWSTGWInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -385,11 +347,9 @@ func (m *AWSTGWTunnelInfoType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTunnel1Psk().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AWSTGWTunnelInfoType.tunnel1_psk")
 	}
-
 	if err := m.GetTunnel2Psk().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AWSTGWTunnelInfoType.tunnel2_psk")
 	}
@@ -441,61 +401,43 @@ func (v *ValidateAWSTGWTunnelInfoType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_name"))
 		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel1_inside_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel1_inside_prefix"))
 		if err := fv(ctx, m.GetTunnel1InsidePrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel1_psk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel1_psk"))
 		if err := fv(ctx, m.GetTunnel1Psk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel2_inside_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel2_inside_prefix"))
 		if err := fv(ctx, m.GetTunnel2InsidePrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel2_psk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel2_psk"))
 		if err := fv(ctx, m.GetTunnel2Psk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSTGWTunnelInfoTypeValidator = func() *ValidateAWSTGWTunnelInfoType {
 	v := &ValidateAWSTGWTunnelInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["tunnel1_psk"] = ves_io_schema.SecretTypeValidator().Validate
-
 	v.FldValidators["tunnel2_psk"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -514,7 +456,6 @@ func (m *AWSTGWType) ToJSON() (string, error) {
 func (m *AWSTGWType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *AWSTGWType) String() string {
 	if m == nil {
 		return ""
@@ -538,13 +479,11 @@ func (m *AWSTGWType) Redact(ctx context.Context) error {
 	}
 
 	m.AdminPasswordBlindfolded = ""
-
 	for idx, e := range m.GetTunnelInformation() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting AWSTGWType.tunnel_information idx %v", idx)
 		}
 	}
-
 	for idx, e := range m.GetSvcsTunnelInformation() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting AWSTGWType.svcs_tunnel_information idx %v", idx)
@@ -586,7 +525,6 @@ type ValidateAWSTGWType struct {
 }
 
 func (v *ValidateAWSTGWType) VpcIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -640,126 +578,85 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
 		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
 		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["assume_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("assume_role"))
 		if err := fv(ctx, m.GetAssumeRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_name"))
 		if err := fv(ctx, m.GetAwsName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hw"))
 		if err := fv(ctx, m.GetCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment"))
 		if err := fv(ctx, m.GetDeployment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disable_internet_connectivity_via_igw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disable_internet_connectivity_via_igw"))
 		if err := fv(ctx, m.GetDisableInternetConnectivityViaIgw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dx_connect"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dx_connect"))
 		if err := fv(ctx, m.GetDxConnect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fleet_label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fleet_label"))
 		if err := fv(ctx, m.GetFleetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gre_tunnel"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gre_tunnel"))
 		if err := fv(ctx, m.GetGreTunnel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_security_group_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_security_group_id"))
 		if err := fv(ctx, m.GetInsideSecurityGroupId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_vip_port_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_vip_port_config"))
 		for idx, item := range m.GetInsideVipPortConfig() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -767,20 +664,14 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_vip"))
 		if err := fv(ctx, m.GetInternetVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["master_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("master_nodes"))
 		for idx, item := range m.GetMasterNodes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -788,29 +679,20 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
 		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_security_group_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_security_group_id"))
 		if err := fv(ctx, m.GetOutsideSecurityGroupId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_vip_port_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_vip_port_config"))
 		for idx, item := range m.GetOutsideVipPortConfig() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -818,29 +700,20 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnets"))
 		for idx, item := range m.GetSubnets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -848,11 +721,8 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["svcs_tunnel_information"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("svcs_tunnel_information"))
 		for idx, item := range m.GetSvcsTunnelInformation() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -860,11 +730,8 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -872,20 +739,14 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw"))
 		if err := fv(ctx, m.GetTgw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway_cidr_block"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway_cidr_block"))
 		for idx, item := range m.GetTransitGatewayCidrBlock() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -893,11 +754,8 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_information"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_information"))
 		for idx, item := range m.GetTunnelInformation() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -905,51 +763,43 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["use_launch_templates"]; exists {
+		vOpts := append(opts, db.WithValidateField("use_launch_templates"))
+		if err := fv(ctx, m.GetUseLaunchTemplates(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["volt_vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_vpc_id"))
 		if err := fv(ctx, m.GetVoltVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc"))
 		if err := fv(ctx, m.GetVpc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("vpc_ids"))
 		if err := fv(ctx, m.GetVpcIds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("worker_nodes"))
 		if err := fv(ctx, m.GetWorkerNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSTGWTypeValidator = func() *ValidateAWSTGWType {
 	v := &ValidateAWSTGWType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -968,25 +818,15 @@ var DefaultAWSTGWTypeValidator = func() *ValidateAWSTGWType {
 		panic(errMsg)
 	}
 	v.FldValidators["vpc_ids"] = vFn
-
 	v.FldValidators["tgw"] = AWSTGWInfoTypeValidator().Validate
-
 	v.FldValidators["vpc"] = AWSVPCInfoTypeValidator().Validate
-
 	v.FldValidators["subnets"] = SubnetTypeValidator().Validate
-
 	v.FldValidators["master_nodes"] = AWSInstanceTypeValidator().Validate
-
 	v.FldValidators["tunnel_information"] = AWSTGWTunnelInfoTypeValidator().Validate
-
 	v.FldValidators["svcs_tunnel_information"] = AWSTGWTunnelInfoTypeValidator().Validate
-
 	v.FldValidators["inside_vip_port_config"] = VIPPortConfigValidator().Validate
-
 	v.FldValidators["outside_vip_port_config"] = VIPPortConfigValidator().Validate
-
 	v.FldValidators["dx_connect"] = DirectConnectTypeValidator().Validate
-
 	v.FldValidators["deployment"] = DeploymentInfoValidator().Validate
 
 	return v
@@ -1050,32 +890,24 @@ func (v *ValidateAWSVPCInfoType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["new_vpc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("new_vpc"))
 		if err := fv(ctx, m.GetNewVpc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCInfoTypeValidator = func() *ValidateAWSVPCInfoType {
 	v := &ValidateAWSVPCInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["new_vpc"] = ves_io_schema_views.AWSVPCParamsTypeValidator().Validate
 
 	return v
@@ -1094,7 +926,6 @@ func (m *AWSVPCType) ToJSON() (string, error) {
 func (m *AWSVPCType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *AWSVPCType) String() string {
 	if m == nil {
 		return ""
@@ -1166,126 +997,85 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
 		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
 		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["assume_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("assume_role"))
 		if err := fv(ctx, m.GetAssumeRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_name"))
 		if err := fv(ctx, m.GetAwsName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hw"))
 		if err := fv(ctx, m.GetCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment"))
 		if err := fv(ctx, m.GetDeployment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disable_internet_connectivity_via_igw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disable_internet_connectivity_via_igw"))
 		if err := fv(ctx, m.GetDisableInternetConnectivityViaIgw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dx_connect"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dx_connect"))
 		if err := fv(ctx, m.GetDxConnect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["egress_gw_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("egress_gw_id"))
 		if err := fv(ctx, m.GetEgressGwId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gateway_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gateway_type"))
 		if err := fv(ctx, m.GetGatewayType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_security_group_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_security_group_id"))
 		if err := fv(ctx, m.GetInsideSecurityGroupId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_vip_port_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_vip_port_config"))
 		for idx, item := range m.GetInsideVipPortConfig() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1293,29 +1083,20 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_vip"))
 		if err := fv(ctx, m.GetInternetVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["manual_routing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("manual_routing"))
 		if err := fv(ctx, m.GetManualRouting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["master_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("master_nodes"))
 		for idx, item := range m.GetMasterNodes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1323,29 +1104,20 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
 		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_security_group_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_security_group_id"))
 		if err := fv(ctx, m.GetOutsideSecurityGroupId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_vip_port_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_vip_port_config"))
 		for idx, item := range m.GetOutsideVipPortConfig() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1353,29 +1125,20 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnets"))
 		for idx, item := range m.GetSubnets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1383,11 +1146,8 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1395,64 +1155,43 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["use_launch_templates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("use_launch_templates"))
 		if err := fv(ctx, m.GetUseLaunchTemplates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_vpc_id"))
 		if err := fv(ctx, m.GetVoltVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc"))
 		if err := fv(ctx, m.GetVpc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("worker_nodes"))
 		if err := fv(ctx, m.GetWorkerNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCTypeValidator = func() *ValidateAWSVPCType {
 	v := &ValidateAWSVPCType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["vpc"] = AWSVPCInfoTypeValidator().Validate
-
 	v.FldValidators["subnets"] = SubnetTypeValidator().Validate
-
 	v.FldValidators["master_nodes"] = AWSInstanceTypeValidator().Validate
-
 	v.FldValidators["inside_vip_port_config"] = VIPPortConfigValidator().Validate
-
 	v.FldValidators["outside_vip_port_config"] = VIPPortConfigValidator().Validate
-
 	v.FldValidators["dx_connect"] = DirectConnectTypeValidator().Validate
-
 	v.FldValidators["deployment"] = DeploymentInfoValidator().Validate
 
 	return v
@@ -1516,54 +1255,37 @@ func (v *ValidateAssumeRoleType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["duration_seconds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("duration_seconds"))
 		if err := fv(ctx, m.GetDurationSeconds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable"))
 		if err := fv(ctx, m.GetEnable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["external_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("external_id"))
 		if err := fv(ctx, m.GetExternalId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["role_arn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("role_arn"))
 		if err := fv(ctx, m.GetRoleArn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["session_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("session_name"))
 		if err := fv(ctx, m.GetSessionName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["session_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("session_tags"))
 		for key, value := range m.GetSessionTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1571,9 +1293,7 @@ func (v *ValidateAssumeRoleType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1642,32 +1362,24 @@ func (v *ValidateCloudSubnetType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["existing_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("existing_subnet_id"))
 		if err := fv(ctx, m.GetExistingSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_param"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_param"))
 		if err := fv(ctx, m.GetSubnetParam(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 	v := &ValidateCloudSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["subnet_param"] = ves_io_schema_views.CloudSubnetParamTypeValidator().Validate
 
 	return v
@@ -1719,7 +1431,6 @@ type ValidateDeploymentInfo struct {
 }
 
 func (v *ValidateDeploymentInfo) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
@@ -1727,9 +1438,7 @@ func (v *ValidateDeploymentInfo) VpcIdValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeploymentInfo) SubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1789,31 +1498,24 @@ func (v *ValidateDeploymentInfo) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["subnet_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("subnet_ids"))
 		if err := fv(ctx, m.GetSubnetIds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDeploymentInfoValidator = func() *ValidateDeploymentInfo {
 	v := &ValidateDeploymentInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1907,63 +1609,43 @@ func (v *ValidateDirectConnectType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["adn_dns_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("adn_dns_ip"))
 		if err := fv(ctx, m.GetAdnDnsIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dx_gw_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dx_gw_asn"))
 		if err := fv(ctx, m.GetDxGwAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dx_gw_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dx_gw_id"))
 		if err := fv(ctx, m.GetDxGwId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable"))
 		if err := fv(ctx, m.GetEnable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["manage_dx_gw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("manage_dx_gw"))
 		if err := fv(ctx, m.GetManageDxGw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_network_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_network_name"))
 		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vif_ids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vif_ids"))
 		for idx, item := range m.GetVifIds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1971,16 +1653,13 @@ func (v *ValidateDirectConnectType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDirectConnectTypeValidator = func() *ValidateDirectConnectType {
 	v := &ValidateDirectConnectType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["vif_ids"] = DirectConnectVifInfoValidator().Validate
 
 	return v
@@ -2032,7 +1711,6 @@ type ValidateDirectConnectVifInfo struct {
 }
 
 func (v *ValidateDirectConnectVifInfo) VifIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2086,31 +1764,24 @@ func (v *ValidateDirectConnectVifInfo) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vif_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("vif_ids"))
 		if err := fv(ctx, m.GetVifIds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vif_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vif_region"))
 		if err := fv(ctx, m.GetVifRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDirectConnectVifInfoValidator = func() *ValidateDirectConnectVifInfo {
 	v := &ValidateDirectConnectVifInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2191,59 +1862,42 @@ func (v *ValidateSubnetType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("az"))
 		if err := fv(ctx, m.GetAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_type"))
 		if err := fv(ctx, m.GetInterfaceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet"))
 		if err := fv(ctx, m.GetSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_subnet_id"))
 		if err := fv(ctx, m.GetVoltSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_vpc_id"))
 		if err := fv(ctx, m.GetVoltVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSubnetTypeValidator = func() *ValidateSubnetType {
 	v := &ValidateSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["subnet"] = CloudSubnetTypeValidator().Validate
 
 	return v

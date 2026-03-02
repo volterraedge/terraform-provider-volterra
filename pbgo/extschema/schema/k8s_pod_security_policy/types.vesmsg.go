@@ -64,7 +64,6 @@ type ValidateCapabilityListType struct {
 }
 
 func (v *ValidateCapabilityListType) CapabilitiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -118,22 +117,18 @@ func (v *ValidateCapabilityListType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["capabilities"]; exists {
 		vOpts := append(opts, db.WithValidateField("capabilities"))
 		if err := fv(ctx, m.GetCapabilities(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCapabilityListTypeValidator = func() *ValidateCapabilityListType {
 	v := &ValidateCapabilityListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -267,16 +262,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -284,7 +276,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConfigMethodChoice := v.ConfigMethodChoiceValidationRuleHandler
 	rulesConfigMethodChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -295,7 +286,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["config_method_choice"] = vFn
-
 	vrhConfigMethodChoiceYaml := v.ConfigMethodChoiceYamlValidationRuleHandler
 	rulesConfigMethodChoiceYaml := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
@@ -306,9 +296,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.config_method_choice_yaml: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["config_method_choice.yaml"] = vFnMap["config_method_choice.yaml"]
-
 	v.FldValidators["config_method_choice.psp_spec"] = PodSecurityPolicySpecTypeValidator().Validate
 
 	return v
@@ -422,16 +410,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -439,7 +424,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConfigMethodChoice := v.ConfigMethodChoiceValidationRuleHandler
 	rulesConfigMethodChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -450,7 +434,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["config_method_choice"] = vFn
-
 	vrhConfigMethodChoiceYaml := v.ConfigMethodChoiceYamlValidationRuleHandler
 	rulesConfigMethodChoiceYaml := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
@@ -461,9 +444,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.config_method_choice_yaml: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["config_method_choice.yaml"] = vFnMap["config_method_choice.yaml"]
-
 	v.FldValidators["config_method_choice.psp_spec"] = PodSecurityPolicySpecTypeValidator().Validate
 
 	return v
@@ -529,9 +510,7 @@ func (v *ValidateGlobalSpecType) ConfigMethodChoiceYamlValidationRuleHandler(rul
 	}
 	return oValidatorFn_Yaml, nil
 }
-
 func (v *ValidateGlobalSpecType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
@@ -587,25 +566,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["generated_yaml"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("generated_yaml"))
 		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -613,7 +586,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConfigMethodChoice := v.ConfigMethodChoiceValidationRuleHandler
 	rulesConfigMethodChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -624,7 +596,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["config_method_choice"] = vFn
-
 	vrhConfigMethodChoiceYaml := v.ConfigMethodChoiceYamlValidationRuleHandler
 	rulesConfigMethodChoiceYaml := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
@@ -635,7 +606,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.config_method_choice_yaml: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["config_method_choice.yaml"] = vFnMap["config_method_choice.yaml"]
 
 	vrhGeneratedYaml := v.GeneratedYamlValidationRuleHandler
@@ -649,7 +619,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["generated_yaml"] = vFn
-
 	v.FldValidators["config_method_choice.psp_spec"] = PodSecurityPolicySpecTypeValidator().Validate
 
 	return v
@@ -701,7 +670,6 @@ type ValidateHostPathType struct {
 }
 
 func (v *ValidateHostPathType) PathPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path_prefix")
@@ -723,32 +691,24 @@ func (v *ValidateHostPathType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["path_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path_prefix"))
 		if err := fv(ctx, m.GetPathPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["read_only"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("read_only"))
 		if err := fv(ctx, m.GetReadOnly(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHostPathTypeValidator = func() *ValidateHostPathType {
 	v := &ValidateHostPathType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -819,7 +779,6 @@ type ValidateIDRangeType struct {
 }
 
 func (v *ValidateIDRangeType) MinIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for min_id")
@@ -827,9 +786,7 @@ func (v *ValidateIDRangeType) MinIdValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIDRangeType) MaxIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for max_id")
@@ -851,32 +808,24 @@ func (v *ValidateIDRangeType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["max_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_id"))
 		if err := fv(ctx, m.GetMaxId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_id"))
 		if err := fv(ctx, m.GetMinId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIDRangeTypeValidator = func() *ValidateIDRangeType {
 	v := &ValidateIDRangeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -960,7 +909,6 @@ type ValidateIDStrategyOptionsType struct {
 }
 
 func (v *ValidateIDStrategyOptionsType) IdRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1006,9 +954,7 @@ func (v *ValidateIDStrategyOptionsType) IdRangesValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIDStrategyOptionsType) RuleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for rule")
@@ -1030,31 +976,24 @@ func (v *ValidateIDStrategyOptionsType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id_ranges"]; exists {
 		vOpts := append(opts, db.WithValidateField("id_ranges"))
 		if err := fv(ctx, m.GetIdRanges(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule"))
 		if err := fv(ctx, m.GetRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIDStrategyOptionsTypeValidator = func() *ValidateIDStrategyOptionsType {
 	v := &ValidateIDStrategyOptionsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1141,7 +1080,6 @@ func (v *ValidatePodSecurityPolicySpecType) AllowedCapabilitiesChoiceValidationR
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) DefaultCapabilitiesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1149,7 +1087,6 @@ func (v *ValidatePodSecurityPolicySpecType) DefaultCapabilitiesChoiceValidationR
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) DropCapabilitiesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1157,7 +1094,6 @@ func (v *ValidatePodSecurityPolicySpecType) DropCapabilitiesChoiceValidationRule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) FsGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1165,7 +1101,6 @@ func (v *ValidatePodSecurityPolicySpecType) FsGroupChoiceValidationRuleHandler(r
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) GroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1173,7 +1108,6 @@ func (v *ValidatePodSecurityPolicySpecType) GroupChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) RuntimeClassChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1181,7 +1115,6 @@ func (v *ValidatePodSecurityPolicySpecType) RuntimeClassChoiceValidationRuleHand
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) SeLinuxChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1189,7 +1122,6 @@ func (v *ValidatePodSecurityPolicySpecType) SeLinuxChoiceValidationRuleHandler(r
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) SupplementalGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1197,7 +1129,6 @@ func (v *ValidatePodSecurityPolicySpecType) SupplementalGroupChoiceValidationRul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) UserChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1205,9 +1136,7 @@ func (v *ValidatePodSecurityPolicySpecType) UserChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) VolumesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1247,9 +1176,7 @@ func (v *ValidatePodSecurityPolicySpecType) VolumesValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) AllowedFlexVolumesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1289,9 +1216,7 @@ func (v *ValidatePodSecurityPolicySpecType) AllowedFlexVolumesValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) AllowedHostPathsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1337,9 +1262,7 @@ func (v *ValidatePodSecurityPolicySpecType) AllowedHostPathsValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) AllowedProcMountsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1379,9 +1302,7 @@ func (v *ValidatePodSecurityPolicySpecType) AllowedProcMountsValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) AllowedCsiDriversValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1421,9 +1342,7 @@ func (v *ValidatePodSecurityPolicySpecType) AllowedCsiDriversValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) HostPortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for host_port_ranges")
@@ -1431,9 +1350,7 @@ func (v *ValidatePodSecurityPolicySpecType) HostPortRangesValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) AllowedUnsafeSysctlsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1473,9 +1390,7 @@ func (v *ValidatePodSecurityPolicySpecType) AllowedUnsafeSysctlsValidationRuleHa
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityPolicySpecType) ForbiddenSysctlsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1529,14 +1444,11 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allow_privilege_escalation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow_privilege_escalation"))
 		if err := fv(ctx, m.GetAllowPrivilegeEscalation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["allowed_capabilities_choice"]; exists {
@@ -1572,56 +1484,42 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allowed_csi_drivers"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_csi_drivers"))
 		if err := fv(ctx, m.GetAllowedCsiDrivers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allowed_flex_volumes"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_flex_volumes"))
 		if err := fv(ctx, m.GetAllowedFlexVolumes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allowed_host_paths"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_host_paths"))
 		if err := fv(ctx, m.GetAllowedHostPaths(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allowed_proc_mounts"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_proc_mounts"))
 		if err := fv(ctx, m.GetAllowedProcMounts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allowed_unsafe_sysctls"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_unsafe_sysctls"))
 		if err := fv(ctx, m.GetAllowedUnsafeSysctls(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_allow_privilege_escalation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_allow_privilege_escalation"))
 		if err := fv(ctx, m.GetDefaultAllowPrivilegeEscalation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["default_capabilities_choice"]; exists {
@@ -1657,7 +1555,6 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["drop_capabilities_choice"]; exists {
@@ -1693,15 +1590,12 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["forbidden_sysctls"]; exists {
 		vOpts := append(opts, db.WithValidateField("forbidden_sysctls"))
 		if err := fv(ctx, m.GetForbiddenSysctls(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["fs_group_choice"]; exists {
@@ -1737,7 +1631,6 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["group_choice"]; exists {
@@ -1773,61 +1666,42 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_ipc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_ipc"))
 		if err := fv(ctx, m.GetHostIpc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_network"))
 		if err := fv(ctx, m.GetHostNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_pid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_pid"))
 		if err := fv(ctx, m.GetHostPid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_port_ranges"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_port_ranges"))
 		if err := fv(ctx, m.GetHostPortRanges(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["privileged"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("privileged"))
 		if err := fv(ctx, m.GetPrivileged(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["read_only_root_filesystem"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("read_only_root_filesystem"))
 		if err := fv(ctx, m.GetReadOnlyRootFilesystem(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["runtime_class_choice"]; exists {
@@ -1863,7 +1737,6 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["se_linux_choice"]; exists {
@@ -1899,7 +1772,6 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["supplemental_group_choice"]; exists {
@@ -1935,7 +1807,6 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["user_choice"]; exists {
@@ -1971,24 +1842,19 @@ func (v *ValidatePodSecurityPolicySpecType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volumes"]; exists {
 		vOpts := append(opts, db.WithValidateField("volumes"))
 		if err := fv(ctx, m.GetVolumes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolicySpecType {
 	v := &ValidatePodSecurityPolicySpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1996,7 +1862,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAllowedCapabilitiesChoice := v.AllowedCapabilitiesChoiceValidationRuleHandler
 	rulesAllowedCapabilitiesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2007,7 +1872,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["allowed_capabilities_choice"] = vFn
-
 	vrhDefaultCapabilitiesChoice := v.DefaultCapabilitiesChoiceValidationRuleHandler
 	rulesDefaultCapabilitiesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2018,7 +1882,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["default_capabilities_choice"] = vFn
-
 	vrhDropCapabilitiesChoice := v.DropCapabilitiesChoiceValidationRuleHandler
 	rulesDropCapabilitiesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2029,7 +1892,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["drop_capabilities_choice"] = vFn
-
 	vrhFsGroupChoice := v.FsGroupChoiceValidationRuleHandler
 	rulesFsGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2040,7 +1902,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["fs_group_choice"] = vFn
-
 	vrhGroupChoice := v.GroupChoiceValidationRuleHandler
 	rulesGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2051,7 +1912,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["group_choice"] = vFn
-
 	vrhRuntimeClassChoice := v.RuntimeClassChoiceValidationRuleHandler
 	rulesRuntimeClassChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2062,7 +1922,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["runtime_class_choice"] = vFn
-
 	vrhSeLinuxChoice := v.SeLinuxChoiceValidationRuleHandler
 	rulesSeLinuxChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2073,7 +1932,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["se_linux_choice"] = vFn
-
 	vrhSupplementalGroupChoice := v.SupplementalGroupChoiceValidationRuleHandler
 	rulesSupplementalGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2084,7 +1942,6 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["supplemental_group_choice"] = vFn
-
 	vrhUserChoice := v.UserChoiceValidationRuleHandler
 	rulesUserChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2196,23 +2053,14 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 		panic(errMsg)
 	}
 	v.FldValidators["forbidden_sysctls"] = vFn
-
 	v.FldValidators["allowed_capabilities_choice.allowed_capabilities"] = CapabilityListTypeValidator().Validate
-
 	v.FldValidators["default_capabilities_choice.default_capabilities"] = CapabilityListTypeValidator().Validate
-
 	v.FldValidators["drop_capabilities_choice.drop_capabilities"] = CapabilityListTypeValidator().Validate
-
 	v.FldValidators["fs_group_choice.fs_group_strategy_options"] = IDStrategyOptionsTypeValidator().Validate
-
 	v.FldValidators["group_choice.run_as_group"] = IDStrategyOptionsTypeValidator().Validate
-
 	v.FldValidators["runtime_class_choice.runtime_class"] = RuntimeClassStrategyOptionsValidator().Validate
-
 	v.FldValidators["se_linux_choice.se_linux_options"] = SELinuxStrategyOptionsValidator().Validate
-
 	v.FldValidators["supplemental_group_choice.supplemental_groups"] = IDStrategyOptionsTypeValidator().Validate
-
 	v.FldValidators["user_choice.run_as_user"] = IDStrategyOptionsTypeValidator().Validate
 
 	return v
@@ -2326,16 +2174,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2343,7 +2188,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConfigMethodChoice := v.ConfigMethodChoiceValidationRuleHandler
 	rulesConfigMethodChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2354,7 +2198,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["config_method_choice"] = vFn
-
 	vrhConfigMethodChoiceYaml := v.ConfigMethodChoiceYamlValidationRuleHandler
 	rulesConfigMethodChoiceYaml := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
@@ -2365,9 +2208,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.config_method_choice_yaml: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["config_method_choice.yaml"] = vFnMap["config_method_choice.yaml"]
-
 	v.FldValidators["config_method_choice.psp_spec"] = PodSecurityPolicySpecTypeValidator().Validate
 
 	return v
@@ -2419,7 +2260,6 @@ type ValidateRuntimeClassStrategyOptions struct {
 }
 
 func (v *ValidateRuntimeClassStrategyOptions) AllowedRuntimeClassNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2459,9 +2299,7 @@ func (v *ValidateRuntimeClassStrategyOptions) AllowedRuntimeClassNamesValidation
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRuntimeClassStrategyOptions) DefaultRuntimeClassNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for default_runtime_class_name")
@@ -2483,31 +2321,24 @@ func (v *ValidateRuntimeClassStrategyOptions) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allowed_runtime_class_names"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_runtime_class_names"))
 		if err := fv(ctx, m.GetAllowedRuntimeClassNames(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_runtime_class_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_runtime_class_name"))
 		if err := fv(ctx, m.GetDefaultRuntimeClassName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRuntimeClassStrategyOptionsValidator = func() *ValidateRuntimeClassStrategyOptions {
 	v := &ValidateRuntimeClassStrategyOptions{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2593,7 +2424,6 @@ type ValidateSELinuxStrategyOptions struct {
 }
 
 func (v *ValidateSELinuxStrategyOptions) RuleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for rule")
@@ -2601,9 +2431,7 @@ func (v *ValidateSELinuxStrategyOptions) RuleValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSELinuxStrategyOptions) LevelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for Level")
@@ -2611,9 +2439,7 @@ func (v *ValidateSELinuxStrategyOptions) LevelValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSELinuxStrategyOptions) RoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for role")
@@ -2621,9 +2447,7 @@ func (v *ValidateSELinuxStrategyOptions) RoleValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSELinuxStrategyOptions) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
@@ -2631,9 +2455,7 @@ func (v *ValidateSELinuxStrategyOptions) TypeValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSELinuxStrategyOptions) UserValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user")
@@ -2655,59 +2477,42 @@ func (v *ValidateSELinuxStrategyOptions) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["Level"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("Level"))
 		if err := fv(ctx, m.GetLevel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("role"))
 		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule"))
 		if err := fv(ctx, m.GetRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user"))
 		if err := fv(ctx, m.GetUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSELinuxStrategyOptionsValidator = func() *ValidateSELinuxStrategyOptions {
 	v := &ValidateSELinuxStrategyOptions{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

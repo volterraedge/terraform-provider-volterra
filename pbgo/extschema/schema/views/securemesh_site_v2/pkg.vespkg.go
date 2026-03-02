@@ -12,16 +12,22 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
-	vr["ves.io.schema.views.securemesh_site_v2.AWSCloudSubnetParamType"] = AWSCloudSubnetParamTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSCloudLinkConfigType"] = AWSCloudLinkConfigTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSDiskEncryptionKeyType"] = AWSDiskEncryptionKeyTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSIGWGatewayType"] = AWSIGWGatewayTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AWSManagedMode"] = AWSManagedModeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AWSManagedNode"] = AWSManagedNodeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AWSManagedNodeList"] = AWSManagedNodeListValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSNATGatewayType"] = AWSNATGatewayTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSNodeInterfaceConfigurationType"] = AWSNodeInterfaceConfigurationTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AWSOrchestratedInterface"] = AWSOrchestratedInterfaceValidator()
-	vr["ves.io.schema.views.securemesh_site_v2.AWSSubnetChoiceType"] = AWSSubnetChoiceTypeValidator()
-	vr["ves.io.schema.views.securemesh_site_v2.MultipleInterface"] = MultipleInterfaceValidator()
-	vr["ves.io.schema.views.securemesh_site_v2.SingleInterface"] = SingleInterfaceValidator()
-	vr["ves.io.schema.views.securemesh_site_v2.TGWType"] = TGWTypeValidator()
-
+	vr["ves.io.schema.views.securemesh_site_v2.AWSOverrideNodeInterfaceConfigurationType"] = AWSOverrideNodeInterfaceConfigurationTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSResourceMappingListType"] = AWSResourceMappingListTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSResourceMappingType"] = AWSResourceMappingTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSResources"] = AWSResourcesValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.AWSTGWType"] = AWSTGWTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.EnablePrivateWorkloadRoutingListType"] = EnablePrivateWorkloadRoutingListTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.EnablePrivateWorkloadRoutingType"] = EnablePrivateWorkloadRoutingTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AzureManagedMode"] = AzureManagedModeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AzureManagedNode"] = AzureManagedNodeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AzureManagedNodeList"] = AzureManagedNodeListValidator()
@@ -31,7 +37,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.securemesh_site_v2.AzureSubnetChoiceType"] = AzureSubnetChoiceTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AzureSubnetType"] = AzureSubnetTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.CloudSubnetParamType"] = CloudSubnetParamTypeValidator()
-
 	vr["ves.io.schema.views.securemesh_site_v2.GCPCloudSubnetParamType"] = GCPCloudSubnetParamTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.GCPCloudVPCParamsType"] = GCPCloudVPCParamsTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.GCPManagedMode"] = GCPManagedModeValidator()
@@ -42,12 +47,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.securemesh_site_v2.GCPSingleInterface"] = GCPSingleInterfaceValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.GCPSubnetChoiceType"] = GCPSubnetChoiceTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.GCPVPCChoiceType"] = GCPVPCChoiceTypeValidator()
-
 	vr["ves.io.schema.views.securemesh_site_v2.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.securemesh_site_v2.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.securemesh_site_v2.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.DeleteRequest"] = DeleteRequestValidator()
@@ -58,7 +60,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.securemesh_site_v2.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.securemesh_site_v2.AWSProviderType"] = AWSProviderTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.AzureProviderType"] = AzureProviderTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.BaremetalProviderType"] = BaremetalProviderTypeValidator()
@@ -77,11 +78,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.securemesh_site_v2.KVMProviderType"] = KVMProviderTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.LoadBalancingSettingsType"] = LoadBalancingSettingsTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.LocalVRFSettingType"] = LocalVRFSettingTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.LogReceiverWithNet"] = LogReceiverWithNetValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.Node"] = NodeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.NodeList"] = NodeListValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.NutanixProviderType"] = NutanixProviderTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.OCIProviderType"] = OCIProviderTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.OpenShiftProviderType"] = OpenShiftProviderTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.OpenstackProviderType"] = OpenstackProviderTypeValidator()
+	vr["ves.io.schema.views.securemesh_site_v2.PrivateADNType"] = PrivateADNTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.RSeriesProviderType"] = RSeriesProviderTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.SegmentNetworkConfiguration"] = SegmentNetworkConfigurationValidator()
@@ -93,11 +97,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.securemesh_site_v2.VMwareProviderType"] = VMwareProviderTypeValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.VirtualNetworkConfiguration"] = VirtualNetworkConfigurationValidator()
 	vr["ves.io.schema.views.securemesh_site_v2.VlanInterfaceType"] = VlanInterfaceTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.EntryFactory["ves.io.schema.views.securemesh_site_v2.Object"] = NewEntryObject
 	mdr.EntryStoreMap["ves.io.schema.views.securemesh_site_v2.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.securemesh_site_v2.Object"] = reflect.TypeOf(&DBObject{})
@@ -106,14 +108,16 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.securemesh_site_v2.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.securemesh_site_v2.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.securemesh_site_v2.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.securemesh_site_v2.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.local_vrf.sli_choice.sli_config.nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.local_vrf.sli_choice.sli_config.secondary_nameserver_v6",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -129,15 +133,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.local_vrf.slo_choice.slo_config.secondary_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.local_vrf.slo_choice.slo_config.static_v6_route_choice.static_v6_routes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.local_vrf.slo_choice.slo_config.vip_v6",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.aws.orchestration_choice.managed.cloud_connect_attachments.tgw.tgw_cidr_choice.tgw_cidr.ipv6",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -205,6 +209,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openshift_virtualization.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openshift_virtualization.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.static_ipv6_address",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
@@ -233,11 +245,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.segment_vrf.segment_config.secondary_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.segment_vrf.segment_config.static_v6_route_choice.static_v6_routes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.securemesh_site_v2.API.Create"] = []string{
 		"spec.admin_user_credentials.admin_password.blindfold_secret_info_internal",
 		"spec.admin_user_credentials.admin_password.secret_encoding_type",
@@ -295,6 +310,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.oci.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
 		"spec.oci.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.oci.not_managed.node_list.#.interface_list.#.static_ipv6_address.fleet_static_ip",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.network_prefix_allocator",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.pools.#.exclude",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_option82_tag",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.static_ipv6_address.fleet_static_ip",
 		"spec.openstack.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.network_prefix_allocator",
 		"spec.openstack.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.pools.#.exclude",
 		"spec.openstack.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_option82_tag",
@@ -308,7 +329,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
 		"spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.rseries.not_managed.node_list.#.interface_list.#.static_ipv6_address.fleet_static_ip",
-		"spec.segment_vrf.#",
 		"spec.vmware.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.network_prefix_allocator",
 		"spec.vmware.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.pools.#.exclude",
 		"spec.vmware.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_option82_tag",
@@ -316,31 +336,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.vmware.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.vmware.not_managed.node_list.#.interface_list.#.static_ipv6_address.fleet_static_ip",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.securemesh_site_v2.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.aws.managed",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
-			FieldPath:           "spec.aws.managed.multiple_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.single_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.tgw.tgw_cidr.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
 			FieldPath:           "spec.aws.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.azure.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.azure.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -356,7 +363,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.gcp.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.gcp.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -371,6 +378,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.local_vrf.sli_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
 			FieldPath:           "spec.local_vrf.sli_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -381,6 +392,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.local_vrf.slo_config.nameserver_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_vrf.slo_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.local_vrf.slo_config.static_v6_route_choice",
@@ -399,8 +414,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.openstack.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.private_adn",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -408,6 +431,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.segment_vrf.#.segment_config.nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.segment_vrf.#.segment_config.secondary_nameserver_v6",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
@@ -419,31 +446,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.securemesh_site_v2.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.aws.managed",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
-			FieldPath:           "spec.aws.managed.multiple_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.single_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.tgw.tgw_cidr.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
 			FieldPath:           "spec.aws.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.azure.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.azure.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -459,7 +473,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.gcp.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.gcp.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -474,6 +488,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.local_vrf.sli_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
 			FieldPath:           "spec.local_vrf.sli_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -484,6 +502,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.local_vrf.slo_config.nameserver_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_vrf.slo_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.local_vrf.slo_config.static_v6_route_choice",
@@ -502,8 +524,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.openstack.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.private_adn",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -511,6 +541,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.segment_vrf.#.segment_config.nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.segment_vrf.#.segment_config.secondary_nameserver_v6",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
@@ -522,25 +556,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.securemesh_site_v2.API.Create"] = "ves.io.schema.views.securemesh_site_v2.CreateRequest"
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.securemesh_site_v2.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.aws.managed",
 			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "create_form.spec.aws.managed.multiple_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "create_form.spec.aws.managed.single_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "create_form.spec.aws.managed.tgw.tgw_cidr.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.aws.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -548,7 +568,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "create_form.spec.azure.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.azure.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -564,7 +584,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "create_form.spec.gcp.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.gcp.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -579,6 +599,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.local_vrf.sli_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
 			FieldPath:           "create_form.spec.local_vrf.sli_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -589,6 +613,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "create_form.spec.local_vrf.slo_config.nameserver_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.local_vrf.slo_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.local_vrf.slo_config.static_v6_route_choice",
@@ -607,8 +635,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "create_form.spec.openstack.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.private_adn",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -616,6 +652,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "create_form.spec.segment_vrf.#.segment_config.nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.segment_vrf.#.segment_config.secondary_nameserver_v6",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
@@ -631,24 +671,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
-			FieldPath:           "replace_form.spec.aws.managed.multiple_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.aws.managed.single_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.aws.managed.tgw.tgw_cidr.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
 			FieldPath:           "replace_form.spec.aws.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.azure.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.azure.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -664,7 +692,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "replace_form.spec.gcp.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.gcp.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -679,6 +707,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.local_vrf.sli_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.local_vrf.sli_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -689,6 +721,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "replace_form.spec.local_vrf.slo_config.nameserver_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.local_vrf.slo_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.local_vrf.slo_config.static_v6_route_choice",
@@ -707,8 +743,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.openstack.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.private_adn",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -716,6 +760,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "replace_form.spec.segment_vrf.#.segment_config.nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.segment_vrf.#.segment_config.secondary_nameserver_v6",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
@@ -731,24 +779,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
-			FieldPath:           "spec.aws.managed.multiple_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.single_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.tgw.tgw_cidr.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
 			FieldPath:           "spec.aws.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.azure.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.azure.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -764,7 +800,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.gcp.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.gcp.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -779,6 +815,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.local_vrf.sli_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
 			FieldPath:           "spec.local_vrf.sli_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -789,6 +829,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.local_vrf.slo_config.nameserver_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_vrf.slo_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.local_vrf.slo_config.static_v6_route_choice",
@@ -807,8 +851,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.openstack.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.private_adn",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -816,6 +868,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.segment_vrf.#.segment_config.nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.segment_vrf.#.segment_config.secondary_nameserver_v6",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
@@ -827,23 +883,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.securemesh_site_v2.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.aws.managed",
 			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.aws.managed.multiple_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.aws.managed.single_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.aws.managed.tgw.tgw_cidr.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.aws.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -851,7 +894,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "items.#.get_spec.azure.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.azure.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -867,7 +910,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "items.#.get_spec.gcp.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.gcp.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -882,6 +925,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "items.#.get_spec.local_vrf.sli_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.local_vrf.sli_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -892,6 +939,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.local_vrf.slo_config.nameserver_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.local_vrf.slo_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.local_vrf.slo_config.static_v6_route_choice",
@@ -910,8 +961,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "items.#.get_spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.openstack.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.private_adn",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -919,6 +978,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "items.#.get_spec.segment_vrf.#.segment_config.nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.segment_vrf.#.segment_config.secondary_nameserver_v6",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
@@ -930,10 +993,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.securemesh_site_v2.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.local_vrf.sli_choice.sli_config.nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.local_vrf.sli_choice.sli_config.secondary_nameserver_v6",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -949,15 +1015,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.local_vrf.slo_choice.slo_config.secondary_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.local_vrf.slo_choice.slo_config.static_v6_route_choice.static_v6_routes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.local_vrf.slo_choice.slo_config.vip_v6",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.aws.orchestration_choice.managed.cloud_connect_attachments.tgw.tgw_cidr_choice.tgw_cidr.ipv6",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -1025,6 +1091,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openshift_virtualization.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openshift_virtualization.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.static_ipv6_address",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
@@ -1053,11 +1127,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
+			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.segment_vrf.segment_config.secondary_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.segment_vrf.segment_config.static_v6_route_choice.static_v6_routes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.securemesh_site_v2.API.Replace"] = []string{
 		"spec.admin_user_credentials.admin_password.blindfold_secret_info_internal",
 		"spec.admin_user_credentials.admin_password.secret_encoding_type",
@@ -1115,6 +1192,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.oci.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
 		"spec.oci.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.oci.not_managed.node_list.#.interface_list.#.static_ipv6_address.fleet_static_ip",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.network_prefix_allocator",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.pools.#.exclude",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_option82_tag",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
+		"spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.static_ipv6_address.fleet_static_ip",
 		"spec.openstack.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.network_prefix_allocator",
 		"spec.openstack.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.pools.#.exclude",
 		"spec.openstack.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_option82_tag",
@@ -1128,7 +1211,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
 		"spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.rseries.not_managed.node_list.#.interface_list.#.static_ipv6_address.fleet_static_ip",
-		"spec.segment_vrf.#",
 		"spec.vmware.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.network_prefix_allocator",
 		"spec.vmware.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_networks.#.pools.#.exclude",
 		"spec.vmware.not_managed.node_list.#.interface_list.#.dhcp_server.dhcp_option82_tag",
@@ -1136,23 +1218,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.vmware.not_managed.node_list.#.interface_list.#.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.vmware.not_managed.node_list.#.interface_list.#.static_ipv6_address.fleet_static_ip",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.securemesh_site_v2.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.aws.managed",
 			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.multiple_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.single_interface.node_list.node_list.#.interface_list.#.subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.aws.managed.tgw.tgw_cidr.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.aws.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -1160,7 +1229,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.azure.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.azure.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -1176,7 +1245,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.gcp.managed",
-			AllowedEnvironments: []string{"demo1", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.gcp.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -1191,6 +1260,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.local_vrf.sli_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
 			FieldPath:           "spec.local_vrf.sli_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -1201,6 +1274,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.local_vrf.slo_config.nameserver_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_vrf.slo_config.secondary_nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.local_vrf.slo_config.static_v6_route_choice",
@@ -1219,8 +1296,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.openshift_virtualization.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.openstack.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.private_adn",
+			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.rseries.not_managed.node_list.#.interface_list.#.ipv6_address_choice",
@@ -1228,6 +1313,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.segment_vrf.#.segment_config.nameserver_v6",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.segment_vrf.#.segment_config.secondary_nameserver_v6",
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
@@ -1239,23 +1328,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.securemesh_site_v2.API.Replace"] = "ves.io.schema.views.securemesh_site_v2.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.securemesh_site_v2.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -1264,9 +1348,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.securemesh_site_v2.Object"] = APISwaggerJSON
@@ -1280,22 +1362,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.securemesh_site_v2.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.securemesh_site_v2.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.securemesh_site_v2.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

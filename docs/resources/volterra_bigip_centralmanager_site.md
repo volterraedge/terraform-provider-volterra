@@ -20,7 +20,6 @@ resource "volterra_bigip_centralmanager_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -61,4 +60,4 @@ Will assign latest available F5XC Software Version.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured bigip_centralmanager_site.
+-   `id` - This is the id of the configured bigip_centralmanager_site.

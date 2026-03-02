@@ -44,7 +44,6 @@ func (c *CustomAPIGrpcClient) doRPCSetCloudSiteInfo(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.SetCloudSiteInfo(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCValidateConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views.ValidateConfigRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -85,11 +84,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SetCloudSiteInfo"] = ccl.doRPCSetCloudSiteInfo
-
 	rpcFns["ValidateConfig"] = ccl.doRPCValidateConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -177,7 +173,6 @@ func (c *CustomAPIRestClient) doRPCSetCloudSiteInfo(ctx context.Context, callOpt
 	pbRsp := &SetCloudSiteInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.gcp_vpc_site.SetCloudSiteInfoResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -185,7 +180,6 @@ func (c *CustomAPIRestClient) doRPCSetCloudSiteInfo(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCValidateConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -261,7 +255,6 @@ func (c *CustomAPIRestClient) doRPCValidateConfig(ctx context.Context, callOpts 
 	pbRsp := &ves_io_schema_views.ValidateConfigResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.ValidateConfigResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -295,11 +288,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SetCloudSiteInfo"] = ccl.doRPCSetCloudSiteInfo
-
 	rpcFns["ValidateConfig"] = ccl.doRPCValidateConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -384,7 +374,6 @@ func (s *customAPISrv) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInf
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.gcp_vpc_site.SetCloudSiteInfoResponse", rsp)...)
 
 	return rsp, nil
@@ -433,7 +422,6 @@ func (s *customAPISrv) ValidateConfig(ctx context.Context, in *ves_io_schema_vie
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.ValidateConfigResponse", rsp)...)
 
 	return rsp, nil

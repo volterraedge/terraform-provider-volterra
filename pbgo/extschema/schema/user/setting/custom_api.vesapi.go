@@ -43,7 +43,6 @@ func (c *CustomAPIGrpcClient) doRPCDeleteUserImage(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.DeleteUserImage(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDisableUserInIDM(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UserEmail{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -52,7 +51,6 @@ func (c *CustomAPIGrpcClient) doRPCDisableUserInIDM(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.DisableUserInIDM(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCEnableUserInIDM(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UserEmail{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -61,7 +59,6 @@ func (c *CustomAPIGrpcClient) doRPCEnableUserInIDM(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.EnableUserInIDM(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -70,7 +67,6 @@ func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts
 	rsp, err := c.grpcClient.Get(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetAdminNtfnPreferences(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -79,7 +75,6 @@ func (c *CustomAPIGrpcClient) doRPCGetAdminNtfnPreferences(ctx context.Context, 
 	rsp, err := c.grpcClient.GetAdminNtfnPreferences(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetCombinedNtfnPreferences(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -88,7 +83,6 @@ func (c *CustomAPIGrpcClient) doRPCGetCombinedNtfnPreferences(ctx context.Contex
 	rsp, err := c.grpcClient.GetCombinedNtfnPreferences(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetNtfnPreferences(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -97,7 +91,6 @@ func (c *CustomAPIGrpcClient) doRPCGetNtfnPreferences(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.GetNtfnPreferences(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetUserImage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -106,7 +99,6 @@ func (c *CustomAPIGrpcClient) doRPCGetUserImage(ctx context.Context, yamlReq str
 	rsp, err := c.grpcClient.GetUserImage(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetUserSessions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -115,7 +107,6 @@ func (c *CustomAPIGrpcClient) doRPCGetUserSessions(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.GetUserSessions(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetViewPreference(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -124,7 +115,6 @@ func (c *CustomAPIGrpcClient) doRPCGetViewPreference(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.GetViewPreference(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRequestInitialAccess(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -133,7 +123,6 @@ func (c *CustomAPIGrpcClient) doRPCRequestInitialAccess(ctx context.Context, yam
 	rsp, err := c.grpcClient.RequestInitialAccess(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCResetOtpDeviceByAdmin(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UserEmail{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -142,7 +131,6 @@ func (c *CustomAPIGrpcClient) doRPCResetOtpDeviceByAdmin(ctx context.Context, ya
 	rsp, err := c.grpcClient.ResetOtpDeviceByAdmin(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSetViewPreference(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetViewPreferenceRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -151,7 +139,6 @@ func (c *CustomAPIGrpcClient) doRPCSetViewPreference(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.SetViewPreference(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUnsetAdminNtfnPreference(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NtfnToUnset{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -160,7 +147,6 @@ func (c *CustomAPIGrpcClient) doRPCUnsetAdminNtfnPreference(ctx context.Context,
 	rsp, err := c.grpcClient.UnsetAdminNtfnPreference(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUnsetNtfnPreference(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NtfnToUnset{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -169,7 +155,6 @@ func (c *CustomAPIGrpcClient) doRPCUnsetNtfnPreference(ctx context.Context, yaml
 	rsp, err := c.grpcClient.UnsetNtfnPreference(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UserSettingsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -178,7 +163,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdate(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Update(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateAdminNtfnPreferences(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NtfnPreferencesMap{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -187,7 +171,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateAdminNtfnPreferences(ctx context.Contex
 	rsp, err := c.grpcClient.UpdateAdminNtfnPreferences(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateCombinedNtfnPreferences(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NtfnPreferencesMap{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -196,7 +179,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateCombinedNtfnPreferences(ctx context.Con
 	rsp, err := c.grpcClient.UpdateCombinedNtfnPreferences(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateNtfnPreferences(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NtfnPreferencesMap{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -205,7 +187,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateNtfnPreferences(ctx context.Context, ya
 	rsp, err := c.grpcClient.UpdateNtfnPreferences(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateUserImage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateImageRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -246,47 +227,26 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DeleteUserImage"] = ccl.doRPCDeleteUserImage
-
 	rpcFns["DisableUserInIDM"] = ccl.doRPCDisableUserInIDM
-
 	rpcFns["EnableUserInIDM"] = ccl.doRPCEnableUserInIDM
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["GetAdminNtfnPreferences"] = ccl.doRPCGetAdminNtfnPreferences
-
 	rpcFns["GetCombinedNtfnPreferences"] = ccl.doRPCGetCombinedNtfnPreferences
-
 	rpcFns["GetNtfnPreferences"] = ccl.doRPCGetNtfnPreferences
-
 	rpcFns["GetUserImage"] = ccl.doRPCGetUserImage
-
 	rpcFns["GetUserSessions"] = ccl.doRPCGetUserSessions
-
 	rpcFns["GetViewPreference"] = ccl.doRPCGetViewPreference
-
 	rpcFns["RequestInitialAccess"] = ccl.doRPCRequestInitialAccess
-
 	rpcFns["ResetOtpDeviceByAdmin"] = ccl.doRPCResetOtpDeviceByAdmin
-
 	rpcFns["SetViewPreference"] = ccl.doRPCSetViewPreference
-
 	rpcFns["UnsetAdminNtfnPreference"] = ccl.doRPCUnsetAdminNtfnPreference
-
 	rpcFns["UnsetNtfnPreference"] = ccl.doRPCUnsetNtfnPreference
-
 	rpcFns["Update"] = ccl.doRPCUpdate
-
 	rpcFns["UpdateAdminNtfnPreferences"] = ccl.doRPCUpdateAdminNtfnPreferences
-
 	rpcFns["UpdateCombinedNtfnPreferences"] = ccl.doRPCUpdateCombinedNtfnPreferences
-
 	rpcFns["UpdateNtfnPreferences"] = ccl.doRPCUpdateNtfnPreferences
-
 	rpcFns["UpdateUserImage"] = ccl.doRPCUpdateUserImage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -371,7 +331,6 @@ func (c *CustomAPIRestClient) doRPCDeleteUserImage(ctx context.Context, callOpts
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -379,7 +338,6 @@ func (c *CustomAPIRestClient) doRPCDeleteUserImage(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDisableUserInIDM(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -454,7 +412,6 @@ func (c *CustomAPIRestClient) doRPCDisableUserInIDM(ctx context.Context, callOpt
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -462,7 +419,6 @@ func (c *CustomAPIRestClient) doRPCDisableUserInIDM(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCEnableUserInIDM(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -537,7 +493,6 @@ func (c *CustomAPIRestClient) doRPCEnableUserInIDM(ctx context.Context, callOpts
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -545,7 +500,6 @@ func (c *CustomAPIRestClient) doRPCEnableUserInIDM(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -619,7 +573,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &UserSettingsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.UserSettingsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -627,7 +580,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetAdminNtfnPreferences(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -701,7 +653,6 @@ func (c *CustomAPIRestClient) doRPCGetAdminNtfnPreferences(ctx context.Context, 
 	pbRsp := &NotificationList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.NotificationList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -709,7 +660,6 @@ func (c *CustomAPIRestClient) doRPCGetAdminNtfnPreferences(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetCombinedNtfnPreferences(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -783,7 +733,6 @@ func (c *CustomAPIRestClient) doRPCGetCombinedNtfnPreferences(ctx context.Contex
 	pbRsp := &NotificationList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.NotificationList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -791,7 +740,6 @@ func (c *CustomAPIRestClient) doRPCGetCombinedNtfnPreferences(ctx context.Contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetNtfnPreferences(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -865,7 +813,6 @@ func (c *CustomAPIRestClient) doRPCGetNtfnPreferences(ctx context.Context, callO
 	pbRsp := &NotificationList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.NotificationList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -873,7 +820,6 @@ func (c *CustomAPIRestClient) doRPCGetNtfnPreferences(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetUserImage(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -949,7 +895,6 @@ func (c *CustomAPIRestClient) doRPCGetUserImage(ctx context.Context, callOpts *s
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -957,7 +902,6 @@ func (c *CustomAPIRestClient) doRPCGetUserImage(ctx context.Context, callOpts *s
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetUserSessions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1031,7 +975,6 @@ func (c *CustomAPIRestClient) doRPCGetUserSessions(ctx context.Context, callOpts
 	pbRsp := &UserSessionList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.UserSessionList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1039,7 +982,6 @@ func (c *CustomAPIRestClient) doRPCGetUserSessions(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetViewPreference(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1113,7 +1055,6 @@ func (c *CustomAPIRestClient) doRPCGetViewPreference(ctx context.Context, callOp
 	pbRsp := &ViewPreference{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.ViewPreference", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1121,7 +1062,6 @@ func (c *CustomAPIRestClient) doRPCGetViewPreference(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRequestInitialAccess(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1195,7 +1135,6 @@ func (c *CustomAPIRestClient) doRPCRequestInitialAccess(ctx context.Context, cal
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1203,7 +1142,6 @@ func (c *CustomAPIRestClient) doRPCRequestInitialAccess(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCResetOtpDeviceByAdmin(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1278,7 +1216,6 @@ func (c *CustomAPIRestClient) doRPCResetOtpDeviceByAdmin(ctx context.Context, ca
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1286,7 +1223,6 @@ func (c *CustomAPIRestClient) doRPCResetOtpDeviceByAdmin(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSetViewPreference(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1328,6 +1264,7 @@ func (c *CustomAPIRestClient) doRPCSetViewPreference(ctx context.Context, callOp
 		_ = q
 		q.Add("advanced_view", fmt.Sprintf("%v", req.AdvancedView))
 		q.Add("persona_preferences", fmt.Sprintf("%v", req.PersonaPreferences))
+		q.Add("wizard_advanced_auto_expand", fmt.Sprintf("%v", req.WizardAdvancedAutoExpand))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -1362,7 +1299,6 @@ func (c *CustomAPIRestClient) doRPCSetViewPreference(ctx context.Context, callOp
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1370,7 +1306,6 @@ func (c *CustomAPIRestClient) doRPCSetViewPreference(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUnsetAdminNtfnPreference(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1445,7 +1380,6 @@ func (c *CustomAPIRestClient) doRPCUnsetAdminNtfnPreference(ctx context.Context,
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1453,7 +1387,6 @@ func (c *CustomAPIRestClient) doRPCUnsetAdminNtfnPreference(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUnsetNtfnPreference(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1528,7 +1461,6 @@ func (c *CustomAPIRestClient) doRPCUnsetNtfnPreference(ctx context.Context, call
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1536,7 +1468,6 @@ func (c *CustomAPIRestClient) doRPCUnsetNtfnPreference(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1617,7 +1548,6 @@ func (c *CustomAPIRestClient) doRPCUpdate(ctx context.Context, callOpts *server.
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1625,7 +1555,6 @@ func (c *CustomAPIRestClient) doRPCUpdate(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateAdminNtfnPreferences(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1700,7 +1629,6 @@ func (c *CustomAPIRestClient) doRPCUpdateAdminNtfnPreferences(ctx context.Contex
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1708,7 +1636,6 @@ func (c *CustomAPIRestClient) doRPCUpdateAdminNtfnPreferences(ctx context.Contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateCombinedNtfnPreferences(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1783,7 +1710,6 @@ func (c *CustomAPIRestClient) doRPCUpdateCombinedNtfnPreferences(ctx context.Con
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1791,7 +1717,6 @@ func (c *CustomAPIRestClient) doRPCUpdateCombinedNtfnPreferences(ctx context.Con
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateNtfnPreferences(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1866,7 +1791,6 @@ func (c *CustomAPIRestClient) doRPCUpdateNtfnPreferences(ctx context.Context, ca
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1874,7 +1798,6 @@ func (c *CustomAPIRestClient) doRPCUpdateNtfnPreferences(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateUserImage(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1950,7 +1873,6 @@ func (c *CustomAPIRestClient) doRPCUpdateUserImage(ctx context.Context, callOpts
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1984,47 +1906,26 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DeleteUserImage"] = ccl.doRPCDeleteUserImage
-
 	rpcFns["DisableUserInIDM"] = ccl.doRPCDisableUserInIDM
-
 	rpcFns["EnableUserInIDM"] = ccl.doRPCEnableUserInIDM
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["GetAdminNtfnPreferences"] = ccl.doRPCGetAdminNtfnPreferences
-
 	rpcFns["GetCombinedNtfnPreferences"] = ccl.doRPCGetCombinedNtfnPreferences
-
 	rpcFns["GetNtfnPreferences"] = ccl.doRPCGetNtfnPreferences
-
 	rpcFns["GetUserImage"] = ccl.doRPCGetUserImage
-
 	rpcFns["GetUserSessions"] = ccl.doRPCGetUserSessions
-
 	rpcFns["GetViewPreference"] = ccl.doRPCGetViewPreference
-
 	rpcFns["RequestInitialAccess"] = ccl.doRPCRequestInitialAccess
-
 	rpcFns["ResetOtpDeviceByAdmin"] = ccl.doRPCResetOtpDeviceByAdmin
-
 	rpcFns["SetViewPreference"] = ccl.doRPCSetViewPreference
-
 	rpcFns["UnsetAdminNtfnPreference"] = ccl.doRPCUnsetAdminNtfnPreference
-
 	rpcFns["UnsetNtfnPreference"] = ccl.doRPCUnsetNtfnPreference
-
 	rpcFns["Update"] = ccl.doRPCUpdate
-
 	rpcFns["UpdateAdminNtfnPreferences"] = ccl.doRPCUpdateAdminNtfnPreferences
-
 	rpcFns["UpdateCombinedNtfnPreferences"] = ccl.doRPCUpdateCombinedNtfnPreferences
-
 	rpcFns["UpdateNtfnPreferences"] = ccl.doRPCUpdateNtfnPreferences
-
 	rpcFns["UpdateUserImage"] = ccl.doRPCUpdateUserImage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -2181,7 +2082,6 @@ func (s *customAPISrv) DeleteUserImage(ctx context.Context, in *Empty) (*Empty, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2230,7 +2130,6 @@ func (s *customAPISrv) DisableUserInIDM(ctx context.Context, in *UserEmail) (*Em
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2279,7 +2178,6 @@ func (s *customAPISrv) EnableUserInIDM(ctx context.Context, in *UserEmail) (*Emp
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2328,7 +2226,6 @@ func (s *customAPISrv) Get(ctx context.Context, in *Empty) (*UserSettingsRespons
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.UserSettingsResponse", rsp)...)
 
 	return rsp, nil
@@ -2377,7 +2274,6 @@ func (s *customAPISrv) GetAdminNtfnPreferences(ctx context.Context, in *Empty) (
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.NotificationList", rsp)...)
 
 	return rsp, nil
@@ -2426,7 +2322,6 @@ func (s *customAPISrv) GetCombinedNtfnPreferences(ctx context.Context, in *Empty
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.NotificationList", rsp)...)
 
 	return rsp, nil
@@ -2475,7 +2370,6 @@ func (s *customAPISrv) GetNtfnPreferences(ctx context.Context, in *Empty) (*Noti
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.NotificationList", rsp)...)
 
 	return rsp, nil
@@ -2524,7 +2418,6 @@ func (s *customAPISrv) GetUserImage(ctx context.Context, in *Empty) (*google_api
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -2573,7 +2466,6 @@ func (s *customAPISrv) GetUserSessions(ctx context.Context, in *Empty) (*UserSes
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.UserSessionList", rsp)...)
 
 	return rsp, nil
@@ -2622,7 +2514,6 @@ func (s *customAPISrv) GetViewPreference(ctx context.Context, in *Empty) (*ViewP
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.ViewPreference", rsp)...)
 
 	return rsp, nil
@@ -2671,7 +2562,6 @@ func (s *customAPISrv) RequestInitialAccess(ctx context.Context, in *Empty) (*Em
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2720,7 +2610,6 @@ func (s *customAPISrv) ResetOtpDeviceByAdmin(ctx context.Context, in *UserEmail)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2769,7 +2658,6 @@ func (s *customAPISrv) SetViewPreference(ctx context.Context, in *SetViewPrefere
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2818,7 +2706,6 @@ func (s *customAPISrv) UnsetAdminNtfnPreference(ctx context.Context, in *NtfnToU
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2867,7 +2754,6 @@ func (s *customAPISrv) UnsetNtfnPreference(ctx context.Context, in *NtfnToUnset)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2916,7 +2802,6 @@ func (s *customAPISrv) Update(ctx context.Context, in *UserSettingsRequest) (*Em
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -2965,7 +2850,6 @@ func (s *customAPISrv) UpdateAdminNtfnPreferences(ctx context.Context, in *NtfnP
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -3014,7 +2898,6 @@ func (s *customAPISrv) UpdateCombinedNtfnPreferences(ctx context.Context, in *Nt
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -3063,7 +2946,6 @@ func (s *customAPISrv) UpdateNtfnPreferences(ctx context.Context, in *NtfnPrefer
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -3112,7 +2994,6 @@ func (s *customAPISrv) UpdateUserImage(ctx context.Context, in *UpdateImageReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
 
 	return rsp, nil
@@ -4932,6 +4813,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Persona preferences",
                     "$ref": "#/definitions/settingPersonaPreferences",
                     "x-displayname": "Persona preferences"
+                },
+                "wizard_advanced_auto_expand": {
+                    "type": "boolean",
+                    "description": " If true then all advanced configuration fields are automatically expanded when creating a new object",
+                    "title": "Advanced fields auto-expand",
+                    "format": "boolean",
+                    "x-displayname": "Advanced fields auto-expand"
                 }
             }
         },
@@ -5149,6 +5037,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Persona preferences",
                     "$ref": "#/definitions/settingPersonaPreferences",
                     "x-displayname": "Persona preferences"
+                },
+                "wizard_advanced_auto_expand": {
+                    "type": "boolean",
+                    "description": " If true then all advanced configuration fields are automatically expanded when creating a new object",
+                    "title": "Advanced fields auto-expand",
+                    "format": "boolean",
+                    "x-displayname": "Advanced fields auto-expand"
                 }
             }
         },

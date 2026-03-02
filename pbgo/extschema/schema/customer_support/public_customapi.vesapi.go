@@ -36,14 +36,13 @@ type CustomAPIGrpcClient struct {
 }
 
 func (c *CustomAPIGrpcClient) doRPCAdminList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &ListRequest{}
+	req := &AdminListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.customer_support.ListRequest", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.customer_support.AdminListRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.AdminList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCClose(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CloseRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -52,7 +51,6 @@ func (c *CustomAPIGrpcClient) doRPCClose(ctx context.Context, yamlReq string, op
 	rsp, err := c.grpcClient.Close(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCComment(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CommentRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -61,7 +59,6 @@ func (c *CustomAPIGrpcClient) doRPCComment(ctx context.Context, yamlReq string, 
 	rsp, err := c.grpcClient.Comment(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCEscalate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &EscalationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -70,7 +67,6 @@ func (c *CustomAPIGrpcClient) doRPCEscalate(ctx context.Context, yamlReq string,
 	rsp, err := c.grpcClient.Escalate(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetAttachment(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetAttachmentRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -79,7 +75,6 @@ func (c *CustomAPIGrpcClient) doRPCGetAttachment(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.GetAttachment(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListCTSupportTickets(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListSupportRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -88,7 +83,6 @@ func (c *CustomAPIGrpcClient) doRPCListCTSupportTickets(ctx context.Context, yam
 	rsp, err := c.grpcClient.ListCTSupportTickets(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCPriority(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PriorityRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -97,7 +91,6 @@ func (c *CustomAPIGrpcClient) doRPCPriority(ctx context.Context, yamlReq string,
 	rsp, err := c.grpcClient.Priority(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRaiseTaxExemptVerificationSupportTicket(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RaiseTaxExemptVerificationSupportTicketRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -106,7 +99,6 @@ func (c *CustomAPIGrpcClient) doRPCRaiseTaxExemptVerificationSupportTicket(ctx c
 	rsp, err := c.grpcClient.RaiseTaxExemptVerificationSupportTicket(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCReopen(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ReopenRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -147,25 +139,15 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AdminList"] = ccl.doRPCAdminList
-
 	rpcFns["Close"] = ccl.doRPCClose
-
 	rpcFns["Comment"] = ccl.doRPCComment
-
 	rpcFns["Escalate"] = ccl.doRPCEscalate
-
 	rpcFns["GetAttachment"] = ccl.doRPCGetAttachment
-
 	rpcFns["ListCTSupportTickets"] = ccl.doRPCListCTSupportTickets
-
 	rpcFns["Priority"] = ccl.doRPCPriority
-
 	rpcFns["RaiseTaxExemptVerificationSupportTicket"] = ccl.doRPCRaiseTaxExemptVerificationSupportTicket
-
 	rpcFns["Reopen"] = ccl.doRPCReopen
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -184,9 +166,9 @@ func (c *CustomAPIRestClient) doRPCAdminList(ctx context.Context, callOpts *serv
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &ListRequest{}
+	req := &AdminListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.customer_support.ListRequest: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.customer_support.AdminListRequest: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -258,7 +240,6 @@ func (c *CustomAPIRestClient) doRPCAdminList(ctx context.Context, callOpts *serv
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.customer_support.ListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -266,7 +247,6 @@ func (c *CustomAPIRestClient) doRPCAdminList(ctx context.Context, callOpts *serv
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCClose(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -342,7 +322,6 @@ func (c *CustomAPIRestClient) doRPCClose(ctx context.Context, callOpts *server.C
 	pbRsp := &CloseResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.customer_support.CloseResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -350,7 +329,6 @@ func (c *CustomAPIRestClient) doRPCClose(ctx context.Context, callOpts *server.C
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCComment(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -430,7 +408,6 @@ func (c *CustomAPIRestClient) doRPCComment(ctx context.Context, callOpts *server
 	pbRsp := &CommentResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.customer_support.CommentResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -438,7 +415,6 @@ func (c *CustomAPIRestClient) doRPCComment(ctx context.Context, callOpts *server
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCEscalate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -514,7 +490,6 @@ func (c *CustomAPIRestClient) doRPCEscalate(ctx context.Context, callOpts *serve
 	pbRsp := &EscalationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.customer_support.EscalationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -522,7 +497,6 @@ func (c *CustomAPIRestClient) doRPCEscalate(ctx context.Context, callOpts *serve
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetAttachment(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -601,7 +575,6 @@ func (c *CustomAPIRestClient) doRPCGetAttachment(ctx context.Context, callOpts *
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -609,7 +582,6 @@ func (c *CustomAPIRestClient) doRPCGetAttachment(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListCTSupportTickets(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -689,7 +661,6 @@ func (c *CustomAPIRestClient) doRPCListCTSupportTickets(ctx context.Context, cal
 	pbRsp := &ListSupportResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.customer_support.ListSupportResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -697,7 +668,6 @@ func (c *CustomAPIRestClient) doRPCListCTSupportTickets(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCPriority(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -774,7 +744,6 @@ func (c *CustomAPIRestClient) doRPCPriority(ctx context.Context, callOpts *serve
 	pbRsp := &PriorityResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.customer_support.PriorityResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -782,7 +751,6 @@ func (c *CustomAPIRestClient) doRPCPriority(ctx context.Context, callOpts *serve
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRaiseTaxExemptVerificationSupportTicket(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -860,7 +828,6 @@ func (c *CustomAPIRestClient) doRPCRaiseTaxExemptVerificationSupportTicket(ctx c
 	pbRsp := &RaiseTaxExemptVerificationSupportTicketResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.customer_support.RaiseTaxExemptVerificationSupportTicketResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -868,7 +835,6 @@ func (c *CustomAPIRestClient) doRPCRaiseTaxExemptVerificationSupportTicket(ctx c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCReopen(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -944,7 +910,6 @@ func (c *CustomAPIRestClient) doRPCReopen(ctx context.Context, callOpts *server.
 	pbRsp := &ReopenResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.customer_support.ReopenResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -978,25 +943,15 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AdminList"] = ccl.doRPCAdminList
-
 	rpcFns["Close"] = ccl.doRPCClose
-
 	rpcFns["Comment"] = ccl.doRPCComment
-
 	rpcFns["Escalate"] = ccl.doRPCEscalate
-
 	rpcFns["GetAttachment"] = ccl.doRPCGetAttachment
-
 	rpcFns["ListCTSupportTickets"] = ccl.doRPCListCTSupportTickets
-
 	rpcFns["Priority"] = ccl.doRPCPriority
-
 	rpcFns["RaiseTaxExemptVerificationSupportTicket"] = ccl.doRPCRaiseTaxExemptVerificationSupportTicket
-
 	rpcFns["Reopen"] = ccl.doRPCReopen
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1007,7 +962,7 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
-func (c *customAPIInprocClient) AdminList(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+func (c *customAPIInprocClient) AdminList(ctx context.Context, in *AdminListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.customer_support.CustomAPI.AdminList")
 	return c.CustomAPIServer.AdminList(ctx, in)
 }
@@ -1065,7 +1020,7 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (s *customAPISrv) AdminList(ctx context.Context, in *ListRequest) (*ListResponse, error) {
+func (s *customAPISrv) AdminList(ctx context.Context, in *AdminListRequest) (*ListResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.customer_support.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -1077,7 +1032,7 @@ func (s *customAPISrv) AdminList(ctx context.Context, in *ListRequest) (*ListRes
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.customer_support.ListRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.customer_support.AdminListRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1109,7 +1064,6 @@ func (s *customAPISrv) AdminList(ctx context.Context, in *ListRequest) (*ListRes
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.customer_support.ListResponse", rsp)...)
 
 	return rsp, nil
@@ -1158,7 +1112,6 @@ func (s *customAPISrv) Close(ctx context.Context, in *CloseRequest) (*CloseRespo
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.customer_support.CloseResponse", rsp)...)
 
 	return rsp, nil
@@ -1207,7 +1160,6 @@ func (s *customAPISrv) Comment(ctx context.Context, in *CommentRequest) (*Commen
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.customer_support.CommentResponse", rsp)...)
 
 	return rsp, nil
@@ -1256,7 +1208,6 @@ func (s *customAPISrv) Escalate(ctx context.Context, in *EscalationRequest) (*Es
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.customer_support.EscalationResponse", rsp)...)
 
 	return rsp, nil
@@ -1305,7 +1256,6 @@ func (s *customAPISrv) GetAttachment(ctx context.Context, in *GetAttachmentReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -1354,7 +1304,6 @@ func (s *customAPISrv) ListCTSupportTickets(ctx context.Context, in *ListSupport
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.customer_support.ListSupportResponse", rsp)...)
 
 	return rsp, nil
@@ -1403,7 +1352,6 @@ func (s *customAPISrv) Priority(ctx context.Context, in *PriorityRequest) (*Prio
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.customer_support.PriorityResponse", rsp)...)
 
 	return rsp, nil
@@ -1452,7 +1400,6 @@ func (s *customAPISrv) RaiseTaxExemptVerificationSupportTicket(ctx context.Conte
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.customer_support.RaiseTaxExemptVerificationSupportTicketResponse", rsp)...)
 
 	return rsp, nil
@@ -1501,7 +1448,6 @@ func (s *customAPISrv) Reopen(ctx context.Context, in *ReopenRequest) (*ReopenRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.customer_support.ReopenResponse", rsp)...)
 
 	return rsp, nil
@@ -2492,10 +2438,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace in which the support ticket object is present.\n\nExample: - \"value\"-",
+                    "description": " The namespace in which the support ticket object is present.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },
@@ -2545,10 +2494,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace in which the support ticket object is present.\n\nExample: - \"value\"-",
+                    "description": " The namespace in which the support ticket object is present.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },
@@ -2653,10 +2605,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace in which the support ticket object is present in.\n\nExample: - \"value\"-",
+                    "description": " The namespace in which the support ticket object is present in.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },
@@ -2884,10 +2839,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace in which the support ticket object is present.\n\nExample: - \"value\"-",
+                    "description": " The namespace in which the support ticket object is present.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "priority": {
                     "description": " New priority of a customer support ticket.",
@@ -2971,10 +2929,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace in which the support ticket object is present.\n\nExample: - \"value\"-",
+                    "description": " The namespace in which the support ticket object is present.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },
@@ -3079,7 +3040,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "customer_supportSupportTicketStatus": {
             "type": "string",
-            "description": "State of the ticket so the customers know if the problem is being looked into\n\nUnknown or empty support ticket status\nIndicates a new ticket, waiting to be assigned to an agent\nIndicates an open issues, actively being looked into\nIndicates a pending issue, an open issue not actively being looked into\nIndicates on issue that on-hold, waiting for more information\nIndicates a solved issue, waiting for customer's confirmation\nIndicates a closed issue, resolved and customer approved\nIndicates a failed ticket, a failed ticket didn't make it into Zendesk and a customer should create new one instead",
+            "description": "State of the ticket so the customers know if the problem is being looked into\n\nUnknown or empty support ticket status\nIndicates a new ticket, waiting to be assigned to an agent\nIndicates an open issues, actively being looked into\nIndicates a pending issue, an open issue not actively being looked into\nIndicates on issue that on-hold, waiting for more information\nIndicates a solved issue, waiting for customer's confirmation\nIndicates a closed issue, resolved and customer approved\nIndicates a failed ticket, a failed ticket didn't make it into Salesforce and a customer should create new one instead",
             "title": "SupportTicketStatus",
             "enum": [
                 "STATUS_UNKNOWN",
@@ -3204,10 +3165,10 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",

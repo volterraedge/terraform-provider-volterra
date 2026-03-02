@@ -78,16 +78,12 @@ func (v *ValidateApiCrawlingStatus) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["last_updated"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_updated"))
 		if err := fv(ctx, m.GetLastUpdated(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -118,7 +114,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetDomains() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting CreateSpecType.domains idx %v", idx)
@@ -160,7 +155,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -220,22 +214,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -279,7 +269,6 @@ func (m *DomainConfiguration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSimpleLogin().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DomainConfiguration.simple_login")
 	}
@@ -319,7 +308,6 @@ type ValidateDomainConfiguration struct {
 }
 
 func (v *ValidateDomainConfiguration) DomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain")
@@ -341,32 +329,24 @@ func (v *ValidateDomainConfiguration) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["simple_login"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("simple_login"))
 		if err := fv(ctx, m.GetSimpleLogin(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDomainConfigurationValidator = func() *ValidateDomainConfiguration {
 	v := &ValidateDomainConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -387,7 +367,6 @@ var DefaultDomainConfigurationValidator = func() *ValidateDomainConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["domain"] = vFn
-
 	v.FldValidators["simple_login"] = SimpleLoginValidator().Validate
 
 	return v
@@ -413,7 +392,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetDomains() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting GetSpecType.domains idx %v", idx)
@@ -455,7 +433,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -515,22 +492,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -574,7 +547,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetDomains() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting GlobalSpecType.domains idx %v", idx)
@@ -616,7 +588,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -676,22 +647,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -735,7 +702,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetDomains() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting ReplaceSpecType.domains idx %v", idx)
@@ -777,7 +743,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -837,22 +802,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -934,70 +895,48 @@ func (v *ValidateScanInfo) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["added_to_queue"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_to_queue"))
 		if err := fv(ctx, m.GetAddedToQueue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_count"))
 		if err := fv(ctx, m.GetEndpointCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kafka_message_created_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kafka_message_created_at"))
 		if err := fv(ctx, m.GetKafkaMessageCreatedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_status_update"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_status_update"))
 		if err := fv(ctx, m.GetLastStatusUpdate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1028,7 +967,6 @@ func (m *SimpleLogin) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SimpleLogin.password")
 	}
@@ -1068,7 +1006,6 @@ type ValidateSimpleLogin struct {
 }
 
 func (v *ValidateSimpleLogin) UserValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user")
@@ -1090,32 +1027,24 @@ func (v *ValidateSimpleLogin) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user"))
 		if err := fv(ctx, m.GetUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
 	v := &ValidateSimpleLogin{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1134,7 +1063,6 @@ var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
 		panic(errMsg)
 	}
 	v.FldValidators["user"] = vFn
-
 	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v

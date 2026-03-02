@@ -26,14 +26,15 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.billing.UsageCountResponse"] = UsageCountResponseValidator()
 	vr["ves.io.schema.billing.VolterraNetworkTrafficRequest"] = VolterraNetworkTrafficRequestValidator()
 	vr["ves.io.schema.billing.VolterraNetworkTrafficResponse"] = VolterraNetworkTrafficResponseValidator()
-
 	vr["ves.io.schema.billing.LilacCDNMetricsRequest"] = LilacCDNMetricsRequestValidator()
 	vr["ves.io.schema.billing.LilacCDNMetricsResponse"] = LilacCDNMetricsResponseValidator()
-
 	vr["ves.io.schema.billing.BillingFeatureData"] = BillingFeatureDataValidator()
 	vr["ves.io.schema.billing.BillingFeatureId"] = BillingFeatureIdValidator()
+	vr["ves.io.schema.billing.BillingMetricData"] = BillingMetricDataValidator()
 	vr["ves.io.schema.billing.BillingUsageData"] = BillingUsageDataValidator()
 	vr["ves.io.schema.billing.BillingUsageId"] = BillingUsageIdValidator()
+	vr["ves.io.schema.billing.BillingUsageSummaryRequest"] = BillingUsageSummaryRequestValidator()
+	vr["ves.io.schema.billing.BillingUsageSummaryResponse"] = BillingUsageSummaryResponseValidator()
 	vr["ves.io.schema.billing.LoadBalancerMetricData"] = LoadBalancerMetricDataValidator()
 	vr["ves.io.schema.billing.MetricLabelFilter"] = MetricLabelFilterValidator()
 	vr["ves.io.schema.billing.MetricValue"] = MetricValueValidator()
@@ -46,26 +47,24 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.billing.SyntheticMonitorInvocationsData"] = SyntheticMonitorInvocationsDataValidator()
 	vr["ves.io.schema.billing.SyntheticMonitorInvocationsId"] = SyntheticMonitorInvocationsIdValidator()
 	vr["ves.io.schema.billing.UsageCountData"] = UsageCountDataValidator()
+	vr["ves.io.schema.billing.UsageMetricData"] = UsageMetricDataValidator()
+	vr["ves.io.schema.billing.UsageSummaryItem"] = UsageSummaryItemValidator()
 	vr["ves.io.schema.billing.VolterraNWTrafficData"] = VolterraNWTrafficDataValidator()
 	vr["ves.io.schema.billing.VolterraNWTrafficId"] = VolterraNWTrafficIdValidator()
 	vr["ves.io.schema.billing.VolterraNWTrafficLabelFilter"] = VolterraNWTrafficLabelFilterValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
+	sm["ves.io.schema.billing.CustomPublicAPI"] = "data"
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -75,12 +74,9 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.billing.Object"] = CustomPrivateAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.billing.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.billing.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
 		if isExternal {
@@ -91,16 +87,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.billing.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.billing.Object"] = CustomPrivateCDNUsageAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.billing.CustomPrivateCDNUsageAPI"] = NewCustomPrivateCDNUsageAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.billing.CustomPrivateCDNUsageAPI"] = NewCustomPrivateCDNUsageAPIRestClient
 		if isExternal {
@@ -111,22 +102,32 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.billing.CustomPrivateCDNUsageAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateCDNUsageAPIServer(svc)
 		}
-
 	}()
-
+	customCSR = mdr.PubCustomServiceRegistry
+	func() {
+		// set swagger jsons for our and external schemas
+		customCSR.SwaggerRegistry["ves.io.schema.billing.Object"] = CustomPublicAPISwaggerJSON
+		customCSR.GrpcClientRegistry["ves.io.schema.billing.CustomPublicAPI"] = NewCustomPublicAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.billing.CustomPublicAPI"] = NewCustomPublicAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.billing.CustomPublicAPI"] = RegisterCustomPublicAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.billing.CustomPublicAPI"] = RegisterGwCustomPublicAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.billing.CustomPublicAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomPublicAPIServer(svc)
+		}
+	}()
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

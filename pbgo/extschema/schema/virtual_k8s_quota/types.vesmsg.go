@@ -67,7 +67,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualK8SRefsDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetVirtualK8SRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *GlobalSpecType) GetVirtualK8SRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualK8SRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *GlobalSpecType) GetVirtualK8SRefsDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) VirtualK8SRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -180,9 +176,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["object_counts"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_counts"))
 		for key, value := range m.GetObjectCounts() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -190,11 +184,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_limits_per_re_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_limits_per_re_site"))
 		for key, value := range m.GetResourceLimitsPerReSite() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -202,24 +193,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_k8s_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_k8s_refs"))
 		if err := fv(ctx, m.GetVirtualK8SRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

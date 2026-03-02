@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log_receiver.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.log_receiver.Object"] = ObjectValidator()
 	vr["ves.io.schema.log_receiver.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.log_receiver.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.log_receiver.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.log_receiver.DeleteRequest"] = DeleteRequestValidator()
@@ -28,10 +26,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log_receiver.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.log_receiver.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.log_receiver.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.log_receiver.TestLogReceiverRequest"] = TestLogReceiverRequestValidator()
 	vr["ves.io.schema.log_receiver.TestLogReceiverResponse"] = TestLogReceiverResponseValidator()
-
 	vr["ves.io.schema.log_receiver.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.log_receiver.DataDogReceiver"] = DataDogReceiverValidator()
 	vr["ves.io.schema.log_receiver.GetSpecType"] = GetSpecTypeValidator()
@@ -46,7 +42,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log_receiver.TLSConfigType"] = TLSConfigTypeValidator()
 	vr["ves.io.schema.log_receiver.UDPServerConfigType"] = UDPServerConfigTypeValidator()
 	vr["ves.io.schema.log_receiver.WhereSites"] = WhereSitesValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -58,11 +53,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.log_receiver.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.log_receiver.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.log_receiver.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.log_receiver.API.Create"] = []string{
 		"spec.data_dog.datadog_api_key.blindfold_secret_info_internal",
 		"spec.data_dog.datadog_api_key.secret_encoding_type",
@@ -81,9 +74,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.syslog.tls_server.mtls_enable.key_url.vault_secret_info",
 		"spec.syslog.tls_server.mtls_enable.key_url.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.log_receiver.API.Create"] = "ves.io.schema.log_receiver.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.log_receiver.API.Replace"] = []string{
 		"spec.data_dog.datadog_api_key.blindfold_secret_info_internal",
 		"spec.data_dog.datadog_api_key.secret_encoding_type",
@@ -102,24 +93,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.syslog.tls_server.mtls_enable.key_url.vault_secret_info",
 		"spec.syslog.tls_server.mtls_enable.key_url.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.log_receiver.API.Replace"] = "ves.io.schema.log_receiver.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.log_receiver.API"] = "config"
 	sm["ves.io.schema.log_receiver.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -128,9 +114,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.log_receiver.Object"] = APISwaggerJSON
@@ -144,16 +128,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.log_receiver.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.log_receiver.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.log_receiver.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.log_receiver.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.log_receiver.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.log_receiver.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -164,22 +143,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.log_receiver.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

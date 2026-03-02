@@ -64,7 +64,6 @@ type ValidateBgpCommunity struct {
 }
 
 func (v *ValidateBgpCommunity) CommunityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -118,22 +117,18 @@ func (v *ValidateBgpCommunity) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["community"]; exists {
 		vOpts := append(opts, db.WithValidateField("community"))
 		if err := fv(ctx, m.GetCommunity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpCommunityValidator = func() *ValidateBgpCommunity {
 	v := &ValidateBgpCommunity{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -206,7 +201,6 @@ type ValidateBgpPrefixMatch struct {
 }
 
 func (v *ValidateBgpPrefixMatch) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_prefixes")
@@ -228,14 +222,11 @@ func (v *ValidateBgpPrefixMatch) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_prefixes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_prefixes"))
 		if err := fv(ctx, m.GetIpPrefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetPrefixLengthMatch().(type) {
@@ -272,16 +263,13 @@ func (v *ValidateBgpPrefixMatch) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpPrefixMatchValidator = func() *ValidateBgpPrefixMatch {
 	v := &ValidateBgpPrefixMatch{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -350,7 +338,6 @@ type ValidateBgpPrefixMatchList struct {
 }
 
 func (v *ValidateBgpPrefixMatchList) PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -410,22 +397,18 @@ func (v *ValidateBgpPrefixMatchList) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefixes"))
 		if err := fv(ctx, m.GetPrefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpPrefixMatchListValidator = func() *ValidateBgpPrefixMatchList {
 	v := &ValidateBgpPrefixMatchList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -576,27 +559,13 @@ func (v *ValidateBgpRouteAction) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *BgpRouteAction_Aggregate:
-		if fv, exists := v.FldValidators["action_type.aggregate"]; exists {
-			val := m.GetActionType().(*BgpRouteAction_Aggregate).Aggregate
-			vOpts := append(opts,
-				db.WithValidateField("action_type"),
-				db.WithValidateField("aggregate"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpRouteActionValidator = func() *ValidateBgpRouteAction {
 	v := &ValidateBgpRouteAction{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["action_type.community"] = BgpCommunityValidator().Validate
 
 	return v
@@ -713,16 +682,13 @@ func (v *ValidateBgpRouteMatch) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpRouteMatchValidator = func() *ValidateBgpRouteMatch {
 	v := &ValidateBgpRouteMatch{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -730,7 +696,6 @@ var DefaultBgpRouteMatchValidator = func() *ValidateBgpRouteMatch {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTypeOfMatch := v.TypeOfMatchValidationRuleHandler
 	rulesTypeOfMatch := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -741,7 +706,6 @@ var DefaultBgpRouteMatchValidator = func() *ValidateBgpRouteMatch {
 		panic(errMsg)
 	}
 	v.FldValidators["type_of_match"] = vFn
-
 	v.FldValidators["type_of_match.ip_prefixes"] = BgpPrefixMatchListValidator().Validate
 	v.FldValidators["type_of_match.community"] = BgpCommunityValidator().Validate
 
@@ -806,34 +770,25 @@ func (v *ValidateBgpRoutePolicy) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["match"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match"))
 		if err := fv(ctx, m.GetMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpRoutePolicyValidator = func() *ValidateBgpRoutePolicy {
 	v := &ValidateBgpRoutePolicy{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["match"] = BgpRouteMatchValidator().Validate
-
 	v.FldValidators["action"] = BgpRouteActionValidator().Validate
 
 	return v
@@ -885,7 +840,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -945,22 +899,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1031,7 +981,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1091,22 +1040,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1177,7 +1122,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1237,22 +1181,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1323,7 +1263,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1383,22 +1322,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

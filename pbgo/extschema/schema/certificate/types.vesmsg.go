@@ -41,7 +41,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPrivateKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.private_key")
 	}
@@ -82,11 +81,9 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCertificateChainDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -102,7 +99,6 @@ func (m *CreateSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCertificateChainDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -112,7 +108,6 @@ func (m *CreateSpecType) GetCertificateChainDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: certificate_chain")
 	}
-
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -130,7 +125,6 @@ func (m *CreateSpecType) GetCertificateChainDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -139,7 +133,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) CertificateUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
@@ -147,9 +140,7 @@ func (v *ValidateCreateSpecType) CertificateUrlValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
@@ -158,11 +149,9 @@ func (v *ValidateCreateSpecType) PrivateKeyValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -182,23 +171,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate_chain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_chain"))
 		if err := fv(ctx, m.GetCertificateChain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_url"))
 		if err := fv(ctx, m.GetCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetOcspStaplingChoice().(type) {
@@ -235,25 +218,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_key"))
 		if err := fv(ctx, m.GetPrivateKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -286,9 +263,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["private_key"] = vFn
-
 	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = ves_io_schema.HashAlgorithmsValidator().Validate
-
 	v.FldValidators["certificate_chain"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -314,7 +289,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPrivateKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.private_key")
 	}
@@ -360,25 +334,20 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHttpLoadbalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHttpLoadbalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTcpLoadbalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTcpLoadbalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -394,7 +363,6 @@ func (m *GetSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCertificateChainDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -404,7 +372,6 @@ func (m *GetSpecType) GetCertificateChainDBEntries(ctx context.Context, d db.Int
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: certificate_chain")
 	}
-
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -422,7 +389,6 @@ func (m *GetSpecType) GetCertificateChainDBEntries(ctx context.Context, d db.Int
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -449,7 +415,6 @@ func (m *GetSpecType) GetHttpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHttpLoadbalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -477,7 +442,6 @@ func (m *GetSpecType) GetHttpLoadbalancersDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -504,7 +468,6 @@ func (m *GetSpecType) GetTcpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTcpLoadbalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -532,7 +495,6 @@ func (m *GetSpecType) GetTcpLoadbalancersDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -541,7 +503,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) CertificateUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
@@ -549,9 +510,7 @@ func (v *ValidateGetSpecType) CertificateUrlValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
@@ -560,11 +519,9 @@ func (v *ValidateGetSpecType) PrivateKeyValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -584,27 +541,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate_chain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_chain"))
 		if err := fv(ctx, m.GetCertificateChain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_url"))
 		if err := fv(ctx, m.GetCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_loadbalancers"))
 		for idx, item := range m.GetHttpLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -612,11 +561,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infos"))
 		for idx, item := range m.GetInfos() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -624,7 +570,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetOcspStaplingChoice().(type) {
@@ -661,20 +606,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_key"))
 		if err := fv(ctx, m.GetPrivateKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_loadbalancers"))
 		for idx, item := range m.GetTcpLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -682,16 +621,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -724,13 +660,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["private_key"] = vFn
-
 	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = ves_io_schema.HashAlgorithmsValidator().Validate
-
 	v.FldValidators["certificate_chain"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["http_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["tcp_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -756,7 +688,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPrivateKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.private_key")
 	}
@@ -802,25 +733,20 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHttpLoadbalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHttpLoadbalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTcpLoadbalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTcpLoadbalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -836,7 +762,6 @@ func (m *GlobalSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCertificateChainDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -846,7 +771,6 @@ func (m *GlobalSpecType) GetCertificateChainDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: certificate_chain")
 	}
-
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -864,7 +788,6 @@ func (m *GlobalSpecType) GetCertificateChainDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -891,7 +814,6 @@ func (m *GlobalSpecType) GetHttpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHttpLoadbalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -919,7 +841,6 @@ func (m *GlobalSpecType) GetHttpLoadbalancersDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -946,7 +867,6 @@ func (m *GlobalSpecType) GetTcpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTcpLoadbalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -974,7 +894,6 @@ func (m *GlobalSpecType) GetTcpLoadbalancersDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -983,7 +902,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) CertificateUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
@@ -991,9 +909,7 @@ func (v *ValidateGlobalSpecType) CertificateUrlValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
@@ -1002,11 +918,9 @@ func (v *ValidateGlobalSpecType) PrivateKeyValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1026,27 +940,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate_chain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_chain"))
 		if err := fv(ctx, m.GetCertificateChain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_url"))
 		if err := fv(ctx, m.GetCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_loadbalancers"))
 		for idx, item := range m.GetHttpLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1054,11 +960,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["infos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infos"))
 		for idx, item := range m.GetInfos() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1066,7 +969,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetOcspStaplingChoice().(type) {
@@ -1103,20 +1005,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_key"))
 		if err := fv(ctx, m.GetPrivateKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_loadbalancers"))
 		for idx, item := range m.GetTcpLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1124,16 +1020,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1166,13 +1059,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["private_key"] = vFn
-
 	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = ves_io_schema.HashAlgorithmsValidator().Validate
-
 	v.FldValidators["certificate_chain"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["http_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["tcp_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1198,7 +1087,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPrivateKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.private_key")
 	}
@@ -1239,11 +1127,9 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCertificateChainDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -1259,7 +1145,6 @@ func (m *ReplaceSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCertificateChainDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1269,7 +1154,6 @@ func (m *ReplaceSpecType) GetCertificateChainDBEntries(ctx context.Context, d db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: certificate_chain")
 	}
-
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -1287,7 +1171,6 @@ func (m *ReplaceSpecType) GetCertificateChainDBEntries(ctx context.Context, d db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1296,7 +1179,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) CertificateUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
@@ -1304,9 +1186,7 @@ func (v *ValidateReplaceSpecType) CertificateUrlValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
@@ -1315,11 +1195,9 @@ func (v *ValidateReplaceSpecType) PrivateKeyValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1339,23 +1217,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate_chain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_chain"))
 		if err := fv(ctx, m.GetCertificateChain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_url"))
 		if err := fv(ctx, m.GetCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetOcspStaplingChoice().(type) {
@@ -1392,25 +1264,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_key"))
 		if err := fv(ctx, m.GetPrivateKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1443,9 +1309,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["private_key"] = vFn
-
 	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = ves_io_schema.HashAlgorithmsValidator().Validate
-
 	v.FldValidators["certificate_chain"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

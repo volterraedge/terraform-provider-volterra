@@ -20,58 +20,46 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ip_prefix_set.crudapi.ObjectListRspItem"] = ObjectListRspItemValidator()
 	vr["ves.io.schema.ip_prefix_set.crudapi.ObjectReplaceReq"] = ObjectReplaceReqValidator()
 	vr["ves.io.schema.ip_prefix_set.crudapi.ObjectReplaceRsp"] = ObjectReplaceRspValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Create"] = []string{
 		"spec.gc_spec.ipv6_prefix.#",
 		"spec.gc_spec.prefix.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Create"] = []string{
 		"spec.gc_spec.ipv6_prefix.#",
 		"spec.gc_spec.prefix.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Get"] = []string{
 		"spec.gc_spec.ipv6_prefix.#",
 		"spec.gc_spec.prefix.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.List"] = []string{
 		"items.#.spec.gc_spec.ipv6_prefix.#",
 		"items.#.spec.gc_spec.prefix.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.ListStream"] = []string{
 		"items.#.spec.gc_spec.ipv6_prefix.#",
 		"items.#.spec.gc_spec.prefix.#",
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.ipv6_prefix.#",
 		"spec.gc_spec.prefix.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.ipv6_prefix.#",
 		"spec.gc_spec.prefix.#",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -81,7 +69,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	csr = mdr.PvtCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.ip_prefix_set.Object"] = APISwaggerJSON
@@ -95,22 +82,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.ip_prefix_set.crudapi.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.ip_prefix_set.crudapi.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.ip_prefix_set.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

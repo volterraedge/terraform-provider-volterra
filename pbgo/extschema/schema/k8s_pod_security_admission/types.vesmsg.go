@@ -64,7 +64,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) PodSecurityAdmissionSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -124,22 +123,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["pod_security_admission_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("pod_security_admission_specs"))
 		if err := fv(ctx, m.GetPodSecurityAdmissionSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -211,7 +206,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) PodSecurityAdmissionSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -271,22 +265,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["pod_security_admission_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("pod_security_admission_specs"))
 		if err := fv(ctx, m.GetPodSecurityAdmissionSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -358,7 +348,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) PodSecurityAdmissionSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -418,22 +407,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["pod_security_admission_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("pod_security_admission_specs"))
 		if err := fv(ctx, m.GetPodSecurityAdmissionSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -511,7 +496,6 @@ func (v *ValidatePodSecurityAdmissionSpec) AdmissionModeChoiceValidationRuleHand
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePodSecurityAdmissionSpec) PolicyTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -578,7 +562,6 @@ func (v *ValidatePodSecurityAdmissionSpec) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policy_type_choice"]; exists {
@@ -625,16 +608,13 @@ func (v *ValidatePodSecurityAdmissionSpec) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPodSecurityAdmissionSpecValidator = func() *ValidatePodSecurityAdmissionSpec {
 	v := &ValidatePodSecurityAdmissionSpec{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -642,7 +622,6 @@ var DefaultPodSecurityAdmissionSpecValidator = func() *ValidatePodSecurityAdmiss
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdmissionModeChoice := v.AdmissionModeChoiceValidationRuleHandler
 	rulesAdmissionModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -653,7 +632,6 @@ var DefaultPodSecurityAdmissionSpecValidator = func() *ValidatePodSecurityAdmiss
 		panic(errMsg)
 	}
 	v.FldValidators["admission_mode_choice"] = vFn
-
 	vrhPolicyTypeChoice := v.PolicyTypeChoiceValidationRuleHandler
 	rulesPolicyTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -714,7 +692,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) PodSecurityAdmissionSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -774,22 +751,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["pod_security_admission_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("pod_security_admission_specs"))
 		if err := fv(ctx, m.GetPodSecurityAdmissionSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

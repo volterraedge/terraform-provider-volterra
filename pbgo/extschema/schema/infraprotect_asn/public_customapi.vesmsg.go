@@ -70,9 +70,7 @@ func (v *ValidateUpdateASNReviewStatusRequest) ReviewTypeValidationRuleHandler(r
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateASNReviewStatusRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -94,23 +92,17 @@ func (v *ValidateUpdateASNReviewStatusRequest) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["review_type"]; exists {
@@ -157,16 +149,13 @@ func (v *ValidateUpdateASNReviewStatusRequest) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateASNReviewStatusRequestValidator = func() *ValidateUpdateASNReviewStatusRequest {
 	v := &ValidateUpdateASNReviewStatusRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -174,7 +163,6 @@ var DefaultUpdateASNReviewStatusRequestValidator = func() *ValidateUpdateASNRevi
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhReviewType := v.ReviewTypeValidationRuleHandler
 	rulesReviewType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -258,7 +246,6 @@ func (v *ValidateUpdateASNReviewStatusResponse) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

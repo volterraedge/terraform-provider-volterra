@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tunnel.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.tunnel.Object"] = ObjectValidator()
 	vr["ves.io.schema.tunnel.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.tunnel.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.tunnel.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.tunnel.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tunnel.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.tunnel.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.tunnel.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.tunnel.ConfigureType"] = ConfigureTypeValidator()
 	vr["ves.io.schema.tunnel.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.tunnel.ESPProposal"] = ESPProposalValidator()
@@ -43,7 +40,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tunnel.RemoteNodeAttributes"] = RemoteNodeAttributesValidator()
 	vr["ves.io.schema.tunnel.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.tunnel.TunnelParams"] = TunnelParamsValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -55,43 +51,34 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.tunnel.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.tunnel.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.tunnel.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.tunnel.API.Create"] = []string{
 		"spec.params.ipsec.ipsec_psk.blindfold_secret_info_internal",
 		"spec.params.ipsec.ipsec_psk.secret_encoding_type",
 		"spec.params.ipsec.ipsec_psk.vault_secret_info",
 		"spec.params.ipsec.ipsec_psk.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.tunnel.API.Create"] = "ves.io.schema.tunnel.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.tunnel.API.Replace"] = []string{
 		"spec.params.ipsec.ipsec_psk.blindfold_secret_info_internal",
 		"spec.params.ipsec.ipsec_psk.secret_encoding_type",
 		"spec.params.ipsec.ipsec_psk.vault_secret_info",
 		"spec.params.ipsec.ipsec_psk.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.tunnel.API.Replace"] = "ves.io.schema.tunnel.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.tunnel.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -100,9 +87,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.tunnel.Object"] = APISwaggerJSON
@@ -116,22 +101,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.tunnel.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.tunnel.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.tunnel.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

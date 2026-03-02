@@ -68,7 +68,6 @@ type ValidateApiEndpoint struct {
 }
 
 func (v *ValidateApiEndpoint) CollapsedUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for collapsed_url")
@@ -90,32 +89,24 @@ func (v *ValidateApiEndpoint) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["collapsed_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("collapsed_url"))
 		if err := fv(ctx, m.GetCollapsedUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiEndpointValidator = func() *ValidateApiEndpoint {
 	v := &ValidateApiEndpoint{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -184,7 +175,6 @@ type ValidateGetSuggestedWAFExclusionRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedWAFExclusionRuleReq) ReqPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for req_path")
@@ -192,9 +182,7 @@ func (v *ValidateGetSuggestedWAFExclusionRuleReq) ReqPathValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedWAFExclusionRuleReq) DomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain")
@@ -202,9 +190,7 @@ func (v *ValidateGetSuggestedWAFExclusionRuleReq) DomainValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedWAFExclusionRuleReq) ExcludeSignatureContextsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -250,9 +236,7 @@ func (v *ValidateGetSuggestedWAFExclusionRuleReq) ExcludeSignatureContextsValida
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedWAFExclusionRuleReq) ExcludeViolationContextsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -298,9 +282,7 @@ func (v *ValidateGetSuggestedWAFExclusionRuleReq) ExcludeViolationContextsValida
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedWAFExclusionRuleReq) ExcludeBotNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -346,9 +328,7 @@ func (v *ValidateGetSuggestedWAFExclusionRuleReq) ExcludeBotNamesValidationRuleH
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedWAFExclusionRuleReq) RouteUuidValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for route_uuid")
@@ -370,92 +350,66 @@ func (v *ValidateGetSuggestedWAFExclusionRuleReq) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_endpoint"))
 		if err := fv(ctx, m.GetApiEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["exclude_bot_names"]; exists {
 		vOpts := append(opts, db.WithValidateField("exclude_bot_names"))
 		if err := fv(ctx, m.GetExcludeBotNames(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["exclude_signature_contexts"]; exists {
 		vOpts := append(opts, db.WithValidateField("exclude_signature_contexts"))
 		if err := fv(ctx, m.GetExcludeSignatureContexts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["exclude_violation_contexts"]; exists {
 		vOpts := append(opts, db.WithValidateField("exclude_violation_contexts"))
 		if err := fv(ctx, m.GetExcludeViolationContexts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["req_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("req_path"))
 		if err := fv(ctx, m.GetReqPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_uuid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_uuid"))
 		if err := fv(ctx, m.GetRouteUuid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedWAFExclusionRuleReqValidator = func() *ValidateGetSuggestedWAFExclusionRuleReq {
 	v := &ValidateGetSuggestedWAFExclusionRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -533,7 +487,6 @@ var DefaultGetSuggestedWAFExclusionRuleReqValidator = func() *ValidateGetSuggest
 		panic(errMsg)
 	}
 	v.FldValidators["route_uuid"] = vFn
-
 	v.FldValidators["api_endpoint"] = ApiEndpointValidator().Validate
 
 	return v
@@ -586,11 +539,9 @@ func (m *GetSuggestedWAFExclusionRuleRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetWafExclusionPolicyDRefInfo()
-
 }
 
 func (m *GetSuggestedWAFExclusionRuleRsp) GetWafExclusionPolicyDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetWafExclusionPolicy()
 	if vref == nil {
 		return nil, nil
@@ -606,7 +557,6 @@ func (m *GetSuggestedWAFExclusionRuleRsp) GetWafExclusionPolicyDRefInfo() ([]db.
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetWafExclusionPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -616,7 +566,6 @@ func (m *GetSuggestedWAFExclusionRuleRsp) GetWafExclusionPolicyDBEntries(ctx con
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: waf_exclusion_policy")
 	}
-
 	vref := m.GetWafExclusionPolicy()
 	if vref == nil {
 		return nil, nil
@@ -634,7 +583,6 @@ func (m *GetSuggestedWAFExclusionRuleRsp) GetWafExclusionPolicyDBEntries(ctx con
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -655,52 +603,37 @@ func (v *ValidateGetSuggestedWAFExclusionRuleRsp) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_exclusion_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_exclusion_policy"))
 		if err := fv(ctx, m.GetWafExclusionPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_exclusion_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_exclusion_rule"))
 		if err := fv(ctx, m.GetWafExclusionRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedWAFExclusionRuleRspValidator = func() *ValidateGetSuggestedWAFExclusionRuleRsp {
 	v := &ValidateGetSuggestedWAFExclusionRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["waf_exclusion_rule"] = ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate
-
 	v.FldValidators["waf_exclusion_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

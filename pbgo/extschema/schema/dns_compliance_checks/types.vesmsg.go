@@ -67,7 +67,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) DisallowedResourceRecordTypeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -113,9 +112,7 @@ func (v *ValidateCreateSpecType) DisallowedResourceRecordTypeListValidationRuleH
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) DomainDenylistValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -155,9 +152,7 @@ func (v *ValidateCreateSpecType) DomainDenylistValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) DisallowedQueryTypeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -217,38 +212,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disallowed_query_type_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("disallowed_query_type_list"))
 		if err := fv(ctx, m.GetDisallowedQueryTypeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disallowed_resource_record_type_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("disallowed_resource_record_type_list"))
 		if err := fv(ctx, m.GetDisallowedResourceRecordTypeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_denylist"]; exists {
 		vOpts := append(opts, db.WithValidateField("domain_denylist"))
 		if err := fv(ctx, m.GetDomainDenylist(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -345,7 +332,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProtocolInspectionDRefInfo()
-
 }
 
 func (m *GetSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
@@ -371,7 +357,6 @@ func (m *GetSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetProtocolInspectionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -399,7 +384,6 @@ func (m *GetSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -408,7 +392,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) DisallowedResourceRecordTypeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -454,9 +437,7 @@ func (v *ValidateGetSpecType) DisallowedResourceRecordTypeListValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DomainDenylistValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -496,9 +477,7 @@ func (v *ValidateGetSpecType) DomainDenylistValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DisallowedQueryTypeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -558,33 +537,25 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disallowed_query_type_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("disallowed_query_type_list"))
 		if err := fv(ctx, m.GetDisallowedQueryTypeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disallowed_resource_record_type_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("disallowed_resource_record_type_list"))
 		if err := fv(ctx, m.GetDisallowedResourceRecordTypeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_denylist"]; exists {
 		vOpts := append(opts, db.WithValidateField("domain_denylist"))
 		if err := fv(ctx, m.GetDomainDenylist(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol_inspection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol_inspection"))
 		for idx, item := range m.GetProtocolInspection() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -592,16 +563,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -647,7 +615,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["disallowed_query_type_list"] = vFn
-
 	v.FldValidators["protocol_inspection"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -700,7 +667,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProtocolInspectionDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
@@ -726,7 +692,6 @@ func (m *GlobalSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) 
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetProtocolInspectionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -754,7 +719,6 @@ func (m *GlobalSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -763,7 +727,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) DisallowedResourceRecordTypeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -809,9 +772,7 @@ func (v *ValidateGlobalSpecType) DisallowedResourceRecordTypeListValidationRuleH
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DomainDenylistValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -851,9 +812,7 @@ func (v *ValidateGlobalSpecType) DomainDenylistValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DisallowedQueryTypeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -913,33 +872,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disallowed_query_type_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("disallowed_query_type_list"))
 		if err := fv(ctx, m.GetDisallowedQueryTypeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disallowed_resource_record_type_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("disallowed_resource_record_type_list"))
 		if err := fv(ctx, m.GetDisallowedResourceRecordTypeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_denylist"]; exists {
 		vOpts := append(opts, db.WithValidateField("domain_denylist"))
 		if err := fv(ctx, m.GetDomainDenylist(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol_inspection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol_inspection"))
 		for idx, item := range m.GetProtocolInspection() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -947,16 +898,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1002,7 +950,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["disallowed_query_type_list"] = vFn
-
 	v.FldValidators["protocol_inspection"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1054,7 +1001,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) DisallowedResourceRecordTypeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1100,9 +1046,7 @@ func (v *ValidateReplaceSpecType) DisallowedResourceRecordTypeListValidationRule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) DomainDenylistValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1142,9 +1086,7 @@ func (v *ValidateReplaceSpecType) DomainDenylistValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) DisallowedQueryTypeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1204,38 +1146,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disallowed_query_type_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("disallowed_query_type_list"))
 		if err := fv(ctx, m.GetDisallowedQueryTypeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disallowed_resource_record_type_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("disallowed_resource_record_type_list"))
 		if err := fv(ctx, m.GetDisallowedResourceRecordTypeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_denylist"]; exists {
 		vOpts := append(opts, db.WithValidateField("domain_denylist"))
 		if err := fv(ctx, m.GetDomainDenylist(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

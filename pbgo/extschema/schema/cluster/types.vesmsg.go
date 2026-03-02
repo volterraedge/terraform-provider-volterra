@@ -66,7 +66,6 @@ type ValidateCircuitBreaker struct {
 }
 
 func (v *ValidateCircuitBreaker) ConnectionLimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_limit")
@@ -74,9 +73,7 @@ func (v *ValidateCircuitBreaker) ConnectionLimitValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCircuitBreaker) PendingRequestsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for pending_requests")
@@ -84,9 +81,7 @@ func (v *ValidateCircuitBreaker) PendingRequestsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCircuitBreaker) RetriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for retries")
@@ -94,9 +89,7 @@ func (v *ValidateCircuitBreaker) RetriesValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCircuitBreaker) MaxRequestsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests")
@@ -118,59 +111,42 @@ func (v *ValidateCircuitBreaker) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connection_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_limit"))
 		if err := fv(ctx, m.GetConnectionLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_requests"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_requests"))
 		if err := fv(ctx, m.GetMaxRequests(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pending_requests"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pending_requests"))
 		if err := fv(ctx, m.GetPendingRequests(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["retries"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("retries"))
 		if err := fv(ctx, m.GetRetries(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCircuitBreakerValidator = func() *ValidateCircuitBreaker {
 	v := &ValidateCircuitBreaker{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -246,7 +222,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.tls_parameters")
 	}
@@ -292,21 +267,17 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
@@ -331,7 +302,6 @@ func (m *CreateSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetEndpointsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -350,7 +320,6 @@ func (m *CreateSpecType) GetEndpointsDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -376,7 +345,6 @@ func (m *CreateSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -395,7 +363,6 @@ func (m *CreateSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -404,7 +371,6 @@ func (m *CreateSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -414,11 +380,26 @@ func (m *CreateSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateSpecType) MaxRequestsPerConnectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests_per_connection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) MaxRequestsPerConnectionChoiceMaxRequestsPerConnectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxRequestsPerConnection, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests_per_connection")
+	}
+	return oValidatorFn_MaxRequestsPerConnection, nil
 }
 
 func (v *ValidateCreateSpecType) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -428,9 +409,7 @@ func (v *ValidateCreateSpecType) PanicThresholdTypePanicThresholdValidationRuleH
 	}
 	return oValidatorFn_PanicThreshold, nil
 }
-
 func (v *ValidateCreateSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -476,9 +455,7 @@ func (v *ValidateCreateSpecType) EndpointsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -524,9 +501,7 @@ func (v *ValidateCreateSpecType) HealthChecksValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -572,9 +547,7 @@ func (v *ValidateCreateSpecType) EndpointSubsetsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) DefaultSubsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -617,9 +590,7 @@ func (v *ValidateCreateSpecType) DefaultSubsetValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
@@ -627,9 +598,7 @@ func (v *ValidateCreateSpecType) ConnectionTimeoutValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) HttpIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for http_idle_timeout")
@@ -651,91 +620,65 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["circuit_breaker"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("circuit_breaker"))
 		if err := fv(ctx, m.GetCircuitBreaker(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_subset"]; exists {
 		vOpts := append(opts, db.WithValidateField("default_subset"))
 		if err := fv(ctx, m.GetDefaultSubset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_selection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_selection"))
 		if err := fv(ctx, m.GetEndpointSelection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
 		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoints"))
 		if err := fv(ctx, m.GetEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fallback_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fallback_policy"))
 		if err := fv(ctx, m.GetFallbackPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
 		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_checks"]; exists {
 		vOpts := append(opts, db.WithValidateField("health_checks"))
 		if err := fv(ctx, m.GetHealthChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetHttpProtocolType().(type) {
@@ -772,25 +715,53 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
-	if fv, exists := v.FldValidators["outlier_detection"]; exists {
+	if fv, exists := v.FldValidators["max_requests_per_connection_choice"]; exists {
+		val := m.GetMaxRequestsPerConnectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_requests_per_connection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
 
+	switch m.GetMaxRequestsPerConnectionChoice().(type) {
+	case *CreateSpecType_MaxRequestsPerConnection:
+		if fv, exists := v.FldValidators["max_requests_per_connection_choice.max_requests_per_connection"]; exists {
+			val := m.GetMaxRequestsPerConnectionChoice().(*CreateSpecType_MaxRequestsPerConnection).MaxRequestsPerConnection
+			vOpts := append(opts,
+				db.WithValidateField("max_requests_per_connection_choice"),
+				db.WithValidateField("max_requests_per_connection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_NoRequestLimitPerConnection:
+		if fv, exists := v.FldValidators["max_requests_per_connection_choice.no_request_limit_per_connection"]; exists {
+			val := m.GetMaxRequestsPerConnectionChoice().(*CreateSpecType_NoRequestLimitPerConnection).NoRequestLimitPerConnection
+			vOpts := append(opts,
+				db.WithValidateField("max_requests_per_connection_choice"),
+				db.WithValidateField("no_request_limit_per_connection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["outlier_detection"]; exists {
 		vOpts := append(opts, db.WithValidateField("outlier_detection"))
 		if err := fv(ctx, m.GetOutlierDetection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetPanicThresholdType().(type) {
@@ -816,7 +787,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetProxyProtocolType().(type) {
@@ -853,34 +823,25 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
 		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
 		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -888,7 +849,26 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
+	vrhMaxRequestsPerConnectionChoice := v.MaxRequestsPerConnectionChoiceValidationRuleHandler
+	rulesMaxRequestsPerConnectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxRequestsPerConnectionChoice(rulesMaxRequestsPerConnectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.max_requests_per_connection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_requests_per_connection_choice"] = vFn
+	vrhMaxRequestsPerConnectionChoiceMaxRequestsPerConnection := v.MaxRequestsPerConnectionChoiceMaxRequestsPerConnectionValidationRuleHandler
+	rulesMaxRequestsPerConnectionChoiceMaxRequestsPerConnection := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFnMap["max_requests_per_connection_choice.max_requests_per_connection"], err = vrhMaxRequestsPerConnectionChoiceMaxRequestsPerConnection(rulesMaxRequestsPerConnectionChoiceMaxRequestsPerConnection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.max_requests_per_connection_choice_max_requests_per_connection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_requests_per_connection_choice.max_requests_per_connection"] = vFnMap["max_requests_per_connection_choice.max_requests_per_connection"]
 	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
 	rulesPanicThresholdTypePanicThreshold := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "100",
@@ -898,7 +878,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.panic_threshold_type_panic_threshold: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
 
 	vrhEndpoints := v.EndpointsValidationRuleHandler
@@ -966,17 +945,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_idle_timeout"] = vFn
-
 	v.FldValidators["http_protocol_type.http1_config"] = Http1ProtocolOptionsValidator().Validate
-
 	v.FldValidators["circuit_breaker"] = CircuitBreakerValidator().Validate
-
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
-
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
-
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
-
 	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
@@ -1028,7 +1001,6 @@ type ValidateEndpointSubsetSelectorType struct {
 }
 
 func (v *ValidateEndpointSubsetSelectorType) KeysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1082,22 +1054,18 @@ func (v *ValidateEndpointSubsetSelectorType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["keys"]; exists {
 		vOpts := append(opts, db.WithValidateField("keys"))
 		if err := fv(ctx, m.GetKeys(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEndpointSubsetSelectorTypeValidator = func() *ValidateEndpointSubsetSelectorType {
 	v := &ValidateEndpointSubsetSelectorType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1142,7 +1110,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.tls_parameters")
 	}
@@ -1188,21 +1155,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
@@ -1227,7 +1190,6 @@ func (m *GetSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetEndpointsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1246,7 +1208,6 @@ func (m *GetSpecType) GetEndpointsDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1272,7 +1233,6 @@ func (m *GetSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1291,7 +1251,6 @@ func (m *GetSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1300,7 +1259,6 @@ func (m *GetSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -1310,11 +1268,26 @@ func (m *GetSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetSpecType) MaxRequestsPerConnectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests_per_connection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) MaxRequestsPerConnectionChoiceMaxRequestsPerConnectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxRequestsPerConnection, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests_per_connection")
+	}
+	return oValidatorFn_MaxRequestsPerConnection, nil
 }
 
 func (v *ValidateGetSpecType) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1324,9 +1297,7 @@ func (v *ValidateGetSpecType) PanicThresholdTypePanicThresholdValidationRuleHand
 	}
 	return oValidatorFn_PanicThreshold, nil
 }
-
 func (v *ValidateGetSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1372,9 +1343,7 @@ func (v *ValidateGetSpecType) EndpointsValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1420,9 +1389,7 @@ func (v *ValidateGetSpecType) HealthChecksValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1468,9 +1435,7 @@ func (v *ValidateGetSpecType) EndpointSubsetsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DefaultSubsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1513,9 +1478,7 @@ func (v *ValidateGetSpecType) DefaultSubsetValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
@@ -1523,9 +1486,7 @@ func (v *ValidateGetSpecType) ConnectionTimeoutValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) HttpIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for http_idle_timeout")
@@ -1547,91 +1508,65 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["circuit_breaker"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("circuit_breaker"))
 		if err := fv(ctx, m.GetCircuitBreaker(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_subset"]; exists {
 		vOpts := append(opts, db.WithValidateField("default_subset"))
 		if err := fv(ctx, m.GetDefaultSubset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_selection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_selection"))
 		if err := fv(ctx, m.GetEndpointSelection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
 		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoints"))
 		if err := fv(ctx, m.GetEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fallback_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fallback_policy"))
 		if err := fv(ctx, m.GetFallbackPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
 		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_checks"]; exists {
 		vOpts := append(opts, db.WithValidateField("health_checks"))
 		if err := fv(ctx, m.GetHealthChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetHttpProtocolType().(type) {
@@ -1668,7 +1603,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetLbSourceIpPersistanceChoice().(type) {
@@ -1694,25 +1628,53 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
-	if fv, exists := v.FldValidators["outlier_detection"]; exists {
+	if fv, exists := v.FldValidators["max_requests_per_connection_choice"]; exists {
+		val := m.GetMaxRequestsPerConnectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_requests_per_connection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
 
+	switch m.GetMaxRequestsPerConnectionChoice().(type) {
+	case *GetSpecType_MaxRequestsPerConnection:
+		if fv, exists := v.FldValidators["max_requests_per_connection_choice.max_requests_per_connection"]; exists {
+			val := m.GetMaxRequestsPerConnectionChoice().(*GetSpecType_MaxRequestsPerConnection).MaxRequestsPerConnection
+			vOpts := append(opts,
+				db.WithValidateField("max_requests_per_connection_choice"),
+				db.WithValidateField("max_requests_per_connection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_NoRequestLimitPerConnection:
+		if fv, exists := v.FldValidators["max_requests_per_connection_choice.no_request_limit_per_connection"]; exists {
+			val := m.GetMaxRequestsPerConnectionChoice().(*GetSpecType_NoRequestLimitPerConnection).NoRequestLimitPerConnection
+			vOpts := append(opts,
+				db.WithValidateField("max_requests_per_connection_choice"),
+				db.WithValidateField("no_request_limit_per_connection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["outlier_detection"]; exists {
 		vOpts := append(opts, db.WithValidateField("outlier_detection"))
 		if err := fv(ctx, m.GetOutlierDetection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetPanicThresholdType().(type) {
@@ -1738,7 +1700,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetProxyProtocolType().(type) {
@@ -1775,34 +1736,25 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
 		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
 		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1810,7 +1762,26 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
+	vrhMaxRequestsPerConnectionChoice := v.MaxRequestsPerConnectionChoiceValidationRuleHandler
+	rulesMaxRequestsPerConnectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxRequestsPerConnectionChoice(rulesMaxRequestsPerConnectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.max_requests_per_connection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_requests_per_connection_choice"] = vFn
+	vrhMaxRequestsPerConnectionChoiceMaxRequestsPerConnection := v.MaxRequestsPerConnectionChoiceMaxRequestsPerConnectionValidationRuleHandler
+	rulesMaxRequestsPerConnectionChoiceMaxRequestsPerConnection := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFnMap["max_requests_per_connection_choice.max_requests_per_connection"], err = vrhMaxRequestsPerConnectionChoiceMaxRequestsPerConnection(rulesMaxRequestsPerConnectionChoiceMaxRequestsPerConnection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.max_requests_per_connection_choice_max_requests_per_connection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_requests_per_connection_choice.max_requests_per_connection"] = vFnMap["max_requests_per_connection_choice.max_requests_per_connection"]
 	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
 	rulesPanicThresholdTypePanicThreshold := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "100",
@@ -1820,7 +1791,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.panic_threshold_type_panic_threshold: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
 
 	vrhEndpoints := v.EndpointsValidationRuleHandler
@@ -1888,17 +1858,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_idle_timeout"] = vFn
-
 	v.FldValidators["http_protocol_type.http1_config"] = Http1ProtocolOptionsValidator().Validate
-
 	v.FldValidators["circuit_breaker"] = CircuitBreakerValidator().Validate
-
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
-
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
-
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
-
 	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
@@ -1924,7 +1888,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.tls_parameters")
 	}
@@ -1965,26 +1928,50 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClusterTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetClusterTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	if fdrInfos, err := m.GetEndpointsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetEndpointsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
+}
 
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetClusterTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetClusterType() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterType().(type) {
+	case *GlobalSpecType_DefaultCluster:
+		return nil, nil
+	case *GlobalSpecType_TmmPoolCluster:
+		drInfos, err := m.GetTmmPoolCluster().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTmmPoolCluster().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tmm_pool_cluster." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
 }
 
 func (m *GlobalSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
@@ -2009,7 +1996,6 @@ func (m *GlobalSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetEndpointsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2028,7 +2014,6 @@ func (m *GlobalSpecType) GetEndpointsDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2054,7 +2039,6 @@ func (m *GlobalSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2073,7 +2057,6 @@ func (m *GlobalSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2082,7 +2065,6 @@ func (m *GlobalSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -2092,11 +2074,26 @@ func (m *GlobalSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGlobalSpecType) MaxRequestsPerConnectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests_per_connection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) MaxRequestsPerConnectionChoiceMaxRequestsPerConnectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxRequestsPerConnection, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests_per_connection")
+	}
+	return oValidatorFn_MaxRequestsPerConnection, nil
 }
 
 func (v *ValidateGlobalSpecType) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2106,9 +2103,7 @@ func (v *ValidateGlobalSpecType) PanicThresholdTypePanicThresholdValidationRuleH
 	}
 	return oValidatorFn_PanicThreshold, nil
 }
-
 func (v *ValidateGlobalSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2154,9 +2149,7 @@ func (v *ValidateGlobalSpecType) EndpointsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2202,9 +2195,7 @@ func (v *ValidateGlobalSpecType) HealthChecksValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2250,9 +2241,7 @@ func (v *ValidateGlobalSpecType) EndpointSubsetsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DefaultSubsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2295,9 +2284,7 @@ func (v *ValidateGlobalSpecType) DefaultSubsetValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
@@ -2305,9 +2292,7 @@ func (v *ValidateGlobalSpecType) ConnectionTimeoutValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) HttpIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for http_idle_timeout")
@@ -2329,109 +2314,102 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["circuit_breaker"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("circuit_breaker"))
 		if err := fv(ctx, m.GetCircuitBreaker(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
+	switch m.GetClusterType().(type) {
+	case *GlobalSpecType_DefaultCluster:
+		if fv, exists := v.FldValidators["cluster_type.default_cluster"]; exists {
+			val := m.GetClusterType().(*GlobalSpecType_DefaultCluster).DefaultCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_type"),
+				db.WithValidateField("default_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_TmmPoolCluster:
+		if fv, exists := v.FldValidators["cluster_type.tmm_pool_cluster"]; exists {
+			val := m.GetClusterType().(*GlobalSpecType_TmmPoolCluster).TmmPoolCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_type"),
+				db.WithValidateField("tmm_pool_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["connection_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_subset"]; exists {
 		vOpts := append(opts, db.WithValidateField("default_subset"))
 		if err := fv(ctx, m.GetDefaultSubset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_discovery_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_discovery_type"))
 		if err := fv(ctx, m.GetDnsDiscoveryType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_lookup_family"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lookup_family"))
 		if err := fv(ctx, m.GetDnsLookupFamily(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_selection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_selection"))
 		if err := fv(ctx, m.GetEndpointSelection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
 		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoints"))
 		if err := fv(ctx, m.GetEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fallback_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fallback_policy"))
 		if err := fv(ctx, m.GetFallbackPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
 		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_checks"]; exists {
 		vOpts := append(opts, db.WithValidateField("health_checks"))
 		if err := fv(ctx, m.GetHealthChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetHttpProtocolType().(type) {
@@ -2468,7 +2446,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetLbSourceIpPersistanceChoice().(type) {
@@ -2494,25 +2471,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
-	if fv, exists := v.FldValidators["outlier_detection"]; exists {
+	if fv, exists := v.FldValidators["max_requests_per_connection_choice"]; exists {
+		val := m.GetMaxRequestsPerConnectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_requests_per_connection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
 
+	switch m.GetMaxRequestsPerConnectionChoice().(type) {
+	case *GlobalSpecType_MaxRequestsPerConnection:
+		if fv, exists := v.FldValidators["max_requests_per_connection_choice.max_requests_per_connection"]; exists {
+			val := m.GetMaxRequestsPerConnectionChoice().(*GlobalSpecType_MaxRequestsPerConnection).MaxRequestsPerConnection
+			vOpts := append(opts,
+				db.WithValidateField("max_requests_per_connection_choice"),
+				db.WithValidateField("max_requests_per_connection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_NoRequestLimitPerConnection:
+		if fv, exists := v.FldValidators["max_requests_per_connection_choice.no_request_limit_per_connection"]; exists {
+			val := m.GetMaxRequestsPerConnectionChoice().(*GlobalSpecType_NoRequestLimitPerConnection).NoRequestLimitPerConnection
+			vOpts := append(opts,
+				db.WithValidateField("max_requests_per_connection_choice"),
+				db.WithValidateField("no_request_limit_per_connection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["outlier_detection"]; exists {
 		vOpts := append(opts, db.WithValidateField("outlier_detection"))
 		if err := fv(ctx, m.GetOutlierDetection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetPanicThresholdType().(type) {
@@ -2538,7 +2543,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetProxyProtocolType().(type) {
@@ -2575,34 +2579,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
 		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
 		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2610,7 +2605,26 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
+	vrhMaxRequestsPerConnectionChoice := v.MaxRequestsPerConnectionChoiceValidationRuleHandler
+	rulesMaxRequestsPerConnectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxRequestsPerConnectionChoice(rulesMaxRequestsPerConnectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.max_requests_per_connection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_requests_per_connection_choice"] = vFn
+	vrhMaxRequestsPerConnectionChoiceMaxRequestsPerConnection := v.MaxRequestsPerConnectionChoiceMaxRequestsPerConnectionValidationRuleHandler
+	rulesMaxRequestsPerConnectionChoiceMaxRequestsPerConnection := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFnMap["max_requests_per_connection_choice.max_requests_per_connection"], err = vrhMaxRequestsPerConnectionChoiceMaxRequestsPerConnection(rulesMaxRequestsPerConnectionChoiceMaxRequestsPerConnection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.max_requests_per_connection_choice_max_requests_per_connection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_requests_per_connection_choice.max_requests_per_connection"] = vFnMap["max_requests_per_connection_choice.max_requests_per_connection"]
 	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
 	rulesPanicThresholdTypePanicThreshold := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "100",
@@ -2620,7 +2634,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.panic_threshold_type_panic_threshold: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
 
 	vrhEndpoints := v.EndpointsValidationRuleHandler
@@ -2688,17 +2701,12 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_idle_timeout"] = vFn
-
+	v.FldValidators["cluster_type.tmm_pool_cluster"] = TMMPoolTypeValidator().Validate
 	v.FldValidators["http_protocol_type.http1_config"] = Http1ProtocolOptionsValidator().Validate
-
 	v.FldValidators["circuit_breaker"] = CircuitBreakerValidator().Validate
-
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
-
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
-
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
-
 	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
@@ -2762,23 +2770,18 @@ func (v *ValidateHttp1ProtocolOptions) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["header_transformation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header_transformation"))
 		if err := fv(ctx, m.GetHeaderTransformation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHttp1ProtocolOptionsValidator = func() *ValidateHttp1ProtocolOptions {
 	v := &ValidateHttp1ProtocolOptions{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["header_transformation"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
 	return v
@@ -2842,16 +2845,12 @@ func (v *ValidateHttp2ProtocolOptions) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enabled"))
 		if err := fv(ctx, m.GetEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2908,7 +2907,6 @@ type ValidateOutlierDetectionType struct {
 }
 
 func (v *ValidateOutlierDetectionType) Consecutive_5XxValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for consecutive_5xx")
@@ -2916,9 +2914,7 @@ func (v *ValidateOutlierDetectionType) Consecutive_5XxValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOutlierDetectionType) IntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for interval")
@@ -2926,9 +2922,7 @@ func (v *ValidateOutlierDetectionType) IntervalValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOutlierDetectionType) BaseEjectionTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for base_ejection_time")
@@ -2936,9 +2930,7 @@ func (v *ValidateOutlierDetectionType) BaseEjectionTimeValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOutlierDetectionType) MaxEjectionPercentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for max_ejection_percent")
@@ -2946,9 +2938,7 @@ func (v *ValidateOutlierDetectionType) MaxEjectionPercentValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOutlierDetectionType) ConsecutiveGatewayFailureValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for consecutive_gateway_failure")
@@ -2970,59 +2960,42 @@ func (v *ValidateOutlierDetectionType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["base_ejection_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("base_ejection_time"))
 		if err := fv(ctx, m.GetBaseEjectionTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["consecutive_5xx"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("consecutive_5xx"))
 		if err := fv(ctx, m.GetConsecutive_5Xx(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["consecutive_gateway_failure"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("consecutive_gateway_failure"))
 		if err := fv(ctx, m.GetConsecutiveGatewayFailure(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interval"))
 		if err := fv(ctx, m.GetInterval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_ejection_percent"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_ejection_percent"))
 		if err := fv(ctx, m.GetMaxEjectionPercent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOutlierDetectionTypeValidator = func() *ValidateOutlierDetectionType {
 	v := &ValidateOutlierDetectionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3109,7 +3082,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.tls_parameters")
 	}
@@ -3155,21 +3127,17 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
@@ -3194,7 +3162,6 @@ func (m *ReplaceSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetEndpointsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3213,7 +3180,6 @@ func (m *ReplaceSpecType) GetEndpointsDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3239,7 +3205,6 @@ func (m *ReplaceSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3258,7 +3223,6 @@ func (m *ReplaceSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3267,7 +3231,6 @@ func (m *ReplaceSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -3277,11 +3240,26 @@ func (m *ReplaceSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceSpecType) MaxRequestsPerConnectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests_per_connection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) MaxRequestsPerConnectionChoiceMaxRequestsPerConnectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxRequestsPerConnection, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_requests_per_connection")
+	}
+	return oValidatorFn_MaxRequestsPerConnection, nil
 }
 
 func (v *ValidateReplaceSpecType) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -3291,9 +3269,7 @@ func (v *ValidateReplaceSpecType) PanicThresholdTypePanicThresholdValidationRule
 	}
 	return oValidatorFn_PanicThreshold, nil
 }
-
 func (v *ValidateReplaceSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3339,9 +3315,7 @@ func (v *ValidateReplaceSpecType) EndpointsValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3387,9 +3361,7 @@ func (v *ValidateReplaceSpecType) HealthChecksValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3435,9 +3407,7 @@ func (v *ValidateReplaceSpecType) EndpointSubsetsValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) DefaultSubsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -3480,9 +3450,7 @@ func (v *ValidateReplaceSpecType) DefaultSubsetValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
@@ -3490,9 +3458,7 @@ func (v *ValidateReplaceSpecType) ConnectionTimeoutValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) HttpIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for http_idle_timeout")
@@ -3514,91 +3480,65 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["circuit_breaker"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("circuit_breaker"))
 		if err := fv(ctx, m.GetCircuitBreaker(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_subset"]; exists {
 		vOpts := append(opts, db.WithValidateField("default_subset"))
 		if err := fv(ctx, m.GetDefaultSubset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_selection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_selection"))
 		if err := fv(ctx, m.GetEndpointSelection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
 		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoints"))
 		if err := fv(ctx, m.GetEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fallback_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fallback_policy"))
 		if err := fv(ctx, m.GetFallbackPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
 		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_checks"]; exists {
 		vOpts := append(opts, db.WithValidateField("health_checks"))
 		if err := fv(ctx, m.GetHealthChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetHttpProtocolType().(type) {
@@ -3635,25 +3575,53 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
-	if fv, exists := v.FldValidators["outlier_detection"]; exists {
+	if fv, exists := v.FldValidators["max_requests_per_connection_choice"]; exists {
+		val := m.GetMaxRequestsPerConnectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_requests_per_connection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
 
+	switch m.GetMaxRequestsPerConnectionChoice().(type) {
+	case *ReplaceSpecType_MaxRequestsPerConnection:
+		if fv, exists := v.FldValidators["max_requests_per_connection_choice.max_requests_per_connection"]; exists {
+			val := m.GetMaxRequestsPerConnectionChoice().(*ReplaceSpecType_MaxRequestsPerConnection).MaxRequestsPerConnection
+			vOpts := append(opts,
+				db.WithValidateField("max_requests_per_connection_choice"),
+				db.WithValidateField("max_requests_per_connection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_NoRequestLimitPerConnection:
+		if fv, exists := v.FldValidators["max_requests_per_connection_choice.no_request_limit_per_connection"]; exists {
+			val := m.GetMaxRequestsPerConnectionChoice().(*ReplaceSpecType_NoRequestLimitPerConnection).NoRequestLimitPerConnection
+			vOpts := append(opts,
+				db.WithValidateField("max_requests_per_connection_choice"),
+				db.WithValidateField("no_request_limit_per_connection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["outlier_detection"]; exists {
 		vOpts := append(opts, db.WithValidateField("outlier_detection"))
 		if err := fv(ctx, m.GetOutlierDetection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetPanicThresholdType().(type) {
@@ -3679,7 +3647,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetProxyProtocolType().(type) {
@@ -3716,34 +3683,25 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
 		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
 		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3751,7 +3709,26 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
+	vrhMaxRequestsPerConnectionChoice := v.MaxRequestsPerConnectionChoiceValidationRuleHandler
+	rulesMaxRequestsPerConnectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxRequestsPerConnectionChoice(rulesMaxRequestsPerConnectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.max_requests_per_connection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_requests_per_connection_choice"] = vFn
+	vrhMaxRequestsPerConnectionChoiceMaxRequestsPerConnection := v.MaxRequestsPerConnectionChoiceMaxRequestsPerConnectionValidationRuleHandler
+	rulesMaxRequestsPerConnectionChoiceMaxRequestsPerConnection := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFnMap["max_requests_per_connection_choice.max_requests_per_connection"], err = vrhMaxRequestsPerConnectionChoiceMaxRequestsPerConnection(rulesMaxRequestsPerConnectionChoiceMaxRequestsPerConnection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.max_requests_per_connection_choice_max_requests_per_connection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_requests_per_connection_choice.max_requests_per_connection"] = vFnMap["max_requests_per_connection_choice.max_requests_per_connection"]
 	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
 	rulesPanicThresholdTypePanicThreshold := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "100",
@@ -3761,7 +3738,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.panic_threshold_type_panic_threshold: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
 
 	vrhEndpoints := v.EndpointsValidationRuleHandler
@@ -3829,17 +3805,11 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_idle_timeout"] = vFn
-
 	v.FldValidators["http_protocol_type.http1_config"] = Http1ProtocolOptionsValidator().Validate
-
 	v.FldValidators["circuit_breaker"] = CircuitBreakerValidator().Validate
-
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
-
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
-
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
-
 	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
@@ -3847,6 +3817,166 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TMMPoolType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TMMPoolType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TMMPoolType) DeepCopy() *TMMPoolType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TMMPoolType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TMMPoolType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TMMPoolType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TMMPoolTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *TMMPoolType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHealthMonitoringDRefInfo()
+}
+
+// GetDRefInfo for the field's type
+func (m *TMMPoolType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetHealthMonitoring() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHealthMonitoring().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "health_monitoring." + dri.DRField
+	}
+	return drInfos, err
+}
+
+type ValidateTMMPoolType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTMMPoolType) SlowRampTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for slow_ramp_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTMMPoolType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TMMPoolType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TMMPoolType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["action_on_service_down"]; exists {
+		vOpts := append(opts, db.WithValidateField("action_on_service_down"))
+		if err := fv(ctx, m.GetActionOnServiceDown(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["health_monitoring"]; exists {
+		vOpts := append(opts, db.WithValidateField("health_monitoring"))
+		if err := fv(ctx, m.GetHealthMonitoring(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["priority_group"]; exists {
+		vOpts := append(opts, db.WithValidateField("priority_group"))
+		if err := fv(ctx, m.GetPriorityGroup(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["request_queue_config"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_queue_config"))
+		if err := fv(ctx, m.GetRequestQueueConfig(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["slow_ramp_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("slow_ramp_time"))
+		if err := fv(ctx, m.GetSlowRampTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["tmm_lb_method"]; exists {
+		vOpts := append(opts, db.WithValidateField("tmm_lb_method"))
+		if err := fv(ctx, m.GetTmmLbMethod(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTMMPoolTypeValidator = func() *ValidateTMMPoolType {
+	v := &ValidateTMMPoolType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSlowRampTime := v.SlowRampTimeValidationRuleHandler
+	rulesSlowRampTime := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "6000",
+	}
+	vFn, err = vrhSlowRampTime(rulesSlowRampTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TMMPoolType.slow_ramp_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slow_ramp_time"] = vFn
+	v.FldValidators["priority_group"] = ves_io_schema.TMMPriorityGroupActivationTypeValidator().Validate
+	v.FldValidators["action_on_service_down"] = ves_io_schema.TMMActionOnServiceDownTypeValidator().Validate
+	v.FldValidators["request_queue_config"] = ves_io_schema.TMMRequestQueuingOptionsTypeValidator().Validate
+	v.FldValidators["health_monitoring"] = ves_io_schema.TMMHealthMonitoringTypeValidator().Validate
+
+	return v
+}()
+
+func TMMPoolTypeValidator() db.Validator {
+	return DefaultTMMPoolTypeValidator
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -3883,6 +4013,41 @@ func (r *CreateSpecType) GetHttpProtocolTypeFromGlobalSpecType(o *GlobalSpecType
 
 	case *GlobalSpecType_Http2Options:
 		r.HttpProtocolType = &CreateSpecType_Http2Options{Http2Options: of.Http2Options}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetMaxRequestsPerConnectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaxRequestsPerConnectionChoice.(type) {
+	case nil:
+		o.MaxRequestsPerConnectionChoice = nil
+
+	case *CreateSpecType_MaxRequestsPerConnection:
+		o.MaxRequestsPerConnectionChoice = &GlobalSpecType_MaxRequestsPerConnection{MaxRequestsPerConnection: of.MaxRequestsPerConnection}
+
+	case *CreateSpecType_NoRequestLimitPerConnection:
+		o.MaxRequestsPerConnectionChoice = &GlobalSpecType_NoRequestLimitPerConnection{NoRequestLimitPerConnection: of.NoRequestLimitPerConnection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetMaxRequestsPerConnectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaxRequestsPerConnectionChoice.(type) {
+	case nil:
+		r.MaxRequestsPerConnectionChoice = nil
+
+	case *GlobalSpecType_MaxRequestsPerConnection:
+		r.MaxRequestsPerConnectionChoice = &CreateSpecType_MaxRequestsPerConnection{MaxRequestsPerConnection: of.MaxRequestsPerConnection}
+
+	case *GlobalSpecType_NoRequestLimitPerConnection:
+		r.MaxRequestsPerConnectionChoice = &CreateSpecType_NoRequestLimitPerConnection{NoRequestLimitPerConnection: of.NoRequestLimitPerConnection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -3982,6 +4147,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
 	m.GetHttpProtocolTypeFromGlobalSpecType(f)
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
+	m.GetMaxRequestsPerConnectionChoiceFromGlobalSpecType(f)
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.GetProxyProtocolTypeFromGlobalSpecType(f)
@@ -4016,6 +4182,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
 	m1.SetHttpProtocolTypeToGlobalSpecType(f)
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
+	m1.SetMaxRequestsPerConnectionChoiceToGlobalSpecType(f)
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	m1.SetProxyProtocolTypeToGlobalSpecType(f)
@@ -4100,6 +4267,41 @@ func (r *GetSpecType) GetLbSourceIpPersistanceChoiceFromGlobalSpecType(o *Global
 
 	case *GlobalSpecType_EnableLbSourceIpPersistance:
 		r.LbSourceIpPersistanceChoice = &GetSpecType_EnableLbSourceIpPersistance{EnableLbSourceIpPersistance: of.EnableLbSourceIpPersistance}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetMaxRequestsPerConnectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaxRequestsPerConnectionChoice.(type) {
+	case nil:
+		o.MaxRequestsPerConnectionChoice = nil
+
+	case *GetSpecType_MaxRequestsPerConnection:
+		o.MaxRequestsPerConnectionChoice = &GlobalSpecType_MaxRequestsPerConnection{MaxRequestsPerConnection: of.MaxRequestsPerConnection}
+
+	case *GetSpecType_NoRequestLimitPerConnection:
+		o.MaxRequestsPerConnectionChoice = &GlobalSpecType_NoRequestLimitPerConnection{NoRequestLimitPerConnection: of.NoRequestLimitPerConnection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetMaxRequestsPerConnectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaxRequestsPerConnectionChoice.(type) {
+	case nil:
+		r.MaxRequestsPerConnectionChoice = nil
+
+	case *GlobalSpecType_MaxRequestsPerConnection:
+		r.MaxRequestsPerConnectionChoice = &GetSpecType_MaxRequestsPerConnection{MaxRequestsPerConnection: of.MaxRequestsPerConnection}
+
+	case *GlobalSpecType_NoRequestLimitPerConnection:
+		r.MaxRequestsPerConnectionChoice = &GetSpecType_NoRequestLimitPerConnection{NoRequestLimitPerConnection: of.NoRequestLimitPerConnection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -4200,6 +4402,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetHttpProtocolTypeFromGlobalSpecType(f)
 	m.GetLbSourceIpPersistanceChoiceFromGlobalSpecType(f)
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
+	m.GetMaxRequestsPerConnectionChoiceFromGlobalSpecType(f)
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.GetProxyProtocolTypeFromGlobalSpecType(f)
@@ -4235,6 +4438,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetHttpProtocolTypeToGlobalSpecType(f)
 	m1.SetLbSourceIpPersistanceChoiceToGlobalSpecType(f)
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
+	m1.SetMaxRequestsPerConnectionChoiceToGlobalSpecType(f)
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	m1.SetProxyProtocolTypeToGlobalSpecType(f)
@@ -4284,6 +4488,41 @@ func (r *ReplaceSpecType) GetHttpProtocolTypeFromGlobalSpecType(o *GlobalSpecTyp
 
 	case *GlobalSpecType_Http2Options:
 		r.HttpProtocolType = &ReplaceSpecType_Http2Options{Http2Options: of.Http2Options}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetMaxRequestsPerConnectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaxRequestsPerConnectionChoice.(type) {
+	case nil:
+		o.MaxRequestsPerConnectionChoice = nil
+
+	case *ReplaceSpecType_MaxRequestsPerConnection:
+		o.MaxRequestsPerConnectionChoice = &GlobalSpecType_MaxRequestsPerConnection{MaxRequestsPerConnection: of.MaxRequestsPerConnection}
+
+	case *ReplaceSpecType_NoRequestLimitPerConnection:
+		o.MaxRequestsPerConnectionChoice = &GlobalSpecType_NoRequestLimitPerConnection{NoRequestLimitPerConnection: of.NoRequestLimitPerConnection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetMaxRequestsPerConnectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaxRequestsPerConnectionChoice.(type) {
+	case nil:
+		r.MaxRequestsPerConnectionChoice = nil
+
+	case *GlobalSpecType_MaxRequestsPerConnection:
+		r.MaxRequestsPerConnectionChoice = &ReplaceSpecType_MaxRequestsPerConnection{MaxRequestsPerConnection: of.MaxRequestsPerConnection}
+
+	case *GlobalSpecType_NoRequestLimitPerConnection:
+		r.MaxRequestsPerConnectionChoice = &ReplaceSpecType_NoRequestLimitPerConnection{NoRequestLimitPerConnection: of.NoRequestLimitPerConnection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -4383,6 +4622,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
 	m.GetHttpProtocolTypeFromGlobalSpecType(f)
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
+	m.GetMaxRequestsPerConnectionChoiceFromGlobalSpecType(f)
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.GetProxyProtocolTypeFromGlobalSpecType(f)
@@ -4417,6 +4657,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
 	m1.SetHttpProtocolTypeToGlobalSpecType(f)
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
+	m1.SetMaxRequestsPerConnectionChoiceToGlobalSpecType(f)
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	m1.SetProxyProtocolTypeToGlobalSpecType(f)

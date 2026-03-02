@@ -64,7 +64,6 @@ type ValidateReportDataATB struct {
 }
 
 func (v *ValidateReportDataATB) JsonDataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for json_data")
@@ -86,23 +85,18 @@ func (v *ValidateReportDataATB) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["json_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("json_data"))
 		if err := fv(ctx, m.GetJsonData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReportDataATBValidator = func() *ValidateReportDataATB {
 	v := &ValidateReportDataATB{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

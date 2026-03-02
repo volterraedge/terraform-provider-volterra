@@ -23,33 +23,30 @@ resource "volterra_service_policy_rule" "example" {
 
   // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
 
-  asn_matcher {
-    asn_sets {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  any_asn          = true
   challenge_action = ["challenge_action"]
 
   // One of the arguments from this list "any_client client_name client_name_matcher client_selector ip_threat_category_list" must be set
 
-  client_name_matcher {
-    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+  client_selector {
+    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
   }
 
   // One of the arguments from this list "any_ip ip_matcher ip_prefix_list" must be set
 
-  any_ip = true
+  ip_prefix_list {
+    invert_match = true
+
+    ip_prefixes = "192.168.20.0/24"
+
+    ipv6_prefixes = "fd48:fa09:d9d4::/48"
+  }
   waf_action {
     // One of the arguments from this list "app_firewall_detection_control data_guard_control jwt_claims_validation jwt_validation none waf_in_monitoring_mode waf_skip_processing" must be set
 
     jwt_validation = true
   }
 }
-
 ```
 
 Argument Reference
@@ -148,6 +145,8 @@ Argument Reference
 `jwt_claims` - (Optional) Note that all specified JWT claim predicates must evaluate to true.. See [Jwt Claims ](#jwt-claims) below for details.
 
 `label_matcher` - (Optional) other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.
+
+`log_rule_evaluation` - (Optional) Log the rule match details along with the request and continue to evaluate rules in the sequence. (`Bool`).
 
 `mobile_identifier_matcher_action` - (Optional) Specifies mobile requests can be matched when both web and mobile traffic types are set. See [Mobile Identifier Matcher Action ](#mobile-identifier-matcher-action) below for details.(Deprecated)
 
@@ -357,6 +356,8 @@ Specifies how Malicious User Mitigation is handled.
 
 The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher..
 
+`encoded_path_matcher` - (Optional)Match against the encoded, escaped path (`Bool`).
+
 `exact_values` - (Optional) A list of exact path values to match the input HTTP path against. (`String`).
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
@@ -505,7 +506,7 @@ The predicate evaluates to true if the expressions in the label selector are tru
 
 Shape Protected Endpoint Action that include application traffic type and mitigation.
 
-`allow_goodbot` - (Required) Good bot (`Bool`).(Deprecated)
+`allow_goodbot` - (Optional) Good bot (`Bool`).(Deprecated)
 
 `app_traffic_type` - (Required) Traffic type (`String`).
 
@@ -515,7 +516,7 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 
 `transaction_result` - (Optional) Success/failure Criteria for transaction result. See [Shape Protected Endpoint Action Transaction Result ](#shape-protected-endpoint-action-transaction-result) below for details.
 
-`web_scraping` - (Required) Web scraping protection enabled for protected endpoint (`Bool`).(Deprecated)
+`web_scraping` - (Optional) Web scraping protection enabled for protected endpoint (`Bool`).(Deprecated)
 
 ### Url Matcher
 
@@ -940,4 +941,4 @@ A list of URL items used as match criteria. The match is considered successful i
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured service_policy_rule.
+*   `id` - This is the id of the configured service_policy_rule.

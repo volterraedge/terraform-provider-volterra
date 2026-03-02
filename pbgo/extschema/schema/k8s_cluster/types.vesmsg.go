@@ -41,7 +41,6 @@ func (m *ApplicationArgoCDType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetLocalDomain().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ApplicationArgoCDType.local_domain")
 	}
@@ -81,7 +80,6 @@ type ValidateApplicationArgoCDType struct {
 }
 
 func (v *ValidateApplicationArgoCDType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
@@ -103,32 +101,24 @@ func (v *ValidateApplicationArgoCDType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["generated_yaml"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("generated_yaml"))
 		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_domain"))
 		if err := fv(ctx, m.GetLocalDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApplicationArgoCDTypeValidator = func() *ValidateApplicationArgoCDType {
 	v := &ValidateApplicationArgoCDType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -148,7 +138,6 @@ var DefaultApplicationArgoCDTypeValidator = func() *ValidateApplicationArgoCDTyp
 		panic(errMsg)
 	}
 	v.FldValidators["generated_yaml"] = vFn
-
 	v.FldValidators["local_domain"] = LocalAccessArgoCDTypeValidator().Validate
 
 	return v
@@ -200,7 +189,6 @@ type ValidateApplicationDashboardType struct {
 }
 
 func (v *ValidateApplicationDashboardType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
@@ -222,23 +210,18 @@ func (v *ValidateApplicationDashboardType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["generated_yaml"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("generated_yaml"))
 		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApplicationDashboardTypeValidator = func() *ValidateApplicationDashboardType {
 	v := &ValidateApplicationDashboardType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -308,7 +291,6 @@ type ValidateApplicationMetricsServerType struct {
 }
 
 func (v *ValidateApplicationMetricsServerType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
@@ -330,23 +312,18 @@ func (v *ValidateApplicationMetricsServerType) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["generated_yaml"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("generated_yaml"))
 		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApplicationMetricsServerTypeValidator = func() *ValidateApplicationMetricsServerType {
 	v := &ValidateApplicationMetricsServerType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -416,7 +393,6 @@ type ValidateApplicationPrometheusType struct {
 }
 
 func (v *ValidateApplicationPrometheusType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
@@ -438,23 +414,18 @@ func (v *ValidateApplicationPrometheusType) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["generated_yaml"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("generated_yaml"))
 		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApplicationPrometheusTypeValidator = func() *ValidateApplicationPrometheusType {
 	v := &ValidateApplicationPrometheusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -525,7 +496,6 @@ func (m *ClusterRoleBindingListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetClusterRoleBindingsDRefInfo()
-
 }
 
 func (m *ClusterRoleBindingListType) GetClusterRoleBindingsDRefInfo() ([]db.DRefInfo, error) {
@@ -551,7 +521,6 @@ func (m *ClusterRoleBindingListType) GetClusterRoleBindingsDRefInfo() ([]db.DRef
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetClusterRoleBindingsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -579,7 +548,6 @@ func (m *ClusterRoleBindingListType) GetClusterRoleBindingsDBEntries(ctx context
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -588,7 +556,6 @@ type ValidateClusterRoleBindingListType struct {
 }
 
 func (v *ValidateClusterRoleBindingListType) ClusterRoleBindingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -648,22 +615,18 @@ func (v *ValidateClusterRoleBindingListType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cluster_role_bindings"]; exists {
 		vOpts := append(opts, db.WithValidateField("cluster_role_bindings"))
 		if err := fv(ctx, m.GetClusterRoleBindings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultClusterRoleBindingListTypeValidator = func() *ValidateClusterRoleBindingListType {
 	v := &ValidateClusterRoleBindingListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -736,7 +699,6 @@ func (m *ClusterRoleListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetClusterRolesDRefInfo()
-
 }
 
 func (m *ClusterRoleListType) GetClusterRolesDRefInfo() ([]db.DRefInfo, error) {
@@ -762,7 +724,6 @@ func (m *ClusterRoleListType) GetClusterRolesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetClusterRolesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -790,7 +751,6 @@ func (m *ClusterRoleListType) GetClusterRolesDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -799,7 +759,6 @@ type ValidateClusterRoleListType struct {
 }
 
 func (v *ValidateClusterRoleListType) ClusterRolesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -859,22 +818,18 @@ func (v *ValidateClusterRoleListType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cluster_roles"]; exists {
 		vOpts := append(opts, db.WithValidateField("cluster_roles"))
 		if err := fv(ctx, m.GetClusterRoles(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultClusterRoleListTypeValidator = func() *ValidateClusterRoleListType {
 	v := &ValidateClusterRoleListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -920,7 +875,6 @@ func (m *ClusterWideAppListType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetClusterWideApps() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting ClusterWideAppListType.cluster_wide_apps idx %v", idx)
@@ -962,7 +916,6 @@ type ValidateClusterWideAppListType struct {
 }
 
 func (v *ValidateClusterWideAppListType) ClusterWideAppsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1022,22 +975,18 @@ func (v *ValidateClusterWideAppListType) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cluster_wide_apps"]; exists {
 		vOpts := append(opts, db.WithValidateField("cluster_wide_apps"))
 		if err := fv(ctx, m.GetClusterWideApps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultClusterWideAppListTypeValidator = func() *ValidateClusterWideAppListType {
 	v := &ValidateClusterWideAppListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1082,7 +1031,6 @@ func (m *ClusterWideAppType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetArgoCd().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ClusterWideAppType.argo_cd")
 	}
@@ -1198,16 +1146,13 @@ func (v *ValidateClusterWideAppType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultClusterWideAppTypeValidator = func() *ValidateClusterWideAppType {
 	v := &ValidateClusterWideAppType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1215,7 +1160,6 @@ var DefaultClusterWideAppTypeValidator = func() *ValidateClusterWideAppType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAppChoice := v.AppChoiceValidationRuleHandler
 	rulesAppChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1226,7 +1170,6 @@ var DefaultClusterWideAppTypeValidator = func() *ValidateClusterWideAppType {
 		panic(errMsg)
 	}
 	v.FldValidators["app_choice"] = vFn
-
 	v.FldValidators["app_choice.argo_cd"] = ApplicationArgoCDTypeValidator().Validate
 	v.FldValidators["app_choice.dashboard"] = ApplicationDashboardTypeValidator().Validate
 	v.FldValidators["app_choice.metrics_server"] = ApplicationMetricsServerTypeValidator().Validate
@@ -1255,7 +1198,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetClusterWideAppList().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.cluster_wide_app_list")
 	}
@@ -1301,27 +1243,22 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1331,11 +1268,8 @@ func (m *CreateSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 	switch m.GetClusterRoleBindingsChoice().(type) {
 	case *CreateSpecType_UseDefaultClusterRoleBindings:
-
 		return nil, nil
-
 	case *CreateSpecType_UseCustomClusterRoleBindings:
-
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
@@ -1345,11 +1279,9 @@ func (m *CreateSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1359,11 +1291,8 @@ func (m *CreateSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetClusterRoleChoice().(type) {
 	case *CreateSpecType_UseDefaultClusterRoles:
-
 		return nil, nil
-
 	case *CreateSpecType_UseCustomClusterRoleList:
-
 		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
@@ -1373,21 +1302,16 @@ func (m *CreateSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *CreateSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *CreateSpecType_UseDefaultPodSecurityAdmission:
-
 		return nil, nil
-
 	case *CreateSpecType_UseCustomPodSecurityAdmission:
-
 		vref := m.GetUseCustomPodSecurityAdmission()
 		if vref == nil {
 			return nil, nil
@@ -1403,7 +1327,6 @@ func (m *CreateSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo,
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -1415,13 +1338,11 @@ func (m *CreateSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Cont
 
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *CreateSpecType_UseDefaultPodSecurityAdmission:
-
 	case *CreateSpecType_UseCustomPodSecurityAdmission:
 		refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
 		}
-
 		vref := m.GetUseCustomPodSecurityAdmission()
 		if vref == nil {
 			return nil, nil
@@ -1439,7 +1360,6 @@ func (m *CreateSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Cont
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -1452,11 +1372,8 @@ func (m *CreateSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 	switch m.GetPodSecurityPolicyChoice().(type) {
 	case *CreateSpecType_UseDefaultPsp:
-
 		return nil, nil
-
 	case *CreateSpecType_UseCustomPspList:
-
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
@@ -1466,11 +1383,9 @@ func (m *CreateSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "use_custom_psp_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -1484,7 +1399,6 @@ func (v *ValidateCreateSpecType) AppsChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1492,7 +1406,6 @@ func (v *ValidateCreateSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ClusterRoleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1500,7 +1413,6 @@ func (v *ValidateCreateSpecType) ClusterRoleChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ClusterScopedResourceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1508,7 +1420,6 @@ func (v *ValidateCreateSpecType) ClusterScopedResourceAccessChoiceValidationRule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1516,7 +1427,6 @@ func (v *ValidateCreateSpecType) GlobalAccessChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) InsecureRegistriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1524,7 +1434,6 @@ func (v *ValidateCreateSpecType) InsecureRegistriesChoiceValidationRuleHandler(r
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) LocalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1532,7 +1441,6 @@ func (v *ValidateCreateSpecType) LocalAccessChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1540,7 +1448,6 @@ func (v *ValidateCreateSpecType) PodSecurityAdmissionChoiceValidationRuleHandler
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PodSecurityPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1548,7 +1455,6 @@ func (v *ValidateCreateSpecType) PodSecurityPolicyChoiceValidationRuleHandler(ru
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1604,7 +1510,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_bindings_choice"]; exists {
@@ -1640,7 +1545,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_choice"]; exists {
@@ -1676,7 +1580,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice"]; exists {
@@ -1712,7 +1615,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["global_access_choice"]; exists {
@@ -1748,7 +1650,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["insecure_registries_choice"]; exists {
@@ -1784,7 +1685,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["local_access_choice"]; exists {
@@ -1820,7 +1720,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pod_security_admission_choice"]; exists {
@@ -1856,7 +1755,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pod_security_policy_choice"]; exists {
@@ -1892,7 +1790,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vk8s_namespace_access_choice"]; exists {
@@ -1928,16 +1825,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1945,7 +1839,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAppsChoice := v.AppsChoiceValidationRuleHandler
 	rulesAppsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1956,7 +1849,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["apps_choice"] = vFn
-
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1967,7 +1859,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_bindings_choice"] = vFn
-
 	vrhClusterRoleChoice := v.ClusterRoleChoiceValidationRuleHandler
 	rulesClusterRoleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1978,7 +1869,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_choice"] = vFn
-
 	vrhClusterScopedResourceAccessChoice := v.ClusterScopedResourceAccessChoiceValidationRuleHandler
 	rulesClusterScopedResourceAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1989,7 +1879,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_scoped_resource_access_choice"] = vFn
-
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2000,7 +1889,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["global_access_choice"] = vFn
-
 	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
 	rulesInsecureRegistriesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2011,7 +1899,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["insecure_registries_choice"] = vFn
-
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2022,7 +1909,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["local_access_choice"] = vFn
-
 	vrhPodSecurityAdmissionChoice := v.PodSecurityAdmissionChoiceValidationRuleHandler
 	rulesPodSecurityAdmissionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2033,7 +1919,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_admission_choice"] = vFn
-
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2044,7 +1929,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
-
 	vrhVk8SNamespaceAccessChoice := v.Vk8SNamespaceAccessChoiceValidationRuleHandler
 	rulesVk8SNamespaceAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2055,19 +1939,12 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vk8s_namespace_access_choice"] = vFn
-
 	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
-
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
-
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
-
 	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
-
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
-
 	v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
 
 	return v
@@ -2093,7 +1970,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetClusterWideAppList().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.cluster_wide_app_list")
 	}
@@ -2139,27 +2015,22 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2169,11 +2040,8 @@ func (m *GetSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetClusterRoleBindingsChoice().(type) {
 	case *GetSpecType_UseDefaultClusterRoleBindings:
-
 		return nil, nil
-
 	case *GetSpecType_UseCustomClusterRoleBindings:
-
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
@@ -2183,11 +2051,9 @@ func (m *GetSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2197,11 +2063,8 @@ func (m *GetSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetClusterRoleChoice().(type) {
 	case *GetSpecType_UseDefaultClusterRoles:
-
 		return nil, nil
-
 	case *GetSpecType_UseCustomClusterRoleList:
-
 		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
@@ -2211,21 +2074,16 @@ func (m *GetSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *GetSpecType_UseDefaultPodSecurityAdmission:
-
 		return nil, nil
-
 	case *GetSpecType_UseCustomPodSecurityAdmission:
-
 		vref := m.GetUseCustomPodSecurityAdmission()
 		if vref == nil {
 			return nil, nil
@@ -2241,7 +2099,6 @@ func (m *GetSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, er
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -2253,13 +2110,11 @@ func (m *GetSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Context
 
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *GetSpecType_UseDefaultPodSecurityAdmission:
-
 	case *GetSpecType_UseCustomPodSecurityAdmission:
 		refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
 		}
-
 		vref := m.GetUseCustomPodSecurityAdmission()
 		if vref == nil {
 			return nil, nil
@@ -2277,7 +2132,6 @@ func (m *GetSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Context
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -2290,11 +2144,8 @@ func (m *GetSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetPodSecurityPolicyChoice().(type) {
 	case *GetSpecType_UseDefaultPsp:
-
 		return nil, nil
-
 	case *GetSpecType_UseCustomPspList:
-
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
@@ -2304,11 +2155,9 @@ func (m *GetSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "use_custom_psp_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -2322,7 +2171,6 @@ func (v *ValidateGetSpecType) AppsChoiceValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2330,7 +2178,6 @@ func (v *ValidateGetSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ClusterRoleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2338,7 +2185,6 @@ func (v *ValidateGetSpecType) ClusterRoleChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ClusterScopedResourceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2346,7 +2192,6 @@ func (v *ValidateGetSpecType) ClusterScopedResourceAccessChoiceValidationRuleHan
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2354,7 +2199,6 @@ func (v *ValidateGetSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) InsecureRegistriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2362,7 +2206,6 @@ func (v *ValidateGetSpecType) InsecureRegistriesChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) LocalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2370,7 +2213,6 @@ func (v *ValidateGetSpecType) LocalAccessChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2378,7 +2220,6 @@ func (v *ValidateGetSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(ru
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PodSecurityPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2386,7 +2227,6 @@ func (v *ValidateGetSpecType) PodSecurityPolicyChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2442,7 +2282,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_bindings_choice"]; exists {
@@ -2478,7 +2317,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_choice"]; exists {
@@ -2514,7 +2352,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice"]; exists {
@@ -2550,7 +2387,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["global_access_choice"]; exists {
@@ -2586,7 +2422,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["insecure_registries_choice"]; exists {
@@ -2622,7 +2457,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["local_access_choice"]; exists {
@@ -2658,7 +2492,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pod_security_admission_choice"]; exists {
@@ -2694,7 +2527,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pod_security_policy_choice"]; exists {
@@ -2730,7 +2562,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vk8s_namespace_access_choice"]; exists {
@@ -2766,16 +2597,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2783,7 +2611,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAppsChoice := v.AppsChoiceValidationRuleHandler
 	rulesAppsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2794,7 +2621,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["apps_choice"] = vFn
-
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2805,7 +2631,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_bindings_choice"] = vFn
-
 	vrhClusterRoleChoice := v.ClusterRoleChoiceValidationRuleHandler
 	rulesClusterRoleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2816,7 +2641,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_choice"] = vFn
-
 	vrhClusterScopedResourceAccessChoice := v.ClusterScopedResourceAccessChoiceValidationRuleHandler
 	rulesClusterScopedResourceAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2827,7 +2651,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_scoped_resource_access_choice"] = vFn
-
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2838,7 +2661,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["global_access_choice"] = vFn
-
 	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
 	rulesInsecureRegistriesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2849,7 +2671,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["insecure_registries_choice"] = vFn
-
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2860,7 +2681,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["local_access_choice"] = vFn
-
 	vrhPodSecurityAdmissionChoice := v.PodSecurityAdmissionChoiceValidationRuleHandler
 	rulesPodSecurityAdmissionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2871,7 +2691,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_admission_choice"] = vFn
-
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2882,7 +2701,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
-
 	vrhVk8SNamespaceAccessChoice := v.Vk8SNamespaceAccessChoiceValidationRuleHandler
 	rulesVk8SNamespaceAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2893,19 +2711,12 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vk8s_namespace_access_choice"] = vFn
-
 	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
-
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
-
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
-
 	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
-
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
-
 	v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
 
 	return v
@@ -2931,7 +2742,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetClusterWideAppList().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.cluster_wide_app_list")
 	}
@@ -2977,57 +2787,47 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFinalClusterRoleBindingsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFinalClusterRoleBindingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFinalClusterRolesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFinalClusterRolesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFinalPodSecurityAdmissionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFinalPodSecurityAdmissionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFinalPodSecurityPoliciesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFinalPodSecurityPoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3037,11 +2837,8 @@ func (m *GlobalSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 	switch m.GetClusterRoleBindingsChoice().(type) {
 	case *GlobalSpecType_UseDefaultClusterRoleBindings:
-
 		return nil, nil
-
 	case *GlobalSpecType_UseCustomClusterRoleBindings:
-
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
@@ -3051,11 +2848,9 @@ func (m *GlobalSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3065,11 +2860,8 @@ func (m *GlobalSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetClusterRoleChoice().(type) {
 	case *GlobalSpecType_UseDefaultClusterRoles:
-
 		return nil, nil
-
 	case *GlobalSpecType_UseCustomClusterRoleList:
-
 		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
@@ -3079,11 +2871,9 @@ func (m *GlobalSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetFinalClusterRoleBindingsDRefInfo() ([]db.DRefInfo, error) {
@@ -3109,7 +2899,6 @@ func (m *GlobalSpecType) GetFinalClusterRoleBindingsDRefInfo() ([]db.DRefInfo, e
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFinalClusterRoleBindingsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3137,7 +2926,6 @@ func (m *GlobalSpecType) GetFinalClusterRoleBindingsDBEntries(ctx context.Contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3164,7 +2952,6 @@ func (m *GlobalSpecType) GetFinalClusterRolesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFinalClusterRolesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3192,12 +2979,10 @@ func (m *GlobalSpecType) GetFinalClusterRolesDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetFinalPodSecurityAdmissionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetFinalPodSecurityAdmission()
 	if vref == nil {
 		return nil, nil
@@ -3213,7 +2998,6 @@ func (m *GlobalSpecType) GetFinalPodSecurityAdmissionDRefInfo() ([]db.DRefInfo, 
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetFinalPodSecurityAdmissionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3223,7 +3007,6 @@ func (m *GlobalSpecType) GetFinalPodSecurityAdmissionDBEntries(ctx context.Conte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
 	}
-
 	vref := m.GetFinalPodSecurityAdmission()
 	if vref == nil {
 		return nil, nil
@@ -3241,7 +3024,6 @@ func (m *GlobalSpecType) GetFinalPodSecurityAdmissionDBEntries(ctx context.Conte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3268,7 +3050,6 @@ func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDRefInfo() ([]db.DRefInfo, e
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFinalPodSecurityPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3296,18 +3077,14 @@ func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDBEntries(ctx context.Contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
-
 		return nil, nil
-
 	case *GlobalSpecType_UseCustomPodSecurityAdmission:
-
 		vref := m.GetUseCustomPodSecurityAdmission()
 		if vref == nil {
 			return nil, nil
@@ -3323,7 +3100,6 @@ func (m *GlobalSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo,
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -3335,13 +3111,11 @@ func (m *GlobalSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Cont
 
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
-
 	case *GlobalSpecType_UseCustomPodSecurityAdmission:
 		refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
 		}
-
 		vref := m.GetUseCustomPodSecurityAdmission()
 		if vref == nil {
 			return nil, nil
@@ -3359,7 +3133,6 @@ func (m *GlobalSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Cont
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -3372,11 +3145,8 @@ func (m *GlobalSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 	switch m.GetPodSecurityPolicyChoice().(type) {
 	case *GlobalSpecType_UseDefaultPsp:
-
 		return nil, nil
-
 	case *GlobalSpecType_UseCustomPspList:
-
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
@@ -3386,15 +3156,12 @@ func (m *GlobalSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "use_custom_psp_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3410,7 +3177,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3420,7 +3186,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3438,7 +3203,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3453,7 +3217,6 @@ func (v *ValidateGlobalSpecType) AppsChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3461,7 +3224,6 @@ func (v *ValidateGlobalSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ClusterRoleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3469,7 +3231,6 @@ func (v *ValidateGlobalSpecType) ClusterRoleChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ClusterScopedResourceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3477,7 +3238,6 @@ func (v *ValidateGlobalSpecType) ClusterScopedResourceAccessChoiceValidationRule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3485,7 +3245,6 @@ func (v *ValidateGlobalSpecType) GlobalAccessChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) InsecureRegistriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3493,7 +3252,6 @@ func (v *ValidateGlobalSpecType) InsecureRegistriesChoiceValidationRuleHandler(r
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) LocalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3501,7 +3259,6 @@ func (v *ValidateGlobalSpecType) LocalAccessChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3509,7 +3266,6 @@ func (v *ValidateGlobalSpecType) PodSecurityAdmissionChoiceValidationRuleHandler
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PodSecurityPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3517,7 +3273,6 @@ func (v *ValidateGlobalSpecType) PodSecurityPolicyChoiceValidationRuleHandler(ru
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3525,9 +3280,7 @@ func (v *ValidateGlobalSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) FinalClusterRoleBindingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3573,9 +3326,7 @@ func (v *ValidateGlobalSpecType) FinalClusterRoleBindingsValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) FinalClusterRolesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3621,9 +3372,7 @@ func (v *ValidateGlobalSpecType) FinalClusterRolesValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) FinalPodSecurityPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3717,7 +3466,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_bindings_choice"]; exists {
@@ -3753,7 +3501,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_choice"]; exists {
@@ -3789,7 +3536,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice"]; exists {
@@ -3825,40 +3571,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["final_cluster_role_bindings"]; exists {
 		vOpts := append(opts, db.WithValidateField("final_cluster_role_bindings"))
 		if err := fv(ctx, m.GetFinalClusterRoleBindings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["final_cluster_roles"]; exists {
 		vOpts := append(opts, db.WithValidateField("final_cluster_roles"))
 		if err := fv(ctx, m.GetFinalClusterRoles(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["final_pod_security_admission"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("final_pod_security_admission"))
 		if err := fv(ctx, m.GetFinalPodSecurityAdmission(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["final_pod_security_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("final_pod_security_policies"))
 		if err := fv(ctx, m.GetFinalPodSecurityPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["global_access_choice"]; exists {
@@ -3894,7 +3630,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["insecure_registries_choice"]; exists {
@@ -3930,7 +3665,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["local_access_choice"]; exists {
@@ -3966,7 +3700,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pod_security_admission_choice"]; exists {
@@ -4002,7 +3735,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pod_security_policy_choice"]; exists {
@@ -4038,16 +3770,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vk8s_namespace_access_choice"]; exists {
@@ -4083,16 +3811,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4100,7 +3825,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAppsChoice := v.AppsChoiceValidationRuleHandler
 	rulesAppsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4111,7 +3835,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["apps_choice"] = vFn
-
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4122,7 +3845,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_bindings_choice"] = vFn
-
 	vrhClusterRoleChoice := v.ClusterRoleChoiceValidationRuleHandler
 	rulesClusterRoleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4133,7 +3855,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_choice"] = vFn
-
 	vrhClusterScopedResourceAccessChoice := v.ClusterScopedResourceAccessChoiceValidationRuleHandler
 	rulesClusterScopedResourceAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4144,7 +3865,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_scoped_resource_access_choice"] = vFn
-
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4155,7 +3875,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["global_access_choice"] = vFn
-
 	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
 	rulesInsecureRegistriesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4166,7 +3885,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["insecure_registries_choice"] = vFn
-
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4177,7 +3895,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["local_access_choice"] = vFn
-
 	vrhPodSecurityAdmissionChoice := v.PodSecurityAdmissionChoiceValidationRuleHandler
 	rulesPodSecurityAdmissionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4188,7 +3905,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_admission_choice"] = vFn
-
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4199,7 +3915,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
-
 	vrhVk8SNamespaceAccessChoice := v.Vk8SNamespaceAccessChoiceValidationRuleHandler
 	rulesVk8SNamespaceAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4246,23 +3961,14 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["final_pod_security_policies"] = vFn
-
 	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
-
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
-
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
-
 	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
-
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
-
 	v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["final_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -4314,7 +4020,6 @@ type ValidateInsecureRegistryListType struct {
 }
 
 func (v *ValidateInsecureRegistryListType) InsecureRegistriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4368,22 +4073,18 @@ func (v *ValidateInsecureRegistryListType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["insecure_registries"]; exists {
 		vOpts := append(opts, db.WithValidateField("insecure_registries"))
 		if err := fv(ctx, m.GetInsecureRegistries(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInsecureRegistryListTypeValidator = func() *ValidateInsecureRegistryListType {
 	v := &ValidateInsecureRegistryListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4431,7 +4132,6 @@ func (m *LocalAccessArgoCDType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting LocalAccessArgoCDType.password")
 	}
@@ -4485,9 +4185,7 @@ func (v *ValidateLocalAccessArgoCDType) PortChoicePortValidationRuleHandler(rule
 	}
 	return oValidatorFn_Port, nil
 }
-
 func (v *ValidateLocalAccessArgoCDType) LocalDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for local_domain")
@@ -4495,9 +4193,7 @@ func (v *ValidateLocalAccessArgoCDType) LocalDomainValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLocalAccessArgoCDType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -4506,11 +4202,9 @@ func (v *ValidateLocalAccessArgoCDType) PasswordValidationRuleHandler(rules map[
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -4530,23 +4224,17 @@ func (v *ValidateLocalAccessArgoCDType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["local_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_domain"))
 		if err := fv(ctx, m.GetLocalDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -4582,16 +4270,13 @@ func (v *ValidateLocalAccessArgoCDType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLocalAccessArgoCDTypeValidator = func() *ValidateLocalAccessArgoCDType {
 	v := &ValidateLocalAccessArgoCDType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4599,7 +4284,6 @@ var DefaultLocalAccessArgoCDTypeValidator = func() *ValidateLocalAccessArgoCDTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4610,7 +4294,6 @@ var DefaultLocalAccessArgoCDTypeValidator = func() *ValidateLocalAccessArgoCDTyp
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.not_in_ranges": "0,6443,8005-8007,8443-8444,8505-8507,9005-9007,9090,9505-9507,9100,9115,9999,20914,23802,30805,30855,30905,30955,32222,18091-18095,65000-65334",
@@ -4620,7 +4303,6 @@ var DefaultLocalAccessArgoCDTypeValidator = func() *ValidateLocalAccessArgoCDTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LocalAccessArgoCDType.port_choice_port: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
 
 	vrhLocalDomain := v.LocalDomainValidationRuleHandler
@@ -4711,9 +4393,7 @@ func (v *ValidateLocalAccessConfigType) PortChoicePortValidationRuleHandler(rule
 	}
 	return oValidatorFn_Port, nil
 }
-
 func (v *ValidateLocalAccessConfigType) LocalDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for local_domain")
@@ -4735,14 +4415,11 @@ func (v *ValidateLocalAccessConfigType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["local_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_domain"))
 		if err := fv(ctx, m.GetLocalDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -4778,16 +4455,13 @@ func (v *ValidateLocalAccessConfigType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLocalAccessConfigTypeValidator = func() *ValidateLocalAccessConfigType {
 	v := &ValidateLocalAccessConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4795,7 +4469,6 @@ var DefaultLocalAccessConfigTypeValidator = func() *ValidateLocalAccessConfigTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4806,7 +4479,6 @@ var DefaultLocalAccessConfigTypeValidator = func() *ValidateLocalAccessConfigTyp
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.not_in_ranges": "0,6443,8005-8007,8443-8444,8505-8507,9005-9007,9090,9505-9507,9100,9115,9999,20914,23802,30805,30855,30905,30955,32222,18091-18095,65000-65334",
@@ -4816,7 +4488,6 @@ var DefaultLocalAccessConfigTypeValidator = func() *ValidateLocalAccessConfigTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LocalAccessConfigType.port_choice_port: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
 
 	vrhLocalDomain := v.LocalDomainValidationRuleHandler
@@ -4883,7 +4554,6 @@ func (m *PodSecurityPolicyListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPodSecurityPoliciesDRefInfo()
-
 }
 
 func (m *PodSecurityPolicyListType) GetPodSecurityPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -4909,7 +4579,6 @@ func (m *PodSecurityPolicyListType) GetPodSecurityPoliciesDRefInfo() ([]db.DRefI
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPodSecurityPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4937,7 +4606,6 @@ func (m *PodSecurityPolicyListType) GetPodSecurityPoliciesDBEntries(ctx context.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4946,7 +4614,6 @@ type ValidatePodSecurityPolicyListType struct {
 }
 
 func (v *ValidatePodSecurityPolicyListType) PodSecurityPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5006,22 +4673,18 @@ func (v *ValidatePodSecurityPolicyListType) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["pod_security_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("pod_security_policies"))
 		if err := fv(ctx, m.GetPodSecurityPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPodSecurityPolicyListTypeValidator = func() *ValidatePodSecurityPolicyListType {
 	v := &ValidatePodSecurityPolicyListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5067,7 +4730,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetClusterWideAppList().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.cluster_wide_app_list")
 	}
@@ -5113,27 +4775,22 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -5143,11 +4800,8 @@ func (m *ReplaceSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo,
 	}
 	switch m.GetClusterRoleBindingsChoice().(type) {
 	case *ReplaceSpecType_UseDefaultClusterRoleBindings:
-
 		return nil, nil
-
 	case *ReplaceSpecType_UseCustomClusterRoleBindings:
-
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
@@ -5157,11 +4811,9 @@ func (m *ReplaceSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -5171,11 +4823,8 @@ func (m *ReplaceSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetClusterRoleChoice().(type) {
 	case *ReplaceSpecType_UseDefaultClusterRoles:
-
 		return nil, nil
-
 	case *ReplaceSpecType_UseCustomClusterRoleList:
-
 		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
@@ -5185,21 +4834,16 @@ func (m *ReplaceSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ReplaceSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *ReplaceSpecType_UseDefaultPodSecurityAdmission:
-
 		return nil, nil
-
 	case *ReplaceSpecType_UseCustomPodSecurityAdmission:
-
 		vref := m.GetUseCustomPodSecurityAdmission()
 		if vref == nil {
 			return nil, nil
@@ -5215,7 +4859,6 @@ func (m *ReplaceSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -5227,13 +4870,11 @@ func (m *ReplaceSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Con
 
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *ReplaceSpecType_UseDefaultPodSecurityAdmission:
-
 	case *ReplaceSpecType_UseCustomPodSecurityAdmission:
 		refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
 		}
-
 		vref := m.GetUseCustomPodSecurityAdmission()
 		if vref == nil {
 			return nil, nil
@@ -5251,7 +4892,6 @@ func (m *ReplaceSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Con
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -5264,11 +4904,8 @@ func (m *ReplaceSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetPodSecurityPolicyChoice().(type) {
 	case *ReplaceSpecType_UseDefaultPsp:
-
 		return nil, nil
-
 	case *ReplaceSpecType_UseCustomPspList:
-
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
@@ -5278,11 +4915,9 @@ func (m *ReplaceSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "use_custom_psp_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -5296,7 +4931,6 @@ func (v *ValidateReplaceSpecType) AppsChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5304,7 +4938,6 @@ func (v *ValidateReplaceSpecType) ClusterRoleBindingsChoiceValidationRuleHandler
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ClusterRoleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5312,7 +4945,6 @@ func (v *ValidateReplaceSpecType) ClusterRoleChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ClusterScopedResourceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5320,7 +4952,6 @@ func (v *ValidateReplaceSpecType) ClusterScopedResourceAccessChoiceValidationRul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5328,7 +4959,6 @@ func (v *ValidateReplaceSpecType) GlobalAccessChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) InsecureRegistriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5336,7 +4966,6 @@ func (v *ValidateReplaceSpecType) InsecureRegistriesChoiceValidationRuleHandler(
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) LocalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5344,7 +4973,6 @@ func (v *ValidateReplaceSpecType) LocalAccessChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5352,7 +4980,6 @@ func (v *ValidateReplaceSpecType) PodSecurityAdmissionChoiceValidationRuleHandle
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PodSecurityPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5360,7 +4987,6 @@ func (v *ValidateReplaceSpecType) PodSecurityPolicyChoiceValidationRuleHandler(r
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5416,7 +5042,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_bindings_choice"]; exists {
@@ -5452,7 +5077,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_choice"]; exists {
@@ -5488,7 +5112,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_scoped_resource_access_choice"]; exists {
@@ -5524,7 +5147,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["global_access_choice"]; exists {
@@ -5560,7 +5182,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["insecure_registries_choice"]; exists {
@@ -5596,7 +5217,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["local_access_choice"]; exists {
@@ -5632,7 +5252,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pod_security_admission_choice"]; exists {
@@ -5668,7 +5287,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["pod_security_policy_choice"]; exists {
@@ -5704,7 +5322,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vk8s_namespace_access_choice"]; exists {
@@ -5740,16 +5357,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5757,7 +5371,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAppsChoice := v.AppsChoiceValidationRuleHandler
 	rulesAppsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5768,7 +5381,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["apps_choice"] = vFn
-
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5779,7 +5391,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_bindings_choice"] = vFn
-
 	vrhClusterRoleChoice := v.ClusterRoleChoiceValidationRuleHandler
 	rulesClusterRoleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5790,7 +5401,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_role_choice"] = vFn
-
 	vrhClusterScopedResourceAccessChoice := v.ClusterScopedResourceAccessChoiceValidationRuleHandler
 	rulesClusterScopedResourceAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5801,7 +5411,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_scoped_resource_access_choice"] = vFn
-
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5812,7 +5421,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["global_access_choice"] = vFn
-
 	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
 	rulesInsecureRegistriesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5823,7 +5431,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["insecure_registries_choice"] = vFn
-
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5834,7 +5441,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["local_access_choice"] = vFn
-
 	vrhPodSecurityAdmissionChoice := v.PodSecurityAdmissionChoiceValidationRuleHandler
 	rulesPodSecurityAdmissionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5845,7 +5451,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_admission_choice"] = vFn
-
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5856,7 +5461,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
-
 	vrhVk8SNamespaceAccessChoice := v.Vk8SNamespaceAccessChoiceValidationRuleHandler
 	rulesVk8SNamespaceAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5867,19 +5471,12 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vk8s_namespace_access_choice"] = vFn
-
 	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
-
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
-
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
-
 	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
-
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
-
 	v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
 
 	return v

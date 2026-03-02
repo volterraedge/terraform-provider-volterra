@@ -75,15 +75,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -93,31 +90,18 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *CreateSpecType_AllowAll:
-
 		return nil, nil
-
 	case *CreateSpecType_AllowedSources:
-
 		return nil, nil
-
 	case *CreateSpecType_AllowedDestinations:
-
 		return nil, nil
-
 	case *CreateSpecType_DenyAll:
-
 		return nil, nil
-
 	case *CreateSpecType_DeniedSources:
-
 		return nil, nil
-
 	case *CreateSpecType_DeniedDestinations:
-
 		return nil, nil
-
 	case *CreateSpecType_RuleList:
-
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -127,11 +111,9 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "rule_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -139,7 +121,6 @@ func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
@@ -149,7 +130,6 @@ func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "segment_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -266,25 +246,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_policy"))
 		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -292,7 +266,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -303,13 +276,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	v.FldValidators["rule_choice.allowed_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.allowed_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = EnhancedFirewallPolicyRuleListTypeValidator().Validate
-
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
@@ -362,7 +333,6 @@ func (m *EnhancedFirewallPolicyRuleListType) GetDRefInfo() ([]db.DRefInfo, error
 	}
 
 	return m.GetRulesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -370,7 +340,6 @@ func (m *EnhancedFirewallPolicyRuleListType) GetRulesDRefInfo() ([]db.DRefInfo, 
 	if m.GetRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
@@ -384,7 +353,6 @@ func (m *EnhancedFirewallPolicyRuleListType) GetRulesDRefInfo() ([]db.DRefInfo, 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateEnhancedFirewallPolicyRuleListType struct {
@@ -392,7 +360,6 @@ type ValidateEnhancedFirewallPolicyRuleListType struct {
 }
 
 func (v *ValidateEnhancedFirewallPolicyRuleListType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -452,22 +419,18 @@ func (v *ValidateEnhancedFirewallPolicyRuleListType) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEnhancedFirewallPolicyRuleListTypeValidator = func() *ValidateEnhancedFirewallPolicyRuleListType {
 	v := &ValidateEnhancedFirewallPolicyRuleListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -544,21 +507,17 @@ func (m *EnhancedFirewallPolicyRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDestinationChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDestinationChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSourceChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSourceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -568,15 +527,10 @@ func (m *EnhancedFirewallPolicyRuleType) GetActionChoiceDRefInfo() ([]db.DRefInf
 	}
 	switch m.GetActionChoice().(type) {
 	case *EnhancedFirewallPolicyRuleType_Deny:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_Allow:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_InsertService:
-
 		drInfos, err := m.GetInsertService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsertService().GetDRefInfo() FAILED")
@@ -586,11 +540,9 @@ func (m *EnhancedFirewallPolicyRuleType) GetActionChoiceDRefInfo() ([]db.DRefInf
 			dri.DRField = "insert_service." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -600,15 +552,10 @@ func (m *EnhancedFirewallPolicyRuleType) GetDestinationChoiceDRefInfo() ([]db.DR
 	}
 	switch m.GetDestinationChoice().(type) {
 	case *EnhancedFirewallPolicyRuleType_AllDestinations:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_DestinationPrefixList:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_DestinationIpPrefixSet:
-
 		drInfos, err := m.GetDestinationIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDestinationIpPrefixSet().GetDRefInfo() FAILED")
@@ -618,39 +565,23 @@ func (m *EnhancedFirewallPolicyRuleType) GetDestinationChoiceDRefInfo() ([]db.DR
 			dri.DRField = "destination_ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	case *EnhancedFirewallPolicyRuleType_InsideDestinations:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_OutsideDestinations:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_DestinationLabelSelector:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_AllSloVips:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_AllSliVips:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_DestinationAwsVpcIds:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -660,15 +591,10 @@ func (m *EnhancedFirewallPolicyRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInf
 	}
 	switch m.GetSourceChoice().(type) {
 	case *EnhancedFirewallPolicyRuleType_AllSources:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_SourcePrefixList:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_SourceIpPrefixSet:
-
 		drInfos, err := m.GetSourceIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSourceIpPrefixSet().GetDRefInfo() FAILED")
@@ -678,31 +604,19 @@ func (m *EnhancedFirewallPolicyRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInf
 			dri.DRField = "source_ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	case *EnhancedFirewallPolicyRuleType_InsideSources:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_OutsideSources:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_SourceLabelSelector:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_SourceAwsVpcIds:
-
 		return nil, nil
-
 	case *EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateEnhancedFirewallPolicyRuleType struct {
@@ -716,7 +630,6 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) ActionChoiceValidationRuleHandl
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEnhancedFirewallPolicyRuleType) DestinationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -724,7 +637,6 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) DestinationChoiceValidationRule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEnhancedFirewallPolicyRuleType) SourceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -732,7 +644,6 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) SourceChoiceValidationRuleHandl
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEnhancedFirewallPolicyRuleType) TrafficChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -740,9 +651,7 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) TrafficChoiceValidationRuleHand
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEnhancedFirewallPolicyRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -751,11 +660,9 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) MetadataValidationRuleHandler(r
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -820,16 +727,12 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["advanced_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advanced_action"))
 		if err := fv(ctx, m.GetAdvancedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["destination_choice"]; exists {
@@ -964,25 +867,18 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["source_choice"]; exists {
@@ -1095,7 +991,6 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["traffic_choice"]; exists {
@@ -1164,16 +1059,13 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEnhancedFirewallPolicyRuleTypeValidator = func() *ValidateEnhancedFirewallPolicyRuleType {
 	v := &ValidateEnhancedFirewallPolicyRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1181,7 +1073,6 @@ var DefaultEnhancedFirewallPolicyRuleTypeValidator = func() *ValidateEnhancedFir
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhActionChoice := v.ActionChoiceValidationRuleHandler
 	rulesActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1192,7 +1083,6 @@ var DefaultEnhancedFirewallPolicyRuleTypeValidator = func() *ValidateEnhancedFir
 		panic(errMsg)
 	}
 	v.FldValidators["action_choice"] = vFn
-
 	vrhDestinationChoice := v.DestinationChoiceValidationRuleHandler
 	rulesDestinationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1203,7 +1093,6 @@ var DefaultEnhancedFirewallPolicyRuleTypeValidator = func() *ValidateEnhancedFir
 		panic(errMsg)
 	}
 	v.FldValidators["destination_choice"] = vFn
-
 	vrhSourceChoice := v.SourceChoiceValidationRuleHandler
 	rulesSourceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1214,7 +1103,6 @@ var DefaultEnhancedFirewallPolicyRuleTypeValidator = func() *ValidateEnhancedFir
 		panic(errMsg)
 	}
 	v.FldValidators["source_choice"] = vFn
-
 	vrhTrafficChoice := v.TrafficChoiceValidationRuleHandler
 	rulesTrafficChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1236,23 +1124,18 @@ var DefaultEnhancedFirewallPolicyRuleTypeValidator = func() *ValidateEnhancedFir
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
-
 	v.FldValidators["action_choice.insert_service"] = ServiceActionTypeValidator().Validate
-
 	v.FldValidators["destination_choice.destination_prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 	v.FldValidators["destination_choice.destination_ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
 	v.FldValidators["destination_choice.destination_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["destination_choice.destination_aws_vpc_ids"] = ves_io_schema.AwsVpcListValidator().Validate
 	v.FldValidators["destination_choice.destination_aws_subnet_ids"] = ves_io_schema.AwsSubnetListValidator().Validate
-
 	v.FldValidators["source_choice.source_prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 	v.FldValidators["source_choice.source_ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
 	v.FldValidators["source_choice.source_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["source_choice.source_aws_vpc_ids"] = ves_io_schema.AwsVpcListValidator().Validate
 	v.FldValidators["source_choice.source_aws_subnet_ids"] = ves_io_schema.AwsSubnetListValidator().Validate
-
 	v.FldValidators["traffic_choice.protocol_port_range"] = ves_io_schema_network_policy.ProtocolPortTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v
@@ -1310,15 +1193,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1328,31 +1208,18 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *GetSpecType_AllowAll:
-
 		return nil, nil
-
 	case *GetSpecType_AllowedSources:
-
 		return nil, nil
-
 	case *GetSpecType_AllowedDestinations:
-
 		return nil, nil
-
 	case *GetSpecType_DenyAll:
-
 		return nil, nil
-
 	case *GetSpecType_DeniedSources:
-
 		return nil, nil
-
 	case *GetSpecType_DeniedDestinations:
-
 		return nil, nil
-
 	case *GetSpecType_RuleList:
-
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -1362,11 +1229,9 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "rule_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1374,7 +1239,6 @@ func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
@@ -1384,7 +1248,6 @@ func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "segment_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -1501,25 +1364,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_policy"))
 		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1527,7 +1384,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1538,13 +1394,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	v.FldValidators["rule_choice.allowed_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.allowed_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = EnhancedFirewallPolicyRuleListTypeValidator().Validate
-
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
@@ -1602,21 +1456,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1624,7 +1474,6 @@ func (m *GlobalSpecType) GetOperGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOperGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOperGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOperGcSpec().GetDRefInfo() FAILED")
@@ -1634,7 +1483,6 @@ func (m *GlobalSpecType) GetOperGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "oper_gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1644,31 +1492,18 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *GlobalSpecType_AllowAll:
-
 		return nil, nil
-
 	case *GlobalSpecType_AllowedSources:
-
 		return nil, nil
-
 	case *GlobalSpecType_AllowedDestinations:
-
 		return nil, nil
-
 	case *GlobalSpecType_DenyAll:
-
 		return nil, nil
-
 	case *GlobalSpecType_DeniedSources:
-
 		return nil, nil
-
 	case *GlobalSpecType_DeniedDestinations:
-
 		return nil, nil
-
 	case *GlobalSpecType_RuleList:
-
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -1678,11 +1513,9 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "rule_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1690,7 +1523,6 @@ func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
@@ -1700,7 +1532,6 @@ func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "segment_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -1728,14 +1559,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["oper_gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("oper_gc_spec"))
 		if err := fv(ctx, m.GetOperGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["rule_choice"]; exists {
@@ -1826,25 +1654,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_policy"))
 		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1852,7 +1674,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1863,13 +1684,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	v.FldValidators["rule_choice.allowed_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.allowed_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = EnhancedFirewallPolicyRuleListTypeValidator().Validate
-
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
@@ -1927,15 +1746,12 @@ func (m *OperGlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNfvServiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNfvServiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *OperGlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
@@ -1960,7 +1776,6 @@ func (m *OperGlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1979,7 +1794,6 @@ func (m *OperGlobalSpecType) GetNetworkInterfaceDBEntries(ctx context.Context, d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2005,7 +1819,6 @@ func (m *OperGlobalSpecType) GetNfvServiceDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNfvServiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2024,7 +1837,6 @@ func (m *OperGlobalSpecType) GetNfvServiceDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2045,9 +1857,7 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["network_interface"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_interface"))
 		for idx, item := range m.GetNetworkInterface() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2055,11 +1865,8 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nfv_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nfv_service"))
 		for idx, item := range m.GetNfvService() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2067,9 +1874,7 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2132,15 +1937,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2150,31 +1952,18 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *ReplaceSpecType_AllowAll:
-
 		return nil, nil
-
 	case *ReplaceSpecType_AllowedSources:
-
 		return nil, nil
-
 	case *ReplaceSpecType_AllowedDestinations:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DenyAll:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DeniedSources:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DeniedDestinations:
-
 		return nil, nil
-
 	case *ReplaceSpecType_RuleList:
-
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -2184,11 +1973,9 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "rule_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2196,7 +1983,6 @@ func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
@@ -2206,7 +1992,6 @@ func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "segment_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -2323,25 +2108,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_policy"))
 		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2349,7 +2128,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2360,13 +2138,11 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	v.FldValidators["rule_choice.allowed_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.allowed_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = EnhancedFirewallPolicyRuleListTypeValidator().Validate
-
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
@@ -2419,11 +2195,9 @@ func (m *ServiceActionType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNfvServiceDRefInfo()
-
 }
 
 func (m *ServiceActionType) GetNfvServiceDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetNfvService()
 	if vref == nil {
 		return nil, nil
@@ -2439,7 +2213,6 @@ func (m *ServiceActionType) GetNfvServiceDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetNfvServiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2449,7 +2222,6 @@ func (m *ServiceActionType) GetNfvServiceDBEntries(ctx context.Context, d db.Int
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: nfv_service")
 	}
-
 	vref := m.GetNfvService()
 	if vref == nil {
 		return nil, nil
@@ -2467,7 +2239,6 @@ func (m *ServiceActionType) GetNfvServiceDBEntries(ctx context.Context, d db.Int
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2476,7 +2247,6 @@ type ValidateServiceActionType struct {
 }
 
 func (v *ValidateServiceActionType) NfvServiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for nfv_service")
@@ -2485,11 +2255,9 @@ func (v *ValidateServiceActionType) NfvServiceValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2509,23 +2277,18 @@ func (v *ValidateServiceActionType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nfv_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nfv_service"))
 		if err := fv(ctx, m.GetNfvService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceActionTypeValidator = func() *ValidateServiceActionType {
 	v := &ValidateServiceActionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

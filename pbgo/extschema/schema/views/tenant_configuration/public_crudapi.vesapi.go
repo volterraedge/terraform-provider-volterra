@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.tenant_configuration.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2318,10 +2295,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -2824,12 +2801,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "display_name": {
                     "type": "string",
-                    "description": " Tenant display name in the login screen\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^[^\u003c\u003e\u0026\\\"]+$\n",
+                    "description": " Changes the tenant name displayed during login without affecting your company’s domain name.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^[^\u003c\u003e\u0026\\\"]+$\n",
                     "title": "Display Name",
                     "maxLength": 255,
                     "x-displayname": "Display Name",
                     "x-ves-example": "value",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "255",
                         "ves.io.schema.rules.string.pattern": "^[^\u003c\u003e\u0026\\\"]+$"
                     }
@@ -2851,6 +2830,50 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "5",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "30"
+                    }
+                }
+            }
+        },
+        "tenant_configurationCookieHoursDuration": {
+            "type": "object",
+            "description": "Represents the cookie duration in hours.",
+            "title": "Cookie Hours Duration",
+            "x-displayname": "Cookie Hours Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.CookieHoursDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 720\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "720"
+                    }
+                }
+            }
+        },
+        "tenant_configurationCookieMinutesDuration": {
+            "type": "object",
+            "description": "Represents the cookie duration in minutes.",
+            "title": "Cookie Minutes Duration",
+            "x-displayname": "Cookie Minutes Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.CookieMinutesDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 5\n  ves.io.schema.rules.uint32.lte: 43200\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "5",
+                        "ves.io.schema.rules.uint32.lte": "43200"
                     }
                 }
             }
@@ -2901,20 +2924,25 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create tenant configuration",
             "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.CreateSpecType",
             "properties": {
-                "basic_configuration": {
-                    "description": " Basic configuration contains general parameters which can be adjusted within tenant.",
-                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
-                    "x-displayname": "Basic Configuration"
-                },
-                "brute_force_detection_settings": {
-                    "description": " Our brute force detection system uses temporary lockout algorithm.\n Temporary lockout will disable a user’s account for a time period after an attack is detected;\n the time period for which the account is disabled increases the longer the attack continues.\n You can adjust some parameters of the brute force detection system.",
+                "brute_force_detection": {
+                    "description": " This system uses algorithms to temporarily lock accounts for a specified time period after detecting an attack.\n The lockout duration increases with longer persisting attack attempts.",
                     "$ref": "#/definitions/tenant_configurationBruteForceDetectionSettings",
-                    "x-displayname": "Brute Force Detection Settings"
+                    "x-displayname": "Brute Force Detection"
                 },
                 "password_policy": {
-                    "description": " Password policy allows you to configure your own password policy within tenant.\n Each user within tenant will have to comply with the configured policy when they set or update the password.",
+                    "description": " Define custom password requirements for your tenant.\n All tenant users must adhere to the policy when creating or updating their passwords.",
                     "$ref": "#/definitions/tenant_configurationPasswordPolicy",
                     "x-displayname": "Password Policy"
+                },
+                "tenant_details": {
+                    "description": " Tenant details defines the metadata of the tenant.",
+                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
+                    "x-displayname": "Tenant Details"
+                },
+                "user_session_expiration": {
+                    "description": " Changes take approximately 5 minutes to apply. Log in again to see the updates reflected. For more details,\n refer to [Tech Docs](https://docs.cloud.f5.com/docs-v2/administration/how-tos/user-mgmt/general-management).",
+                    "$ref": "#/definitions/tenant_configurationUserSessionExpiration",
+                    "x-displayname": "User Session Expiration"
                 }
             }
         },
@@ -2945,6 +2973,50 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
+                }
+            }
+        },
+        "tenant_configurationDurationByUnitCookie": {
+            "type": "object",
+            "description": "Represents the cookie expiration duration",
+            "title": "Duration By Unit Cookie",
+            "x-displayname": "Duration By Unit Cookie",
+            "x-ves-oneof-field-unit_of_time": "[\"hours\",\"minutes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.DurationByUnitCookie",
+            "properties": {
+                "hours": {
+                    "description": "Exclusive with [minutes]\n",
+                    "title": "Hours",
+                    "$ref": "#/definitions/tenant_configurationCookieHoursDuration",
+                    "x-displayname": "Hours"
+                },
+                "minutes": {
+                    "description": "Exclusive with [hours]\n",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/tenant_configurationCookieMinutesDuration",
+                    "x-displayname": "Minutes"
+                }
+            }
+        },
+        "tenant_configurationDurationByUnitSession": {
+            "type": "object",
+            "description": "Represents the session expiration duration.",
+            "title": "Duration By Unit Session",
+            "x-displayname": "Duration By Unit Session",
+            "x-ves-oneof-field-unit_of_time": "[\"hours\",\"minutes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.DurationByUnitSession",
+            "properties": {
+                "hours": {
+                    "description": "Exclusive with [minutes]\n",
+                    "title": "Hours",
+                    "$ref": "#/definitions/tenant_configurationSessionHoursDuration",
+                    "x-displayname": "Hours"
+                },
+                "minutes": {
+                    "description": "Exclusive with [hours]\n",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/tenant_configurationSessionMinutesDuration",
+                    "x-displayname": "Minutes"
                 }
             }
         },
@@ -3045,20 +3117,25 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get tenant configuration",
             "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.GetSpecType",
             "properties": {
-                "basic_configuration": {
-                    "description": " Basic configuration contains general parameters which can be adjusted within tenant.",
-                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
-                    "x-displayname": "Basic Configuration"
-                },
-                "brute_force_detection_settings": {
-                    "description": " Our brute force detection system uses temporary lockout algorithm.\n Temporary lockout will disable a user’s account for a time period after an attack is detected;\n the time period for which the account is disabled increases the longer the attack continues.\n You can adjust some parameters of the brute force detection system.",
+                "brute_force_detection": {
+                    "description": " This system uses algorithms to temporarily lock accounts for a specified time period after detecting an attack.\n The lockout duration increases with longer persisting attack attempts.",
                     "$ref": "#/definitions/tenant_configurationBruteForceDetectionSettings",
-                    "x-displayname": "Brute Force Detection Settings"
+                    "x-displayname": "Brute Force Detection"
                 },
                 "password_policy": {
-                    "description": " Password policy allows you to configure your own password policy within tenant.\n Each user within tenant will have to comply with the configured policy when they set or update the password.",
+                    "description": " Define custom password requirements for your tenant.\n All tenant users must adhere to the policy when creating or updating their passwords.",
                     "$ref": "#/definitions/tenant_configurationPasswordPolicy",
                     "x-displayname": "Password Policy"
+                },
+                "tenant_details": {
+                    "description": " Tenant details defines the metadata of the tenant.",
+                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
+                    "x-displayname": "Tenant Details"
+                },
+                "user_session_expiration": {
+                    "description": " Changes take approximately 5 minutes to apply. Log in again to see the updates reflected. For more details,\n refer to [Tech Docs](https://docs.cloud.f5.com/docs-v2/administration/how-tos/user-mgmt/general-management).",
+                    "$ref": "#/definitions/tenant_configurationUserSessionExpiration",
+                    "x-displayname": "User Session Expiration"
                 }
             }
         },
@@ -3301,20 +3378,69 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace tenant configuration",
             "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.ReplaceSpecType",
             "properties": {
-                "basic_configuration": {
-                    "description": " Basic configuration contains general parameters which can be adjusted within tenant.",
-                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
-                    "x-displayname": "Basic Configuration"
-                },
-                "brute_force_detection_settings": {
-                    "description": " Our brute force detection system uses temporary lockout algorithm.\n Temporary lockout will disable a user’s account for a time period after an attack is detected;\n the time period for which the account is disabled increases the longer the attack continues.\n You can adjust some parameters of the brute force detection system.",
+                "brute_force_detection": {
+                    "description": " This system uses algorithms to temporarily lock accounts for a specified time period after detecting an attack.\n The lockout duration increases with longer persisting attack attempts.",
                     "$ref": "#/definitions/tenant_configurationBruteForceDetectionSettings",
-                    "x-displayname": "Brute Force Detection Settings"
+                    "x-displayname": "Brute Force Detection"
                 },
                 "password_policy": {
-                    "description": " Password policy allows you to configure your own password policy within tenant.\n Each user within tenant will have to comply with the configured policy when they set or update the password.",
+                    "description": " Define custom password requirements for your tenant.\n All tenant users must adhere to the policy when creating or updating their passwords.",
                     "$ref": "#/definitions/tenant_configurationPasswordPolicy",
                     "x-displayname": "Password Policy"
+                },
+                "tenant_details": {
+                    "description": " Tenant details defines the metadata of the tenant.",
+                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
+                    "x-displayname": "Tenant Details"
+                },
+                "user_session_expiration": {
+                    "description": " Changes take approximately 5 minutes to apply. Log in again to see the updates reflected. For more details,\n refer to [Tech Docs](https://docs.cloud.f5.com/docs-v2/administration/how-tos/user-mgmt/general-management).",
+                    "$ref": "#/definitions/tenant_configurationUserSessionExpiration",
+                    "x-displayname": "User Session Expiration"
+                }
+            }
+        },
+        "tenant_configurationSessionHoursDuration": {
+            "type": "object",
+            "description": "Represents the session duration in hours.",
+            "title": "Session Hours Duration",
+            "x-displayname": "Session Hours Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionHoursDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 720\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "720"
+                    }
+                }
+            }
+        },
+        "tenant_configurationSessionMinutesDuration": {
+            "type": "object",
+            "description": "Represents the session duration in minutes.",
+            "title": "Session Minutes Duration",
+            "x-displayname": "Session Minutes Duration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionMinutesDuration",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 5\n  ves.io.schema.rules.uint32.lte: 43200\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "5",
+                        "ves.io.schema.rules.uint32.lte": "43200"
+                    }
                 }
             }
         },
@@ -3348,6 +3474,35 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "tenant_configurationUserSessionExpiration": {
+            "type": "object",
+            "description": "Defines all session-related expiration for user sessions within a tenant's environment.\nRelationship between session_expiry and cookie_expiry:\n- session_expiry defines the 'absolute maximum duration' of a session and enforces re-authentication after this time.\n- cookie_expiry defines the 'inactivity timeout', which resets on user activity and only logs out users after idle periods.\nTogether, these ensure the user is logged out when either the session reaches its maximum age or the user is inactive for too long.",
+            "title": "User Session Expiration",
+            "x-displayname": "User Session Expiration",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.UserSessionExpiration",
+            "properties": {
+                "absolute_timeout": {
+                    "description": " Maximum length of user session.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Absolute Timeout",
+                    "$ref": "#/definitions/tenant_configurationDurationByUnitSession",
+                    "x-displayname": "Absolute Timeout",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "idle_timeout": {
+                    "description": " Maximum user inactivity allowed in a session.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Idle Timeout",
+                    "$ref": "#/definitions/tenant_configurationDurationByUnitCookie",
+                    "x-displayname": "Idle Timeout",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         }

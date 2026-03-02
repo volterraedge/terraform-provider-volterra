@@ -21,7 +21,6 @@ resource "volterra_token" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -50,4 +49,4 @@ Argument Reference
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured token.
+-   `id` - This is the id of the configured token.

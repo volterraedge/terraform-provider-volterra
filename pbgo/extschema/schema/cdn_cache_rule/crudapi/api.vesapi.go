@@ -56,7 +56,6 @@ func (r *ObjectCreateReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // EntryConverter
 func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 	r.FromObject(e)
@@ -76,15 +75,11 @@ func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
 
 // CLIENT side
-
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -93,7 +88,6 @@ func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r.FromObject(e)
 	return r, nil
 }
-
 func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 	r := &ObjectReplaceReq{}
 	if e == nil {
@@ -105,12 +99,10 @@ func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 		// See if uid can be got from Metadata.Uid
 		obj := e.(*object.DBObject)
 		uid = obj.GetMetadata().GetUid()
-
 	}
 	r.ObjectUid = uid
 	return r, nil
 }
-
 func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	ccOpts := server.NewCRUDCallOpts()
 	for _, o := range opts {
@@ -120,7 +112,6 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
-
 func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	r := &ObjectListReq{
 		TenantFilter:      cco.TenantFilter,
@@ -146,7 +137,6 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	}
 	return r, nil
 }
-
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
 	return &ObjectDeleteReq{ObjectUid: uid}
 }
@@ -158,7 +148,6 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -180,11 +169,9 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -202,9 +189,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -228,7 +213,6 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -236,11 +220,9 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -257,11 +239,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -271,11 +251,9 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -285,9 +263,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -312,7 +288,6 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -328,11 +303,9 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
-
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -346,7 +319,6 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -389,7 +361,6 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -457,11 +428,9 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
-
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -543,9 +512,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
-
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -597,7 +564,6 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -605,11 +571,9 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -627,11 +591,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -641,11 +603,9 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -655,9 +615,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.cdn_cache_rule.crudapi", ".")
@@ -748,7 +706,6 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -795,7 +752,6 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -824,7 +780,6 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cdn_cache_rule.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
-
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cdn_cache_rule.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -835,7 +790,6 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cdn_cache_rule.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
-
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cdn_cache_rule.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -846,7 +800,6 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cdn_cache_rule.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
-
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cdn_cache_rule.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -857,11 +810,9 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cdn_cache_rule.crudapi.API.List")
 	return oah.List(ctx, req)
 }
-
 func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (API_ListStreamClient, error) {
 	return nil, fmt.Errorf("ListStream Not implemented")
 }
-
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cdn_cache_rule.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -883,7 +834,6 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -904,11 +854,9 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -924,9 +872,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -947,7 +893,6 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -955,11 +900,9 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -977,11 +920,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -991,11 +932,9 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -1005,9 +944,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -1035,7 +972,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1047,7 +983,6 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -1077,7 +1012,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 	}
 	return nil
 }
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1098,7 +1032,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	obj := object.NewDBObject(nil)
 	req.ToObject(obj)
 	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-
 	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1110,7 +1043,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1141,9 +1073,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		return nil, status.Error(codes.ResourceExhausted, errors.Wrap(err, "Replace with NewObjectReplaceRsp").Error())
 	}
 	return rsp, nil
-
 }
-
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1168,7 +1098,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1180,7 +1109,6 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1193,17 +1121,16 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+		return nil, errors.Wrap(err, "List")
 	}
 	rsp, err := NewObjectListRsp(req, rsrcRsp.Items)
 	if err != nil {
-		merr = multierror.Append(merr, err)
+		return rsp, err
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
 	rsp.NextPage = rsrcRsp.NextPage
-	return rsp, merr
+	return rsp, nil
 }
-
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
 	var merr *multierror.Error
 	rsrcReq := &server.ResourceListRequest{
@@ -1215,6 +1142,7 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
 	if err != nil {
 		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+		return errors.ErrOrNil(merr)
 	}
 	streamSvr := &crudAPIListStreamServer{stream}
 	for item := range rsrcRsp.ItemsCh {
@@ -1225,7 +1153,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	}
 	return errors.ErrOrNil(merr)
 }
-
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1314,11 +1241,9 @@ func (r *ObjectGetReq) GetBackrefParam() (bool, []string) {
 func (r *ObjectDeleteReq) ToUid() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectCreateRsp) Key() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectGetRsp) GetBackrefs(ef db.NewEntryFunc) ([]db.Entry, error) {
 	brEnts := []db.Entry{}
 	bRefs := r.GetEntBackrefs()
@@ -1377,7 +1302,6 @@ func NewObjectCreateRsp(e db.Entry) (*ObjectCreateRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo := &ObjectReplaceRsp{}
 	switch e.(type) {
@@ -1391,7 +1315,6 @@ func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*ObjectGetRsp, error) {
 	rspo := &ObjectGetRsp{}
 	e := rsrcRsp.Entry
@@ -1426,7 +1349,6 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 	rspo.EntBackrefs = entBackrefs
 	return rspo, nil
 }
-
 func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*ObjectListRsp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("Nil ObjectListReq")
@@ -1452,7 +1374,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
 			continue
 		}
-
 		tenant := dbObj.GetSystemMetadata().GetTenant()
 		namespace := dbObj.GetMetadata().GetNamespace()
 		name := dbObj.GetMetadata().GetName()
@@ -1475,7 +1396,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 	}
 	return o, errs
 }
-
 func NewObjectDeleteRsp(ec ErrorCode) (*ObjectDeleteRsp, error) {
 	return &ObjectDeleteRsp{Err: ec}, nil
 }
@@ -2823,7 +2743,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " A case-sensitive cookie name.\n\nExample: - \"Session\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "description": " Enter the name of the cookie to match\n\nExample: - \"Session\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "name",
                     "maxLength": 256,
                     "x-displayname": "Cookie Name",
@@ -2836,7 +2756,7 @@ var APISwaggerJSON string = `{
                 },
                 "operator": {
                     "title": "cache_operator",
-                    "$ref": "#/definitions/cdn_cache_ruleCacheOperator",
+                    "$ref": "#/definitions/cdn_cache_ruleCookieMatcherCacheOperator",
                     "x-displayname": "Operator"
                 }
             }
@@ -2871,7 +2791,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.CacheHeaderMatcherType",
             "properties": {
                 "name": {
-                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Select the name of the header from the list\n\nExample: - \"Content-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Name",
                     "$ref": "#/definitions/cdn_cache_ruleHeaderOptions",
                     "x-displayname": "Name",
@@ -2884,7 +2804,7 @@ var APISwaggerJSON string = `{
                 "operator": {
                     "description": " Available operators",
                     "title": "cache_operator",
-                    "$ref": "#/definitions/cdn_cache_ruleCacheOperator",
+                    "$ref": "#/definitions/cdn_cache_ruleHeaderCacheOperator",
                     "x-displayname": "Operator"
                 }
             }
@@ -2898,62 +2818,61 @@ var APISwaggerJSON string = `{
             "properties": {
                 "Contains": {
                     "type": "string",
-                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must contain",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The path must include the specified value as a substring, up to the filename.",
                     "title": "Contains",
                     "x-displayname": "Contains"
                 },
                 "DoesNotContain": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not contain",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The path must not include the specified value as a substring, up to the filename.",
                     "title": "Does Not Contain",
                     "x-displayname": "Does Not Contain"
                 },
                 "DoesNotEndWith": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not end with",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The path must not end with the specified value, up to the filename.",
                     "title": "Does Not End With",
                     "x-displayname": "Does Not End With"
                 },
                 "DoesNotEqual": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not equal",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The path must not match the specified value, up to the filename.",
                     "title": "Does Not Equal",
                     "x-displayname": "Does Not Equal"
                 },
                 "DoesNotStartWith": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n Field must not start with",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n The path must not begin with the specified value, up to the filename.",
                     "title": "Does Not Start With",
                     "x-displayname": "Does Not Start With"
                 },
                 "Endswith": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n Field must end with",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n The path must end with the specified value, up to the filename.",
                     "title": "Ends With",
                     "x-displayname": "Ends With"
                 },
                 "Equals": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n Field must exactly match",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n The path must exactly match the specified value, up to the filename.",
                     "title": "Equals",
                     "x-displayname": "Equals"
                 },
                 "MatchRegex": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n Field matches PCRE 1 compliant regular expression\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pcre_regex: true\n",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n The path must match the specified regular expression pattern in PCRE format.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Matches Regex",
                     "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Matches Regex",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.pcre_regex": "true"
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "Startswith": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n Field must start with",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n The path must begin with the specified value, up to the filename.",
                     "title": "Starts With",
                     "x-displayname": "Starts With"
                 }
@@ -2968,7 +2887,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " Query parameter key\n In the above example, assignee_username is the key\n\nExample: - \"assignee_username\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " The name of the query parameter to match\n\nExample: - \"assignee_username\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "key",
                     "minLength": 1,
                     "maxLength": 256,
@@ -2983,7 +2902,7 @@ var APISwaggerJSON string = `{
                 },
                 "operator": {
                     "title": "cache_operator",
-                    "$ref": "#/definitions/cdn_cache_ruleCacheOperator",
+                    "$ref": "#/definitions/cdn_cache_ruleQueryParamCacheOperator",
                     "x-displayname": "Operator"
                 }
             }
@@ -3023,6 +2942,144 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cdn_cache_ruleCookieMatcherCacheOperator": {
+            "type": "object",
+            "title": "Cookie Matcher Cache Operator",
+            "x-displayname": "Operator",
+            "x-ves-oneof-field-cache_operator": "[\"Contains\",\"DoesNotContain\",\"DoesNotEndWith\",\"DoesNotEqual\",\"DoesNotStartWith\",\"Endswith\",\"Equals\",\"MatchRegex\",\"Startswith\"]",
+            "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.CookieMatcherCacheOperator",
+            "properties": {
+                "Contains": {
+                    "type": "string",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The cookie value must include the specified value as a substring.",
+                    "title": "Contains",
+                    "x-displayname": "Contains"
+                },
+                "DoesNotContain": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The cookie value must not include the specified value as a substring.",
+                    "title": "Does Not Contain",
+                    "x-displayname": "Does Not Contain"
+                },
+                "DoesNotEndWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The cookie value must not end with the specified value.",
+                    "title": "Does Not End With",
+                    "x-displayname": "Does Not End With"
+                },
+                "DoesNotEqual": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The cookie value must not match the specified value.",
+                    "title": "Does Not Equal",
+                    "x-displayname": "Does Not Equal"
+                },
+                "DoesNotStartWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n The cookie value must not begin with the specified value.",
+                    "title": "Does Not Start With",
+                    "x-displayname": "Does Not Start With"
+                },
+                "Endswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n The cookie value must end with the specified value.",
+                    "title": "Ends With",
+                    "x-displayname": "Ends With"
+                },
+                "Equals": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n The cookie value must exactly match the specified value.",
+                    "title": "Equals",
+                    "x-displayname": "Equals"
+                },
+                "MatchRegex": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n The cookie value must match the specified regular expression pattern in PCRE format.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Matches Regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Matches Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "Startswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n The cookie value must begin with the specified value.",
+                    "title": "Starts With",
+                    "x-displayname": "Starts With"
+                }
+            }
+        },
+        "cdn_cache_ruleHeaderCacheOperator": {
+            "type": "object",
+            "title": "Header Cache Operator",
+            "x-displayname": "Operator",
+            "x-ves-oneof-field-cache_operator": "[\"Contains\",\"DoesNotContain\",\"DoesNotEndWith\",\"DoesNotEqual\",\"DoesNotStartWith\",\"Endswith\",\"Equals\",\"MatchRegex\",\"Startswith\"]",
+            "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.HeaderCacheOperator",
+            "properties": {
+                "Contains": {
+                    "type": "string",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The header value must include the specified value as a substring.",
+                    "title": "Contains",
+                    "x-displayname": "Contains"
+                },
+                "DoesNotContain": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The header value must not include the specified value as a substring.",
+                    "title": "Does Not Contain",
+                    "x-displayname": "Does Not Contain"
+                },
+                "DoesNotEndWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The header value must not end with the specified value.",
+                    "title": "Does Not End With",
+                    "x-displayname": "Does Not End With"
+                },
+                "DoesNotEqual": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The header value must not match the specified value.",
+                    "title": "Does Not Equal",
+                    "x-displayname": "Does Not Equal"
+                },
+                "DoesNotStartWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n The header value must not begin with the specified value.",
+                    "title": "Does Not Start With",
+                    "x-displayname": "Does Not Start With"
+                },
+                "Endswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n The header value must end with the specified value.",
+                    "title": "Ends With",
+                    "x-displayname": "Ends With"
+                },
+                "Equals": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n The header value must exactly match the specified value.",
+                    "title": "Equals",
+                    "x-displayname": "Equals"
+                },
+                "MatchRegex": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n The header value must match the specified regular expression pattern.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Matches Regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Matches Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "Startswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n The header value must begin with the specified value.",
+                    "title": "Starts With",
+                    "x-displayname": "Starts With"
+                }
+            }
+        },
         "cdn_cache_ruleHeaderOptions": {
             "type": "string",
             "description": "\n - PROXY_HOST: Proxy Host\n\nName of the proxied server\n - REFERER: Referer\n\nThis is the address of the previous web page from which a link to the currently requested page was followed\n - SCHEME: Scheme\n\nThe http scheme used: http or https\n - USER_AGENT: User Agent\n\nThe user agent string of the user agent",
@@ -3036,6 +3093,75 @@ var APISwaggerJSON string = `{
             "default": "PROXY_HOST",
             "x-displayname": "Header Options",
             "x-ves-proto-enum": "ves.io.schema.cdn_cache_rule.HeaderOptions"
+        },
+        "cdn_cache_ruleQueryParamCacheOperator": {
+            "type": "object",
+            "title": "Query Param Cache Operator",
+            "x-displayname": "Operator",
+            "x-ves-oneof-field-cache_operator": "[\"Contains\",\"DoesNotContain\",\"DoesNotEndWith\",\"DoesNotEqual\",\"DoesNotStartWith\",\"Endswith\",\"Equals\",\"MatchRegex\",\"Startswith\"]",
+            "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.QueryParamCacheOperator",
+            "properties": {
+                "Contains": {
+                    "type": "string",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The query parameter value must include the specified value as a substring.",
+                    "title": "Contains",
+                    "x-displayname": "Contains"
+                },
+                "DoesNotContain": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The query parameter value must not include the specified value as a substring.",
+                    "title": "Does Not Contain",
+                    "x-displayname": "Does Not Contain"
+                },
+                "DoesNotEndWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The query parameter value must not end with the specified value.",
+                    "title": "Does Not End With",
+                    "x-displayname": "Does Not End With"
+                },
+                "DoesNotEqual": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n The query parameter value must not match the specified value.",
+                    "title": "Does Not Equal",
+                    "x-displayname": "Does Not Equal"
+                },
+                "DoesNotStartWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n The query parameter value must not begin with the specified value.",
+                    "title": "Does Not Start With",
+                    "x-displayname": "Does Not Start With"
+                },
+                "Endswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n The query parameter value must end with the specified value.",
+                    "title": "Ends With",
+                    "x-displayname": "Ends With"
+                },
+                "Equals": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n The query parameter value must exactly match the specified value.",
+                    "title": "Equals",
+                    "x-displayname": "Equals"
+                },
+                "MatchRegex": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n The query parameter value must match the specified regular expression pattern in PCRE format.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Matches Regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Matches Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "Startswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n The query parameter value must begin with the specified value.",
+                    "title": "Starts With",
+                    "x-displayname": "Starts With"
+                }
+            }
         },
         "cdn_cache_ruleSpecType": {
             "type": "object",
@@ -3512,7 +3638,7 @@ var APISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },

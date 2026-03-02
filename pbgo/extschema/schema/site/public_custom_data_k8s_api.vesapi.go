@@ -47,7 +47,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCConfigMapList(ctx context.Context, yam
 	rsp, err := c.grpcClient.ConfigMapList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCCronJobList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CronJobListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -56,7 +55,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCCronJobList(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.CronJobList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCDaemonSetList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DaemonSetListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -65,7 +63,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCDaemonSetList(ctx context.Context, yam
 	rsp, err := c.grpcClient.DaemonSetList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCDeploymentList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DeploymentListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -74,7 +71,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCDeploymentList(ctx context.Context, ya
 	rsp, err := c.grpcClient.DeploymentList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCEndpointsList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &EndpointsListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,7 +79,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCEndpointsList(ctx context.Context, yam
 	rsp, err := c.grpcClient.EndpointsList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCJobList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &JobListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,7 +87,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCJobList(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.JobList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCNamespaceList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NamespaceListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,7 +95,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCNamespaceList(ctx context.Context, yam
 	rsp, err := c.grpcClient.NamespaceList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCNodeList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NodeListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -110,7 +103,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCNodeList(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.NodeList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCPersistentVolumeClaimList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PersistentVolumeClaimListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -119,7 +111,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCPersistentVolumeClaimList(ctx context.
 	rsp, err := c.grpcClient.PersistentVolumeClaimList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCPersistentVolumeList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PersistentVolumeListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -128,7 +119,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCPersistentVolumeList(ctx context.Conte
 	rsp, err := c.grpcClient.PersistentVolumeList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCPodList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PodListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -137,7 +127,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCPodList(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.PodList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCPodsMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PodsMetricsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -146,7 +135,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCPodsMetrics(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.PodsMetrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCReplicaSetList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ReplicaSetListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -155,7 +143,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCReplicaSetList(ctx context.Context, ya
 	rsp, err := c.grpcClient.ReplicaSetList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCSecretList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecretListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -164,7 +151,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCSecretList(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.SecretList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCServiceList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ServiceListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -173,7 +159,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCServiceList(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.ServiceList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCStatefulSetList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &StatefulSetListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -182,7 +167,6 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCStatefulSetList(ctx context.Context, y
 	rsp, err := c.grpcClient.StatefulSetList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataK8SAPIGrpcClient) doRPCVirtualMachineInstancesMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VirtualMachineInstancesMetricsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -223,41 +207,23 @@ func NewCustomDataK8SAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ConfigMapList"] = ccl.doRPCConfigMapList
-
 	rpcFns["CronJobList"] = ccl.doRPCCronJobList
-
 	rpcFns["DaemonSetList"] = ccl.doRPCDaemonSetList
-
 	rpcFns["DeploymentList"] = ccl.doRPCDeploymentList
-
 	rpcFns["EndpointsList"] = ccl.doRPCEndpointsList
-
 	rpcFns["JobList"] = ccl.doRPCJobList
-
 	rpcFns["NamespaceList"] = ccl.doRPCNamespaceList
-
 	rpcFns["NodeList"] = ccl.doRPCNodeList
-
 	rpcFns["PersistentVolumeClaimList"] = ccl.doRPCPersistentVolumeClaimList
-
 	rpcFns["PersistentVolumeList"] = ccl.doRPCPersistentVolumeList
-
 	rpcFns["PodList"] = ccl.doRPCPodList
-
 	rpcFns["PodsMetrics"] = ccl.doRPCPodsMetrics
-
 	rpcFns["ReplicaSetList"] = ccl.doRPCReplicaSetList
-
 	rpcFns["SecretList"] = ccl.doRPCSecretList
-
 	rpcFns["ServiceList"] = ccl.doRPCServiceList
-
 	rpcFns["StatefulSetList"] = ccl.doRPCStatefulSetList
-
 	rpcFns["VirtualMachineInstancesMetrics"] = ccl.doRPCVirtualMachineInstancesMetrics
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -344,7 +310,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCConfigMapList(ctx context.Context, cal
 	pbRsp := &k8s_io_api_core_v1.ConfigMapList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.ConfigMapList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -352,7 +317,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCConfigMapList(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCCronJobList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -428,7 +392,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCCronJobList(ctx context.Context, callO
 	pbRsp := &k8s_io_api_batch_v1beta1.CronJobList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.batch.v1beta1.CronJobList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -436,7 +399,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCCronJobList(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCDaemonSetList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -512,7 +474,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCDaemonSetList(ctx context.Context, cal
 	pbRsp := &k8s_io_api_apps_v1.DaemonSetList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.apps.v1.DaemonSetList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -520,7 +481,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCDaemonSetList(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCDeploymentList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -596,7 +556,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCDeploymentList(ctx context.Context, ca
 	pbRsp := &k8s_io_api_apps_v1.DeploymentList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.apps.v1.DeploymentList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -604,7 +563,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCDeploymentList(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCEndpointsList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -680,7 +638,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCEndpointsList(ctx context.Context, cal
 	pbRsp := &k8s_io_api_core_v1.EndpointsList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.EndpointsList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -688,7 +645,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCEndpointsList(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCJobList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -764,7 +720,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCJobList(ctx context.Context, callOpts 
 	pbRsp := &k8s_io_api_batch_v1.JobList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.batch.v1.JobList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -772,7 +727,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCJobList(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCNamespaceList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -847,7 +801,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCNamespaceList(ctx context.Context, cal
 	pbRsp := &k8s_io_api_core_v1.NamespaceList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.NamespaceList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -855,7 +808,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCNamespaceList(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCNodeList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -930,7 +882,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCNodeList(ctx context.Context, callOpts
 	pbRsp := &k8s_io_api_core_v1.NodeList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.NodeList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -938,7 +889,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCNodeList(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1014,7 +964,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.
 	pbRsp := &k8s_io_api_core_v1.PersistentVolumeClaimList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeClaimList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1022,7 +971,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1097,7 +1045,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeList(ctx context.Conte
 	pbRsp := &k8s_io_api_core_v1.PersistentVolumeList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1105,7 +1052,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeList(ctx context.Conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1181,7 +1127,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts 
 	pbRsp := &k8s_io_api_core_v1.PodList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.PodList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1189,7 +1134,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCPodsMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1274,7 +1218,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodsMetrics(ctx context.Context, callO
 	pbRsp := &PodsMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.PodsMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1282,7 +1225,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodsMetrics(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCReplicaSetList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1358,7 +1300,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCReplicaSetList(ctx context.Context, ca
 	pbRsp := &k8s_io_api_apps_v1.ReplicaSetList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.apps.v1.ReplicaSetList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1366,7 +1307,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCReplicaSetList(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCSecretList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1442,7 +1382,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCSecretList(ctx context.Context, callOp
 	pbRsp := &k8s_io_api_core_v1.SecretList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.SecretList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1450,7 +1389,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCSecretList(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCServiceList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1526,7 +1464,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCServiceList(ctx context.Context, callO
 	pbRsp := &k8s_io_api_core_v1.ServiceList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.ServiceList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1534,7 +1471,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCServiceList(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCStatefulSetList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1610,7 +1546,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCStatefulSetList(ctx context.Context, c
 	pbRsp := &k8s_io_api_apps_v1.StatefulSetList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.apps.v1.StatefulSetList", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1618,7 +1553,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCStatefulSetList(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataK8SAPIRestClient) doRPCVirtualMachineInstancesMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1699,7 +1633,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCVirtualMachineInstancesMetrics(ctx con
 	pbRsp := &VirtualMachineInstancesMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.VirtualMachineInstancesMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1733,41 +1666,23 @@ func NewCustomDataK8SAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ConfigMapList"] = ccl.doRPCConfigMapList
-
 	rpcFns["CronJobList"] = ccl.doRPCCronJobList
-
 	rpcFns["DaemonSetList"] = ccl.doRPCDaemonSetList
-
 	rpcFns["DeploymentList"] = ccl.doRPCDeploymentList
-
 	rpcFns["EndpointsList"] = ccl.doRPCEndpointsList
-
 	rpcFns["JobList"] = ccl.doRPCJobList
-
 	rpcFns["NamespaceList"] = ccl.doRPCNamespaceList
-
 	rpcFns["NodeList"] = ccl.doRPCNodeList
-
 	rpcFns["PersistentVolumeClaimList"] = ccl.doRPCPersistentVolumeClaimList
-
 	rpcFns["PersistentVolumeList"] = ccl.doRPCPersistentVolumeList
-
 	rpcFns["PodList"] = ccl.doRPCPodList
-
 	rpcFns["PodsMetrics"] = ccl.doRPCPodsMetrics
-
 	rpcFns["ReplicaSetList"] = ccl.doRPCReplicaSetList
-
 	rpcFns["SecretList"] = ccl.doRPCSecretList
-
 	rpcFns["ServiceList"] = ccl.doRPCServiceList
-
 	rpcFns["StatefulSetList"] = ccl.doRPCStatefulSetList
-
 	rpcFns["VirtualMachineInstancesMetrics"] = ccl.doRPCVirtualMachineInstancesMetrics
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1912,7 +1827,6 @@ func (s *customDataK8SAPISrv) ConfigMapList(ctx context.Context, in *ConfigMapLi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.ConfigMapList", rsp)...)
 
 	return rsp, nil
@@ -1961,7 +1875,6 @@ func (s *customDataK8SAPISrv) CronJobList(ctx context.Context, in *CronJobListRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.batch.v1beta1.CronJobList", rsp)...)
 
 	return rsp, nil
@@ -2010,7 +1923,6 @@ func (s *customDataK8SAPISrv) DaemonSetList(ctx context.Context, in *DaemonSetLi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.apps.v1.DaemonSetList", rsp)...)
 
 	return rsp, nil
@@ -2059,7 +1971,6 @@ func (s *customDataK8SAPISrv) DeploymentList(ctx context.Context, in *Deployment
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.apps.v1.DeploymentList", rsp)...)
 
 	return rsp, nil
@@ -2108,7 +2019,6 @@ func (s *customDataK8SAPISrv) EndpointsList(ctx context.Context, in *EndpointsLi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.EndpointsList", rsp)...)
 
 	return rsp, nil
@@ -2157,7 +2067,6 @@ func (s *customDataK8SAPISrv) JobList(ctx context.Context, in *JobListRequest) (
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.batch.v1.JobList", rsp)...)
 
 	return rsp, nil
@@ -2206,7 +2115,6 @@ func (s *customDataK8SAPISrv) NamespaceList(ctx context.Context, in *NamespaceLi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.NamespaceList", rsp)...)
 
 	return rsp, nil
@@ -2255,7 +2163,6 @@ func (s *customDataK8SAPISrv) NodeList(ctx context.Context, in *NodeListRequest)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.NodeList", rsp)...)
 
 	return rsp, nil
@@ -2304,7 +2211,6 @@ func (s *customDataK8SAPISrv) PersistentVolumeClaimList(ctx context.Context, in 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.PersistentVolumeClaimList", rsp)...)
 
 	return rsp, nil
@@ -2353,7 +2259,6 @@ func (s *customDataK8SAPISrv) PersistentVolumeList(ctx context.Context, in *Pers
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.PersistentVolumeList", rsp)...)
 
 	return rsp, nil
@@ -2402,7 +2307,6 @@ func (s *customDataK8SAPISrv) PodList(ctx context.Context, in *PodListRequest) (
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.PodList", rsp)...)
 
 	return rsp, nil
@@ -2451,7 +2355,6 @@ func (s *customDataK8SAPISrv) PodsMetrics(ctx context.Context, in *PodsMetricsRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.PodsMetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -2500,7 +2403,6 @@ func (s *customDataK8SAPISrv) ReplicaSetList(ctx context.Context, in *ReplicaSet
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.apps.v1.ReplicaSetList", rsp)...)
 
 	return rsp, nil
@@ -2549,7 +2451,6 @@ func (s *customDataK8SAPISrv) SecretList(ctx context.Context, in *SecretListRequ
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.SecretList", rsp)...)
 
 	return rsp, nil
@@ -2598,7 +2499,6 @@ func (s *customDataK8SAPISrv) ServiceList(ctx context.Context, in *ServiceListRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.ServiceList", rsp)...)
 
 	return rsp, nil
@@ -2647,7 +2547,6 @@ func (s *customDataK8SAPISrv) StatefulSetList(ctx context.Context, in *StatefulS
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.apps.v1.StatefulSetList", rsp)...)
 
 	return rsp, nil
@@ -2696,7 +2595,6 @@ func (s *customDataK8SAPISrv) VirtualMachineInstancesMetrics(ctx context.Context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.VirtualMachineInstancesMetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -5970,7 +5868,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
             "properties": {
                 "labels": {
                     "type": "object",
-                    "description": " Labels contains the name/value pair that uniquely identifies an entity whose metric is being reported.\n \"name\" is the label name defined in \"VirtualMachineInstancesMetricLabel\" ",
+                    "description": " Labels contains the name/value pair that uniquely identifies an entity whose metric is being reported.\n \"name\" is the label name defined in \"VirtualMachineInstancesMetricLabel\"",
                     "title": "Labels",
                     "x-displayname": "Labels"
                 },

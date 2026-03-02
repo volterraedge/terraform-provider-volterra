@@ -63,28 +63,14 @@ resource "volterra_discovery" "example" {
     publish_info {
       // One of the arguments from this list "disable dns_delegation publish publish_fqdns" must be set
 
-      publish {
-        namespace = "default"
-      }
+      disable = true
     }
   }
   where {
     // One of the arguments from this list "site virtual_network virtual_site" must be set
 
-    virtual_site {
-      // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
-
-      disable_internet_vip = true
-
-      network_type = "network_type"
-
+    virtual_network {
       ref {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-
-      refs {
         name      = "test1"
         namespace = "staging"
         tenant    = "acmecorp"
@@ -92,7 +78,6 @@ resource "volterra_discovery" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -130,11 +115,11 @@ Argument Reference
 
 `discovery_third_party` - (Optional) Discovery configuration for Third Party. See [Discovery Choice Discovery Third Party ](#discovery-choice-discovery-third-party) below for details.
 
-`where` - (Required) Site for which discovery is valid.. See [Where ](#where) below for details.
+`where` - (Required) Site for which discovery is valid. See [Where ](#where) below for details.
 
 ### Where
 
-Site for which discovery is valid..
+Site for which discovery is valid.
 
 ###### One of the arguments from this list "site, virtual_network, virtual_site" must be set
 
@@ -206,24 +191,6 @@ x-required.
 
 `trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Origin Pool for verification of server's certificate. See [ref](#ref) below for details.
 
-### Cbip Clusters Cbip Devices
-
-List of Classic BIG-IP devices..
-
-`admin_credentials` - (Required) x-required. See [Cbip Devices Admin Credentials ](#cbip-devices-admin-credentials) below for details.(Deprecated)
-
-`cbip_certificate_authority` - (Required) x-required. See [Cbip Devices Cbip Certificate Authority ](#cbip-devices-cbip-certificate-authority) below for details.(Deprecated)
-
-`cbip_mgmt_ip` - (Required) IP Address of the Classic BIG-IP device. Hostname is not supported. (`String`).(Deprecated)
-
-###### One of the arguments from this list "default_all, namespace_mapping" can be set
-
-`default_all` - (Optional) If configuring in an App Namespace, discovered services across all BIG-IP partitions will be discovered in the current Namespace (`Bool`).(Deprecated)
-
-`namespace_mapping` - (Optional) Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.. See [Namespace Mapping Choice Namespace Mapping ](#namespace-mapping-choice-namespace-mapping) below for details.(Deprecated)
-
-`virtual_server_filter` - (Optional) Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all.. See [Cbip Devices Virtual Server Filter ](#cbip-devices-virtual-server-filter) below for details.(Deprecated)
-
 ### Cbip Clusters Metadata
 
 Common attributes for the device configuration including name and description..
@@ -236,43 +203,11 @@ Common attributes for the device configuration including name and description..
 
 ### Cbip Clusters Mgmt Port
 
-x-displayName: "Management Port".
+x-required.
 
-`port` - (Optional) Management Port of the BIGIP HA cluster (`Int`).
+`port` - (Required) Management Port of the BIGIP HA cluster (`Int`).
 
 ### Cbip Clusters Virtual Server Filter
-
-Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all..
-
-`description_regex` - (Optional) Regex to match Virtual Server description (`String`).
-
-`discover_disabled_virtual_servers` - (Optional) When checked, disabled virtual servers will be included (`Bool`).
-
-`name_regex` - (Optional) Regex to match Virtual Server name (`String`).
-
-`port_ranges` - (Optional) Maximum number of ports allowed is 1024. (`String`).
-
-`protocols` - (Optional) Filter by protocol(s) (`String`).(Deprecated)
-
-### Cbip Devices Admin Credentials
-
-x-required.
-
-`password` - (Required) Password used to log into an admin account on the BIG-IP device. See [Admin Credentials Password ](#admin-credentials-password) below for details.
-
-`username` - (Required) Username used to log into an admin account on the BIG-IP device (`String`).
-
-### Cbip Devices Cbip Certificate Authority
-
-x-required.
-
-###### One of the arguments from this list "skip_server_verification, trusted_ca" must be set
-
-`skip_server_verification` - (Optional) Skip origin server verification (`Bool`).
-
-`trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Origin Pool for verification of server's certificate. See [ref](#ref) below for details.
-
-### Cbip Devices Virtual Server Filter
 
 Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all..
 
@@ -352,7 +287,7 @@ are in an Active-Active or Active-Standby setup or even a standalone BIG-IP devi
 
 `metadata` - (Required) Common attributes for the device configuration including name and description.. See [Cbip Clusters Metadata ](#cbip-clusters-metadata) below for details.
 
-`mgmt_port` - (Optional) x-displayName: "Management Port". See [Cbip Clusters Mgmt Port ](#cbip-clusters-mgmt-port) below for details.
+`mgmt_port` - (Required) x-required. See [Cbip Clusters Mgmt Port ](#cbip-clusters-mgmt-port) below for details.
 
 ###### One of the arguments from this list "default_all, namespace_mapping" can be set
 
@@ -404,7 +339,7 @@ Discovery configuration for K8s..
 
 Discovery configuration for Third Party.
 
-`applications` - (Required) Defines names to identify and distingish log source system or platforms (`String`).
+`applications` - (Required) Defines names to identify and distinguish log source system or platforms (`String`).
 
 `expiration_timestamp` - (Optional) This discovery service expiration timestamp (`String`).(Deprecated)
 
@@ -538,7 +473,7 @@ Map BIG-IP partition(s) to App Namespaces.
 
 `namespace` - (Optional) Select a namespace (`String`).
 
-`partition_regex` - (Optional) The regex here will be used to match BIG-IP partition(s). (`String`).
+`partition_regex` - (Required) The regex here will be used to match BIG-IP partition(s). (`String`).
 
 ### Namespace Mapping Choice Default All
 
@@ -755,4 +690,4 @@ The data may be optionally secured using BlindFold..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured discovery.
+*   `id` - This is the id of the configured discovery.

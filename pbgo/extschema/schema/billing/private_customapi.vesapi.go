@@ -42,7 +42,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCBillingFeature(ctx context.Context, ya
 	rsp, err := c.grpcClient.BillingFeature(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCBillingUsage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &BillingUsageRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCBillingUsage(ctx context.Context, yaml
 	rsp, err := c.grpcClient.BillingUsage(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCRELoadBalancerMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LoadBalancerMetricsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCRELoadBalancerMetrics(ctx context.Cont
 	rsp, err := c.grpcClient.RELoadBalancerMetrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCSecretManagement(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SecretManagementRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCSecretManagement(ctx context.Context, 
 	rsp, err := c.grpcClient.SecretManagement(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCSiteTraffic(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SiteTrafficRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCSiteTraffic(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.SiteTraffic(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCSyntheticMonitorInvocations(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SyntheticMonitorInvocationsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +82,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCSyntheticMonitorInvocations(ctx contex
 	rsp, err := c.grpcClient.SyntheticMonitorInvocations(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCUsageCount(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UsageCountRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +90,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCUsageCount(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.UsageCount(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCVolterraNetworkTraffic(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VolterraNetworkTrafficRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -137,23 +130,14 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["BillingFeature"] = ccl.doRPCBillingFeature
-
 	rpcFns["BillingUsage"] = ccl.doRPCBillingUsage
-
 	rpcFns["RELoadBalancerMetrics"] = ccl.doRPCRELoadBalancerMetrics
-
 	rpcFns["SecretManagement"] = ccl.doRPCSecretManagement
-
 	rpcFns["SiteTraffic"] = ccl.doRPCSiteTraffic
-
 	rpcFns["SyntheticMonitorInvocations"] = ccl.doRPCSyntheticMonitorInvocations
-
 	rpcFns["UsageCount"] = ccl.doRPCUsageCount
-
 	rpcFns["VolterraNetworkTraffic"] = ccl.doRPCVolterraNetworkTraffic
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -248,7 +232,6 @@ func (c *CustomPrivateAPIRestClient) doRPCBillingFeature(ctx context.Context, ca
 	pbRsp := &BillingFeatureResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.BillingFeatureResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -256,7 +239,6 @@ func (c *CustomPrivateAPIRestClient) doRPCBillingFeature(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCBillingUsage(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -340,7 +322,6 @@ func (c *CustomPrivateAPIRestClient) doRPCBillingUsage(ctx context.Context, call
 	pbRsp := &BillingUsageResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.BillingUsageResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -348,7 +329,6 @@ func (c *CustomPrivateAPIRestClient) doRPCBillingUsage(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCRELoadBalancerMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -431,7 +411,6 @@ func (c *CustomPrivateAPIRestClient) doRPCRELoadBalancerMetrics(ctx context.Cont
 	pbRsp := &LoadBalancerMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.LoadBalancerMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -439,7 +418,6 @@ func (c *CustomPrivateAPIRestClient) doRPCRELoadBalancerMetrics(ctx context.Cont
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCSecretManagement(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -523,7 +501,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSecretManagement(ctx context.Context, 
 	pbRsp := &SecretManagementResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.SecretManagementResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -531,7 +508,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSecretManagement(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCSiteTraffic(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -608,7 +584,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSiteTraffic(ctx context.Context, callO
 	pbRsp := &SiteTrafficResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.SiteTrafficResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -616,7 +591,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSiteTraffic(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCSyntheticMonitorInvocations(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -697,7 +671,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSyntheticMonitorInvocations(ctx contex
 	pbRsp := &SyntheticMonitorInvocationsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.SyntheticMonitorInvocationsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -705,7 +678,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSyntheticMonitorInvocations(ctx contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCUsageCount(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -784,7 +756,6 @@ func (c *CustomPrivateAPIRestClient) doRPCUsageCount(ctx context.Context, callOp
 	pbRsp := &UsageCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.UsageCountResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -792,7 +763,6 @@ func (c *CustomPrivateAPIRestClient) doRPCUsageCount(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCVolterraNetworkTraffic(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -876,7 +846,6 @@ func (c *CustomPrivateAPIRestClient) doRPCVolterraNetworkTraffic(ctx context.Con
 	pbRsp := &VolterraNetworkTrafficResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.VolterraNetworkTrafficResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -910,23 +879,14 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["BillingFeature"] = ccl.doRPCBillingFeature
-
 	rpcFns["BillingUsage"] = ccl.doRPCBillingUsage
-
 	rpcFns["RELoadBalancerMetrics"] = ccl.doRPCRELoadBalancerMetrics
-
 	rpcFns["SecretManagement"] = ccl.doRPCSecretManagement
-
 	rpcFns["SiteTraffic"] = ccl.doRPCSiteTraffic
-
 	rpcFns["SyntheticMonitorInvocations"] = ccl.doRPCSyntheticMonitorInvocations
-
 	rpcFns["UsageCount"] = ccl.doRPCUsageCount
-
 	rpcFns["VolterraNetworkTraffic"] = ccl.doRPCVolterraNetworkTraffic
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

@@ -78,16 +78,12 @@ func (v *ValidateApiEndpointsStatsAllNSReq) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -144,7 +140,6 @@ type ValidateApiEndpointsStatsNSReq struct {
 }
 
 func (v *ValidateApiEndpointsStatsNSReq) VhostsTypesFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -204,18 +199,13 @@ func (v *ValidateApiEndpointsStatsNSReq) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vhosts_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vhosts_filter"))
 		for idx, item := range m.GetVhostsFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -223,24 +213,19 @@ func (v *ValidateApiEndpointsStatsNSReq) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vhosts_types_filter"]; exists {
 		vOpts := append(opts, db.WithValidateField("vhosts_types_filter"))
 		if err := fv(ctx, m.GetVhostsTypesFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiEndpointsStatsNSReqValidator = func() *ValidateApiEndpointsStatsNSReq {
 	v := &ValidateApiEndpointsStatsNSReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -322,52 +307,36 @@ func (v *ValidateApiEndpointsStatsNSRsp) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovered"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovered"))
 		if err := fv(ctx, m.GetDiscovered(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inventory"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inventory"))
 		if err := fv(ctx, m.GetInventory(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pii_detected"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pii_detected"))
 		if err := fv(ctx, m.GetPiiDetected(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["shadow"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("shadow"))
 		if err := fv(ctx, m.GetShadow(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_endpoints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_endpoints"))
 		if err := fv(ctx, m.GetTotalEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

@@ -64,7 +64,6 @@ type ValidateFindFilterSetsReq struct {
 }
 
 func (v *ValidateFindFilterSetsReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -72,9 +71,7 @@ func (v *ValidateFindFilterSetsReq) NamespaceValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateFindFilterSetsReq) ContextKeysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -128,31 +125,24 @@ func (v *ValidateFindFilterSetsReq) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["context_keys"]; exists {
 		vOpts := append(opts, db.WithValidateField("context_keys"))
 		if err := fv(ctx, m.GetContextKeys(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFindFilterSetsReqValidator = func() *ValidateFindFilterSetsReq {
 	v := &ValidateFindFilterSetsReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -235,7 +225,6 @@ func (m *FindFilterSetsRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return nil, nil
-
 }
 
 type ValidateFindFilterSetsRsp struct {
@@ -255,9 +244,7 @@ func (v *ValidateFindFilterSetsRsp) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["filter_sets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filter_sets"))
 		for idx, item := range m.GetFilterSets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -265,16 +252,13 @@ func (v *ValidateFindFilterSetsRsp) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFindFilterSetsRspValidator = func() *ValidateFindFilterSetsRsp {
 	v := &ValidateFindFilterSetsRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["filter_sets"] = ObjectValidator().Validate
 
 	return v

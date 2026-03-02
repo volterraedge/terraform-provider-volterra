@@ -78,16 +78,12 @@ func (v *ValidateCloneReq) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -156,9 +152,7 @@ func (v *ValidateCloneResp) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["failed_zones"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("failed_zones"))
 		for idx, item := range m.GetFailedZones() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -166,11 +160,8 @@ func (v *ValidateCloneResp) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["success_zones"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("success_zones"))
 		for idx, item := range m.GetSuccessZones() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -178,9 +169,7 @@ func (v *ValidateCloneResp) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -249,25 +238,18 @@ func (v *ValidateExportZoneFileRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -336,16 +318,12 @@ func (v *ValidateExportZoneFileResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["html_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("html_data"))
 		if err := fv(ctx, m.GetHtmlData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -438,9 +416,7 @@ func (v *ValidateF5CSDNSZoneConfiguration) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -509,25 +485,18 @@ func (v *ValidateGetLocalZoneFileRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -596,25 +565,18 @@ func (v *ValidateGetLocalZoneFileResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["last_axfr_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_axfr_timestamp"))
 		if err := fv(ctx, m.GetLastAxfrTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zone_file"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zone_file"))
 		if err := fv(ctx, m.GetZoneFile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -683,25 +645,18 @@ func (v *ValidateGetRemoteZoneFileRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -770,16 +725,12 @@ func (v *ValidateGetRemoteZoneFileResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["zone_file"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zone_file"))
 		if err := fv(ctx, m.GetZoneFile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -810,7 +761,6 @@ func (m *ImportAXFRRequest) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTsigConfiguration().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ImportAXFRRequest.tsig_configuration")
 	}
@@ -850,7 +800,6 @@ type ValidateImportAXFRRequest struct {
 }
 
 func (v *ValidateImportAXFRRequest) PrimaryServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for primary_server")
@@ -858,9 +807,7 @@ func (v *ValidateImportAXFRRequest) PrimaryServerValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateImportAXFRRequest) DomainNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_name")
@@ -882,41 +829,30 @@ func (v *ValidateImportAXFRRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_name"))
 		if err := fv(ctx, m.GetDomainName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["primary_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("primary_server"))
 		if err := fv(ctx, m.GetPrimaryServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tsig_configuration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tsig_configuration"))
 		if err := fv(ctx, m.GetTsigConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultImportAXFRRequestValidator = func() *ValidateImportAXFRRequest {
 	v := &ValidateImportAXFRRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -950,7 +886,6 @@ var DefaultImportAXFRRequestValidator = func() *ValidateImportAXFRRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["domain_name"] = vFn
-
 	v.FldValidators["tsig_configuration"] = TSIGConfigurationValidator().Validate
 
 	return v
@@ -1003,7 +938,6 @@ func (m *ImportAXFRResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConfigurationDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1011,7 +945,6 @@ func (m *ImportAXFRResponse) GetConfigurationDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetConfiguration() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetConfiguration().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetConfiguration().GetDRefInfo() FAILED")
@@ -1021,7 +954,6 @@ func (m *ImportAXFRResponse) GetConfigurationDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "configuration." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateImportAXFRResponse struct {
@@ -1041,23 +973,18 @@ func (v *ValidateImportAXFRResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["configuration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("configuration"))
 		if err := fv(ctx, m.GetConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultImportAXFRResponseValidator = func() *ValidateImportAXFRResponse {
 	v := &ValidateImportAXFRResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["configuration"] = PrimaryDNSGetSpecTypeValidator().Validate
 
 	return v
@@ -1076,7 +1003,6 @@ func (m *ImportBINDCreateRequest) ToJSON() (string, error) {
 func (m *ImportBINDCreateRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *ImportBINDCreateRequest) String() string {
 	if m == nil {
 		return ""
@@ -1136,7 +1062,6 @@ type ValidateImportBINDCreateRequest struct {
 }
 
 func (v *ValidateImportBINDCreateRequest) FileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewBytesValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for file")
@@ -1158,27 +1083,19 @@ func (v *ValidateImportBINDCreateRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["file"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("file"))
 		if err := fv(ctx, m.GetFile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ignore_zone_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ignore_zone_list"))
 		for idx, item := range m.GetIgnoreZoneList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1186,16 +1103,13 @@ func (v *ValidateImportBINDCreateRequest) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultImportBINDCreateRequestValidator = func() *ValidateImportBINDCreateRequest {
 	v := &ValidateImportBINDCreateRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1277,9 +1191,7 @@ func (v *ValidateImportBINDResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["invalid_zone_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("invalid_zone_list"))
 		for idx, item := range m.GetInvalidZoneList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1287,20 +1199,14 @@ func (v *ValidateImportBINDResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["success_created_zone_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("success_created_zone_count"))
 		if err := fv(ctx, m.GetSuccessCreatedZoneCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["valid_zone_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("valid_zone_list"))
 		for idx, item := range m.GetValidZoneList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1308,9 +1214,7 @@ func (v *ValidateImportBINDResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1334,7 +1238,6 @@ func (m *ImportBINDValidateRequest) ToJSON() (string, error) {
 func (m *ImportBINDValidateRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *ImportBINDValidateRequest) String() string {
 	if m == nil {
 		return ""
@@ -1394,7 +1297,6 @@ type ValidateImportBINDValidateRequest struct {
 }
 
 func (v *ValidateImportBINDValidateRequest) FileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewBytesValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for file")
@@ -1416,32 +1318,24 @@ func (v *ValidateImportBINDValidateRequest) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["file"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("file"))
 		if err := fv(ctx, m.GetFile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultImportBINDValidateRequestValidator = func() *ValidateImportBINDValidateRequest {
 	v := &ValidateImportBINDValidateRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1523,16 +1417,12 @@ func (v *ValidateImportF5CSZoneRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["configuration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("configuration"))
 		if err := fv(ctx, m.GetConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1563,7 +1453,6 @@ func (m *ImportF5CSZoneResponse) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ImportF5CSZoneResponse.spec")
 	}
@@ -1604,7 +1493,6 @@ func (m *ImportF5CSZoneResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1612,7 +1500,6 @@ func (m *ImportF5CSZoneResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -1622,7 +1509,6 @@ func (m *ImportF5CSZoneResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateImportF5CSZoneResponse struct {
@@ -1642,43 +1528,31 @@ func (v *ValidateImportF5CSZoneResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultImportF5CSZoneResponseValidator = func() *ValidateImportF5CSZoneResponse {
 	v := &ValidateImportF5CSZoneResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = GetSpecTypeValidator().Validate
 
 	return v
@@ -1742,25 +1616,18 @@ func (v *ValidateInvalidZone) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["validation_error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("validation_error"))
 		if err := fv(ctx, m.GetValidationError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zone_name"))
 		if err := fv(ctx, m.GetZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1791,7 +1658,6 @@ func (m *TSIGConfiguration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTsigKeyValue().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TSIGConfiguration.tsig_key_value")
 	}
@@ -1831,7 +1697,6 @@ type ValidateTSIGConfiguration struct {
 }
 
 func (v *ValidateTSIGConfiguration) TsigKeyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tsig_key_name")
@@ -1853,41 +1718,30 @@ func (v *ValidateTSIGConfiguration) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tsig_key_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tsig_key_algorithm"))
 		if err := fv(ctx, m.GetTsigKeyAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tsig_key_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tsig_key_name"))
 		if err := fv(ctx, m.GetTsigKeyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tsig_key_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tsig_key_value"))
 		if err := fv(ctx, m.GetTsigKeyValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTSIGConfigurationValidator = func() *ValidateTSIGConfiguration {
 	v := &ValidateTSIGConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1907,7 +1761,6 @@ var DefaultTSIGConfigurationValidator = func() *ValidateTSIGConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["tsig_key_name"] = vFn
-
 	v.FldValidators["tsig_key_value"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -1971,25 +1824,18 @@ func (v *ValidateValidZone) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["record_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_count"))
 		if err := fv(ctx, m.GetRecordCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zone_name"))
 		if err := fv(ctx, m.GetZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

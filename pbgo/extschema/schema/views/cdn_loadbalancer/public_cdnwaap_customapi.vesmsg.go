@@ -64,7 +64,6 @@ type ValidateCDNLoadBalancerList struct {
 }
 
 func (v *ValidateCDNLoadBalancerList) CdnLoadbalancerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -118,22 +117,18 @@ func (v *ValidateCDNLoadBalancerList) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cdn_loadbalancer"]; exists {
 		vOpts := append(opts, db.WithValidateField("cdn_loadbalancer"))
 		if err := fv(ctx, m.GetCdnLoadbalancer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCDNLoadBalancerListValidator = func() *ValidateCDNLoadBalancerList {
 	v := &ValidateCDNLoadBalancerList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -260,25 +255,19 @@ func (v *ValidateGetCDNSecurityConfigReq) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetCDNSecurityConfigReqValidator = func() *ValidateGetCDNSecurityConfigReq {
 	v := &ValidateGetCDNSecurityConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -286,7 +275,6 @@ var DefaultGetCDNSecurityConfigReqValidator = func() *ValidateGetCDNSecurityConf
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLoadbalancerChoice := v.LoadbalancerChoiceValidationRuleHandler
 	rulesLoadbalancerChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -297,7 +285,6 @@ var DefaultGetCDNSecurityConfigReqValidator = func() *ValidateGetCDNSecurityConf
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_choice"] = vFn
-
 	v.FldValidators["loadbalancer_choice.cdn_loadbalancers_list"] = CDNLoadBalancerListValidator().Validate
 
 	return v

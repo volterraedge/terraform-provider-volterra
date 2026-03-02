@@ -64,7 +64,6 @@ type ValidateDownloadCertificatesRequest struct {
 }
 
 func (v *ValidateDownloadCertificatesRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -72,9 +71,7 @@ func (v *ValidateDownloadCertificatesRequest) NamespaceValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDownloadCertificatesRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -96,32 +93,24 @@ func (v *ValidateDownloadCertificatesRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDownloadCertificatesRequestValidator = func() *ValidateDownloadCertificatesRequest {
 	v := &ValidateDownloadCertificatesRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -168,7 +157,6 @@ func (m *DownloadCertificatesResponse) ToJSON() (string, error) {
 func (m *DownloadCertificatesResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *DownloadCertificatesResponse) String() string {
 	return "REDACTED"
 }
@@ -233,16 +221,12 @@ func (v *ValidateDownloadCertificatesResponse) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

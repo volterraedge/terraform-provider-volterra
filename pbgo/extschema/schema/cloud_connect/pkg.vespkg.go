@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.cloud_connect.Object"] = ObjectValidator()
 	vr["ves.io.schema.cloud_connect.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.cloud_connect.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.cloud_connect.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.cloud_connect.DeleteRequest"] = DeleteRequestValidator()
@@ -28,7 +26,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.cloud_connect.FieldData"] = FieldDataValidator()
 	vr["ves.io.schema.cloud_connect.GetMetricsRequest"] = GetMetricsRequestValidator()
 	vr["ves.io.schema.cloud_connect.GetMetricsResponse"] = GetMetricsResponseValidator()
@@ -39,32 +36,34 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.TopCloudConnectData"] = TopCloudConnectDataValidator()
 	vr["ves.io.schema.cloud_connect.TopCloudConnectRequest"] = TopCloudConnectRequestValidator()
 	vr["ves.io.schema.cloud_connect.TopCloudConnectResponse"] = TopCloudConnectResponseValidator()
-
 	vr["ves.io.schema.cloud_connect.CredentialsRequest"] = CredentialsRequestValidator()
 	vr["ves.io.schema.cloud_connect.CredentialsResponse"] = CredentialsResponseValidator()
 	vr["ves.io.schema.cloud_connect.EdgeListRequest"] = EdgeListRequestValidator()
 	vr["ves.io.schema.cloud_connect.EdgeListResponse"] = EdgeListResponseValidator()
 	vr["ves.io.schema.cloud_connect.EdgeSite"] = EdgeSiteValidator()
-
 	vr["ves.io.schema.cloud_connect.DiscoverVPCRequest"] = DiscoverVPCRequestValidator()
 	vr["ves.io.schema.cloud_connect.DiscoverVPCResponse"] = DiscoverVPCResponseValidator()
 	vr["ves.io.schema.cloud_connect.DiscoveredVPCType"] = DiscoveredVPCTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReApplyVPCAttachmentRequest"] = ReApplyVPCAttachmentRequestValidator()
 	vr["ves.io.schema.cloud_connect.ReApplyVPCAttachmentResponse"] = ReApplyVPCAttachmentResponseValidator()
-
 	vr["ves.io.schema.cloud_connect.AWSAttachmentsListStatusType"] = AWSAttachmentsListStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSAttachmentsStatusType"] = AWSAttachmentsStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSCloudTransitGatewayType"] = AWSCloudTransitGatewayTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSConnectAttachmentStatusType"] = AWSConnectAttachmentStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSConnectPeerStatusType"] = AWSConnectPeerStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSDefaultRoutesRouteTable"] = AWSDefaultRoutesRouteTableValidator()
+	vr["ves.io.schema.cloud_connect.AWSProviderType"] = AWSProviderTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSREType"] = AWSRETypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSRouteTableListType"] = AWSRouteTableListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSRouteTableType"] = AWSRouteTableTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSSecureMeshSiteStatusType"] = AWSSecureMeshSiteStatusTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSSecureMeshSiteType"] = AWSSecureMeshSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSSubnetIDListType"] = AWSSubnetIDListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSTGWResourceReference"] = AWSTGWResourceReferenceValidator()
+	vr["ves.io.schema.cloud_connect.AWSTGWResourceShareType"] = AWSTGWResourceShareTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSTGWRouteTableStatusType"] = AWSTGWRouteTableStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSTGWSiteType"] = AWSTGWSiteTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSTGWStatusType"] = AWSTGWStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSVPCAttachmentListType"] = AWSVPCAttachmentListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSVPCAttachmentType"] = AWSVPCAttachmentTypeValidator()
 	vr["ves.io.schema.cloud_connect.AzureAttachmentsListStatusType"] = AzureAttachmentsListStatusTypeValidator()
@@ -82,6 +81,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.CloudConnectStatusType"] = CloudConnectStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.CloudLinkListType"] = CloudLinkListTypeValidator()
 	vr["ves.io.schema.cloud_connect.CreateAWSCloudTransitGatewayType"] = CreateAWSCloudTransitGatewayTypeValidator()
+	vr["ves.io.schema.cloud_connect.CreateAWSProviderType"] = CreateAWSProviderTypeValidator()
+	vr["ves.io.schema.cloud_connect.CreateAWSSecureMeshSiteType"] = CreateAWSSecureMeshSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.CreateAWSTGWSiteType"] = CreateAWSTGWSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.cloud_connect.CustomerEdge"] = CustomerEdgeValidator()
@@ -93,14 +94,15 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.MetricData"] = MetricDataValidator()
 	vr["ves.io.schema.cloud_connect.PeerType"] = PeerTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAWSCloudTransitGatewayType"] = ReplaceAWSCloudTransitGatewayTypeValidator()
+	vr["ves.io.schema.cloud_connect.ReplaceAWSProviderType"] = ReplaceAWSProviderTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAWSREType"] = ReplaceAWSRETypeValidator()
+	vr["ves.io.schema.cloud_connect.ReplaceAWSSecureMeshSiteType"] = ReplaceAWSSecureMeshSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType"] = ReplaceAWSTGWSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAzureVNETSiteType"] = ReplaceAzureVNETSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.cloud_connect.SegmentationData"] = SegmentationDataValidator()
 	vr["ves.io.schema.cloud_connect.SubnetStatusType"] = SubnetStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.VerStatusType"] = VerStatusTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -112,17 +114,93 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.cloud_connect.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.cloud_connect.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.cloud_connect.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.cloud_connect.API.Create"] = []string{
+		"spec.aws_tgw_site",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.API.Create"] = []string{
+		"spec.aws_tgw_site",
+	}
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_connect.API.Create"] = []string{
 		"spec.aws_re.peers.#",
 		"spec.aws_re.tgw",
 		"spec.azure_vnet_site.cred",
 	}
-
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_provider.securemesh_site_v2",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_provider.securemesh_site_v2",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.API.Get"] = []string{
+		"create_form.spec.aws_tgw_site",
+		"replace_form.spec.aws_tgw_site",
+		"spec.aws_tgw_site",
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.aws_provider.securemesh_site_v2",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.aws_provider.securemesh_site_v2",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_provider.securemesh_site_v2",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "status.#.cloud_connect_status.cloud_connect_aws_securemesh_site",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "status.#.cloud_connect_status.cloud_connect_aws_site.tgw_status",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "status.#.cloud_connect_status.cloud_connect_aws_site.transit_gateway_resource_share_status",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.API.List"] = []string{
+		"items.#.get_spec.aws_tgw_site",
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.aws_provider.securemesh_site_v2",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.status_set.#.cloud_connect_status.cloud_connect_aws_securemesh_site",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.status_set.#.cloud_connect_status.cloud_connect_aws_site.tgw_status",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.status_set.#.cloud_connect_status.cloud_connect_aws_site.transit_gateway_resource_share_status",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.cloud_connect.API.Replace"] = []string{
+		"spec.aws_tgw_site",
+	}
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cloud_connect.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_provider.securemesh_site_v2",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
@@ -130,16 +208,13 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.cloud_connect.CustomAPI"] = "data"
 	sm["ves.io.schema.cloud_connect.ConfigCustomAPI"] = "config"
 	sm["ves.io.schema.cloud_connect.CloudDataCustomAPI"] = "sync-cloud-data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -148,9 +223,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.cloud_connect.Object"] = APISwaggerJSON
@@ -164,16 +237,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.cloud_connect.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.cloud_connect.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.cloud_connect.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.cloud_connect.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.cloud_connect.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.cloud_connect.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -184,16 +252,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.cloud_connect.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.cloud_connect.Object"] = ConfigCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.cloud_connect.ConfigCustomAPI"] = NewConfigCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.cloud_connect.ConfigCustomAPI"] = NewConfigCustomAPIRestClient
 		if isExternal {
@@ -204,16 +267,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.cloud_connect.ConfigCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewConfigCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.cloud_connect.Object"] = CloudDataCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.cloud_connect.CloudDataCustomAPI"] = NewCloudDataCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.cloud_connect.CloudDataCustomAPI"] = NewCloudDataCustomAPIRestClient
 		if isExternal {
@@ -224,22 +282,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.cloud_connect.CloudDataCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCloudDataCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

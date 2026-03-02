@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.voltstack_site.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.voltstack_site.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.voltstack_site.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.voltstack_site.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.voltstack_site.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.views.voltstack_site.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.voltstack_site.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.voltstack_site.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.voltstack_site.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.voltstack_site.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.voltstack_site.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.voltstack_site.GlobalNetworkConnectionListType"] = GlobalNetworkConnectionListTypeValidator()
@@ -43,7 +40,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.voltstack_site.VnConfiguration"] = VnConfigurationValidator()
 	vr["ves.io.schema.views.voltstack_site.VssNetworkConfiguration"] = VssNetworkConfigurationValidator()
 	vr["ves.io.schema.views.voltstack_site.VssStorageConfiguration"] = VssStorageConfigurationValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -55,11 +51,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.voltstack_site.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.voltstack_site.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.voltstack_site.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.voltstack_site.CreateRequest.spec.custom_dns.inside_nameserver_v6",
@@ -138,17 +132,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []string{
 		"spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"spec.master_nodes.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []string{
 		"spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"spec.master_nodes.#",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []string{
 		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
 		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
@@ -224,7 +215,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.local_control_plane.bgp_config.peers.#.metadata.disable",
 		"spec.local_control_plane.bgp_config.peers.#.target_service",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
@@ -279,7 +269,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
@@ -334,9 +323,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.voltstack_site.API.Create"] = "ves.io.schema.views.voltstack_site.CreateRequest"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.voltstack_site.API.Get"] = []string{
 		"create_form.spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"create_form.spec.master_nodes.#",
@@ -345,7 +332,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"spec.master_nodes.#",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.custom_dns.inside_nameserver_v6",
@@ -504,12 +490,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.voltstack_site.API.List"] = []string{
 		"items.#.get_spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"items.#.get_spec.master_nodes.#",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.custom_dns.inside_nameserver_v6",
@@ -564,7 +548,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.voltstack_site.ReplaceRequest.spec.custom_dns.inside_nameserver_v6",
@@ -643,12 +626,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = []string{
 		"spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"spec.master_nodes.#",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = []string{
 		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
 		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
@@ -724,7 +705,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.local_control_plane.bgp_config.peers.#.metadata.disable",
 		"spec.local_control_plane.bgp_config.peers.#.target_service",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
@@ -779,23 +759,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = "ves.io.schema.views.voltstack_site.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.voltstack_site.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -804,9 +779,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.voltstack_site.Object"] = APISwaggerJSON
@@ -820,22 +793,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.voltstack_site.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.voltstack_site.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.voltstack_site.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

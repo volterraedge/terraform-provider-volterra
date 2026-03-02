@@ -1277,39 +1277,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_F5XcClearviewMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_clearview_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcClearviewMonitor).F5XcClearviewMonitor
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_clearview_monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcClearviewUser:
-		if fv, exists := v.FldValidators["choice.f5xc_clearview_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcClearviewUser).F5XcClearviewUser
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_clearview_user"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcClearviewAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_clearview_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcClearviewAdmin).F5XcClearviewAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_clearview_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *APIGroupChoice_F5XcSecuremeshStandardMonitor:
 		if fv, exists := v.FldValidators["choice.f5xc_securemesh_standard_monitor"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_F5XcSecuremeshStandardMonitor).F5XcSecuremeshStandardMonitor
@@ -2245,39 +2212,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_F5XcBigIpApmMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_big_ip_apm_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcBigIpApmMonitor).F5XcBigIpApmMonitor
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_big_ip_apm_monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcBigIpApmUser:
-		if fv, exists := v.FldValidators["choice.f5xc_big_ip_apm_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcBigIpApmUser).F5XcBigIpApmUser
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_big_ip_apm_user"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcBigIpApmAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_big_ip_apm_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcBigIpApmAdmin).F5XcBigIpApmAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_big_ip_apm_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *APIGroupChoice_F5XcCorePlatformServicesBasicMonitor:
 		if fv, exists := v.FldValidators["choice.f5xc_core_platform_services_basic_monitor"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_F5XcCorePlatformServicesBasicMonitor).F5XcCorePlatformServicesBasicMonitor
@@ -2443,9 +2377,29 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *APIGroupChoice_F5XcBigipStandardMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_bigip_standard_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBigipStandardMonitor).F5XcBigipStandardMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bigip_standard_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcBigipStandardUser:
+		if fv, exists := v.FldValidators["choice.f5xc_bigip_standard_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBigipStandardUser).F5XcBigipStandardUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bigip_standard_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	return nil
 }
 

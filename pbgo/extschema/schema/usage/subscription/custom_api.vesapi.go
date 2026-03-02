@@ -74,9 +74,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ListSubscriptions"] = ccl.doRPCListSubscriptions
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -163,7 +161,6 @@ func (c *CustomAPIRestClient) doRPCListSubscriptions(ctx context.Context, callOp
 	pbRsp := &ListSubscriptionsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.usage.subscription.ListSubscriptionsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -197,9 +194,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ListSubscriptions"] = ccl.doRPCListSubscriptions
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -280,7 +275,6 @@ func (s *customAPISrv) ListSubscriptions(ctx context.Context, in *ListSubscripti
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.usage.subscription.ListSubscriptionsRsp", rsp)...)
 
 	return rsp, nil

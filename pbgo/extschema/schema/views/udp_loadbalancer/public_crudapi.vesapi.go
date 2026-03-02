@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.udp_loadbalancer.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2237,6 +2214,33 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "common_wafServicePolicyList": {
+            "type": "object",
+            "description": "List of service policies.",
+            "title": "service policy list",
+            "x-displayname": "Service Policy List",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.ServicePolicyList",
+            "properties": {
+                "policies": {
+                    "type": "array",
+                    "description": " Service Policies is a sequential engine where policies (and rules within the policy) are evaluated one after the other. It's important to define the\n correct order (policies evaluated from top to bottom in the list) for service policies, to get the intended result.\n For each request, its characteristics are evaluated based on the match criteria in each service policy starting at the top. If there is a match in the\n current policy, then the policy takes effect, and no more policies are evaluated. Otherwise, the next policy is evaluated.\n If all policies are evaluated and none match, then the request will be denied by default.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "policies",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Policies",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "ioschemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
@@ -2325,10 +2329,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -4068,8 +4072,14 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"udp\"]",
             "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
+            "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-proto-message": "ves.io.schema.views.udp_loadbalancer.CreateSpecType",
             "properties": {
+                "active_service_policies": {
+                    "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
+                    "$ref": "#/definitions/common_wafServicePolicyList",
+                    "x-displayname": "Apply Specified Service Policies"
+                },
                 "advertise_custom": {
                     "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this VIP on specific sites",
                     "$ref": "#/definitions/viewsAdvertiseCustom",
@@ -4111,12 +4121,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
-                "enable_per_packet_load_balancing": {
-                    "type": "boolean",
-                    "description": " Per packet load balancing:\n If disabled (default): First packet identified by source IP/port and local IP/port is sent to an upstream server as the load balancing algorithm dictates, and subsequent packets with the same identity are forwarded to the same upstream server without rechecking the algorithm\n If enabled: Each packet is directed to an upstream server as the load balancing algorithm dictates.",
-                    "format": "boolean",
-                    "x-displayname": "Per Packet Load Balancing"
-                },
                 "hash_policy_choice_random": {
                     "description": "Exclusive with [hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n Connections are sent to all eligible origin servers in random fashion",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4152,6 +4156,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
+                "no_service_policies": {
+                    "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Apply Service Policies"
+                },
                 "origin_pools_weights": {
                     "type": "array",
                     "description": " Origin pools with weights and priorities used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -4179,6 +4188,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
+                "service_policies_from_namespace": {
+                    "description": "Exclusive with [active_service_policies no_service_policies]\n Apply the active service policies configured as part of the namespace service policy set",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Apply Namespace Service Policies"
+                },
                 "udp": {
                     "description": "Exclusive with []\n UDP Load Balancer.",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4196,8 +4210,14 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"udp\"]",
             "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
+            "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-proto-message": "ves.io.schema.views.udp_loadbalancer.GetSpecType",
             "properties": {
+                "active_service_policies": {
+                    "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
+                    "$ref": "#/definitions/common_wafServicePolicyList",
+                    "x-displayname": "Apply Specified Service Policies"
+                },
                 "advertise_custom": {
                     "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this VIP on specific sites",
                     "$ref": "#/definitions/viewsAdvertiseCustom",
@@ -4247,12 +4267,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
-                "enable_per_packet_load_balancing": {
-                    "type": "boolean",
-                    "description": " Per packet load balancing:\n If disabled (default): First packet identified by source IP/port and local IP/port is sent to an upstream server as the load balancing algorithm dictates, and subsequent packets with the same identity are forwarded to the same upstream server without rechecking the algorithm\n If enabled: Each packet is directed to an upstream server as the load balancing algorithm dictates.",
-                    "format": "boolean",
-                    "x-displayname": "Per Packet Load Balancing"
-                },
                 "hash_policy_choice_random": {
                     "description": "Exclusive with [hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n Connections are sent to all eligible origin servers in random fashion",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4286,7 +4300,7 @@ var APISwaggerJSON string = `{
                 },
                 "internet_vip_info": {
                     "type": "array",
-                    "description": " Internet VIP Info ",
+                    "description": " Internet VIP Info",
                     "items": {
                         "$ref": "#/definitions/viewsInternetVIPInfo"
                     },
@@ -4301,6 +4315,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
+                },
+                "no_service_policies": {
+                    "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Apply Service Policies"
                 },
                 "origin_pools_weights": {
                     "type": "array",
@@ -4329,6 +4348,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
+                "service_policies_from_namespace": {
+                    "description": "Exclusive with [active_service_policies no_service_policies]\n Apply the active service policies configured as part of the namespace service policy set",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Apply Namespace Service Policies"
+                },
                 "udp": {
                     "description": "Exclusive with []\n UDP Load Balancer.",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4346,8 +4370,14 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"udp\"]",
             "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
+            "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-proto-message": "ves.io.schema.views.udp_loadbalancer.ReplaceSpecType",
             "properties": {
+                "active_service_policies": {
+                    "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
+                    "$ref": "#/definitions/common_wafServicePolicyList",
+                    "x-displayname": "Apply Specified Service Policies"
+                },
                 "advertise_custom": {
                     "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this VIP on specific sites",
                     "$ref": "#/definitions/viewsAdvertiseCustom",
@@ -4389,12 +4419,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
-                "enable_per_packet_load_balancing": {
-                    "type": "boolean",
-                    "description": " Per packet load balancing:\n If disabled (default): First packet identified by source IP/port and local IP/port is sent to an upstream server as the load balancing algorithm dictates, and subsequent packets with the same identity are forwarded to the same upstream server without rechecking the algorithm\n If enabled: Each packet is directed to an upstream server as the load balancing algorithm dictates.",
-                    "format": "boolean",
-                    "x-displayname": "Per Packet Load Balancing"
-                },
                 "hash_policy_choice_random": {
                     "description": "Exclusive with [hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n Connections are sent to all eligible origin servers in random fashion",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4430,6 +4454,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
+                "no_service_policies": {
+                    "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do Not Apply Service Policies"
+                },
                 "origin_pools_weights": {
                     "type": "array",
                     "description": " Origin pools with weights and priorities used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -4456,6 +4485,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_len": "1",
                         "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
+                },
+                "service_policies_from_namespace": {
+                    "description": "Exclusive with [active_service_policies no_service_policies]\n Apply the active service policies configured as part of the namespace service policy set",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Apply Namespace Service Policies"
                 },
                 "udp": {
                     "description": "Exclusive with []\n UDP Load Balancer.",

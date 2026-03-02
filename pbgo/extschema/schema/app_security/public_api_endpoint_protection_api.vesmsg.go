@@ -67,7 +67,6 @@ type ValidateGetSuggestedAPIEndpointProtectionRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
@@ -75,9 +74,7 @@ func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) PathValidationRuleHan
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpMethod)
@@ -105,50 +102,36 @@ func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) Validate(ctx context.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedAPIEndpointProtectionRuleReqValidator = func() *ValidateGetSuggestedAPIEndpointProtectionRuleReq {
 	v := &ValidateGetSuggestedAPIEndpointProtectionRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -232,7 +215,6 @@ func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetDRefInfo() ([]db.DRefInfo,
 	}
 
 	return m.GetRuleDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -240,7 +222,6 @@ func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetRuleDRefInfo() ([]db.DRefI
 	if m.GetRule() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRule().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRule().GetDRefInfo() FAILED")
@@ -250,7 +231,6 @@ func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetRuleDRefInfo() ([]db.DRefI
 		dri.DRField = "rule." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSuggestedAPIEndpointProtectionRuleRsp struct {
@@ -270,32 +250,24 @@ func (v *ValidateGetSuggestedAPIEndpointProtectionRuleRsp) Validate(ctx context.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule"))
 		if err := fv(ctx, m.GetRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedAPIEndpointProtectionRuleRspValidator = func() *ValidateGetSuggestedAPIEndpointProtectionRuleRsp {
 	v := &ValidateGetSuggestedAPIEndpointProtectionRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["rule"] = ves_io_schema_views_common_waf.APIEndpointProtectionRuleValidator().Validate
 
 	return v

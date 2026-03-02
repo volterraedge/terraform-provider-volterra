@@ -68,7 +68,6 @@ type ValidateGetSuggestedBlockClientRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedBlockClientRuleReq) IpPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_prefix")
@@ -76,9 +75,7 @@ func (v *ValidateGetSuggestedBlockClientRuleReq) IpPrefixValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedBlockClientRuleReq) AsNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for as_number")
@@ -86,9 +83,7 @@ func (v *ValidateGetSuggestedBlockClientRuleReq) AsNumberValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedBlockClientRuleReq) AsDescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for as_description")
@@ -96,9 +91,7 @@ func (v *ValidateGetSuggestedBlockClientRuleReq) AsDescriptionValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedBlockClientRuleReq) UserIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id")
@@ -120,68 +113,48 @@ func (v *ValidateGetSuggestedBlockClientRuleReq) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["as_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("as_description"))
 		if err := fv(ctx, m.GetAsDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["as_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("as_number"))
 		if err := fv(ctx, m.GetAsNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_prefix"))
 		if err := fv(ctx, m.GetIpPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_id"))
 		if err := fv(ctx, m.GetUserId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedBlockClientRuleReqValidator = func() *ValidateGetSuggestedBlockClientRuleReq {
 	v := &ValidateGetSuggestedBlockClientRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -298,41 +271,30 @@ func (v *ValidateGetSuggestedBlockClientRuleRsp) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule"))
 		if err := fv(ctx, m.GetRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedBlockClientRuleRspValidator = func() *ValidateGetSuggestedBlockClientRuleRsp {
 	v := &ValidateGetSuggestedBlockClientRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["rule"] = ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate
 
 	return v
@@ -384,7 +346,6 @@ type ValidateGetSuggestedDDoSMitigtionRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedDDoSMitigtionRuleReq) CountryListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -444,76 +405,54 @@ func (v *ValidateGetSuggestedDDoSMitigtionRuleReq) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["asn_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn_list"))
 		if err := fv(ctx, m.GetAsnList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["country_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("country_list"))
 		if err := fv(ctx, m.GetCountryList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_prefix_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_prefix_list"))
 		if err := fv(ctx, m.GetIpPrefixList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ja4_tls_fingerprint_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ja4_tls_fingerprint_matcher"))
 		if err := fv(ctx, m.GetJa4TlsFingerprintMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
 		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedDDoSMitigtionRuleReqValidator = func() *ValidateGetSuggestedDDoSMitigtionRuleReq {
 	v := &ValidateGetSuggestedDDoSMitigtionRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -533,13 +472,9 @@ var DefaultGetSuggestedDDoSMitigtionRuleReqValidator = func() *ValidateGetSugges
 		panic(errMsg)
 	}
 	v.FldValidators["country_list"] = vFn
-
 	v.FldValidators["ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
-
 	v.FldValidators["asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
-
 	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["ja4_tls_fingerprint_matcher"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
 
 	return v
@@ -603,41 +538,30 @@ func (v *ValidateGetSuggestedDDoSMitigtionRuleRsp) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["found_existing_mitigation_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_mitigation_rule"))
 		if err := fv(ctx, m.GetFoundExistingMitigationRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mitigation_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mitigation_rule"))
 		if err := fv(ctx, m.GetMitigationRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mitigation_rule_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mitigation_rule_name"))
 		if err := fv(ctx, m.GetMitigationRuleName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedDDoSMitigtionRuleRspValidator = func() *ValidateGetSuggestedDDoSMitigtionRuleRsp {
 	v := &ValidateGetSuggestedDDoSMitigtionRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["mitigation_rule"] = ves_io_schema_views_common_security.DDoSMitigationRuleValidator().Validate
 
 	return v
@@ -689,7 +613,6 @@ type ValidateGetSuggestedTrustClientRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedTrustClientRuleReq) IpPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_prefix")
@@ -697,9 +620,7 @@ func (v *ValidateGetSuggestedTrustClientRuleReq) IpPrefixValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedTrustClientRuleReq) AsNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for as_number")
@@ -707,9 +628,7 @@ func (v *ValidateGetSuggestedTrustClientRuleReq) AsNumberValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedTrustClientRuleReq) AsDescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for as_description")
@@ -717,9 +636,7 @@ func (v *ValidateGetSuggestedTrustClientRuleReq) AsDescriptionValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedTrustClientRuleReq) SecEventTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -765,9 +682,7 @@ func (v *ValidateGetSuggestedTrustClientRuleReq) SecEventTypesValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedTrustClientRuleReq) UserIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id")
@@ -789,103 +704,72 @@ func (v *ValidateGetSuggestedTrustClientRuleReq) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["as_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("as_description"))
 		if err := fv(ctx, m.GetAsDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["as_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("as_number"))
 		if err := fv(ctx, m.GetAsNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_prefix"))
 		if err := fv(ctx, m.GetIpPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_reputation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_reputation"))
 		if err := fv(ctx, m.GetIpReputation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sec_event_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sec_event_name"))
 		if err := fv(ctx, m.GetSecEventName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sec_event_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("sec_event_types"))
 		if err := fv(ctx, m.GetSecEventTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["threat_mesh"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("threat_mesh"))
 		if err := fv(ctx, m.GetThreatMesh(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_id"))
 		if err := fv(ctx, m.GetUserId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedTrustClientRuleReqValidator = func() *ValidateGetSuggestedTrustClientRuleReq {
 	v := &ValidateGetSuggestedTrustClientRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1014,41 +898,30 @@ func (v *ValidateGetSuggestedTrustClientRuleRsp) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule"))
 		if err := fv(ctx, m.GetRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedTrustClientRuleRspValidator = func() *ValidateGetSuggestedTrustClientRuleRsp {
 	v := &ValidateGetSuggestedTrustClientRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["rule"] = ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate
 
 	return v

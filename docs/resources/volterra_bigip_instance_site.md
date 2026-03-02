@@ -28,7 +28,6 @@ resource "volterra_bigip_instance_site" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -239,4 +238,4 @@ Will assign latest available F5XC Software Version.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured bigip_instance_site.
+-   `id` - This is the id of the configured bigip_instance_site.

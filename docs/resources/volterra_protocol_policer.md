@@ -20,7 +20,6 @@ resource "volterra_protocol_policer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -99,4 +98,4 @@ Match all UDP packets.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured protocol_policer.
+*   `id` - This is the id of the configured protocol_policer.

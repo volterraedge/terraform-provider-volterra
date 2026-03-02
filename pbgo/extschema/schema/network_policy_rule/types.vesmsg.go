@@ -67,7 +67,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRemoteEndpointDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -77,15 +76,10 @@ func (m *CreateSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRemoteEndpoint().(type) {
 	case *CreateSpecType_Prefix:
-
 		return nil, nil
-
 	case *CreateSpecType_PrefixSelector:
-
 		return nil, nil
-
 	case *CreateSpecType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -95,11 +89,9 @@ func (m *CreateSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -107,7 +99,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -147,9 +138,7 @@ func (v *ValidateCreateSpecType) PortsValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -171,49 +160,35 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["advanced_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advanced_action"))
 		if err := fv(ctx, m.GetAdvancedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("ports"))
 		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRemoteEndpoint().(type) {
@@ -250,16 +225,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -290,11 +262,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
 	v.FldValidators["remote_endpoint.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["remote_endpoint.prefix_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["remote_endpoint.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v
@@ -347,7 +317,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRemoteEndpointDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -357,15 +326,10 @@ func (m *GetSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRemoteEndpoint().(type) {
 	case *GetSpecType_Prefix:
-
 		return nil, nil
-
 	case *GetSpecType_PrefixSelector:
-
 		return nil, nil
-
 	case *GetSpecType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -375,11 +339,9 @@ func (m *GetSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -387,7 +349,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -427,9 +388,7 @@ func (v *ValidateGetSpecType) PortsValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -451,49 +410,35 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["advanced_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advanced_action"))
 		if err := fv(ctx, m.GetAdvancedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("ports"))
 		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRemoteEndpoint().(type) {
@@ -530,16 +475,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -570,11 +512,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
 	v.FldValidators["remote_endpoint.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["remote_endpoint.prefix_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["remote_endpoint.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v
@@ -632,15 +572,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRemoteEndpointDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRemoteEndpointDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -648,7 +585,6 @@ func (m *GlobalSpecType) GetPbrActionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPbrAction() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetPbrAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPbrAction().GetDRefInfo() FAILED")
@@ -658,7 +594,6 @@ func (m *GlobalSpecType) GetPbrActionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "pbr_action." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -668,15 +603,10 @@ func (m *GlobalSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRemoteEndpoint().(type) {
 	case *GlobalSpecType_Prefix:
-
 		return nil, nil
-
 	case *GlobalSpecType_PrefixSelector:
-
 		return nil, nil
-
 	case *GlobalSpecType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -686,11 +616,9 @@ func (m *GlobalSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -698,7 +626,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -738,9 +665,7 @@ func (v *ValidateGlobalSpecType) PortsValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -762,58 +687,41 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["advanced_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advanced_action"))
 		if err := fv(ctx, m.GetAdvancedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pbr_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pbr_action"))
 		if err := fv(ctx, m.GetPbrAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("ports"))
 		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRemoteEndpoint().(type) {
@@ -850,16 +758,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -890,13 +795,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
 	v.FldValidators["remote_endpoint.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["remote_endpoint.prefix_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["remote_endpoint.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
-
 	v.FldValidators["pbr_action"] = NetworkPolicyPBRRuleActionValidator().Validate
 
 	return v
@@ -949,7 +851,6 @@ func (m *NetworkPolicyPBRRuleAction) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetForwardingClassDRefInfo()
-
 }
 
 func (m *NetworkPolicyPBRRuleAction) GetForwardingClassDRefInfo() ([]db.DRefInfo, error) {
@@ -974,7 +875,6 @@ func (m *NetworkPolicyPBRRuleAction) GetForwardingClassDRefInfo() ([]db.DRefInfo
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardingClassDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -993,7 +893,6 @@ func (m *NetworkPolicyPBRRuleAction) GetForwardingClassDBEntries(ctx context.Con
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1002,7 +901,6 @@ type ValidateNetworkPolicyPBRRuleAction struct {
 }
 
 func (v *ValidateNetworkPolicyPBRRuleAction) ForwardingClassValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1062,22 +960,18 @@ func (v *ValidateNetworkPolicyPBRRuleAction) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["forwarding_class"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class"))
 		if err := fv(ctx, m.GetForwardingClass(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkPolicyPBRRuleActionValidator = func() *ValidateNetworkPolicyPBRRuleAction {
 	v := &ValidateNetworkPolicyPBRRuleAction{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1158,16 +1052,12 @@ func (v *ValidateNetworkPolicyRuleAdvancedAction) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1225,7 +1115,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRemoteEndpointDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1235,15 +1124,10 @@ func (m *ReplaceSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRemoteEndpoint().(type) {
 	case *ReplaceSpecType_Prefix:
-
 		return nil, nil
-
 	case *ReplaceSpecType_PrefixSelector:
-
 		return nil, nil
-
 	case *ReplaceSpecType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -1253,11 +1137,9 @@ func (m *ReplaceSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1265,7 +1147,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1305,9 +1186,7 @@ func (v *ValidateReplaceSpecType) PortsValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -1329,49 +1208,35 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["advanced_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advanced_action"))
 		if err := fv(ctx, m.GetAdvancedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("ports"))
 		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRemoteEndpoint().(type) {
@@ -1408,16 +1273,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1448,11 +1310,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
 	v.FldValidators["remote_endpoint.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["remote_endpoint.prefix_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["remote_endpoint.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v

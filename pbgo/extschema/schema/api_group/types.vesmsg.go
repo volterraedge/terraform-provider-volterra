@@ -68,7 +68,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetElementsDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetElementsDRefInfo() ([]db.DRefInfo, error) {
@@ -93,7 +92,6 @@ func (m *CreateSpecType) GetElementsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetElementsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -112,7 +110,6 @@ func (m *CreateSpecType) GetElementsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -121,7 +118,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -167,9 +163,7 @@ func (v *ValidateCreateSpecType) ElementsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ElementSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -229,30 +223,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["element_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("element_specs"))
 		if err := fv(ctx, m.GetElementSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -333,7 +321,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetElementsDRefInfo()
-
 }
 
 func (m *GetSpecType) GetElementsDRefInfo() ([]db.DRefInfo, error) {
@@ -358,7 +345,6 @@ func (m *GetSpecType) GetElementsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetElementsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -377,7 +363,6 @@ func (m *GetSpecType) GetElementsDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -386,7 +371,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -432,9 +416,7 @@ func (v *ValidateGetSpecType) ElementsValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ElementSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -494,30 +476,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["element_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("element_specs"))
 		if err := fv(ctx, m.GetElementSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -598,7 +574,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetElementsDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetElementsDRefInfo() ([]db.DRefInfo, error) {
@@ -623,7 +598,6 @@ func (m *GlobalSpecType) GetElementsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetElementsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -642,7 +616,6 @@ func (m *GlobalSpecType) GetElementsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -651,7 +624,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -697,9 +669,7 @@ func (v *ValidateGlobalSpecType) ElementsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ElementSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -759,30 +729,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["element_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("element_specs"))
 		if err := fv(ctx, m.GetElementSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -863,7 +827,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetElementsDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetElementsDRefInfo() ([]db.DRefInfo, error) {
@@ -888,7 +851,6 @@ func (m *ReplaceSpecType) GetElementsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetElementsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -907,7 +869,6 @@ func (m *ReplaceSpecType) GetElementsDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -916,7 +877,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -962,9 +922,7 @@ func (v *ValidateReplaceSpecType) ElementsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ElementSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1024,30 +982,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["element_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("element_specs"))
 		if err := fv(ctx, m.GetElementSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

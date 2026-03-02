@@ -32,7 +32,6 @@ resource "volterra_network_firewall" "example" {
 
   disable_network_policy = true
 }
-
 ```
 
 Argument Reference
@@ -117,4 +116,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured network_firewall.
+*   `id` - This is the id of the configured network_firewall.

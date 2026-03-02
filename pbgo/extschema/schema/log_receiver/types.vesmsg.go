@@ -41,15 +41,12 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSyslog().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.syslog")
 	}
-
 	if err := m.GetDataDog().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.data_dog")
 	}
-
 	if err := m.GetSplunk().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.splunk")
 	}
@@ -90,7 +87,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetWhereChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -100,11 +96,8 @@ func (m *CreateSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetWhereChoice().(type) {
 	case *CreateSpecType_SiteLocal:
-
 		return nil, nil
-
 	case *CreateSpecType_LogReceiverSites:
-
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
@@ -114,11 +107,9 @@ func (m *CreateSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "log_receiver_sites." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -132,7 +123,6 @@ func (v *ValidateCreateSpecType) LogReceiverChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) WhereChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -199,7 +189,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["where_choice"]; exists {
@@ -235,16 +224,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -252,7 +238,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLogReceiverChoice := v.LogReceiverChoiceValidationRuleHandler
 	rulesLogReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -263,7 +248,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["log_receiver_choice"] = vFn
-
 	vrhWhereChoice := v.WhereChoiceValidationRuleHandler
 	rulesWhereChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -274,11 +258,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["where_choice"] = vFn
-
 	v.FldValidators["log_receiver_choice.syslog"] = SyslogReceiverValidator().Validate
 	v.FldValidators["log_receiver_choice.data_dog"] = DataDogReceiverValidator().Validate
 	v.FldValidators["log_receiver_choice.splunk"] = SplunkReceiverValidator().Validate
-
 	v.FldValidators["where_choice.log_receiver_sites"] = WhereSitesValidator().Validate
 
 	return v
@@ -304,7 +286,6 @@ func (m *DataDogReceiver) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetDatadogApiKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DataDogReceiver.datadog_api_key")
 	}
@@ -358,7 +339,6 @@ func (v *ValidateDataDogReceiver) CaChoiceTrustedCaUrlValidationRuleHandler(rule
 	}
 	return oValidatorFn_TrustedCaUrl, nil
 }
-
 func (v *ValidateDataDogReceiver) CompressionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -366,7 +346,6 @@ func (v *ValidateDataDogReceiver) CompressionChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDataDogReceiver) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -382,7 +361,6 @@ func (v *ValidateDataDogReceiver) PortChoicePortValidationRuleHandler(rules map[
 	}
 	return oValidatorFn_Port, nil
 }
-
 func (v *ValidateDataDogReceiver) ServerNameChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -446,7 +424,6 @@ func (v *ValidateDataDogReceiver) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["compression_choice"]; exists {
@@ -482,16 +459,12 @@ func (v *ValidateDataDogReceiver) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["datadog_api_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("datadog_api_key"))
 		if err := fv(ctx, m.GetDatadogApiKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -527,7 +500,6 @@ func (v *ValidateDataDogReceiver) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["server_name_choice"]; exists {
@@ -563,16 +535,13 @@ func (v *ValidateDataDogReceiver) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 	v := &ValidateDataDogReceiver{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -580,7 +549,6 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCaChoice := v.CaChoiceValidationRuleHandler
 	rulesCaChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -591,7 +559,6 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 		panic(errMsg)
 	}
 	v.FldValidators["ca_choice"] = vFn
-
 	vrhCaChoiceTrustedCaUrl := v.CaChoiceTrustedCaUrlValidationRuleHandler
 	rulesCaChoiceTrustedCaUrl := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "131072",
@@ -602,9 +569,7 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DataDogReceiver.ca_choice_trusted_ca_url: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["ca_choice.trusted_ca_url"] = vFnMap["ca_choice.trusted_ca_url"]
-
 	vrhCompressionChoice := v.CompressionChoiceValidationRuleHandler
 	rulesCompressionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -615,7 +580,6 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 		panic(errMsg)
 	}
 	v.FldValidators["compression_choice"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -626,7 +590,6 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -637,9 +600,7 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DataDogReceiver.port_choice_port: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
-
 	vrhServerNameChoice := v.ServerNameChoiceValidationRuleHandler
 	rulesServerNameChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -650,7 +611,6 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 		panic(errMsg)
 	}
 	v.FldValidators["server_name_choice"] = vFn
-
 	vrhServerNameChoiceServerName := v.ServerNameChoiceServerNameValidationRuleHandler
 	rulesServerNameChoiceServerName := map[string]string{
 		"ves.io.schema.rules.string.hostname": "true",
@@ -661,9 +621,7 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DataDogReceiver.server_name_choice_server_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["server_name_choice.server_name"] = vFnMap["server_name_choice.server_name"]
-
 	v.FldValidators["datadog_api_key"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -689,15 +647,12 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSyslog().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.syslog")
 	}
-
 	if err := m.GetDataDog().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.data_dog")
 	}
-
 	if err := m.GetSplunk().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.splunk")
 	}
@@ -738,7 +693,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetWhereChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -748,11 +702,8 @@ func (m *GetSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetWhereChoice().(type) {
 	case *GetSpecType_SiteLocal:
-
 		return nil, nil
-
 	case *GetSpecType_LogReceiverSites:
-
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
@@ -762,11 +713,9 @@ func (m *GetSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "log_receiver_sites." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -780,7 +729,6 @@ func (v *ValidateGetSpecType) LogReceiverChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) WhereChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -847,7 +795,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["where_choice"]; exists {
@@ -883,16 +830,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -900,7 +844,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLogReceiverChoice := v.LogReceiverChoiceValidationRuleHandler
 	rulesLogReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -911,7 +854,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["log_receiver_choice"] = vFn
-
 	vrhWhereChoice := v.WhereChoiceValidationRuleHandler
 	rulesWhereChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -922,11 +864,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["where_choice"] = vFn
-
 	v.FldValidators["log_receiver_choice.syslog"] = SyslogReceiverValidator().Validate
 	v.FldValidators["log_receiver_choice.data_dog"] = DataDogReceiverValidator().Validate
 	v.FldValidators["log_receiver_choice.splunk"] = SplunkReceiverValidator().Validate
-
 	v.FldValidators["where_choice.log_receiver_sites"] = WhereSitesValidator().Validate
 
 	return v
@@ -952,15 +892,12 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSyslog().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.syslog")
 	}
-
 	if err := m.GetDataDog().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.data_dog")
 	}
-
 	if err := m.GetSplunk().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.splunk")
 	}
@@ -1006,19 +943,15 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWhereChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWhereChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1034,7 +967,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1044,7 +976,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1062,7 +993,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1073,11 +1003,8 @@ func (m *GlobalSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetWhereChoice().(type) {
 	case *GlobalSpecType_SiteLocal:
-
 		return nil, nil
-
 	case *GlobalSpecType_LogReceiverSites:
-
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
@@ -1087,11 +1014,9 @@ func (m *GlobalSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "log_receiver_sites." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -1105,7 +1030,6 @@ func (v *ValidateGlobalSpecType) LogReceiverChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) WhereChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1172,16 +1096,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["where_choice"]; exists {
@@ -1217,16 +1137,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1234,7 +1151,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLogReceiverChoice := v.LogReceiverChoiceValidationRuleHandler
 	rulesLogReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1245,7 +1161,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["log_receiver_choice"] = vFn
-
 	vrhWhereChoice := v.WhereChoiceValidationRuleHandler
 	rulesWhereChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1256,13 +1171,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["where_choice"] = vFn
-
 	v.FldValidators["log_receiver_choice.syslog"] = SyslogReceiverValidator().Validate
 	v.FldValidators["log_receiver_choice.data_dog"] = DataDogReceiverValidator().Validate
 	v.FldValidators["log_receiver_choice.splunk"] = SplunkReceiverValidator().Validate
-
 	v.FldValidators["where_choice.log_receiver_sites"] = WhereSitesValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1314,7 +1226,6 @@ type ValidateHTTPServerConfigType struct {
 }
 
 func (v *ValidateHTTPServerConfigType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
@@ -1322,9 +1233,7 @@ func (v *ValidateHTTPServerConfigType) ServerNameValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHTTPServerConfigType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -1346,32 +1255,24 @@ func (v *ValidateHTTPServerConfigType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHTTPServerConfigTypeValidator = func() *ValidateHTTPServerConfigType {
 	v := &ValidateHTTPServerConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1455,7 +1356,6 @@ type ValidateIPServerConfigType struct {
 }
 
 func (v *ValidateIPServerConfigType) IpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_address")
@@ -1463,9 +1363,7 @@ func (v *ValidateIPServerConfigType) IpAddressValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIPServerConfigType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -1487,32 +1385,24 @@ func (v *ValidateIPServerConfigType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_address"))
 		if err := fv(ctx, m.GetIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPServerConfigTypeValidator = func() *ValidateIPServerConfigType {
 	v := &ValidateIPServerConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1569,15 +1459,12 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSyslog().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.syslog")
 	}
-
 	if err := m.GetDataDog().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.data_dog")
 	}
-
 	if err := m.GetSplunk().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.splunk")
 	}
@@ -1618,7 +1505,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetWhereChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1628,11 +1514,8 @@ func (m *ReplaceSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetWhereChoice().(type) {
 	case *ReplaceSpecType_SiteLocal:
-
 		return nil, nil
-
 	case *ReplaceSpecType_LogReceiverSites:
-
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
@@ -1642,11 +1525,9 @@ func (m *ReplaceSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "log_receiver_sites." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1660,7 +1541,6 @@ func (v *ValidateReplaceSpecType) LogReceiverChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) WhereChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1727,7 +1607,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["where_choice"]; exists {
@@ -1763,16 +1642,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1780,7 +1656,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLogReceiverChoice := v.LogReceiverChoiceValidationRuleHandler
 	rulesLogReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1791,7 +1666,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["log_receiver_choice"] = vFn
-
 	vrhWhereChoice := v.WhereChoiceValidationRuleHandler
 	rulesWhereChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1802,11 +1676,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["where_choice"] = vFn
-
 	v.FldValidators["log_receiver_choice.syslog"] = SyslogReceiverValidator().Validate
 	v.FldValidators["log_receiver_choice.data_dog"] = DataDogReceiverValidator().Validate
 	v.FldValidators["log_receiver_choice.splunk"] = SplunkReceiverValidator().Validate
-
 	v.FldValidators["where_choice.log_receiver_sites"] = WhereSitesValidator().Validate
 
 	return v
@@ -1832,11 +1704,9 @@ func (m *SplunkReceiver) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSplunkServerTls().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SplunkReceiver.splunk_server_tls")
 	}
-
 	if err := m.GetSplunkHecToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SplunkReceiver.splunk_hec_token")
 	}
@@ -1941,25 +1811,19 @@ func (v *ValidateSplunkReceiver) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["splunk_hec_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("splunk_hec_token"))
 		if err := fv(ctx, m.GetSplunkHecToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSplunkReceiverValidator = func() *ValidateSplunkReceiver {
 	v := &ValidateSplunkReceiver{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1967,7 +1831,6 @@ var DefaultSplunkReceiverValidator = func() *ValidateSplunkReceiver {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServerNameChoice := v.ServerNameChoiceValidationRuleHandler
 	rulesServerNameChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1978,11 +1841,9 @@ var DefaultSplunkReceiverValidator = func() *ValidateSplunkReceiver {
 		panic(errMsg)
 	}
 	v.FldValidators["server_name_choice"] = vFn
-
 	v.FldValidators["server_name_choice.splunk_server_name"] = HTTPServerConfigTypeValidator().Validate
 	v.FldValidators["server_name_choice.splunk_server_ip"] = IPServerConfigTypeValidator().Validate
 	v.FldValidators["server_name_choice.splunk_server_tls"] = TLSConfigTypeValidator().Validate
-
 	v.FldValidators["splunk_hec_token"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -2008,7 +1869,6 @@ func (m *SyslogReceiver) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsServer().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SyslogReceiver.tls_server")
 	}
@@ -2062,6 +1922,7 @@ func (v *ValidateSyslogReceiver) FormatChoiceSyslogRfc5424ValidationRuleHandler(
 	}
 	return oValidatorFn_SyslogRfc5424, nil
 }
+
 func (v *ValidateSyslogReceiver) FormatChoiceSyslogRfc3164ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SyslogRfc3164, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -2069,7 +1930,6 @@ func (v *ValidateSyslogReceiver) FormatChoiceSyslogRfc3164ValidationRuleHandler(
 	}
 	return oValidatorFn_SyslogRfc3164, nil
 }
-
 func (v *ValidateSyslogReceiver) ModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2125,7 +1985,6 @@ func (v *ValidateSyslogReceiver) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["mode_choice"]; exists {
@@ -2172,16 +2031,13 @@ func (v *ValidateSyslogReceiver) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSyslogReceiverValidator = func() *ValidateSyslogReceiver {
 	v := &ValidateSyslogReceiver{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2189,7 +2045,6 @@ var DefaultSyslogReceiverValidator = func() *ValidateSyslogReceiver {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFormatChoice := v.FormatChoiceValidationRuleHandler
 	rulesFormatChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2200,7 +2055,6 @@ var DefaultSyslogReceiverValidator = func() *ValidateSyslogReceiver {
 		panic(errMsg)
 	}
 	v.FldValidators["format_choice"] = vFn
-
 	vrhFormatChoiceSyslogRfc5424 := v.FormatChoiceSyslogRfc5424ValidationRuleHandler
 	rulesFormatChoiceSyslogRfc5424 := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "408",
@@ -2221,10 +2075,8 @@ var DefaultSyslogReceiverValidator = func() *ValidateSyslogReceiver {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SyslogReceiver.format_choice_syslog_rfc3164: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["format_choice.syslog_rfc5424"] = vFnMap["format_choice.syslog_rfc5424"]
 	v.FldValidators["format_choice.syslog_rfc3164"] = vFnMap["format_choice.syslog_rfc3164"]
-
 	vrhModeChoice := v.ModeChoiceValidationRuleHandler
 	rulesModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2235,7 +2087,6 @@ var DefaultSyslogReceiverValidator = func() *ValidateSyslogReceiver {
 		panic(errMsg)
 	}
 	v.FldValidators["mode_choice"] = vFn
-
 	v.FldValidators["mode_choice.udp_server"] = UDPServerConfigTypeValidator().Validate
 	v.FldValidators["mode_choice.tcp_server"] = TCPServerConfigTypeValidator().Validate
 	v.FldValidators["mode_choice.tls_server"] = TLSConfigTypeValidator().Validate
@@ -2289,7 +2140,6 @@ type ValidateTCPServerConfigType struct {
 }
 
 func (v *ValidateTCPServerConfigType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
@@ -2297,9 +2147,7 @@ func (v *ValidateTCPServerConfigType) ServerNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTCPServerConfigType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -2321,32 +2169,24 @@ func (v *ValidateTCPServerConfigType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTCPServerConfigTypeValidator = func() *ValidateTCPServerConfigType {
 	v := &ValidateTCPServerConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2404,7 +2244,6 @@ func (m *TLSClientConfigType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetKeyUrl().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TLSClientConfigType.key_url")
 	}
@@ -2444,7 +2283,6 @@ type ValidateTLSClientConfigType struct {
 }
 
 func (v *ValidateTLSClientConfigType) CertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate")
@@ -2466,32 +2304,24 @@ func (v *ValidateTLSClientConfigType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate"))
 		if err := fv(ctx, m.GetCertificate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_url"))
 		if err := fv(ctx, m.GetKeyUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTLSClientConfigTypeValidator = func() *ValidateTLSClientConfigType {
 	v := &ValidateTLSClientConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2511,7 +2341,6 @@ var DefaultTLSClientConfigTypeValidator = func() *ValidateTLSClientConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["certificate"] = vFn
-
 	v.FldValidators["key_url"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -2537,7 +2366,6 @@ func (m *TLSConfigType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetMtlsEnable().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TLSConfigType.mtls_enable")
 	}
@@ -2591,7 +2419,6 @@ func (v *ValidateTLSConfigType) CaChoiceTrustedCaUrlValidationRuleHandler(rules 
 	}
 	return oValidatorFn_TrustedCaUrl, nil
 }
-
 func (v *ValidateTLSConfigType) MtlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2599,7 +2426,6 @@ func (v *ValidateTLSConfigType) MtlsChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateTLSConfigType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2615,9 +2441,7 @@ func (v *ValidateTLSConfigType) PortChoicePortValidationRuleHandler(rules map[st
 	}
 	return oValidatorFn_Port, nil
 }
-
 func (v *ValidateTLSConfigType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
@@ -2673,7 +2497,6 @@ func (v *ValidateTLSConfigType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["mtls_choice"]; exists {
@@ -2709,7 +2532,6 @@ func (v *ValidateTLSConfigType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -2756,25 +2578,19 @@ func (v *ValidateTLSConfigType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 	v := &ValidateTLSConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2782,7 +2598,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCaChoice := v.CaChoiceValidationRuleHandler
 	rulesCaChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2793,7 +2608,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["ca_choice"] = vFn
-
 	vrhCaChoiceTrustedCaUrl := v.CaChoiceTrustedCaUrlValidationRuleHandler
 	rulesCaChoiceTrustedCaUrl := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "131072",
@@ -2804,9 +2618,7 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field TLSConfigType.ca_choice_trusted_ca_url: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["ca_choice.trusted_ca_url"] = vFnMap["ca_choice.trusted_ca_url"]
-
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2817,7 +2629,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["mtls_choice"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2828,7 +2639,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -2839,7 +2649,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field TLSConfigType.port_choice_port: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
 
 	vrhServerName := v.ServerNameValidationRuleHandler
@@ -2854,7 +2663,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_name"] = vFn
-
 	v.FldValidators["mtls_choice.mtls_enable"] = TLSClientConfigTypeValidator().Validate
 
 	return v
@@ -2906,7 +2714,6 @@ type ValidateUDPServerConfigType struct {
 }
 
 func (v *ValidateUDPServerConfigType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
@@ -2914,9 +2721,7 @@ func (v *ValidateUDPServerConfigType) ServerNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUDPServerConfigType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -2938,32 +2743,24 @@ func (v *ValidateUDPServerConfigType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUDPServerConfigTypeValidator = func() *ValidateUDPServerConfigType {
 	v := &ValidateUDPServerConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3048,7 +2845,6 @@ func (m *WhereSites) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteDRefInfo()
-
 }
 
 func (m *WhereSites) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -3074,7 +2870,6 @@ func (m *WhereSites) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3102,7 +2897,6 @@ func (m *WhereSites) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3111,7 +2905,6 @@ type ValidateWhereSites struct {
 }
 
 func (v *ValidateWhereSites) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_views.SiteNetwork)
@@ -3125,9 +2918,7 @@ func (v *ValidateWhereSites) NetworkValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWhereSites) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3187,31 +2978,24 @@ func (v *ValidateWhereSites) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network"))
 		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereSitesValidator = func() *ValidateWhereSites {
 	v := &ValidateWhereSites{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

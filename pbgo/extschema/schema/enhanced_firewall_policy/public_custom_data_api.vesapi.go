@@ -74,9 +74,7 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["EnhancedFirewallPolicyHits"] = ccl.doRPCEnhancedFirewallPolicyHits
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -171,7 +169,6 @@ func (c *CustomDataAPIRestClient) doRPCEnhancedFirewallPolicyHits(ctx context.Co
 	pbRsp := &EnhancedFirewallPolicyHitsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.enhanced_firewall_policy.EnhancedFirewallPolicyHitsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -205,9 +202,7 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["EnhancedFirewallPolicyHits"] = ccl.doRPCEnhancedFirewallPolicyHits
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -288,7 +283,6 @@ func (s *customDataAPISrv) EnhancedFirewallPolicyHits(ctx context.Context, in *E
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.enhanced_firewall_policy.EnhancedFirewallPolicyHitsResponse", rsp)...)
 
 	return rsp, nil
@@ -600,7 +594,7 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-displayname": "Label"
                 },
                 "op": {
-                    "description": " Operator to evaluate the label ",
+                    "description": " Operator to evaluate the label",
                     "title": "Operator",
                     "$ref": "#/definitions/schemaMetricLabelOp",
                     "x-displayname": "Operator"

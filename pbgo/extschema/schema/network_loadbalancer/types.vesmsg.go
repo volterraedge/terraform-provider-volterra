@@ -74,21 +74,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVipChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVipChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -96,7 +92,6 @@ func (m *GlobalSpecType) GetOperGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOperGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOperGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOperGcSpec().GetDRefInfo() FAILED")
@@ -106,7 +101,6 @@ func (m *GlobalSpecType) GetOperGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "oper_gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -114,7 +108,6 @@ func (m *GlobalSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginPools() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPools() {
 		driSet, err := e.GetDRefInfo()
@@ -128,7 +121,6 @@ func (m *GlobalSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -138,11 +130,8 @@ func (m *GlobalSpecType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetVipChoice().(type) {
 	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *GlobalSpecType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -152,9 +141,7 @@ func (m *GlobalSpecType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -164,15 +151,11 @@ func (m *GlobalSpecType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -186,7 +169,6 @@ func (v *ValidateGlobalSpecType) NlbChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TcpPortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -194,7 +176,6 @@ func (v *ValidateGlobalSpecType) TcpPortChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) UdpPortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -202,7 +183,6 @@ func (v *ValidateGlobalSpecType) UdpPortChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -210,9 +190,7 @@ func (v *ValidateGlobalSpecType) VipChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -317,24 +295,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["oper_gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("oper_gc_spec"))
 		if err := fv(ctx, m.GetOperGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tcp_port_choice"]; exists {
@@ -370,7 +342,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["udp_port_choice"]; exists {
@@ -406,7 +377,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vip_choice"]; exists {
@@ -464,16 +434,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -481,7 +448,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNlbChoice := v.NlbChoiceValidationRuleHandler
 	rulesNlbChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -492,7 +458,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["nlb_choice"] = vFn
-
 	vrhTcpPortChoice := v.TcpPortChoiceValidationRuleHandler
 	rulesTcpPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -503,7 +468,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tcp_port_choice"] = vFn
-
 	vrhUdpPortChoice := v.UdpPortChoiceValidationRuleHandler
 	rulesUdpPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -514,7 +478,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["udp_port_choice"] = vFn
-
 	vrhVipChoice := v.VipChoiceValidationRuleHandler
 	rulesVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -539,11 +502,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin_pools"] = vFn
-
 	v.FldValidators["tcp_port_choice.custom_tcp_ports"] = ves_io_schema.PortRangesTypeValidator().Validate
-
 	v.FldValidators["udp_port_choice.custom_udp_ports"] = ves_io_schema.PortRangesTypeValidator().Validate
-
 	v.FldValidators["vip_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["vip_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
@@ -602,33 +562,27 @@ func (m *OperGlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAdvertiseVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAdvertiseVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAdvertiseVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAdvertiseVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetEndpointNfvServiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetEndpointNfvServiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPublicIpDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPublicIpDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *OperGlobalSpecType) GetAdvertiseSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -653,7 +607,6 @@ func (m *OperGlobalSpecType) GetAdvertiseSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAdvertiseSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -672,7 +625,6 @@ func (m *OperGlobalSpecType) GetAdvertiseSiteDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -698,7 +650,6 @@ func (m *OperGlobalSpecType) GetAdvertiseVirtualNetworkDRefInfo() ([]db.DRefInfo
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAdvertiseVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -717,7 +668,6 @@ func (m *OperGlobalSpecType) GetAdvertiseVirtualNetworkDBEntries(ctx context.Con
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -743,7 +693,6 @@ func (m *OperGlobalSpecType) GetAdvertiseVirtualSiteDRefInfo() ([]db.DRefInfo, e
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAdvertiseVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -762,7 +711,6 @@ func (m *OperGlobalSpecType) GetAdvertiseVirtualSiteDBEntries(ctx context.Contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -788,7 +736,6 @@ func (m *OperGlobalSpecType) GetEndpointNfvServiceDRefInfo() ([]db.DRefInfo, err
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetEndpointNfvServiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -807,7 +754,6 @@ func (m *OperGlobalSpecType) GetEndpointNfvServiceDBEntries(ctx context.Context,
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -833,7 +779,6 @@ func (m *OperGlobalSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPublicIpDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -852,7 +797,6 @@ func (m *OperGlobalSpecType) GetPublicIpDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -873,9 +817,7 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["advertise_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advertise_site"))
 		for idx, item := range m.GetAdvertiseSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -883,11 +825,8 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["advertise_virtual_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advertise_virtual_network"))
 		for idx, item := range m.GetAdvertiseVirtualNetwork() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -895,11 +834,8 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["advertise_virtual_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advertise_virtual_site"))
 		for idx, item := range m.GetAdvertiseVirtualSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -907,11 +843,8 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_nfv_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_nfv_service"))
 		for idx, item := range m.GetEndpointNfvService() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -919,11 +852,8 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip"))
 		for idx, item := range m.GetPublicIp() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -931,9 +861,7 @@ func (v *ValidateOperGlobalSpecType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -991,7 +919,6 @@ func (m *OriginServerEndpointK8SServiceType) GetDRefInfo() ([]db.DRefInfo, error
 	}
 
 	return m.GetK8SServiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -999,7 +926,6 @@ func (m *OriginServerEndpointK8SServiceType) GetK8SServiceDRefInfo() ([]db.DRefI
 	if m.GetK8SService() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetK8SService().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
@@ -1009,7 +935,6 @@ func (m *OriginServerEndpointK8SServiceType) GetK8SServiceDRefInfo() ([]db.DRefI
 		dri.DRField = "k8s_service." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateOriginServerEndpointK8SServiceType struct {
@@ -1017,7 +942,6 @@ type ValidateOriginServerEndpointK8SServiceType struct {
 }
 
 func (v *ValidateOriginServerEndpointK8SServiceType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -1039,32 +963,24 @@ func (v *ValidateOriginServerEndpointK8SServiceType) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["k8s_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("k8s_service"))
 		if err := fv(ctx, m.GetK8SService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginServerEndpointK8SServiceTypeValidator = func() *ValidateOriginServerEndpointK8SServiceType {
 	v := &ValidateOriginServerEndpointK8SServiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1085,7 +1001,6 @@ var DefaultOriginServerEndpointK8SServiceTypeValidator = func() *ValidateOriginS
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["k8s_service"] = ves_io_schema_views_origin_pool.OriginServerK8SServiceValidator().Validate
 
 	return v
@@ -1138,11 +1053,9 @@ func (m *OriginServerEndpointNFVServiceType) GetDRefInfo() ([]db.DRefInfo, error
 	}
 
 	return m.GetEndpointNfvServiceDRefInfo()
-
 }
 
 func (m *OriginServerEndpointNFVServiceType) GetEndpointNfvServiceDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetEndpointNfvService()
 	if vref == nil {
 		return nil, nil
@@ -1158,7 +1071,6 @@ func (m *OriginServerEndpointNFVServiceType) GetEndpointNfvServiceDRefInfo() ([]
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetEndpointNfvServiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1168,7 +1080,6 @@ func (m *OriginServerEndpointNFVServiceType) GetEndpointNfvServiceDBEntries(ctx 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: nfv_service")
 	}
-
 	vref := m.GetEndpointNfvService()
 	if vref == nil {
 		return nil, nil
@@ -1186,7 +1097,6 @@ func (m *OriginServerEndpointNFVServiceType) GetEndpointNfvServiceDBEntries(ctx 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1195,7 +1105,6 @@ type ValidateOriginServerEndpointNFVServiceType struct {
 }
 
 func (v *ValidateOriginServerEndpointNFVServiceType) EndpointNfvServiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint_nfv_service")
@@ -1204,11 +1113,9 @@ func (v *ValidateOriginServerEndpointNFVServiceType) EndpointNfvServiceValidatio
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1228,23 +1135,18 @@ func (v *ValidateOriginServerEndpointNFVServiceType) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["endpoint_nfv_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_nfv_service"))
 		if err := fv(ctx, m.GetEndpointNfvService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginServerEndpointNFVServiceTypeValidator = func() *ValidateOriginServerEndpointNFVServiceType {
 	v := &ValidateOriginServerEndpointNFVServiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1314,7 +1216,6 @@ func (m *OriginServerWithWeight) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOriginServerChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1324,7 +1225,6 @@ func (m *OriginServerWithWeight) GetOriginServerChoiceDRefInfo() ([]db.DRefInfo,
 	}
 	switch m.GetOriginServerChoice().(type) {
 	case *OriginServerWithWeight_EndpointNfvService:
-
 		drInfos, err := m.GetEndpointNfvService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEndpointNfvService().GetDRefInfo() FAILED")
@@ -1334,9 +1234,7 @@ func (m *OriginServerWithWeight) GetOriginServerChoiceDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "endpoint_nfv_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *OriginServerWithWeight_K8SService:
-
 		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
@@ -1346,11 +1244,9 @@ func (m *OriginServerWithWeight) GetOriginServerChoiceDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "k8s_service." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateOriginServerWithWeight struct {
@@ -1412,25 +1308,19 @@ func (v *ValidateOriginServerWithWeight) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["weight"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("weight"))
 		if err := fv(ctx, m.GetWeight(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginServerWithWeightValidator = func() *ValidateOriginServerWithWeight {
 	v := &ValidateOriginServerWithWeight{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1438,7 +1328,6 @@ var DefaultOriginServerWithWeightValidator = func() *ValidateOriginServerWithWei
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhOriginServerChoice := v.OriginServerChoiceValidationRuleHandler
 	rulesOriginServerChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1449,7 +1338,6 @@ var DefaultOriginServerWithWeightValidator = func() *ValidateOriginServerWithWei
 		panic(errMsg)
 	}
 	v.FldValidators["origin_server_choice"] = vFn
-
 	v.FldValidators["origin_server_choice.endpoint_nfv_service"] = OriginServerEndpointNFVServiceTypeValidator().Validate
 	v.FldValidators["origin_server_choice.k8s_service"] = OriginServerEndpointK8SServiceTypeValidator().Validate
 

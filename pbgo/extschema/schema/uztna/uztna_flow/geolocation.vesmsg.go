@@ -66,7 +66,6 @@ type ValidateGeoMatch struct {
 }
 
 func (v *ValidateGeoMatch) MatchCriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -126,22 +125,18 @@ func (v *ValidateGeoMatch) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["match_cri"]; exists {
 		vOpts := append(opts, db.WithValidateField("match_cri"))
 		if err := fv(ctx, m.GetMatchCri(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGeoMatchValidator = func() *ValidateGeoMatch {
 	v := &ValidateGeoMatch{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -225,23 +220,18 @@ func (v *ValidateMatchingCriteria) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["custom_geo_location_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("custom_geo_location_selector"))
 		if err := fv(ctx, m.GetCustomGeoLocationSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMatchingCriteriaValidator = func() *ValidateMatchingCriteria {
 	v := &ValidateMatchingCriteria{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["custom_geo_location_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
 	return v

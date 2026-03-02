@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.healthcheck.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.healthcheck.Object"] = ObjectValidator()
 	vr["ves.io.schema.healthcheck.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.healthcheck.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.healthcheck.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.healthcheck.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.healthcheck.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.healthcheck.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.healthcheck.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.healthcheck.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.healthcheck.DnsHealthCheck"] = DnsHealthCheckValidator()
 	vr["ves.io.schema.healthcheck.DnsProxyTcpHealthCheck"] = DnsProxyTcpHealthCheckValidator()
@@ -37,7 +34,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.healthcheck.HttpHealthCheck"] = HttpHealthCheckValidator()
 	vr["ves.io.schema.healthcheck.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.healthcheck.TcpHealthCheck"] = TcpHealthCheckValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -49,39 +45,32 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.healthcheck.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.healthcheck.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.healthcheck.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.healthcheck.API.Create"] = []string{
 		"spec.dns_health_check",
 		"spec.dns_proxy_icmp_health_check",
 		"spec.dns_proxy_tcp_health_check",
 		"spec.dns_proxy_udp_health_check",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.healthcheck.API.Replace"] = []string{
 		"spec.dns_health_check",
 		"spec.dns_proxy_icmp_health_check",
 		"spec.dns_proxy_tcp_health_check",
 		"spec.dns_proxy_udp_health_check",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.healthcheck.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -90,9 +79,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.healthcheck.Object"] = APISwaggerJSON
@@ -106,22 +93,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.healthcheck.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.healthcheck.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.healthcheck.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

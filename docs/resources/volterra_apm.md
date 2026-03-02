@@ -138,7 +138,6 @@ resource "volterra_apm" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -797,4 +796,4 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured apm.
+-   `id` - This is the id of the configured apm.

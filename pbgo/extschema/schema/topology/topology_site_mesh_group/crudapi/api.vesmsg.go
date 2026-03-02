@@ -73,15 +73,12 @@ func (m *ObjectCreateReq) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -89,7 +86,6 @@ func (m *ObjectCreateReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -99,7 +95,6 @@ func (m *ObjectCreateReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -107,7 +102,6 @@ func (m *ObjectCreateReq) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -117,7 +111,6 @@ func (m *ObjectCreateReq) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateObjectCreateReq struct {
@@ -137,45 +130,32 @@ func (v *ValidateObjectCreateReq) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectCreateReqValidator = func() *ValidateObjectCreateReq {
 	v := &ValidateObjectCreateReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = ves_io_schema_topology_topology_site_mesh_group.SpecTypeValidator().Validate
 
 	return v
@@ -233,15 +213,12 @@ func (m *ObjectCreateRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -249,7 +226,6 @@ func (m *ObjectCreateRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -259,7 +235,6 @@ func (m *ObjectCreateRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -267,7 +242,6 @@ func (m *ObjectCreateRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -277,7 +251,6 @@ func (m *ObjectCreateRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateObjectCreateRsp struct {
@@ -297,63 +270,44 @@ func (v *ValidateObjectCreateRsp) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["err"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("err"))
 		if err := fv(ctx, m.GetErr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_uid"))
 		if err := fv(ctx, m.GetObjectUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectCreateRspValidator = func() *ValidateObjectCreateRsp {
 	v := &ValidateObjectCreateRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = ves_io_schema_topology_topology_site_mesh_group.SpecTypeValidator().Validate
 
 	return v
@@ -417,16 +371,12 @@ func (v *ValidateObjectDeleteReq) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["object_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_uid"))
 		if err := fv(ctx, m.GetObjectUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -495,16 +445,12 @@ func (v *ValidateObjectDeleteRsp) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["err"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("err"))
 		if err := fv(ctx, m.GetErr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -573,18 +519,13 @@ func (v *ValidateObjectGetReq) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["all_backrefs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("all_backrefs"))
 		if err := fv(ctx, m.GetAllBackrefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["backref_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("backref_types"))
 		for idx, item := range m.GetBackrefTypes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -592,27 +533,19 @@ func (v *ValidateObjectGetReq) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["include_referred_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("include_referred_id"))
 		if err := fv(ctx, m.GetIncludeReferredId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_uid"))
 		if err := fv(ctx, m.GetObjectUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -675,15 +608,12 @@ func (m *ObjectGetRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -691,7 +621,6 @@ func (m *ObjectGetRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -701,7 +630,6 @@ func (m *ObjectGetRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -709,7 +637,6 @@ func (m *ObjectGetRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -719,7 +646,6 @@ func (m *ObjectGetRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateObjectGetRsp struct {
@@ -739,9 +665,7 @@ func (v *ValidateObjectGetRsp) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ent_backrefs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ent_backrefs"))
 		for idx, item := range m.GetEntBackrefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -749,65 +673,45 @@ func (v *ValidateObjectGetRsp) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["err"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("err"))
 		if err := fv(ctx, m.GetErr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_version"))
 		if err := fv(ctx, m.GetResourceVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectGetRspValidator = func() *ValidateObjectGetRsp {
 	v := &ValidateObjectGetRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = ves_io_schema_topology_topology_site_mesh_group.SpecTypeValidator().Validate
 
 	return v
@@ -871,27 +775,19 @@ func (v *ValidateObjectListReq) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["include_referred_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("include_referred_id"))
 		if err := fv(ctx, m.GetIncludeReferredId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_filter"))
 		for idx, item := range m.GetNamespaceFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -899,29 +795,20 @@ func (v *ValidateObjectListReq) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["page_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("page_limit"))
 		if err := fv(ctx, m.GetPageLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["page_start"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("page_start"))
 		if err := fv(ctx, m.GetPageStart(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_fields"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_fields"))
 		for idx, item := range m.GetReportFields() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -929,20 +816,14 @@ func (v *ValidateObjectListReq) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_version"))
 		if err := fv(ctx, m.GetResourceVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_filter"))
 		for idx, item := range m.GetTenantFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -950,9 +831,7 @@ func (v *ValidateObjectListReq) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1010,7 +889,6 @@ func (m *ObjectListRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetItemsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1018,7 +896,6 @@ func (m *ObjectListRsp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItems() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
@@ -1032,7 +909,6 @@ func (m *ObjectListRsp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateObjectListRsp struct {
@@ -1052,18 +928,13 @@ func (v *ValidateObjectListRsp) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["err"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("err"))
 		if err := fv(ctx, m.GetErr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1071,29 +942,20 @@ func (v *ValidateObjectListRsp) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["next_page"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("next_page"))
 		if err := fv(ctx, m.GetNextPage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uids"))
 		for idx, item := range m.GetUids() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1101,16 +963,13 @@ func (v *ValidateObjectListRsp) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectListRspValidator = func() *ValidateObjectListRsp {
 	v := &ValidateObjectListRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = ObjectListRspItemValidator().Validate
 
 	return v
@@ -1168,15 +1027,12 @@ func (m *ObjectListRspItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1184,7 +1040,6 @@ func (m *ObjectListRspItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -1194,7 +1049,6 @@ func (m *ObjectListRspItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1202,7 +1056,6 @@ func (m *ObjectListRspItem) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -1212,7 +1065,6 @@ func (m *ObjectListRspItem) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateObjectListRspItem struct {
@@ -1232,9 +1084,7 @@ func (v *ValidateObjectListRspItem) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1242,83 +1092,57 @@ func (v *ValidateObjectListRspItem) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_uid"))
 		if err := fv(ctx, m.GetObjectUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectListRspItemValidator = func() *ValidateObjectListRspItem {
 	v := &ValidateObjectListRspItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = ves_io_schema_topology_topology_site_mesh_group.SpecTypeValidator().Validate
 
 	return v
@@ -1371,7 +1195,6 @@ func (m *ObjectReplaceReq) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1379,7 +1202,6 @@ func (m *ObjectReplaceReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -1389,7 +1211,6 @@ func (m *ObjectReplaceReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateObjectReplaceReq struct {
@@ -1409,52 +1230,37 @@ func (v *ValidateObjectReplaceReq) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_uid"))
 		if err := fv(ctx, m.GetObjectUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_version"))
 		if err := fv(ctx, m.GetResourceVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectReplaceReqValidator = func() *ValidateObjectReplaceReq {
 	v := &ValidateObjectReplaceReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = ves_io_schema_topology_topology_site_mesh_group.SpecTypeValidator().Validate
 
 	return v
@@ -1512,15 +1318,12 @@ func (m *ObjectReplaceRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1528,7 +1331,6 @@ func (m *ObjectReplaceRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -1538,7 +1340,6 @@ func (m *ObjectReplaceRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1546,7 +1347,6 @@ func (m *ObjectReplaceRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -1556,7 +1356,6 @@ func (m *ObjectReplaceRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateObjectReplaceRsp struct {
@@ -1576,54 +1375,38 @@ func (v *ValidateObjectReplaceRsp) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["err"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("err"))
 		if err := fv(ctx, m.GetErr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectReplaceRspValidator = func() *ValidateObjectReplaceRsp {
 	v := &ValidateObjectReplaceRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = ves_io_schema_topology_topology_site_mesh_group.SpecTypeValidator().Validate
 
 	return v

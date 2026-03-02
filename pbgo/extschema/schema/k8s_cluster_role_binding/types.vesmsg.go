@@ -68,11 +68,9 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetK8SClusterRoleDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -88,7 +86,6 @@ func (m *CreateSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetK8SClusterRoleDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -98,7 +95,6 @@ func (m *CreateSpecType) GetK8SClusterRoleDBEntries(ctx context.Context, d db.In
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: k8s_cluster_role")
 	}
-
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -116,7 +112,6 @@ func (m *CreateSpecType) GetK8SClusterRoleDBEntries(ctx context.Context, d db.In
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -125,7 +120,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) K8SClusterRoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for k8s_cluster_role")
@@ -134,19 +128,15 @@ func (v *ValidateCreateSpecType) K8SClusterRoleValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SubjectsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -206,31 +196,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["k8s_cluster_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("k8s_cluster_role"))
 		if err := fv(ctx, m.GetK8SClusterRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subjects"]; exists {
 		vOpts := append(opts, db.WithValidateField("subjects"))
 		if err := fv(ctx, m.GetSubjects(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -314,11 +297,9 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetK8SClusterRoleDRefInfo()
-
 }
 
 func (m *GetSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -334,7 +315,6 @@ func (m *GetSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetK8SClusterRoleDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -344,7 +324,6 @@ func (m *GetSpecType) GetK8SClusterRoleDBEntries(ctx context.Context, d db.Inter
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: k8s_cluster_role")
 	}
-
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -362,7 +341,6 @@ func (m *GetSpecType) GetK8SClusterRoleDBEntries(ctx context.Context, d db.Inter
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -371,7 +349,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) K8SClusterRoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for k8s_cluster_role")
@@ -380,19 +357,15 @@ func (v *ValidateGetSpecType) K8SClusterRoleValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SubjectsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -452,31 +425,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["k8s_cluster_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("k8s_cluster_role"))
 		if err := fv(ctx, m.GetK8SClusterRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subjects"]; exists {
 		vOpts := append(opts, db.WithValidateField("subjects"))
 		if err := fv(ctx, m.GetSubjects(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -560,11 +526,9 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetK8SClusterRoleDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -580,7 +544,6 @@ func (m *GlobalSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetK8SClusterRoleDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -590,7 +553,6 @@ func (m *GlobalSpecType) GetK8SClusterRoleDBEntries(ctx context.Context, d db.In
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: k8s_cluster_role")
 	}
-
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -608,7 +570,6 @@ func (m *GlobalSpecType) GetK8SClusterRoleDBEntries(ctx context.Context, d db.In
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -617,7 +578,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) K8SClusterRoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for k8s_cluster_role")
@@ -626,19 +586,15 @@ func (v *ValidateGlobalSpecType) K8SClusterRoleValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SubjectsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -684,9 +640,7 @@ func (v *ValidateGlobalSpecType) SubjectsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
@@ -708,40 +662,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["generated_yaml"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("generated_yaml"))
 		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["k8s_cluster_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("k8s_cluster_role"))
 		if err := fv(ctx, m.GetK8SClusterRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subjects"]; exists {
 		vOpts := append(opts, db.WithValidateField("subjects"))
 		if err := fv(ctx, m.GetSubjects(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -837,11 +781,9 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetK8SClusterRoleDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -857,7 +799,6 @@ func (m *ReplaceSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetK8SClusterRoleDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -867,7 +808,6 @@ func (m *ReplaceSpecType) GetK8SClusterRoleDBEntries(ctx context.Context, d db.I
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: k8s_cluster_role")
 	}
-
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -885,7 +825,6 @@ func (m *ReplaceSpecType) GetK8SClusterRoleDBEntries(ctx context.Context, d db.I
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -894,7 +833,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) K8SClusterRoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for k8s_cluster_role")
@@ -903,19 +841,15 @@ func (v *ValidateReplaceSpecType) K8SClusterRoleValidationRuleHandler(rules map[
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SubjectsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -975,31 +909,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["k8s_cluster_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("k8s_cluster_role"))
 		if err := fv(ctx, m.GetK8SClusterRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subjects"]; exists {
 		vOpts := append(opts, db.WithValidateField("subjects"))
 		if err := fv(ctx, m.GetSubjects(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1082,7 +1009,6 @@ type ValidateServiceAccountType struct {
 }
 
 func (v *ValidateServiceAccountType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1090,9 +1016,7 @@ func (v *ValidateServiceAccountType) NamespaceValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServiceAccountType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -1114,32 +1038,24 @@ func (v *ValidateServiceAccountType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceAccountTypeValidator = func() *ValidateServiceAccountType {
 	v := &ValidateServiceAccountType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1237,6 +1153,7 @@ func (v *ValidateSubjectType) SubjectChoiceUserValidationRuleHandler(rules map[s
 	}
 	return oValidatorFn_User, nil
 }
+
 func (v *ValidateSubjectType) SubjectChoiceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Group, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1303,16 +1220,13 @@ func (v *ValidateSubjectType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSubjectTypeValidator = func() *ValidateSubjectType {
 	v := &ValidateSubjectType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1320,7 +1234,6 @@ var DefaultSubjectTypeValidator = func() *ValidateSubjectType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSubjectChoice := v.SubjectChoiceValidationRuleHandler
 	rulesSubjectChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1331,7 +1244,6 @@ var DefaultSubjectTypeValidator = func() *ValidateSubjectType {
 		panic(errMsg)
 	}
 	v.FldValidators["subject_choice"] = vFn
-
 	vrhSubjectChoiceUser := v.SubjectChoiceUserValidationRuleHandler
 	rulesSubjectChoiceUser := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -1352,10 +1264,8 @@ var DefaultSubjectTypeValidator = func() *ValidateSubjectType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SubjectType.subject_choice_group: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["subject_choice.user"] = vFnMap["subject_choice.user"]
 	v.FldValidators["subject_choice.group"] = vFnMap["subject_choice.group"]
-
 	v.FldValidators["subject_choice.service_account"] = ServiceAccountTypeValidator().Validate
 
 	return v

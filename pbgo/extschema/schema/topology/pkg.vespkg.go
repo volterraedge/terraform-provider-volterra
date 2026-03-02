@@ -10,6 +10,8 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+	vr["ves.io.schema.topology.GetAWSTransitGatewayRequest"] = GetAWSTransitGatewayRequestValidator()
+	vr["ves.io.schema.topology.GetAWSTransitGatewayResponse"] = GetAWSTransitGatewayResponseValidator()
 	vr["ves.io.schema.topology.ListCloudNetworkTagKeysRequest"] = ListCloudNetworkTagKeysRequestValidator()
 	vr["ves.io.schema.topology.ListCloudNetworkTagKeysResponse"] = ListCloudNetworkTagKeysResponseValidator()
 	vr["ves.io.schema.topology.ListCloudNetworkTagValuesRequest"] = ListCloudNetworkTagValuesRequestValidator()
@@ -18,7 +20,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.topology.ListCloudSubnetTagKeysResponse"] = ListCloudSubnetTagKeysResponseValidator()
 	vr["ves.io.schema.topology.ListCloudSubnetTagValuesRequest"] = ListCloudSubnetTagValuesRequestValidator()
 	vr["ves.io.schema.topology.ListCloudSubnetTagValuesResponse"] = ListCloudSubnetTagValuesResponseValidator()
-
 	vr["ves.io.schema.topology.AWSNetworkMetaData"] = AWSNetworkMetaDataValidator()
 	vr["ves.io.schema.topology.DCClusterGroupSummaryInfo"] = DCClusterGroupSummaryInfoValidator()
 	vr["ves.io.schema.topology.DCClusterGroupsSummaryRequest"] = DCClusterGroupsSummaryRequestValidator()
@@ -64,7 +65,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.topology.TGWRouteTablesRequest"] = TGWRouteTablesRequestValidator()
 	vr["ves.io.schema.topology.TGWRouteTablesResponse"] = TGWRouteTablesResponseValidator()
 	vr["ves.io.schema.topology.TopologyResponse"] = TopologyResponseValidator()
-
 	vr["ves.io.schema.topology.AWSPolicyType"] = AWSPolicyTypeValidator()
 	vr["ves.io.schema.topology.AWSRouteAttributes"] = AWSRouteAttributesValidator()
 	vr["ves.io.schema.topology.AWSTGWAttachment"] = AWSTGWAttachmentValidator()
@@ -91,24 +91,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.topology.TransitGatewayType"] = TransitGatewayTypeValidator()
 	vr["ves.io.schema.topology.TunnelSetType"] = TunnelSetTypeValidator()
 	vr["ves.io.schema.topology.TunnelType"] = TunnelTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.topology.CustomDataAPI"] = "data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -118,12 +113,9 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.topology.Object"] = PrivateCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.topology.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.topology.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
 		if isExternal {
@@ -134,16 +126,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.topology.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewPrivateCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.topology.Object"] = CustomDataAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.topology.CustomDataAPI"] = NewCustomDataAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.topology.CustomDataAPI"] = NewCustomDataAPIRestClient
 		if isExternal {
@@ -154,22 +141,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.topology.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

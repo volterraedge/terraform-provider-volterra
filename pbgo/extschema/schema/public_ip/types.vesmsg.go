@@ -67,7 +67,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualSitesDRefInfo()
-
 }
 
 func (m *GetSpecType) GetVirtualSitesDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *GetSpecType) GetVirtualSitesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSitesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *GetSpecType) GetVirtualSitesDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
@@ -128,9 +124,7 @@ func (v *ValidateGetSpecType) IpValidationRuleHandler(rules map[string]string) (
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VirtualSitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -190,31 +184,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_sites"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_sites"))
 		if err := fv(ctx, m.GetVirtualSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -296,7 +283,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualSitesDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetVirtualSitesDRefInfo() ([]db.DRefInfo, error) {
@@ -321,7 +307,6 @@ func (m *GlobalSpecType) GetVirtualSitesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSitesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -340,7 +325,6 @@ func (m *GlobalSpecType) GetVirtualSitesDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -349,7 +333,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
@@ -357,9 +340,7 @@ func (v *ValidateGlobalSpecType) IpValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VirtualSitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -419,58 +400,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["do_not_advertise"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("do_not_advertise"))
 		if err := fv(ctx, m.GetDoNotAdvertise(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_shared"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_shared"))
 		if err := fv(ctx, m.GetIsShared(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_selector"))
 		if err := fv(ctx, m.GetNodeSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_sites"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_sites"))
 		if err := fv(ctx, m.GetVirtualSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -501,7 +466,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["virtual_sites"] = vFn
-
 	v.FldValidators["node_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
 	return v
@@ -554,7 +518,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualSitesDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetVirtualSitesDRefInfo() ([]db.DRefInfo, error) {
@@ -579,7 +542,6 @@ func (m *ReplaceSpecType) GetVirtualSitesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSitesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -598,7 +560,6 @@ func (m *ReplaceSpecType) GetVirtualSitesDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -607,7 +568,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) VirtualSitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -667,22 +627,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["virtual_sites"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_sites"))
 		if err := fv(ctx, m.GetVirtualSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

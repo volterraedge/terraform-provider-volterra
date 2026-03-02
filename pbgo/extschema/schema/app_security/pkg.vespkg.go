@@ -12,22 +12,19 @@ import (
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_security.GetSuggestedAPIEndpointProtectionRuleReq"] = GetSuggestedAPIEndpointProtectionRuleReqValidator()
 	vr["ves.io.schema.app_security.GetSuggestedAPIEndpointProtectionRuleRsp"] = GetSuggestedAPIEndpointProtectionRuleRspValidator()
-
 	vr["ves.io.schema.app_security.GetSuggestedRateLimitRuleReq"] = GetSuggestedRateLimitRuleReqValidator()
 	vr["ves.io.schema.app_security.GetSuggestedRateLimitRuleRsp"] = GetSuggestedRateLimitRuleRspValidator()
-
 	vr["ves.io.schema.app_security.GetSuggestedSensitiveDataRuleReq"] = GetSuggestedSensitiveDataRuleReqValidator()
 	vr["ves.io.schema.app_security.GetSuggestedSensitiveDataRuleRsp"] = GetSuggestedSensitiveDataRuleRspValidator()
-
 	vr["ves.io.schema.app_security.GetSuggestedBlockClientRuleReq"] = GetSuggestedBlockClientRuleReqValidator()
 	vr["ves.io.schema.app_security.GetSuggestedBlockClientRuleRsp"] = GetSuggestedBlockClientRuleRspValidator()
 	vr["ves.io.schema.app_security.GetSuggestedDDoSMitigtionRuleReq"] = GetSuggestedDDoSMitigtionRuleReqValidator()
 	vr["ves.io.schema.app_security.GetSuggestedDDoSMitigtionRuleRsp"] = GetSuggestedDDoSMitigtionRuleRspValidator()
 	vr["ves.io.schema.app_security.GetSuggestedTrustClientRuleReq"] = GetSuggestedTrustClientRuleReqValidator()
 	vr["ves.io.schema.app_security.GetSuggestedTrustClientRuleRsp"] = GetSuggestedTrustClientRuleRspValidator()
-
 	vr["ves.io.schema.app_security.LoadbalancerData"] = LoadbalancerDataValidator()
 	vr["ves.io.schema.app_security.RequestData"] = RequestDataValidator()
+	vr["ves.io.schema.app_security.SearchAfterSortValues"] = SearchAfterSortValuesValidator()
 	vr["ves.io.schema.app_security.SearchFilter"] = SearchFilterValidator()
 	vr["ves.io.schema.app_security.SearchLoadBalancersRequest"] = SearchLoadBalancersRequestValidator()
 	vr["ves.io.schema.app_security.SearchLoadBalancersResponse"] = SearchLoadBalancersResponseValidator()
@@ -49,17 +46,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_security.SuspiciousUserLogsRequest"] = SuspiciousUserLogsRequestValidator()
 	vr["ves.io.schema.app_security.SuspiciousUserLogsResponse"] = SuspiciousUserLogsResponseValidator()
 	vr["ves.io.schema.app_security.SuspiciousUserLogsScrollRequest"] = SuspiciousUserLogsScrollRequestValidator()
-
 	vr["ves.io.schema.app_security.GetSuggestedOasValidationRuleReq"] = GetSuggestedOasValidationRuleReqValidator()
 	vr["ves.io.schema.app_security.GetSuggestedOasValidationRuleRsp"] = GetSuggestedOasValidationRuleRspValidator()
-
 	vr["ves.io.schema.app_security.ThreatCampaign"] = ThreatCampaignValidator()
 	vr["ves.io.schema.app_security.ThreatCampaignRequest"] = ThreatCampaignRequestValidator()
-
 	vr["ves.io.schema.app_security.ApiEndpoint"] = ApiEndpointValidator()
 	vr["ves.io.schema.app_security.GetSuggestedWAFExclusionRuleReq"] = GetSuggestedWAFExclusionRuleReqValidator()
 	vr["ves.io.schema.app_security.GetSuggestedWAFExclusionRuleRsp"] = GetSuggestedWAFExclusionRuleRspValidator()
-
 	vr["ves.io.schema.app_security.AggregationRequest"] = AggregationRequestValidator()
 	vr["ves.io.schema.app_security.CardinalityAggregation"] = CardinalityAggregationValidator()
 	vr["ves.io.schema.app_security.DateAggregation"] = DateAggregationValidator()
@@ -70,57 +63,48 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_security.MultiFieldAggregation"] = MultiFieldAggregationValidator()
 	vr["ves.io.schema.app_security.MultiFieldSubAggregation"] = MultiFieldSubAggregationValidator()
 	vr["ves.io.schema.app_security.PercentileAggregation"] = PercentileAggregationValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.app_security.APIEndpointProtectionRuleSuggestionAPI.GetSuggestedAPIEndpointProtectionRule"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "rule.client_matcher.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.app_security.APIRateLimitRuleSuggestionAPI.GetSuggestedRateLimitRule"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "rule.client_matcher.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedDDoSMitigationRule"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedDDoSMitigationRule"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "mitigation_rule.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedDDoSMitigationRuleForCDN"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedDDoSMitigationRuleForCDN"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "mitigation_rule.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
@@ -132,7 +116,6 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.app_security.OasValidationSuggestionAPI"] = "config"
 	sm["ves.io.schema.app_security.ThreatCampaignAPI"] = "waf"
 	sm["ves.io.schema.app_security.AppSecurityWafExclusionAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
@@ -140,7 +123,6 @@ func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -149,14 +131,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_security.Object"] = APIEndpointProtectionRuleSuggestionAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_security.APIEndpointProtectionRuleSuggestionAPI"] = NewAPIEndpointProtectionRuleSuggestionAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_security.APIEndpointProtectionRuleSuggestionAPI"] = NewAPIEndpointProtectionRuleSuggestionAPIRestClient
 		if isExternal {
@@ -167,16 +145,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_security.APIEndpointProtectionRuleSuggestionAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewAPIEndpointProtectionRuleSuggestionAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_security.Object"] = APIRateLimitRuleSuggestionAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_security.APIRateLimitRuleSuggestionAPI"] = NewAPIRateLimitRuleSuggestionAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_security.APIRateLimitRuleSuggestionAPI"] = NewAPIRateLimitRuleSuggestionAPIRestClient
 		if isExternal {
@@ -187,16 +160,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_security.APIRateLimitRuleSuggestionAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewAPIRateLimitRuleSuggestionAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_security.Object"] = APISensitiveDataRuleSuggestionAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_security.APISensitiveDataRuleSuggestionAPI"] = NewAPISensitiveDataRuleSuggestionAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_security.APISensitiveDataRuleSuggestionAPI"] = NewAPISensitiveDataRuleSuggestionAPIRestClient
 		if isExternal {
@@ -207,16 +175,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_security.APISensitiveDataRuleSuggestionAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewAPISensitiveDataRuleSuggestionAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_security.Object"] = AppSecurityClientRuleAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_security.AppSecurityClientRuleAPI"] = NewAppSecurityClientRuleAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_security.AppSecurityClientRuleAPI"] = NewAppSecurityClientRuleAPIRestClient
 		if isExternal {
@@ -227,16 +190,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_security.AppSecurityClientRuleAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewAppSecurityClientRuleAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_security.Object"] = AppSecurityMonitoringAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_security.AppSecurityMonitoringAPI"] = NewAppSecurityMonitoringAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_security.AppSecurityMonitoringAPI"] = NewAppSecurityMonitoringAPIRestClient
 		if isExternal {
@@ -247,16 +205,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_security.AppSecurityMonitoringAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewAppSecurityMonitoringAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_security.Object"] = OasValidationSuggestionAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_security.OasValidationSuggestionAPI"] = NewOasValidationSuggestionAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_security.OasValidationSuggestionAPI"] = NewOasValidationSuggestionAPIRestClient
 		if isExternal {
@@ -267,16 +220,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_security.OasValidationSuggestionAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewOasValidationSuggestionAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_security.Object"] = ThreatCampaignAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_security.ThreatCampaignAPI"] = NewThreatCampaignAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_security.ThreatCampaignAPI"] = NewThreatCampaignAPIRestClient
 		if isExternal {
@@ -287,16 +235,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_security.ThreatCampaignAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewThreatCampaignAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_security.Object"] = AppSecurityWafExclusionAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_security.AppSecurityWafExclusionAPI"] = NewAppSecurityWafExclusionAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_security.AppSecurityWafExclusionAPI"] = NewAppSecurityWafExclusionAPIRestClient
 		if isExternal {
@@ -307,22 +250,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_security.AppSecurityWafExclusionAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewAppSecurityWafExclusionAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

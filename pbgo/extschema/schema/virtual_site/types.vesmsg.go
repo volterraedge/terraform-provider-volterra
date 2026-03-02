@@ -67,7 +67,6 @@ func (m *CreateSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
 		return nil, nil
 	}
 	return m.GetSiteSelectorSRefInfo()
-
 }
 
 // GetSiteSelectorSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
@@ -91,7 +90,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) SiteSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site_selector")
@@ -100,19 +98,15 @@ func (v *ValidateCreateSpecType) SiteSelectorValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.LabelSelectorTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_site.SiteType)
@@ -140,32 +134,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_selector"))
 		if err := fv(ctx, m.GetSiteSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -246,7 +232,6 @@ func (m *GetSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
 		return nil, nil
 	}
 	return m.GetSiteSelectorSRefInfo()
-
 }
 
 // GetSiteSelectorSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
@@ -270,7 +255,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) SiteSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site_selector")
@@ -279,19 +263,15 @@ func (v *ValidateGetSpecType) SiteSelectorValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.LabelSelectorTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_site.SiteType)
@@ -319,32 +299,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_selector"))
 		if err := fv(ctx, m.GetSiteSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -425,7 +397,6 @@ func (m *GlobalSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
 		return nil, nil
 	}
 	return m.GetSiteSelectorSRefInfo()
-
 }
 
 // GetSiteSelectorSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
@@ -449,7 +420,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) SiteSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site_selector")
@@ -458,19 +428,15 @@ func (v *ValidateGlobalSpecType) SiteSelectorValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.LabelSelectorTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_site.SiteType)
@@ -498,32 +464,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_selector"))
 		if err := fv(ctx, m.GetSiteSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -616,7 +574,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

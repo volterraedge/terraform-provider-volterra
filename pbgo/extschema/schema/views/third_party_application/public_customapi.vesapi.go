@@ -44,7 +44,6 @@ func (c *CustomAPIGrpcClient) doRPCGenerateToken(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.GenerateToken(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetSecurityConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSecurityConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -85,11 +84,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GenerateToken"] = ccl.doRPCGenerateToken
-
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -176,7 +172,6 @@ func (c *CustomAPIRestClient) doRPCGenerateToken(ctx context.Context, callOpts *
 	pbRsp := &GenerateTokenResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.third_party_application.GenerateTokenResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -184,7 +179,6 @@ func (c *CustomAPIRestClient) doRPCGenerateToken(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetSecurityConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -260,7 +254,6 @@ func (c *CustomAPIRestClient) doRPCGetSecurityConfig(ctx context.Context, callOp
 	pbRsp := &ves_io_schema_views_common_security.GetSecurityConfigRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.GetSecurityConfigRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -294,11 +287,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GenerateToken"] = ccl.doRPCGenerateToken
-
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -383,7 +373,6 @@ func (s *customAPISrv) GenerateToken(ctx context.Context, in *GenerateTokenReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.third_party_application.GenerateTokenResponse", rsp)...)
 
 	return rsp, nil
@@ -432,7 +421,6 @@ func (s *customAPISrv) GetSecurityConfig(ctx context.Context, in *GetSecurityCon
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.GetSecurityConfigRsp", rsp)...)
 
 	return rsp, nil

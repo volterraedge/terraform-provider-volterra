@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.policy_based_routing.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.policy_based_routing.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.policy_based_routing.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.policy_based_routing.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.policy_based_routing.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.views.policy_based_routing.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.policy_based_routing.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.policy_based_routing.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.policy_based_routing.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.policy_based_routing.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.policy_based_routing.ForwardProxyPBRRuleType"] = ForwardProxyPBRRuleTypeValidator()
 	vr["ves.io.schema.views.policy_based_routing.ForwardProxyPBRType"] = ForwardProxyPBRTypeValidator()
@@ -36,7 +33,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.policy_based_routing.NetworkPBRRuleType"] = NetworkPBRRuleTypeValidator()
 	vr["ves.io.schema.views.policy_based_routing.NetworkPBRType"] = NetworkPBRTypeValidator()
 	vr["ves.io.schema.views.policy_based_routing.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -48,11 +44,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.policy_based_routing.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.policy_based_routing.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.policy_based_routing.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.policy_based_routing.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.policy_based_routing.CreateRequest.spec.policy_choice.forward_proxy_pbr.forward_proxy_pbr_rules.source_choice.prefix_list.ipv6_prefixes",
@@ -67,7 +61,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.policy_based_routing.API.Create"] = []string{
 		"spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.interface",
 		"spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.metadata.disable",
@@ -76,7 +69,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.network_pbr.network_pbr_rules.#.metadata.disable",
 		"spec.network_pbr.network_pbr_rules.#.rule_name",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.policy_based_routing.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.prefix_list.ipv6_prefixes.#",
@@ -91,7 +83,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.policy_based_routing.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.prefix_list.ipv6_prefixes.#",
@@ -106,7 +97,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.policy_based_routing.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.prefix_list.ipv6_prefixes.#",
@@ -145,7 +135,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.policy_based_routing.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.prefix_list.ipv6_prefixes.#",
@@ -160,7 +149,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.policy_based_routing.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.policy_based_routing.ReplaceRequest.spec.policy_choice.forward_proxy_pbr.forward_proxy_pbr_rules.source_choice.prefix_list.ipv6_prefixes",
@@ -175,7 +163,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.policy_based_routing.API.Replace"] = []string{
 		"spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.interface",
 		"spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.metadata.disable",
@@ -184,7 +171,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.network_pbr.network_pbr_rules.#.metadata.disable",
 		"spec.network_pbr.network_pbr_rules.#.rule_name",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.policy_based_routing.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.forward_proxy_pbr.forward_proxy_pbr_rules.#.prefix_list.ipv6_prefixes.#",
@@ -199,21 +185,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.policy_based_routing.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -222,9 +204,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.policy_based_routing.Object"] = APISwaggerJSON
@@ -238,22 +218,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.policy_based_routing.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.policy_based_routing.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.policy_based_routing.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

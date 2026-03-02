@@ -42,7 +42,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCAllApplicationInventory(ctx context.
 	rsp, err := c.grpcClient.AllApplicationInventory(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCAllApplicationInventoryWaf(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &AllApplicationInventoryWafFilterRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCAllApplicationInventoryWaf(ctx conte
 	rsp, err := c.grpcClient.AllApplicationInventoryWaf(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCApplicationInventory(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ApplicationInventoryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCApplicationInventory(ctx context.Con
 	rsp, err := c.grpcClient.ApplicationInventory(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CascadeDeleteRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,14 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, y
 	rsp, err := c.grpcClient.CascadeDelete(ctx, req, opts...)
 	return rsp, err
 }
-
+func (c *NamespaceCustomAPIGrpcClient) doRPCDynamicData(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DynamicDataReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.DynamicDataReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.DynamicData(ctx, req, opts...)
+	return rsp, err
+}
 func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveAlertPolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetActiveAlertPoliciesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +82,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveAlertPolicies(ctx context.C
 	rsp, err := c.grpcClient.GetActiveAlertPolicies(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveNetworkPolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetActiveNetworkPoliciesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +90,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveNetworkPolicies(ctx context
 	rsp, err := c.grpcClient.GetActiveNetworkPolicies(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveServicePolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetActiveServicePoliciesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +98,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveServicePolicies(ctx context
 	rsp, err := c.grpcClient.GetActiveServicePolicies(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCGetFastACLsForInternetVIPs(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetFastACLsForInternetVIPsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -105,7 +106,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCGetFastACLsForInternetVIPs(ctx conte
 	rsp, err := c.grpcClient.GetFastACLsForInternetVIPs(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCNetworkingInventory(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NetworkingInventoryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -114,7 +114,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCNetworkingInventory(ctx context.Cont
 	rsp, err := c.grpcClient.NetworkingInventory(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCSetActiveAlertPolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetActiveAlertPoliciesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -123,7 +122,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCSetActiveAlertPolicies(ctx context.C
 	rsp, err := c.grpcClient.SetActiveAlertPolicies(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCSetActiveNetworkPolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetActiveNetworkPoliciesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -132,7 +130,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCSetActiveNetworkPolicies(ctx context
 	rsp, err := c.grpcClient.SetActiveNetworkPolicies(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCSetActiveServicePolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetActiveServicePoliciesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -141,7 +138,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCSetActiveServicePolicies(ctx context
 	rsp, err := c.grpcClient.SetActiveServicePolicies(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCSetFastACLsForInternetVIPs(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetFastACLsForInternetVIPsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -150,7 +146,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCSetFastACLsForInternetVIPs(ctx conte
 	rsp, err := c.grpcClient.SetFastACLsForInternetVIPs(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuggestValuesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -159,7 +154,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, y
 	rsp, err := c.grpcClient.SuggestValues(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateAllowAdvertiseOnPublicReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -168,7 +162,6 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCUpdateAllowAdvertiseOnPublic(ctx con
 	rsp, err := c.grpcClient.UpdateAllowAdvertiseOnPublic(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *NamespaceCustomAPIGrpcClient) doRPCValidateRules(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ValidateRulesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -209,39 +202,23 @@ func NewNamespaceCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AllApplicationInventory"] = ccl.doRPCAllApplicationInventory
-
 	rpcFns["AllApplicationInventoryWaf"] = ccl.doRPCAllApplicationInventoryWaf
-
 	rpcFns["ApplicationInventory"] = ccl.doRPCApplicationInventory
-
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
-
+	rpcFns["DynamicData"] = ccl.doRPCDynamicData
 	rpcFns["GetActiveAlertPolicies"] = ccl.doRPCGetActiveAlertPolicies
-
 	rpcFns["GetActiveNetworkPolicies"] = ccl.doRPCGetActiveNetworkPolicies
-
 	rpcFns["GetActiveServicePolicies"] = ccl.doRPCGetActiveServicePolicies
-
 	rpcFns["GetFastACLsForInternetVIPs"] = ccl.doRPCGetFastACLsForInternetVIPs
-
 	rpcFns["NetworkingInventory"] = ccl.doRPCNetworkingInventory
-
 	rpcFns["SetActiveAlertPolicies"] = ccl.doRPCSetActiveAlertPolicies
-
 	rpcFns["SetActiveNetworkPolicies"] = ccl.doRPCSetActiveNetworkPolicies
-
 	rpcFns["SetActiveServicePolicies"] = ccl.doRPCSetActiveServicePolicies
-
 	rpcFns["SetFastACLsForInternetVIPs"] = ccl.doRPCSetFastACLsForInternetVIPs
-
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	rpcFns["UpdateAllowAdvertiseOnPublic"] = ccl.doRPCUpdateAllowAdvertiseOnPublic
-
 	rpcFns["ValidateRules"] = ccl.doRPCValidateRules
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -299,6 +276,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventory(ctx context.
 		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
 		q.Add("third_party_application_filter", fmt.Sprintf("%v", req.ThirdPartyApplicationFilter))
 		q.Add("udp_load_balancer_filter", fmt.Sprintf("%v", req.UdpLoadBalancerFilter))
+		q.Add("virtual_service_filter", fmt.Sprintf("%v", req.VirtualServiceFilter))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -333,7 +311,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventory(ctx context.
 	pbRsp := &ApplicationInventoryResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.ApplicationInventoryResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -341,7 +318,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventory(ctx context.
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventoryWaf(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -416,7 +392,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventoryWaf(ctx conte
 	pbRsp := &AllApplicationInventoryWafFilterResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.AllApplicationInventoryWafFilterResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -424,7 +399,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventoryWaf(ctx conte
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -472,6 +446,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Con
 		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
 		q.Add("third_party_application_filter", fmt.Sprintf("%v", req.ThirdPartyApplicationFilter))
 		q.Add("udp_load_balancer_filter", fmt.Sprintf("%v", req.UdpLoadBalancerFilter))
+		q.Add("virtual_service_filter", fmt.Sprintf("%v", req.VirtualServiceFilter))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -506,7 +481,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Con
 	pbRsp := &ApplicationInventoryResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.ApplicationInventoryResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -514,7 +488,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Con
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -589,7 +562,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, c
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.CascadeDeleteResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -597,7 +569,90 @@ func (c *NamespaceCustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
+func (c *NamespaceCustomAPIRestClient) doRPCDynamicData(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &DynamicDataReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.DynamicDataReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("defaults", fmt.Sprintf("%v", req.Defaults))
+		q.Add("field_path", fmt.Sprintf("%v", req.FieldPath))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("request_body", fmt.Sprintf("%v", req.RequestBody))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &DynamicDataResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.DynamicDataResp", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *NamespaceCustomAPIRestClient) doRPCGetActiveAlertPolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -672,7 +727,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveAlertPolicies(ctx context.C
 	pbRsp := &GetActiveAlertPoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.GetActiveAlertPoliciesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -680,7 +734,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveAlertPolicies(ctx context.C
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCGetActiveNetworkPolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -755,7 +808,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveNetworkPolicies(ctx context
 	pbRsp := &GetActiveNetworkPoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.GetActiveNetworkPoliciesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -763,7 +815,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveNetworkPolicies(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCGetActiveServicePolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -838,7 +889,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveServicePolicies(ctx context
 	pbRsp := &GetActiveServicePoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.GetActiveServicePoliciesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -846,7 +896,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveServicePolicies(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCGetFastACLsForInternetVIPs(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -921,7 +970,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetFastACLsForInternetVIPs(ctx conte
 	pbRsp := &GetFastACLsForInternetVIPsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -929,7 +977,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetFastACLsForInternetVIPs(ctx conte
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCNetworkingInventory(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1003,7 +1050,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCNetworkingInventory(ctx context.Cont
 	pbRsp := &NetworkingInventoryResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.NetworkingInventoryResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1011,7 +1057,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCNetworkingInventory(ctx context.Cont
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCSetActiveAlertPolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1089,7 +1134,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveAlertPolicies(ctx context.C
 	pbRsp := &SetActiveAlertPoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SetActiveAlertPoliciesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1097,7 +1141,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveAlertPolicies(ctx context.C
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCSetActiveNetworkPolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1175,7 +1218,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveNetworkPolicies(ctx context
 	pbRsp := &SetActiveNetworkPoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SetActiveNetworkPoliciesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1183,7 +1225,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveNetworkPolicies(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCSetActiveServicePolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1261,7 +1302,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveServicePolicies(ctx context
 	pbRsp := &SetActiveServicePoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SetActiveServicePoliciesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1269,7 +1309,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveServicePolicies(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCSetFastACLsForInternetVIPs(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1347,7 +1386,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetFastACLsForInternetVIPs(ctx conte
 	pbRsp := &SetFastACLsForInternetVIPsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1355,7 +1393,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetFastACLsForInternetVIPs(ctx conte
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1433,7 +1470,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSuggestValues(ctx context.Context, c
 	pbRsp := &SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1441,7 +1477,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCSuggestValues(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1517,7 +1552,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx con
 	pbRsp := &UpdateAllowAdvertiseOnPublicResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1525,7 +1559,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx con
 	}
 	return pbRsp, nil
 }
-
 func (c *NamespaceCustomAPIRestClient) doRPCValidateRules(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1602,7 +1635,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCValidateRules(ctx context.Context, c
 	pbRsp := &ValidateRulesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.ValidateRulesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1636,39 +1668,23 @@ func NewNamespaceCustomAPIRestClient(baseURL string, hc http.Client) server.Cust
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AllApplicationInventory"] = ccl.doRPCAllApplicationInventory
-
 	rpcFns["AllApplicationInventoryWaf"] = ccl.doRPCAllApplicationInventoryWaf
-
 	rpcFns["ApplicationInventory"] = ccl.doRPCApplicationInventory
-
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
-
+	rpcFns["DynamicData"] = ccl.doRPCDynamicData
 	rpcFns["GetActiveAlertPolicies"] = ccl.doRPCGetActiveAlertPolicies
-
 	rpcFns["GetActiveNetworkPolicies"] = ccl.doRPCGetActiveNetworkPolicies
-
 	rpcFns["GetActiveServicePolicies"] = ccl.doRPCGetActiveServicePolicies
-
 	rpcFns["GetFastACLsForInternetVIPs"] = ccl.doRPCGetFastACLsForInternetVIPs
-
 	rpcFns["NetworkingInventory"] = ccl.doRPCNetworkingInventory
-
 	rpcFns["SetActiveAlertPolicies"] = ccl.doRPCSetActiveAlertPolicies
-
 	rpcFns["SetActiveNetworkPolicies"] = ccl.doRPCSetActiveNetworkPolicies
-
 	rpcFns["SetActiveServicePolicies"] = ccl.doRPCSetActiveServicePolicies
-
 	rpcFns["SetFastACLsForInternetVIPs"] = ccl.doRPCSetFastACLsForInternetVIPs
-
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	rpcFns["UpdateAllowAdvertiseOnPublic"] = ccl.doRPCUpdateAllowAdvertiseOnPublic
-
 	rpcFns["ValidateRules"] = ccl.doRPCValidateRules
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1694,6 +1710,10 @@ func (c *namespaceCustomAPIInprocClient) ApplicationInventory(ctx context.Contex
 func (c *namespaceCustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete")
 	return c.NamespaceCustomAPIServer.CascadeDelete(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) DynamicData(ctx context.Context, in *DynamicDataReq, opts ...grpc.CallOption) (*DynamicDataResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.DynamicData")
+	return c.NamespaceCustomAPIServer.DynamicData(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*GetActiveAlertPoliciesResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies")
@@ -1809,7 +1829,6 @@ func (s *namespaceCustomAPISrv) AllApplicationInventory(ctx context.Context, in 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.ApplicationInventoryResponse", rsp)...)
 
 	return rsp, nil
@@ -1858,7 +1877,6 @@ func (s *namespaceCustomAPISrv) AllApplicationInventoryWaf(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.AllApplicationInventoryWafFilterResponse", rsp)...)
 
 	return rsp, nil
@@ -1907,7 +1925,6 @@ func (s *namespaceCustomAPISrv) ApplicationInventory(ctx context.Context, in *Ap
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.ApplicationInventoryResponse", rsp)...)
 
 	return rsp, nil
@@ -1956,8 +1973,55 @@ func (s *namespaceCustomAPISrv) CascadeDelete(ctx context.Context, in *CascadeDe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.CascadeDeleteResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *namespaceCustomAPISrv) DynamicData(ctx context.Context, in *DynamicDataReq) (*DynamicDataResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+	cah, ok := ah.(NamespaceCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *DynamicDataResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.DynamicDataReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceCustomAPI.DynamicData' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.DynamicData"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.DynamicData(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.DynamicDataResp", rsp)...)
 
 	return rsp, nil
 }
@@ -2005,7 +2069,6 @@ func (s *namespaceCustomAPISrv) GetActiveAlertPolicies(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveAlertPoliciesResponse", rsp)...)
 
 	return rsp, nil
@@ -2054,7 +2117,6 @@ func (s *namespaceCustomAPISrv) GetActiveNetworkPolicies(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveNetworkPoliciesResponse", rsp)...)
 
 	return rsp, nil
@@ -2103,7 +2165,6 @@ func (s *namespaceCustomAPISrv) GetActiveServicePolicies(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetActiveServicePoliciesResponse", rsp)...)
 
 	return rsp, nil
@@ -2152,7 +2213,6 @@ func (s *namespaceCustomAPISrv) GetFastACLsForInternetVIPs(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", rsp)...)
 
 	return rsp, nil
@@ -2201,7 +2261,6 @@ func (s *namespaceCustomAPISrv) NetworkingInventory(ctx context.Context, in *Net
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.NetworkingInventoryResponse", rsp)...)
 
 	return rsp, nil
@@ -2253,7 +2312,6 @@ func (s *namespaceCustomAPISrv) SetActiveAlertPolicies(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveAlertPoliciesResponse", rsp)...)
 
 	return rsp, nil
@@ -2305,7 +2363,6 @@ func (s *namespaceCustomAPISrv) SetActiveNetworkPolicies(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveNetworkPoliciesResponse", rsp)...)
 
 	return rsp, nil
@@ -2357,7 +2414,6 @@ func (s *namespaceCustomAPISrv) SetActiveServicePolicies(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetActiveServicePoliciesResponse", rsp)...)
 
 	return rsp, nil
@@ -2409,7 +2465,6 @@ func (s *namespaceCustomAPISrv) SetFastACLsForInternetVIPs(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse", rsp)...)
 
 	return rsp, nil
@@ -2458,7 +2513,6 @@ func (s *namespaceCustomAPISrv) SuggestValues(ctx context.Context, in *SuggestVa
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesResp", rsp)...)
 
 	return rsp, nil
@@ -2507,7 +2561,6 @@ func (s *namespaceCustomAPISrv) UpdateAllowAdvertiseOnPublic(ctx context.Context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp", rsp)...)
 
 	return rsp, nil
@@ -2556,7 +2609,6 @@ func (s *namespaceCustomAPISrv) ValidateRules(ctx context.Context, in *ValidateR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.ValidateRulesResponse", rsp)...)
 
 	return rsp, nil
@@ -3610,6 +3662,98 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/dynamic-data": {
+            "post": {
+                "summary": "Dynamic Data",
+                "description": "DynamicData returns data that should be populated in a table.",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.DynamicData",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceDynamicDataResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nNamespace in which the data is scoped",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceDynamicDataReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-dynamicdata"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.DynamicData"
+            },
+            "x-displayname": "NamespaceCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/fast_acls_for_internet_vips": {
             "get": {
                 "summary": "Get FastACLs For Internet VIPs",
@@ -4106,6 +4250,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "UDPLoadbalancerInventoryFilterType",
                     "$ref": "#/definitions/namespaceUDPLoadbalancerInventoryFilterType",
                     "x-displayname": "UDP LoadBalancer Inventory Filter Type"
+                },
+                "virtual_service_filter": {
+                    "description": " Filters for Virtual Service",
+                    "title": "virtualServiceInventoryFilterType",
+                    "$ref": "#/definitions/namespaceVirtualServiceInventoryFilterType",
+                    "x-displayname": "Virtual Service Inventory Filter Type"
                 }
             }
         },
@@ -4214,6 +4364,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "UDPLoadbalancerInventoryFilterType",
                     "$ref": "#/definitions/namespaceUDPLoadbalancerInventoryFilterType",
                     "x-displayname": "UDP LoadBalancer Inventory Filter Type"
+                },
+                "virtual_service_filter": {
+                    "description": " Filters for Virtual Service",
+                    "title": "virtualServiceInventoryFilterType",
+                    "$ref": "#/definitions/namespaceVirtualServiceInventoryFilterType",
+                    "x-displayname": "Virtual Service Inventory Filter Type"
                 }
             }
         },
@@ -4286,6 +4442,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "UDP Loadbalancer Inventory",
                     "$ref": "#/definitions/namespaceUDPLoadbalancerInventoryType",
                     "x-displayname": "UDP Loadbalancers"
+                },
+                "virtual_servers": {
+                    "description": " Inventory of configured Virtual Servers",
+                    "title": "Virtual Server Inventory",
+                    "$ref": "#/definitions/namespaceVirtualServerInventoryResultType",
+                    "x-displayname": "Virtual Servers"
                 }
             }
         },
@@ -4352,7 +4514,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.namespace.BIGIPVirtualServerResultType",
             "properties": {
                 "api_discovery_enabled": {
-                    "description": " API Discovery configured ",
+                    "description": " API Discovery configured",
                     "title": "API Discovery Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "API Discovery Enabled or Disabled"
@@ -4374,6 +4536,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "description": " Name of BIGIP Virtual Server",
                     "title": "BIGIP Virtual Server Name",
                     "x-displayname": "BIG-IP Virtual Server Name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of BIGIP VS",
+                    "title": "BIGIP VS Namespace",
+                    "x-displayname": "BIG-IP VS Namespace"
                 },
                 "server_name": {
                     "type": "string",
@@ -4469,6 +4637,63 @@ var NamespaceCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/namespaceCascadeDeleteItemType"
                     },
                     "x-displayname": "Items"
+                }
+            }
+        },
+        "namespaceDynamicDataReq": {
+            "type": "object",
+            "description": "Request body of DynamicData request",
+            "title": "DynamicDataReq",
+            "x-displayname": "Request for DynamicData",
+            "x-ves-proto-message": "ves.io.schema.namespace.DynamicDataReq",
+            "properties": {
+                "defaults": {
+                    "type": "boolean",
+                    "description": " The response should contain the default values for a new object",
+                    "title": "defaults",
+                    "format": "boolean",
+                    "x-displayname": "Request Defaults"
+                },
+                "field_path": {
+                    "type": "string",
+                    "description": " JSON path of the field for which the data are being requested\n\nExample: - \"spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "field_path",
+                    "maxLength": 1024,
+                    "x-displayname": "Field Path",
+                    "x-ves-example": "spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the data is scoped",
+                    "title": "namespace",
+                    "x-displayname": "Namespace"
+                },
+                "request_body": {
+                    "description": " The body of the Create/Replace request for which the data is being requested",
+                    "title": "request_body",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Request Body"
+                }
+            }
+        },
+        "namespaceDynamicDataResp": {
+            "type": "object",
+            "description": "Response body of DynamicData request",
+            "title": "DynamicDataResp",
+            "x-displayname": "Response for DynamicData",
+            "x-ves-proto-message": "ves.io.schema.namespace.DynamicDataResp",
+            "properties": {
+                "rows": {
+                    "type": "array",
+                    "description": " List of rows of data",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/protobufAny"
+                    },
+                    "x-displayname": "Rows"
                 }
             }
         },
@@ -4927,13 +5152,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.namespace.HTTPLoadbalancerResultType",
             "properties": {
                 "api_definition_enabled": {
-                    "description": " API Definition configured ",
+                    "description": " API Definition configured",
                     "title": "API Definition Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "API Definition Enabled or Disabled"
                 },
                 "api_discovery_enabled": {
-                    "description": " API Discovery configured ",
+                    "description": " API Discovery configured",
                     "title": "API Discovery Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "API Discovery Enabled or Disabled"
@@ -4945,7 +5170,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "API Protection Enabled or Disabled"
                 },
                 "api_schema_validation_enabled": {
-                    "description": " API Schema Validation configured ",
+                    "description": " API Schema Validation configured",
                     "title": "API Schema Validation Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "API Schema Validation Enabled or Disabled"
@@ -4970,7 +5195,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Certification Status"
                 },
                 "client_blocking_enabled": {
-                    "description": " Client Blocking configured ",
+                    "description": " Client Blocking configured",
                     "title": "Client Blocking Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Client Blocking Enabled or Disabled"
@@ -4989,25 +5214,25 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Connection Idle Timeout"
                 },
                 "cookie_protection_enabled": {
-                    "description": " Cookie Protection configured ",
+                    "description": " Cookie Protection configured",
                     "title": "Cookie Protection Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Cookie Protection Enabled or Disabled"
                 },
                 "cors_policy_enabled": {
-                    "description": " CORS Policy configured ",
+                    "description": " CORS Policy configured",
                     "title": "CORS Policy Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "CORS Policy Enabled or Disabled"
                 },
                 "csrf_protection_enabled": {
-                    "description": " CSRF Protection configured ",
+                    "description": " CSRF Protection configured",
                     "title": "CSRF Protection Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "CSRF Protection Enabled or Disabled"
                 },
                 "data_guard_enabled": {
-                    "description": " Data Guard configured  ",
+                    "description": " Data Guard configured",
                     "title": "Data Guard Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Data Guard Enabled or Disabled"
@@ -5031,7 +5256,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "L7 DDoS Detection Enabled or Disabled"
                 },
                 "default_loadbalancer_enabled": {
-                    "description": " Default Loadbalancer configured ",
+                    "description": " Default Loadbalancer configured",
                     "title": "Default Loadbalancer Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Loadbalancer Enabled or Disabled"
@@ -5044,7 +5269,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " Domains ",
+                    "description": " Domains",
                     "title": "Domains",
                     "items": {
                         "type": "string"
@@ -5052,7 +5277,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Domains"
                 },
                 "graph_ql_inspection_enabled": {
-                    "description": " GraphQL Inspection configured ",
+                    "description": " GraphQL Inspection configured",
                     "title": "GraphQL Inspection Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "GraphQL Inspection Enabled or Disabled"
@@ -5065,13 +5290,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "http_listen_port_choice": {
                     "type": "string",
-                    "description": " HTTP Listen Port Choice ",
+                    "description": " HTTP Listen Port Choice",
                     "title": "HTTP Listen Port Choice",
                     "x-displayname": "HTTP Listen Port Choice"
                 },
                 "idle_timeout": {
                     "type": "integer",
-                    "description": " Idle Timeout ",
+                    "description": " Idle Timeout",
                     "title": "Idle Timeout",
                     "format": "int64",
                     "x-displayname": "Idle Timeout"
@@ -5084,7 +5309,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "loadbalancer_algorithm": {
                     "type": "string",
-                    "description": " Loadbalancer Algorithm configured ",
+                    "description": " Loadbalancer Algorithm configured",
                     "title": "Loadbalancer Algorithm",
                     "x-displayname": "Loadbalancer Algorithm"
                 },
@@ -5095,7 +5320,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Malicious User Detection Enabled or Disabled"
                 },
                 "malicious_user_mitigation_enabled": {
-                    "description": " Malicious User Mitigation configured ",
+                    "description": " Malicious User Mitigation configured",
                     "title": "Malicious User Mitigation Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Malicious User Mitigation Enabled or Disabled"
@@ -5131,7 +5356,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Namespace Service Policy Enabled or Disabled"
                 },
                 "origin_server_subset_enabled": {
-                    "description": " Origin Server Subset configured ",
+                    "description": " Origin Server Subset configured",
                     "title": "Origin Server Subset Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Origin Server Subset Enabled or Disabled"
@@ -5155,19 +5380,19 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Rate Limiting Enabled or Disabled"
                 },
                 "routes_enabled": {
-                    "description": " Routes configured ",
+                    "description": " Routes configured",
                     "title": "Routes Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Routes Enabled or Disabled"
                 },
                 "service_policy_enabled": {
-                    "description": " Service Policy configured ",
+                    "description": " Service Policy configured",
                     "title": "Service Policy Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Service Policy Enabled or Disabled"
                 },
                 "slow_ddos_mitigation_enabled": {
-                    "description": " Slow DDoS Mitigation configured ",
+                    "description": " Slow DDoS Mitigation configured",
                     "title": "Slow DDoS Mitigation Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Slow DDoS Mitigation Enabled or Disabled"
@@ -5179,20 +5404,20 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "TLS Security Level"
                 },
                 "trusted_client_enabled": {
-                    "description": " Trusted Client configured ",
+                    "description": " Trusted Client configured",
                     "title": "Trusted Client Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Trusted Client Enabled or Disabled"
                 },
                 "trusted_client_ip_headers_enabled": {
-                    "description": " Trusted Client IP Headers configured ",
+                    "description": " Trusted Client IP Headers configured",
                     "title": "Trusted Client IP Headers Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Trusted Client IP Headers Enabled or Disabled"
                 },
                 "vip_type": {
                     "type": "string",
-                    "description": " VIP Type ",
+                    "description": " VIP Type",
                     "title": "VIP Type",
                     "x-displayname": "VIP Type"
                 },
@@ -5209,7 +5434,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "WAF Enforcement Mode"
                 },
                 "waf_exclusion_enabled": {
-                    "description": " WAF Exclusion configured ",
+                    "description": " WAF Exclusion configured",
                     "title": "WAF Exclusion Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "WAF Exclusion Enabled or Disabled"
@@ -5310,7 +5535,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.namespace.NGINXOneServerResultType",
             "properties": {
                 "api_discovery_enabled": {
-                    "description": " API Discovery configured ",
+                    "description": " API Discovery configured",
                     "title": "API Discovery Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "API Discovery Enabled or Disabled"
@@ -5816,7 +6041,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Rate Limiting Enabled or Disabled"
                 },
                 "service_policy": {
-                    "description": " xService Policy configured",
+                    "description": " Service Policy configured",
                     "title": "Service Policy Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Service Policy Enabled or Disabled"
@@ -5898,6 +6123,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Filter for Inventory of UDP Loadbalancers",
             "x-ves-proto-message": "ves.io.schema.namespace.UDPLoadbalancerInventoryFilterType",
             "properties": {
+                "namespace_service_policy": {
+                    "type": "boolean",
+                    "description": " Filter results with UDP loadbalancers with Namespace Service Policy configured",
+                    "title": "Namespace Service Policy",
+                    "format": "boolean",
+                    "x-displayname": "Namespace Service Policy"
+                },
                 "private_advertisement": {
                     "type": "boolean",
                     "description": " Filter results with UDP loadbalancers advertised privately",
@@ -5911,6 +6143,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Public Advertisement",
                     "format": "boolean",
                     "x-displayname": "Public Advertisement"
+                },
+                "service_policy": {
+                    "type": "boolean",
+                    "description": " Filter results with UDP loadbalancers with Service Policy configured",
+                    "title": "Service Policy",
+                    "format": "boolean",
+                    "x-displayname": "Service Policy"
                 }
             }
         },
@@ -5921,6 +6160,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Inventory of UDP Loadbalancers",
             "x-ves-proto-message": "ves.io.schema.namespace.UDPLoadbalancerInventoryType",
             "properties": {
+                "namespace_service_policy": {
+                    "type": "integer",
+                    "description": " Number of UDP loadbalancers with Namespace Service Policy configured",
+                    "title": "Namespace Service Policy",
+                    "format": "int64",
+                    "x-displayname": "Namespace Service Policy"
+                },
                 "private_advertisement": {
                     "type": "integer",
                     "description": " Number of UDP loadbalancers advertised privately",
@@ -5934,6 +6180,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Public Advertisement",
                     "format": "int64",
                     "x-displayname": "Public Advertisement"
+                },
+                "service_policy": {
+                    "type": "integer",
+                    "description": " Number of UDP loadbalancers with Service Policy configured",
+                    "title": "Service Policy",
+                    "format": "int64",
+                    "x-displayname": "Service Policy"
                 },
                 "udplb_results": {
                     "type": "array",
@@ -5965,6 +6218,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "UDP LB Namespace",
                     "x-displayname": "UDP LB Namespace"
                 },
+                "namespace_service_policy": {
+                    "description": " Namespace Service Policy configured",
+                    "title": "Namespace Service Policy Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Namespace Service Policy"
+                },
                 "private_advertisement": {
                     "description": " advertised privately configured",
                     "title": "Private Advertisement Status",
@@ -5976,6 +6235,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Public Advertisement Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Public Advertisement Enabled or Disabled"
+                },
+                "service_policy": {
+                    "description": " Service Policy configured",
+                    "title": "Service Policy Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Service Policy Enabled or Disabled"
                 }
             }
         },
@@ -6068,7 +6333,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "validation_results": {
                     "type": "array",
-                    "description": " This will return a list of validation results based on validators passed as input.   ",
+                    "description": " This will return a list of validation results based on validators passed as input.",
                     "title": "Validation Results",
                     "items": {
                         "$ref": "#/definitions/namespaceValidationResult"
@@ -6092,6 +6357,104 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Severity",
                     "$ref": "#/definitions/namespaceSeverity",
                     "x-displayname": "Severity of message"
+                }
+            }
+        },
+        "namespaceVirtualServerInventoryResultType": {
+            "type": "object",
+            "description": "Virtual Server Inventory Results",
+            "title": "VirtualServerInventoryResultType",
+            "x-displayname": "Virtual Server Inventory Results",
+            "x-ves-proto-message": "ves.io.schema.namespace.VirtualServerInventoryResultType",
+            "properties": {
+                "http_count": {
+                    "type": "integer",
+                    "description": " Number of HTTP or HTTPS virtual servers configured",
+                    "title": "HTTP Count",
+                    "format": "int64",
+                    "x-displayname": "HTTP Count"
+                },
+                "irules_count": {
+                    "type": "integer",
+                    "description": " Number of iRules configured",
+                    "title": "iRules Count",
+                    "format": "int64",
+                    "x-displayname": "iRules Count"
+                },
+                "virtualserver_results": {
+                    "type": "array",
+                    "description": " List of Virtual Servers",
+                    "title": "Virtual Server",
+                    "items": {
+                        "$ref": "#/definitions/namespaceVirtualServerResultType"
+                    },
+                    "x-displayname": "List of Virtual Servers"
+                }
+            }
+        },
+        "namespaceVirtualServerResultType": {
+            "type": "object",
+            "description": "Virtual Server Inventory Results",
+            "title": "VirtualServerResultType",
+            "x-displayname": "Virtual Server Inventory Results",
+            "x-ves-proto-message": "ves.io.schema.namespace.VirtualServerResultType",
+            "properties": {
+                "domains": {
+                    "type": "array",
+                    "description": " Domains associated with the Virtual Server",
+                    "title": "Domains",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Domains"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of Virtual Server",
+                    "title": "name\nx-displayName: \"Virtual Server Name\"\nName of Virtual Server",
+                    "x-displayname": "Virtual Server Name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of Virtual Server",
+                    "title": "namespace\nx-displayName: \"Virtual Server Namespace\"\nNamespace of Virtual Server",
+                    "x-displayname": "Virtual Server Namespace"
+                },
+                "vip_type": {
+                    "type": "string",
+                    "description": " VIP Type",
+                    "title": "VIP Type",
+                    "x-displayname": "VIP Type"
+                }
+            }
+        },
+        "namespaceVirtualServiceInventoryFilterType": {
+            "type": "object",
+            "description": "Virtual Service Inventory Filter",
+            "title": "VirtualServiceInventoryFilterType",
+            "x-displayname": "Filter for Virtual Service Inventory",
+            "x-ves-proto-message": "ves.io.schema.namespace.VirtualServiceInventoryFilterType",
+            "properties": {
+                "http_only": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP only loadbalancers",
+                    "title": "HTTP Only",
+                    "format": "boolean",
+                    "x-displayname": "HTTP Only"
+                },
+                "irules": {
+                    "type": "boolean",
+                    "description": " Filter results with Virtual Services with IRules configured",
+                    "title": "IRules",
+                    "format": "boolean",
+                    "x-displayname": "IRules"
+                },
+                "traffic_policy": {
+                    "type": "boolean",
+                    "description": " Filter results with Virtual Services with Traffic Policy enabled",
+                    "title": "Traffic Policy Enabled",
+                    "format": "boolean",
+                    "x-displayname": "Traffic Policy Enabled"
                 }
             }
         },

@@ -36,7 +36,6 @@ resource "volterra_uztna_application_group" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -87,4 +86,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_application_group.
+-   `id` - This is the id of the configured uztna_application_group.

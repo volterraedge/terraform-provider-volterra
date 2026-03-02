@@ -65,7 +65,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTopologyMetadataDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -73,7 +72,6 @@ func (m *GlobalSpecType) GetTopologyMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTopologyMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTopologyMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTopologyMetadata().GetDRefInfo() FAILED")
@@ -83,7 +81,6 @@ func (m *GlobalSpecType) GetTopologyMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "topology_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -103,25 +100,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["topology_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topology_metadata"))
 		if err := fv(ctx, m.GetTopologyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topology_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topology_spec"))
 		if err := fv(ctx, m.GetTopologySpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

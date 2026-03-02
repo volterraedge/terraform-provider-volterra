@@ -22,7 +22,7 @@ resource "volterra_tcp_loadbalancer" "example" {
 
   // One of the arguments from this list "advertise_custom advertise_on_public advertise_on_public_default_vip do_not_advertise" must be set
 
-  advertise_on_public_default_vip = true
+  do_not_advertise = true
 
   // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
 
@@ -48,7 +48,6 @@ resource "volterra_tcp_loadbalancer" "example" {
 
   no_sni = true
 }
-
 ```
 
 Argument Reference
@@ -567,5 +566,5 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured tcp_loadbalancer.
--	`cname` - This is the hostname of the configured tcp_loadbalancer.
+*   `id` - This is the id of the configured tcp_loadbalancer.
+*   `cname` - This is the hostname of the configured tcp_loadbalancer.

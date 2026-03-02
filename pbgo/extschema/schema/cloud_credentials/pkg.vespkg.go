@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_credentials.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.cloud_credentials.Object"] = ObjectValidator()
 	vr["ves.io.schema.cloud_credentials.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.cloud_credentials.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.cloud_credentials.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.cloud_credentials.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_credentials.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.cloud_credentials.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cloud_credentials.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.cloud_credentials.AWSAssumeRoleType"] = AWSAssumeRoleTypeValidator()
 	vr["ves.io.schema.cloud_credentials.AWSSecretType"] = AWSSecretTypeValidator()
 	vr["ves.io.schema.cloud_credentials.AzurePfxType"] = AzurePfxTypeValidator()
@@ -37,7 +34,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_credentials.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.cloud_credentials.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.cloud_credentials.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -49,11 +45,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.cloud_credentials.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.cloud_credentials.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.cloud_credentials.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_credentials.API.Create"] = []string{
 		"spec.aws_secret_key.secret_key.blindfold_secret_info_internal",
 		"spec.aws_secret_key.secret_key.secret_encoding_type",
@@ -72,9 +66,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gcp_cred_file.credential_file.vault_secret_info",
 		"spec.gcp_cred_file.credential_file.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.cloud_credentials.API.Create"] = "ves.io.schema.cloud_credentials.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_credentials.API.Replace"] = []string{
 		"spec.aws_secret_key.secret_key.blindfold_secret_info_internal",
 		"spec.aws_secret_key.secret_key.secret_encoding_type",
@@ -93,23 +85,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gcp_cred_file.credential_file.vault_secret_info",
 		"spec.gcp_cred_file.credential_file.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.cloud_credentials.API.Replace"] = "ves.io.schema.cloud_credentials.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.cloud_credentials.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -118,9 +105,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.cloud_credentials.Object"] = APISwaggerJSON
@@ -134,22 +119,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.cloud_credentials.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.cloud_credentials.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.cloud_credentials.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCFlowCollection(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.FlowCollection(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCTopFlowAnomalies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &TopFlowAnomaliesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCTopFlowAnomalies(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.TopFlowAnomalies(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCTopTalkers(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &TopTalkersRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["FlowCollection"] = ccl.doRPCFlowCollection
-
 	rpcFns["TopFlowAnomalies"] = ccl.doRPCTopFlowAnomalies
-
 	rpcFns["TopTalkers"] = ccl.doRPCTopTalkers
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -196,7 +190,6 @@ func (c *CustomAPIRestClient) doRPCFlowCollection(ctx context.Context, callOpts 
 	pbRsp := &TopTalkersResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.flow.TopTalkersResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -204,7 +197,6 @@ func (c *CustomAPIRestClient) doRPCFlowCollection(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCTopFlowAnomalies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -291,7 +283,6 @@ func (c *CustomAPIRestClient) doRPCTopFlowAnomalies(ctx context.Context, callOpt
 	pbRsp := &TopFlowAnomaliesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.flow.TopFlowAnomaliesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -299,7 +290,6 @@ func (c *CustomAPIRestClient) doRPCTopFlowAnomalies(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCTopTalkers(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -386,7 +376,6 @@ func (c *CustomAPIRestClient) doRPCTopTalkers(ctx context.Context, callOpts *ser
 	pbRsp := &TopTalkersResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.flow.TopTalkersResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -420,13 +409,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["FlowCollection"] = ccl.doRPCFlowCollection
-
 	rpcFns["TopFlowAnomalies"] = ccl.doRPCTopFlowAnomalies
-
 	rpcFns["TopTalkers"] = ccl.doRPCTopTalkers
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -515,7 +500,6 @@ func (s *customAPISrv) FlowCollection(ctx context.Context, in *TopTalkersRequest
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.flow.TopTalkersResponse", rsp)...)
 
 	return rsp, nil
@@ -564,7 +548,6 @@ func (s *customAPISrv) TopFlowAnomalies(ctx context.Context, in *TopFlowAnomalie
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.flow.TopFlowAnomaliesResponse", rsp)...)
 
 	return rsp, nil
@@ -613,7 +596,6 @@ func (s *customAPISrv) TopTalkers(ctx context.Context, in *TopTalkersRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.flow.TopTalkersResponse", rsp)...)
 
 	return rsp, nil
@@ -1149,7 +1131,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "filter": {
                     "type": "string",
-                    "description": " x-example: \"{SITE IN (\"\\site-1\",\\\"site-2\\\")}\"\n filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in Label can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels. \n\nExample: - \"{SITE=\\\"site-1\\\"}\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "description": " x-example: \"{SITE IN (\"\\site-1\",\\\"site-2\\\")}\"\n filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in Label can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels.\n\nExample: - \"{SITE=\\\"site-1\\\"}\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
                     "title": "Label Filter",
                     "maxLength": 1024,
                     "x-displayname": "Filter",
@@ -1258,7 +1240,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "filter": {
                     "type": "string",
-                    "description": " x-example: \"{SITE IN (\"\\site-1\",\\\"site-2\\\")}\"\n filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in Label can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels. \n\nExample: - \"{SITE=\\\"site-1\\\"}\"-",
+                    "description": " x-example: \"{SITE IN (\"\\site-1\",\\\"site-2\\\")}\"\n filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in Label can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels.\n\nExample: - \"{SITE=\\\"site-1\\\"}\"-",
                     "title": "Label Filter",
                     "x-displayname": "Filter",
                     "x-ves-example": "{SITE=\\\"site-1\\\"}"
@@ -1313,7 +1295,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "data": {
                     "type": "array",
-                    "description": " FlowData wraps the response for the flow request. ",
+                    "description": " FlowData wraps the response for the flow request.",
                     "title": "FlowData",
                     "items": {
                         "$ref": "#/definitions/flowFlowData"

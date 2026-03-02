@@ -27,7 +27,6 @@ resource "volterra_tf_params_action" "example" {
   action          = "plan"
   wait_for_action = true
 }
-
 ```
 
 ### Argument Reference
@@ -51,4 +50,4 @@ Attribute Reference
 
 ---
 
--	`tf_output` - Terraform output string, when action is `apply`
+-   `tf_output` - Terraform output string, when action is `apply`

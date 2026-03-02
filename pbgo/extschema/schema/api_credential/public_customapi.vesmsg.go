@@ -33,7 +33,6 @@ func (m *ApiCertificateType) ToJSON() (string, error) {
 func (m *ApiCertificateType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *ApiCertificateType) String() string {
 	if m == nil {
 		return ""
@@ -93,7 +92,6 @@ type ValidateApiCertificateType struct {
 }
 
 func (v *ValidateApiCertificateType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for password")
@@ -115,23 +113,18 @@ func (v *ValidateApiCertificateType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiCertificateTypeValidator = func() *ValidateApiCertificateType {
 	v := &ValidateApiCertificateType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -256,16 +249,13 @@ func (v *ValidateBulkRevokeRequest) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBulkRevokeRequestValidator = func() *ValidateBulkRevokeRequest {
 	v := &ValidateBulkRevokeRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -273,7 +263,6 @@ var DefaultBulkRevokeRequestValidator = func() *ValidateBulkRevokeRequest {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBulkrevokeChoice := v.BulkrevokeChoiceValidationRuleHandler
 	rulesBulkrevokeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -284,7 +273,6 @@ var DefaultBulkRevokeRequestValidator = func() *ValidateBulkRevokeRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["bulkrevoke_choice"] = vFn
-
 	v.FldValidators["bulkrevoke_choice.name_selector"] = NameSelectorValidator().Validate
 	v.FldValidators["bulkrevoke_choice.expired_selector"] = ExpiredSelectorValidator().Validate
 
@@ -349,9 +337,7 @@ func (v *ValidateBulkRevokeResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["credentials_failed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("credentials_failed"))
 		for idx, item := range m.GetCredentialsFailed() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -359,11 +345,8 @@ func (v *ValidateBulkRevokeResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["credentials_marked_for_deletion"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("credentials_marked_for_deletion"))
 		for idx, item := range m.GetCredentialsMarkedForDeletion() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -371,18 +354,13 @@ func (v *ValidateBulkRevokeResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_message"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_message"))
 		if err := fv(ctx, m.GetErrorMessage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -395,6 +373,310 @@ var DefaultBulkRevokeResponseValidator = func() *ValidateBulkRevokeResponse {
 
 func BulkRevokeResponseValidator() db.Validator {
 	return DefaultBulkRevokeResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CreateKubeConfigRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateKubeConfigRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateKubeConfigRequest) DeepCopy() *CreateKubeConfigRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateKubeConfigRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateKubeConfigRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateKubeConfigRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateKubeConfigRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateKubeConfigRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateKubeConfigRequest) Vk8SNamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_namespace")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateCreateKubeConfigRequest) Vk8SClusterNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_cluster_name")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateCreateKubeConfigRequest) ExpirationDaysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_days")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateKubeConfigRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateKubeConfigRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateKubeConfigRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["expiration_days"]; exists {
+		vOpts := append(opts, db.WithValidateField("expiration_days"))
+		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["vk8s_cluster_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("vk8s_cluster_name"))
+		if err := fv(ctx, m.GetVk8SClusterName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["vk8s_namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("vk8s_namespace"))
+		if err := fv(ctx, m.GetVk8SNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateKubeConfigRequestValidator = func() *ValidateCreateKubeConfigRequest {
+	v := &ValidateCreateKubeConfigRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVk8SNamespace := v.Vk8SNamespaceValidationRuleHandler
+	rulesVk8SNamespace := map[string]string{
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhVk8SNamespace(rulesVk8SNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigRequest.vk8s_namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vk8s_namespace"] = vFn
+
+	vrhVk8SClusterName := v.Vk8SClusterNameValidationRuleHandler
+	rulesVk8SClusterName := map[string]string{
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhVk8SClusterName(rulesVk8SClusterName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigRequest.vk8s_cluster_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vk8s_cluster_name"] = vFn
+
+	vrhExpirationDays := v.ExpirationDaysValidationRuleHandler
+	rulesExpirationDays := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "90",
+	}
+	vFn, err = vrhExpirationDays(rulesExpirationDays)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigRequest.expiration_days: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expiration_days"] = vFn
+
+	return v
+}()
+
+func CreateKubeConfigRequestValidator() db.Validator {
+	return DefaultCreateKubeConfigRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CreateKubeConfigServiceCredentialsRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateKubeConfigServiceCredentialsRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateKubeConfigServiceCredentialsRequest) DeepCopy() *CreateKubeConfigServiceCredentialsRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateKubeConfigServiceCredentialsRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateKubeConfigServiceCredentialsRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateKubeConfigServiceCredentialsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateKubeConfigServiceCredentialsRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateKubeConfigServiceCredentialsRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateKubeConfigServiceCredentialsRequest) ExpirationDaysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_days")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateKubeConfigServiceCredentialsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateKubeConfigServiceCredentialsRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateKubeConfigServiceCredentialsRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["expiration_days"]; exists {
+		vOpts := append(opts, db.WithValidateField("expiration_days"))
+		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace_roles"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_roles"))
+		for idx, item := range m.GetNamespaceRoles() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["user_group_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("user_group_names"))
+		for idx, item := range m.GetUserGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["vk8s_kubeconfig"]; exists {
+		vOpts := append(opts, db.WithValidateField("vk8s_kubeconfig"))
+		if err := fv(ctx, m.GetVk8SKubeconfig(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateKubeConfigServiceCredentialsRequestValidator = func() *ValidateCreateKubeConfigServiceCredentialsRequest {
+	v := &ValidateCreateKubeConfigServiceCredentialsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExpirationDays := v.ExpirationDaysValidationRuleHandler
+	rulesExpirationDays := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "90",
+	}
+	vFn, err = vrhExpirationDays(rulesExpirationDays)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigServiceCredentialsRequest.expiration_days: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expiration_days"] = vFn
+	v.FldValidators["vk8s_kubeconfig"] = Vk8SKubeconfigTypeValidator().Validate
+	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
+
+	return v
+}()
+
+func CreateKubeConfigServiceCredentialsRequestValidator() db.Validator {
+	return DefaultCreateKubeConfigServiceCredentialsRequestValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -413,7 +695,6 @@ func (m *CreateRequest) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateRequest.spec")
 	}
@@ -465,50 +746,36 @@ func (v *ValidateCreateRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["expiration_days"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_days"))
 		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateRequestValidator = func() *ValidateCreateRequest {
 	v := &ValidateCreateRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["spec"] = CustomCreateSpecTypeValidator().Validate
 
 	return v
@@ -527,7 +794,6 @@ func (m *CreateResponse) ToJSON() (string, error) {
 func (m *CreateResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *CreateResponse) String() string {
 	return "REDACTED"
 }
@@ -598,43 +864,30 @@ func (v *ValidateCreateResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active"))
 		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -658,7 +911,6 @@ func (m *CreateServiceCredentialsRequest) ToJSON() (string, error) {
 func (m *CreateServiceCredentialsRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *CreateServiceCredentialsRequest) String() string {
 	if m == nil {
 		return ""
@@ -682,7 +934,6 @@ func (m *CreateServiceCredentialsRequest) Redact(ctx context.Context) error {
 	}
 
 	m.Password = ""
-
 	if err := m.GetApiCertificate().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateServiceCredentialsRequest.api_certificate")
 	}
@@ -722,7 +973,6 @@ type ValidateCreateServiceCredentialsRequest struct {
 }
 
 func (v *ValidateCreateServiceCredentialsRequest) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(APICredentialType)
@@ -736,9 +986,7 @@ func (v *ValidateCreateServiceCredentialsRequest) TypeValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateServiceCredentialsRequest) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for password")
@@ -760,36 +1008,25 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["expiration_days"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_days"))
 		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_roles"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
 		for idx, item := range m.GetNamespaceRoles() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -797,16 +1034,12 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServiceCredentialChoice().(type) {
@@ -854,20 +1087,14 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_group_names"))
 		for idx, item := range m.GetUserGroupNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -875,34 +1102,25 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_k8s_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_k8s_name"))
 		if err := fv(ctx, m.GetVirtualK8SName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_k8s_namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_k8s_namespace"))
 		if err := fv(ctx, m.GetVirtualK8SNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateServiceCredentialsRequestValidator = func() *ValidateCreateServiceCredentialsRequest {
 	v := &ValidateCreateServiceCredentialsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -932,11 +1150,9 @@ var DefaultCreateServiceCredentialsRequestValidator = func() *ValidateCreateServ
 		panic(errMsg)
 	}
 	v.FldValidators["password"] = vFn
-
 	v.FldValidators["service_credential_choice.api_certificate"] = ApiCertificateTypeValidator().Validate
 	v.FldValidators["service_credential_choice.vk8s_kubeconfig"] = Vk8SKubeconfigTypeValidator().Validate
 	v.FldValidators["service_credential_choice.site_kubeconfig"] = SiteKubeconfigTypeValidator().Validate
-
 	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
 	return v
@@ -948,6 +1164,146 @@ func CreateServiceCredentialsRequestValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CreateSiteGlobalKubeConfigRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateSiteGlobalKubeConfigRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateSiteGlobalKubeConfigRequest) DeepCopy() *CreateSiteGlobalKubeConfigRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateSiteGlobalKubeConfigRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateSiteGlobalKubeConfigRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateSiteGlobalKubeConfigRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateSiteGlobalKubeConfigRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateSiteGlobalKubeConfigRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateSiteGlobalKubeConfigRequest) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSiteGlobalKubeConfigRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateSiteGlobalKubeConfigRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateSiteGlobalKubeConfigRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["expiration_days"]; exists {
+		vOpts := append(opts, db.WithValidateField("expiration_days"))
+		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace_roles"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_roles"))
+		for idx, item := range m.GetNamespaceRoles() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["site"]; exists {
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["user_group_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("user_group_names"))
+		for idx, item := range m.GetUserGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateSiteGlobalKubeConfigRequestValidator = func() *ValidateCreateSiteGlobalKubeConfigRequest {
+	v := &ValidateCreateSiteGlobalKubeConfigRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSiteGlobalKubeConfigRequest.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
+
+	return v
+}()
+
+func CreateSiteGlobalKubeConfigRequestValidator() db.Validator {
+	return DefaultCreateSiteGlobalKubeConfigRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CustomCreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -955,7 +1311,6 @@ func (m *CustomCreateSpecType) ToJSON() (string, error) {
 func (m *CustomCreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *CustomCreateSpecType) String() string {
 	if m == nil {
 		return ""
@@ -1015,7 +1370,6 @@ type ValidateCustomCreateSpecType struct {
 }
 
 func (v *ValidateCustomCreateSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(APICredentialType)
@@ -1029,9 +1383,7 @@ func (v *ValidateCustomCreateSpecType) TypeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCustomCreateSpecType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for password")
@@ -1053,50 +1405,36 @@ func (v *ValidateCustomCreateSpecType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_k8s_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_k8s_name"))
 		if err := fv(ctx, m.GetVirtualK8SName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_k8s_namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_k8s_namespace"))
 		if err := fv(ctx, m.GetVirtualK8SNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomCreateSpecTypeValidator = func() *ValidateCustomCreateSpecType {
 	v := &ValidateCustomCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1176,7 +1514,6 @@ type ValidateDeleteRequest struct {
 }
 
 func (v *ValidateDeleteRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1184,9 +1521,7 @@ func (v *ValidateDeleteRequest) NamespaceValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeleteRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -1208,32 +1543,24 @@ func (v *ValidateDeleteRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDeleteRequestValidator = func() *ValidateDeleteRequest {
 	v := &ValidateDeleteRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1367,16 +1694,13 @@ func (v *ValidateExpiredSelector) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultExpiredSelectorValidator = func() *ValidateExpiredSelector {
 	v := &ValidateExpiredSelector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1384,7 +1708,6 @@ var DefaultExpiredSelectorValidator = func() *ValidateExpiredSelector {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhExpiredCredentialChoice := v.ExpiredCredentialChoiceValidationRuleHandler
 	rulesExpiredCredentialChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1445,7 +1768,6 @@ type ValidateGetRequest struct {
 }
 
 func (v *ValidateGetRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1453,9 +1775,7 @@ func (v *ValidateGetRequest) NamespaceValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -1477,32 +1797,24 @@ func (v *ValidateGetRequest) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetRequestValidator = func() *ValidateGetRequest {
 	v := &ValidateGetRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1583,7 +1895,6 @@ func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return nil, nil
-
 }
 
 type ValidateGetResponse struct {
@@ -1603,23 +1914,18 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["object"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object"))
 		if err := fv(ctx, m.GetObject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetResponseValidator = func() *ValidateGetResponse {
 	v := &ValidateGetResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["object"] = ObjectValidator().Validate
 
 	return v
@@ -1683,90 +1989,61 @@ func (v *ValidateGetServiceCredentialsResponse) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active"))
 		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["create_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("create_timestamp"))
 		if err := fv(ctx, m.GetCreateTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiry_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiry_timestamp"))
 		if err := fv(ctx, m.GetExpiryTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_access"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_access"))
 		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_email"))
 		if err := fv(ctx, m.GetUserEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_group_names"))
 		for idx, item := range m.GetUserGroupNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1774,16 +2051,13 @@ func (v *ValidateGetServiceCredentialsResponse) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetServiceCredentialsResponseValidator = func() *ValidateGetServiceCredentialsResponse {
 	v := &ValidateGetServiceCredentialsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
 
 	return v
@@ -1847,16 +2121,12 @@ func (v *ValidateListRequest) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1925,9 +2195,7 @@ func (v *ValidateListResponse) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1935,9 +2203,7 @@ func (v *ValidateListResponse) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2006,79 +2272,54 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active"))
 		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["create_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("create_timestamp"))
 		if err := fv(ctx, m.GetCreateTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiry_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiry_timestamp"))
 		if err := fv(ctx, m.GetExpiryTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_email"))
 		if err := fv(ctx, m.GetUserEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2147,9 +2388,7 @@ func (v *ValidateListServiceCredentialsResponse) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2157,16 +2396,13 @@ func (v *ValidateListServiceCredentialsResponse) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListServiceCredentialsResponseValidator = func() *ValidateListServiceCredentialsResponse {
 	v := &ValidateListServiceCredentialsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = ListServiceCredentialsResponseItemValidator().Validate
 
 	return v
@@ -2230,90 +2466,61 @@ func (v *ValidateListServiceCredentialsResponseItem) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active"))
 		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["create_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("create_timestamp"))
 		if err := fv(ctx, m.GetCreateTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiry_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiry_timestamp"))
 		if err := fv(ctx, m.GetExpiryTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_access"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_access"))
 		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_email"))
 		if err := fv(ctx, m.GetUserEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_group_names"))
 		for idx, item := range m.GetUserGroupNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2321,16 +2528,13 @@ func (v *ValidateListServiceCredentialsResponseItem) Validate(ctx context.Contex
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListServiceCredentialsResponseItemValidator = func() *ValidateListServiceCredentialsResponseItem {
 	v := &ValidateListServiceCredentialsResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
 
 	return v
@@ -2382,7 +2586,6 @@ type ValidateNameSelector struct {
 }
 
 func (v *ValidateNameSelector) NamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2436,22 +2639,18 @@ func (v *ValidateNameSelector) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["names"]; exists {
 		vOpts := append(opts, db.WithValidateField("names"))
 		if err := fv(ctx, m.GetNames(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNameSelectorValidator = func() *ValidateNameSelector {
 	v := &ValidateNameSelector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2523,7 +2722,6 @@ type ValidateRecreateScimTokenRequest struct {
 }
 
 func (v *ValidateRecreateScimTokenRequest) ExpirationDaysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_days")
@@ -2545,32 +2743,24 @@ func (v *ValidateRecreateScimTokenRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["expiration_days"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_days"))
 		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRecreateScimTokenRequestValidator = func() *ValidateRecreateScimTokenRequest {
 	v := &ValidateRecreateScimTokenRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2640,7 +2830,6 @@ type ValidateRenewRequest struct {
 }
 
 func (v *ValidateRenewRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -2648,9 +2837,7 @@ func (v *ValidateRenewRequest) NamespaceValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRenewRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -2672,41 +2859,30 @@ func (v *ValidateRenewRequest) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["expiration_days"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_days"))
 		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRenewRequestValidator = func() *ValidateRenewRequest {
 	v := &ValidateRenewRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2786,7 +2962,6 @@ type ValidateReplaceServiceCredentialsRequest struct {
 }
 
 func (v *ValidateReplaceServiceCredentialsRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -2808,36 +2983,25 @@ func (v *ValidateReplaceServiceCredentialsRequest) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_access"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_access"))
 		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_group_names"))
 		for idx, item := range m.GetUserGroupNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2845,16 +3009,13 @@ func (v *ValidateReplaceServiceCredentialsRequest) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceServiceCredentialsRequestValidator = func() *ValidateReplaceServiceCredentialsRequest {
 	v := &ValidateReplaceServiceCredentialsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2873,7 +3034,6 @@ var DefaultReplaceServiceCredentialsRequestValidator = func() *ValidateReplaceSe
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
-
 	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
 
 	return v
@@ -2937,34 +3097,24 @@ func (v *ValidateReplaceServiceCredentialsResponse) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active"))
 		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3021,7 +3171,6 @@ type ValidateScimTokenRequest struct {
 }
 
 func (v *ValidateScimTokenRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -3043,23 +3192,18 @@ func (v *ValidateScimTokenRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultScimTokenRequestValidator = func() *ValidateScimTokenRequest {
 	v := &ValidateScimTokenRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3128,7 +3272,6 @@ type ValidateSiteKubeconfigType struct {
 }
 
 func (v *ValidateSiteKubeconfigType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for site")
@@ -3150,23 +3293,18 @@ func (v *ValidateSiteKubeconfigType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteKubeconfigTypeValidator = func() *ValidateSiteKubeconfigType {
 	v := &ValidateSiteKubeconfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3249,16 +3387,12 @@ func (v *ValidateStatusResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3315,7 +3449,6 @@ type ValidateVk8SKubeconfigType struct {
 }
 
 func (v *ValidateVk8SKubeconfigType) Vk8SNamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_namespace")
@@ -3323,9 +3456,7 @@ func (v *ValidateVk8SKubeconfigType) Vk8SNamespaceValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVk8SKubeconfigType) Vk8SClusterNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_cluster_name")
@@ -3347,32 +3478,24 @@ func (v *ValidateVk8SKubeconfigType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vk8s_cluster_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vk8s_cluster_name"))
 		if err := fv(ctx, m.GetVk8SClusterName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vk8s_namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vk8s_namespace"))
 		if err := fv(ctx, m.GetVk8SNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVk8SKubeconfigTypeValidator = func() *ValidateVk8SKubeconfigType {
 	v := &ValidateVk8SKubeconfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3408,6 +3531,42 @@ var DefaultVk8SKubeconfigTypeValidator = func() *ValidateVk8SKubeconfigType {
 
 func Vk8SKubeconfigTypeValidator() db.Validator {
 	return DefaultVk8SKubeconfigTypeValidator
+}
+
+func (m *CreateKubeConfigRequest) fromObject(e db.Entry, withDeepCopy bool) {
+	f := e.(*DBObject)
+	if withDeepCopy {
+		f = e.DeepCopy().(*DBObject)
+	}
+	_ = f
+
+}
+
+func (m *CreateKubeConfigRequest) FromObject(e db.Entry) {
+	m.fromObject(e, true)
+}
+
+func (m *CreateKubeConfigRequest) FromObjectWithoutDeepCopy(e db.Entry) {
+	m.fromObject(e, false)
+}
+
+func (m *CreateKubeConfigRequest) toObject(e db.Entry, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+	f := e.(*DBObject)
+	_ = f
+
+}
+
+func (m *CreateKubeConfigRequest) ToObject(e db.Entry) {
+	m.toObject(e, true)
+}
+
+func (m *CreateKubeConfigRequest) ToObjectWithoutDeepCopy(e db.Entry) {
+	m.toObject(e, false)
 }
 
 func (m *CreateRequest) fromObject(e db.Entry, withDeepCopy bool) {

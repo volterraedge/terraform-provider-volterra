@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.cloud_connect.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2278,6 +2255,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "2"
                     }
+                },
+                "tgw_status": {
+                    "description": " AWS Transit Gateway Status Type",
+                    "title": "AWS Transit Gateway Status Type",
+                    "$ref": "#/definitions/cloud_connectAWSTGWStatusType",
+                    "x-displayname": "AWS TGW Status"
+                },
+                "transit_gateway_resource_share_status": {
+                    "description": " AWS Transit Gateway Resource Share Status",
+                    "title": "AWS Transit Gateway Resource Share Status Type",
+                    "$ref": "#/definitions/cloud_connectAWSTGWResourceShareType",
+                    "x-displayname": "AWS Transit Gateway Resource Share Status"
                 }
             }
         },
@@ -2407,7 +2396,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "vpc_attachments": {
-                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the Cloud Transit Gateway \nx-required",
+                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the Cloud Transit Gateway\nx-required",
                     "title": "Spoke VPCs",
                     "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
                 }
@@ -2539,6 +2528,11 @@ var APISwaggerJSON string = `{
                     "title": "Connect Peer Name",
                     "x-displayname": "Connect Peer Name"
                 },
+                "peer_gre_address": {
+                    "type": "string",
+                    "title": "Peer GRE Address",
+                    "x-displayname": "Peer GRE Address"
+                },
                 "tags": {
                     "type": "object",
                     "description": " Connect Peer Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
@@ -2549,6 +2543,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.map.max_pairs": "20",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
+                },
+                "transit_gateway_gre_address": {
+                    "type": "string",
+                    "title": "Transit Gateway GRE Address",
+                    "x-displayname": "Transit Gateway GRE Address"
                 }
             }
         },
@@ -2574,6 +2573,27 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.pattern": "^(rtb-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
+                }
+            }
+        },
+        "cloud_connectAWSProviderType": {
+            "type": "object",
+            "description": "Cloud Connect with AWS",
+            "title": "Cloud Connect with AWS",
+            "x-displayname": "AWS",
+            "x-ves-oneof-field-site_type": "[\"aws_tgw_site\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSProviderType",
+            "properties": {
+                "aws_tgw_site": {
+                    "description": "Exclusive with []\n",
+                    "title": "AWS TGW Site",
+                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
+                },
+                "securemesh_site_v2": {
+                    "title": "AWS SecureMesh Site Type",
+                    "$ref": "#/definitions/cloud_connectAWSSecureMeshSiteType",
+                    "x-displayname": "Secure Mesh Site v2"
                 }
             }
         },
@@ -2685,6 +2705,96 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectAWSSecureMeshSiteStatusType": {
+            "type": "object",
+            "title": "Cloud Connect Attached to AWS SecureMesh Site v2",
+            "x-displayname": "Cloud Connect to AWS Secure Mesh Site v2",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSSecureMeshSiteStatusType",
+            "properties": {
+                "attachment_status": {
+                    "type": "array",
+                    "title": "VPC Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
+                    },
+                    "x-displayname": "VPC Attachment Status"
+                },
+                "connect_attachment_status": {
+                    "type": "array",
+                    "title": "Connect Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSConnectAttachmentStatusType"
+                    },
+                    "x-displayname": "Connect Attachment Status"
+                },
+                "tgw_route_table_status": {
+                    "type": "array",
+                    "title": "Transit Gateway Route Table Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSTGWRouteTableStatusType"
+                    },
+                    "x-displayname": "Transit Gateway Route Table Status"
+                },
+                "tgw_status": {
+                    "title": "Transit Gateway Status Type",
+                    "$ref": "#/definitions/cloud_connectAWSTGWStatusType",
+                    "x-displayname": "Transit Gateway Status"
+                },
+                "transit_gateway_resource_share_status": {
+                    "title": "Transit Gateway Resource Share Status Type",
+                    "$ref": "#/definitions/cloud_connectAWSTGWResourceShareType",
+                    "x-displayname": "Transit Gateway Resource Share Status"
+                }
+            }
+        },
+        "cloud_connectAWSSecureMeshSiteType": {
+            "type": "object",
+            "description": "Cloud Connect AWS Secure Mesh Site Type",
+            "title": "Cloud Connect AWS Secure Mesh Site Type",
+            "x-displayname": "AWS Secure Mesh Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSSecureMeshSiteType",
+            "properties": {
+                "cloud_user_account_ref": {
+                    "description": " Reference to cloud user account to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Cloud User Account",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Cloud User Account Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "peers": {
+                    "type": "array",
+                    "description": " Peers",
+                    "title": "Peers",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectPeerType"
+                    },
+                    "x-displayname": "Peers"
+                },
+                "site": {
+                    "description": " Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Site",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the AWS SecureMesh Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "cloud_connectAWSTGWResourceReference": {
             "type": "object",
             "description": "AWS Transit Gateway Route Table Associations",
@@ -2721,6 +2831,73 @@ var APISwaggerJSON string = `{
                     "title": "Resource State",
                     "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
                     "x-displayname": "Resource State"
+                }
+            }
+        },
+        "cloud_connectAWSTGWResourceShareType": {
+            "type": "object",
+            "description": "AWS Resource Share Status Type",
+            "title": "AWS Resource Share Status Type",
+            "x-displayname": "AWS Resource Share Status",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWResourceShareType",
+            "properties": {
+                "allow_external_principles": {
+                    "type": "boolean",
+                    "description": " Manage Sharing Outside AWS Organization",
+                    "title": "Allow External Principles",
+                    "format": "boolean",
+                    "x-displayname": "Allow External Principles"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Attachment Deployment Status",
+                    "title": "Attachment Deployment Status",
+                    "x-displayname": "Attachment Deployment Status"
+                },
+                "owner_account_id": {
+                    "type": "string",
+                    "description": " Resource Share Owner Account ID",
+                    "title": "Resource Share Owner Account ID",
+                    "x-displayname": "Resource Share Owner Account ID"
+                },
+                "receiver_account_id": {
+                    "type": "array",
+                    "description": " Resource Share Acceptor Account ID",
+                    "title": "Resource Share Acceptor Account ID",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Resource Share Acceptor Account ID"
+                },
+                "resource_share_arn": {
+                    "type": "string",
+                    "description": " Resource Share ARN",
+                    "title": "Resource Share ARN",
+                    "x-displayname": "Resource Share ARN"
+                },
+                "resource_share_name": {
+                    "type": "string",
+                    "description": " Resource Share Name",
+                    "title": "Resource Share Name",
+                    "x-displayname": "Resource Share Name"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Resource Share State",
+                    "title": "Resource Share State",
+                    "x-displayname": "Resource Share State"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Resource Share Tags",
+                    "title": "Resource Share Tags",
+                    "x-displayname": "Resource Share Tags"
+                },
+                "transit_gateway_id": {
+                    "type": "string",
+                    "description": " Transit Gateway ID",
+                    "title": "Transit Gateway ID",
+                    "x-displayname": "Transit Gateway ID"
                 }
             }
         },
@@ -2837,6 +3014,71 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "cloud_connectAWSTGWStatusType": {
+            "type": "object",
+            "description": "AWS Transit Gateway Status Type",
+            "title": "AWS Transit Gateway Status Type",
+            "x-displayname": "AWS Transit Gateway Status",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWStatusType",
+            "properties": {
+                "amazon_asn": {
+                    "type": "string",
+                    "description": " AWS Side ASN of TGW",
+                    "title": "AWS Side ASN of TGW",
+                    "format": "int64",
+                    "x-displayname": "AWS Side ASN"
+                },
+                "arn": {
+                    "type": "string",
+                    "description": " TGW ARN",
+                    "title": "TGW ARN",
+                    "x-displayname": "ARN"
+                },
+                "cidrs": {
+                    "type": "array",
+                    "description": " x-displayName \"CIDRs\"\n TGW CIDRs",
+                    "title": "TGW CIDRs",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "string",
+                    "description": " TGW ID",
+                    "title": "TGW ID",
+                    "x-displayname": "ID"
+                },
+                "owner_account": {
+                    "type": "string",
+                    "description": " TGW Owner Account",
+                    "title": "TGW Owner",
+                    "x-displayname": "Owner Account"
+                },
+                "region": {
+                    "type": "string",
+                    "description": " TGW Region",
+                    "title": "TGW Region",
+                    "x-displayname": "Region"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " TGW State",
+                    "title": "TGW State",
+                    "x-displayname": "State"
+                },
+                "status_msg": {
+                    "type": "string",
+                    "description": " x-displayName \"Deployment Status\"\n TGW Deployment Status",
+                    "title": "TGW Deployment Status"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " TGW Tags",
+                    "title": "TGW Tags",
+                    "x-displayname": "Tags"
                 }
             }
         },
@@ -3311,6 +3553,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud_connect_deployment": "[\"cloud_connect_aws_site\",\"cloud_connect_azure_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CloudConnectStatusType",
             "properties": {
+                "cloud_connect_aws_securemesh_site": {
+                    "description": " Cloud Connect status attached with AWS SecureMesh Site",
+                    "title": "Cloud Connect Attached to AWS SecureMesh Site v2",
+                    "$ref": "#/definitions/cloud_connectAWSSecureMeshSiteStatusType",
+                    "x-displayname": "Cloud Connect to AWS Secure Mesh Site v2"
+                },
                 "cloud_connect_aws_site": {
                     "description": "Exclusive with [cloud_connect_azure_site]\n Cloud Connect to AWS Sites",
                     "title": "Cloud Connect Attached to AWS TGW Site",
@@ -3376,10 +3624,66 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectCreateAWSProviderType": {
+            "type": "object",
+            "description": "Cloud Connect with AWS",
+            "title": "Cloud Connect with AWS",
+            "x-displayname": "AWS",
+            "x-ves-oneof-field-site_type": "[\"aws_tgw_site\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateAWSProviderType",
+            "properties": {
+                "aws_tgw_site": {
+                    "description": "Exclusive with []\n",
+                    "$ref": "#/definitions/cloud_connectCreateAWSTGWSiteType"
+                },
+                "securemesh_site_v2": {
+                    "$ref": "#/definitions/cloud_connectCreateAWSSecureMeshSiteType"
+                }
+            }
+        },
+        "cloud_connectCreateAWSSecureMeshSiteType": {
+            "type": "object",
+            "description": "Cloud Connect AWS Secure Mesh Site Type",
+            "title": "Cloud Connect AWS Secure Mesh Site Type",
+            "x-displayname": "AWS Secure Mesh Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateAWSSecureMeshSiteType",
+            "properties": {
+                "cloud_user_account_ref": {
+                    "description": " Reference to cloud user account to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Cloud User Account",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Cloud User Account Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site": {
+                    "description": " Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site Reference",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the AWS SecureMesh Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "cloud_connectCreateAWSTGWSiteType": {
             "type": "object",
             "description": "Cloud Connect AWS TGW Site Type",
-            "title": "Replace Cloud Connect AWS TGW Site Type",
+            "title": "Create Cloud Connect AWS TGW Site Type",
             "x-displayname": "AWS TGW Site Type",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateAWSTGWSiteType",
             "properties": {
@@ -3762,6 +4066,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectReplaceAWSProviderType": {
+            "type": "object",
+            "description": "Cloud Connect with AWS",
+            "title": "Cloud Connect with AWS",
+            "x-displayname": "AWS",
+            "x-ves-oneof-field-site_type": "[\"aws_tgw_site\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceAWSProviderType",
+            "properties": {
+                "aws_tgw_site": {
+                    "description": "Exclusive with []\n",
+                    "$ref": "#/definitions/cloud_connectReplaceAWSTGWSiteType"
+                },
+                "securemesh_site_v2": {
+                    "$ref": "#/definitions/cloud_connectReplaceAWSSecureMeshSiteType"
+                }
+            }
+        },
         "cloud_connectReplaceAWSREType": {
             "type": "object",
             "description": "x-displayName: \"AWS RE Type\"\nCloud Connect AWS RE Type",
@@ -3771,6 +4092,24 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"VPC Attachments\"",
                     "title": "VPC Attachments",
                     "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
+                }
+            }
+        },
+        "cloud_connectReplaceAWSSecureMeshSiteType": {
+            "type": "object",
+            "description": "Cloud Connect AWS Secure Mesh Site Type",
+            "title": "Cloud Connect AWS Secure Mesh Site Type",
+            "x-displayname": "AWS Secure Mesh Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceAWSSecureMeshSiteType",
+            "properties": {
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the AWS SecureMesh Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -4034,10 +4373,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -4649,16 +4988,16 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Create Cloud Connect",
             "x-displayname": "Create Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_provider\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateSpecType",
             "properties": {
-                "aws_tgw_site": {
+                "aws_provider": {
                     "description": "Exclusive with [azure_vnet_site]\n",
-                    "$ref": "#/definitions/cloud_connectCreateAWSTGWSiteType",
+                    "$ref": "#/definitions/cloud_connectCreateAWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure_vnet_site": {
-                    "description": "Exclusive with [aws_tgw_site]\n",
+                    "description": "Exclusive with [aws_provider]\n",
                     "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
                     "x-displayname": "Azure"
                 },
@@ -4678,16 +5017,16 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Get Cloud Connect",
             "x-displayname": "Get Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_provider\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GetSpecType",
             "properties": {
-                "aws_tgw_site": {
+                "aws_provider": {
                     "description": "Exclusive with [azure_vnet_site]\n",
-                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "$ref": "#/definitions/cloud_connectAWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure_vnet_site": {
-                    "description": "Exclusive with [aws_tgw_site]\n",
+                    "description": "Exclusive with [aws_provider]\n",
                     "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
                     "x-displayname": "Azure"
                 },
@@ -4712,16 +5051,16 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Replace Cloud Connect",
             "x-displayname": "Replace Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_provider\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceSpecType",
             "properties": {
-                "aws_tgw_site": {
+                "aws_provider": {
                     "description": "Exclusive with [azure_vnet_site]\n",
-                    "$ref": "#/definitions/cloud_connectReplaceAWSTGWSiteType",
+                    "$ref": "#/definitions/cloud_connectReplaceAWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure_vnet_site": {
-                    "description": "Exclusive with [aws_tgw_site]\n",
+                    "description": "Exclusive with [aws_provider]\n",
                     "$ref": "#/definitions/cloud_connectReplaceAzureVNETSiteType",
                     "x-displayname": "Azure"
                 }

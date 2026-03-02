@@ -26,6 +26,134 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AIEnhancementsConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AIEnhancementsConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AIEnhancementsConfig) DeepCopy() *AIEnhancementsConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AIEnhancementsConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AIEnhancementsConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AIEnhancementsConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AIEnhancementsConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAIEnhancementsConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAIEnhancementsConfig) RiskScoreActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for risk_score_action_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAIEnhancementsConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AIEnhancementsConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AIEnhancementsConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["risk_score_action_choice"]; exists {
+		val := m.GetRiskScoreActionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("risk_score_action_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRiskScoreActionChoice().(type) {
+	case *AIEnhancementsConfig_MitigateHighRiskAction:
+		if fv, exists := v.FldValidators["risk_score_action_choice.mitigate_high_risk_action"]; exists {
+			val := m.GetRiskScoreActionChoice().(*AIEnhancementsConfig_MitigateHighRiskAction).MitigateHighRiskAction
+			vOpts := append(opts,
+				db.WithValidateField("risk_score_action_choice"),
+				db.WithValidateField("mitigate_high_risk_action"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AIEnhancementsConfig_MitigateHighMediumRiskAction:
+		if fv, exists := v.FldValidators["risk_score_action_choice.mitigate_high_medium_risk_action"]; exists {
+			val := m.GetRiskScoreActionChoice().(*AIEnhancementsConfig_MitigateHighMediumRiskAction).MitigateHighMediumRiskAction
+			vOpts := append(opts,
+				db.WithValidateField("risk_score_action_choice"),
+				db.WithValidateField("mitigate_high_medium_risk_action"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAIEnhancementsConfigValidator = func() *ValidateAIEnhancementsConfig {
+	v := &ValidateAIEnhancementsConfig{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhRiskScoreActionChoice := v.RiskScoreActionChoiceValidationRuleHandler
+	rulesRiskScoreActionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRiskScoreActionChoice(rulesRiskScoreActionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AIEnhancementsConfig.risk_score_action_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["risk_score_action_choice"] = vFn
+
+	return v
+}()
+
+func AIEnhancementsConfigValidator() db.Validator {
+	return DefaultAIEnhancementsConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AiRiskBasedBlocking) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -66,7 +194,6 @@ type ValidateAiRiskBasedBlocking struct {
 }
 
 func (v *ValidateAiRiskBasedBlocking) HighRiskActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(RiskBasedBlockingAction)
@@ -80,9 +207,7 @@ func (v *ValidateAiRiskBasedBlocking) HighRiskActionValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAiRiskBasedBlocking) MediumRiskActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(RiskBasedBlockingAction)
@@ -96,9 +221,7 @@ func (v *ValidateAiRiskBasedBlocking) MediumRiskActionValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAiRiskBasedBlocking) LowRiskActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(RiskBasedBlockingAction)
@@ -126,41 +249,30 @@ func (v *ValidateAiRiskBasedBlocking) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["high_risk_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("high_risk_action"))
 		if err := fv(ctx, m.GetHighRiskAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["low_risk_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("low_risk_action"))
 		if err := fv(ctx, m.GetLowRiskAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["medium_risk_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("medium_risk_action"))
 		if err := fv(ctx, m.GetMediumRiskAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAiRiskBasedBlockingValidator = func() *ValidateAiRiskBasedBlocking {
 	v := &ValidateAiRiskBasedBlocking{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -251,7 +363,6 @@ type ValidateAllowedResponseCodes struct {
 }
 
 func (v *ValidateAllowedResponseCodes) ResponseCodeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepUint32ItemRules(rules)
 	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
 	if err != nil {
@@ -305,22 +416,18 @@ func (v *ValidateAllowedResponseCodes) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["response_code"]; exists {
 		vOpts := append(opts, db.WithValidateField("response_code"))
 		if err := fv(ctx, m.GetResponseCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAllowedResponseCodesValidator = func() *ValidateAllowedResponseCodes {
 	v := &ValidateAllowedResponseCodes{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -459,16 +566,13 @@ func (v *ValidateAnonymizationConfiguration) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAnonymizationConfigurationValidator = func() *ValidateAnonymizationConfiguration {
 	v := &ValidateAnonymizationConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -476,7 +580,6 @@ var DefaultAnonymizationConfigurationValidator = func() *ValidateAnonymizationCo
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAnonymizationChoice := v.AnonymizationChoiceValidationRuleHandler
 	rulesAnonymizationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -487,7 +590,6 @@ var DefaultAnonymizationConfigurationValidator = func() *ValidateAnonymizationCo
 		panic(errMsg)
 	}
 	v.FldValidators["anonymization_choice"] = vFn
-
 	v.FldValidators["anonymization_choice.http_header"] = AnonymizeHttpHeaderValidator().Validate
 	v.FldValidators["anonymization_choice.query_parameter"] = AnonymizeHttpQueryParameterValidator().Validate
 	v.FldValidators["anonymization_choice.cookie"] = AnonymizeHttpCookieValidator().Validate
@@ -541,7 +643,6 @@ type ValidateAnonymizationSetting struct {
 }
 
 func (v *ValidateAnonymizationSetting) AnonymizationConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -601,22 +702,18 @@ func (v *ValidateAnonymizationSetting) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["anonymization_config"]; exists {
 		vOpts := append(opts, db.WithValidateField("anonymization_config"))
 		if err := fv(ctx, m.GetAnonymizationConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAnonymizationSettingValidator = func() *ValidateAnonymizationSetting {
 	v := &ValidateAnonymizationSetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -687,7 +784,6 @@ type ValidateAnonymizeHttpCookie struct {
 }
 
 func (v *ValidateAnonymizeHttpCookie) CookieNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cookie_name")
@@ -709,23 +805,18 @@ func (v *ValidateAnonymizeHttpCookie) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cookie_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_name"))
 		if err := fv(ctx, m.GetCookieName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAnonymizeHttpCookieValidator = func() *ValidateAnonymizeHttpCookie {
 	v := &ValidateAnonymizeHttpCookie{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -795,7 +886,6 @@ type ValidateAnonymizeHttpHeader struct {
 }
 
 func (v *ValidateAnonymizeHttpHeader) HeaderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for header_name")
@@ -817,23 +907,18 @@ func (v *ValidateAnonymizeHttpHeader) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["header_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header_name"))
 		if err := fv(ctx, m.GetHeaderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAnonymizeHttpHeaderValidator = func() *ValidateAnonymizeHttpHeader {
 	v := &ValidateAnonymizeHttpHeader{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -903,7 +988,6 @@ type ValidateAnonymizeHttpQueryParameter struct {
 }
 
 func (v *ValidateAnonymizeHttpQueryParameter) QueryParamNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for query_param_name")
@@ -925,23 +1009,18 @@ func (v *ValidateAnonymizeHttpQueryParameter) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["query_param_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_param_name"))
 		if err := fv(ctx, m.GetQueryParamName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAnonymizeHttpQueryParameterValidator = func() *ValidateAnonymizeHttpQueryParameter {
 	v := &ValidateAnonymizeHttpQueryParameter{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1011,7 +1090,6 @@ type ValidateAttackTypeSettings struct {
 }
 
 func (v *ValidateAttackTypeSettings) DisabledAttackTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1071,22 +1149,18 @@ func (v *ValidateAttackTypeSettings) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disabled_attack_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("disabled_attack_types"))
 		if err := fv(ctx, m.GetDisabledAttackTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAttackTypeSettingsValidator = func() *ValidateAttackTypeSettings {
 	v := &ValidateAttackTypeSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1169,34 +1243,24 @@ func (v *ValidateBotProtectionSetting) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["good_bot_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("good_bot_action"))
 		if err := fv(ctx, m.GetGoodBotAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malicious_bot_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malicious_bot_action"))
 		if err := fv(ctx, m.GetMaliciousBotAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["suspicious_bot_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("suspicious_bot_action"))
 		if err := fv(ctx, m.GetSuspiciousBotAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1259,7 +1323,6 @@ func (v *ValidateCreateSpecType) AllowedResponseCodesChoiceValidationRuleHandler
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AnonymizationSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1267,7 +1330,6 @@ func (v *ValidateCreateSpecType) AnonymizationSettingValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) BlockingPageChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1275,7 +1337,6 @@ func (v *ValidateCreateSpecType) BlockingPageChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1283,7 +1344,6 @@ func (v *ValidateCreateSpecType) BotProtectionChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) DetectionSettingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1291,11 +1351,17 @@ func (v *ValidateCreateSpecType) DetectionSettingChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) EnforcementModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for enforcement_mode_choice")
+	}
+	return validatorFn, nil
+}
+func (v *ValidateCreateSpecType) EnhanceWithAiChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enhance_with_ai_choice")
 	}
 	return validatorFn, nil
 }
@@ -1347,7 +1413,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["anonymization_setting"]; exists {
@@ -1394,7 +1459,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocking_page_choice"]; exists {
@@ -1430,7 +1494,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
@@ -1466,7 +1529,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["detection_setting_choice"]; exists {
@@ -1513,7 +1575,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enforcement_mode_choice"]; exists {
@@ -1560,16 +1621,48 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
+	if fv, exists := v.FldValidators["enhance_with_ai_choice"]; exists {
+		val := m.GetEnhanceWithAiChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enhance_with_ai_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnhanceWithAiChoice().(type) {
+	case *CreateSpecType_DisableAiEnhancements:
+		if fv, exists := v.FldValidators["enhance_with_ai_choice.disable_ai_enhancements"]; exists {
+			val := m.GetEnhanceWithAiChoice().(*CreateSpecType_DisableAiEnhancements).DisableAiEnhancements
+			vOpts := append(opts,
+				db.WithValidateField("enhance_with_ai_choice"),
+				db.WithValidateField("disable_ai_enhancements"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableAiEnhancements:
+		if fv, exists := v.FldValidators["enhance_with_ai_choice.enable_ai_enhancements"]; exists {
+			val := m.GetEnhanceWithAiChoice().(*CreateSpecType_EnableAiEnhancements).EnableAiEnhancements
+			vOpts := append(opts,
+				db.WithValidateField("enhance_with_ai_choice"),
+				db.WithValidateField("enable_ai_enhancements"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1577,7 +1670,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAllowedResponseCodesChoice := v.AllowedResponseCodesChoiceValidationRuleHandler
 	rulesAllowedResponseCodesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1588,7 +1680,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["allowed_response_codes_choice"] = vFn
-
 	vrhAnonymizationSetting := v.AnonymizationSettingValidationRuleHandler
 	rulesAnonymizationSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1599,7 +1690,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["anonymization_setting"] = vFn
-
 	vrhBlockingPageChoice := v.BlockingPageChoiceValidationRuleHandler
 	rulesBlockingPageChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1610,7 +1700,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocking_page_choice"] = vFn
-
 	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
 	rulesBotProtectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1621,7 +1710,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bot_protection_choice"] = vFn
-
 	vrhDetectionSettingChoice := v.DetectionSettingChoiceValidationRuleHandler
 	rulesDetectionSettingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1632,7 +1720,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["detection_setting_choice"] = vFn
-
 	vrhEnforcementModeChoice := v.EnforcementModeChoiceValidationRuleHandler
 	rulesEnforcementModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1643,15 +1730,22 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["enforcement_mode_choice"] = vFn
-
+	vrhEnhanceWithAiChoice := v.EnhanceWithAiChoiceValidationRuleHandler
+	rulesEnhanceWithAiChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnhanceWithAiChoice(rulesEnhanceWithAiChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.enhance_with_ai_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enhance_with_ai_choice"] = vFn
 	v.FldValidators["allowed_response_codes_choice.allowed_response_codes"] = AllowedResponseCodesValidator().Validate
-
 	v.FldValidators["anonymization_setting.custom_anonymization"] = AnonymizationSettingValidator().Validate
-
 	v.FldValidators["blocking_page_choice.blocking_page"] = CustomBlockingPageValidator().Validate
-
 	v.FldValidators["detection_setting_choice.detection_settings"] = DetectionSettingValidator().Validate
 	v.FldValidators["detection_setting_choice.ai_risk_based_blocking"] = AiRiskBasedBlockingValidator().Validate
+	v.FldValidators["enhance_with_ai_choice.enable_ai_enhancements"] = AIEnhancementsConfigValidator().Validate
 
 	return v
 }()
@@ -1702,7 +1796,6 @@ type ValidateCustomBlockingPage struct {
 }
 
 func (v *ValidateCustomBlockingPage) BlockingPageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for blocking_page")
@@ -1710,9 +1803,7 @@ func (v *ValidateCustomBlockingPage) BlockingPageValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCustomBlockingPage) ResponseCodeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpStatusCode)
@@ -1740,32 +1831,24 @@ func (v *ValidateCustomBlockingPage) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["blocking_page"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("blocking_page"))
 		if err := fv(ctx, m.GetBlockingPage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["response_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_code"))
 		if err := fv(ctx, m.GetResponseCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomBlockingPageValidator = func() *ValidateCustomBlockingPage {
 	v := &ValidateCustomBlockingPage{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1853,7 +1936,6 @@ func (v *ValidateDetectionSetting) BotProtectionChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDetectionSetting) FalsePositiveSuppressionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1861,7 +1943,6 @@ func (v *ValidateDetectionSetting) FalsePositiveSuppressionValidationRuleHandler
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDetectionSetting) ThreatCampaignChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1869,12 +1950,103 @@ func (v *ValidateDetectionSetting) ThreatCampaignChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDetectionSetting) ViolationDetectionSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for violation_detection_setting")
 	}
+	return validatorFn, nil
+}
+func (v *ValidateDetectionSetting) ViolationsViewValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for violations_view")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ViolationConfigView, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ViolationConfigViewValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for violations_view")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ViolationConfigView)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ViolationConfigView, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated violations_view")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items violations_view")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateDetectionSetting) ConfiguredViolationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for configured_violations")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ViolationConfiguration, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ViolationConfigurationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for configured_violations")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ViolationConfiguration)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ViolationConfiguration, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated configured_violations")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items configured_violations")
+		}
+		return nil
+	}
+
 	return validatorFn, nil
 }
 
@@ -1925,7 +2097,12 @@ func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
+	}
+	if fv, exists := v.FldValidators["configured_violations"]; exists {
+		vOpts := append(opts, db.WithValidateField("configured_violations"))
+		if err := fv(ctx, m.GetConfiguredViolations(), vOpts...); err != nil {
+			return err
+		}
 	}
 
 	if fv, exists := v.FldValidators["false_positive_suppression"]; exists {
@@ -1961,16 +2138,12 @@ func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["signature_selection_setting"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("signature_selection_setting"))
 		if err := fv(ctx, m.GetSignatureSelectionSetting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSignaturesStagingSettings().(type) {
@@ -2007,7 +2180,6 @@ func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["threat_campaign_choice"]; exists {
@@ -2043,7 +2215,6 @@ func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["violation_detection_setting"]; exists {
@@ -2079,16 +2250,19 @@ func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["violations_view"]; exists {
+		vOpts := append(opts, db.WithValidateField("violations_view"))
+		if err := fv(ctx, m.GetViolationsView(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 	v := &ValidateDetectionSetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2096,7 +2270,6 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
 	rulesBotProtectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2107,7 +2280,6 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 		panic(errMsg)
 	}
 	v.FldValidators["bot_protection_choice"] = vFn
-
 	vrhFalsePositiveSuppression := v.FalsePositiveSuppressionValidationRuleHandler
 	rulesFalsePositiveSuppression := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2118,7 +2290,6 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 		panic(errMsg)
 	}
 	v.FldValidators["false_positive_suppression"] = vFn
-
 	vrhThreatCampaignChoice := v.ThreatCampaignChoiceValidationRuleHandler
 	rulesThreatCampaignChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2129,7 +2300,6 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 		panic(errMsg)
 	}
 	v.FldValidators["threat_campaign_choice"] = vFn
-
 	vrhViolationDetectionSetting := v.ViolationDetectionSettingValidationRuleHandler
 	rulesViolationDetectionSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2141,11 +2311,30 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 	}
 	v.FldValidators["violation_detection_setting"] = vFn
 
+	vrhViolationsView := v.ViolationsViewValidationRuleHandler
+	rulesViolationsView := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhViolationsView(rulesViolationsView)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DetectionSetting.violations_view: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["violations_view"] = vFn
+
+	vrhConfiguredViolations := v.ConfiguredViolationsValidationRuleHandler
+	rulesConfiguredViolations := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhConfiguredViolations(rulesConfiguredViolations)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DetectionSetting.configured_violations: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["configured_violations"] = vFn
 	v.FldValidators["signatures_staging_settings.stage_new_signatures"] = SignaturesStagingSettingsValidator().Validate
 	v.FldValidators["signatures_staging_settings.stage_new_and_updated_signatures"] = SignaturesStagingSettingsValidator().Validate
-
 	v.FldValidators["violation_detection_setting.violation_settings"] = ViolationSettingsValidator().Validate
-
 	v.FldValidators["signature_selection_setting"] = SignatureSelectionSettingValidator().Validate
 
 	return v
@@ -2203,7 +2392,6 @@ func (v *ValidateGetSpecType) AllowedResponseCodesChoiceValidationRuleHandler(ru
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AnonymizationSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2211,7 +2399,6 @@ func (v *ValidateGetSpecType) AnonymizationSettingValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) BlockingPageChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2219,7 +2406,6 @@ func (v *ValidateGetSpecType) BlockingPageChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2227,7 +2413,6 @@ func (v *ValidateGetSpecType) BotProtectionChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DetectionSettingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2235,11 +2420,17 @@ func (v *ValidateGetSpecType) DetectionSettingChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) EnforcementModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for enforcement_mode_choice")
+	}
+	return validatorFn, nil
+}
+func (v *ValidateGetSpecType) EnhanceWithAiChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enhance_with_ai_choice")
 	}
 	return validatorFn, nil
 }
@@ -2291,7 +2482,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["anonymization_setting"]; exists {
@@ -2338,7 +2528,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocking_page_choice"]; exists {
@@ -2374,7 +2563,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
@@ -2410,7 +2598,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["detection_setting_choice"]; exists {
@@ -2457,7 +2644,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enforcement_mode_choice"]; exists {
@@ -2504,16 +2690,48 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
+	if fv, exists := v.FldValidators["enhance_with_ai_choice"]; exists {
+		val := m.GetEnhanceWithAiChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enhance_with_ai_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnhanceWithAiChoice().(type) {
+	case *GetSpecType_DisableAiEnhancements:
+		if fv, exists := v.FldValidators["enhance_with_ai_choice.disable_ai_enhancements"]; exists {
+			val := m.GetEnhanceWithAiChoice().(*GetSpecType_DisableAiEnhancements).DisableAiEnhancements
+			vOpts := append(opts,
+				db.WithValidateField("enhance_with_ai_choice"),
+				db.WithValidateField("disable_ai_enhancements"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableAiEnhancements:
+		if fv, exists := v.FldValidators["enhance_with_ai_choice.enable_ai_enhancements"]; exists {
+			val := m.GetEnhanceWithAiChoice().(*GetSpecType_EnableAiEnhancements).EnableAiEnhancements
+			vOpts := append(opts,
+				db.WithValidateField("enhance_with_ai_choice"),
+				db.WithValidateField("enable_ai_enhancements"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2521,7 +2739,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAllowedResponseCodesChoice := v.AllowedResponseCodesChoiceValidationRuleHandler
 	rulesAllowedResponseCodesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2532,7 +2749,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["allowed_response_codes_choice"] = vFn
-
 	vrhAnonymizationSetting := v.AnonymizationSettingValidationRuleHandler
 	rulesAnonymizationSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2543,7 +2759,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["anonymization_setting"] = vFn
-
 	vrhBlockingPageChoice := v.BlockingPageChoiceValidationRuleHandler
 	rulesBlockingPageChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2554,7 +2769,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocking_page_choice"] = vFn
-
 	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
 	rulesBotProtectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2565,7 +2779,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bot_protection_choice"] = vFn
-
 	vrhDetectionSettingChoice := v.DetectionSettingChoiceValidationRuleHandler
 	rulesDetectionSettingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2576,7 +2789,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["detection_setting_choice"] = vFn
-
 	vrhEnforcementModeChoice := v.EnforcementModeChoiceValidationRuleHandler
 	rulesEnforcementModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2587,15 +2799,22 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["enforcement_mode_choice"] = vFn
-
+	vrhEnhanceWithAiChoice := v.EnhanceWithAiChoiceValidationRuleHandler
+	rulesEnhanceWithAiChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnhanceWithAiChoice(rulesEnhanceWithAiChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.enhance_with_ai_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enhance_with_ai_choice"] = vFn
 	v.FldValidators["allowed_response_codes_choice.allowed_response_codes"] = AllowedResponseCodesValidator().Validate
-
 	v.FldValidators["anonymization_setting.custom_anonymization"] = AnonymizationSettingValidator().Validate
-
 	v.FldValidators["blocking_page_choice.blocking_page"] = CustomBlockingPageValidator().Validate
-
 	v.FldValidators["detection_setting_choice.detection_settings"] = DetectionSettingValidator().Validate
 	v.FldValidators["detection_setting_choice.ai_risk_based_blocking"] = AiRiskBasedBlockingValidator().Validate
+	v.FldValidators["enhance_with_ai_choice.enable_ai_enhancements"] = AIEnhancementsConfigValidator().Validate
 
 	return v
 }()
@@ -2652,7 +2871,6 @@ func (v *ValidateGlobalSpecType) AllowedResponseCodesChoiceValidationRuleHandler
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AnonymizationSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2660,7 +2878,6 @@ func (v *ValidateGlobalSpecType) AnonymizationSettingValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BlockingPageChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2668,7 +2885,6 @@ func (v *ValidateGlobalSpecType) BlockingPageChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2676,7 +2892,6 @@ func (v *ValidateGlobalSpecType) BotProtectionChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DetectionSettingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2684,11 +2899,17 @@ func (v *ValidateGlobalSpecType) DetectionSettingChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EnforcementModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for enforcement_mode_choice")
+	}
+	return validatorFn, nil
+}
+func (v *ValidateGlobalSpecType) EnhanceWithAiChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enhance_with_ai_choice")
 	}
 	return validatorFn, nil
 }
@@ -2740,7 +2961,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["anonymization_setting"]; exists {
@@ -2787,7 +3007,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocking_page_choice"]; exists {
@@ -2823,7 +3042,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
@@ -2859,7 +3077,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["detection_setting_choice"]; exists {
@@ -2906,7 +3123,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enforcement_mode_choice"]; exists {
@@ -2953,16 +3169,48 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
+	if fv, exists := v.FldValidators["enhance_with_ai_choice"]; exists {
+		val := m.GetEnhanceWithAiChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enhance_with_ai_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnhanceWithAiChoice().(type) {
+	case *GlobalSpecType_DisableAiEnhancements:
+		if fv, exists := v.FldValidators["enhance_with_ai_choice.disable_ai_enhancements"]; exists {
+			val := m.GetEnhanceWithAiChoice().(*GlobalSpecType_DisableAiEnhancements).DisableAiEnhancements
+			vOpts := append(opts,
+				db.WithValidateField("enhance_with_ai_choice"),
+				db.WithValidateField("disable_ai_enhancements"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableAiEnhancements:
+		if fv, exists := v.FldValidators["enhance_with_ai_choice.enable_ai_enhancements"]; exists {
+			val := m.GetEnhanceWithAiChoice().(*GlobalSpecType_EnableAiEnhancements).EnableAiEnhancements
+			vOpts := append(opts,
+				db.WithValidateField("enhance_with_ai_choice"),
+				db.WithValidateField("enable_ai_enhancements"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2970,7 +3218,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAllowedResponseCodesChoice := v.AllowedResponseCodesChoiceValidationRuleHandler
 	rulesAllowedResponseCodesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2981,7 +3228,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["allowed_response_codes_choice"] = vFn
-
 	vrhAnonymizationSetting := v.AnonymizationSettingValidationRuleHandler
 	rulesAnonymizationSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2992,7 +3238,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["anonymization_setting"] = vFn
-
 	vrhBlockingPageChoice := v.BlockingPageChoiceValidationRuleHandler
 	rulesBlockingPageChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3003,7 +3248,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocking_page_choice"] = vFn
-
 	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
 	rulesBotProtectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3014,7 +3258,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bot_protection_choice"] = vFn
-
 	vrhDetectionSettingChoice := v.DetectionSettingChoiceValidationRuleHandler
 	rulesDetectionSettingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3025,7 +3268,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["detection_setting_choice"] = vFn
-
 	vrhEnforcementModeChoice := v.EnforcementModeChoiceValidationRuleHandler
 	rulesEnforcementModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3036,15 +3278,22 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["enforcement_mode_choice"] = vFn
-
+	vrhEnhanceWithAiChoice := v.EnhanceWithAiChoiceValidationRuleHandler
+	rulesEnhanceWithAiChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnhanceWithAiChoice(rulesEnhanceWithAiChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.enhance_with_ai_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enhance_with_ai_choice"] = vFn
 	v.FldValidators["allowed_response_codes_choice.allowed_response_codes"] = AllowedResponseCodesValidator().Validate
-
 	v.FldValidators["anonymization_setting.custom_anonymization"] = AnonymizationSettingValidator().Validate
-
 	v.FldValidators["blocking_page_choice.blocking_page"] = CustomBlockingPageValidator().Validate
-
 	v.FldValidators["detection_setting_choice.detection_settings"] = DetectionSettingValidator().Validate
 	v.FldValidators["detection_setting_choice.ai_risk_based_blocking"] = AiRiskBasedBlockingValidator().Validate
+	v.FldValidators["enhance_with_ai_choice.enable_ai_enhancements"] = AIEnhancementsConfigValidator().Validate
 
 	return v
 }()
@@ -3101,7 +3350,6 @@ func (v *ValidateReplaceSpecType) AllowedResponseCodesChoiceValidationRuleHandle
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) AnonymizationSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3109,7 +3357,6 @@ func (v *ValidateReplaceSpecType) AnonymizationSettingValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) BlockingPageChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3117,7 +3364,6 @@ func (v *ValidateReplaceSpecType) BlockingPageChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3125,7 +3371,6 @@ func (v *ValidateReplaceSpecType) BotProtectionChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) DetectionSettingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3133,11 +3378,17 @@ func (v *ValidateReplaceSpecType) DetectionSettingChoiceValidationRuleHandler(ru
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) EnforcementModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for enforcement_mode_choice")
+	}
+	return validatorFn, nil
+}
+func (v *ValidateReplaceSpecType) EnhanceWithAiChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enhance_with_ai_choice")
 	}
 	return validatorFn, nil
 }
@@ -3189,7 +3440,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["anonymization_setting"]; exists {
@@ -3236,7 +3486,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocking_page_choice"]; exists {
@@ -3272,7 +3521,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
@@ -3308,7 +3556,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["detection_setting_choice"]; exists {
@@ -3355,7 +3602,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["enforcement_mode_choice"]; exists {
@@ -3402,16 +3648,48 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
+	if fv, exists := v.FldValidators["enhance_with_ai_choice"]; exists {
+		val := m.GetEnhanceWithAiChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enhance_with_ai_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnhanceWithAiChoice().(type) {
+	case *ReplaceSpecType_DisableAiEnhancements:
+		if fv, exists := v.FldValidators["enhance_with_ai_choice.disable_ai_enhancements"]; exists {
+			val := m.GetEnhanceWithAiChoice().(*ReplaceSpecType_DisableAiEnhancements).DisableAiEnhancements
+			vOpts := append(opts,
+				db.WithValidateField("enhance_with_ai_choice"),
+				db.WithValidateField("disable_ai_enhancements"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableAiEnhancements:
+		if fv, exists := v.FldValidators["enhance_with_ai_choice.enable_ai_enhancements"]; exists {
+			val := m.GetEnhanceWithAiChoice().(*ReplaceSpecType_EnableAiEnhancements).EnableAiEnhancements
+			vOpts := append(opts,
+				db.WithValidateField("enhance_with_ai_choice"),
+				db.WithValidateField("enable_ai_enhancements"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3419,7 +3697,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAllowedResponseCodesChoice := v.AllowedResponseCodesChoiceValidationRuleHandler
 	rulesAllowedResponseCodesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3430,7 +3707,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["allowed_response_codes_choice"] = vFn
-
 	vrhAnonymizationSetting := v.AnonymizationSettingValidationRuleHandler
 	rulesAnonymizationSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3441,7 +3717,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["anonymization_setting"] = vFn
-
 	vrhBlockingPageChoice := v.BlockingPageChoiceValidationRuleHandler
 	rulesBlockingPageChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3452,7 +3727,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocking_page_choice"] = vFn
-
 	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
 	rulesBotProtectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3463,7 +3737,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bot_protection_choice"] = vFn
-
 	vrhDetectionSettingChoice := v.DetectionSettingChoiceValidationRuleHandler
 	rulesDetectionSettingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3474,7 +3747,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["detection_setting_choice"] = vFn
-
 	vrhEnforcementModeChoice := v.EnforcementModeChoiceValidationRuleHandler
 	rulesEnforcementModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3485,15 +3757,22 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["enforcement_mode_choice"] = vFn
-
+	vrhEnhanceWithAiChoice := v.EnhanceWithAiChoiceValidationRuleHandler
+	rulesEnhanceWithAiChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnhanceWithAiChoice(rulesEnhanceWithAiChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.enhance_with_ai_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enhance_with_ai_choice"] = vFn
 	v.FldValidators["allowed_response_codes_choice.allowed_response_codes"] = AllowedResponseCodesValidator().Validate
-
 	v.FldValidators["anonymization_setting.custom_anonymization"] = AnonymizationSettingValidator().Validate
-
 	v.FldValidators["blocking_page_choice.blocking_page"] = CustomBlockingPageValidator().Validate
-
 	v.FldValidators["detection_setting_choice.detection_settings"] = DetectionSettingValidator().Validate
 	v.FldValidators["detection_setting_choice.ai_risk_based_blocking"] = AiRiskBasedBlockingValidator().Validate
+	v.FldValidators["enhance_with_ai_choice.enable_ai_enhancements"] = AIEnhancementsConfigValidator().Validate
 
 	return v
 }()
@@ -3550,7 +3829,6 @@ func (v *ValidateSignatureSelectionSetting) AttackTypeSettingValidationRuleHandl
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSignatureSelectionSetting) SignatureSelectionByAccuracyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3606,7 +3884,6 @@ func (v *ValidateSignatureSelectionSetting) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["signature_selection_by_accuracy"]; exists {
@@ -3653,16 +3930,13 @@ func (v *ValidateSignatureSelectionSetting) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSignatureSelectionSettingValidator = func() *ValidateSignatureSelectionSetting {
 	v := &ValidateSignatureSelectionSetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3670,7 +3944,6 @@ var DefaultSignatureSelectionSettingValidator = func() *ValidateSignatureSelecti
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAttackTypeSetting := v.AttackTypeSettingValidationRuleHandler
 	rulesAttackTypeSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3681,7 +3954,6 @@ var DefaultSignatureSelectionSettingValidator = func() *ValidateSignatureSelecti
 		panic(errMsg)
 	}
 	v.FldValidators["attack_type_setting"] = vFn
-
 	vrhSignatureSelectionByAccuracy := v.SignatureSelectionByAccuracyValidationRuleHandler
 	rulesSignatureSelectionByAccuracy := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3692,7 +3964,6 @@ var DefaultSignatureSelectionSettingValidator = func() *ValidateSignatureSelecti
 		panic(errMsg)
 	}
 	v.FldValidators["signature_selection_by_accuracy"] = vFn
-
 	v.FldValidators["attack_type_setting.attack_type_settings"] = AttackTypeSettingsValidator().Validate
 
 	return v
@@ -3744,7 +4015,6 @@ type ValidateSignaturesStagingSettings struct {
 }
 
 func (v *ValidateSignaturesStagingSettings) StagingPeriodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for staging_period")
@@ -3766,23 +4036,18 @@ func (v *ValidateSignaturesStagingSettings) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["staging_period"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("staging_period"))
 		if err := fv(ctx, m.GetStagingPeriod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSignaturesStagingSettingsValidator = func() *ValidateSignaturesStagingSettings {
 	v := &ValidateSignaturesStagingSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3809,6 +4074,257 @@ var DefaultSignaturesStagingSettingsValidator = func() *ValidateSignaturesStagin
 
 func SignaturesStagingSettingsValidator() db.Validator {
 	return DefaultSignaturesStagingSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ViolationConfigView) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ViolationConfigView) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ViolationConfigView) DeepCopy() *ViolationConfigView {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ViolationConfigView{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ViolationConfigView) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ViolationConfigView) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ViolationConfigViewValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateViolationConfigView struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateViolationConfigView) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ViolationConfigView)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ViolationConfigView got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["description"]; exists {
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["enabled"]; exists {
+		vOpts := append(opts, db.WithValidateField("enabled"))
+		if err := fv(ctx, m.GetEnabled(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["enabled_by_default"]; exists {
+		vOpts := append(opts, db.WithValidateField("enabled_by_default"))
+		if err := fv(ctx, m.GetEnabledByDefault(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["title"]; exists {
+		vOpts := append(opts, db.WithValidateField("title"))
+		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultViolationConfigViewValidator = func() *ValidateViolationConfigView {
+	v := &ValidateViolationConfigView{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ViolationConfigViewValidator() db.Validator {
+	return DefaultViolationConfigViewValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ViolationConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ViolationConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ViolationConfiguration) DeepCopy() *ViolationConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ViolationConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ViolationConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ViolationConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ViolationConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateViolationConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateViolationConfiguration) StateChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for state_choice")
+	}
+	return validatorFn, nil
+}
+func (v *ValidateViolationConfiguration) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateViolationConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ViolationConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ViolationConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+
+	if fv, exists := v.FldValidators["state_choice"]; exists {
+		val := m.GetStateChoice()
+		vOpts := append(opts,
+			db.WithValidateField("state_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStateChoice().(type) {
+	case *ViolationConfiguration_Enabled:
+		if fv, exists := v.FldValidators["state_choice.enabled"]; exists {
+			val := m.GetStateChoice().(*ViolationConfiguration_Enabled).Enabled
+			vOpts := append(opts,
+				db.WithValidateField("state_choice"),
+				db.WithValidateField("enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ViolationConfiguration_Disabled:
+		if fv, exists := v.FldValidators["state_choice.disabled"]; exists {
+			val := m.GetStateChoice().(*ViolationConfiguration_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("state_choice"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultViolationConfigurationValidator = func() *ValidateViolationConfiguration {
+	v := &ValidateViolationConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhStateChoice := v.StateChoiceValidationRuleHandler
+	rulesStateChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhStateChoice(rulesStateChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ViolationConfiguration.state_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["state_choice"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ViolationConfiguration.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func ViolationConfigurationValidator() db.Validator {
+	return DefaultViolationConfigurationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3853,7 +4369,6 @@ type ValidateViolationSettings struct {
 }
 
 func (v *ValidateViolationSettings) DisabledViolationTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -3913,22 +4428,18 @@ func (v *ValidateViolationSettings) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disabled_violation_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("disabled_violation_types"))
 		if err := fv(ctx, m.GetDisabledViolationTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultViolationSettingsValidator = func() *ValidateViolationSettings {
 	v := &ValidateViolationSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4185,6 +4696,41 @@ func (r *CreateSpecType) GetEnforcementModeChoiceFromGlobalSpecType(o *GlobalSpe
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetEnhanceWithAiChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EnhanceWithAiChoice.(type) {
+	case nil:
+		o.EnhanceWithAiChoice = nil
+
+	case *CreateSpecType_DisableAiEnhancements:
+		o.EnhanceWithAiChoice = &GlobalSpecType_DisableAiEnhancements{DisableAiEnhancements: of.DisableAiEnhancements}
+
+	case *CreateSpecType_EnableAiEnhancements:
+		o.EnhanceWithAiChoice = &GlobalSpecType_EnableAiEnhancements{EnableAiEnhancements: of.EnableAiEnhancements}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetEnhanceWithAiChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EnhanceWithAiChoice.(type) {
+	case nil:
+		r.EnhanceWithAiChoice = nil
+
+	case *GlobalSpecType_DisableAiEnhancements:
+		r.EnhanceWithAiChoice = &CreateSpecType_DisableAiEnhancements{DisableAiEnhancements: of.DisableAiEnhancements}
+
+	case *GlobalSpecType_EnableAiEnhancements:
+		r.EnhanceWithAiChoice = &CreateSpecType_EnableAiEnhancements{EnableAiEnhancements: of.EnableAiEnhancements}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -4195,6 +4741,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetDetectionSettingChoiceFromGlobalSpecType(f)
 	m.GetEnforcementModeChoiceFromGlobalSpecType(f)
+	m.GetEnhanceWithAiChoiceFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -4218,6 +4765,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetDetectionSettingChoiceToGlobalSpecType(f)
 	m1.SetEnforcementModeChoiceToGlobalSpecType(f)
+	m1.SetEnhanceWithAiChoiceToGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -4456,6 +5004,41 @@ func (r *GetSpecType) GetEnforcementModeChoiceFromGlobalSpecType(o *GlobalSpecTy
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetEnhanceWithAiChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EnhanceWithAiChoice.(type) {
+	case nil:
+		o.EnhanceWithAiChoice = nil
+
+	case *GetSpecType_DisableAiEnhancements:
+		o.EnhanceWithAiChoice = &GlobalSpecType_DisableAiEnhancements{DisableAiEnhancements: of.DisableAiEnhancements}
+
+	case *GetSpecType_EnableAiEnhancements:
+		o.EnhanceWithAiChoice = &GlobalSpecType_EnableAiEnhancements{EnableAiEnhancements: of.EnableAiEnhancements}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetEnhanceWithAiChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EnhanceWithAiChoice.(type) {
+	case nil:
+		r.EnhanceWithAiChoice = nil
+
+	case *GlobalSpecType_DisableAiEnhancements:
+		r.EnhanceWithAiChoice = &GetSpecType_DisableAiEnhancements{DisableAiEnhancements: of.DisableAiEnhancements}
+
+	case *GlobalSpecType_EnableAiEnhancements:
+		r.EnhanceWithAiChoice = &GetSpecType_EnableAiEnhancements{EnableAiEnhancements: of.EnableAiEnhancements}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -4466,6 +5049,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetDetectionSettingChoiceFromGlobalSpecType(f)
 	m.GetEnforcementModeChoiceFromGlobalSpecType(f)
+	m.GetEnhanceWithAiChoiceFromGlobalSpecType(f)
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -4489,6 +5073,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetDetectionSettingChoiceToGlobalSpecType(f)
 	m1.SetEnforcementModeChoiceToGlobalSpecType(f)
+	m1.SetEnhanceWithAiChoiceToGlobalSpecType(f)
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -4727,6 +5312,41 @@ func (r *ReplaceSpecType) GetEnforcementModeChoiceFromGlobalSpecType(o *GlobalSp
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetEnhanceWithAiChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EnhanceWithAiChoice.(type) {
+	case nil:
+		o.EnhanceWithAiChoice = nil
+
+	case *ReplaceSpecType_DisableAiEnhancements:
+		o.EnhanceWithAiChoice = &GlobalSpecType_DisableAiEnhancements{DisableAiEnhancements: of.DisableAiEnhancements}
+
+	case *ReplaceSpecType_EnableAiEnhancements:
+		o.EnhanceWithAiChoice = &GlobalSpecType_EnableAiEnhancements{EnableAiEnhancements: of.EnableAiEnhancements}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetEnhanceWithAiChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EnhanceWithAiChoice.(type) {
+	case nil:
+		r.EnhanceWithAiChoice = nil
+
+	case *GlobalSpecType_DisableAiEnhancements:
+		r.EnhanceWithAiChoice = &ReplaceSpecType_DisableAiEnhancements{DisableAiEnhancements: of.DisableAiEnhancements}
+
+	case *GlobalSpecType_EnableAiEnhancements:
+		r.EnhanceWithAiChoice = &ReplaceSpecType_EnableAiEnhancements{EnableAiEnhancements: of.EnableAiEnhancements}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -4737,6 +5357,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetDetectionSettingChoiceFromGlobalSpecType(f)
 	m.GetEnforcementModeChoiceFromGlobalSpecType(f)
+	m.GetEnhanceWithAiChoiceFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -4760,6 +5381,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetDetectionSettingChoiceToGlobalSpecType(f)
 	m1.SetEnforcementModeChoiceToGlobalSpecType(f)
+	m1.SetEnhanceWithAiChoiceToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

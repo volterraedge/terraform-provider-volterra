@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.global_log_receiver.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.global_log_receiver.Object"] = ObjectValidator()
 	vr["ves.io.schema.global_log_receiver.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.global_log_receiver.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.global_log_receiver.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.global_log_receiver.DeleteRequest"] = DeleteRequestValidator()
@@ -28,16 +26,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.global_log_receiver.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.global_log_receiver.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.global_log_receiver.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.global_log_receiver.GlobalLogReceiverStatusData"] = GlobalLogReceiverStatusDataValidator()
 	vr["ves.io.schema.global_log_receiver.GlobalLogReceiverStatusRequest"] = GlobalLogReceiverStatusRequestValidator()
 	vr["ves.io.schema.global_log_receiver.GlobalLogReceiverStatusResponse"] = GlobalLogReceiverStatusResponseValidator()
 	vr["ves.io.schema.global_log_receiver.LabelFilter"] = LabelFilterValidator()
 	vr["ves.io.schema.global_log_receiver.StatusValue"] = StatusValueValidator()
-
 	vr["ves.io.schema.global_log_receiver.TestGlobalLogReceiverRequest"] = TestGlobalLogReceiverRequestValidator()
 	vr["ves.io.schema.global_log_receiver.TestGlobalLogReceiverResponse"] = TestGlobalLogReceiverResponseValidator()
-
 	vr["ves.io.schema.global_log_receiver.AWSCloudwatchConfig"] = AWSCloudwatchConfigValidator()
 	vr["ves.io.schema.global_log_receiver.AuthToken"] = AuthTokenValidator()
 	vr["ves.io.schema.global_log_receiver.AzureBlobConfig"] = AzureBlobConfigValidator()
@@ -63,7 +58,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.global_log_receiver.SumoLogicConfig"] = SumoLogicConfigValidator()
 	vr["ves.io.schema.global_log_receiver.TLSClientConfigType"] = TLSClientConfigTypeValidator()
 	vr["ves.io.schema.global_log_receiver.TLSConfigType"] = TLSConfigTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -75,11 +69,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.global_log_receiver.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.global_log_receiver.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.global_log_receiver.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.global_log_receiver.API.Create"] = []string{
 		"spec.azure_event_hubs_receiver.connection_string.blindfold_secret_info_internal",
 		"spec.azure_event_hubs_receiver.connection_string.secret_encoding_type",
@@ -142,9 +134,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.sumo_logic_receiver.url.vault_secret_info",
 		"spec.sumo_logic_receiver.url.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.global_log_receiver.API.Create"] = "ves.io.schema.global_log_receiver.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.global_log_receiver.API.Replace"] = []string{
 		"spec.azure_event_hubs_receiver.connection_string.blindfold_secret_info_internal",
 		"spec.azure_event_hubs_receiver.connection_string.secret_encoding_type",
@@ -207,25 +197,20 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.sumo_logic_receiver.url.vault_secret_info",
 		"spec.sumo_logic_receiver.url.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.global_log_receiver.API.Replace"] = "ves.io.schema.global_log_receiver.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.global_log_receiver.API"] = "config"
 	sm["ves.io.schema.global_log_receiver.CustomDataAPI"] = "data"
 	sm["ves.io.schema.global_log_receiver.CustomAPI"] = "log_receiver"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -234,9 +219,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.global_log_receiver.Object"] = APISwaggerJSON
@@ -250,16 +233,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.global_log_receiver.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.global_log_receiver.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.global_log_receiver.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.global_log_receiver.Object"] = CustomDataAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.global_log_receiver.CustomDataAPI"] = NewCustomDataAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.global_log_receiver.CustomDataAPI"] = NewCustomDataAPIRestClient
 		if isExternal {
@@ -270,16 +248,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.global_log_receiver.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.global_log_receiver.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.global_log_receiver.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.global_log_receiver.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -290,22 +263,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.global_log_receiver.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

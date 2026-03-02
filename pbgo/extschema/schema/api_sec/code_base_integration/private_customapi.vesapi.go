@@ -74,9 +74,7 @@ func NewPrivateCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["UpdateCodeBaseIntegration"] = ccl.doRPCUpdateCodeBaseIntegration
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -168,7 +166,6 @@ func (c *PrivateCustomAPIRestClient) doRPCUpdateCodeBaseIntegration(ctx context.
 	pbRsp := &UpdateCodeBaseIntegrationResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_sec.code_base_integration.UpdateCodeBaseIntegrationResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -202,9 +199,7 @@ func NewPrivateCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["UpdateCodeBaseIntegration"] = ccl.doRPCUpdateCodeBaseIntegration
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

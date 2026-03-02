@@ -14,10 +14,8 @@ import (
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_compliance_checks.DNSComplianceChecksStatus"] = DNSComplianceChecksStatusValidator()
 	vr["ves.io.schema.dns_compliance_checks.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.dns_compliance_checks.Object"] = ObjectValidator()
 	vr["ves.io.schema.dns_compliance_checks.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.dns_compliance_checks.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.dns_compliance_checks.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.dns_compliance_checks.DeleteRequest"] = DeleteRequestValidator()
@@ -28,12 +26,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_compliance_checks.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.dns_compliance_checks.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.dns_compliance_checks.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.dns_compliance_checks.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.dns_compliance_checks.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.dns_compliance_checks.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.dns_compliance_checks.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -45,25 +41,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.dns_compliance_checks.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.dns_compliance_checks.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.dns_compliance_checks.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.dns_compliance_checks.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -72,9 +63,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.dns_compliance_checks.Object"] = APISwaggerJSON
@@ -88,22 +77,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.dns_compliance_checks.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.dns_compliance_checks.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.dns_compliance_checks.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

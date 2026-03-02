@@ -64,7 +64,6 @@ type ValidateAPIItemListReq struct {
 }
 
 func (v *ValidateAPIItemListReq) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -124,31 +123,24 @@ func (v *ValidateAPIItemListReq) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
 		vOpts := append(opts, db.WithValidateField("items"))
 		if err := fv(ctx, m.GetItems(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["list_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("list_id"))
 		if err := fv(ctx, m.GetListId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAPIItemListReqValidator = func() *ValidateAPIItemListReq {
 	v := &ValidateAPIItemListReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -229,9 +221,7 @@ func (v *ValidateAPIItemListResp) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -239,27 +229,19 @@ func (v *ValidateAPIItemListResp) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["list_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("list_id"))
 		if err := fv(ctx, m.GetListId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["result"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("result"))
 		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -328,25 +310,18 @@ func (v *ValidateAPIItemReq) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -439,36 +414,25 @@ func (v *ValidateAPIItemResp) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["result"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("result"))
 		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -537,9 +501,7 @@ func (v *ValidateAccessEnablerAddonService) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["addon_service_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addon_service_names"))
 		for idx, item := range m.GetAddonServiceNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -547,9 +509,7 @@ func (v *ValidateAccessEnablerAddonService) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -606,7 +566,6 @@ type ValidateEvaluateAPIAccessReq struct {
 }
 
 func (v *ValidateEvaluateAPIAccessReq) ItemListsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -666,40 +625,30 @@ func (v *ValidateEvaluateAPIAccessReq) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_control_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_control_type"))
 		if err := fv(ctx, m.GetAccessControlType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["item_lists"]; exists {
 		vOpts := append(opts, db.WithValidateField("item_lists"))
 		if err := fv(ctx, m.GetItemLists(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEvaluateAPIAccessReqValidator = func() *ValidateEvaluateAPIAccessReq {
 	v := &ValidateEvaluateAPIAccessReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -780,9 +729,7 @@ func (v *ValidateEvaluateAPIAccessResp) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["item_lists"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("item_lists"))
 		for idx, item := range m.GetItemLists() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -790,9 +737,7 @@ func (v *ValidateEvaluateAPIAccessResp) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -849,7 +794,6 @@ type ValidateEvaluateBatchAPIAccessReq struct {
 }
 
 func (v *ValidateEvaluateBatchAPIAccessReq) BatchNamespaceApiListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -909,22 +853,18 @@ func (v *ValidateEvaluateBatchAPIAccessReq) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["batch_namespace_api_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("batch_namespace_api_list"))
 		if err := fv(ctx, m.GetBatchNamespaceApiList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEvaluateBatchAPIAccessReqValidator = func() *ValidateEvaluateBatchAPIAccessReq {
 	v := &ValidateEvaluateBatchAPIAccessReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1005,9 +945,7 @@ func (v *ValidateEvaluateBatchAPIAccessResp) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["batch_namespace_api_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch_namespace_api_list"))
 		for idx, item := range m.GetBatchNamespaceApiList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1015,9 +953,7 @@ func (v *ValidateEvaluateBatchAPIAccessResp) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1086,16 +1022,12 @@ func (v *ValidateLookupUserRolesReq) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1164,9 +1096,7 @@ func (v *ValidateLookupUserRolesResp) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["roles"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("roles"))
 		for idx, item := range m.GetRoles() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1174,9 +1104,7 @@ func (v *ValidateLookupUserRolesResp) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1233,7 +1161,6 @@ type ValidateNamespaceAPIListReq struct {
 }
 
 func (v *ValidateNamespaceAPIListReq) ItemListsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1293,31 +1220,24 @@ func (v *ValidateNamespaceAPIListReq) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["item_lists"]; exists {
 		vOpts := append(opts, db.WithValidateField("item_lists"))
 		if err := fv(ctx, m.GetItemLists(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNamespaceAPIListReqValidator = func() *ValidateNamespaceAPIListReq {
 	v := &ValidateNamespaceAPIListReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1398,9 +1318,7 @@ func (v *ValidateNamespaceAPIListResp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["item_lists"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("item_lists"))
 		for idx, item := range m.GetItemLists() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1408,18 +1326,13 @@ func (v *ValidateNamespaceAPIListResp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

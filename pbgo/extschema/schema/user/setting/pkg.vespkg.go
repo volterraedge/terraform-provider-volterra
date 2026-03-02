@@ -25,28 +25,21 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.user.setting.UserSettingsRequest"] = UserSettingsRequestValidator()
 	vr["ves.io.schema.user.setting.UserSettingsResponse"] = UserSettingsResponseValidator()
 	vr["ves.io.schema.user.setting.ViewPreference"] = ViewPreferenceValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.user.setting.CustomAPI.Update"] = "ves.io.schema.user.setting.UserSettingsRequest"
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.user.setting.CustomAPI.UpdateUserImage"] = "ves.io.schema.user.setting.UpdateImageRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.user.setting.CustomAPI"] = "web"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -55,14 +48,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.user.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.user.setting.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.user.setting.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -73,22 +62,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.user.setting.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -42,7 +42,6 @@ func (c *CustomActionAPIGrpcClient) doRPCForceDelete(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.ForceDelete(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomActionAPIGrpcClient) doRPCRun(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RunRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomActionAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ForceDelete"] = ccl.doRPCForceDelete
-
 	rpcFns["Run"] = ccl.doRPCRun
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -175,7 +171,6 @@ func (c *CustomActionAPIRestClient) doRPCForceDelete(ctx context.Context, callOp
 	pbRsp := &ForceDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.ForceDeleteResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -183,7 +178,6 @@ func (c *CustomActionAPIRestClient) doRPCForceDelete(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomActionAPIRestClient) doRPCRun(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -261,7 +255,6 @@ func (c *CustomActionAPIRestClient) doRPCRun(ctx context.Context, callOpts *serv
 	pbRsp := &RunResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.RunResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -295,11 +288,8 @@ func NewCustomActionAPIRestClient(baseURL string, hc http.Client) server.CustomC
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ForceDelete"] = ccl.doRPCForceDelete
-
 	rpcFns["Run"] = ccl.doRPCRun
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -384,7 +374,6 @@ func (s *customActionAPISrv) ForceDelete(ctx context.Context, in *ForceDeleteReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.ForceDeleteResponse", rsp)...)
 
 	return rsp, nil
@@ -433,7 +422,6 @@ func (s *customActionAPISrv) Run(ctx context.Context, in *RunRequest) (*RunRespo
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.terraform_parameters.RunResponse", rsp)...)
 
 	return rsp, nil
@@ -447,7 +435,7 @@ var CustomActionAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "View Terraform Parameters",
-        "description": "View Terraform Parameters is set of parameters that are used by terraform scripts \nto instantiate view objects external to volterra",
+        "description": "View Terraform Parameters is set of parameters that are used by terraform scripts\nto instantiate view objects external to volterra",
         "version": "version not set"
     },
     "schemes": [

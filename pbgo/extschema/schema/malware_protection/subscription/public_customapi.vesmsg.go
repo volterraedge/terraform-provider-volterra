@@ -76,7 +76,6 @@ func (v *ValidateSubscribeRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -145,7 +144,6 @@ func (v *ValidateSubscribeResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -214,7 +212,6 @@ func (v *ValidateUnsubscribeRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -283,7 +280,6 @@ func (v *ValidateUnsubscribeResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

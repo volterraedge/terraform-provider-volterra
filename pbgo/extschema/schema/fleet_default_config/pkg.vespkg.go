@@ -15,15 +15,12 @@ import (
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.fleet_default_config.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.fleet_default_config.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.fleet_default_config.Object"] = ObjectValidator()
-
 	vr["ves.io.schema.fleet_default_config.FDCRefList"] = FDCRefListValidator()
 	vr["ves.io.schema.fleet_default_config.FleetDefaultConfigDependencyMapReq"] = FleetDefaultConfigDependencyMapReqValidator()
 	vr["ves.io.schema.fleet_default_config.FleetDefaultConfigDependencyMapRsp"] = FleetDefaultConfigDependencyMapRspValidator()
 	vr["ves.io.schema.fleet_default_config.GetDefaultFleetConfigRequest"] = GetDefaultFleetConfigRequestValidator()
 	vr["ves.io.schema.fleet_default_config.GetDefaultFleetConfigResponse"] = GetDefaultFleetConfigResponseValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -31,24 +28,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.fleet_default_config.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.fleet_default_config.Object"] = reflect.TypeOf(&DBObject{})
 	mdr.EntryIndexers["ves.io.schema.fleet_default_config.Object"] = GetObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -57,14 +49,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.akar.fleet_default_config.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.fleet_default_config.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.fleet_default_config.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -75,22 +63,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.fleet_default_config.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

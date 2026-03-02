@@ -64,7 +64,6 @@ type ValidateDnsInfo struct {
 }
 
 func (v *ValidateDnsInfo) IpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_address")
@@ -86,32 +85,24 @@ func (v *ValidateDnsInfo) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["internal_cdn_service_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_cdn_service_domain"))
 		if err := fv(ctx, m.GetInternalCdnServiceDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_address"))
 		if err := fv(ctx, m.GetIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDnsInfoValidator = func() *ValidateDnsInfo {
 	v := &ValidateDnsInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -181,7 +172,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualHostDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
@@ -206,7 +196,6 @@ func (m *GlobalSpecType) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualHostDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -225,7 +214,6 @@ func (m *GlobalSpecType) GetVirtualHostDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -246,9 +234,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_info"))
 		for idx, item := range m.GetDnsInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -256,20 +242,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host"))
 		for idx, item := range m.GetVirtualHost() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -277,16 +257,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["dns_info"] = DnsInfoValidator().Validate
 
 	return v
@@ -339,7 +316,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -347,7 +323,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
@@ -357,7 +332,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSpecType struct {
@@ -377,23 +351,18 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v

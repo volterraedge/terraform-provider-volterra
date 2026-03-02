@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.Object"] = ObjectValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.ConfigSyncGroup"] = ConfigSyncGroupValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.DiscoveryTarget"] = DiscoveryTargetValidator()
@@ -36,7 +33,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.NGINXInstance"] = NGINXInstanceValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_service_discovery.ServerBlockFilter"] = ServerBlockFilterValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -48,25 +44,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.nginx.one.nginx_service_discovery.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.nginx.one.nginx_service_discovery.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.nginx.one.nginx_service_discovery.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.nginx.one.nginx_service_discovery.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -75,9 +66,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.nginx.one.nginx_service_discovery.Object"] = APISwaggerJSON
@@ -91,22 +80,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.nginx.one.nginx_service_discovery.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.nginx.one.nginx_service_discovery.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.nginx.one.nginx_service_discovery.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

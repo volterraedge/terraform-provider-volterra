@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.customer_support.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.customer_support.Object"] = ObjectValidator()
 	vr["ves.io.schema.customer_support.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.customer_support.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.customer_support.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.customer_support.GetRequest"] = GetRequestValidator()
@@ -25,7 +23,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.customer_support.ListRequest"] = ListRequestValidator()
 	vr["ves.io.schema.customer_support.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.customer_support.ListResponseItem"] = ListResponseItemValidator()
-
+	vr["ves.io.schema.customer_support.AdminListRequest"] = AdminListRequestValidator()
 	vr["ves.io.schema.customer_support.CloseRequest"] = CloseRequestValidator()
 	vr["ves.io.schema.customer_support.CloseResponse"] = CloseResponseValidator()
 	vr["ves.io.schema.customer_support.CommentRequest"] = CommentRequestValidator()
@@ -41,13 +39,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.customer_support.RaiseTaxExemptVerificationSupportTicketResponse"] = RaiseTaxExemptVerificationSupportTicketResponseValidator()
 	vr["ves.io.schema.customer_support.ReopenRequest"] = ReopenRequestValidator()
 	vr["ves.io.schema.customer_support.ReopenResponse"] = ReopenResponseValidator()
-
 	vr["ves.io.schema.customer_support.AttachmentType"] = AttachmentTypeValidator()
 	vr["ves.io.schema.customer_support.CommentType"] = CommentTypeValidator()
 	vr["ves.io.schema.customer_support.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.customer_support.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.customer_support.GlobalSpecType"] = GlobalSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -59,46 +55,36 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.customer_support.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.customer_support.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.customer_support.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.customer_support.API.Create"] = []string{
 		"spec.category",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.customer_support.API.Create"] = []string{
 		"spec.category",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.customer_support.API.Get"] = []string{
 		"create_form.spec.category",
 		"spec.category",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.customer_support.API.List"] = []string{
 		"items.#.get_spec.category",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.customer_support.CustomAPI.AdminList"] = []string{
 		"items.#.get_spec.category",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.customer_support.CustomAPI.ListCTSupportTickets"] = []string{
 		"items.#.get_spec.category",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.customer_support.API"] = "web"
 	sm["ves.io.schema.customer_support.CustomAPI"] = "web"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -107,9 +93,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.customer_support.Object"] = APISwaggerJSON
@@ -123,16 +107,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.customer_support.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.customer_support.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.customer_support.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.customer_support.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.customer_support.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.customer_support.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -143,22 +122,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.customer_support.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

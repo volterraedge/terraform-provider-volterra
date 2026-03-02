@@ -26,7 +26,6 @@ resource "volterra_site_state" "example" {
   state = "DECOMMISSIONING"
   when  = "delete"
 }
-
 ```
 
 ### Argument Reference
@@ -50,4 +49,4 @@ Attribute Reference
 
 ---
 
--	`id` - This is the id of Volterra site object.
+-   `id` - This is the id of Volterra site object.

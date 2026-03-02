@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.endpoint.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.endpoint.Object"] = ObjectValidator()
 	vr["ves.io.schema.endpoint.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.endpoint.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.endpoint.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.endpoint.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.endpoint.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.endpoint.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.endpoint.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.endpoint.ConsulInfo"] = ConsulInfoValidator()
 	vr["ves.io.schema.endpoint.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.endpoint.DNSInfo"] = DNSInfoValidator()
@@ -39,8 +36,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.endpoint.K8SInfo"] = K8SInfoValidator()
 	vr["ves.io.schema.endpoint.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.endpoint.ServiceInfoType"] = ServiceInfoTypeValidator()
+	vr["ves.io.schema.endpoint.TMMPoolMemberType"] = TMMPoolMemberTypeValidator()
 	vr["ves.io.schema.endpoint.VerStatusType"] = VerStatusTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -52,38 +49,32 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.endpoint.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.endpoint.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.endpoint.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.endpoint.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.endpoint.CreateRequest.spec.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.endpoint.API.Create"] = []string{
 		"spec.dns_name_advanced.strict_ttl",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.endpoint.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.endpoint.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.endpoint.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.snat_pool.snat_pool.ipv6_prefixes.#",
@@ -98,48 +89,40 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.endpoint.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.endpoint.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.endpoint.ReplaceRequest.spec.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.endpoint.API.Replace"] = []string{
 		"spec.dns_name_advanced.strict_ttl",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.endpoint.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.endpoint.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -148,9 +131,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.endpoint.Object"] = APISwaggerJSON
@@ -164,22 +145,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.endpoint.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.endpoint.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.endpoint.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

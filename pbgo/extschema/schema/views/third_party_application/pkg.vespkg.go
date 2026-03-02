@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.third_party_application.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.third_party_application.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.third_party_application.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.third_party_application.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.views.third_party_application.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.views.third_party_application.ListRequest"] = ListRequestValidator()
@@ -25,16 +23,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.third_party_application.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.third_party_application.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.third_party_application.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.third_party_application.GenerateTokenRequest"] = GenerateTokenRequestValidator()
 	vr["ves.io.schema.views.third_party_application.GenerateTokenResponse"] = GenerateTokenResponseValidator()
 	vr["ves.io.schema.views.third_party_application.GetSecurityConfigReq"] = GetSecurityConfigReqValidator()
 	vr["ves.io.schema.views.third_party_application.ThirdPartyApplicationList"] = ThirdPartyApplicationListValidator()
-
 	vr["ves.io.schema.views.third_party_application.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.third_party_application.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.views.third_party_application.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -46,20 +41,16 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.third_party_application.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.third_party_application.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.third_party_application.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.third_party_application.API.Get"] = []string{
 		"replace_form.spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.third_party_application.API.List"] = []string{
 		"items.#.get_spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.third_party_application.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.third_party_application.ReplaceRequest.spec.api_definition_choice.api_specification",
@@ -70,11 +61,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.third_party_application.API.Replace"] = []string{
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.third_party_application.API.Replace"] = []string{
 		"spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
 		"spec.api_specification.validation_all_spec_endpoints.settings.fail_close",
@@ -89,24 +78,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.third_party_application.API.Replace"] = "ves.io.schema.views.third_party_application.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.third_party_application.API"] = "config"
 	sm["ves.io.schema.views.third_party_application.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -115,9 +99,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.third_party_application.Object"] = APISwaggerJSON
@@ -131,16 +113,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.third_party_application.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.third_party_application.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.third_party_application.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.third_party_application.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.third_party_application.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.third_party_application.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -151,22 +128,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.third_party_application.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

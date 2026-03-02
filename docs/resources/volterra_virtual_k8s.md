@@ -20,7 +20,6 @@ resource "volterra_virtual_k8s" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -65,4 +64,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured virtual_k8s.
+*   `id` - This is the id of the configured virtual_k8s.

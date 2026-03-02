@@ -76,9 +76,7 @@ func (v *ValidateEdgeData) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -86,11 +84,8 @@ func (v *ValidateEdgeData) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dst_labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dst_labels"))
 		for key, value := range m.GetDstLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -98,11 +93,8 @@ func (v *ValidateEdgeData) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["src_labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("src_labels"))
 		for key, value := range m.GetSrcLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -110,9 +102,7 @@ func (v *ValidateEdgeData) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -169,7 +159,6 @@ type ValidateFieldSelector struct {
 }
 
 func (v *ValidateFieldSelector) NodeMetricTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -215,9 +204,7 @@ func (v *ValidateFieldSelector) NodeMetricTypeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateFieldSelector) EdgeMetricTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -277,30 +264,24 @@ func (v *ValidateFieldSelector) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["edge_metric_type"]; exists {
 		vOpts := append(opts, db.WithValidateField("edge_metric_type"))
 		if err := fv(ctx, m.GetEdgeMetricType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_metric_type"]; exists {
 		vOpts := append(opts, db.WithValidateField("node_metric_type"))
 		if err := fv(ctx, m.GetNodeMetricType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFieldSelectorValidator = func() *ValidateFieldSelector {
 	v := &ValidateFieldSelector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -392,34 +373,24 @@ func (v *ValidateLabelFilter) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["op"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("op"))
 		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -488,27 +459,19 @@ func (v *ValidateMetricData) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit"))
 		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		for idx, item := range m.GetValue() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -516,9 +479,7 @@ func (v *ValidateMetricData) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -587,18 +548,13 @@ func (v *ValidateNodeData) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connected_segments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connected_segments"))
 		if err := fv(ctx, m.GetConnectedSegments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -606,11 +562,8 @@ func (v *ValidateNodeData) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -618,9 +571,7 @@ func (v *ValidateNodeData) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -677,7 +628,6 @@ type ValidateSegmentsRequest struct {
 }
 
 func (v *ValidateSegmentsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -685,9 +635,7 @@ func (v *ValidateSegmentsRequest) StartTimeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSegmentsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -695,9 +643,7 @@ func (v *ValidateSegmentsRequest) EndTimeValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSegmentsRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -719,27 +665,19 @@ func (v *ValidateSegmentsRequest) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["field_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_selector"))
 		if err := fv(ctx, m.GetFieldSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		for idx, item := range m.GetGroupBy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -747,11 +685,8 @@ func (v *ValidateSegmentsRequest) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		for idx, item := range m.GetLabelFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -759,43 +694,31 @@ func (v *ValidateSegmentsRequest) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSegmentsRequestValidator = func() *ValidateSegmentsRequest {
 	v := &ValidateSegmentsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -836,7 +759,6 @@ var DefaultSegmentsRequestValidator = func() *ValidateSegmentsRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["step"] = vFn
-
 	v.FldValidators["field_selector"] = FieldSelectorValidator().Validate
 
 	return v
@@ -888,7 +810,6 @@ type ValidateSegmentsResponse struct {
 }
 
 func (v *ValidateSegmentsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -910,9 +831,7 @@ func (v *ValidateSegmentsResponse) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["edges"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("edges"))
 		for idx, item := range m.GetEdges() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -920,11 +839,8 @@ func (v *ValidateSegmentsResponse) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nodes"))
 		for idx, item := range m.GetNodes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -932,25 +848,19 @@ func (v *ValidateSegmentsResponse) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSegmentsResponseValidator = func() *ValidateSegmentsResponse {
 	v := &ValidateSegmentsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.azure_vnet_site.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.azure_vnet_site.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.azure_vnet_site.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.azure_vnet_site.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.azure_vnet_site.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.views.azure_vnet_site.DeleteRequest"] = DeleteRequestValidator()
@@ -28,12 +26,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.azure_vnet_site.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.azure_vnet_site.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.azure_vnet_site.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.azure_vnet_site.SetCloudSiteInfoRequest"] = SetCloudSiteInfoRequestValidator()
 	vr["ves.io.schema.views.azure_vnet_site.SetCloudSiteInfoResponse"] = SetCloudSiteInfoResponseValidator()
 	vr["ves.io.schema.views.azure_vnet_site.SetVIPInfoRequest"] = SetVIPInfoRequestValidator()
 	vr["ves.io.schema.views.azure_vnet_site.SetVIPInfoResponse"] = SetVIPInfoResponseValidator()
-
+	vr["ves.io.schema.views.azure_vnet_site.AzureDiskEncryption"] = AzureDiskEncryptionValidator()
 	vr["ves.io.schema.views.azure_vnet_site.AzureHubVnetType"] = AzureHubVnetTypeValidator()
 	vr["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARReplaceType"] = AzureVnetIngressEgressGwARReplaceTypeValidator()
 	vr["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType"] = AzureVnetIngressEgressGwARTypeValidator()
@@ -60,7 +57,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.azure_vnet_site.VNETInfoType"] = VNETInfoTypeValidator()
 	vr["ves.io.schema.views.azure_vnet_site.VnetIpPrefixesType"] = VnetIpPrefixesTypeValidator()
 	vr["ves.io.schema.views.azure_vnet_site.VnetPeeringType"] = VnetPeeringTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -72,11 +68,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.azure_vnet_site.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.azure_vnet_site.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.azure_vnet_site.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.custom_dns.inside_nameserver_v6",
@@ -135,7 +129,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []string{
 		"spec.admin_password.blindfold_secret_info_internal",
 		"spec.admin_password.secret_encoding_type",
@@ -171,7 +164,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
@@ -180,6 +172,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
 			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.encryption_choice",
+			AllowedEnvironments: []string{"crt", "demo1"},
 		},
 		{
 			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -230,7 +226,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
@@ -289,9 +284,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = "ves.io.schema.views.azure_vnet_site.CreateRequest"
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.custom_dns.inside_nameserver_v6",
@@ -300,6 +293,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "create_form.spec.custom_dns.outside_nameserver_v6",
 			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.encryption_choice",
+			AllowedEnvironments: []string{"crt", "demo1"},
 		},
 		{
 			FieldPath:           "create_form.spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -462,7 +459,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.custom_dns.inside_nameserver_v6",
@@ -521,7 +517,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.custom_dns.inside_nameserver_v6",
@@ -580,7 +575,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []string{
 		"spec.ingress_egress_gw.az_nodes.#.disk_size",
 		"spec.ingress_egress_gw.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
@@ -612,7 +606,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
@@ -671,24 +664,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = "ves.io.schema.views.azure_vnet_site.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.azure_vnet_site.API"] = "config"
 	sm["ves.io.schema.views.azure_vnet_site.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -697,14 +685,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = PrivateCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.azure_vnet_site.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.azure_vnet_site.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
 		if isExternal {
@@ -715,11 +699,8 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.azure_vnet_site.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewPrivateCustomAPIServer(svc)
 		}
-
 	}()
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = APISwaggerJSON
@@ -733,16 +714,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.azure_vnet_site.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.azure_vnet_site.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.azure_vnet_site.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.azure_vnet_site.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -753,22 +729,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.azure_vnet_site.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

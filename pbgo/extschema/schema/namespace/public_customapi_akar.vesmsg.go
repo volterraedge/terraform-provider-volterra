@@ -80,70 +80,54 @@ func (v *ValidateAllApplicationInventoryRequest) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bigip_virtual_server_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_virtual_server_filter"))
 		if err := fv(ctx, m.GetBigipVirtualServerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cdn_load_balancer_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cdn_load_balancer_filter"))
 		if err := fv(ctx, m.GetCdnLoadBalancerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_load_balancer_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_load_balancer_filter"))
 		if err := fv(ctx, m.GetHttpLoadBalancerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_server_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_server_filter"))
 		if err := fv(ctx, m.GetNginxOneServerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_load_balancer_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_load_balancer_filter"))
 		if err := fv(ctx, m.GetTcpLoadBalancerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["third_party_application_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("third_party_application_filter"))
 		if err := fv(ctx, m.GetThirdPartyApplicationFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["udp_load_balancer_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("udp_load_balancer_filter"))
 		if err := fv(ctx, m.GetUdpLoadBalancerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["virtual_service_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_service_filter"))
+		if err := fv(ctx, m.GetVirtualServiceFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -254,16 +238,13 @@ func (v *ValidateAllApplicationInventoryWafFilterRequest) Validate(ctx context.C
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAllApplicationInventoryWafFilterRequestValidator = func() *ValidateAllApplicationInventoryWafFilterRequest {
 	v := &ValidateAllApplicationInventoryWafFilterRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -271,7 +252,6 @@ var DefaultAllApplicationInventoryWafFilterRequestValidator = func() *ValidateAl
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhWafFilterChoice := v.WafFilterChoiceValidationRuleHandler
 	rulesWafFilterChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -344,9 +324,7 @@ func (v *ValidateAllApplicationInventoryWafFilterResponse) Validate(ctx context.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cdn_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cdn_loadbalancers"))
 		for idx, item := range m.GetCdnLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -354,11 +332,8 @@ func (v *ValidateAllApplicationInventoryWafFilterResponse) Validate(ctx context.
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_loadbalancers"))
 		for idx, item := range m.GetHttpLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -366,9 +341,7 @@ func (v *ValidateAllApplicationInventoryWafFilterResponse) Validate(ctx context.
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -437,79 +410,60 @@ func (v *ValidateApplicationInventoryRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bigip_virtual_server_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_virtual_server_filter"))
 		if err := fv(ctx, m.GetBigipVirtualServerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cdn_load_balancer_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cdn_load_balancer_filter"))
 		if err := fv(ctx, m.GetCdnLoadBalancerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_load_balancer_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_load_balancer_filter"))
 		if err := fv(ctx, m.GetHttpLoadBalancerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_server_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_server_filter"))
 		if err := fv(ctx, m.GetNginxOneServerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_load_balancer_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_load_balancer_filter"))
 		if err := fv(ctx, m.GetTcpLoadBalancerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["third_party_application_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("third_party_application_filter"))
 		if err := fv(ctx, m.GetThirdPartyApplicationFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["udp_load_balancer_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("udp_load_balancer_filter"))
 		if err := fv(ctx, m.GetUdpLoadBalancerFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["virtual_service_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_service_filter"))
+		if err := fv(ctx, m.GetVirtualServiceFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -572,15 +526,12 @@ func (m *ApplicationInventoryResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHttpLoadbalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHttpLoadbalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -588,7 +539,6 @@ func (m *ApplicationInventoryResponse) GetCdnLoadbalancersDRefInfo() ([]db.DRefI
 	if m.GetCdnLoadbalancers() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCdnLoadbalancers().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCdnLoadbalancers().GetDRefInfo() FAILED")
@@ -598,7 +548,6 @@ func (m *ApplicationInventoryResponse) GetCdnLoadbalancersDRefInfo() ([]db.DRefI
 		dri.DRField = "cdn_loadbalancers." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -606,7 +555,6 @@ func (m *ApplicationInventoryResponse) GetHttpLoadbalancersDRefInfo() ([]db.DRef
 	if m.GetHttpLoadbalancers() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetHttpLoadbalancers().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHttpLoadbalancers().GetDRefInfo() FAILED")
@@ -616,7 +564,6 @@ func (m *ApplicationInventoryResponse) GetHttpLoadbalancersDRefInfo() ([]db.DRef
 		dri.DRField = "http_loadbalancers." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateApplicationInventoryResponse struct {
@@ -636,108 +583,80 @@ func (v *ValidateApplicationInventoryResponse) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bigip_virtual_servers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_virtual_servers"))
 		if err := fv(ctx, m.GetBigipVirtualServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cdn_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cdn_loadbalancers"))
 		if err := fv(ctx, m.GetCdnLoadbalancers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_loadbalancers"))
 		if err := fv(ctx, m.GetHttpLoadbalancers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancers"))
 		if err := fv(ctx, m.GetLoadbalancers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_servers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_servers"))
 		if err := fv(ctx, m.GetNginxOneServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["services_discovered"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("services_discovered"))
 		if err := fv(ctx, m.GetServicesDiscovered(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_loadbalancers"))
 		if err := fv(ctx, m.GetTcpLoadbalancers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["third_party_applications"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("third_party_applications"))
 		if err := fv(ctx, m.GetThirdPartyApplications(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["udp_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("udp_loadbalancers"))
 		if err := fv(ctx, m.GetUdpLoadbalancers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["virtual_servers"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_servers"))
+		if err := fv(ctx, m.GetVirtualServers(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApplicationInventoryResponseValidator = func() *ValidateApplicationInventoryResponse {
 	v := &ValidateApplicationInventoryResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["http_loadbalancers"] = HTTPLoadbalancerInventoryTypeValidator().Validate
-
 	v.FldValidators["cdn_loadbalancers"] = HTTPLoadbalancerInventoryTypeValidator().Validate
-
 	v.FldValidators["nginx_one_servers"] = NGINXOneServerInventoryTypeValidator().Validate
 
 	return v
@@ -801,25 +720,18 @@ func (v *ValidateBIGIPVirtualServerInventoryFilterType) Validate(ctx context.Con
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery"))
 		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_configured"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_configured"))
 		if err := fv(ctx, m.GetWafConfigured(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -888,18 +800,13 @@ func (v *ValidateBIGIPVirtualServerInventoryType) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery"))
 		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bigiplb_results"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigiplb_results"))
 		for idx, item := range m.GetBigiplbResults() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -907,18 +814,13 @@ func (v *ValidateBIGIPVirtualServerInventoryType) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_configured"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_configured"))
 		if err := fv(ctx, m.GetWafConfigured(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -987,79 +889,60 @@ func (v *ValidateBIGIPVirtualServerResultType) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_enabled"))
 		if err := fv(ctx, m.GetApiDiscoveryEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_enforcement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_enforcement_mode"))
 		if err := fv(ctx, m.GetWafEnforcementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_policy_name"))
 		if err := fv(ctx, m.GetWafPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1128,16 +1011,12 @@ func (v *ValidateGetActiveAlertPoliciesRequest) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1200,15 +1079,12 @@ func (m *GetActiveAlertPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAlertPoliciesStatusDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAlertPoliciesStatusDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -1234,7 +1110,6 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDRefInfo() ([]db.DRefIn
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAlertPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1262,7 +1137,6 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDBEntries(ctx context.C
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1271,7 +1145,6 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesStatusDRefInfo() ([]db.
 	if m.GetAlertPoliciesStatus() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAlertPoliciesStatus() {
 		driSet, err := e.GetDRefInfo()
@@ -1285,7 +1158,6 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesStatusDRefInfo() ([]db.
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetActiveAlertPoliciesResponse struct {
@@ -1305,9 +1177,7 @@ func (v *ValidateGetActiveAlertPoliciesResponse) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["alert_policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("alert_policies"))
 		for idx, item := range m.GetAlertPolicies() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1315,11 +1185,8 @@ func (v *ValidateGetActiveAlertPoliciesResponse) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["alert_policies_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("alert_policies_status"))
 		for idx, item := range m.GetAlertPoliciesStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1327,18 +1194,14 @@ func (v *ValidateGetActiveAlertPoliciesResponse) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetActiveAlertPoliciesResponseValidator = func() *ValidateGetActiveAlertPoliciesResponse {
 	v := &ValidateGetActiveAlertPoliciesResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["alert_policies"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["alert_policies_status"] = ves_io_schema_alert_policy_set.AlertPolicyStatusValidator().Validate
 
 	return v
@@ -1402,16 +1265,12 @@ func (v *ValidateGetActiveNetworkPoliciesRequest) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1469,7 +1328,6 @@ func (m *GetActiveNetworkPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) 
 	}
 
 	return m.GetNetworkPoliciesDRefInfo()
-
 }
 
 func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -1495,7 +1353,6 @@ func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDRefInfo() ([]db.DR
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1523,7 +1380,6 @@ func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDBEntries(ctx conte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1544,9 +1400,7 @@ func (v *ValidateGetActiveNetworkPoliciesResponse) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["network_policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_policies"))
 		for idx, item := range m.GetNetworkPolicies() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1554,16 +1408,13 @@ func (v *ValidateGetActiveNetworkPoliciesResponse) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetActiveNetworkPoliciesResponseValidator = func() *ValidateGetActiveNetworkPoliciesResponse {
 	v := &ValidateGetActiveNetworkPoliciesResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["network_policies"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1627,16 +1478,12 @@ func (v *ValidateGetActiveServicePoliciesRequest) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1694,7 +1541,6 @@ func (m *GetActiveServicePoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) 
 	}
 
 	return m.GetServicePoliciesDRefInfo()
-
 }
 
 func (m *GetActiveServicePoliciesResponse) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -1720,7 +1566,6 @@ func (m *GetActiveServicePoliciesResponse) GetServicePoliciesDRefInfo() ([]db.DR
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetServicePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1748,7 +1593,6 @@ func (m *GetActiveServicePoliciesResponse) GetServicePoliciesDBEntries(ctx conte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1769,9 +1613,7 @@ func (v *ValidateGetActiveServicePoliciesResponse) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["service_policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_policies"))
 		for idx, item := range m.GetServicePolicies() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1779,16 +1621,13 @@ func (v *ValidateGetActiveServicePoliciesResponse) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetActiveServicePoliciesResponseValidator = func() *ValidateGetActiveServicePoliciesResponse {
 	v := &ValidateGetActiveServicePoliciesResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["service_policies"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1852,16 +1691,12 @@ func (v *ValidateGetFastACLsForInternetVIPsRequest) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1919,7 +1754,6 @@ func (m *GetFastACLsForInternetVIPsResponse) GetDRefInfo() ([]db.DRefInfo, error
 	}
 
 	return m.GetFastAclsDRefInfo()
-
 }
 
 func (m *GetFastACLsForInternetVIPsResponse) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
@@ -1945,7 +1779,6 @@ func (m *GetFastACLsForInternetVIPsResponse) GetFastAclsDRefInfo() ([]db.DRefInf
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFastAclsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1973,7 +1806,6 @@ func (m *GetFastACLsForInternetVIPsResponse) GetFastAclsDBEntries(ctx context.Co
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1994,9 +1826,7 @@ func (v *ValidateGetFastACLsForInternetVIPsResponse) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fast_acls"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fast_acls"))
 		for idx, item := range m.GetFastAcls() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2004,16 +1834,13 @@ func (v *ValidateGetFastACLsForInternetVIPsResponse) Validate(ctx context.Contex
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetFastACLsForInternetVIPsResponseValidator = func() *ValidateGetFastACLsForInternetVIPsResponse {
 	v := &ValidateGetFastACLsForInternetVIPsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["fast_acls"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2077,304 +1904,204 @@ func (v *ValidateHTTPLoadbalancerInventoryFilterType) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_definition"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_definition"))
 		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery"))
 		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_protection"))
 		if err := fv(ctx, m.GetApiProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_schema_validation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_schema_validation"))
 		if err := fv(ctx, m.GetApiSchemaValidation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_protection"))
 		if err := fv(ctx, m.GetBotProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_blocking"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_blocking"))
 		if err := fv(ctx, m.GetClientBlocking(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_side_defense"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_side_defense"))
 		if err := fv(ctx, m.GetClientSideDefense(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_protection"))
 		if err := fv(ctx, m.GetCookieProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cors_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["csrf_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("csrf_protection"))
 		if err := fv(ctx, m.GetCsrfProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["data_guard"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data_guard"))
 		if err := fv(ctx, m.GetDataGuard(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_auto_mitigation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_auto_mitigation"))
 		if err := fv(ctx, m.GetDdosAutoMitigation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_mitigation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_mitigation"))
 		if err := fv(ctx, m.GetDdosMitigation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_protection"))
 		if err := fv(ctx, m.GetDdosProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_loadbalancer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_loadbalancer"))
 		if err := fv(ctx, m.GetDefaultLoadbalancer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["graph_ql_inspection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("graph_ql_inspection"))
 		if err := fv(ctx, m.GetGraphQlInspection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_only"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_only"))
 		if err := fv(ctx, m.GetHttpOnly(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_reputation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_reputation"))
 		if err := fv(ctx, m.GetIpReputation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malicious_user_detection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malicious_user_detection"))
 		if err := fv(ctx, m.GetMaliciousUserDetection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
 		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malware_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malware_protection"))
 		if err := fv(ctx, m.GetMalwareProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mutual_tls"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mutual_tls"))
 		if err := fv(ctx, m.GetMutualTls(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
 		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_server_subset"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_server_subset"))
 		if err := fv(ctx, m.GetOriginServerSubset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement"))
 		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment"))
 		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("routes"))
 		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_policy"))
 		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["slow_ddos_mitigation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("slow_ddos_mitigation"))
 		if err := fv(ctx, m.GetSlowDdosMitigation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trusted_client"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trusted_client"))
 		if err := fv(ctx, m.GetTrustedClient(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trusted_client_ip_headers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trusted_client_ip_headers"))
 		if err := fv(ctx, m.GetTrustedClientIpHeaders(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf"))
 		if err := fv(ctx, m.GetWaf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_exclusion"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_exclusion"))
 		if err := fv(ctx, m.GetWafExclusion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2437,15 +2164,12 @@ func (m *HTTPLoadbalancerInventoryType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHttplbResultsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHttplbResultsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2453,7 +2177,6 @@ func (m *HTTPLoadbalancerInventoryType) GetCdnlbResultsDRefInfo() ([]db.DRefInfo
 	if m.GetCdnlbResults() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetCdnlbResults() {
 		driSet, err := e.GetDRefInfo()
@@ -2467,7 +2190,6 @@ func (m *HTTPLoadbalancerInventoryType) GetCdnlbResultsDRefInfo() ([]db.DRefInfo
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2475,7 +2197,6 @@ func (m *HTTPLoadbalancerInventoryType) GetHttplbResultsDRefInfo() ([]db.DRefInf
 	if m.GetHttplbResults() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetHttplbResults() {
 		driSet, err := e.GetDRefInfo()
@@ -2489,7 +2210,6 @@ func (m *HTTPLoadbalancerInventoryType) GetHttplbResultsDRefInfo() ([]db.DRefInf
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateHTTPLoadbalancerInventoryType struct {
@@ -2509,36 +2229,25 @@ func (v *ValidateHTTPLoadbalancerInventoryType) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery"))
 		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_protection"))
 		if err := fv(ctx, m.GetApiProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_protection"))
 		if err := fv(ctx, m.GetBotProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cdnlb_results"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cdnlb_results"))
 		for idx, item := range m.GetCdnlbResults() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2546,38 +2255,26 @@ func (v *ValidateHTTPLoadbalancerInventoryType) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_side_defense"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_side_defense"))
 		if err := fv(ctx, m.GetClientSideDefense(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_protection"))
 		if err := fv(ctx, m.GetDdosProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_only"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_only"))
 		if err := fv(ctx, m.GetHttpOnly(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["httplb_results"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("httplb_results"))
 		for idx, item := range m.GetHttplbResults() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2585,90 +2282,62 @@ func (v *ValidateHTTPLoadbalancerInventoryType) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_reputation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_reputation"))
 		if err := fv(ctx, m.GetIpReputation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malicious_user_detection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malicious_user_detection"))
 		if err := fv(ctx, m.GetMaliciousUserDetection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malware_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malware_protection"))
 		if err := fv(ctx, m.GetMalwareProtection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
 		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement"))
 		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment"))
 		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_policy"))
 		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf"))
 		if err := fv(ctx, m.GetWaf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHTTPLoadbalancerInventoryTypeValidator = func() *ValidateHTTPLoadbalancerInventoryType {
 	v := &ValidateHTTPLoadbalancerInventoryType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["httplb_results"] = HTTPLoadbalancerResultTypeValidator().Validate
-
 	v.FldValidators["cdnlb_results"] = HTTPLoadbalancerResultTypeValidator().Validate
 
 	return v
@@ -2721,7 +2390,6 @@ func (m *HTTPLoadbalancerResultType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetWafPolicyRefDRefInfo()
-
 }
 
 func (m *HTTPLoadbalancerResultType) GetWafPolicyRefDRefInfo() ([]db.DRefInfo, error) {
@@ -2747,7 +2415,6 @@ func (m *HTTPLoadbalancerResultType) GetWafPolicyRefDRefInfo() ([]db.DRefInfo, e
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetWafPolicyRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2775,7 +2442,6 @@ func (m *HTTPLoadbalancerResultType) GetWafPolicyRefDBEntries(ctx context.Contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2784,7 +2450,6 @@ type ValidateHTTPLoadbalancerResultType struct {
 }
 
 func (v *ValidateHTTPLoadbalancerResultType) WafPolicyRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2844,180 +2509,121 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_definition_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_definition_enabled"))
 		if err := fv(ctx, m.GetApiDefinitionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_enabled"))
 		if err := fv(ctx, m.GetApiDiscoveryEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_protection_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_protection_enabled"))
 		if err := fv(ctx, m.GetApiProtectionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_schema_validation_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_schema_validation_enabled"))
 		if err := fv(ctx, m.GetApiSchemaValidationEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_protection_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_protection_enabled"))
 		if err := fv(ctx, m.GetBotProtectionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certification_expiration_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certification_expiration_date"))
 		if err := fv(ctx, m.GetCertificationExpirationDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certification_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certification_status"))
 		if err := fv(ctx, m.GetCertificationStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_blocking_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_blocking_enabled"))
 		if err := fv(ctx, m.GetClientBlockingEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_side_defense_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_side_defense_enabled"))
 		if err := fv(ctx, m.GetClientSideDefenseEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
 		if err := fv(ctx, m.GetConnectionIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_protection_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_protection_enabled"))
 		if err := fv(ctx, m.GetCookieProtectionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cors_policy_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cors_policy_enabled"))
 		if err := fv(ctx, m.GetCorsPolicyEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["csrf_protection_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("csrf_protection_enabled"))
 		if err := fv(ctx, m.GetCsrfProtectionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["data_guard_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data_guard_enabled"))
 		if err := fv(ctx, m.GetDataGuardEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_auto_mitigation_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_auto_mitigation_enabled"))
 		if err := fv(ctx, m.GetDdosAutoMitigationEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_mitigation_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_mitigation_enabled"))
 		if err := fv(ctx, m.GetDdosMitigationEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_protection_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_protection_enabled"))
 		if err := fv(ctx, m.GetDdosProtectionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_loadbalancer_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_loadbalancer_enabled"))
 		if err := fv(ctx, m.GetDefaultLoadbalancerEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_info"))
 		if err := fv(ctx, m.GetDnsInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domains"))
 		for idx, item := range m.GetDomains() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3025,267 +2631,181 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["graph_ql_inspection_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("graph_ql_inspection_enabled"))
 		if err := fv(ctx, m.GetGraphQlInspectionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_enabled"))
 		if err := fv(ctx, m.GetHttpEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_listen_port_choice"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_listen_port_choice"))
 		if err := fv(ctx, m.GetHttpListenPortChoice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_reputation_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_reputation_enabled"))
 		if err := fv(ctx, m.GetIpReputationEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malicious_user_detection_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malicious_user_detection_enabled"))
 		if err := fv(ctx, m.GetMaliciousUserDetectionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malicious_user_mitigation_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_enabled"))
 		if err := fv(ctx, m.GetMaliciousUserMitigationEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malware_protection_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("malware_protection_enabled"))
 		if err := fv(ctx, m.GetMalwareProtectionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mutual_tls_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mutual_tls_enabled"))
 		if err := fv(ctx, m.GetMutualTlsEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_service_policy_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy_enabled"))
 		if err := fv(ctx, m.GetNamespaceServicePolicyEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_server_subset_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_server_subset_enabled"))
 		if err := fv(ctx, m.GetOriginServerSubsetEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_advertisement_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement_enabled"))
 		if err := fv(ctx, m.GetPrivateAdvertisementEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment_enabled"))
 		if err := fv(ctx, m.GetPublicAdvertismentEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rate_limit"))
 		if err := fv(ctx, m.GetRateLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routes_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("routes_enabled"))
 		if err := fv(ctx, m.GetRoutesEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_policy_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_policy_enabled"))
 		if err := fv(ctx, m.GetServicePolicyEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["slow_ddos_mitigation_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("slow_ddos_mitigation_enabled"))
 		if err := fv(ctx, m.GetSlowDdosMitigationEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_security_level"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_security_level"))
 		if err := fv(ctx, m.GetTlsSecurityLevel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trusted_client_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trusted_client_enabled"))
 		if err := fv(ctx, m.GetTrustedClientEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trusted_client_ip_headers_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trusted_client_ip_headers_enabled"))
 		if err := fv(ctx, m.GetTrustedClientIpHeadersEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip_type"))
 		if err := fv(ctx, m.GetVipType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_enabled"))
 		if err := fv(ctx, m.GetWafEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_enforcement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_enforcement_mode"))
 		if err := fv(ctx, m.GetWafEnforcementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_exclusion_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_exclusion_enabled"))
 		if err := fv(ctx, m.GetWafExclusionEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_policy_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("waf_policy_ref"))
 		if err := fv(ctx, m.GetWafPolicyRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHTTPLoadbalancerResultTypeValidator = func() *ValidateHTTPLoadbalancerResultType {
 	v := &ValidateHTTPLoadbalancerResultType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3366,25 +2886,18 @@ func (v *ValidateHTTPLoadbalancerWafFilterResultType) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3453,25 +2966,18 @@ func (v *ValidateNGINXOneServerInventoryFilterType) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery"))
 		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_configured"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_configured"))
 		if err := fv(ctx, m.GetWafConfigured(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3540,18 +3046,13 @@ func (v *ValidateNGINXOneServerInventoryType) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_enabled_server_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_enabled_server_count"))
 		if err := fv(ctx, m.GetApiDiscoveryEnabledServerCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_server_results"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_server_results"))
 		for idx, item := range m.GetNginxServerResults() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3559,25 +3060,19 @@ func (v *ValidateNGINXOneServerInventoryType) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_enabled_server_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_enabled_server_count"))
 		if err := fv(ctx, m.GetWafEnabledServerCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNGINXOneServerInventoryTypeValidator = func() *ValidateNGINXOneServerInventoryType {
 	v := &ValidateNGINXOneServerInventoryType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["nginx_server_results"] = NGINXOneServerResultTypeValidator().Validate
 
 	return v
@@ -3629,7 +3124,6 @@ type ValidateNGINXOneServerResultType struct {
 }
 
 func (v *ValidateNGINXOneServerResultType) WafPolicyManagementPlatformValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_policy_management_platform")
@@ -3651,18 +3145,13 @@ func (v *ValidateNGINXOneServerResultType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_enabled"))
 		if err := fv(ctx, m.GetApiDiscoveryEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domains"))
 		for idx, item := range m.GetDomains() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3670,101 +3159,68 @@ func (v *ValidateNGINXOneServerResultType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
 		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
 		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_server_name"))
 		if err := fv(ctx, m.GetNginxOneServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_routes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_routes"))
 		if err := fv(ctx, m.GetTotalRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_enforcement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_enforcement_mode"))
 		if err := fv(ctx, m.GetWafEnforcementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_policy_file_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_policy_file_name"))
 		if err := fv(ctx, m.GetWafPolicyFileName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_policy_management_platform"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_policy_management_platform"))
 		if err := fv(ctx, m.GetWafPolicyManagementPlatform(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_policy_name"))
 		if err := fv(ctx, m.GetWafPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_security_log_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_security_log_enabled"))
 		if err := fv(ctx, m.GetWafSecurityLogEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_security_log_file_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_security_log_file_names"))
 		for idx, item := range m.GetWafSecurityLogFileNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3772,16 +3228,13 @@ func (v *ValidateNGINXOneServerResultType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNGINXOneServerResultTypeValidator = func() *ValidateNGINXOneServerResultType {
 	v := &ValidateNGINXOneServerResultType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3862,7 +3315,6 @@ func (v *ValidateNetworkingInventoryRequest) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -3931,61 +3383,42 @@ func (v *ValidateNetworkingInventoryResponse) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_links"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_links"))
 		if err := fv(ctx, m.GetCloudLinks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dc_cluster_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dc_cluster_groups"))
 		if err := fv(ctx, m.GetDcClusterGroups(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["global_networks"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("global_networks"))
 		if err := fv(ctx, m.GetGlobalNetworks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segments"))
 		if err := fv(ctx, m.GetSegments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_mesh_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_mesh_groups"))
 		if err := fv(ctx, m.GetSiteMeshGroups(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sites"))
 		if err := fv(ctx, m.GetSites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -4043,7 +3476,6 @@ func (m *SetActiveAlertPoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAlertPoliciesDRefInfo()
-
 }
 
 func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -4069,7 +3501,6 @@ func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDRefInfo() ([]db.DRefInf
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAlertPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4097,7 +3528,6 @@ func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDBEntries(ctx context.Co
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4106,7 +3536,6 @@ type ValidateSetActiveAlertPoliciesRequest struct {
 }
 
 func (v *ValidateSetActiveAlertPoliciesRequest) AlertPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4166,31 +3595,24 @@ func (v *ValidateSetActiveAlertPoliciesRequest) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["alert_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("alert_policies"))
 		if err := fv(ctx, m.GetAlertPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetActiveAlertPoliciesRequestValidator = func() *ValidateSetActiveAlertPoliciesRequest {
 	v := &ValidateSetActiveAlertPoliciesRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4271,7 +3693,6 @@ func (v *ValidateSetActiveAlertPoliciesResponse) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -4329,7 +3750,6 @@ func (m *SetActiveNetworkPoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkPoliciesDRefInfo()
-
 }
 
 func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -4355,7 +3775,6 @@ func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDRefInfo() ([]db.DRe
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4383,7 +3802,6 @@ func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDBEntries(ctx contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4392,7 +3810,6 @@ type ValidateSetActiveNetworkPoliciesRequest struct {
 }
 
 func (v *ValidateSetActiveNetworkPoliciesRequest) NetworkPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4452,31 +3869,24 @@ func (v *ValidateSetActiveNetworkPoliciesRequest) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("network_policies"))
 		if err := fv(ctx, m.GetNetworkPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetActiveNetworkPoliciesRequestValidator = func() *ValidateSetActiveNetworkPoliciesRequest {
 	v := &ValidateSetActiveNetworkPoliciesRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4557,7 +3967,6 @@ func (v *ValidateSetActiveNetworkPoliciesResponse) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -4615,7 +4024,6 @@ func (m *SetActiveServicePoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetServicePoliciesDRefInfo()
-
 }
 
 func (m *SetActiveServicePoliciesRequest) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -4641,7 +4049,6 @@ func (m *SetActiveServicePoliciesRequest) GetServicePoliciesDRefInfo() ([]db.DRe
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetServicePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4669,7 +4076,6 @@ func (m *SetActiveServicePoliciesRequest) GetServicePoliciesDBEntries(ctx contex
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4678,7 +4084,6 @@ type ValidateSetActiveServicePoliciesRequest struct {
 }
 
 func (v *ValidateSetActiveServicePoliciesRequest) ServicePoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4738,31 +4143,24 @@ func (v *ValidateSetActiveServicePoliciesRequest) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("service_policies"))
 		if err := fv(ctx, m.GetServicePolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetActiveServicePoliciesRequestValidator = func() *ValidateSetActiveServicePoliciesRequest {
 	v := &ValidateSetActiveServicePoliciesRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4843,7 +4241,6 @@ func (v *ValidateSetActiveServicePoliciesResponse) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -4901,7 +4298,6 @@ func (m *SetFastACLsForInternetVIPsRequest) GetDRefInfo() ([]db.DRefInfo, error)
 	}
 
 	return m.GetFastAclsDRefInfo()
-
 }
 
 func (m *SetFastACLsForInternetVIPsRequest) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
@@ -4927,7 +4323,6 @@ func (m *SetFastACLsForInternetVIPsRequest) GetFastAclsDRefInfo() ([]db.DRefInfo
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFastAclsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4955,7 +4350,6 @@ func (m *SetFastACLsForInternetVIPsRequest) GetFastAclsDBEntries(ctx context.Con
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4964,7 +4358,6 @@ type ValidateSetFastACLsForInternetVIPsRequest struct {
 }
 
 func (v *ValidateSetFastACLsForInternetVIPsRequest) FastAclsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5024,31 +4417,24 @@ func (v *ValidateSetFastACLsForInternetVIPsRequest) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fast_acls"]; exists {
 		vOpts := append(opts, db.WithValidateField("fast_acls"))
 		if err := fv(ctx, m.GetFastAcls(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetFastACLsForInternetVIPsRequestValidator = func() *ValidateSetFastACLsForInternetVIPsRequest {
 	v := &ValidateSetFastACLsForInternetVIPsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5129,7 +4515,6 @@ func (v *ValidateSetFastACLsForInternetVIPsResponse) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -5198,52 +4583,36 @@ func (v *ValidateTCPLoadbalancerInventoryFilterType) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
 		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement"))
 		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment"))
 		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_policy"))
 		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_encryption"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_encryption"))
 		if err := fv(ctx, m.GetTlsEncryption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -5312,45 +4681,31 @@ func (v *ValidateTCPLoadbalancerInventoryType) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
 		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement"))
 		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment"))
 		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_policy"))
 		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcplb_results"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcplb_results"))
 		for idx, item := range m.GetTcplbResults() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5358,18 +4713,13 @@ func (v *ValidateTCPLoadbalancerInventoryType) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_encryption"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_encryption"))
 		if err := fv(ctx, m.GetTlsEncryption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -5438,79 +4788,54 @@ func (v *ValidateTCPLoadbalancerResultType) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
 		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement"))
 		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment"))
 		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rate_limit"))
 		if err := fv(ctx, m.GetRateLimit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_policy"))
 		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_encryption"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_encryption"))
 		if err := fv(ctx, m.GetTlsEncryption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -5579,16 +4904,12 @@ func (v *ValidateThirdPartyApplicationFilterType) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery"))
 		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -5657,18 +4978,13 @@ func (v *ValidateThirdPartyApplicationInventoryType) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery"))
 		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["third_party_application_results"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("third_party_application_results"))
 		for idx, item := range m.GetThirdPartyApplicationResults() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5676,9 +4992,7 @@ func (v *ValidateThirdPartyApplicationInventoryType) Validate(ctx context.Contex
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -5747,25 +5061,18 @@ func (v *ValidateThirdPartyApplicationResultType) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_enabled"))
 		if err := fv(ctx, m.GetApiDiscoveryEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -5834,25 +5141,30 @@ func (v *ValidateUDPLoadbalancerInventoryFilterType) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
+	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
+		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["private_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement"))
 		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment"))
 		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["service_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("service_policy"))
+		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -5921,27 +5233,31 @@ func (v *ValidateUDPLoadbalancerInventoryType) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
+	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
+		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["private_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement"))
 		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment"))
 		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["service_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("service_policy"))
+		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["udplb_results"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("udplb_results"))
 		for idx, item := range m.GetUdplbResults() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5949,9 +5265,7 @@ func (v *ValidateUDPLoadbalancerInventoryType) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -6020,43 +5334,42 @@ func (v *ValidateUDPLoadbalancerResultType) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
+		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["private_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_advertisement"))
 		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_advertisment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_advertisment"))
 		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["service_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("service_policy"))
+		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -6125,25 +5438,18 @@ func (v *ValidateUpdateAllowAdvertiseOnPublicReq) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allow_advertise_on_public"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow_advertise_on_public"))
 		if err := fv(ctx, m.GetAllowAdvertiseOnPublic(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -6212,16 +5518,12 @@ func (v *ValidateUpdateAllowAdvertiseOnPublicResp) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["result"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("result"))
 		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -6290,18 +5592,13 @@ func (v *ValidateValidateRulesReq) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["validator_evaluation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("validator_evaluation"))
 		for key, value := range m.GetValidatorEvaluation() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -6309,18 +5606,13 @@ func (v *ValidateValidateRulesReq) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -6389,27 +5681,19 @@ func (v *ValidateValidateRulesResponse) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["success"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("success"))
 		if err := fv(ctx, m.GetSuccess(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["validation_results"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("validation_results"))
 		for idx, item := range m.GetValidationResults() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -6417,9 +5701,7 @@ func (v *ValidateValidateRulesResponse) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -6488,25 +5770,18 @@ func (v *ValidateValidationResult) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["message"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("message"))
 		if err := fv(ctx, m.GetMessage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["severity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("severity"))
 		if err := fv(ctx, m.GetSeverity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -6519,4 +5794,274 @@ var DefaultValidationResultValidator = func() *ValidateValidationResult {
 
 func ValidationResultValidator() db.Validator {
 	return DefaultValidationResultValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VirtualServerInventoryResultType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VirtualServerInventoryResultType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VirtualServerInventoryResultType) DeepCopy() *VirtualServerInventoryResultType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VirtualServerInventoryResultType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VirtualServerInventoryResultType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VirtualServerInventoryResultType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VirtualServerInventoryResultTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVirtualServerInventoryResultType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVirtualServerInventoryResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VirtualServerInventoryResultType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VirtualServerInventoryResultType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["http_count"]; exists {
+		vOpts := append(opts, db.WithValidateField("http_count"))
+		if err := fv(ctx, m.GetHttpCount(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["irules_count"]; exists {
+		vOpts := append(opts, db.WithValidateField("irules_count"))
+		if err := fv(ctx, m.GetIrulesCount(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["virtualserver_results"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtualserver_results"))
+		for idx, item := range m.GetVirtualserverResults() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVirtualServerInventoryResultTypeValidator = func() *ValidateVirtualServerInventoryResultType {
+	v := &ValidateVirtualServerInventoryResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VirtualServerInventoryResultTypeValidator() db.Validator {
+	return DefaultVirtualServerInventoryResultTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VirtualServerResultType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VirtualServerResultType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VirtualServerResultType) DeepCopy() *VirtualServerResultType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VirtualServerResultType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VirtualServerResultType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VirtualServerResultType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VirtualServerResultTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVirtualServerResultType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVirtualServerResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VirtualServerResultType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VirtualServerResultType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["domains"]; exists {
+		vOpts := append(opts, db.WithValidateField("domains"))
+		for idx, item := range m.GetDomains() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["vip_type"]; exists {
+		vOpts := append(opts, db.WithValidateField("vip_type"))
+		if err := fv(ctx, m.GetVipType(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVirtualServerResultTypeValidator = func() *ValidateVirtualServerResultType {
+	v := &ValidateVirtualServerResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VirtualServerResultTypeValidator() db.Validator {
+	return DefaultVirtualServerResultTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VirtualServiceInventoryFilterType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VirtualServiceInventoryFilterType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VirtualServiceInventoryFilterType) DeepCopy() *VirtualServiceInventoryFilterType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VirtualServiceInventoryFilterType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VirtualServiceInventoryFilterType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VirtualServiceInventoryFilterType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VirtualServiceInventoryFilterTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVirtualServiceInventoryFilterType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVirtualServiceInventoryFilterType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VirtualServiceInventoryFilterType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VirtualServiceInventoryFilterType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["http_only"]; exists {
+		vOpts := append(opts, db.WithValidateField("http_only"))
+		if err := fv(ctx, m.GetHttpOnly(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["irules"]; exists {
+		vOpts := append(opts, db.WithValidateField("irules"))
+		if err := fv(ctx, m.GetIrules(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["traffic_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("traffic_policy"))
+		if err := fv(ctx, m.GetTrafficPolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVirtualServiceInventoryFilterTypeValidator = func() *ValidateVirtualServiceInventoryFilterType {
+	v := &ValidateVirtualServiceInventoryFilterType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VirtualServiceInventoryFilterTypeValidator() db.Validator {
+	return DefaultVirtualServiceInventoryFilterTypeValidator
 }

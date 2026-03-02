@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.quota.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.quota.Object"] = ObjectValidator()
 	vr["ves.io.schema.quota.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.quota.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.quota.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.quota.DeleteRequest"] = DeleteRequestValidator()
@@ -28,12 +26,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.quota.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.quota.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.quota.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.quota.GetQuotaLimitsRequest"] = GetQuotaLimitsRequestValidator()
 	vr["ves.io.schema.quota.GetQuotaLimitsResponse"] = GetQuotaLimitsResponseValidator()
 	vr["ves.io.schema.quota.GetRequestType"] = GetRequestTypeValidator()
 	vr["ves.io.schema.quota.GetResponseType"] = GetResponseTypeValidator()
-
 	vr["ves.io.schema.quota.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.quota.FloatLimitType"] = FloatLimitTypeValidator()
 	vr["ves.io.schema.quota.GetSpecType"] = GetSpecTypeValidator()
@@ -45,7 +41,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.quota.QuotaUsageItemType"] = QuotaUsageItemTypeValidator()
 	vr["ves.io.schema.quota.RateLimitType"] = RateLimitTypeValidator()
 	vr["ves.io.schema.quota.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -57,21 +52,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.quota.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.quota.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.quota.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.quota.API"] = "web"
 	sm["ves.io.schema.quota.CustomAPI"] = "web"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -80,9 +71,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.quota.Object"] = APISwaggerJSON
@@ -96,16 +85,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.quota.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.quota.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.quota.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.quota.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.quota.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.quota.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -116,22 +100,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.quota.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

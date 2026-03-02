@@ -9,6 +9,27 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+	vr["ves.io.schema.DestinationAddressType"] = DestinationAddressTypeValidator()
+	vr["ves.io.schema.SourceAddressType"] = SourceAddressTypeValidator()
+	vr["ves.io.schema.SourceDestinationAddressType"] = SourceDestinationAddressTypeValidator()
+	vr["ves.io.schema.TMMActionOnServiceDownType"] = TMMActionOnServiceDownTypeValidator()
+	vr["ves.io.schema.TMMHealthMonitoringType"] = TMMHealthMonitoringTypeValidator()
+	vr["ves.io.schema.TMMImmediateActionOnServiceDownType"] = TMMImmediateActionOnServiceDownTypeValidator()
+	vr["ves.io.schema.TMMMemberStateType"] = TMMMemberStateTypeValidator()
+	vr["ves.io.schema.TMMPoolHealthMonitorAvailabilityType"] = TMMPoolHealthMonitorAvailabilityTypeValidator()
+	vr["ves.io.schema.TMMPoolMemberCountType"] = TMMPoolMemberCountTypeValidator()
+	vr["ves.io.schema.TMMPoolMemberSelectionType"] = TMMPoolMemberSelectionTypeValidator()
+	vr["ves.io.schema.TMMPoolRequestQueuingType"] = TMMPoolRequestQueuingTypeValidator()
+	vr["ves.io.schema.TMMPoolReselectType"] = TMMPoolReselectTypeValidator()
+	vr["ves.io.schema.TMMPriorityGroupActivationType"] = TMMPriorityGroupActivationTypeValidator()
+	vr["ves.io.schema.TMMRequestQueuingOptionsType"] = TMMRequestQueuingOptionsTypeValidator()
+	vr["ves.io.schema.TMMStateType"] = TMMStateTypeValidator()
+	vr["ves.io.schema.TMMVirtualServerAddressTranslationType"] = TMMVirtualServerAddressTranslationTypeValidator()
+	vr["ves.io.schema.TMMVirtualServerAutoLastHopType"] = TMMVirtualServerAutoLastHopTypeValidator()
+	vr["ves.io.schema.TMMVirtualServerConnectionRateLimitMode"] = TMMVirtualServerConnectionRateLimitModeValidator()
+	vr["ves.io.schema.TMMVirtualServerNAT64Type"] = TMMVirtualServerNAT64TypeValidator()
+	vr["ves.io.schema.TMMVirtualServerPortTranslationType"] = TMMVirtualServerPortTranslationTypeValidator()
+	vr["ves.io.schema.TMMVirtualServerSourcePortType"] = TMMVirtualServerSourcePortTypeValidator()
 	vr["ves.io.schema.CertInfoType"] = CertInfoTypeValidator()
 	vr["ves.io.schema.CertificateParamsType"] = CertificateParamsTypeValidator()
 	vr["ves.io.schema.DownstreamTlsParamsType"] = DownstreamTlsParamsTypeValidator()
@@ -17,9 +38,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.TlsParamsType"] = TlsParamsTypeValidator()
 	vr["ves.io.schema.UpstreamCertificateParamsType"] = UpstreamCertificateParamsTypeValidator()
 	vr["ves.io.schema.UpstreamTlsParamsType"] = UpstreamTlsParamsTypeValidator()
-
 	vr["ves.io.schema.ErrorType"] = ErrorTypeValidator()
-
 	vr["ves.io.schema.AwsSubnetList"] = AwsSubnetListValidator()
 	vr["ves.io.schema.AwsVpcList"] = AwsVpcListValidator()
 	vr["ves.io.schema.IpAddressType"] = IpAddressTypeValidator()
@@ -30,7 +49,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.Ipv6SubnetType"] = Ipv6SubnetTypeValidator()
 	vr["ves.io.schema.MacAddressType"] = MacAddressTypeValidator()
 	vr["ves.io.schema.PrefixListType"] = PrefixListTypeValidator()
-
 	vr["ves.io.schema.Dependencies"] = DependenciesValidator()
 	vr["ves.io.schema.EnumInfo"] = EnumInfoValidator()
 	vr["ves.io.schema.Key"] = KeyValidator()
@@ -40,7 +58,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.On"] = OnValidator()
 	vr["ves.io.schema.ThreatLevelInfo"] = ThreatLevelInfoValidator()
 	vr["ves.io.schema.Via"] = ViaValidator()
-
 	vr["ves.io.schema.DaemonEnvironmentType"] = DaemonEnvironmentTypeValidator()
 	vr["ves.io.schema.DaemonTLSParamsType"] = DaemonTLSParamsTypeValidator()
 	vr["ves.io.schema.DaemonTlsCertificateType"] = DaemonTlsCertificateTypeValidator()
@@ -54,7 +71,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.SyncServerParamsType"] = SyncServerParamsTypeValidator()
 	vr["ves.io.schema.UseragentType"] = UseragentTypeValidator()
 	vr["ves.io.schema.VTRPGracefulRestartParamsType"] = VTRPGracefulRestartParamsTypeValidator()
-
 	vr["ves.io.schema.Action"] = ActionValidator()
 	vr["ves.io.schema.AppFirewallRefType"] = AppFirewallRefTypeValidator()
 	vr["ves.io.schema.AppRoleAuthInfoType"] = AppRoleAuthInfoTypeValidator()
@@ -142,6 +158,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ObjectMetaType"] = ObjectMetaTypeValidator()
 	vr["ves.io.schema.ObjectRefType"] = ObjectRefTypeValidator()
 	vr["ves.io.schema.ObjectReplaceMetaType"] = ObjectReplaceMetaTypeValidator()
+	vr["ves.io.schema.OwaspCategory"] = OwaspCategoryValidator()
 	vr["ves.io.schema.PathMatcherType"] = PathMatcherTypeValidator()
 	vr["ves.io.schema.PolicerRefType"] = PolicerRefTypeValidator()
 	vr["ves.io.schema.PortMatcherType"] = PortMatcherTypeValidator()
@@ -162,6 +179,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.RouteTargetIPv4Addr"] = RouteTargetIPv4AddrValidator()
 	vr["ves.io.schema.SecretType"] = SecretTypeValidator()
 	vr["ves.io.schema.SegmentRefType"] = SegmentRefTypeValidator()
+	vr["ves.io.schema.ServiceUsageType"] = ServiceUsageTypeValidator()
 	vr["ves.io.schema.SetCookieValueOption"] = SetCookieValueOptionValidator()
 	vr["ves.io.schema.SiteInfo"] = SiteInfoValidator()
 	vr["ves.io.schema.SiteRefType"] = SiteRefTypeValidator()
@@ -181,6 +199,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.TrendValue"] = TrendValueValidator()
 	vr["ves.io.schema.TrustedCAList"] = TrustedCAListValidator()
 	vr["ves.io.schema.UpstreamConnPoolReuseType"] = UpstreamConnPoolReuseTypeValidator()
+	vr["ves.io.schema.UsageType"] = UsageTypeValidator()
 	vr["ves.io.schema.VSiteRefType"] = VSiteRefTypeValidator()
 	vr["ves.io.schema.VaultAccessInfoType"] = VaultAccessInfoTypeValidator()
 	vr["ves.io.schema.VaultAuthInfoType"] = VaultAuthInfoTypeValidator()
@@ -192,7 +211,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.VolterraSecretType"] = VolterraSecretTypeValidator()
 	vr["ves.io.schema.WafType"] = WafTypeValidator()
 	vr["ves.io.schema.WingmanSecretInfoType"] = WingmanSecretInfoTypeValidator()
-
 	vr["ves.io.schema.AnyRules"] = AnyRulesValidator()
 	vr["ves.io.schema.BoolRules"] = BoolRulesValidator()
 	vr["ves.io.schema.BytesRules"] = BytesRulesValidator()
@@ -217,7 +235,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.TimestampRules"] = TimestampRulesValidator()
 	vr["ves.io.schema.UInt32Rules"] = UInt32RulesValidator()
 	vr["ves.io.schema.UInt64Rules"] = UInt64RulesValidator()
-
 	vr["ves.io.schema.ChoiceItem"] = ChoiceItemValidator()
 	vr["ves.io.schema.ChoiceItemList"] = ChoiceItemListValidator()
 	vr["ves.io.schema.Choices"] = ChoicesValidator()
@@ -248,26 +265,22 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.StoredObjectURL"] = StoredObjectURLValidator()
 	vr["ves.io.schema.SuffixText"] = SuffixTextValidator()
 	vr["ves.io.schema.SuggestedValues"] = SuggestedValuesValidator()
+	vr["ves.io.schema.TextBlock"] = TextBlockValidator()
 	vr["ves.io.schema.Tile"] = TileValidator()
 	vr["ves.io.schema.Tiles"] = TilesValidator()
 	vr["ves.io.schema.ValueAtPath"] = ValueAtPathValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -276,20 +289,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

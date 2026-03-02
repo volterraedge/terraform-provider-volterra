@@ -26,6 +26,179 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSParams) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSParams) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AWSParams) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+	if err := m.GetSecretAccessKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AWSParams.secret_access_key")
+	}
+
+	return nil
+}
+
+func (m *AWSParams) DeepCopy() *AWSParams {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSParams{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSParams) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSParams) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSParamsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSParams struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSParams) AccessKeyIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for access_key_id")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSParams) SecretAccessKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for secret_access_key")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSParams) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSParams) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSParams)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSParams got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["access_key_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("access_key_id"))
+		if err := fv(ctx, m.GetAccessKeyId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["region"]; exists {
+		vOpts := append(opts, db.WithValidateField("region"))
+		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["secret_access_key"]; exists {
+		vOpts := append(opts, db.WithValidateField("secret_access_key"))
+		if err := fv(ctx, m.GetSecretAccessKey(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSParamsValidator = func() *ValidateAWSParams {
+	v := &ValidateAWSParams{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAccessKeyId := v.AccessKeyIdValidationRuleHandler
+	rulesAccessKeyId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAccessKeyId(rulesAccessKeyId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSParams.access_key_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["access_key_id"] = vFn
+
+	vrhSecretAccessKey := v.SecretAccessKeyValidationRuleHandler
+	rulesSecretAccessKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSecretAccessKey(rulesSecretAccessKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSParams.secret_access_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["secret_access_key"] = vFn
+
+	vrhRegion := v.RegionValidationRuleHandler
+	rulesRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRegion(rulesRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSParams.region: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region"] = vFn
+
+	return v
+}()
+
+func AWSParamsValidator() db.Validator {
+	return DefaultAWSParamsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ClickhouseParams) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -40,7 +213,6 @@ func (m *ClickhouseParams) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ClickhouseParams.password")
 	}
@@ -80,7 +252,6 @@ type ValidateClickhouseParams struct {
 }
 
 func (v *ValidateClickhouseParams) HostValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for host")
@@ -88,9 +259,7 @@ func (v *ValidateClickhouseParams) HostValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateClickhouseParams) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -98,9 +267,7 @@ func (v *ValidateClickhouseParams) PortValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateClickhouseParams) UserValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user")
@@ -108,9 +275,7 @@ func (v *ValidateClickhouseParams) UserValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateClickhouseParams) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -119,11 +284,9 @@ func (v *ValidateClickhouseParams) PasswordValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -143,50 +306,36 @@ func (v *ValidateClickhouseParams) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["host"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host"))
 		if err := fv(ctx, m.GetHost(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user"))
 		if err := fv(ctx, m.GetUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultClickhouseParamsValidator = func() *ValidateClickhouseParams {
 	v := &ValidateClickhouseParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -288,7 +437,6 @@ type ValidateElasticParams struct {
 }
 
 func (v *ValidateElasticParams) UrlsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -342,22 +490,18 @@ func (v *ValidateElasticParams) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["urls"]; exists {
 		vOpts := append(opts, db.WithValidateField("urls"))
 		if err := fv(ctx, m.GetUrls(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultElasticParamsValidator = func() *ValidateElasticParams {
 	v := &ValidateElasticParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -401,9 +545,11 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetClickhouseParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.clickhouse_params")
+	}
+	if err := m.GetAwsParams().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.aws_params")
 	}
 
 	return nil
@@ -441,7 +587,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) KafkaParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for kafka_params")
@@ -450,19 +595,15 @@ func (v *ValidateGetSpecType) KafkaParamsValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := KafkaParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ElasticParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for elastic_params")
@@ -471,19 +612,15 @@ func (v *ValidateGetSpecType) ElasticParamsValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ElasticParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ClickhouseParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for clickhouse_params")
@@ -492,11 +629,9 @@ func (v *ValidateGetSpecType) ClickhouseParamsValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ClickhouseParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -516,50 +651,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
+	if fv, exists := v.FldValidators["aws_params"]; exists {
+		vOpts := append(opts, db.WithValidateField("aws_params"))
+		if err := fv(ctx, m.GetAwsParams(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["clickhouse_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("clickhouse_params"))
 		if err := fv(ctx, m.GetClickhouseParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elastic_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("elastic_params"))
 		if err := fv(ctx, m.GetElasticParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_default"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_default"))
 		if err := fv(ctx, m.GetIsDefault(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kafka_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kafka_params"))
 		if err := fv(ctx, m.GetKafkaParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -600,6 +727,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["clickhouse_params"] = vFn
+	v.FldValidators["aws_params"] = AWSParamsValidator().Validate
 
 	return v
 }()
@@ -624,9 +752,11 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetClickhouseParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.clickhouse_params")
+	}
+	if err := m.GetAwsParams().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.aws_params")
 	}
 
 	return nil
@@ -664,7 +794,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) KafkaParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for kafka_params")
@@ -673,19 +802,15 @@ func (v *ValidateGlobalSpecType) KafkaParamsValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := KafkaParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ElasticParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for elastic_params")
@@ -694,19 +819,15 @@ func (v *ValidateGlobalSpecType) ElasticParamsValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ElasticParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ClickhouseParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for clickhouse_params")
@@ -715,11 +836,9 @@ func (v *ValidateGlobalSpecType) ClickhouseParamsValidationRuleHandler(rules map
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ClickhouseParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -739,50 +858,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
+	if fv, exists := v.FldValidators["aws_params"]; exists {
+		vOpts := append(opts, db.WithValidateField("aws_params"))
+		if err := fv(ctx, m.GetAwsParams(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["clickhouse_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("clickhouse_params"))
 		if err := fv(ctx, m.GetClickhouseParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elastic_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("elastic_params"))
 		if err := fv(ctx, m.GetElasticParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_default"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_default"))
 		if err := fv(ctx, m.GetIsDefault(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kafka_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kafka_params"))
 		if err := fv(ctx, m.GetKafkaParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -823,6 +934,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["clickhouse_params"] = vFn
+	v.FldValidators["aws_params"] = AWSParamsValidator().Validate
 
 	return v
 }()
@@ -873,7 +985,6 @@ type ValidateKafkaParams struct {
 }
 
 func (v *ValidateKafkaParams) BootstrapServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -927,22 +1038,18 @@ func (v *ValidateKafkaParams) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bootstrap_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("bootstrap_servers"))
 		if err := fv(ctx, m.GetBootstrapServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultKafkaParamsValidator = func() *ValidateKafkaParams {
 	v := &ValidateKafkaParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -974,6 +1081,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.AwsParams = f.GetAwsParams()
 	m.ClickhouseParams = f.GetClickhouseParams()
 	m.ElasticParams = f.GetElasticParams()
 	m.IsDefault = f.GetIsDefault()
@@ -995,6 +1103,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.AwsParams = m1.AwsParams
 	f.ClickhouseParams = m1.ClickhouseParams
 	f.ElasticParams = m1.ElasticParams
 	f.IsDefault = m1.IsDefault

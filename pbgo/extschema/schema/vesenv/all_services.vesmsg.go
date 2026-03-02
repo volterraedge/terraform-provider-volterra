@@ -1046,9 +1046,40 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
+	case *ServiceChoice_Vector:
+		if fv, exists := v.FldValidators["choice.vector"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Vector).Vector
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("vector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceChoice_VectorAgent:
+		if fv, exists := v.FldValidators["choice.vector_agent"]; exists {
+			val := m.GetChoice().(*ServiceChoice_VectorAgent).VectorAgent
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("vector_agent"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceChoice_Basilisk:
+		if fv, exists := v.FldValidators["choice.basilisk"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Basilisk).Basilisk
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("basilisk"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	return nil
 }
 

@@ -46,12 +46,10 @@ resource "volterra_cloud_link" "example" {
 
           // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
-          blindfold_secret_info {
-            decryption_provider = "value"
+          clear_secret_info {
+            provider = "box-provider"
 
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
+            url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
           }
         }
 
@@ -86,7 +84,7 @@ resource "volterra_cloud_link" "example" {
 
         // One of the arguments from this list "system_generated_name user_assigned_name" can be set
 
-        system_generated_name = true
+        user_assigned_name = "user_assigned_name"
         tags = {
           "key1" = "value1"
         }
@@ -104,7 +102,6 @@ resource "volterra_cloud_link" "example" {
 
   disabled = true
 }
-
 ```
 
 Argument Reference
@@ -190,7 +187,7 @@ List of Bring You Own Connections. These AWS Direct Connect connections are not 
 
 ### Byoc Connections
 
-Each 'Bring Your Own Connection' represents a virtual connection that the customer has provisioned in the Cloud (example: AWS Direct Connect). F5XC will orchestrate networking resources in the cloud to facilitate seamless private connectivity. .
+Each 'Bring Your Own Connection' represents a virtual connection that the customer has provisioned in the Cloud (example: AWS Direct Connect). F5XC will orchestrate networking resources in the cloud to facilitate seamless private connectivity..
 
 `coordinates` - (Optional) Coordinates of the CloudLink Connection based on connection's physical location. See [Connections Coordinates ](#connections-coordinates) below for details.(Deprecated)
 
@@ -216,7 +213,7 @@ Assumption is that this given AWS account already has direct connect connection 
 
 Assumption is that this given GCP account already has Cloud Interconnect provisioned..
 
-`connections` - (Required)Each 'Bring Your Own Connection' represents a virtual connection that the customer has provisioned in the Cloud (example: AWS Direct Connect). F5XC will orchestrate networking resources in the cloud to facilitate seamless private connectivity. . See [Byoc Connections ](#byoc-connections) below for details.
+`connections` - (Required)Each 'Bring Your Own Connection' represents a virtual connection that the customer has provisioned in the Cloud (example: AWS Direct Connect). F5XC will orchestrate networking resources in the cloud to facilitate seamless private connectivity.. See [Byoc Connections ](#byoc-connections) below for details.
 
 ### Cloud Link Type F5xc Managed
 
@@ -371,4 +368,4 @@ Secret is given as bootstrap secret in F5XC Security Sidecar.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cloud_link.
+*   `id` - This is the id of the configured cloud_link.

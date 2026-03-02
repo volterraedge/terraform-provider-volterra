@@ -20,7 +20,6 @@ resource "volterra_app_type" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -243,4 +242,4 @@ The rule is applied only for the specified api endpoints..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured app_type.
+*   `id` - This is the id of the configured app_type.

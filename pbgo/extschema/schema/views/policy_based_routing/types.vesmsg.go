@@ -75,15 +75,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
@@ -109,7 +106,6 @@ func (m *CreateSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardingClassListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -137,7 +133,6 @@ func (m *CreateSpecType) GetForwardingClassListDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -148,7 +143,6 @@ func (m *CreateSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPolicyChoice().(type) {
 	case *CreateSpecType_NetworkPbr:
-
 		drInfos, err := m.GetNetworkPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNetworkPbr().GetDRefInfo() FAILED")
@@ -158,9 +152,7 @@ func (m *CreateSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "network_pbr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_ForwardProxyPbr:
-
 		drInfos, err := m.GetForwardProxyPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfo() FAILED")
@@ -170,11 +162,9 @@ func (m *CreateSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "forward_proxy_pbr." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -188,9 +178,7 @@ func (v *ValidateCreateSpecType) PolicyChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ForwardingClassListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -250,13 +238,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["forwarding_class_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class_list"))
 		if err := fv(ctx, m.GetForwardingClassList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policy_choice"]; exists {
@@ -292,16 +278,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -309,7 +292,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPolicyChoice := v.PolicyChoiceValidationRuleHandler
 	rulesPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -333,7 +315,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forwarding_class_list"] = vFn
-
 	v.FldValidators["policy_choice.network_pbr"] = NetworkPBRTypeValidator().Validate
 	v.FldValidators["policy_choice.forward_proxy_pbr"] = ForwardProxyPBRTypeValidator().Validate
 
@@ -392,15 +373,12 @@ func (m *ForwardProxyPBRRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSourceChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSourceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ForwardProxyPBRRuleType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
@@ -426,7 +404,6 @@ func (m *ForwardProxyPBRRuleType) GetForwardingClassListDRefInfo() ([]db.DRefInf
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardingClassListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -454,22 +431,16 @@ func (m *ForwardProxyPBRRuleType) GetForwardingClassListDBEntries(ctx context.Co
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *ForwardProxyPBRRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetSourceChoice().(type) {
 	case *ForwardProxyPBRRuleType_AllSources:
-
 		return nil, nil
-
 	case *ForwardProxyPBRRuleType_PrefixList:
-
 		return nil, nil
-
 	case *ForwardProxyPBRRuleType_Interface:
-
 		vref := m.GetInterface()
 		if vref == nil {
 			return nil, nil
@@ -485,13 +456,9 @@ func (m *ForwardProxyPBRRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, erro
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *ForwardProxyPBRRuleType_LabelSelector:
-
 		return nil, nil
-
 	case *ForwardProxyPBRRuleType_IpPrefixSet:
-
 		vref := m.GetIpPrefixSet()
 		if vref == nil {
 			return nil, nil
@@ -507,7 +474,6 @@ func (m *ForwardProxyPBRRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, erro
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -519,15 +485,12 @@ func (m *ForwardProxyPBRRuleType) GetSourceChoiceDBEntries(ctx context.Context, 
 
 	switch m.GetSourceChoice().(type) {
 	case *ForwardProxyPBRRuleType_AllSources:
-
 	case *ForwardProxyPBRRuleType_PrefixList:
-
 	case *ForwardProxyPBRRuleType_Interface:
 		refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
 		}
-
 		vref := m.GetInterface()
 		if vref == nil {
 			return nil, nil
@@ -545,15 +508,12 @@ func (m *ForwardProxyPBRRuleType) GetSourceChoiceDBEntries(ctx context.Context, 
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *ForwardProxyPBRRuleType_LabelSelector:
-
 	case *ForwardProxyPBRRuleType_IpPrefixSet:
 		refdType, err := d.TypeForEntryKind("", "", "ip_prefix_set.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: ip_prefix_set")
 		}
-
 		vref := m.GetIpPrefixSet()
 		if vref == nil {
 			return nil, nil
@@ -571,7 +531,6 @@ func (m *ForwardProxyPBRRuleType) GetSourceChoiceDBEntries(ctx context.Context, 
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -588,9 +547,7 @@ func (v *ValidateForwardProxyPBRRuleType) DestinationChoiceValidationRuleHandler
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateForwardProxyPBRRuleType) RuleNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_name")
@@ -598,9 +555,7 @@ func (v *ValidateForwardProxyPBRRuleType) RuleNameValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateForwardProxyPBRRuleType) ForwardingClassListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -646,9 +601,7 @@ func (v *ValidateForwardProxyPBRRuleType) ForwardingClassListValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidateForwardProxyPBRRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -657,11 +610,9 @@ func (v *ValidateForwardProxyPBRRuleType) MetadataValidationRuleHandler(rules ma
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -726,33 +677,24 @@ func (v *ValidateForwardProxyPBRRuleType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["forwarding_class_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class_list"))
 		if err := fv(ctx, m.GetForwardingClassList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule_name"))
 		if err := fv(ctx, m.GetRuleName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSourceChoice().(type) {
@@ -822,16 +764,13 @@ func (v *ValidateForwardProxyPBRRuleType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultForwardProxyPBRRuleTypeValidator = func() *ValidateForwardProxyPBRRuleType {
 	v := &ValidateForwardProxyPBRRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -839,7 +778,6 @@ var DefaultForwardProxyPBRRuleTypeValidator = func() *ValidateForwardProxyPBRRul
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDestinationChoice := v.DestinationChoiceValidationRuleHandler
 	rulesDestinationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -885,10 +823,8 @@ var DefaultForwardProxyPBRRuleTypeValidator = func() *ValidateForwardProxyPBRRul
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
-
 	v.FldValidators["destination_choice.tls_list"] = ves_io_schema_views_forward_proxy_policy.DomainListTypeValidator().Validate
 	v.FldValidators["destination_choice.http_list"] = ves_io_schema_views_forward_proxy_policy.URLListTypeValidator().Validate
-
 	v.FldValidators["source_choice.prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 	v.FldValidators["source_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["source_choice.label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
@@ -944,7 +880,6 @@ func (m *ForwardProxyPBRType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetForwardProxyPbrRulesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -952,7 +887,6 @@ func (m *ForwardProxyPBRType) GetForwardProxyPbrRulesDRefInfo() ([]db.DRefInfo, 
 	if m.GetForwardProxyPbrRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetForwardProxyPbrRules() {
 		driSet, err := e.GetDRefInfo()
@@ -966,7 +900,6 @@ func (m *ForwardProxyPBRType) GetForwardProxyPbrRulesDRefInfo() ([]db.DRefInfo, 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateForwardProxyPBRType struct {
@@ -974,7 +907,6 @@ type ValidateForwardProxyPBRType struct {
 }
 
 func (v *ValidateForwardProxyPBRType) ForwardProxyPbrRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1034,22 +966,18 @@ func (v *ValidateForwardProxyPBRType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["forward_proxy_pbr_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("forward_proxy_pbr_rules"))
 		if err := fv(ctx, m.GetForwardProxyPbrRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultForwardProxyPBRTypeValidator = func() *ValidateForwardProxyPBRType {
 	v := &ValidateForwardProxyPBRType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1125,15 +1053,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
@@ -1159,7 +1084,6 @@ func (m *GetSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardingClassListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1187,7 +1111,6 @@ func (m *GetSpecType) GetForwardingClassListDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1198,7 +1121,6 @@ func (m *GetSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPolicyChoice().(type) {
 	case *GetSpecType_NetworkPbr:
-
 		drInfos, err := m.GetNetworkPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNetworkPbr().GetDRefInfo() FAILED")
@@ -1208,9 +1130,7 @@ func (m *GetSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "network_pbr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_ForwardProxyPbr:
-
 		drInfos, err := m.GetForwardProxyPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfo() FAILED")
@@ -1220,11 +1140,9 @@ func (m *GetSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "forward_proxy_pbr." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -1238,9 +1156,7 @@ func (v *ValidateGetSpecType) PolicyChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ForwardingClassListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1300,13 +1216,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["forwarding_class_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class_list"))
 		if err := fv(ctx, m.GetForwardingClassList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policy_choice"]; exists {
@@ -1342,16 +1256,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1359,7 +1270,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPolicyChoice := v.PolicyChoiceValidationRuleHandler
 	rulesPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1383,7 +1293,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forwarding_class_list"] = vFn
-
 	v.FldValidators["policy_choice.network_pbr"] = NetworkPBRTypeValidator().Validate
 	v.FldValidators["policy_choice.forward_proxy_pbr"] = ForwardProxyPBRTypeValidator().Validate
 
@@ -1442,21 +1351,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
@@ -1482,7 +1387,6 @@ func (m *GlobalSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardingClassListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1510,7 +1414,6 @@ func (m *GlobalSpecType) GetForwardingClassListDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1521,7 +1424,6 @@ func (m *GlobalSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPolicyChoice().(type) {
 	case *GlobalSpecType_NetworkPbr:
-
 		drInfos, err := m.GetNetworkPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNetworkPbr().GetDRefInfo() FAILED")
@@ -1531,9 +1433,7 @@ func (m *GlobalSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "network_pbr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_ForwardProxyPbr:
-
 		drInfos, err := m.GetForwardProxyPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfo() FAILED")
@@ -1543,15 +1443,12 @@ func (m *GlobalSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "forward_proxy_pbr." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1567,7 +1464,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1577,7 +1473,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1595,7 +1490,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1610,9 +1504,7 @@ func (v *ValidateGlobalSpecType) PolicyChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ForwardingClassListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1672,13 +1564,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["forwarding_class_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class_list"))
 		if err := fv(ctx, m.GetForwardingClassList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policy_choice"]; exists {
@@ -1714,25 +1604,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1740,7 +1624,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPolicyChoice := v.PolicyChoiceValidationRuleHandler
 	rulesPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1764,10 +1647,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forwarding_class_list"] = vFn
-
 	v.FldValidators["policy_choice.network_pbr"] = NetworkPBRTypeValidator().Validate
 	v.FldValidators["policy_choice.forward_proxy_pbr"] = ForwardProxyPBRTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1825,15 +1706,12 @@ func (m *NetworkPBRRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetForwardingClassListDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetForwardingClassListDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1843,15 +1721,10 @@ func (m *NetworkPBRRuleType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDestination().(type) {
 	case *NetworkPBRRuleType_Any:
-
 		return nil, nil
-
 	case *NetworkPBRRuleType_PrefixList:
-
 		return nil, nil
-
 	case *NetworkPBRRuleType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -1861,11 +1734,9 @@ func (m *NetworkPBRRuleType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *NetworkPBRRuleType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
@@ -1891,7 +1762,6 @@ func (m *NetworkPBRRuleType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, er
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardingClassListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1919,7 +1789,6 @@ func (m *NetworkPBRRuleType) GetForwardingClassListDBEntries(ctx context.Context
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1934,9 +1803,7 @@ func (v *ValidateNetworkPBRRuleType) DestinationDnsNameValidationRuleHandler(rul
 	}
 	return oValidatorFn_DnsName, nil
 }
-
 func (v *ValidateNetworkPBRRuleType) RuleNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_name")
@@ -1944,9 +1811,7 @@ func (v *ValidateNetworkPBRRuleType) RuleNameValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNetworkPBRRuleType) ForwardingClassListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1992,9 +1857,7 @@ func (v *ValidateNetworkPBRRuleType) ForwardingClassListValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNetworkPBRRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -2003,11 +1866,9 @@ func (v *ValidateNetworkPBRRuleType) MetadataValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2073,33 +1934,24 @@ func (v *ValidateNetworkPBRRuleType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["forwarding_class_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class_list"))
 		if err := fv(ctx, m.GetForwardingClassList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule_name"))
 		if err := fv(ctx, m.GetRuleName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetTrafficChoice().(type) {
@@ -2158,16 +2010,13 @@ func (v *ValidateNetworkPBRRuleType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkPBRRuleTypeValidator = func() *ValidateNetworkPBRRuleType {
 	v := &ValidateNetworkPBRRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2175,7 +2024,6 @@ var DefaultNetworkPBRRuleTypeValidator = func() *ValidateNetworkPBRRuleType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDestinationDnsName := v.DestinationDnsNameValidationRuleHandler
 	rulesDestinationDnsName := map[string]string{
 		"ves.io.schema.rules.string.hostname": "true",
@@ -2185,7 +2033,6 @@ var DefaultNetworkPBRRuleTypeValidator = func() *ValidateNetworkPBRRuleType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field NetworkPBRRuleType.destination_dns_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["destination.dns_name"] = vFnMap["destination.dns_name"]
 
 	vrhRuleName := v.RuleNameValidationRuleHandler
@@ -2222,10 +2069,8 @@ var DefaultNetworkPBRRuleTypeValidator = func() *ValidateNetworkPBRRuleType {
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
-
 	v.FldValidators["destination.prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 	v.FldValidators["destination.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
-
 	v.FldValidators["traffic_choice.protocol_port_range"] = ves_io_schema_network_policy.ProtocolPortTypeValidator().Validate
 
 	return v
@@ -2283,15 +2128,12 @@ func (m *NetworkPBRType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSourceChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSourceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2299,7 +2141,6 @@ func (m *NetworkPBRType) GetNetworkPbrRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNetworkPbrRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetNetworkPbrRules() {
 		driSet, err := e.GetDRefInfo()
@@ -2313,21 +2154,15 @@ func (m *NetworkPBRType) GetNetworkPbrRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *NetworkPBRType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetSourceChoice().(type) {
 	case *NetworkPBRType_Any:
-
 		return nil, nil
-
 	case *NetworkPBRType_PrefixList:
-
 		return nil, nil
-
 	case *NetworkPBRType_Interface:
-
 		vref := m.GetInterface()
 		if vref == nil {
 			return nil, nil
@@ -2343,11 +2178,8 @@ func (m *NetworkPBRType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *NetworkPBRType_LabelSelector:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -2359,15 +2191,12 @@ func (m *NetworkPBRType) GetSourceChoiceDBEntries(ctx context.Context, d db.Inte
 
 	switch m.GetSourceChoice().(type) {
 	case *NetworkPBRType_Any:
-
 	case *NetworkPBRType_PrefixList:
-
 	case *NetworkPBRType_Interface:
 		refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
 		}
-
 		vref := m.GetInterface()
 		if vref == nil {
 			return nil, nil
@@ -2385,9 +2214,7 @@ func (m *NetworkPBRType) GetSourceChoiceDBEntries(ctx context.Context, d db.Inte
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *NetworkPBRType_LabelSelector:
-
 	}
 
 	return entries, nil
@@ -2398,7 +2225,6 @@ type ValidateNetworkPBRType struct {
 }
 
 func (v *ValidateNetworkPBRType) NetworkPbrRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2458,13 +2284,11 @@ func (v *ValidateNetworkPBRType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["network_pbr_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("network_pbr_rules"))
 		if err := fv(ctx, m.GetNetworkPbrRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSourceChoice().(type) {
@@ -2523,16 +2347,13 @@ func (v *ValidateNetworkPBRType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkPBRTypeValidator = func() *ValidateNetworkPBRType {
 	v := &ValidateNetworkPBRType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2552,7 +2373,6 @@ var DefaultNetworkPBRTypeValidator = func() *ValidateNetworkPBRType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_pbr_rules"] = vFn
-
 	v.FldValidators["source_choice.prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 	v.FldValidators["source_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["source_choice.label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
@@ -2612,15 +2432,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
@@ -2646,7 +2463,6 @@ func (m *ReplaceSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardingClassListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2674,7 +2490,6 @@ func (m *ReplaceSpecType) GetForwardingClassListDBEntries(ctx context.Context, d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2685,7 +2500,6 @@ func (m *ReplaceSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPolicyChoice().(type) {
 	case *ReplaceSpecType_NetworkPbr:
-
 		drInfos, err := m.GetNetworkPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNetworkPbr().GetDRefInfo() FAILED")
@@ -2695,9 +2509,7 @@ func (m *ReplaceSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "network_pbr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_ForwardProxyPbr:
-
 		drInfos, err := m.GetForwardProxyPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfo() FAILED")
@@ -2707,11 +2519,9 @@ func (m *ReplaceSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "forward_proxy_pbr." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -2725,9 +2535,7 @@ func (v *ValidateReplaceSpecType) PolicyChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ForwardingClassListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2787,13 +2595,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["forwarding_class_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class_list"))
 		if err := fv(ctx, m.GetForwardingClassList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policy_choice"]; exists {
@@ -2829,16 +2635,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2846,7 +2649,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPolicyChoice := v.PolicyChoiceValidationRuleHandler
 	rulesPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2870,7 +2672,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["forwarding_class_list"] = vFn
-
 	v.FldValidators["policy_choice.network_pbr"] = NetworkPBRTypeValidator().Validate
 	v.FldValidators["policy_choice.forward_proxy_pbr"] = ForwardProxyPBRTypeValidator().Validate
 

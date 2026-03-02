@@ -64,7 +64,6 @@ type ValidateAPIEndpointLearntSchemaReq struct {
 }
 
 func (v *ValidateAPIEndpointLearntSchemaReq) ApiEndpointInfoRequestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -124,58 +123,42 @@ func (v *ValidateAPIEndpointLearntSchemaReq) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoint_info_request"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_endpoint_info_request"))
 		if err := fv(ctx, m.GetApiEndpointInfoRequest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["collapsed_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("collapsed_url"))
 		if err := fv(ctx, m.GetCollapsedUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAPIEndpointLearntSchemaReqValidator = func() *ValidateAPIEndpointLearntSchemaReq {
 	v := &ValidateAPIEndpointLearntSchemaReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -256,9 +239,7 @@ func (v *ValidateAPIEndpointLearntSchemaRsp) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_specs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_specs"))
 		for key, value := range m.GetApiSpecs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -266,47 +247,32 @@ func (v *ValidateAPIEndpointLearntSchemaRsp) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["discovered_openapi_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovered_openapi_spec"))
 		if err := fv(ctx, m.GetDiscoveredOpenapiSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["discovered_schema"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovered_schema"))
 		if err := fv(ctx, m.GetDiscoveredSchema(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inventory_openapi_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inventory_openapi_spec"))
 		if err := fv(ctx, m.GetInventoryOpenapiSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pdf_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pdf_info"))
 		if err := fv(ctx, m.GetPdfInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sensitive_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sensitive_data"))
 		for idx, item := range m.GetSensitiveData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -314,9 +280,7 @@ func (v *ValidateAPIEndpointLearntSchemaRsp) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -385,43 +349,30 @@ func (v *ValidateAPIEndpointPDFReq) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["collapsed_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("collapsed_url"))
 		if err := fv(ctx, m.GetCollapsedUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -490,16 +441,12 @@ func (v *ValidateAPIEndpointPDFRsp) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["pdf_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pdf_info"))
 		if err := fv(ctx, m.GetPdfInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -556,7 +503,6 @@ type ValidateAPIEndpointsReq struct {
 }
 
 func (v *ValidateAPIEndpointsReq) ApiEndpointInfoRequestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -616,40 +562,30 @@ func (v *ValidateAPIEndpointsReq) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoint_info_request"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_endpoint_info_request"))
 		if err := fv(ctx, m.GetApiEndpointInfoRequest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAPIEndpointsReqValidator = func() *ValidateAPIEndpointsReq {
 	v := &ValidateAPIEndpointsReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -730,9 +666,7 @@ func (v *ValidateAPIEndpointsRsp) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["apiep_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apiep_list"))
 		for idx, item := range m.GetApiepList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -740,9 +674,7 @@ func (v *ValidateAPIEndpointsRsp) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -811,25 +743,18 @@ func (v *ValidateOverridePopReq) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -898,25 +823,18 @@ func (v *ValidateOverridePopRsp) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status_msg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status_msg"))
 		if err := fv(ctx, m.GetStatusMsg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -985,34 +903,24 @@ func (v *ValidateOverridePushReq) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["override_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("override_info"))
 		if err := fv(ctx, m.GetOverrideInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1081,25 +989,18 @@ func (v *ValidateOverridePushRsp) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status_msg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status_msg"))
 		if err := fv(ctx, m.GetStatusMsg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1168,25 +1069,18 @@ func (v *ValidateOverridesReq) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1255,9 +1149,7 @@ func (v *ValidateOverridesRsp) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["override_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("override_list"))
 		for idx, item := range m.GetOverrideList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1265,9 +1157,7 @@ func (v *ValidateOverridesRsp) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1336,52 +1226,36 @@ func (v *ValidateServiceAPIEndpointPDFReq) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["collapsed_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("collapsed_url"))
 		if err := fv(ctx, m.GetCollapsedUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_name"))
 		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1438,7 +1312,6 @@ type ValidateServiceAPIEndpointsReq struct {
 }
 
 func (v *ValidateServiceAPIEndpointsReq) ApiEndpointInfoRequestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1498,49 +1371,36 @@ func (v *ValidateServiceAPIEndpointsReq) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoint_info_request"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_endpoint_info_request"))
 		if err := fv(ctx, m.GetApiEndpointInfoRequest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_name"))
 		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceAPIEndpointsReqValidator = func() *ValidateServiceAPIEndpointsReq {
 	v := &ValidateServiceAPIEndpointsReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1621,25 +1481,18 @@ func (v *ValidateSwaggerSpecReq) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_name"))
 		if err := fv(ctx, m.GetAppTypeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1708,16 +1561,12 @@ func (v *ValidateSwaggerSpecRsp) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["swagger_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("swagger_spec"))
 		if err := fv(ctx, m.GetSwaggerSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

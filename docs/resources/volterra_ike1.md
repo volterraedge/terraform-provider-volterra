@@ -30,7 +30,6 @@ resource "volterra_ike1" "example" {
     duration = "duration"
   }
 }
-
 ```
 
 Argument Reference
@@ -103,4 +102,4 @@ Set Reauthentication timeout in Hours.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured ike1.
+*   `id` - This is the id of the configured ike1.

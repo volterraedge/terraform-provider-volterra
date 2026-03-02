@@ -68,7 +68,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProxyAdvertisementDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -76,7 +75,6 @@ func (m *CreateSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetProxyAdvertisement() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
@@ -86,7 +84,6 @@ func (m *CreateSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 		dri.DRField = "proxy_advertisement." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -94,7 +91,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) TransportTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TransportType)
@@ -122,59 +118,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_name"))
 		if err := fv(ctx, m.GetDomainName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["msg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("msg"))
 		if err := fv(ctx, m.GetMsg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_advertisement"))
 		if err := fv(ctx, m.GetProxyAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_type"))
 		if err := fv(ctx, m.GetTransportType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -193,9 +172,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["transport_type"] = vFn
-
 	v.FldValidators["msg"] = ServiceDetailsValidator().Validate
-
 	v.FldValidators["proxy_advertisement"] = ProxyAdvertisementTypeValidator().Validate
 
 	return v
@@ -248,7 +225,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProxyAdvertisementDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -256,7 +232,6 @@ func (m *GetSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProxyAdvertisement() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
@@ -266,7 +241,6 @@ func (m *GetSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "proxy_advertisement." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -274,7 +248,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) TransportTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TransportType)
@@ -302,59 +275,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_name"))
 		if err := fv(ctx, m.GetDomainName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["msg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("msg"))
 		if err := fv(ctx, m.GetMsg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_advertisement"))
 		if err := fv(ctx, m.GetProxyAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_type"))
 		if err := fv(ctx, m.GetTransportType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -373,9 +329,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["transport_type"] = vFn
-
 	v.FldValidators["msg"] = ServiceDetailsValidator().Validate
-
 	v.FldValidators["proxy_advertisement"] = ProxyAdvertisementTypeValidator().Validate
 
 	return v
@@ -433,15 +387,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -449,7 +400,6 @@ func (m *GlobalSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetProxyAdvertisement() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
@@ -459,11 +409,9 @@ func (m *GlobalSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 		dri.DRField = "proxy_advertisement." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -479,7 +427,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -489,7 +436,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -507,7 +453,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -516,7 +461,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) TransportTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TransportType)
@@ -544,68 +488,48 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_name"))
 		if err := fv(ctx, m.GetDomainName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["msg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("msg"))
 		if err := fv(ctx, m.GetMsg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_advertisement"))
 		if err := fv(ctx, m.GetProxyAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_type"))
 		if err := fv(ctx, m.GetTransportType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -624,11 +548,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["transport_type"] = vFn
-
 	v.FldValidators["msg"] = ServiceDetailsValidator().Validate
-
 	v.FldValidators["proxy_advertisement"] = ProxyAdvertisementTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -681,7 +602,6 @@ func (m *ProxyAdvertisementType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAdvertiseChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -691,15 +611,10 @@ func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ProxyAdvertisementType_DoNotAdvertise:
-
 		return nil, nil
-
 	case *ProxyAdvertisementType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *ProxyAdvertisementType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -709,9 +624,7 @@ func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ProxyAdvertisementType_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -721,11 +634,9 @@ func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateProxyAdvertisementType struct {
@@ -809,16 +720,13 @@ func (v *ValidateProxyAdvertisementType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProxyAdvertisementTypeValidator = func() *ValidateProxyAdvertisementType {
 	v := &ValidateProxyAdvertisementType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -826,7 +734,6 @@ var DefaultProxyAdvertisementTypeValidator = func() *ValidateProxyAdvertisementT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -837,7 +744,6 @@ var DefaultProxyAdvertisementTypeValidator = func() *ValidateProxyAdvertisementT
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
@@ -891,7 +797,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProxyAdvertisementDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -899,7 +804,6 @@ func (m *ReplaceSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error)
 	if m.GetProxyAdvertisement() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
@@ -909,7 +813,6 @@ func (m *ReplaceSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error)
 		dri.DRField = "proxy_advertisement." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -917,7 +820,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) TransportTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TransportType)
@@ -945,59 +847,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_name"))
 		if err := fv(ctx, m.GetDomainName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["msg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("msg"))
 		if err := fv(ctx, m.GetMsg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_advertisement"))
 		if err := fv(ctx, m.GetProxyAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_type"))
 		if err := fv(ctx, m.GetTransportType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1016,9 +901,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["transport_type"] = vFn
-
 	v.FldValidators["msg"] = ServiceDetailsValidator().Validate
-
 	v.FldValidators["proxy_advertisement"] = ProxyAdvertisementTypeValidator().Validate
 
 	return v
@@ -1082,32 +965,24 @@ func (v *ValidateServiceDetails) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceDetailsValidator = func() *ValidateServiceDetails {
 	v := &ValidateServiceDetails{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["ip"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -1159,7 +1034,6 @@ type ValidateTileAccess struct {
 }
 
 func (v *ValidateTileAccess) DisplayNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for display_name")
@@ -1181,32 +1055,24 @@ func (v *ValidateTileAccess) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTileAccessValidator = func() *ValidateTileAccess {
 	v := &ValidateTileAccess{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1287,34 +1153,24 @@ func (v *ValidateZTNApolicies) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connectivity_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connectivity_policy_name"))
 		if err := fv(ctx, m.GetConnectivityPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["message_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("message_policy_name"))
 		if err := fv(ctx, m.GetMessagePolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["session_policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("session_policy_name"))
 		if err := fv(ctx, m.GetSessionPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

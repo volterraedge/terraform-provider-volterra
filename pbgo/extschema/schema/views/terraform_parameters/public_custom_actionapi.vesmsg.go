@@ -76,34 +76,24 @@ func (v *ValidateForceDeleteRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_kind"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_kind"))
 		if err := fv(ctx, m.GetViewKind(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_name"))
 		if err := fv(ctx, m.GetViewName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -172,7 +162,6 @@ func (v *ValidateForceDeleteResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -241,43 +230,30 @@ func (v *ValidateRunRequest) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_kind"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_kind"))
 		if err := fv(ctx, m.GetViewKind(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_name"))
 		if err := fv(ctx, m.GetViewName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -346,7 +322,6 @@ func (v *ValidateRunResponse) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

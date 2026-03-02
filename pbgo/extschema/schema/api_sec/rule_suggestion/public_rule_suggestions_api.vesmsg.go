@@ -68,7 +68,6 @@ type ValidateGetSuggestedAPIEndpointProtectionRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -76,9 +75,7 @@ func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) NamespaceValidationRu
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) VirtualHostNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_host_name")
@@ -86,9 +83,7 @@ func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) VirtualHostNameValida
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
@@ -96,9 +91,7 @@ func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) PathValidationRuleHan
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpMethod)
@@ -126,50 +119,36 @@ func (v *ValidateGetSuggestedAPIEndpointProtectionRuleReq) Validate(ctx context.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_name"))
 		if err := fv(ctx, m.GetVirtualHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedAPIEndpointProtectionRuleReqValidator = func() *ValidateGetSuggestedAPIEndpointProtectionRuleReq {
 	v := &ValidateGetSuggestedAPIEndpointProtectionRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -275,7 +254,6 @@ func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetDRefInfo() ([]db.DRefInfo,
 	}
 
 	return m.GetRuleDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -283,7 +261,6 @@ func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetRuleDRefInfo() ([]db.DRefI
 	if m.GetRule() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRule().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRule().GetDRefInfo() FAILED")
@@ -293,7 +270,6 @@ func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetRuleDRefInfo() ([]db.DRefI
 		dri.DRField = "rule." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSuggestedAPIEndpointProtectionRuleRsp struct {
@@ -313,41 +289,30 @@ func (v *ValidateGetSuggestedAPIEndpointProtectionRuleRsp) Validate(ctx context.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_type"))
 		if err := fv(ctx, m.GetLoadbalancerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule"))
 		if err := fv(ctx, m.GetRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedAPIEndpointProtectionRuleRspValidator = func() *ValidateGetSuggestedAPIEndpointProtectionRuleRsp {
 	v := &ValidateGetSuggestedAPIEndpointProtectionRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["rule"] = ves_io_schema_views_common_waf.APIEndpointProtectionRuleValidator().Validate
 
 	return v
@@ -399,7 +364,6 @@ type ValidateGetSuggestedOasValidationRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedOasValidationRuleReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -407,9 +371,7 @@ func (v *ValidateGetSuggestedOasValidationRuleReq) NamespaceValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedOasValidationRuleReq) VirtualHostNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_host_name")
@@ -417,9 +379,7 @@ func (v *ValidateGetSuggestedOasValidationRuleReq) VirtualHostNameValidationRule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedOasValidationRuleReq) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
@@ -427,9 +387,7 @@ func (v *ValidateGetSuggestedOasValidationRuleReq) PathValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedOasValidationRuleReq) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpMethod)
@@ -457,9 +415,7 @@ func (v *ValidateGetSuggestedOasValidationRuleReq) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		for idx, item := range m.GetApiGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -467,52 +423,37 @@ func (v *ValidateGetSuggestedOasValidationRuleReq) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_name"))
 		if err := fv(ctx, m.GetVirtualHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedOasValidationRuleReqValidator = func() *ValidateGetSuggestedOasValidationRuleReq {
 	v := &ValidateGetSuggestedOasValidationRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -653,34 +594,25 @@ func (v *ValidateGetSuggestedOasValidationRuleRsp) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_type"))
 		if err := fv(ctx, m.GetLoadbalancerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedOasValidationRuleRspValidator = func() *ValidateGetSuggestedOasValidationRuleRsp {
 	v := &ValidateGetSuggestedOasValidationRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["api_validation_choice.custom_oas_validation"] = ves_io_schema_views_common_waf.OpenApiValidationRuleValidator().Validate
 	v.FldValidators["api_validation_choice.all_endpoints_oas_validation"] = ves_io_schema_views_common_waf.OpenApiValidationAllSpecEndpointsSettingsValidator().Validate
 
@@ -733,7 +665,6 @@ type ValidateGetSuggestedRateLimitRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedRateLimitRuleReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -741,9 +672,7 @@ func (v *ValidateGetSuggestedRateLimitRuleReq) NamespaceValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedRateLimitRuleReq) VirtualHostNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_host_name")
@@ -751,9 +680,7 @@ func (v *ValidateGetSuggestedRateLimitRuleReq) VirtualHostNameValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedRateLimitRuleReq) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
@@ -761,9 +688,7 @@ func (v *ValidateGetSuggestedRateLimitRuleReq) PathValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedRateLimitRuleReq) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpMethod)
@@ -791,50 +716,36 @@ func (v *ValidateGetSuggestedRateLimitRuleReq) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_name"))
 		if err := fv(ctx, m.GetVirtualHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedRateLimitRuleReqValidator = func() *ValidateGetSuggestedRateLimitRuleReq {
 	v := &ValidateGetSuggestedRateLimitRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -940,7 +851,6 @@ func (m *GetSuggestedRateLimitRuleRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRuleDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -948,7 +858,6 @@ func (m *GetSuggestedRateLimitRuleRsp) GetRuleDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetRule() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRule().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRule().GetDRefInfo() FAILED")
@@ -958,7 +867,6 @@ func (m *GetSuggestedRateLimitRuleRsp) GetRuleDRefInfo() ([]db.DRefInfo, error) 
 		dri.DRField = "rule." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSuggestedRateLimitRuleRsp struct {
@@ -978,41 +886,30 @@ func (v *ValidateGetSuggestedRateLimitRuleRsp) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_type"))
 		if err := fv(ctx, m.GetLoadbalancerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule"))
 		if err := fv(ctx, m.GetRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedRateLimitRuleRspValidator = func() *ValidateGetSuggestedRateLimitRuleRsp {
 	v := &ValidateGetSuggestedRateLimitRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["rule"] = ves_io_schema_views_common_waf.ApiEndpointRuleValidator().Validate
 
 	return v
@@ -1064,7 +961,6 @@ type ValidateGetSuggestedSensitiveDataRuleReq struct {
 }
 
 func (v *ValidateGetSuggestedSensitiveDataRuleReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1072,9 +968,7 @@ func (v *ValidateGetSuggestedSensitiveDataRuleReq) NamespaceValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedSensitiveDataRuleReq) VirtualHostNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_host_name")
@@ -1082,9 +976,7 @@ func (v *ValidateGetSuggestedSensitiveDataRuleReq) VirtualHostNameValidationRule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedSensitiveDataRuleReq) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
@@ -1092,9 +984,7 @@ func (v *ValidateGetSuggestedSensitiveDataRuleReq) PathValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSuggestedSensitiveDataRuleReq) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpMethod)
@@ -1122,50 +1012,36 @@ func (v *ValidateGetSuggestedSensitiveDataRuleReq) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_name"))
 		if err := fv(ctx, m.GetVirtualHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedSensitiveDataRuleReqValidator = func() *ValidateGetSuggestedSensitiveDataRuleReq {
 	v := &ValidateGetSuggestedSensitiveDataRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1282,41 +1158,30 @@ func (v *ValidateGetSuggestedSensitiveDataRuleRsp) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["found_existing_rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("found_existing_rule"))
 		if err := fv(ctx, m.GetFoundExistingRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancer_type"))
 		if err := fv(ctx, m.GetLoadbalancerType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule"))
 		if err := fv(ctx, m.GetRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSuggestedSensitiveDataRuleRspValidator = func() *ValidateGetSuggestedSensitiveDataRuleRsp {
 	v := &ValidateGetSuggestedSensitiveDataRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["rule"] = ves_io_schema_views_http_loadbalancer.SensitiveDataTypesValidator().Validate
 
 	return v

@@ -76,18 +76,13 @@ func (v *ValidateAWSStatusType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_link_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_link_state"))
 		if err := fv(ctx, m.GetCloudLinkState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_status"))
 		for idx, item := range m.GetConnectionStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -95,43 +90,31 @@ func (v *ValidateAWSStatusType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_description"))
 		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["suggested_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("suggested_action"))
 		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSStatusTypeValidator = func() *ValidateAWSStatusType {
 	v := &ValidateAWSStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["connection_status"] = DirectConnectConnectionStatusTypeValidator().Validate
 
 	return v
@@ -195,7 +178,6 @@ func (v *ValidateAzureStatusType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -252,7 +234,6 @@ type ValidateBGPPeerType struct {
 }
 
 func (v *ValidateBGPPeerType) AddressFamilyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address_family")
@@ -260,9 +241,7 @@ func (v *ValidateBGPPeerType) AddressFamilyValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBGPPeerType) BgpPeerStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_state")
@@ -270,9 +249,7 @@ func (v *ValidateBGPPeerType) BgpPeerStateValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBGPPeerType) BgpStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_status")
@@ -294,77 +271,54 @@ func (v *ValidateBGPPeerType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address_family"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address_family"))
 		if err := fv(ctx, m.GetAddressFamily(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peer_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peer_id"))
 		if err := fv(ctx, m.GetBgpPeerId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peer_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peer_state"))
 		if err := fv(ctx, m.GetBgpPeerState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_status"))
 		if err := fv(ctx, m.GetBgpStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cloud_provider_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_provider_address"))
 		if err := fv(ctx, m.GetCloudProviderAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["customer_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("customer_address"))
 		if err := fv(ctx, m.GetCustomerAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBGPPeerTypeValidator = func() *ValidateBGPPeerType {
 	v := &ValidateBGPPeerType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -455,7 +409,6 @@ type ValidateDirectConnectConnectionStatusType struct {
 }
 
 func (v *ValidateDirectConnectConnectionStatusType) ConnectionStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_state")
@@ -463,9 +416,7 @@ func (v *ValidateDirectConnectConnectionStatusType) ConnectionStateValidationRul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDirectConnectConnectionStatusType) HasLogicalRedundancyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for has_logical_redundancy")
@@ -487,126 +438,85 @@ func (v *ValidateDirectConnectConnectionStatusType) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_path"))
 		if err := fv(ctx, m.GetAwsPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bandwidth"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bandwidth"))
 		if err := fv(ctx, m.GetBandwidth(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_id"))
 		if err := fv(ctx, m.GetConnectionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_name"))
 		if err := fv(ctx, m.GetConnectionName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_state"))
 		if err := fv(ctx, m.GetConnectionState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gateway_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gateway_status"))
 		if err := fv(ctx, m.GetGatewayStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["has_logical_redundancy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("has_logical_redundancy"))
 		if err := fv(ctx, m.GetHasLogicalRedundancy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jumbo_frame_capable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("jumbo_frame_capable"))
 		if err := fv(ctx, m.GetJumboFrameCapable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["location"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("location"))
 		if err := fv(ctx, m.GetLocation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["owner_account"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("owner_account"))
 		if err := fv(ctx, m.GetOwnerAccount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["partner_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("partner_name"))
 		if err := fv(ctx, m.GetPartnerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_name"))
 		if err := fv(ctx, m.GetProviderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -614,34 +524,25 @@ func (v *ValidateDirectConnectConnectionStatusType) Validate(ctx context.Context
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vif_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vif_status"))
 		if err := fv(ctx, m.GetVifStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan"))
 		if err := fv(ctx, m.GetVlan(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDirectConnectConnectionStatusTypeValidator = func() *ValidateDirectConnectConnectionStatusType {
 	v := &ValidateDirectConnectConnectionStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -671,9 +572,7 @@ var DefaultDirectConnectConnectionStatusTypeValidator = func() *ValidateDirectCo
 		panic(errMsg)
 	}
 	v.FldValidators["has_logical_redundancy"] = vFn
-
 	v.FldValidators["vif_status"] = VirtualInterfaceStatusTypeValidator().Validate
-
 	v.FldValidators["gateway_status"] = DirectConnectGatewayStatusTypeValidator().Validate
 
 	return v
@@ -725,7 +624,6 @@ type ValidateDirectConnectGatewayStatusType struct {
 }
 
 func (v *ValidateDirectConnectGatewayStatusType) DirectConnectGatewayStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_gateway_state")
@@ -747,77 +645,54 @@ func (v *ValidateDirectConnectGatewayStatusType) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["amazon_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("amazon_asn"))
 		if err := fv(ctx, m.GetAmazonAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_path"))
 		if err := fv(ctx, m.GetAwsPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_gateway_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_id"))
 		if err := fv(ctx, m.GetDirectConnectGatewayId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_gateway_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_name"))
 		if err := fv(ctx, m.GetDirectConnectGatewayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_gateway_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_state"))
 		if err := fv(ctx, m.GetDirectConnectGatewayState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["owner_account"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("owner_account"))
 		if err := fv(ctx, m.GetOwnerAccount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state_change_error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state_change_error"))
 		if err := fv(ctx, m.GetStateChangeError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDirectConnectGatewayStatusTypeValidator = func() *ValidateDirectConnectGatewayStatusType {
 	v := &ValidateDirectConnectGatewayStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -886,7 +761,6 @@ type ValidateGCPCloudInterconnectAttachmentStatusType struct {
 }
 
 func (v *ValidateGCPCloudInterconnectAttachmentStatusType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
@@ -894,9 +768,7 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) TypeValidationRuleHan
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPCloudInterconnectAttachmentStatusType) EncryptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for encryption")
@@ -904,9 +776,7 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) EncryptionValidationR
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPCloudInterconnectAttachmentStatusType) VlanValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan")
@@ -914,9 +784,7 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) VlanValidationRuleHan
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPCloudInterconnectAttachmentStatusType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -924,9 +792,7 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) MtuValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPCloudInterconnectAttachmentStatusType) AttachmentStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for attachment_state")
@@ -948,45 +814,31 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) Validate(ctx context.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_enabled"))
 		if err := fv(ctx, m.GetAdminEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["attachment_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachment_state"))
 		if err := fv(ctx, m.GetAttachmentState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["availability_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("availability_domain"))
 		if err := fv(ctx, m.GetAvailabilityDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bandwidth"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bandwidth"))
 		if err := fv(ctx, m.GetBandwidth(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peers"))
 		for idx, item := range m.GetBgpPeers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -994,65 +846,44 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) Validate(ctx context.
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cloud_router_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_router_ip"))
 		if err := fv(ctx, m.GetCloudRouterIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["customer_router_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("customer_router_ip"))
 		if err := fv(ctx, m.GetCustomerRouterIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dataplane_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dataplane_version"))
 		if err := fv(ctx, m.GetDataplaneVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["encryption"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("encryption"))
 		if err := fv(ctx, m.GetEncryption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_path"))
 		if err := fv(ctx, m.GetGcpPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interconnect"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interconnect"))
 		if err := fv(ctx, m.GetInterconnect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1060,124 +891,85 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) Validate(ctx context.
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["operational_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operational_status"))
 		if err := fv(ctx, m.GetOperationalStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["partner_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("partner_asn"))
 		if err := fv(ctx, m.GetPartnerAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["partner_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("partner_metadata"))
 		if err := fv(ctx, m.GetPartnerMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["project"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("project"))
 		if err := fv(ctx, m.GetProject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["router"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("router"))
 		if err := fv(ctx, m.GetRouter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["stack_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("stack_type"))
 		if err := fv(ctx, m.GetStackType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan"))
 		if err := fv(ctx, m.GetVlan(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_network"))
 		if err := fv(ctx, m.GetVpcNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPCloudInterconnectAttachmentStatusTypeValidator = func() *ValidateGCPCloudInterconnectAttachmentStatusType {
 	v := &ValidateGCPCloudInterconnectAttachmentStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1242,7 +1034,6 @@ var DefaultGCPCloudInterconnectAttachmentStatusTypeValidator = func() *ValidateG
 		panic(errMsg)
 	}
 	v.FldValidators["attachment_state"] = vFn
-
 	v.FldValidators["bgp_peers"] = BGPPeerTypeValidator().Validate
 
 	return v
@@ -1306,18 +1097,13 @@ func (v *ValidateGCPStatusType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_link_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_link_state"))
 		if err := fv(ctx, m.GetCloudLinkState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_status"))
 		for idx, item := range m.GetConnectionStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1325,16 +1111,13 @@ func (v *ValidateGCPStatusType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPStatusTypeValidator = func() *ValidateGCPStatusType {
 	v := &ValidateGCPStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["connection_status"] = GCPCloudInterconnectAttachmentStatusTypeValidator().Validate
 
 	return v
@@ -1360,7 +1143,6 @@ func (m *SpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetGcSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SpecType.gc_spec")
 	}
@@ -1401,7 +1183,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1409,7 +1190,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
@@ -1419,7 +1199,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSpecType struct {
@@ -1439,23 +1218,18 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v
@@ -1507,7 +1281,6 @@ type ValidateVirtualInterfaceStatusType struct {
 }
 
 func (v *ValidateVirtualInterfaceStatusType) AddressFamilyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address_family")
@@ -1515,9 +1288,7 @@ func (v *ValidateVirtualInterfaceStatusType) AddressFamilyValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualInterfaceStatusType) VirtualInterfaceStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_interface_state")
@@ -1525,9 +1296,7 @@ func (v *ValidateVirtualInterfaceStatusType) VirtualInterfaceStateValidationRule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualInterfaceStatusType) VirtualInterfaceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_interface_type")
@@ -1535,9 +1304,7 @@ func (v *ValidateVirtualInterfaceStatusType) VirtualInterfaceTypeValidationRuleH
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualInterfaceStatusType) DirectConnectAttachmentStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_attachment_state")
@@ -1559,63 +1326,43 @@ func (v *ValidateVirtualInterfaceStatusType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address_family"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address_family"))
 		if err := fv(ctx, m.GetAddressFamily(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["amazon_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("amazon_address"))
 		if err := fv(ctx, m.GetAmazonAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["amazon_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("amazon_asn"))
 		if err := fv(ctx, m.GetAmazonAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["attachment_state_change_error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachment_state_change_error"))
 		if err := fv(ctx, m.GetAttachmentStateChangeError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_path"))
 		if err := fv(ctx, m.GetAwsPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_asn"))
 		if err := fv(ctx, m.GetBgpAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bgp_peers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bgp_peers"))
 		for idx, item := range m.GetBgpPeers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1623,92 +1370,62 @@ func (v *ValidateVirtualInterfaceStatusType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_id"))
 		if err := fv(ctx, m.GetConnectionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_attachment_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_attachment_state"))
 		if err := fv(ctx, m.GetDirectConnectAttachmentState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_gateway_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_id"))
 		if err := fv(ctx, m.GetDirectConnectGatewayId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_gateway_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_name"))
 		if err := fv(ctx, m.GetDirectConnectGatewayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jumbo_frame_capable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("jumbo_frame_capable"))
 		if err := fv(ctx, m.GetJumboFrameCapable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["location"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("location"))
 		if err := fv(ctx, m.GetLocation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["owner_account"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("owner_account"))
 		if err := fv(ctx, m.GetOwnerAccount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1716,61 +1433,43 @@ func (v *ValidateVirtualInterfaceStatusType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_interface_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_interface_id"))
 		if err := fv(ctx, m.GetVirtualInterfaceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_interface_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_interface_name"))
 		if err := fv(ctx, m.GetVirtualInterfaceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_interface_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_interface_state"))
 		if err := fv(ctx, m.GetVirtualInterfaceState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_interface_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_interface_type"))
 		if err := fv(ctx, m.GetVirtualInterfaceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan"))
 		if err := fv(ctx, m.GetVlan(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVirtualInterfaceStatusTypeValidator = func() *ValidateVirtualInterfaceStatusType {
 	v := &ValidateVirtualInterfaceStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1822,7 +1521,6 @@ var DefaultVirtualInterfaceStatusTypeValidator = func() *ValidateVirtualInterfac
 		panic(errMsg)
 	}
 	v.FldValidators["direct_connect_attachment_state"] = vFn
-
 	v.FldValidators["bgp_peers"] = BGPPeerTypeValidator().Validate
 
 	return v

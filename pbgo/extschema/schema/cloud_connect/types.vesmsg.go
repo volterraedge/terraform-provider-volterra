@@ -69,7 +69,6 @@ type ValidateAWSAttachmentsListStatusType struct {
 }
 
 func (v *ValidateAWSAttachmentsListStatusType) ConnectAttachmentStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -115,9 +114,7 @@ func (v *ValidateAWSAttachmentsListStatusType) ConnectAttachmentStatusValidation
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSAttachmentsListStatusType) TgwRouteTableStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -177,9 +174,7 @@ func (v *ValidateAWSAttachmentsListStatusType) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attachment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachment_status"))
 		for idx, item := range m.GetAttachmentStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -187,32 +182,37 @@ func (v *ValidateAWSAttachmentsListStatusType) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connect_attachment_status"]; exists {
 		vOpts := append(opts, db.WithValidateField("connect_attachment_status"))
 		if err := fv(ctx, m.GetConnectAttachmentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_route_table_status"]; exists {
 		vOpts := append(opts, db.WithValidateField("tgw_route_table_status"))
 		if err := fv(ctx, m.GetTgwRouteTableStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["tgw_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("tgw_status"))
+		if err := fv(ctx, m.GetTgwStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["transit_gateway_resource_share_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("transit_gateway_resource_share_status"))
+		if err := fv(ctx, m.GetTransitGatewayResourceShareStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSAttachmentsListStatusTypeValidator = func() *ValidateAWSAttachmentsListStatusType {
 	v := &ValidateAWSAttachmentsListStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -242,7 +242,6 @@ var DefaultAWSAttachmentsListStatusTypeValidator = func() *ValidateAWSAttachment
 		panic(errMsg)
 	}
 	v.FldValidators["tgw_route_table_status"] = vFn
-
 	v.FldValidators["attachment_status"] = AWSAttachmentsStatusTypeValidator().Validate
 
 	return v
@@ -294,7 +293,6 @@ type ValidateAWSAttachmentsStatusType struct {
 }
 
 func (v *ValidateAWSAttachmentsStatusType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -351,54 +349,37 @@ func (v *ValidateAWSAttachmentsStatusType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["association_route_table_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("association_route_table_id"))
 		if err := fv(ctx, m.GetAssociationRouteTableId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["association_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("association_state"))
 		if err := fv(ctx, m.GetAssociationState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["creation_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creation_time"))
 		if err := fv(ctx, m.GetCreationTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["installed_routes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("installed_routes"))
 		if err := fv(ctx, m.GetInstalledRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnets"))
 		for idx, item := range m.GetSubnets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -406,87 +387,61 @@ func (v *ValidateAWSAttachmentsStatusType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_attachment_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_attachment_id"))
 		if err := fv(ctx, m.GetTgwAttachmentId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_attachment_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_attachment_name"))
 		if err := fv(ctx, m.GetTgwAttachmentName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_cidr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_cidr"))
 		if err := fv(ctx, m.GetVpcCidr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_deployment_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_deployment_state"))
 		if err := fv(ctx, m.GetVpcDeploymentState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_name"))
 		if err := fv(ctx, m.GetVpcName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_owner_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_owner_id"))
 		if err := fv(ctx, m.GetVpcOwnerId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSAttachmentsStatusTypeValidator = func() *ValidateAWSAttachmentsStatusType {
 	v := &ValidateAWSAttachmentsStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -507,7 +462,6 @@ var DefaultAWSAttachmentsStatusTypeValidator = func() *ValidateAWSAttachmentsSta
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
-
 	v.FldValidators["installed_routes"] = AWSRouteTableListTypeValidator().Validate
 
 	return v
@@ -565,25 +519,20 @@ func (m *AWSCloudTransitGatewayType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCredDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCredDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *AWSCloudTransitGatewayType) GetCloudTransitGatewayDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCloudTransitGateway()
 	if vref == nil {
 		return nil, nil
@@ -599,7 +548,6 @@ func (m *AWSCloudTransitGatewayType) GetCloudTransitGatewayDRefInfo() ([]db.DRef
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCloudTransitGatewayDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -609,7 +557,6 @@ func (m *AWSCloudTransitGatewayType) GetCloudTransitGatewayDBEntries(ctx context
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_transit_gateway")
 	}
-
 	vref := m.GetCloudTransitGateway()
 	if vref == nil {
 		return nil, nil
@@ -627,12 +574,10 @@ func (m *AWSCloudTransitGatewayType) GetCloudTransitGatewayDBEntries(ctx context
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *AWSCloudTransitGatewayType) GetCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -648,7 +593,6 @@ func (m *AWSCloudTransitGatewayType) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -658,7 +602,6 @@ func (m *AWSCloudTransitGatewayType) GetCredDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -676,7 +619,6 @@ func (m *AWSCloudTransitGatewayType) GetCredDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -685,7 +627,6 @@ func (m *AWSCloudTransitGatewayType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPeers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
@@ -699,7 +640,6 @@ func (m *AWSCloudTransitGatewayType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateAWSCloudTransitGatewayType struct {
@@ -707,7 +647,6 @@ type ValidateAWSCloudTransitGatewayType struct {
 }
 
 func (v *ValidateAWSCloudTransitGatewayType) CloudTransitGatewayValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cloud_transit_gateway")
@@ -716,19 +655,15 @@ func (v *ValidateAWSCloudTransitGatewayType) CloudTransitGatewayValidationRuleHa
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSCloudTransitGatewayType) CredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cred")
@@ -737,19 +672,15 @@ func (v *ValidateAWSCloudTransitGatewayType) CredValidationRuleHandler(rules map
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSCloudTransitGatewayType) VpcAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for vpc_attachments")
@@ -758,11 +689,9 @@ func (v *ValidateAWSCloudTransitGatewayType) VpcAttachmentsValidationRuleHandler
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := AWSVPCAttachmentListTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -782,27 +711,19 @@ func (v *ValidateAWSCloudTransitGatewayType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_transit_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_transit_gateway"))
 		if err := fv(ctx, m.GetCloudTransitGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peers"))
 		for idx, item := range m.GetPeers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -810,25 +731,19 @@ func (v *ValidateAWSCloudTransitGatewayType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
 		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSCloudTransitGatewayTypeValidator = func() *ValidateAWSCloudTransitGatewayType {
 	v := &ValidateAWSCloudTransitGatewayType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -869,7 +784,6 @@ var DefaultAWSCloudTransitGatewayTypeValidator = func() *ValidateAWSCloudTransit
 		panic(errMsg)
 	}
 	v.FldValidators["vpc_attachments"] = vFn
-
 	v.FldValidators["peers"] = PeerTypeValidator().Validate
 
 	return v
@@ -921,7 +835,6 @@ type ValidateAWSConnectAttachmentStatusType struct {
 }
 
 func (v *ValidateAWSConnectAttachmentStatusType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -978,45 +891,31 @@ func (v *ValidateAWSConnectAttachmentStatusType) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["association_route_table_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("association_route_table_id"))
 		if err := fv(ctx, m.GetAssociationRouteTableId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["association_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("association_state"))
 		if err := fv(ctx, m.GetAssociationState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connect_deployment_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connect_deployment_state"))
 		if err := fv(ctx, m.GetConnectDeploymentState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peers"))
 		for idx, item := range m.GetPeers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1024,78 +923,55 @@ func (v *ValidateAWSConnectAttachmentStatusType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway_asn"))
 		if err := fv(ctx, m.GetTransitGatewayAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway_attachment_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway_attachment_id"))
 		if err := fv(ctx, m.GetTransitGatewayAttachmentId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway_attachment_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway_attachment_name"))
 		if err := fv(ctx, m.GetTransitGatewayAttachmentName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway_id"))
 		if err := fv(ctx, m.GetTransitGatewayId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_attachment_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_attachment_id"))
 		if err := fv(ctx, m.GetTransportAttachmentId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSConnectAttachmentStatusTypeValidator = func() *ValidateAWSConnectAttachmentStatusType {
 	v := &ValidateAWSConnectAttachmentStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1116,7 +992,6 @@ var DefaultAWSConnectAttachmentStatusTypeValidator = func() *ValidateAWSConnectA
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
-
 	v.FldValidators["peers"] = AWSConnectPeerStatusTypeValidator().Validate
 
 	return v
@@ -1168,7 +1043,6 @@ type ValidateAWSConnectPeerStatusType struct {
 }
 
 func (v *ValidateAWSConnectPeerStatusType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1225,67 +1099,60 @@ func (v *ValidateAWSConnectPeerStatusType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connect_attachment_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connect_attachment_id"))
 		if err := fv(ctx, m.GetConnectAttachmentId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connect_peer_deployment_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connect_peer_deployment_state"))
 		if err := fv(ctx, m.GetConnectPeerDeploymentState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connect_peer_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connect_peer_id"))
 		if err := fv(ctx, m.GetConnectPeerId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["peer_gre_address"]; exists {
+		vOpts := append(opts, db.WithValidateField("peer_gre_address"))
+		if err := fv(ctx, m.GetPeerGreAddress(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["transit_gateway_gre_address"]; exists {
+		vOpts := append(opts, db.WithValidateField("transit_gateway_gre_address"))
+		if err := fv(ctx, m.GetTransitGatewayGreAddress(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSConnectPeerStatusTypeValidator = func() *ValidateAWSConnectPeerStatusType {
 	v := &ValidateAWSConnectPeerStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1356,7 +1223,6 @@ type ValidateAWSDefaultRoutesRouteTable struct {
 }
 
 func (v *ValidateAWSDefaultRoutesRouteTable) RouteTableIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1410,22 +1276,18 @@ func (v *ValidateAWSDefaultRoutesRouteTable) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_table_id"]; exists {
 		vOpts := append(opts, db.WithValidateField("route_table_id"))
 		if err := fv(ctx, m.GetRouteTableId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSDefaultRoutesRouteTableValidator = func() *ValidateAWSDefaultRoutesRouteTable {
 	v := &ValidateAWSDefaultRoutesRouteTable{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1452,6 +1314,175 @@ var DefaultAWSDefaultRoutesRouteTableValidator = func() *ValidateAWSDefaultRoute
 
 func AWSDefaultRoutesRouteTableValidator() db.Validator {
 	return DefaultAWSDefaultRoutesRouteTableValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSProviderType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSProviderType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSProviderType) DeepCopy() *AWSProviderType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSProviderType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSProviderType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSProviderType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSProviderTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AWSProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteTypeDRefInfo()
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSProviderType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteType().(type) {
+	case *AWSProviderType_AwsTgwSite:
+		drInfos, err := m.GetAwsTgwSite().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsTgwSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_tgw_site." + dri.DRField
+		}
+		return drInfos, err
+	case *AWSProviderType_SecuremeshSiteV2:
+		drInfos, err := m.GetSecuremeshSiteV2().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSecuremeshSiteV2().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "securemesh_site_v2." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+type ValidateAWSProviderType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSProviderType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSProviderType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSProviderType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site_type"]; exists {
+		val := m.GetSiteType()
+		vOpts := append(opts,
+			db.WithValidateField("site_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSiteType().(type) {
+	case *AWSProviderType_AwsTgwSite:
+		if fv, exists := v.FldValidators["site_type.aws_tgw_site"]; exists {
+			val := m.GetSiteType().(*AWSProviderType_AwsTgwSite).AwsTgwSite
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("aws_tgw_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSProviderType_SecuremeshSiteV2:
+		if fv, exists := v.FldValidators["site_type.securemesh_site_v2"]; exists {
+			val := m.GetSiteType().(*AWSProviderType_SecuremeshSiteV2).SecuremeshSiteV2
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("securemesh_site_v2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSProviderTypeValidator = func() *ValidateAWSProviderType {
+	v := &ValidateAWSProviderType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhSiteType := v.SiteTypeValidationRuleHandler
+	rulesSiteType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteType(rulesSiteType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSProviderType.site_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_type"] = vFn
+	v.FldValidators["site_type.aws_tgw_site"] = AWSTGWSiteTypeValidator().Validate
+	v.FldValidators["site_type.securemesh_site_v2"] = AWSSecureMeshSiteTypeValidator().Validate
+
+	return v
+}()
+
+func AWSProviderTypeValidator() db.Validator {
+	return DefaultAWSProviderTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1502,27 +1533,22 @@ func (m *AWSREType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCredDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCredDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRegionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRegionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1530,7 +1556,6 @@ func (m *AWSREType) GetCloudLinksDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCloudLinks() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCloudLinks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCloudLinks().GetDRefInfo() FAILED")
@@ -1540,11 +1565,9 @@ func (m *AWSREType) GetCloudLinksDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "cloud_links." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *AWSREType) GetCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -1560,7 +1583,6 @@ func (m *AWSREType) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1570,7 +1592,6 @@ func (m *AWSREType) GetCredDBEntries(ctx context.Context, d db.Interface) ([]db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -1588,7 +1609,6 @@ func (m *AWSREType) GetCredDBEntries(ctx context.Context, d db.Interface) ([]db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1597,7 +1617,6 @@ func (m *AWSREType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPeers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
@@ -1611,11 +1630,9 @@ func (m *AWSREType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *AWSREType) GetRegionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetRegion()
 	if vref == nil {
 		return nil, nil
@@ -1631,7 +1648,6 @@ func (m *AWSREType) GetRegionDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetRegionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1641,7 +1657,6 @@ func (m *AWSREType) GetRegionDBEntries(ctx context.Context, d db.Interface) ([]d
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_region")
 	}
-
 	vref := m.GetRegion()
 	if vref == nil {
 		return nil, nil
@@ -1659,7 +1674,6 @@ func (m *AWSREType) GetRegionDBEntries(ctx context.Context, d db.Interface) ([]d
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1668,7 +1682,6 @@ type ValidateAWSREType struct {
 }
 
 func (v *ValidateAWSREType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for region")
@@ -1677,19 +1690,15 @@ func (v *ValidateAWSREType) RegionValidationRuleHandler(rules map[string]string)
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSREType) CredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cred")
@@ -1698,11 +1707,9 @@ func (v *ValidateAWSREType) CredValidationRuleHandler(rules map[string]string) (
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1722,27 +1729,19 @@ func (v *ValidateAWSREType) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_links"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_links"))
 		if err := fv(ctx, m.GetCloudLinks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peers"))
 		for idx, item := range m.GetPeers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1750,43 +1749,31 @@ func (v *ValidateAWSREType) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw"))
 		if err := fv(ctx, m.GetTgw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
 		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSRETypeValidator = func() *ValidateAWSREType {
 	v := &ValidateAWSREType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1816,11 +1803,8 @@ var DefaultAWSRETypeValidator = func() *ValidateAWSREType {
 		panic(errMsg)
 	}
 	v.FldValidators["cred"] = vFn
-
 	v.FldValidators["vpc_attachments"] = AWSVPCAttachmentListTypeValidator().Validate
-
 	v.FldValidators["cloud_links"] = CloudLinkListTypeValidator().Validate
-
 	v.FldValidators["peers"] = PeerTypeValidator().Validate
 
 	return v
@@ -1872,7 +1856,6 @@ type ValidateAWSRouteTableListType struct {
 }
 
 func (v *ValidateAWSRouteTableListType) RouteTablesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1932,22 +1915,18 @@ func (v *ValidateAWSRouteTableListType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_tables"]; exists {
 		vOpts := append(opts, db.WithValidateField("route_tables"))
 		if err := fv(ctx, m.GetRouteTables(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSRouteTableListTypeValidator = func() *ValidateAWSRouteTableListType {
 	v := &ValidateAWSRouteTableListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2019,7 +1998,6 @@ type ValidateAWSRouteTableType struct {
 }
 
 func (v *ValidateAWSRouteTableType) RouteTableIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for route_table_id")
@@ -2027,9 +2005,7 @@ func (v *ValidateAWSRouteTableType) RouteTableIdValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSRouteTableType) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2083,31 +2059,24 @@ func (v *ValidateAWSRouteTableType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_table_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table_id"))
 		if err := fv(ctx, m.GetRouteTableId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSRouteTableTypeValidator = func() *ValidateAWSRouteTableType {
 	v := &ValidateAWSRouteTableType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2152,6 +2121,438 @@ func AWSRouteTableTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSSecureMeshSiteStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSSecureMeshSiteStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSSecureMeshSiteStatusType) DeepCopy() *AWSSecureMeshSiteStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSSecureMeshSiteStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSSecureMeshSiteStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSSecureMeshSiteStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSSecureMeshSiteStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSSecureMeshSiteStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSSecureMeshSiteStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSSecureMeshSiteStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSSecureMeshSiteStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["attachment_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("attachment_status"))
+		for idx, item := range m.GetAttachmentStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["connect_attachment_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("connect_attachment_status"))
+		for idx, item := range m.GetConnectAttachmentStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["tgw_route_table_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("tgw_route_table_status"))
+		for idx, item := range m.GetTgwRouteTableStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["tgw_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("tgw_status"))
+		if err := fv(ctx, m.GetTgwStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["transit_gateway_resource_share_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("transit_gateway_resource_share_status"))
+		if err := fv(ctx, m.GetTransitGatewayResourceShareStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSSecureMeshSiteStatusTypeValidator = func() *ValidateAWSSecureMeshSiteStatusType {
+	v := &ValidateAWSSecureMeshSiteStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["attachment_status"] = AWSAttachmentsStatusTypeValidator().Validate
+	v.FldValidators["connect_attachment_status"] = AWSConnectAttachmentStatusTypeValidator().Validate
+	v.FldValidators["tgw_route_table_status"] = AWSTGWRouteTableStatusTypeValidator().Validate
+
+	return v
+}()
+
+func AWSSecureMeshSiteStatusTypeValidator() db.Validator {
+	return DefaultAWSSecureMeshSiteStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSSecureMeshSiteType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSSecureMeshSiteType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSSecureMeshSiteType) DeepCopy() *AWSSecureMeshSiteType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSSecureMeshSiteType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSSecureMeshSiteType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSSecureMeshSiteType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSSecureMeshSiteTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AWSSecureMeshSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCloudUserAccountRefDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCloudUserAccountRefDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+
+func (m *AWSSecureMeshSiteType) GetCloudUserAccountRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCloudUserAccountRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_user_account.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_user_account.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_user_account_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetCloudUserAccountRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AWSSecureMeshSiteType) GetCloudUserAccountRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_user_account.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_user_account")
+	}
+	vref := m.GetCloudUserAccountRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cloud_user_account.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSSecureMeshSiteType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPeers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+func (m *AWSSecureMeshSiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("securemesh_site_v2.Object")
+	dri := db.DRefInfo{
+		RefdType:   "securemesh_site_v2.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AWSSecureMeshSiteType) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "securemesh_site_v2.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: securemesh_site_v2")
+	}
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "securemesh_site_v2.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+type ValidateAWSSecureMeshSiteType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSSecureMeshSiteType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSSecureMeshSiteType) CloudUserAccountRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cloud_user_account_ref")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSSecureMeshSiteType) VpcAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for vpc_attachments")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := AWSVPCAttachmentListTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSSecureMeshSiteType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSSecureMeshSiteType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSSecureMeshSiteType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["cloud_user_account_ref"]; exists {
+		vOpts := append(opts, db.WithValidateField("cloud_user_account_ref"))
+		if err := fv(ctx, m.GetCloudUserAccountRef(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["peers"]; exists {
+		vOpts := append(opts, db.WithValidateField("peers"))
+		for idx, item := range m.GetPeers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["site"]; exists {
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
+		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
+		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSSecureMeshSiteTypeValidator = func() *ValidateAWSSecureMeshSiteType {
+	v := &ValidateAWSSecureMeshSiteType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSecureMeshSiteType.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+
+	vrhCloudUserAccountRef := v.CloudUserAccountRefValidationRuleHandler
+	rulesCloudUserAccountRef := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCloudUserAccountRef(rulesCloudUserAccountRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSecureMeshSiteType.cloud_user_account_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_user_account_ref"] = vFn
+
+	vrhVpcAttachments := v.VpcAttachmentsValidationRuleHandler
+	rulesVpcAttachments := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVpcAttachments(rulesVpcAttachments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSecureMeshSiteType.vpc_attachments: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vpc_attachments"] = vFn
+	v.FldValidators["peers"] = PeerTypeValidator().Validate
+
+	return v
+}()
+
+func AWSSecureMeshSiteTypeValidator() db.Validator {
+	return DefaultAWSSecureMeshSiteTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AWSSubnetIDListType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2192,7 +2593,6 @@ type ValidateAWSSubnetIDListType struct {
 }
 
 func (v *ValidateAWSSubnetIDListType) SubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2246,22 +2646,18 @@ func (v *ValidateAWSSubnetIDListType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["subnet_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("subnet_ids"))
 		if err := fv(ctx, m.GetSubnetIds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSSubnetIDListTypeValidator = func() *ValidateAWSSubnetIDListType {
 	v := &ValidateAWSSubnetIDListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2346,52 +2742,36 @@ func (v *ValidateAWSTGWResourceReference) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attachment_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachment_id"))
 		if err := fv(ctx, m.GetAttachmentId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_id"))
 		if err := fv(ctx, m.GetResourceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_type"))
 		if err := fv(ctx, m.GetResourceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2404,6 +2784,134 @@ var DefaultAWSTGWResourceReferenceValidator = func() *ValidateAWSTGWResourceRefe
 
 func AWSTGWResourceReferenceValidator() db.Validator {
 	return DefaultAWSTGWResourceReferenceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSTGWResourceShareType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSTGWResourceShareType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSTGWResourceShareType) DeepCopy() *AWSTGWResourceShareType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSTGWResourceShareType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSTGWResourceShareType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSTGWResourceShareType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSTGWResourceShareTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSTGWResourceShareType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSTGWResourceShareType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSTGWResourceShareType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSTGWResourceShareType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["allow_external_principles"]; exists {
+		vOpts := append(opts, db.WithValidateField("allow_external_principles"))
+		if err := fv(ctx, m.GetAllowExternalPrinciples(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["deployment_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("deployment_status"))
+		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["owner_account_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("owner_account_id"))
+		if err := fv(ctx, m.GetOwnerAccountId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["receiver_account_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("receiver_account_id"))
+		for idx, item := range m.GetReceiverAccountId() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["resource_share_arn"]; exists {
+		vOpts := append(opts, db.WithValidateField("resource_share_arn"))
+		if err := fv(ctx, m.GetResourceShareArn(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["resource_share_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("resource_share_name"))
+		if err := fv(ctx, m.GetResourceShareName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["status"]; exists {
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["tags"]; exists {
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["transit_gateway_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("transit_gateway_id"))
+		if err := fv(ctx, m.GetTransitGatewayId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSTGWResourceShareTypeValidator = func() *ValidateAWSTGWResourceShareType {
+	v := &ValidateAWSTGWResourceShareType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSTGWResourceShareTypeValidator() db.Validator {
+	return DefaultAWSTGWResourceShareTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2448,7 +2956,6 @@ type ValidateAWSTGWRouteTableStatusType struct {
 }
 
 func (v *ValidateAWSTGWRouteTableStatusType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2505,9 +3012,7 @@ func (v *ValidateAWSTGWRouteTableStatusType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["associations"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("associations"))
 		for idx, item := range m.GetAssociations() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2515,20 +3020,14 @@ func (v *ValidateAWSTGWRouteTableStatusType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["propagations"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("propagations"))
 		for idx, item := range m.GetPropagations() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2536,60 +3035,43 @@ func (v *ValidateAWSTGWRouteTableStatusType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_rt_deployment_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_rt_deployment_state"))
 		if err := fv(ctx, m.GetTgwRtDeploymentState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway_id"))
 		if err := fv(ctx, m.GetTransitGatewayId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway_route_table_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway_route_table_id"))
 		if err := fv(ctx, m.GetTransitGatewayRouteTableId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway_route_table_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway_route_table_name"))
 		if err := fv(ctx, m.GetTransitGatewayRouteTableName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSTGWRouteTableStatusTypeValidator = func() *ValidateAWSTGWRouteTableStatusType {
 	v := &ValidateAWSTGWRouteTableStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2666,25 +3148,20 @@ func (m *AWSTGWSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *AWSTGWSiteType) GetCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -2700,7 +3177,6 @@ func (m *AWSTGWSiteType) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2710,7 +3186,6 @@ func (m *AWSTGWSiteType) GetCredDBEntries(ctx context.Context, d db.Interface) (
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -2728,7 +3203,6 @@ func (m *AWSTGWSiteType) GetCredDBEntries(ctx context.Context, d db.Interface) (
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2737,7 +3211,6 @@ func (m *AWSTGWSiteType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPeers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
@@ -2751,11 +3224,9 @@ func (m *AWSTGWSiteType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *AWSTGWSiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -2771,7 +3242,6 @@ func (m *AWSTGWSiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2781,7 +3251,6 @@ func (m *AWSTGWSiteType) GetSiteDBEntries(ctx context.Context, d db.Interface) (
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: aws_tgw_site")
 	}
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -2799,7 +3268,6 @@ func (m *AWSTGWSiteType) GetSiteDBEntries(ctx context.Context, d db.Interface) (
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2808,7 +3276,6 @@ type ValidateAWSTGWSiteType struct {
 }
 
 func (v *ValidateAWSTGWSiteType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site")
@@ -2817,19 +3284,15 @@ func (v *ValidateAWSTGWSiteType) SiteValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSTGWSiteType) CredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cred")
@@ -2838,19 +3301,15 @@ func (v *ValidateAWSTGWSiteType) CredValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSTGWSiteType) VpcAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for vpc_attachments")
@@ -2859,11 +3318,9 @@ func (v *ValidateAWSTGWSiteType) VpcAttachmentsValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := AWSVPCAttachmentListTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2883,18 +3340,13 @@ func (v *ValidateAWSTGWSiteType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peers"))
 		for idx, item := range m.GetPeers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2902,34 +3354,25 @@ func (v *ValidateAWSTGWSiteType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
 		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSTGWSiteTypeValidator = func() *ValidateAWSTGWSiteType {
 	v := &ValidateAWSTGWSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2970,7 +3413,6 @@ var DefaultAWSTGWSiteTypeValidator = func() *ValidateAWSTGWSiteType {
 		panic(errMsg)
 	}
 	v.FldValidators["vpc_attachments"] = vFn
-
 	v.FldValidators["peers"] = PeerTypeValidator().Validate
 
 	return v
@@ -2978,6 +3420,134 @@ var DefaultAWSTGWSiteTypeValidator = func() *ValidateAWSTGWSiteType {
 
 func AWSTGWSiteTypeValidator() db.Validator {
 	return DefaultAWSTGWSiteTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSTGWStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSTGWStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSTGWStatusType) DeepCopy() *AWSTGWStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSTGWStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSTGWStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSTGWStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSTGWStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSTGWStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSTGWStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSTGWStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSTGWStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["amazon_asn"]; exists {
+		vOpts := append(opts, db.WithValidateField("amazon_asn"))
+		if err := fv(ctx, m.GetAmazonAsn(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["arn"]; exists {
+		vOpts := append(opts, db.WithValidateField("arn"))
+		if err := fv(ctx, m.GetArn(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["cidrs"]; exists {
+		vOpts := append(opts, db.WithValidateField("cidrs"))
+		for idx, item := range m.GetCidrs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["id"]; exists {
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["owner_account"]; exists {
+		vOpts := append(opts, db.WithValidateField("owner_account"))
+		if err := fv(ctx, m.GetOwnerAccount(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["region"]; exists {
+		vOpts := append(opts, db.WithValidateField("region"))
+		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["state"]; exists {
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["status_msg"]; exists {
+		vOpts := append(opts, db.WithValidateField("status_msg"))
+		if err := fv(ctx, m.GetStatusMsg(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["tags"]; exists {
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSTGWStatusTypeValidator = func() *ValidateAWSTGWStatusType {
+	v := &ValidateAWSTGWStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSTGWStatusTypeValidator() db.Validator {
+	return DefaultAWSTGWStatusTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3022,7 +3592,6 @@ type ValidateAWSVPCAttachmentListType struct {
 }
 
 func (v *ValidateAWSVPCAttachmentListType) VpcListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3082,22 +3651,18 @@ func (v *ValidateAWSVPCAttachmentListType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vpc_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("vpc_list"))
 		if err := fv(ctx, m.GetVpcList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCAttachmentListTypeValidator = func() *ValidateAWSVPCAttachmentListType {
 	v := &ValidateAWSVPCAttachmentListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3172,9 +3737,7 @@ func (v *ValidateAWSVPCAttachmentType) RoutingChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSVPCAttachmentType) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
@@ -3196,9 +3759,7 @@ func (v *ValidateAWSVPCAttachmentType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -3206,7 +3767,6 @@ func (v *ValidateAWSVPCAttachmentType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["routing_choice"]; exists {
@@ -3253,25 +3813,19 @@ func (v *ValidateAWSVPCAttachmentType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCAttachmentTypeValidator = func() *ValidateAWSVPCAttachmentType {
 	v := &ValidateAWSVPCAttachmentType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3279,7 +3833,6 @@ var DefaultAWSVPCAttachmentTypeValidator = func() *ValidateAWSVPCAttachmentType 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRoutingChoice := v.RoutingChoiceValidationRuleHandler
 	rulesRoutingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3303,7 +3856,6 @@ var DefaultAWSVPCAttachmentTypeValidator = func() *ValidateAWSVPCAttachmentType 
 		panic(errMsg)
 	}
 	v.FldValidators["vpc_id"] = vFn
-
 	v.FldValidators["routing_choice.default_route"] = DefaultRouteValidator().Validate
 	v.FldValidators["routing_choice.custom_routing"] = AWSRouteTableListTypeValidator().Validate
 
@@ -3368,9 +3920,7 @@ func (v *ValidateAzureAttachmentsListStatusType) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attachment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachment_status"))
 		for idx, item := range m.GetAttachmentStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3378,16 +3928,13 @@ func (v *ValidateAzureAttachmentsListStatusType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureAttachmentsListStatusTypeValidator = func() *ValidateAzureAttachmentsListStatusType {
 	v := &ValidateAzureAttachmentsListStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["attachment_status"] = AzureAttachmentsStatusTypeValidator().Validate
 
 	return v
@@ -3439,7 +3986,6 @@ type ValidateAzureAttachmentsStatusType struct {
 }
 
 func (v *ValidateAzureAttachmentsStatusType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -3496,99 +4042,67 @@ func (v *ValidateAzureAttachmentsStatusType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
 		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hub_owner_subscriptionid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hub_owner_subscriptionid"))
 		if err := fv(ctx, m.GetHubOwnerSubscriptionid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hub_vnet_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hub_vnet_name"))
 		if err := fv(ctx, m.GetHubVnetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hub_vnet_resource_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hub_vnet_resource_group"))
 		if err := fv(ctx, m.GetHubVnetResourceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["installed_routes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("installed_routes"))
 		if err := fv(ctx, m.GetInstalledRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peering_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peering_state"))
 		if err := fv(ctx, m.GetPeeringState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peering_sync_level"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peering_sync_level"))
 		if err := fv(ctx, m.GetPeeringSyncLevel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provisioning_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provisioning_state"))
 		if err := fv(ctx, m.GetProvisioningState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spoke_subscription_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spoke_subscription_id"))
 		if err := fv(ctx, m.GetSpokeSubscriptionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spoke_vnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spoke_vnet_id"))
 		if err := fv(ctx, m.GetSpokeVnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnets"))
 		for idx, item := range m.GetSubnets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3596,42 +4110,31 @@ func (v *ValidateAzureAttachmentsStatusType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet_attachment_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_attachment_id"))
 		if err := fv(ctx, m.GetVnetAttachmentId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet_cidr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_cidr"))
 		if err := fv(ctx, m.GetVnetCidr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureAttachmentsStatusTypeValidator = func() *ValidateAzureAttachmentsStatusType {
 	v := &ValidateAzureAttachmentsStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3652,7 +4155,6 @@ var DefaultAzureAttachmentsStatusTypeValidator = func() *ValidateAzureAttachment
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
-
 	v.FldValidators["installed_routes"] = AzureRouteTableWithStaticRouteListTypeValidator().Validate
 
 	return v
@@ -3740,16 +4242,13 @@ func (v *ValidateAzureDefaultRoute) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureDefaultRouteValidator = func() *ValidateAzureDefaultRoute {
 	v := &ValidateAzureDefaultRoute{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["default_route_choice.selective_route_tables"] = AzureRouteTablesValidator().Validate
 
 	return v
@@ -3801,7 +4300,6 @@ type ValidateAzureRouteTableWithStaticRoute struct {
 }
 
 func (v *ValidateAzureRouteTableWithStaticRoute) RouteTableIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for route_table_id")
@@ -3809,9 +4307,7 @@ func (v *ValidateAzureRouteTableWithStaticRoute) RouteTableIdValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureRouteTableWithStaticRoute) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3865,31 +4361,24 @@ func (v *ValidateAzureRouteTableWithStaticRoute) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_table_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table_id"))
 		if err := fv(ctx, m.GetRouteTableId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureRouteTableWithStaticRouteValidator = func() *ValidateAzureRouteTableWithStaticRoute {
 	v := &ValidateAzureRouteTableWithStaticRoute{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3974,7 +4463,6 @@ type ValidateAzureRouteTableWithStaticRouteListType struct {
 }
 
 func (v *ValidateAzureRouteTableWithStaticRouteListType) RouteTablesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4034,22 +4522,18 @@ func (v *ValidateAzureRouteTableWithStaticRouteListType) Validate(ctx context.Co
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_tables"]; exists {
 		vOpts := append(opts, db.WithValidateField("route_tables"))
 		if err := fv(ctx, m.GetRouteTables(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureRouteTableWithStaticRouteListTypeValidator = func() *ValidateAzureRouteTableWithStaticRouteListType {
 	v := &ValidateAzureRouteTableWithStaticRouteListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4121,7 +4605,6 @@ type ValidateAzureRouteTables struct {
 }
 
 func (v *ValidateAzureRouteTables) RouteTableIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4175,22 +4658,18 @@ func (v *ValidateAzureRouteTables) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["route_table_id"]; exists {
 		vOpts := append(opts, db.WithValidateField("route_table_id"))
 		if err := fv(ctx, m.GetRouteTableId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureRouteTablesValidator = func() *ValidateAzureRouteTables {
 	v := &ValidateAzureRouteTables{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4266,9 +4745,7 @@ func (v *ValidateAzureVNETAttachmentType) RoutingChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVNETAttachmentType) SubscriptionIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subscription_id")
@@ -4276,9 +4753,7 @@ func (v *ValidateAzureVNETAttachmentType) SubscriptionIdValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVNETAttachmentType) VnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vnet_id")
@@ -4300,9 +4775,7 @@ func (v *ValidateAzureVNETAttachmentType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -4310,7 +4783,6 @@ func (v *ValidateAzureVNETAttachmentType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["routing_choice"]; exists {
@@ -4357,34 +4829,25 @@ func (v *ValidateAzureVNETAttachmentType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subscription_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subscription_id"))
 		if err := fv(ctx, m.GetSubscriptionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_id"))
 		if err := fv(ctx, m.GetVnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVNETAttachmentTypeValidator = func() *ValidateAzureVNETAttachmentType {
 	v := &ValidateAzureVNETAttachmentType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4392,7 +4855,6 @@ var DefaultAzureVNETAttachmentTypeValidator = func() *ValidateAzureVNETAttachmen
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRoutingChoice := v.RoutingChoiceValidationRuleHandler
 	rulesRoutingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4427,7 +4889,6 @@ var DefaultAzureVNETAttachmentTypeValidator = func() *ValidateAzureVNETAttachmen
 		panic(errMsg)
 	}
 	v.FldValidators["vnet_id"] = vFn
-
 	v.FldValidators["routing_choice.custom_routing"] = AzureRouteTableWithStaticRouteListTypeValidator().Validate
 	v.FldValidators["routing_choice.default_route"] = AzureDefaultRouteValidator().Validate
 
@@ -4486,19 +4947,15 @@ func (m *AzureVNETSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *AzureVNETSiteType) GetCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -4514,7 +4971,6 @@ func (m *AzureVNETSiteType) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4524,7 +4980,6 @@ func (m *AzureVNETSiteType) GetCredDBEntries(ctx context.Context, d db.Interface
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -4542,12 +4997,10 @@ func (m *AzureVNETSiteType) GetCredDBEntries(ctx context.Context, d db.Interface
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *AzureVNETSiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -4563,7 +5016,6 @@ func (m *AzureVNETSiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4573,7 +5025,6 @@ func (m *AzureVNETSiteType) GetSiteDBEntries(ctx context.Context, d db.Interface
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: azure_vnet_site")
 	}
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -4591,7 +5042,6 @@ func (m *AzureVNETSiteType) GetSiteDBEntries(ctx context.Context, d db.Interface
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -4600,7 +5050,6 @@ type ValidateAzureVNETSiteType struct {
 }
 
 func (v *ValidateAzureVNETSiteType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site")
@@ -4609,19 +5058,15 @@ func (v *ValidateAzureVNETSiteType) SiteValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVNETSiteType) VnetAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for vnet_attachments")
@@ -4630,11 +5075,9 @@ func (v *ValidateAzureVNETSiteType) VnetAttachmentsValidationRuleHandler(rules m
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := AzureVnetAttachmentListTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -4654,41 +5097,30 @@ func (v *ValidateAzureVNETSiteType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_attachments"))
 		if err := fv(ctx, m.GetVnetAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVNETSiteTypeValidator = func() *ValidateAzureVNETSiteType {
 	v := &ValidateAzureVNETSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4718,7 +5150,6 @@ var DefaultAzureVNETSiteTypeValidator = func() *ValidateAzureVNETSiteType {
 		panic(errMsg)
 	}
 	v.FldValidators["vnet_attachments"] = vFn
-
 	v.FldValidators["cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -4770,7 +5201,6 @@ type ValidateAzureVnetAttachmentListType struct {
 }
 
 func (v *ValidateAzureVnetAttachmentListType) VnetListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4830,22 +5260,18 @@ func (v *ValidateAzureVnetAttachmentListType) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vnet_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("vnet_list"))
 		if err := fv(ctx, m.GetVnetList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetAttachmentListTypeValidator = func() *ValidateAzureVnetAttachmentListType {
 	v := &ValidateAzureVnetAttachmentListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4926,34 +5352,24 @@ func (v *ValidateCIDRConflictListType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_connect_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_connect_name"))
 		if err := fv(ctx, m.GetCloudConnectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["overlapping_cidr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("overlapping_cidr"))
 		if err := fv(ctx, m.GetOverlappingCidr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -5022,18 +5438,13 @@ func (v *ValidateCIDRConflictStatusType) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cidr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr"))
 		if err := fv(ctx, m.GetCidr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["conflict_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("conflict_list"))
 		for idx, item := range m.GetConflictList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5041,9 +5452,7 @@ func (v *ValidateCIDRConflictStatusType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -5112,9 +5521,7 @@ func (v *ValidateCloudConnectData) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5122,11 +5529,8 @@ func (v *ValidateCloudConnectData) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -5134,9 +5538,7 @@ func (v *ValidateCloudConnectData) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -5229,18 +5631,27 @@ func (v *ValidateCloudConnectStatusType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
+	case *CloudConnectStatusType_CloudConnectAwsSecuremeshSite:
+		if fv, exists := v.FldValidators["cloud_connect_deployment.cloud_connect_aws_securemesh_site"]; exists {
+			val := m.GetCloudConnectDeployment().(*CloudConnectStatusType_CloudConnectAwsSecuremeshSite).CloudConnectAwsSecuremeshSite
+			vOpts := append(opts,
+				db.WithValidateField("cloud_connect_deployment"),
+				db.WithValidateField("cloud_connect_aws_securemesh_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCloudConnectStatusTypeValidator = func() *ValidateCloudConnectStatusType {
 	v := &ValidateCloudConnectStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["cloud_connect_deployment.cloud_connect_aws_site"] = AWSAttachmentsListStatusTypeValidator().Validate
 	v.FldValidators["cloud_connect_deployment.cloud_connect_azure_site"] = AzureAttachmentsListStatusTypeValidator().Validate
+	v.FldValidators["cloud_connect_deployment.cloud_connect_aws_securemesh_site"] = AWSSecureMeshSiteStatusTypeValidator().Validate
 
 	return v
 }()
@@ -5292,7 +5703,6 @@ func (m *CloudLinkListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudLinkDRefInfo()
-
 }
 
 func (m *CloudLinkListType) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
@@ -5318,7 +5728,6 @@ func (m *CloudLinkListType) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCloudLinkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5346,7 +5755,6 @@ func (m *CloudLinkListType) GetCloudLinkDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -5355,7 +5763,6 @@ type ValidateCloudLinkListType struct {
 }
 
 func (v *ValidateCloudLinkListType) CloudLinkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5415,22 +5822,18 @@ func (v *ValidateCloudLinkListType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_link"]; exists {
 		vOpts := append(opts, db.WithValidateField("cloud_link"))
 		if err := fv(ctx, m.GetCloudLink(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCloudLinkListTypeValidator = func() *ValidateCloudLinkListType {
 	v := &ValidateCloudLinkListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5505,19 +5908,15 @@ func (m *CreateAWSCloudTransitGatewayType) GetDRefInfo() ([]db.DRefInfo, error) 
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCredDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCredDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateAWSCloudTransitGatewayType) GetCloudTransitGatewayDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCloudTransitGateway()
 	if vref == nil {
 		return nil, nil
@@ -5533,7 +5932,6 @@ func (m *CreateAWSCloudTransitGatewayType) GetCloudTransitGatewayDRefInfo() ([]d
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCloudTransitGatewayDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5543,7 +5941,6 @@ func (m *CreateAWSCloudTransitGatewayType) GetCloudTransitGatewayDBEntries(ctx c
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_transit_gateway")
 	}
-
 	vref := m.GetCloudTransitGateway()
 	if vref == nil {
 		return nil, nil
@@ -5561,12 +5958,10 @@ func (m *CreateAWSCloudTransitGatewayType) GetCloudTransitGatewayDBEntries(ctx c
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *CreateAWSCloudTransitGatewayType) GetCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -5582,7 +5977,6 @@ func (m *CreateAWSCloudTransitGatewayType) GetCredDRefInfo() ([]db.DRefInfo, err
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5592,7 +5986,6 @@ func (m *CreateAWSCloudTransitGatewayType) GetCredDBEntries(ctx context.Context,
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -5610,7 +6003,6 @@ func (m *CreateAWSCloudTransitGatewayType) GetCredDBEntries(ctx context.Context,
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -5619,7 +6011,6 @@ type ValidateCreateAWSCloudTransitGatewayType struct {
 }
 
 func (v *ValidateCreateAWSCloudTransitGatewayType) CredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cred")
@@ -5628,11 +6019,9 @@ func (v *ValidateCreateAWSCloudTransitGatewayType) CredValidationRuleHandler(rul
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -5652,41 +6041,30 @@ func (v *ValidateCreateAWSCloudTransitGatewayType) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_transit_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_transit_gateway"))
 		if err := fv(ctx, m.GetCloudTransitGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
 		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateAWSCloudTransitGatewayTypeValidator = func() *ValidateCreateAWSCloudTransitGatewayType {
 	v := &ValidateCreateAWSCloudTransitGatewayType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5705,9 +6083,7 @@ var DefaultCreateAWSCloudTransitGatewayTypeValidator = func() *ValidateCreateAWS
 		panic(errMsg)
 	}
 	v.FldValidators["cred"] = vFn
-
 	v.FldValidators["cloud_transit_gateway"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["vpc_attachments"] = AWSVPCAttachmentListTypeValidator().Validate
 
 	return v
@@ -5715,6 +6091,427 @@ var DefaultCreateAWSCloudTransitGatewayTypeValidator = func() *ValidateCreateAWS
 
 func CreateAWSCloudTransitGatewayTypeValidator() db.Validator {
 	return DefaultCreateAWSCloudTransitGatewayTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CreateAWSProviderType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateAWSProviderType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateAWSProviderType) DeepCopy() *CreateAWSProviderType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateAWSProviderType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateAWSProviderType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateAWSProviderType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateAWSProviderTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CreateAWSProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteTypeDRefInfo()
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateAWSProviderType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteType().(type) {
+	case *CreateAWSProviderType_AwsTgwSite:
+		drInfos, err := m.GetAwsTgwSite().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsTgwSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_tgw_site." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateAWSProviderType_SecuremeshSiteV2:
+		drInfos, err := m.GetSecuremeshSiteV2().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSecuremeshSiteV2().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "securemesh_site_v2." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+type ValidateCreateAWSProviderType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateAWSProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateAWSProviderType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateAWSProviderType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetSiteType().(type) {
+	case *CreateAWSProviderType_AwsTgwSite:
+		if fv, exists := v.FldValidators["site_type.aws_tgw_site"]; exists {
+			val := m.GetSiteType().(*CreateAWSProviderType_AwsTgwSite).AwsTgwSite
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("aws_tgw_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateAWSProviderType_SecuremeshSiteV2:
+		if fv, exists := v.FldValidators["site_type.securemesh_site_v2"]; exists {
+			val := m.GetSiteType().(*CreateAWSProviderType_SecuremeshSiteV2).SecuremeshSiteV2
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("securemesh_site_v2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateAWSProviderTypeValidator = func() *ValidateCreateAWSProviderType {
+	v := &ValidateCreateAWSProviderType{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["site_type.aws_tgw_site"] = CreateAWSTGWSiteTypeValidator().Validate
+	v.FldValidators["site_type.securemesh_site_v2"] = CreateAWSSecureMeshSiteTypeValidator().Validate
+
+	return v
+}()
+
+func CreateAWSProviderTypeValidator() db.Validator {
+	return DefaultCreateAWSProviderTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CreateAWSSecureMeshSiteType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateAWSSecureMeshSiteType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateAWSSecureMeshSiteType) DeepCopy() *CreateAWSSecureMeshSiteType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateAWSSecureMeshSiteType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateAWSSecureMeshSiteType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateAWSSecureMeshSiteType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateAWSSecureMeshSiteTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CreateAWSSecureMeshSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCloudUserAccountRefDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCloudUserAccountRefDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+
+func (m *CreateAWSSecureMeshSiteType) GetCloudUserAccountRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCloudUserAccountRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_user_account.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_user_account.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_user_account_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetCloudUserAccountRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateAWSSecureMeshSiteType) GetCloudUserAccountRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_user_account.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_user_account")
+	}
+	vref := m.GetCloudUserAccountRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cloud_user_account.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+func (m *CreateAWSSecureMeshSiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("securemesh_site_v2.Object")
+	dri := db.DRefInfo{
+		RefdType:   "securemesh_site_v2.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateAWSSecureMeshSiteType) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "securemesh_site_v2.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: securemesh_site_v2")
+	}
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "securemesh_site_v2.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+type ValidateCreateAWSSecureMeshSiteType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateAWSSecureMeshSiteType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateCreateAWSSecureMeshSiteType) CloudUserAccountRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cloud_user_account_ref")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateCreateAWSSecureMeshSiteType) VpcAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for vpc_attachments")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := AWSVPCAttachmentListTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateAWSSecureMeshSiteType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateAWSSecureMeshSiteType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateAWSSecureMeshSiteType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["cloud_user_account_ref"]; exists {
+		vOpts := append(opts, db.WithValidateField("cloud_user_account_ref"))
+		if err := fv(ctx, m.GetCloudUserAccountRef(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["site"]; exists {
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
+		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
+		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateAWSSecureMeshSiteTypeValidator = func() *ValidateCreateAWSSecureMeshSiteType {
+	v := &ValidateCreateAWSSecureMeshSiteType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateAWSSecureMeshSiteType.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+
+	vrhCloudUserAccountRef := v.CloudUserAccountRefValidationRuleHandler
+	rulesCloudUserAccountRef := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCloudUserAccountRef(rulesCloudUserAccountRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateAWSSecureMeshSiteType.cloud_user_account_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_user_account_ref"] = vFn
+
+	vrhVpcAttachments := v.VpcAttachmentsValidationRuleHandler
+	rulesVpcAttachments := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVpcAttachments(rulesVpcAttachments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateAWSSecureMeshSiteType.vpc_attachments: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vpc_attachments"] = vFn
+
+	return v
+}()
+
+func CreateAWSSecureMeshSiteTypeValidator() db.Validator {
+	return DefaultCreateAWSSecureMeshSiteTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5765,19 +6562,15 @@ func (m *CreateAWSTGWSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateAWSTGWSiteType) GetCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -5793,7 +6586,6 @@ func (m *CreateAWSTGWSiteType) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5803,7 +6595,6 @@ func (m *CreateAWSTGWSiteType) GetCredDBEntries(ctx context.Context, d db.Interf
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -5821,12 +6612,10 @@ func (m *CreateAWSTGWSiteType) GetCredDBEntries(ctx context.Context, d db.Interf
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *CreateAWSTGWSiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -5842,7 +6631,6 @@ func (m *CreateAWSTGWSiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5852,7 +6640,6 @@ func (m *CreateAWSTGWSiteType) GetSiteDBEntries(ctx context.Context, d db.Interf
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: aws_tgw_site")
 	}
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -5870,7 +6657,6 @@ func (m *CreateAWSTGWSiteType) GetSiteDBEntries(ctx context.Context, d db.Interf
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -5879,7 +6665,6 @@ type ValidateCreateAWSTGWSiteType struct {
 }
 
 func (v *ValidateCreateAWSTGWSiteType) CredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cred")
@@ -5888,11 +6673,9 @@ func (v *ValidateCreateAWSTGWSiteType) CredValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -5912,41 +6695,30 @@ func (v *ValidateCreateAWSTGWSiteType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cred"))
 		if err := fv(ctx, m.GetCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
 		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateAWSTGWSiteTypeValidator = func() *ValidateCreateAWSTGWSiteType {
 	v := &ValidateCreateAWSTGWSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5965,9 +6737,7 @@ var DefaultCreateAWSTGWSiteTypeValidator = func() *ValidateCreateAWSTGWSiteType 
 		panic(errMsg)
 	}
 	v.FldValidators["cred"] = vFn
-
 	v.FldValidators["site"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["vpc_attachments"] = AWSVPCAttachmentListTypeValidator().Validate
 
 	return v
@@ -6025,15 +6795,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -6043,7 +6810,6 @@ func (m *CreateSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloud().(type) {
 	case *CreateSpecType_AwsRe:
-
 		drInfos, err := m.GetAwsRe().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsRe().GetDRefInfo() FAILED")
@@ -6053,9 +6819,7 @@ func (m *CreateSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_re." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_AwsTgwSite:
-
 		drInfos, err := m.GetAwsTgwSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsTgwSite().GetDRefInfo() FAILED")
@@ -6065,9 +6829,7 @@ func (m *CreateSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_tgw_site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_AzureVnetSite:
-
 		drInfos, err := m.GetAzureVnetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAzureVnetSite().GetDRefInfo() FAILED")
@@ -6077,9 +6839,7 @@ func (m *CreateSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "azure_vnet_site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_AwsCloudTransitGateway:
-
 		drInfos, err := m.GetAwsCloudTransitGateway().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudTransitGateway().GetDRefInfo() FAILED")
@@ -6089,15 +6849,22 @@ func (m *CreateSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_cloud_transit_gateway." + dri.DRField
 		}
 		return drInfos, err
-
+	case *CreateSpecType_AwsProvider:
+		drInfos, err := m.GetAwsProvider().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsProvider().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_provider." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *CreateSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -6113,7 +6880,6 @@ func (m *CreateSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6123,7 +6889,6 @@ func (m *CreateSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -6141,7 +6906,6 @@ func (m *CreateSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -6156,9 +6920,7 @@ func (v *ValidateCreateSpecType) CloudValidationRuleHandler(rules map[string]str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
@@ -6167,11 +6929,9 @@ func (v *ValidateCreateSpecType) SegmentValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -6247,25 +7007,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *CreateSpecType_AwsProvider:
+		if fv, exists := v.FldValidators["cloud.aws_provider"]; exists {
+			val := m.GetCloud().(*CreateSpecType_AwsProvider).AwsProvider
+			vOpts := append(opts,
+				db.WithValidateField("cloud"),
+				db.WithValidateField("aws_provider"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	if fv, exists := v.FldValidators["segment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment"))
 		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6273,7 +7038,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6295,11 +7059,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["segment"] = vFn
-
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = CreateAWSTGWSiteTypeValidator().Validate
 	v.FldValidators["cloud.azure_vnet_site"] = AzureVNETSiteTypeValidator().Validate
 	v.FldValidators["cloud.aws_cloud_transit_gateway"] = CreateAWSCloudTransitGatewayTypeValidator().Validate
+	v.FldValidators["cloud.aws_provider"] = CreateAWSProviderTypeValidator().Validate
 
 	return v
 }()
@@ -6362,16 +7126,12 @@ func (v *ValidateCustomerEdge) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -6464,16 +7224,13 @@ func (v *ValidateDefaultRoute) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDefaultRouteValidator = func() *ValidateDefaultRoute {
 	v := &ValidateDefaultRoute{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["default_route_choice.selective_route_tables"] = AWSDefaultRoutesRouteTableValidator().Validate
 
 	return v
@@ -6537,18 +7294,13 @@ func (v *ValidateEdgeData) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ce"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ce"))
 		if err := fv(ctx, m.GetCe(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segments"))
 		for idx, item := range m.GetSegments() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -6556,9 +7308,7 @@ func (v *ValidateEdgeData) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -6621,15 +7371,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -6639,7 +7386,6 @@ func (m *GetSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloud().(type) {
 	case *GetSpecType_AwsRe:
-
 		drInfos, err := m.GetAwsRe().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsRe().GetDRefInfo() FAILED")
@@ -6649,9 +7395,7 @@ func (m *GetSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_re." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_AwsTgwSite:
-
 		drInfos, err := m.GetAwsTgwSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsTgwSite().GetDRefInfo() FAILED")
@@ -6661,9 +7405,7 @@ func (m *GetSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_tgw_site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_AzureVnetSite:
-
 		drInfos, err := m.GetAzureVnetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAzureVnetSite().GetDRefInfo() FAILED")
@@ -6673,9 +7415,7 @@ func (m *GetSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "azure_vnet_site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_AwsCloudTransitGateway:
-
 		drInfos, err := m.GetAwsCloudTransitGateway().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudTransitGateway().GetDRefInfo() FAILED")
@@ -6685,15 +7425,22 @@ func (m *GetSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_cloud_transit_gateway." + dri.DRField
 		}
 		return drInfos, err
-
+	case *GetSpecType_AwsProvider:
+		drInfos, err := m.GetAwsProvider().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsProvider().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_provider." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -6709,7 +7456,6 @@ func (m *GetSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6719,7 +7465,6 @@ func (m *GetSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface) (
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -6737,7 +7482,6 @@ func (m *GetSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface) (
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -6752,9 +7496,7 @@ func (v *ValidateGetSpecType) CloudValidationRuleHandler(rules map[string]string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
@@ -6763,11 +7505,9 @@ func (v *ValidateGetSpecType) SegmentValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -6843,52 +7583,48 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
+	case *GetSpecType_AwsProvider:
+		if fv, exists := v.FldValidators["cloud.aws_provider"]; exists {
+			val := m.GetCloud().(*GetSpecType_AwsProvider).AwsProvider
+			vOpts := append(opts,
+				db.WithValidateField("cloud"),
+				db.WithValidateField("aws_provider"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["onboarded_vpc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("onboarded_vpc"))
 		if err := fv(ctx, m.GetOnboardedVpc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment"))
 		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6896,7 +7632,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6918,12 +7653,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["segment"] = vFn
-
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = AWSTGWSiteTypeValidator().Validate
 	v.FldValidators["cloud.azure_vnet_site"] = AzureVNETSiteTypeValidator().Validate
 	v.FldValidators["cloud.aws_cloud_transit_gateway"] = AWSCloudTransitGatewayTypeValidator().Validate
-
+	v.FldValidators["cloud.aws_provider"] = AWSProviderTypeValidator().Validate
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
@@ -6981,33 +7715,27 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSitesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSitesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -7017,7 +7745,6 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloud().(type) {
 	case *GlobalSpecType_AwsRe:
-
 		drInfos, err := m.GetAwsRe().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsRe().GetDRefInfo() FAILED")
@@ -7027,9 +7754,7 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_re." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_AwsTgwSite:
-
 		drInfos, err := m.GetAwsTgwSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsTgwSite().GetDRefInfo() FAILED")
@@ -7039,9 +7764,7 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_tgw_site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_AzureVnetSite:
-
 		drInfos, err := m.GetAzureVnetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAzureVnetSite().GetDRefInfo() FAILED")
@@ -7051,9 +7774,7 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "azure_vnet_site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_AwsCloudTransitGateway:
-
 		drInfos, err := m.GetAwsCloudTransitGateway().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudTransitGateway().GetDRefInfo() FAILED")
@@ -7063,15 +7784,22 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_cloud_transit_gateway." + dri.DRField
 		}
 		return drInfos, err
-
+	case *GlobalSpecType_AwsProvider:
+		drInfos, err := m.GetAwsProvider().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsProvider().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_provider." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -7087,7 +7815,6 @@ func (m *GlobalSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7097,7 +7824,6 @@ func (m *GlobalSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -7115,7 +7841,6 @@ func (m *GlobalSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -7141,7 +7866,6 @@ func (m *GlobalSpecType) GetSitesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSitesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7160,12 +7884,10 @@ func (m *GlobalSpecType) GetSitesDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -7181,7 +7903,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7191,7 +7912,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -7209,7 +7929,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -7235,7 +7954,6 @@ func (m *GlobalSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7254,7 +7972,6 @@ func (m *GlobalSpecType) GetVirtualNetworkDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -7269,7 +7986,6 @@ func (v *ValidateGlobalSpecType) BandwidthOptionValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CloudValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7277,9 +7993,7 @@ func (v *ValidateGlobalSpecType) CloudValidationRuleHandler(rules map[string]str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
@@ -7288,11 +8002,9 @@ func (v *ValidateGlobalSpecType) SegmentValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -7335,7 +8047,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cloud"]; exists {
@@ -7393,38 +8104,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *GlobalSpecType_AwsProvider:
+		if fv, exists := v.FldValidators["cloud.aws_provider"]; exists {
+			val := m.GetCloud().(*GlobalSpecType_AwsProvider).AwsProvider
+			vOpts := append(opts,
+				db.WithValidateField("cloud"),
+				db.WithValidateField("aws_provider"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["onboarded_vpc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("onboarded_vpc"))
 		if err := fv(ctx, m.GetOnboardedVpc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment"))
 		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sites"))
 		for idx, item := range m.GetSites() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -7432,29 +8142,20 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		for idx, item := range m.GetVirtualNetwork() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -7462,16 +8163,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7479,7 +8177,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBandwidthOption := v.BandwidthOptionValidationRuleHandler
 	rulesBandwidthOption := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7490,7 +8187,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bandwidth_option"] = vFn
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7512,14 +8208,12 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["segment"] = vFn
-
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = AWSTGWSiteTypeValidator().Validate
 	v.FldValidators["cloud.azure_vnet_site"] = AzureVNETSiteTypeValidator().Validate
 	v.FldValidators["cloud.aws_cloud_transit_gateway"] = AWSCloudTransitGatewayTypeValidator().Validate
-
+	v.FldValidators["cloud.aws_provider"] = AWSProviderTypeValidator().Validate
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -7583,34 +8277,24 @@ func (v *ValidateLabelFilter) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label"))
 		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["op"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("op"))
 		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -7679,27 +8363,19 @@ func (v *ValidateMetricData) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit"))
 		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["values"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("values"))
 		for idx, item := range m.GetValues() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -7707,9 +8383,7 @@ func (v *ValidateMetricData) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -7767,7 +8441,6 @@ func (m *PeerType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7775,7 +8448,6 @@ func (m *PeerType) GetNodeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNode() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNode().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNode().GetDRefInfo() FAILED")
@@ -7785,7 +8457,6 @@ func (m *PeerType) GetNodeDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "node." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidatePeerType struct {
@@ -7805,50 +8476,36 @@ func (v *ValidatePeerType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["inside_gre_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_gre_subnet"))
 		if err := fv(ctx, m.GetInsideGreSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node"))
 		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peer_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peer_asn"))
 		if err := fv(ctx, m.GetPeerAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_address"))
 		if err := fv(ctx, m.GetTgwAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPeerTypeValidator = func() *ValidatePeerType {
 	v := &ValidatePeerType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["node"] = ves_io_schema_cloud_re_region.NodeTypeValidator().Validate
 
 	return v
@@ -7912,23 +8569,18 @@ func (v *ValidateReplaceAWSCloudTransitGatewayType) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
 		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceAWSCloudTransitGatewayTypeValidator = func() *ValidateReplaceAWSCloudTransitGatewayType {
 	v := &ValidateReplaceAWSCloudTransitGatewayType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["vpc_attachments"] = AWSVPCAttachmentListTypeValidator().Validate
 
 	return v
@@ -7936,6 +8588,101 @@ var DefaultReplaceAWSCloudTransitGatewayTypeValidator = func() *ValidateReplaceA
 
 func ReplaceAWSCloudTransitGatewayTypeValidator() db.Validator {
 	return DefaultReplaceAWSCloudTransitGatewayTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ReplaceAWSProviderType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ReplaceAWSProviderType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ReplaceAWSProviderType) DeepCopy() *ReplaceAWSProviderType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ReplaceAWSProviderType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ReplaceAWSProviderType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ReplaceAWSProviderType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ReplaceAWSProviderTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateReplaceAWSProviderType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceAWSProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ReplaceAWSProviderType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ReplaceAWSProviderType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetSiteType().(type) {
+	case *ReplaceAWSProviderType_AwsTgwSite:
+		if fv, exists := v.FldValidators["site_type.aws_tgw_site"]; exists {
+			val := m.GetSiteType().(*ReplaceAWSProviderType_AwsTgwSite).AwsTgwSite
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("aws_tgw_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceAWSProviderType_SecuremeshSiteV2:
+		if fv, exists := v.FldValidators["site_type.securemesh_site_v2"]; exists {
+			val := m.GetSiteType().(*ReplaceAWSProviderType_SecuremeshSiteV2).SecuremeshSiteV2
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("securemesh_site_v2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultReplaceAWSProviderTypeValidator = func() *ValidateReplaceAWSProviderType {
+	v := &ValidateReplaceAWSProviderType{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["site_type.aws_tgw_site"] = ReplaceAWSTGWSiteTypeValidator().Validate
+	v.FldValidators["site_type.securemesh_site_v2"] = ReplaceAWSSecureMeshSiteTypeValidator().Validate
+
+	return v
+}()
+
+func ReplaceAWSProviderTypeValidator() db.Validator {
+	return DefaultReplaceAWSProviderTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -7992,23 +8739,18 @@ func (v *ValidateReplaceAWSREType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
 		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceAWSRETypeValidator = func() *ValidateReplaceAWSREType {
 	v := &ValidateReplaceAWSREType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["vpc_attachments"] = AWSVPCAttachmentListTypeValidator().Validate
 
 	return v
@@ -8016,6 +8758,81 @@ var DefaultReplaceAWSRETypeValidator = func() *ValidateReplaceAWSREType {
 
 func ReplaceAWSRETypeValidator() db.Validator {
 	return DefaultReplaceAWSRETypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ReplaceAWSSecureMeshSiteType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) DeepCopy() *ReplaceAWSSecureMeshSiteType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ReplaceAWSSecureMeshSiteType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ReplaceAWSSecureMeshSiteTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateReplaceAWSSecureMeshSiteType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceAWSSecureMeshSiteType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ReplaceAWSSecureMeshSiteType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ReplaceAWSSecureMeshSiteType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
+		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
+		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultReplaceAWSSecureMeshSiteTypeValidator = func() *ValidateReplaceAWSSecureMeshSiteType {
+	v := &ValidateReplaceAWSSecureMeshSiteType{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["vpc_attachments"] = AWSVPCAttachmentListTypeValidator().Validate
+
+	return v
+}()
+
+func ReplaceAWSSecureMeshSiteTypeValidator() db.Validator {
+	return DefaultReplaceAWSSecureMeshSiteTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -8072,23 +8889,18 @@ func (v *ValidateReplaceAWSTGWSiteType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
 		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceAWSTGWSiteTypeValidator = func() *ValidateReplaceAWSTGWSiteType {
 	v := &ValidateReplaceAWSTGWSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["vpc_attachments"] = AWSVPCAttachmentListTypeValidator().Validate
 
 	return v
@@ -8152,23 +8964,18 @@ func (v *ValidateReplaceAzureVNETSiteType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vnet_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_attachments"))
 		if err := fv(ctx, m.GetVnetAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceAzureVNETSiteTypeValidator = func() *ValidateReplaceAzureVNETSiteType {
 	v := &ValidateReplaceAzureVNETSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["vnet_attachments"] = AzureVnetAttachmentListTypeValidator().Validate
 
 	return v
@@ -8296,16 +9103,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
+	case *ReplaceSpecType_AwsProvider:
+		if fv, exists := v.FldValidators["cloud.aws_provider"]; exists {
+			val := m.GetCloud().(*ReplaceSpecType_AwsProvider).AwsProvider
+			vOpts := append(opts,
+				db.WithValidateField("cloud"),
+				db.WithValidateField("aws_provider"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8313,7 +9128,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8324,11 +9138,11 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud"] = vFn
-
 	v.FldValidators["cloud.aws_re"] = ReplaceAWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = ReplaceAWSTGWSiteTypeValidator().Validate
 	v.FldValidators["cloud.azure_vnet_site"] = ReplaceAzureVNETSiteTypeValidator().Validate
 	v.FldValidators["cloud.aws_cloud_transit_gateway"] = ReplaceAWSCloudTransitGatewayTypeValidator().Validate
+	v.FldValidators["cloud.aws_provider"] = ReplaceAWSProviderTypeValidator().Validate
 
 	return v
 }()
@@ -8391,9 +9205,7 @@ func (v *ValidateSegmentationData) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		for idx, item := range m.GetData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -8401,18 +9213,13 @@ func (v *ValidateSegmentationData) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -8481,61 +9288,42 @@ func (v *ValidateSubnetStatusType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["availability_zone"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("availability_zone"))
 		if err := fv(ctx, m.GetAvailabilityZone(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_type"))
 		if err := fv(ctx, m.GetInterfaceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_interface_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_interface_id"))
 		if err := fv(ctx, m.GetNetworkInterfaceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_ipv4_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_ipv4_address"))
 		if err := fv(ctx, m.GetPrivateIpv4Address(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_id"))
 		if err := fv(ctx, m.GetSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -8604,9 +9392,7 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cidr_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr_status"))
 		for idx, item := range m.GetCidrStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -8614,9 +9400,7 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -8666,6 +9450,129 @@ func (m *CreateAWSCloudTransitGatewayType) ToAWSCloudTransitGatewayType(f *AWSCl
 
 func (m *CreateAWSCloudTransitGatewayType) ToAWSCloudTransitGatewayTypeWithoutDeepCopy(f *AWSCloudTransitGatewayType) {
 	m.toAWSCloudTransitGatewayType(f, false)
+}
+
+// create setters in CreateAWSProviderType from AWSProviderType for oneof fields
+func (r *CreateAWSProviderType) SetSiteTypeToAWSProviderType(o *AWSProviderType) error {
+	switch of := r.SiteType.(type) {
+	case nil:
+		o.SiteType = nil
+
+	case *CreateAWSProviderType_AwsTgwSite:
+
+		f1 := o.GetAwsTgwSite()
+		if f1 == nil {
+			f1 = &AWSTGWSiteType{}
+		}
+		of.AwsTgwSite.ToAWSTGWSiteTypeWithoutDeepCopy(f1)
+		o.SiteType = &AWSProviderType_AwsTgwSite{AwsTgwSite: f1}
+
+	case *CreateAWSProviderType_SecuremeshSiteV2:
+
+		f1 := o.GetSecuremeshSiteV2()
+		if f1 == nil {
+			f1 = &AWSSecureMeshSiteType{}
+		}
+		of.SecuremeshSiteV2.ToAWSSecureMeshSiteTypeWithoutDeepCopy(f1)
+		o.SiteType = &AWSProviderType_SecuremeshSiteV2{SecuremeshSiteV2: f1}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateAWSProviderType) GetSiteTypeFromAWSProviderType(o *AWSProviderType) error {
+	switch of := o.SiteType.(type) {
+	case nil:
+		r.SiteType = nil
+
+	case *AWSProviderType_AwsTgwSite:
+
+		f1 := &CreateAWSTGWSiteType{}
+		f1.FromAWSTGWSiteTypeWithoutDeepCopy(of.AwsTgwSite)
+		r.SiteType = &CreateAWSProviderType_AwsTgwSite{AwsTgwSite: f1}
+
+	case *AWSProviderType_SecuremeshSiteV2:
+
+		f1 := &CreateAWSSecureMeshSiteType{}
+		f1.FromAWSSecureMeshSiteTypeWithoutDeepCopy(of.SecuremeshSiteV2)
+		r.SiteType = &CreateAWSProviderType_SecuremeshSiteV2{SecuremeshSiteV2: f1}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *CreateAWSProviderType) fromAWSProviderType(f *AWSProviderType, withDeepCopy bool) {
+	if f == nil {
+		return
+	}
+	m.GetSiteTypeFromAWSProviderType(f)
+}
+
+func (m *CreateAWSProviderType) FromAWSProviderType(f *AWSProviderType) {
+	m.fromAWSProviderType(f, true)
+}
+
+func (m *CreateAWSProviderType) FromAWSProviderTypeWithoutDeepCopy(f *AWSProviderType) {
+	m.fromAWSProviderType(f, false)
+}
+
+func (m *CreateAWSProviderType) toAWSProviderType(f *AWSProviderType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	m1.SetSiteTypeToAWSProviderType(f)
+}
+
+func (m *CreateAWSProviderType) ToAWSProviderType(f *AWSProviderType) {
+	m.toAWSProviderType(f, true)
+}
+
+func (m *CreateAWSProviderType) ToAWSProviderTypeWithoutDeepCopy(f *AWSProviderType) {
+	m.toAWSProviderType(f, false)
+}
+
+func (m *CreateAWSSecureMeshSiteType) fromAWSSecureMeshSiteType(f *AWSSecureMeshSiteType, withDeepCopy bool) {
+	if f == nil {
+		return
+	}
+	m.CloudUserAccountRef = f.GetCloudUserAccountRef()
+	m.Site = f.GetSite()
+	m.VpcAttachments = f.GetVpcAttachments()
+}
+
+func (m *CreateAWSSecureMeshSiteType) FromAWSSecureMeshSiteType(f *AWSSecureMeshSiteType) {
+	m.fromAWSSecureMeshSiteType(f, true)
+}
+
+func (m *CreateAWSSecureMeshSiteType) FromAWSSecureMeshSiteTypeWithoutDeepCopy(f *AWSSecureMeshSiteType) {
+	m.fromAWSSecureMeshSiteType(f, false)
+}
+
+func (m *CreateAWSSecureMeshSiteType) toAWSSecureMeshSiteType(f *AWSSecureMeshSiteType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	f.CloudUserAccountRef = m1.CloudUserAccountRef
+	f.Site = m1.Site
+	f.VpcAttachments = m1.VpcAttachments
+}
+
+func (m *CreateAWSSecureMeshSiteType) ToAWSSecureMeshSiteType(f *AWSSecureMeshSiteType) {
+	m.toAWSSecureMeshSiteType(f, true)
+}
+
+func (m *CreateAWSSecureMeshSiteType) ToAWSSecureMeshSiteTypeWithoutDeepCopy(f *AWSSecureMeshSiteType) {
+	m.toAWSSecureMeshSiteType(f, false)
 }
 
 func (m *CreateAWSTGWSiteType) fromAWSTGWSiteType(f *AWSTGWSiteType, withDeepCopy bool) {
@@ -8720,6 +9627,15 @@ func (r *CreateSpecType) SetCloudToGlobalSpecType(o *GlobalSpecType) error {
 		of.AwsCloudTransitGateway.ToAWSCloudTransitGatewayTypeWithoutDeepCopy(f1)
 		o.Cloud = &GlobalSpecType_AwsCloudTransitGateway{AwsCloudTransitGateway: f1}
 
+	case *CreateSpecType_AwsProvider:
+
+		f1 := o.GetAwsProvider()
+		if f1 == nil {
+			f1 = &AWSProviderType{}
+		}
+		of.AwsProvider.ToAWSProviderTypeWithoutDeepCopy(f1)
+		o.Cloud = &GlobalSpecType_AwsProvider{AwsProvider: f1}
+
 	case *CreateSpecType_AwsRe:
 		o.Cloud = &GlobalSpecType_AwsRe{AwsRe: of.AwsRe}
 
@@ -8751,6 +9667,12 @@ func (r *CreateSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 		f1 := &CreateAWSCloudTransitGatewayType{}
 		f1.FromAWSCloudTransitGatewayTypeWithoutDeepCopy(of.AwsCloudTransitGateway)
 		r.Cloud = &CreateSpecType_AwsCloudTransitGateway{AwsCloudTransitGateway: f1}
+
+	case *GlobalSpecType_AwsProvider:
+
+		f1 := &CreateAWSProviderType{}
+		f1.FromAWSProviderTypeWithoutDeepCopy(of.AwsProvider)
+		r.Cloud = &CreateSpecType_AwsProvider{AwsProvider: f1}
 
 	case *GlobalSpecType_AwsRe:
 		r.Cloud = &CreateSpecType_AwsRe{AwsRe: of.AwsRe}
@@ -8814,6 +9736,9 @@ func (r *GetSpecType) SetCloudToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_AwsCloudTransitGateway:
 		o.Cloud = &GlobalSpecType_AwsCloudTransitGateway{AwsCloudTransitGateway: of.AwsCloudTransitGateway}
 
+	case *GetSpecType_AwsProvider:
+		o.Cloud = &GlobalSpecType_AwsProvider{AwsProvider: of.AwsProvider}
+
 	case *GetSpecType_AwsRe:
 		o.Cloud = &GlobalSpecType_AwsRe{AwsRe: of.AwsRe}
 
@@ -8836,6 +9761,9 @@ func (r *GetSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_AwsCloudTransitGateway:
 		r.Cloud = &GetSpecType_AwsCloudTransitGateway{AwsCloudTransitGateway: of.AwsCloudTransitGateway}
+
+	case *GlobalSpecType_AwsProvider:
+		r.Cloud = &GetSpecType_AwsProvider{AwsProvider: of.AwsProvider}
 
 	case *GlobalSpecType_AwsRe:
 		r.Cloud = &GetSpecType_AwsRe{AwsRe: of.AwsRe}
@@ -8926,6 +9854,92 @@ func (m *ReplaceAWSCloudTransitGatewayType) ToAWSCloudTransitGatewayTypeWithoutD
 	m.toAWSCloudTransitGatewayType(f, false)
 }
 
+// create setters in ReplaceAWSProviderType from AWSProviderType for oneof fields
+func (r *ReplaceAWSProviderType) SetSiteTypeToAWSProviderType(o *AWSProviderType) error {
+	switch of := r.SiteType.(type) {
+	case nil:
+		o.SiteType = nil
+
+	case *ReplaceAWSProviderType_AwsTgwSite:
+
+		f1 := o.GetAwsTgwSite()
+		if f1 == nil {
+			f1 = &AWSTGWSiteType{}
+		}
+		of.AwsTgwSite.ToAWSTGWSiteTypeWithoutDeepCopy(f1)
+		o.SiteType = &AWSProviderType_AwsTgwSite{AwsTgwSite: f1}
+
+	case *ReplaceAWSProviderType_SecuremeshSiteV2:
+
+		f1 := o.GetSecuremeshSiteV2()
+		if f1 == nil {
+			f1 = &AWSSecureMeshSiteType{}
+		}
+		of.SecuremeshSiteV2.ToAWSSecureMeshSiteTypeWithoutDeepCopy(f1)
+		o.SiteType = &AWSProviderType_SecuremeshSiteV2{SecuremeshSiteV2: f1}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceAWSProviderType) GetSiteTypeFromAWSProviderType(o *AWSProviderType) error {
+	switch of := o.SiteType.(type) {
+	case nil:
+		r.SiteType = nil
+
+	case *AWSProviderType_AwsTgwSite:
+
+		f1 := &ReplaceAWSTGWSiteType{}
+		f1.FromAWSTGWSiteTypeWithoutDeepCopy(of.AwsTgwSite)
+		r.SiteType = &ReplaceAWSProviderType_AwsTgwSite{AwsTgwSite: f1}
+
+	case *AWSProviderType_SecuremeshSiteV2:
+
+		f1 := &ReplaceAWSSecureMeshSiteType{}
+		f1.FromAWSSecureMeshSiteTypeWithoutDeepCopy(of.SecuremeshSiteV2)
+		r.SiteType = &ReplaceAWSProviderType_SecuremeshSiteV2{SecuremeshSiteV2: f1}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *ReplaceAWSProviderType) fromAWSProviderType(f *AWSProviderType, withDeepCopy bool) {
+	if f == nil {
+		return
+	}
+	m.GetSiteTypeFromAWSProviderType(f)
+}
+
+func (m *ReplaceAWSProviderType) FromAWSProviderType(f *AWSProviderType) {
+	m.fromAWSProviderType(f, true)
+}
+
+func (m *ReplaceAWSProviderType) FromAWSProviderTypeWithoutDeepCopy(f *AWSProviderType) {
+	m.fromAWSProviderType(f, false)
+}
+
+func (m *ReplaceAWSProviderType) toAWSProviderType(f *AWSProviderType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	m1.SetSiteTypeToAWSProviderType(f)
+}
+
+func (m *ReplaceAWSProviderType) ToAWSProviderType(f *AWSProviderType) {
+	m.toAWSProviderType(f, true)
+}
+
+func (m *ReplaceAWSProviderType) ToAWSProviderTypeWithoutDeepCopy(f *AWSProviderType) {
+	m.toAWSProviderType(f, false)
+}
+
 func (m *ReplaceAWSREType) fromAWSREType(f *AWSREType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -8957,6 +9971,39 @@ func (m *ReplaceAWSREType) ToAWSREType(f *AWSREType) {
 
 func (m *ReplaceAWSREType) ToAWSRETypeWithoutDeepCopy(f *AWSREType) {
 	m.toAWSREType(f, false)
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) fromAWSSecureMeshSiteType(f *AWSSecureMeshSiteType, withDeepCopy bool) {
+	if f == nil {
+		return
+	}
+	m.VpcAttachments = f.GetVpcAttachments()
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) FromAWSSecureMeshSiteType(f *AWSSecureMeshSiteType) {
+	m.fromAWSSecureMeshSiteType(f, true)
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) FromAWSSecureMeshSiteTypeWithoutDeepCopy(f *AWSSecureMeshSiteType) {
+	m.fromAWSSecureMeshSiteType(f, false)
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) toAWSSecureMeshSiteType(f *AWSSecureMeshSiteType, withDeepCopy bool) {
+	m1 := m
+	if withDeepCopy {
+		m1 = m.DeepCopy()
+	}
+	_ = m1
+
+	f.VpcAttachments = m1.VpcAttachments
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) ToAWSSecureMeshSiteType(f *AWSSecureMeshSiteType) {
+	m.toAWSSecureMeshSiteType(f, true)
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) ToAWSSecureMeshSiteTypeWithoutDeepCopy(f *AWSSecureMeshSiteType) {
+	m.toAWSSecureMeshSiteType(f, false)
 }
 
 func (m *ReplaceAWSTGWSiteType) fromAWSTGWSiteType(f *AWSTGWSiteType, withDeepCopy bool) {
@@ -9040,6 +10087,15 @@ func (r *ReplaceSpecType) SetCloudToGlobalSpecType(o *GlobalSpecType) error {
 		of.AwsCloudTransitGateway.ToAWSCloudTransitGatewayTypeWithoutDeepCopy(f1)
 		o.Cloud = &GlobalSpecType_AwsCloudTransitGateway{AwsCloudTransitGateway: f1}
 
+	case *ReplaceSpecType_AwsProvider:
+
+		f1 := o.GetAwsProvider()
+		if f1 == nil {
+			f1 = &AWSProviderType{}
+		}
+		of.AwsProvider.ToAWSProviderTypeWithoutDeepCopy(f1)
+		o.Cloud = &GlobalSpecType_AwsProvider{AwsProvider: f1}
+
 	case *ReplaceSpecType_AwsRe:
 
 		f1 := o.GetAwsRe()
@@ -9083,6 +10139,12 @@ func (r *ReplaceSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 		f1 := &ReplaceAWSCloudTransitGatewayType{}
 		f1.FromAWSCloudTransitGatewayTypeWithoutDeepCopy(of.AwsCloudTransitGateway)
 		r.Cloud = &ReplaceSpecType_AwsCloudTransitGateway{AwsCloudTransitGateway: f1}
+
+	case *GlobalSpecType_AwsProvider:
+
+		f1 := &ReplaceAWSProviderType{}
+		f1.FromAWSProviderTypeWithoutDeepCopy(of.AwsProvider)
+		r.Cloud = &ReplaceSpecType_AwsProvider{AwsProvider: f1}
 
 	case *GlobalSpecType_AwsRe:
 

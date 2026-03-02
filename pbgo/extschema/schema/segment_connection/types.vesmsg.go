@@ -67,7 +67,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectionsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -75,7 +74,6 @@ func (m *CreateSpecType) GetConnectionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetConnections() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetConnections() {
 		driSet, err := e.GetDRefInfo()
@@ -89,7 +87,6 @@ func (m *CreateSpecType) GetConnectionsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCreateSpecType struct {
@@ -97,7 +94,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -157,22 +153,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connections"]; exists {
 		vOpts := append(opts, db.WithValidateField("connections"))
 		if err := fv(ctx, m.GetConnections(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -242,7 +234,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectionsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -250,7 +241,6 @@ func (m *GetSpecType) GetConnectionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetConnections() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetConnections() {
 		driSet, err := e.GetDRefInfo()
@@ -264,7 +254,6 @@ func (m *GetSpecType) GetConnectionsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetSpecType struct {
@@ -272,7 +261,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -332,22 +320,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connections"]; exists {
 		vOpts := append(opts, db.WithValidateField("connections"))
 		if err := fv(ctx, m.GetConnections(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -422,15 +406,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworksDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -438,7 +419,6 @@ func (m *GlobalSpecType) GetConnectionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetConnections() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetConnections() {
 		driSet, err := e.GetDRefInfo()
@@ -452,7 +432,6 @@ func (m *GlobalSpecType) GetConnectionsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetVirtualNetworksDRefInfo() ([]db.DRefInfo, error) {
@@ -477,7 +456,6 @@ func (m *GlobalSpecType) GetVirtualNetworksDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -496,7 +474,6 @@ func (m *GlobalSpecType) GetVirtualNetworksDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -505,7 +482,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -565,17 +541,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connections"]; exists {
 		vOpts := append(opts, db.WithValidateField("connections"))
 		if err := fv(ctx, m.GetConnections(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_networks"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_networks"))
 		for idx, item := range m.GetVirtualNetworks() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -583,16 +555,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -662,7 +631,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectionsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -670,7 +638,6 @@ func (m *ReplaceSpecType) GetConnectionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetConnections() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetConnections() {
 		driSet, err := e.GetDRefInfo()
@@ -684,7 +651,6 @@ func (m *ReplaceSpecType) GetConnectionsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -692,7 +658,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -752,22 +717,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connections"]; exists {
 		vOpts := append(opts, db.WithValidateField("connections"))
 		if err := fv(ctx, m.GetConnections(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -842,15 +803,12 @@ func (m *SegmentConnectionType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSourceSegmentsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSourceSegmentsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *SegmentConnectionType) GetDestinationSegmentsDRefInfo() ([]db.DRefInfo, error) {
@@ -875,7 +833,6 @@ func (m *SegmentConnectionType) GetDestinationSegmentsDRefInfo() ([]db.DRefInfo,
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDestinationSegmentsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -894,7 +851,6 @@ func (m *SegmentConnectionType) GetDestinationSegmentsDBEntries(ctx context.Cont
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -920,7 +876,6 @@ func (m *SegmentConnectionType) GetSourceSegmentsDRefInfo() ([]db.DRefInfo, erro
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSourceSegmentsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -939,7 +894,6 @@ func (m *SegmentConnectionType) GetSourceSegmentsDBEntries(ctx context.Context, 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -948,7 +902,6 @@ type ValidateSegmentConnectionType struct {
 }
 
 func (v *ValidateSegmentConnectionType) SourceSegmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -994,9 +947,7 @@ func (v *ValidateSegmentConnectionType) SourceSegmentsValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSegmentConnectionType) DestinationSegmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1080,32 +1031,25 @@ func (v *ValidateSegmentConnectionType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination_segments"]; exists {
 		vOpts := append(opts, db.WithValidateField("destination_segments"))
 		if err := fv(ctx, m.GetDestinationSegments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["source_segments"]; exists {
 		vOpts := append(opts, db.WithValidateField("source_segments"))
 		if err := fv(ctx, m.GetSourceSegments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSegmentConnectionTypeValidator = func() *ValidateSegmentConnectionType {
 	v := &ValidateSegmentConnectionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

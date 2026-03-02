@@ -64,7 +64,6 @@ type ValidateUpgradeOSRequest struct {
 }
 
 func (v *ValidateUpgradeOSRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -72,9 +71,7 @@ func (v *ValidateUpgradeOSRequest) NamespaceValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpgradeOSRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -82,9 +79,7 @@ func (v *ValidateUpgradeOSRequest) NameValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpgradeOSRequest) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -92,9 +87,7 @@ func (v *ValidateUpgradeOSRequest) VersionValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpgradeOSRequest) ForceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewBoolValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for force")
@@ -116,50 +109,36 @@ func (v *ValidateUpgradeOSRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["force"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("force"))
 		if err := fv(ctx, m.GetForce(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpgradeOSRequestValidator = func() *ValidateUpgradeOSRequest {
 	v := &ValidateUpgradeOSRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -273,7 +252,6 @@ func (v *ValidateUpgradeOSResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -330,7 +308,6 @@ type ValidateUpgradeSWRequest struct {
 }
 
 func (v *ValidateUpgradeSWRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -338,9 +315,7 @@ func (v *ValidateUpgradeSWRequest) NamespaceValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpgradeSWRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -348,9 +323,7 @@ func (v *ValidateUpgradeSWRequest) NameValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpgradeSWRequest) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -358,9 +331,7 @@ func (v *ValidateUpgradeSWRequest) VersionValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpgradeSWRequest) ForceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewBoolValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for force")
@@ -382,50 +353,36 @@ func (v *ValidateUpgradeSWRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["force"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("force"))
 		if err := fv(ctx, m.GetForce(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpgradeSWRequestValidator = func() *ValidateUpgradeSWRequest {
 	v := &ValidateUpgradeSWRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -539,7 +496,6 @@ func (v *ValidateUpgradeSWResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

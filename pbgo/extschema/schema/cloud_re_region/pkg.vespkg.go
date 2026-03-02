@@ -13,15 +13,12 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_re_region.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.cloud_re_region.Object"] = ObjectValidator()
 	vr["ves.io.schema.cloud_re_region.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.cloud_re_region.AWSType"] = AWSTypeValidator()
 	vr["ves.io.schema.cloud_re_region.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.cloud_re_region.NodeType"] = NodeTypeValidator()
 	vr["ves.io.schema.cloud_re_region.TGWType"] = TGWTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -33,24 +30,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.cloud_re_region.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.cloud_re_region.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.cloud_re_region.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -59,20 +51,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

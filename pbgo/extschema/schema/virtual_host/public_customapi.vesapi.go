@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCAssignAPIDefinition(ctx context.Context, yaml
 	rsp, err := c.grpcClient.AssignAPIDefinition(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetDnsInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetDnsInfoRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AssignAPIDefinition"] = ccl.doRPCAssignAPIDefinition
-
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -176,7 +172,6 @@ func (c *CustomAPIRestClient) doRPCAssignAPIDefinition(ctx context.Context, call
 	pbRsp := &AssignAPIDefinitionResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.AssignAPIDefinitionResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -184,7 +179,6 @@ func (c *CustomAPIRestClient) doRPCAssignAPIDefinition(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -260,7 +254,6 @@ func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *ser
 	pbRsp := &GetDnsInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetDnsInfoResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -294,11 +287,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AssignAPIDefinition"] = ccl.doRPCAssignAPIDefinition
-
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -386,7 +376,6 @@ func (s *customAPISrv) AssignAPIDefinition(ctx context.Context, in *AssignAPIDef
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.AssignAPIDefinitionResp", rsp)...)
 
 	return rsp, nil
@@ -435,7 +424,6 @@ func (s *customAPISrv) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetDnsInfoResponse", rsp)...)
 
 	return rsp, nil
@@ -449,7 +437,7 @@ var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Virtual host",
-        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is \nreverse proxy.  Virtual host object is used to create a LoadBalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTerminology\n\nDownstream: A downstream host connects to F5XC ADC, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from F5XC ADC and returns responses.",
+        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is\nreverse proxy.  Virtual host object is used to create a LoadBalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTerminology\n\nDownstream: A downstream host connects to F5XC ADC, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from F5XC ADC and returns responses.",
         "version": "version not set"
     },
     "schemes": [

@@ -30,7 +30,6 @@ resource "volterra_k8s_pod_security_admission" "example" {
     privileged = true
   }
 }
-
 ```
 
 Argument Reference
@@ -101,4 +100,4 @@ Heavily restricted policy, following current Pod hardening best practices..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured k8s_pod_security_admission.
+*   `id` - This is the id of the configured k8s_pod_security_admission.

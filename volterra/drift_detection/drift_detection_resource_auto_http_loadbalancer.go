@@ -1,3 +1,7 @@
+//
+// Copyright (c) 2026 F5 Inc. All rights reserved.
+//
+
 package driftdetection
 
 import (
@@ -5,6 +9,7 @@ import (
 
 	"github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"gopkg.volterra.us/stdlib/client/vesapi"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
@@ -20,7 +25,6 @@ import (
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
-	"gopkg.volterra.us/stdlib/client/vesapi"
 )
 
 func FlattenVk8s(x *ves_io_schema_views.WhereVK8SService) []interface{} {
@@ -1690,12 +1694,13 @@ func FlattenSpecPath(x *ves_io_schema_policy.PathMatcherType) []interface{} {
 	pathValue := make([]interface{}, 0)
 	if x != nil {
 		pathVal := map[string]interface{}{
-			"exact_values":   x.GetExactValues(),
-			"invert_matcher": x.GetInvertMatcher(),
-			"prefix_values":  x.GetPrefixValues(),
-			"regex_values":   x.GetRegexValues(),
-			"suffix_values":  x.GetSuffixValues(),
-			"transformers":   FlattenTransformers(x.GetTransformers()),
+			"encoded_path_matcher": x.GetEncodedPathMatcher(),
+			"exact_values":         x.GetExactValues(),
+			"invert_matcher":       x.GetInvertMatcher(),
+			"prefix_values":        x.GetPrefixValues(),
+			"regex_values":         x.GetRegexValues(),
+			"suffix_values":        x.GetSuffixValues(),
+			"transformers":         FlattenTransformers(x.GetTransformers()),
 		}
 		pathValue = append(pathValue, pathVal)
 	}
@@ -2037,16 +2042,28 @@ func FlattenEnableIpReputation(x *ves_io_schema_views_common_waf.IPThreatCategor
 	return rslt
 }
 
+func FlattenAuthorizationServer(x *ves_io_schema_views_common_waf.AuthorizationServer) []interface{} {
+	asValue := make([]interface{}, 0)
+	if x != nil {
+		asVal := map[string]interface{}{
+			"authorization_servers": FlattenVObjectRefTypeList(x.GetAuthorizationServers()),
+		}
+		asValue = append(asValue, asVal)
+	}
+	return asValue
+}
+
 func FlattenJwtValidation(x *ves_io_schema_views_common_waf.JWTValidation) []interface{} {
 	rslt := make([]interface{}, 0)
 	if x != nil {
 		rs := map[string]interface{}{
-			"action":           FlattenJWTAction(x.GetAction()),
-			"jwks_config":      FlattenJwksConfig(x.GetJwksConfig()),
-			"mandatory_claims": FlattenMandatoryClaims(x.GetMandatoryClaims()),
-			"reserved_claims":  FlattenReservedClaims(x.GetReservedClaims()),
-			"target":           FlattenTarget(x.GetTarget()),
-			"token_location":   FlattenTokenLocation(x.GetTokenLocation()),
+			"action":               FlattenJWTAction(x.GetAction()),
+			"authorization_server": FlattenAuthorizationServer(x.GetAuthorizationServer()),
+			"jwks_config":          FlattenJwksConfig(x.GetJwksConfig()),
+			"mandatory_claims":     FlattenMandatoryClaims(x.GetMandatoryClaims()),
+			"reserved_claims":      FlattenReservedClaims(x.GetReservedClaims()),
+			"target":               FlattenTarget(x.GetTarget()),
+			"token_location":       FlattenTokenLocation(x.GetTokenLocation()),
 		}
 		rslt = append(rslt, rs)
 	}
@@ -2609,20 +2626,22 @@ func FlattenMoreOption(x *ves_io_schema_views_http_loadbalancer.AdvancedOptionsT
 	rslt := make([]interface{}, 0)
 	if x != nil {
 		mapValue := map[string]interface{}{
-			"buffer_policy":               FlattenBufferPolicy(x.GetBufferPolicy()),
-			"compression_params":          FlattenCompressionParams(x.GetCompressionParams()),
-			"custom_errors":               FlattenCustomError(x.GetCustomErrors()),
-			"disable_default_error_pages": x.GetDisableDefaultErrorPages(),
-			"idle_timeout":                x.GetIdleTimeout(),
-			"max_request_header_size":     x.GetMaxRequestHeaderSize(),
-			"request_cookies_to_add":      FlattenReqestCookiesToAdd(x.GetRequestCookiesToAdd()),
-			"request_cookies_to_remove":   x.GetRequestCookiesToRemove(),
-			"request_headers_to_add":      FlattenRequestHeadersToAdd(x.GetRequestHeadersToAdd()),
-			"request_headers_to_remove":   x.GetRequestHeadersToRemove(),
-			"response_cookies_to_add":     FlattenResponseCookiesToAdd(x.GetResponseCookiesToAdd()),
-			"response_cookies_to_remove":  x.GetResponseCookiesToRemove(),
-			"response_headers_to_add":     FlattenRequestHeadersToAdd(x.GetResponseHeadersToAdd()),
-			"response_headers_to_remove":  x.GetResponseHeadersToRemove(),
+			"buffer_policy":                   FlattenBufferPolicy(x.GetBufferPolicy()),
+			"compression_params":              FlattenCompressionParams(x.GetCompressionParams()),
+			"custom_errors":                   FlattenCustomError(x.GetCustomErrors()),
+			"disable_default_error_pages":     x.GetDisableDefaultErrorPages(),
+			"max_requests_per_connection":     x.GetMaxRequestsPerConnection(),
+			"no_request_limit_per_connection": isEmpty(x.GetNoRequestLimitPerConnection()),
+			"idle_timeout":                    x.GetIdleTimeout(),
+			"max_request_header_size":         x.GetMaxRequestHeaderSize(),
+			"request_cookies_to_add":          FlattenReqestCookiesToAdd(x.GetRequestCookiesToAdd()),
+			"request_cookies_to_remove":       x.GetRequestCookiesToRemove(),
+			"request_headers_to_add":          FlattenRequestHeadersToAdd(x.GetRequestHeadersToAdd()),
+			"request_headers_to_remove":       x.GetRequestHeadersToRemove(),
+			"response_cookies_to_add":         FlattenResponseCookiesToAdd(x.GetResponseCookiesToAdd()),
+			"response_cookies_to_remove":      x.GetResponseCookiesToRemove(),
+			"response_headers_to_add":         FlattenRequestHeadersToAdd(x.GetResponseHeadersToAdd()),
+			"response_headers_to_remove":      x.GetResponseHeadersToRemove(),
 		}
 		rslt = append(rslt, mapValue)
 	}
@@ -2961,6 +2980,8 @@ func FlattenDPAdvancedOption(x *ves_io_schema_views_origin_pool.OriginPoolAdvanc
 			"http2_options":                    FlattenHttp2Options(x.GetHttp2Options()),
 			"disable_lb_source_ip_persistance": isEmpty(x.GetDisableLbSourceIpPersistance()),
 			"enable_lb_source_ip_persistance":  isEmpty(x.GetEnableLbSourceIpPersistance()),
+			"max_requests_per_connection":      x.GetMaxRequestsPerConnection(),
+			"no_request_limit_per_connection":  isEmpty(x.GetNoRequestLimitPerConnection()),
 			"disable_outlier_detection":        isEmpty(x.GetDisableOutlierDetection()),
 			"outlier_detection":                FlattenOutlierDetection(x.GetOutlierDetection()),
 			"no_panic_threshold":               isEmpty(x.GetNoPanicThreshold()),
@@ -3277,6 +3298,8 @@ func FlattenRateLimiter(x *ves_io_schema_rate_limiter.RateLimitValue) []interfac
 		rlVal := map[string]interface{}{
 			"action_block":      FlattenActionBlock(x.GetActionBlock()),
 			"disabled":          isEmpty(x.GetDisabled()),
+			"leaky_bucket":      x.GetLeakyBucket().String(),
+			"token_bucket":      x.GetTokenBucket().String(),
 			"burst_multiplier":  x.GetBurstMultiplier(),
 			"period_multiplier": x.GetPeriodMultiplier(),
 			"total_number":      x.GetTotalNumber(),
@@ -3330,6 +3353,8 @@ func FlattenRoutes(x []*ves_io_schema_views_http_loadbalancer.RouteType) []inter
 			"direct_response_route": FlattenDirectResponseRoute(val.GetDirectResponseRoute()),
 			"redirect_route":        FlattenRedirectRoute(val.GetRedirectRoute()),
 			"simple_route":          FlattenSimpleRoute(val.GetSimpleRoute()),
+			"route_state_disabled":  isEmpty(val.GetRouteStateDisabled()),
+			"route_state_enabled":   isEmpty(val.GetRouteStateEnabled()),
 		}
 		rslt = append(rslt, mapValue)
 	}
@@ -3341,6 +3366,8 @@ func FlattenSimpleRoute(x *ves_io_schema_views_http_loadbalancer.RouteTypeSimple
 	if x != nil {
 		simpleRouteVal := map[string]interface{}{
 			"advanced_options":     FlattenSRAdvancedOptions(x.GetAdvancedOptions()),
+			"caching_disable":      isEmpty(x.GetCachingDisable()),
+			"caching_inherit":      isEmpty(x.GetCachingInherit()),
 			"headers":              FlattenHTTPHeaders(x.GetHeaders()),
 			"auto_host_rewrite":    isEmpty(x.GetAutoHostRewrite()),
 			"disable_host_rewrite": isEmpty(x.GetDisableHostRewrite()),
@@ -3608,7 +3635,9 @@ func FlattenCustomRouteObject(x *ves_io_schema_views_http_loadbalancer.RouteType
 	croValue := make([]interface{}, 0)
 	if x != nil {
 		croVal := map[string]interface{}{
-			"route_ref": FlattenObjectRefTypeSet(x.GetRouteRef()),
+			"route_ref":       FlattenObjectRefTypeSet(x.GetRouteRef()),
+			"caching_disable": isEmpty(x.GetCachingDisable()),
+			"caching_inherit": isEmpty(x.GetCachingInherit()),
 		}
 		croValue = append(croValue, croVal)
 	}

@@ -64,7 +64,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RuleListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -124,17 +123,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rule_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("rule_list"))
 		if err := fv(ctx, m.GetRuleList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rules"))
 		for idx, item := range m.GetRules() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -142,16 +137,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -171,7 +163,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_list"] = vFn
-
 	v.FldValidators["rules"] = RuleTypeValidator().Validate
 
 	return v
@@ -277,16 +268,13 @@ func (v *ValidatePolicyRuleType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPolicyRuleTypeValidator = func() *ValidatePolicyRuleType {
 	v := &ValidatePolicyRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -294,7 +282,6 @@ var DefaultPolicyRuleTypeValidator = func() *ValidatePolicyRuleType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -305,7 +292,6 @@ var DefaultPolicyRuleTypeValidator = func() *ValidatePolicyRuleType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	v.FldValidators["rule_choice.tenant_share"] = TenantRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.namespace_share"] = UserRuleTypeValidator().Validate
 
@@ -358,7 +344,6 @@ type ValidateResourceListType struct {
 }
 
 func (v *ValidateResourceListType) ResourceTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -398,9 +383,7 @@ func (v *ValidateResourceListType) ResourceTypesValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateResourceListType) ResourceInstancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -440,9 +423,7 @@ func (v *ValidateResourceListType) ResourceInstancesValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateResourceListType) VerbsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -496,38 +477,30 @@ func (v *ValidateResourceListType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["resource_instances"]; exists {
 		vOpts := append(opts, db.WithValidateField("resource_instances"))
 		if err := fv(ctx, m.GetResourceInstances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("resource_types"))
 		if err := fv(ctx, m.GetResourceTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["verbs"]; exists {
 		vOpts := append(opts, db.WithValidateField("verbs"))
 		if err := fv(ctx, m.GetVerbs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResourceListTypeValidator = func() *ValidateResourceListType {
 	v := &ValidateResourceListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -629,7 +602,6 @@ type ValidateRuleType struct {
 }
 
 func (v *ValidateRuleType) ResourceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for resource")
@@ -638,19 +610,15 @@ func (v *ValidateRuleType) ResourceValidationRuleHandler(rules map[string]string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ResourceListTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRuleType) SubjectsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -710,31 +678,24 @@ func (v *ValidateRuleType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["resource"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource"))
 		if err := fv(ctx, m.GetResource(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subjects"]; exists {
 		vOpts := append(opts, db.WithValidateField("subjects"))
 		if err := fv(ctx, m.GetSubjects(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRuleTypeValidator = func() *ValidateRuleType {
 	v := &ValidateRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -817,7 +778,6 @@ type ValidateSubjectType struct {
 }
 
 func (v *ValidateSubjectType) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant")
@@ -825,9 +785,7 @@ func (v *ValidateSubjectType) TenantValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSubjectType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -835,9 +793,7 @@ func (v *ValidateSubjectType) NamespaceValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSubjectType) RoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for role")
@@ -859,41 +815,30 @@ func (v *ValidateSubjectType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("role"))
 		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSubjectTypeValidator = func() *ValidateSubjectType {
 	v := &ValidateSubjectType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -986,7 +931,6 @@ type ValidateTenantRuleType struct {
 }
 
 func (v *ValidateTenantRuleType) ResourceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for resource")
@@ -995,19 +939,15 @@ func (v *ValidateTenantRuleType) ResourceValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ResourceListTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTenantRuleType) TenantsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1067,31 +1007,24 @@ func (v *ValidateTenantRuleType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["resource"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource"))
 		if err := fv(ctx, m.GetResource(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenants"]; exists {
 		vOpts := append(opts, db.WithValidateField("tenants"))
 		if err := fv(ctx, m.GetTenants(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTenantRuleTypeValidator = func() *ValidateTenantRuleType {
 	v := &ValidateTenantRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1174,7 +1107,6 @@ type ValidateTenantSubjectType struct {
 }
 
 func (v *ValidateTenantSubjectType) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant")
@@ -1182,9 +1114,7 @@ func (v *ValidateTenantSubjectType) TenantValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTenantSubjectType) RoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for role")
@@ -1206,32 +1136,24 @@ func (v *ValidateTenantSubjectType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("role"))
 		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTenantSubjectTypeValidator = func() *ValidateTenantSubjectType {
 	v := &ValidateTenantSubjectType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1315,7 +1237,6 @@ type ValidateUserRuleType struct {
 }
 
 func (v *ValidateUserRuleType) ResourceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for resource")
@@ -1324,19 +1245,15 @@ func (v *ValidateUserRuleType) ResourceValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ResourceListTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUserRuleType) UsersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1396,31 +1313,24 @@ func (v *ValidateUserRuleType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["resource"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource"))
 		if err := fv(ctx, m.GetResource(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["users"]; exists {
 		vOpts := append(opts, db.WithValidateField("users"))
 		if err := fv(ctx, m.GetUsers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUserRuleTypeValidator = func() *ValidateUserRuleType {
 	v := &ValidateUserRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1503,7 +1413,6 @@ type ValidateUserSubjectType struct {
 }
 
 func (v *ValidateUserSubjectType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1511,9 +1420,7 @@ func (v *ValidateUserSubjectType) NamespaceValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUserSubjectType) RoleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for role")
@@ -1535,32 +1442,24 @@ func (v *ValidateUserSubjectType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("role"))
 		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUserSubjectTypeValidator = func() *ValidateUserSubjectType {
 	v := &ValidateUserSubjectType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

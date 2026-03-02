@@ -72,7 +72,11 @@ resource "volterra_azure_vnet_site" "example" {
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l3_enhanced perf_mode_l7_enhanced" must be set
 
-      perf_mode_l7_enhanced = true
+      perf_mode_l7_enhanced {
+        // One of the arguments from this list "jumbo_disabled jumbo_enabled" must be set
+
+        jumbo_disabled = true
+      }
     }
   }
   ssh_key = ["ssh-rsa AAAAB..."]
@@ -90,9 +94,8 @@ resource "volterra_azure_vnet_site" "example" {
 
   // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
 
-  nodes_per_az = "2"
+  no_worker_nodes = true
 }
-
 ```
 
 Argument Reference
@@ -135,6 +138,12 @@ Argument Reference
 `azure_cred` - (Optional) Reference to Azure credentials for automatic deployment. See [ref](#ref) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
+
+###### One of the arguments from this list "disable_encryption, enable_encryption" can be set
+
+`disable_encryption` - (Optional) Disk attached to VM will not be encrypted with CMK (`Bool`).
+
+`enable_encryption` - (Optional) Disk will be encrypted with the specified key. See [Encryption Choice Enable Encryption ](#encryption-choice-enable-encryption) below for details.
 
 `kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
 
@@ -524,6 +533,14 @@ Disable Interception.
 
 Enable Interception.
 
+### Encryption Choice Enable Encryption
+
+Disk will be encrypted with the specified key.
+
+`disk_encryption_set_id` - (Required) Azure Disk Encryption Set to be used to encrypt the disk attached to the VM (`String`).
+
+`resource_group` - (Required) The resource group in which the Disk Encryption Set is present (`String`).
+
 ### Express Route Choice Express Route Disabled
 
 Express Route is disabled on this site.
@@ -726,7 +743,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Ingress Egress Gw Ar Accelerated Networking
 
@@ -734,7 +751,7 @@ disruption will be seen.
 
 ###### One of the arguments from this list "disable, enable" must be set
 
-`disable` - (Optional) infrastructure. (`Bool`).
+`disable`- (Optional) infrastructure. (`Bool`).
 
 `enable` - (Optional) improving networking performance (`Bool`).
 
@@ -750,7 +767,7 @@ Ingress/Egress Gateway (Two Interface) Node information..
 
 `outside_subnet` - (Optional) Subnets for the outside interface of the node. See [Node Outside Subnet ](#node-outside-subnet) below for details.
 
-`update_domain` - (Optional) Number of update domains to be used while creating the availability set (`Int`).
+`update_domain` - (Optional) Namuber of update domains to be used while creating the availability set (`Int`).
 
 ### Ingress Egress Gw Ar Performance Enhancement Mode
 
@@ -760,7 +777,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Ingress Gw Accelerated Networking
 
@@ -768,7 +785,7 @@ disruption will be seen.
 
 ###### One of the arguments from this list "disable, enable" must be set
 
-`disable` - (Optional) infrastructure. (`Bool`).
+`disable`- (Optional) infrastructure. (`Bool`).
 
 `enable` - (Optional) improving networking performance (`Bool`).
 
@@ -790,7 +807,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Ingress Gw Ar Accelerated Networking
 
@@ -798,7 +815,7 @@ disruption will be seen.
 
 ###### One of the arguments from this list "disable, enable" must be set
 
-`disable` - (Optional) infrastructure. (`Bool`).
+`disable`- (Optional) infrastructure. (`Bool`).
 
 `enable` - (Optional) improving networking performance (`Bool`).
 
@@ -812,7 +829,7 @@ Ingress Gateway (One Interface) Node information.
 
 `node_number` - (Required) Number of main nodes to create, either 1 or 3. (`Int`).
 
-`update_domain` - (Optional) Number of update domains to be used while creating the availability set (`Int`).
+`update_domain` - (Optional) Namuber of update domains to be used while creating the availability set (`Int`).
 
 ### Ingress Gw Ar Performance Enhancement Mode
 
@@ -822,7 +839,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Inside Static Route Choice Inside Static Routes
 
@@ -1020,6 +1037,14 @@ List of Static routes.
 
 x-displayName: "Enabled".
 
+### Perf Mode Choice Jumbo Disabled
+
+x-displayName: "Disabled".
+
+### Perf Mode Choice Jumbo Enabled
+
+x-displayName: "Enabled".
+
 ### Perf Mode Choice No Jumbo
 
 x-displayName: "Disabled".
@@ -1037,6 +1062,12 @@ Site optimized for L3 traffic processing.
 ### Perf Mode Choice Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
+
+###### One of the arguments from this list "jumbo_disabled, jumbo_enabled" must be set
+
+`jumbo_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
+`jumbo_enabled` - (Optional) x-displayName: "Enabled" (`Bool`).
 
 ### Policy Interception Rules
 
@@ -1088,7 +1119,7 @@ F5 will orchestrate required routes for SLO Route Table towards Internet and SLI
 
 ### Routing Type Manual Routing
 
-In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. .
+In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments..
 
 ### Secret Info Oneof Blindfold Secret Info
 
@@ -1612,9 +1643,9 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `node_number` - (Required) Number of main nodes to create, either 1 or 3. (`Int`).
 
-`update_domain` - (Optional) Number of update domains to be used while creating the availability set (`Int`).
+`update_domain` - (Optional) Namuber of update domains to be used while creating the availability set (`Int`).
 
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured azure_vnet_site.
+*   `id` - This is the id of the configured azure_vnet_site.

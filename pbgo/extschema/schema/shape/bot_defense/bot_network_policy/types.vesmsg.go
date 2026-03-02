@@ -68,7 +68,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) BotInfrasWithVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -128,49 +127,36 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bot_infras_with_version"]; exists {
 		vOpts := append(opts, db.WithValidateField("bot_infras_with_version"))
 		if err := fv(ctx, m.GetBotInfrasWithVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["latest_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("latest_version"))
 		if err := fv(ctx, m.GetLatestVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_policy_content"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_policy_content"))
 		if err := fv(ctx, m.GetNetworkPolicyContent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_user"))
 		if err := fv(ctx, m.GetUpdateUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -189,7 +175,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bot_infras_with_version"] = vFn
-
 	v.FldValidators["network_policy_content"] = ves_io_schema_shape_bot_defense.NetworkPolicyContentValidator().Validate
 
 	return v
@@ -242,7 +227,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkPolicyVersionDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetNetworkPolicyVersionDRefInfo() ([]db.DRefInfo, error) {
@@ -268,7 +252,6 @@ func (m *GlobalSpecType) GetNetworkPolicyVersionDRefInfo() ([]db.DRefInfo, error
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkPolicyVersionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -296,7 +279,6 @@ func (m *GlobalSpecType) GetNetworkPolicyVersionDBEntries(ctx context.Context, d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -305,7 +287,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) CommentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for comments")
@@ -313,9 +294,7 @@ func (v *ValidateGlobalSpecType) CommentsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) BotInfrasWithVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -375,44 +354,31 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bot_infras_with_version"]; exists {
 		vOpts := append(opts, db.WithValidateField("bot_infras_with_version"))
 		if err := fv(ctx, m.GetBotInfrasWithVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["comments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("comments"))
 		if err := fv(ctx, m.GetComments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["latest_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("latest_version"))
 		if err := fv(ctx, m.GetLatestVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_policy_content"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_policy_content"))
 		if err := fv(ctx, m.GetNetworkPolicyContent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_policy_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_policy_version"))
 		for idx, item := range m.GetNetworkPolicyVersion() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -420,52 +386,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pc_graph_draft_policy_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pc_graph_draft_policy_id"))
 		if err := fv(ctx, m.GetPcGraphDraftPolicyId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pc_graph_latest_version_policy_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pc_graph_latest_version_policy_id"))
 		if err := fv(ctx, m.GetPcGraphLatestVersionPolicyId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spm_policy_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spm_policy_id"))
 		if err := fv(ctx, m.GetSpmPolicyId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_user"))
 		if err := fv(ctx, m.GetUpdateUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -495,9 +446,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["bot_infras_with_version"] = vFn
-
 	v.FldValidators["network_policy_version"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["network_policy_content"] = ves_io_schema_shape_bot_defense.NetworkPolicyContentValidator().Validate
 
 	return v
@@ -549,7 +498,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) CommentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for comments")
@@ -571,59 +519,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["comments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("comments"))
 		if err := fv(ctx, m.GetComments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["latest_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("latest_version"))
 		if err := fv(ctx, m.GetLatestVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_policy_content"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_policy_content"))
 		if err := fv(ctx, m.GetNetworkPolicyContent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pc_graph_draft_policy_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pc_graph_draft_policy_id"))
 		if err := fv(ctx, m.GetPcGraphDraftPolicyId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_user"))
 		if err := fv(ctx, m.GetUpdateUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -642,7 +573,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["comments"] = vFn
-
 	v.FldValidators["network_policy_content"] = ves_io_schema_shape_bot_defense.NetworkPolicyContentValidator().Validate
 
 	return v

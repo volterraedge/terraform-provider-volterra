@@ -43,7 +43,6 @@ func (c *ConfigKubeConfigAPIGrpcClient) doRPCCreateLocalKubeConfig(ctx context.C
 	rsp, err := c.grpcClient.CreateLocalKubeConfig(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ConfigKubeConfigAPIGrpcClient) doRPCListLocalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -84,11 +83,8 @@ func NewConfigKubeConfigAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CreateLocalKubeConfig"] = ccl.doRPCCreateLocalKubeConfig
-
 	rpcFns["ListLocalKubeConfig"] = ccl.doRPCListLocalKubeConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -177,7 +173,6 @@ func (c *ConfigKubeConfigAPIRestClient) doRPCCreateLocalKubeConfig(ctx context.C
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -185,7 +180,6 @@ func (c *ConfigKubeConfigAPIRestClient) doRPCCreateLocalKubeConfig(ctx context.C
 	}
 	return pbRsp, nil
 }
-
 func (c *ConfigKubeConfigAPIRestClient) doRPCListLocalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -261,7 +255,6 @@ func (c *ConfigKubeConfigAPIRestClient) doRPCListLocalKubeConfig(ctx context.Con
 	pbRsp := &ListKubeConfigRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.ListKubeConfigRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -295,11 +288,8 @@ func NewConfigKubeConfigAPIRestClient(baseURL string, hc http.Client) server.Cus
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CreateLocalKubeConfig"] = ccl.doRPCCreateLocalKubeConfig
-
 	rpcFns["ListLocalKubeConfig"] = ccl.doRPCListLocalKubeConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -384,7 +374,6 @@ func (s *configKubeConfigAPISrv) CreateLocalKubeConfig(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -433,7 +422,6 @@ func (s *configKubeConfigAPISrv) ListLocalKubeConfig(ctx context.Context, in *Li
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.ListKubeConfigRsp", rsp)...)
 
 	return rsp, nil

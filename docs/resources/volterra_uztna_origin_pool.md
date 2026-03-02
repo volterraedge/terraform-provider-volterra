@@ -42,7 +42,6 @@ resource "volterra_uztna_origin_pool" "example" {
     port = "9080"
   }
 }
-
 ```
 
 Argument Reference
@@ -121,4 +120,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_origin_pool.
+-   `id` - This is the id of the configured uztna_origin_pool.
