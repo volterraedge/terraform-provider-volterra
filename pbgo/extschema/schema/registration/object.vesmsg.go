@@ -65,7 +65,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -73,7 +72,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
@@ -83,7 +81,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSpecType struct {
@@ -103,23 +100,18 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v
@@ -183,25 +175,30 @@ func (v *ValidateStatusType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["current_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current_state"))
 		if err := fv(ctx, m.GetCurrentState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_status"))
 		if err := fv(ctx, m.GetObjectStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["parent_current_state"]; exists {
+		vOpts := append(opts, db.WithValidateField("parent_current_state"))
+		if err := fv(ctx, m.GetParentCurrentState(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["state_update_timestamp"]; exists {
+		vOpts := append(opts, db.WithValidateField("state_update_timestamp"))
+		if err := fv(ctx, m.GetStateUpdateTimestamp(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

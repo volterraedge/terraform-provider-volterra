@@ -64,7 +64,6 @@ type ValidateConfirmAlertReceiverRequest struct {
 }
 
 func (v *ValidateConfirmAlertReceiverRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -72,9 +71,7 @@ func (v *ValidateConfirmAlertReceiverRequest) NamespaceValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateConfirmAlertReceiverRequest) VerificationCodeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for verification_code")
@@ -96,41 +93,30 @@ func (v *ValidateConfirmAlertReceiverRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["verification_code"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("verification_code"))
 		if err := fv(ctx, m.GetVerificationCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConfirmAlertReceiverRequestValidator = func() *ValidateConfirmAlertReceiverRequest {
 	v := &ValidateConfirmAlertReceiverRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -222,7 +208,6 @@ func (v *ValidateConfirmAlertReceiverResponse) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -279,7 +264,6 @@ type ValidateTestAlertReceiverRequest struct {
 }
 
 func (v *ValidateTestAlertReceiverRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -301,32 +285,24 @@ func (v *ValidateTestAlertReceiverRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTestAlertReceiverRequestValidator = func() *ValidateTestAlertReceiverRequest {
 	v := &ValidateTestAlertReceiverRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -407,7 +383,6 @@ func (v *ValidateTestAlertReceiverResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -464,7 +439,6 @@ type ValidateVerifyAlertReceiverRequest struct {
 }
 
 func (v *ValidateVerifyAlertReceiverRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -486,32 +460,24 @@ func (v *ValidateVerifyAlertReceiverRequest) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVerifyAlertReceiverRequestValidator = func() *ValidateVerifyAlertReceiverRequest {
 	v := &ValidateVerifyAlertReceiverRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -592,7 +558,6 @@ func (v *ValidateVerifyAlertReceiverResponse) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

@@ -27,6 +27,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.common_waf.ApiEndpointDetails"] = ApiEndpointDetailsValidator()
 	vr["ves.io.schema.views.common_waf.ApiEndpointRule"] = ApiEndpointRuleValidator()
 	vr["ves.io.schema.views.common_waf.Audiences"] = AudiencesValidator()
+	vr["ves.io.schema.views.common_waf.AuthorizationServer"] = AuthorizationServerValidator()
 	vr["ves.io.schema.views.common_waf.BasePathsType"] = BasePathsTypeValidator()
 	vr["ves.io.schema.views.common_waf.BypassRateLimitingRule"] = BypassRateLimitingRuleValidator()
 	vr["ves.io.schema.views.common_waf.BypassRateLimitingRules"] = BypassRateLimitingRulesValidator()
@@ -66,23 +67,18 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.common_waf.ValidationSettingForQueryParameters"] = ValidationSettingForQueryParametersValidator()
 	vr["ves.io.schema.views.common_waf.WafExclusion"] = WafExclusionValidator()
 	vr["ves.io.schema.views.common_waf.WafExclusionInlineRules"] = WafExclusionInlineRulesValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -91,20 +87,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

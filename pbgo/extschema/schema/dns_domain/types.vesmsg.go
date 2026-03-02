@@ -68,11 +68,9 @@ func (m *AWSRoute53Type) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCredsDRefInfo()
-
 }
 
 func (m *AWSRoute53Type) GetCredsDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCreds()
 	if vref == nil {
 		return nil, nil
@@ -88,7 +86,6 @@ func (m *AWSRoute53Type) GetCredsDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCredsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -98,7 +95,6 @@ func (m *AWSRoute53Type) GetCredsDBEntries(ctx context.Context, d db.Interface) 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetCreds()
 	if vref == nil {
 		return nil, nil
@@ -116,7 +112,6 @@ func (m *AWSRoute53Type) GetCredsDBEntries(ctx context.Context, d db.Interface) 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -137,23 +132,18 @@ func (v *ValidateAWSRoute53Type) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["creds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creds"))
 		if err := fv(ctx, m.GetCreds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSRoute53TypeValidator = func() *ValidateAWSRoute53Type {
 	v := &ValidateAWSRoute53Type{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["creds"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -206,7 +196,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDomainChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -216,11 +205,8 @@ func (m *CreateSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDomainChoice().(type) {
 	case *CreateSpecType_VolterraManaged:
-
 		return nil, nil
-
 	case *CreateSpecType_Route53:
-
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
@@ -230,15 +216,11 @@ func (m *CreateSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "route53." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_VerificationOnly:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -266,14 +248,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dnssec_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dnssec_mode"))
 		if err := fv(ctx, m.GetDnssecMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["domain_choice"]; exists {
@@ -320,16 +299,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -337,7 +313,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
 	rulesDomainChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -348,7 +323,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["domain_choice"] = vFn
-
 	v.FldValidators["domain_choice.route53"] = AWSRoute53TypeValidator().Validate
 
 	return v
@@ -401,7 +375,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDomainChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -411,11 +384,8 @@ func (m *GetSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDomainChoice().(type) {
 	case *GetSpecType_VolterraManaged:
-
 		return nil, nil
-
 	case *GetSpecType_Route53:
-
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
@@ -425,15 +395,11 @@ func (m *GetSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "route53." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_VerificationOnly:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -461,23 +427,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dnssec_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dnssec_mode"))
 		if err := fv(ctx, m.GetDnssecMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["domain_choice"]; exists {
@@ -524,25 +484,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["txt_record"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("txt_record"))
 		if err := fv(ctx, m.GetTxtRecord(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -550,7 +504,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
 	rulesDomainChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -561,7 +514,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["domain_choice"] = vFn
-
 	v.FldValidators["domain_choice.route53"] = AWSRoute53TypeValidator().Validate
 
 	return v
@@ -614,7 +566,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDomainChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -624,11 +575,8 @@ func (m *GlobalSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDomainChoice().(type) {
 	case *GlobalSpecType_VolterraManaged:
-
 		return nil, nil
-
 	case *GlobalSpecType_Route53:
-
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
@@ -638,15 +586,11 @@ func (m *GlobalSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "route53." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_VerificationOnly:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -674,14 +618,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dnssec_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dnssec_mode"))
 		if err := fv(ctx, m.GetDnssecMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["domain_choice"]; exists {
@@ -728,25 +669,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["txt_record"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("txt_record"))
 		if err := fv(ctx, m.GetTxtRecord(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -754,7 +689,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
 	rulesDomainChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -765,7 +699,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["domain_choice"] = vFn
-
 	v.FldValidators["domain_choice.route53"] = AWSRoute53TypeValidator().Validate
 
 	return v
@@ -818,7 +751,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDomainChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -828,11 +760,8 @@ func (m *ReplaceSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDomainChoice().(type) {
 	case *ReplaceSpecType_VolterraManaged:
-
 		return nil, nil
-
 	case *ReplaceSpecType_Route53:
-
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
@@ -842,15 +771,11 @@ func (m *ReplaceSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "route53." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_VerificationOnly:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -878,14 +803,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dnssec_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dnssec_mode"))
 		if err := fv(ctx, m.GetDnssecMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["domain_choice"]; exists {
@@ -932,16 +854,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -949,7 +868,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
 	rulesDomainChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -960,7 +878,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["domain_choice"] = vFn
-
 	v.FldValidators["domain_choice.route53"] = AWSRoute53TypeValidator().Validate
 
 	return v

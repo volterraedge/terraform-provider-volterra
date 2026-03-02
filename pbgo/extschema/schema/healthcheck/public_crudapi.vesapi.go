@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.healthcheck.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2440,7 +2417,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/healthcheckDNSResponseRcodeType"
                 },
                 "expected_record_type": {
-                    "description": "x-displayName: \"Expected Response Record Type\"\nx-example: \"REQUESTED_QUERY_TYPE\"\nx-required\nSpecifies an expected record type in the answer section of DNS Response \noptions: [REQUESTED_QUERY_TYPE, RECORD_TYPE_ANY] when REQUESTED_QUERY_TYPE is set, health monitor expects record type same as requested query type",
+                    "description": "x-displayName: \"Expected Response Record Type\"\nx-example: \"REQUESTED_QUERY_TYPE\"\nx-required\nSpecifies an expected record type in the answer section of DNS Response\noptions: [REQUESTED_QUERY_TYPE, RECORD_TYPE_ANY] when REQUESTED_QUERY_TYPE is set, health monitor expects record type same as requested query type",
                     "title": "Expected Response Record Type",
                     "$ref": "#/definitions/healthcheckDNSResponseRecordType"
                 },
@@ -2461,7 +2438,7 @@ var APISwaggerJSON string = `{
                 },
                 "reverse": {
                     "type": "boolean",
-                    "description": "x-displayName: \"Use Reverse mode\"\nx-example: false\nEnable the monitor operation in reverse mode. \nWhen the monitor is in reverse mode, a successful receive\nstring match marks the monitored object down instead of up.",
+                    "description": "x-displayName: \"Use Reverse mode\"\nx-example: false\nEnable the monitor operation in reverse mode.\nWhen the monitor is in reverse mode, a successful receive\nstring match marks the monitored object down instead of up.",
                     "title": "Use Reverse mode",
                     "format": "boolean"
                 }
@@ -2687,6 +2664,18 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-host_header_choice": "[\"host_header\",\"use_origin_server_name\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.HttpHealthCheck",
             "properties": {
+                "expected_response": {
+                    "type": "string",
+                    "description": " Raw bytes expected in the response of http health check. Input is to be given in Hex encoded format.\n If left empty, then response body is not considered for evaluating health check status.\n\nExample: - \"00000034\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hex: true\n  ves.io.schema.rules.string.max_len: 2048\n",
+                    "title": "Expected response",
+                    "maxLength": 2048,
+                    "x-displayname": "Expected http Response",
+                    "x-ves-example": "00000034",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hex": "true",
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
+                },
                 "expected_status_codes": {
                     "type": "array",
                     "description": " Specifies a list of HTTP response status codes considered healthy. To treat default HTTP expected\n status code 200 as healthy, user has to configure it explicitly. This is a list of strings, each\n of which is single HTTP status code or a range with start and end values separated by \"-\".\n\nExample: - \"200-250\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_status_range: true\n  ves.io.schema.rules.repeated.items.string.max_len: 10\n  ves.io.schema.rules.repeated.items.string.min_len: 3\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -3122,10 +3111,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",

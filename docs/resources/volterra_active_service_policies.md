@@ -48,7 +48,6 @@ resource "volterra_active_service_policies" "active_staging" {
 		tenant = volterra_namespace.system.tenant_name
 	}
 }
-
 ```
 
 Argument Reference
@@ -71,4 +70,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of instance of active service policies.
+-   `id` - This is the id of instance of active service policies.

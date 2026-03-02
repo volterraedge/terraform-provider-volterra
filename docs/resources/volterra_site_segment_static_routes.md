@@ -32,7 +32,6 @@ resource "volterra_site_segment_static_routes" "example" {
     tenant    = "acmecorp"
   }
 }
-
 ```
 
 Argument Reference
@@ -185,4 +184,4 @@ IPv6 Subnet Address.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured site_segment_static_routes.
+*   `id` - This is the id of the configured site_segment_static_routes.

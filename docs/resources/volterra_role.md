@@ -20,7 +20,6 @@ resource "volterra_role" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -45,4 +44,4 @@ Argument Reference
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured role.
+*   `id` - This is the id of the configured role.

@@ -76,9 +76,7 @@ func (v *ValidateReleaseSignatures) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["added_signature_ids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signature_ids"))
 		for idx, item := range m.GetAddedSignatureIds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -86,20 +84,14 @@ func (v *ValidateReleaseSignatures) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["release_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_date"))
 		if err := fv(ctx, m.GetReleaseDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signature_ids"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signature_ids"))
 		for idx, item := range m.GetUpdatedSignatureIds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -107,9 +99,7 @@ func (v *ValidateReleaseSignatures) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -178,25 +168,18 @@ func (v *ValidateReleasedSignaturesReq) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vh_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vh_name"))
 		if err := fv(ctx, m.GetVhName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -265,9 +248,7 @@ func (v *ValidateReleasedSignaturesRsp) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["release_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_signatures"))
 		for idx, item := range m.GetReleaseSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -275,9 +256,7 @@ func (v *ValidateReleasedSignaturesRsp) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

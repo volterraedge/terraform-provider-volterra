@@ -16,6 +16,7 @@ import (
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -31,6 +32,40 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// Network Type
+//
+// x-displayName: "XC Network Type"
+// Network Type
+type NetworkType int32
+
+const (
+	// x-displayName: "Site Local Outside"
+	// SLO is used to connect a site's virtual machines, containers, or other workloads to the outside world.
+	SITE_LOCAL_OUTSIDE NetworkType = 0
+	// x-displayName: "Site Local Inside"
+	// This is the network where workloads and applications within a site are deployed.
+	SITE_LOCAL_INSIDE NetworkType = 1
+	// x-displayName: "Segment"
+	// Refers to a portion of a network that is isolated from other parts of the network.
+	SEGMENT NetworkType = 2
+)
+
+var NetworkType_name = map[int32]string{
+	0: "SITE_LOCAL_OUTSIDE",
+	1: "SITE_LOCAL_INSIDE",
+	2: "SEGMENT",
+}
+
+var NetworkType_value = map[string]int32{
+	"SITE_LOCAL_OUTSIDE": 0,
+	"SITE_LOCAL_INSIDE":  1,
+	"SEGMENT":            2,
+}
+
+func (NetworkType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{0}
+}
+
 // AWSManagedMode
 //
 // x-displayName: "Managed By F5XC"
@@ -38,28 +73,24 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type AWSManagedMode struct {
 	// AWS Region
 	//
-	// x-displayName: "AWS Region"
+	// x-displayName: "Region"
 	// x-example: "us-east-1"
 	// x-required
-	// AWS Region of your services vpc, where F5XC site will be deployed.
+	// Select the value for AWS region where you want to deploy the CE site.
 	AwsRegion string `protobuf:"bytes,1,opt,name=aws_region,json=awsRegion,proto3" json:"aws_region,omitempty"`
-	// New/Existing Services VPC
+	// VPC
 	//
-	// x-displayName: "New/Existing Services VPC"
+	// x-displayName: "VPC"
+	// x-example: "vpc-12345678901234567"
 	// x-required
-	// Services VPC where F5XC site will be deployed can be an existing VPC
-	// or F5XC can orchestrate a new VPC and create required cloud resources within that VPC.
-	//
-	// Types that are valid to be assigned to ServiceVpcChoice:
-	//	*AWSManagedMode_NewVpc
-	//	*AWSManagedMode_VpcId
-	ServiceVpcChoice isAWSManagedMode_ServiceVpcChoice `protobuf_oneof:"service_vpc_choice"`
+	// Choose the Cloud VPC where you want to deploy the CE site.
+	VpcId string `protobuf:"bytes,4,opt,name=vpc_id,json=vpcId,proto3" json:"vpc_id,omitempty"`
 	// Automatic Deployment
 	//
-	// x-displayName: "Credential Reference"
+	// x-displayName: "Cloud User Account"
 	// x-required
-	// Reference to AWS cloud credential object used to deploy cloud resources
-	AwsCred *views.ObjectRefType `protobuf:"bytes,6,opt,name=aws_cred,json=awsCred,proto3" json:"aws_cred,omitempty"`
+	// Choose the Cloud User Account
+	AwsCloudUserAccount *views.ObjectRefType `protobuf:"bytes,44,opt,name=aws_cloud_user_account,json=awsCloudUserAccount,proto3" json:"aws_cloud_user_account,omitempty"`
 	// AWS Tags
 	//
 	// x-displayName: "AWS Tags"
@@ -69,65 +100,81 @@ type AWSManagedMode struct {
 	Tags map[string]string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// AWS Instance Type
 	//
-	// x-displayName: "AWS Instance Type for Node"
+	// x-displayName: "AWS Instance Type"
 	// x-example: "a1.xlarge"
 	// x-required
-	// Instance size based on the performance.
+	// Choose the AWS Instance flavour you want to use for CE node
 	InstanceType string `protobuf:"bytes,8,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
 	// Node Disk size
 	//
 	// x-displayName: "Node Disk Size"
 	// x-example: "80"
-	// Node disk size for all node in the F5XC site. Unit is GiB
+	// x-required
+	// Enter the disk size in GB for the node. The minimum is 80 GB
 	DiskSize uint32 `protobuf:"varint,11,opt,name=disk_size,json=diskSize,proto3" json:"disk_size,omitempty"`
-	// Security Group
+	// Cloud Egress
 	//
-	// x-displayName: "Security Group"
-	// Select the security group for slo and sli interfaces.
-	//
-	// Types that are valid to be assigned to SecurityGroupChoice:
-	//	*AWSManagedMode_F5XcSecurityGroup
-	//	*AWSManagedMode_CustomSecurityGroup
-	SecurityGroupChoice isAWSManagedMode_SecurityGroupChoice `protobuf_oneof:"security_group_choice"`
-	// Cloud Egress Gateway Selection
-	//
-	// x-displayName: "Cloud Egress Gateway Selection"
-	// Select the egress cloud gateway that will handle the node traffic to the internet. This configuration determines the path your data will take.
+	// x-displayName: "Cloud Egress"
+	// Choose the gateway to be used for egress traffic. Default is IGW. When 'None' is selected, user needs to ensure the SLO route
+	// table has internet connectivity.
 	//
 	// Types that are valid to be assigned to EgressGatewayChoice:
-	//	*AWSManagedMode_EgressGatewayDefault
+	//	*AWSManagedMode_NoEgress
+	//	*AWSManagedMode_EgressIgwGw
 	//	*AWSManagedMode_EgressNatGw
-	//	*AWSManagedMode_EgressVirtualPrivateGateway
+	//	*AWSManagedMode_PrivateAdn
 	EgressGatewayChoice isAWSManagedMode_EgressGatewayChoice `protobuf_oneof:"egress_gateway_choice"`
-	// Private Connectivity To Site
+	// CloudLink To Site
 	//
-	// x-displayName: "Private Connectivity To Site"
-	// Select Private Connectivity To Site
+	// x-displayName: "CloudLink"
+	// Enable this option if you want this site to connect privately using Cloudlink, When enabled choose the cloudlink object
 	//
 	// Types that are valid to be assigned to PrivateConnectivityChoice:
 	//	*AWSManagedMode_PrivateConnectivityDisabled
-	//	*AWSManagedMode_PrivateConnectivity
+	//	*AWSManagedMode_CloudLinkConfig
 	PrivateConnectivityChoice isAWSManagedMode_PrivateConnectivityChoice `protobuf_oneof:"private_connectivity_choice"`
-	// Number of interfaces on CE
+	// Nodes
 	//
-	// x-displayName: "Select Node Settings"
+	// x-displayName: "Nodes"
 	// x-required
-	// Choice of deploying one interface or multiple interface site
-	//
-	// Types that are valid to be assigned to SiteType:
-	//	*AWSManagedMode_SingleInterface
-	//	*AWSManagedMode_MultipleInterface
-	SiteType isAWSManagedMode_SiteType `protobuf_oneof:"site_type"`
+	// Nodes within this CE Site
+	NodeList *AWSManagedNodeList `protobuf:"bytes,35,opt,name=node_list,json=nodeList,proto3" json:"node_list,omitempty"`
 	// Configure Cloud Connect for this site
 	//
-	// x-displayName: "Cloud Connect Configuration"
-	// x-required
-	// Configure Cloud Connect for this site.
+	// x-displayName: "Cloud Connect"
+	// Enable this option when this site is a hub and is associated with multiple spokes using Cloud Connect
 	//
-	// Types that are valid to be assigned to CloudConnectAttachments:
-	//	*AWSManagedMode_Disabled
-	//	*AWSManagedMode_Tgw
-	CloudConnectAttachments isAWSManagedMode_CloudConnectAttachments `protobuf_oneof:"cloud_connect_attachments"`
+	// Types that are valid to be assigned to CloudConnectChoice:
+	//	*AWSManagedMode_DisableCloudConnect
+	//	*AWSManagedMode_EnableCloudConnect
+	CloudConnectChoice isAWSManagedMode_CloudConnectChoice `protobuf_oneof:"cloud_connect_choice"`
+	// Resource Mapping
+	//
+	// x-displayName: "Resource Mapping"
+	// You can use this section to provide resource mapping for Site Local Outside (SLO), Site Local Inside (SLI) and Segment networks across
+	// availablity zones according to your deployment topology. When resource mapping is provided here, then these resources will be implictly used for
+	// interface configuration. You do not need to provide explicit inputs for interfaces within a CE node.
+	AwsResourceMappingList *AWSResourceMappingListType `protobuf:"bytes,38,opt,name=aws_resource_mapping_list,json=awsResourceMappingList,proto3" json:"aws_resource_mapping_list,omitempty"`
+	// PrivateWorkloadRoutingType
+	//
+	// x-displayName: "Private Workload Routing to CE"
+	// When enabled, Choose the private workload subnets that you want F5 Distributed Cloud to manage. A default
+	// route will be added in each of these private workload subnets with next hop as SLI interface of CE node in
+	// that AZ. When disabled, F5 distributed cloud will not modify any routes in any workload subnets.
+	//
+	// Types that are valid to be assigned to PrivateWorkloadRoutingChoice:
+	//	*AWSManagedMode_DisablePrivateWorkloadRoutingToCe
+	//	*AWSManagedMode_EnablePrivateWorkloadRoutingList
+	PrivateWorkloadRoutingChoice isAWSManagedMode_PrivateWorkloadRoutingChoice `protobuf_oneof:"private_workload_routing_choice"`
+	// Disk Encryption
+	//
+	// x-displayName: "Disk Encryption"
+	// By default, disk encryption will be disabled. When it is enabled, select the key to be used for encryption.
+	//
+	// Types that are valid to be assigned to DiskEncryptionChoice:
+	//	*AWSManagedMode_DisableDiskEncryption
+	//	*AWSManagedMode_DiskEncryptionKey
+	DiskEncryptionChoice isAWSManagedMode_DiskEncryptionChoice `protobuf_oneof:"disk_encryption_choice"`
 }
 
 func (m *AWSManagedMode) Reset()      { *m = AWSManagedMode{} }
@@ -158,18 +205,6 @@ func (m *AWSManagedMode) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AWSManagedMode proto.InternalMessageInfo
 
-type isAWSManagedMode_ServiceVpcChoice interface {
-	isAWSManagedMode_ServiceVpcChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isAWSManagedMode_SecurityGroupChoice interface {
-	isAWSManagedMode_SecurityGroupChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
 type isAWSManagedMode_EgressGatewayChoice interface {
 	isAWSManagedMode_EgressGatewayChoice()
 	Equal(interface{}) bool
@@ -182,85 +217,77 @@ type isAWSManagedMode_PrivateConnectivityChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
-type isAWSManagedMode_SiteType interface {
-	isAWSManagedMode_SiteType()
+type isAWSManagedMode_CloudConnectChoice interface {
+	isAWSManagedMode_CloudConnectChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
-type isAWSManagedMode_CloudConnectAttachments interface {
-	isAWSManagedMode_CloudConnectAttachments()
+type isAWSManagedMode_PrivateWorkloadRoutingChoice interface {
+	isAWSManagedMode_PrivateWorkloadRoutingChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isAWSManagedMode_DiskEncryptionChoice interface {
+	isAWSManagedMode_DiskEncryptionChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
 
-type AWSManagedMode_NewVpc struct {
-	NewVpc *views.AWSVPCParamsType `protobuf:"bytes,3,opt,name=new_vpc,json=newVpc,proto3,oneof" json:"new_vpc,omitempty"`
+type AWSManagedMode_NoEgress struct {
+	NoEgress *schema.Empty `protobuf:"bytes,40,opt,name=no_egress,json=noEgress,proto3,oneof" json:"no_egress,omitempty"`
 }
-type AWSManagedMode_VpcId struct {
-	VpcId string `protobuf:"bytes,4,opt,name=vpc_id,json=vpcId,proto3,oneof" json:"vpc_id,omitempty"`
-}
-type AWSManagedMode_F5XcSecurityGroup struct {
-	F5XcSecurityGroup *schema.Empty `protobuf:"bytes,13,opt,name=f5xc_security_group,json=f5xcSecurityGroup,proto3,oneof" json:"f5xc_security_group,omitempty"`
-}
-type AWSManagedMode_CustomSecurityGroup struct {
-	CustomSecurityGroup *views.SecurityGroupType `protobuf:"bytes,14,opt,name=custom_security_group,json=customSecurityGroup,proto3,oneof" json:"custom_security_group,omitempty"`
-}
-type AWSManagedMode_EgressGatewayDefault struct {
-	EgressGatewayDefault *schema.Empty `protobuf:"bytes,16,opt,name=egress_gateway_default,json=egressGatewayDefault,proto3,oneof" json:"egress_gateway_default,omitempty"`
+type AWSManagedMode_EgressIgwGw struct {
+	EgressIgwGw *AWSIGWGatewayType `protobuf:"bytes,39,opt,name=egress_igw_gw,json=egressIgwGw,proto3,oneof" json:"egress_igw_gw,omitempty"`
 }
 type AWSManagedMode_EgressNatGw struct {
-	EgressNatGw *views.AWSNATGatewaychoiceType `protobuf:"bytes,17,opt,name=egress_nat_gw,json=egressNatGw,proto3,oneof" json:"egress_nat_gw,omitempty"`
+	EgressNatGw *AWSNATGatewayType `protobuf:"bytes,48,opt,name=egress_nat_gw,json=egressNatGw,proto3,oneof" json:"egress_nat_gw,omitempty"`
 }
-type AWSManagedMode_EgressVirtualPrivateGateway struct {
-	EgressVirtualPrivateGateway *views.AWSVirtualPrivateGatewaychoiceType `protobuf:"bytes,18,opt,name=egress_virtual_private_gateway,json=egressVirtualPrivateGateway,proto3,oneof" json:"egress_virtual_private_gateway,omitempty"`
+type AWSManagedMode_PrivateAdn struct {
+	PrivateAdn *schema.Empty `protobuf:"bytes,50,opt,name=private_adn,json=privateAdn,proto3,oneof" json:"private_adn,omitempty"`
 }
 type AWSManagedMode_PrivateConnectivityDisabled struct {
 	PrivateConnectivityDisabled *schema.Empty `protobuf:"bytes,23,opt,name=private_connectivity_disabled,json=privateConnectivityDisabled,proto3,oneof" json:"private_connectivity_disabled,omitempty"`
 }
-type AWSManagedMode_PrivateConnectivity struct {
-	PrivateConnectivity *views.PrivateConnectConfigType `protobuf:"bytes,24,opt,name=private_connectivity,json=privateConnectivity,proto3,oneof" json:"private_connectivity,omitempty"`
+type AWSManagedMode_CloudLinkConfig struct {
+	CloudLinkConfig *AWSCloudLinkConfigType `protobuf:"bytes,54,opt,name=cloud_link_config,json=cloudLinkConfig,proto3,oneof" json:"cloud_link_config,omitempty"`
 }
-type AWSManagedMode_SingleInterface struct {
-	SingleInterface *SingleInterface `protobuf:"bytes,27,opt,name=single_interface,json=singleInterface,proto3,oneof" json:"single_interface,omitempty"`
+type AWSManagedMode_DisableCloudConnect struct {
+	DisableCloudConnect *schema.Empty `protobuf:"bytes,36,opt,name=disable_cloud_connect,json=disableCloudConnect,proto3,oneof" json:"disable_cloud_connect,omitempty"`
 }
-type AWSManagedMode_MultipleInterface struct {
-	MultipleInterface *MultipleInterface `protobuf:"bytes,28,opt,name=multiple_interface,json=multipleInterface,proto3,oneof" json:"multiple_interface,omitempty"`
+type AWSManagedMode_EnableCloudConnect struct {
+	EnableCloudConnect *AWSTGWType `protobuf:"bytes,37,opt,name=enable_cloud_connect,json=enableCloudConnect,proto3,oneof" json:"enable_cloud_connect,omitempty"`
 }
-type AWSManagedMode_Disabled struct {
-	Disabled *schema.Empty `protobuf:"bytes,33,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
+type AWSManagedMode_DisablePrivateWorkloadRoutingToCe struct {
+	DisablePrivateWorkloadRoutingToCe *schema.Empty `protobuf:"bytes,42,opt,name=disable_private_workload_routing_to_ce,json=disablePrivateWorkloadRoutingToCe,proto3,oneof" json:"disable_private_workload_routing_to_ce,omitempty"`
 }
-type AWSManagedMode_Tgw struct {
-	Tgw *TGWType `protobuf:"bytes,34,opt,name=tgw,proto3,oneof" json:"tgw,omitempty"`
+type AWSManagedMode_EnablePrivateWorkloadRoutingList struct {
+	EnablePrivateWorkloadRoutingList *EnablePrivateWorkloadRoutingListType `protobuf:"bytes,53,opt,name=enable_private_workload_routing_list,json=enablePrivateWorkloadRoutingList,proto3,oneof" json:"enable_private_workload_routing_list,omitempty"`
+}
+type AWSManagedMode_DisableDiskEncryption struct {
+	DisableDiskEncryption *schema.Empty `protobuf:"bytes,46,opt,name=disable_disk_encryption,json=disableDiskEncryption,proto3,oneof" json:"disable_disk_encryption,omitempty"`
+}
+type AWSManagedMode_DiskEncryptionKey struct {
+	DiskEncryptionKey *AWSDiskEncryptionKeyType `protobuf:"bytes,47,opt,name=disk_encryption_key,json=diskEncryptionKey,proto3,oneof" json:"disk_encryption_key,omitempty"`
 }
 
-func (*AWSManagedMode_NewVpc) isAWSManagedMode_ServiceVpcChoice()                               {}
-func (*AWSManagedMode_VpcId) isAWSManagedMode_ServiceVpcChoice()                                {}
-func (*AWSManagedMode_F5XcSecurityGroup) isAWSManagedMode_SecurityGroupChoice()                 {}
-func (*AWSManagedMode_CustomSecurityGroup) isAWSManagedMode_SecurityGroupChoice()               {}
-func (*AWSManagedMode_EgressGatewayDefault) isAWSManagedMode_EgressGatewayChoice()              {}
+func (*AWSManagedMode_NoEgress) isAWSManagedMode_EgressGatewayChoice()                          {}
+func (*AWSManagedMode_EgressIgwGw) isAWSManagedMode_EgressGatewayChoice()                       {}
 func (*AWSManagedMode_EgressNatGw) isAWSManagedMode_EgressGatewayChoice()                       {}
-func (*AWSManagedMode_EgressVirtualPrivateGateway) isAWSManagedMode_EgressGatewayChoice()       {}
+func (*AWSManagedMode_PrivateAdn) isAWSManagedMode_EgressGatewayChoice()                        {}
 func (*AWSManagedMode_PrivateConnectivityDisabled) isAWSManagedMode_PrivateConnectivityChoice() {}
-func (*AWSManagedMode_PrivateConnectivity) isAWSManagedMode_PrivateConnectivityChoice()         {}
-func (*AWSManagedMode_SingleInterface) isAWSManagedMode_SiteType()                              {}
-func (*AWSManagedMode_MultipleInterface) isAWSManagedMode_SiteType()                            {}
-func (*AWSManagedMode_Disabled) isAWSManagedMode_CloudConnectAttachments()                      {}
-func (*AWSManagedMode_Tgw) isAWSManagedMode_CloudConnectAttachments()                           {}
+func (*AWSManagedMode_CloudLinkConfig) isAWSManagedMode_PrivateConnectivityChoice()             {}
+func (*AWSManagedMode_DisableCloudConnect) isAWSManagedMode_CloudConnectChoice()                {}
+func (*AWSManagedMode_EnableCloudConnect) isAWSManagedMode_CloudConnectChoice()                 {}
+func (*AWSManagedMode_DisablePrivateWorkloadRoutingToCe) isAWSManagedMode_PrivateWorkloadRoutingChoice() {
+}
+func (*AWSManagedMode_EnablePrivateWorkloadRoutingList) isAWSManagedMode_PrivateWorkloadRoutingChoice() {
+}
+func (*AWSManagedMode_DisableDiskEncryption) isAWSManagedMode_DiskEncryptionChoice() {}
+func (*AWSManagedMode_DiskEncryptionKey) isAWSManagedMode_DiskEncryptionChoice()     {}
 
-func (m *AWSManagedMode) GetServiceVpcChoice() isAWSManagedMode_ServiceVpcChoice {
-	if m != nil {
-		return m.ServiceVpcChoice
-	}
-	return nil
-}
-func (m *AWSManagedMode) GetSecurityGroupChoice() isAWSManagedMode_SecurityGroupChoice {
-	if m != nil {
-		return m.SecurityGroupChoice
-	}
-	return nil
-}
 func (m *AWSManagedMode) GetEgressGatewayChoice() isAWSManagedMode_EgressGatewayChoice {
 	if m != nil {
 		return m.EgressGatewayChoice
@@ -273,15 +300,21 @@ func (m *AWSManagedMode) GetPrivateConnectivityChoice() isAWSManagedMode_Private
 	}
 	return nil
 }
-func (m *AWSManagedMode) GetSiteType() isAWSManagedMode_SiteType {
+func (m *AWSManagedMode) GetCloudConnectChoice() isAWSManagedMode_CloudConnectChoice {
 	if m != nil {
-		return m.SiteType
+		return m.CloudConnectChoice
 	}
 	return nil
 }
-func (m *AWSManagedMode) GetCloudConnectAttachments() isAWSManagedMode_CloudConnectAttachments {
+func (m *AWSManagedMode) GetPrivateWorkloadRoutingChoice() isAWSManagedMode_PrivateWorkloadRoutingChoice {
 	if m != nil {
-		return m.CloudConnectAttachments
+		return m.PrivateWorkloadRoutingChoice
+	}
+	return nil
+}
+func (m *AWSManagedMode) GetDiskEncryptionChoice() isAWSManagedMode_DiskEncryptionChoice {
+	if m != nil {
+		return m.DiskEncryptionChoice
 	}
 	return nil
 }
@@ -293,23 +326,16 @@ func (m *AWSManagedMode) GetAwsRegion() string {
 	return ""
 }
 
-func (m *AWSManagedMode) GetNewVpc() *views.AWSVPCParamsType {
-	if x, ok := m.GetServiceVpcChoice().(*AWSManagedMode_NewVpc); ok {
-		return x.NewVpc
-	}
-	return nil
-}
-
 func (m *AWSManagedMode) GetVpcId() string {
-	if x, ok := m.GetServiceVpcChoice().(*AWSManagedMode_VpcId); ok {
-		return x.VpcId
+	if m != nil {
+		return m.VpcId
 	}
 	return ""
 }
 
-func (m *AWSManagedMode) GetAwsCred() *views.ObjectRefType {
+func (m *AWSManagedMode) GetAwsCloudUserAccount() *views.ObjectRefType {
 	if m != nil {
-		return m.AwsCred
+		return m.AwsCloudUserAccount
 	}
 	return nil
 }
@@ -335,37 +361,30 @@ func (m *AWSManagedMode) GetDiskSize() uint32 {
 	return 0
 }
 
-func (m *AWSManagedMode) GetF5XcSecurityGroup() *schema.Empty {
-	if x, ok := m.GetSecurityGroupChoice().(*AWSManagedMode_F5XcSecurityGroup); ok {
-		return x.F5XcSecurityGroup
+func (m *AWSManagedMode) GetNoEgress() *schema.Empty {
+	if x, ok := m.GetEgressGatewayChoice().(*AWSManagedMode_NoEgress); ok {
+		return x.NoEgress
 	}
 	return nil
 }
 
-func (m *AWSManagedMode) GetCustomSecurityGroup() *views.SecurityGroupType {
-	if x, ok := m.GetSecurityGroupChoice().(*AWSManagedMode_CustomSecurityGroup); ok {
-		return x.CustomSecurityGroup
+func (m *AWSManagedMode) GetEgressIgwGw() *AWSIGWGatewayType {
+	if x, ok := m.GetEgressGatewayChoice().(*AWSManagedMode_EgressIgwGw); ok {
+		return x.EgressIgwGw
 	}
 	return nil
 }
 
-func (m *AWSManagedMode) GetEgressGatewayDefault() *schema.Empty {
-	if x, ok := m.GetEgressGatewayChoice().(*AWSManagedMode_EgressGatewayDefault); ok {
-		return x.EgressGatewayDefault
-	}
-	return nil
-}
-
-func (m *AWSManagedMode) GetEgressNatGw() *views.AWSNATGatewaychoiceType {
+func (m *AWSManagedMode) GetEgressNatGw() *AWSNATGatewayType {
 	if x, ok := m.GetEgressGatewayChoice().(*AWSManagedMode_EgressNatGw); ok {
 		return x.EgressNatGw
 	}
 	return nil
 }
 
-func (m *AWSManagedMode) GetEgressVirtualPrivateGateway() *views.AWSVirtualPrivateGatewaychoiceType {
-	if x, ok := m.GetEgressGatewayChoice().(*AWSManagedMode_EgressVirtualPrivateGateway); ok {
-		return x.EgressVirtualPrivateGateway
+func (m *AWSManagedMode) GetPrivateAdn() *schema.Empty {
+	if x, ok := m.GetEgressGatewayChoice().(*AWSManagedMode_PrivateAdn); ok {
+		return x.PrivateAdn
 	}
 	return nil
 }
@@ -377,37 +396,65 @@ func (m *AWSManagedMode) GetPrivateConnectivityDisabled() *schema.Empty {
 	return nil
 }
 
-func (m *AWSManagedMode) GetPrivateConnectivity() *views.PrivateConnectConfigType {
-	if x, ok := m.GetPrivateConnectivityChoice().(*AWSManagedMode_PrivateConnectivity); ok {
-		return x.PrivateConnectivity
+func (m *AWSManagedMode) GetCloudLinkConfig() *AWSCloudLinkConfigType {
+	if x, ok := m.GetPrivateConnectivityChoice().(*AWSManagedMode_CloudLinkConfig); ok {
+		return x.CloudLinkConfig
 	}
 	return nil
 }
 
-func (m *AWSManagedMode) GetSingleInterface() *SingleInterface {
-	if x, ok := m.GetSiteType().(*AWSManagedMode_SingleInterface); ok {
-		return x.SingleInterface
+func (m *AWSManagedMode) GetNodeList() *AWSManagedNodeList {
+	if m != nil {
+		return m.NodeList
 	}
 	return nil
 }
 
-func (m *AWSManagedMode) GetMultipleInterface() *MultipleInterface {
-	if x, ok := m.GetSiteType().(*AWSManagedMode_MultipleInterface); ok {
-		return x.MultipleInterface
+func (m *AWSManagedMode) GetDisableCloudConnect() *schema.Empty {
+	if x, ok := m.GetCloudConnectChoice().(*AWSManagedMode_DisableCloudConnect); ok {
+		return x.DisableCloudConnect
 	}
 	return nil
 }
 
-func (m *AWSManagedMode) GetDisabled() *schema.Empty {
-	if x, ok := m.GetCloudConnectAttachments().(*AWSManagedMode_Disabled); ok {
-		return x.Disabled
+func (m *AWSManagedMode) GetEnableCloudConnect() *AWSTGWType {
+	if x, ok := m.GetCloudConnectChoice().(*AWSManagedMode_EnableCloudConnect); ok {
+		return x.EnableCloudConnect
 	}
 	return nil
 }
 
-func (m *AWSManagedMode) GetTgw() *TGWType {
-	if x, ok := m.GetCloudConnectAttachments().(*AWSManagedMode_Tgw); ok {
-		return x.Tgw
+func (m *AWSManagedMode) GetAwsResourceMappingList() *AWSResourceMappingListType {
+	if m != nil {
+		return m.AwsResourceMappingList
+	}
+	return nil
+}
+
+func (m *AWSManagedMode) GetDisablePrivateWorkloadRoutingToCe() *schema.Empty {
+	if x, ok := m.GetPrivateWorkloadRoutingChoice().(*AWSManagedMode_DisablePrivateWorkloadRoutingToCe); ok {
+		return x.DisablePrivateWorkloadRoutingToCe
+	}
+	return nil
+}
+
+func (m *AWSManagedMode) GetEnablePrivateWorkloadRoutingList() *EnablePrivateWorkloadRoutingListType {
+	if x, ok := m.GetPrivateWorkloadRoutingChoice().(*AWSManagedMode_EnablePrivateWorkloadRoutingList); ok {
+		return x.EnablePrivateWorkloadRoutingList
+	}
+	return nil
+}
+
+func (m *AWSManagedMode) GetDisableDiskEncryption() *schema.Empty {
+	if x, ok := m.GetDiskEncryptionChoice().(*AWSManagedMode_DisableDiskEncryption); ok {
+		return x.DisableDiskEncryption
+	}
+	return nil
+}
+
+func (m *AWSManagedMode) GetDiskEncryptionKey() *AWSDiskEncryptionKeyType {
+	if x, ok := m.GetDiskEncryptionChoice().(*AWSManagedMode_DiskEncryptionKey); ok {
+		return x.DiskEncryptionKey
 	}
 	return nil
 }
@@ -415,59 +462,60 @@ func (m *AWSManagedMode) GetTgw() *TGWType {
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AWSManagedMode) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*AWSManagedMode_NewVpc)(nil),
-		(*AWSManagedMode_VpcId)(nil),
-		(*AWSManagedMode_F5XcSecurityGroup)(nil),
-		(*AWSManagedMode_CustomSecurityGroup)(nil),
-		(*AWSManagedMode_EgressGatewayDefault)(nil),
+		(*AWSManagedMode_NoEgress)(nil),
+		(*AWSManagedMode_EgressIgwGw)(nil),
 		(*AWSManagedMode_EgressNatGw)(nil),
-		(*AWSManagedMode_EgressVirtualPrivateGateway)(nil),
+		(*AWSManagedMode_PrivateAdn)(nil),
 		(*AWSManagedMode_PrivateConnectivityDisabled)(nil),
-		(*AWSManagedMode_PrivateConnectivity)(nil),
-		(*AWSManagedMode_SingleInterface)(nil),
-		(*AWSManagedMode_MultipleInterface)(nil),
-		(*AWSManagedMode_Disabled)(nil),
-		(*AWSManagedMode_Tgw)(nil),
+		(*AWSManagedMode_CloudLinkConfig)(nil),
+		(*AWSManagedMode_DisableCloudConnect)(nil),
+		(*AWSManagedMode_EnableCloudConnect)(nil),
+		(*AWSManagedMode_DisablePrivateWorkloadRoutingToCe)(nil),
+		(*AWSManagedMode_EnablePrivateWorkloadRoutingList)(nil),
+		(*AWSManagedMode_DisableDiskEncryption)(nil),
+		(*AWSManagedMode_DiskEncryptionKey)(nil),
 	}
 }
 
-// Transit Gateway for Cloud Connect
+// AWS Private Connectivity To Site
 //
-// x-displayName: "Transit Gateway Configuration"
-// Configure Transit Gateway to be used with Cloud Connect
-type TGWType struct {
-	// New/Existing Transit Gateway
+// x-displayName: "AWS Private Connectivity"
+// Enable this option if you want to this site to connect privately using Cloudlink, When enabled
+// choose the cloudlink object
+type AWSCloudLinkConfigType struct {
+	// Virtual Private Gateway
 	//
-	// x-displayName: "New/Existing Transit Gateway"
 	// x-required
-	// F5XC Site can work with an existing Transit Gateway(TGW) and orchestrate attachments, TGW routing and propagation
-	// or F5XC can orchestrate new TGW, attachments, TGW routing and propagation
+	// x-displayName: "Virtual Private Gateway"
+	// Choose Virtual Private Gateway
+	VgwId string `protobuf:"bytes,1,opt,name=vgw_id,json=vgwId,proto3" json:"vgw_id,omitempty"`
+	// Associate Cloud Link
 	//
-	// Types that are valid to be assigned to TgwChoice:
-	//	*TGWType_NewTgw
-	//	*TGWType_ExistingTgw
-	TgwChoice isTGWType_TgwChoice `protobuf_oneof:"tgw_choice"`
-	// Transit gateway CIDR Block
-	//
-	// x-displayName: "Transit gateway CIDR Block"
+	// x-displayName: "Associate Cloud Link"
 	// x-required
-	// CIDR block for AWS Transit Gateway GRE connectivity. Defines the IP address range for GRE tunnel traffic over Transit Gateway.
+	// Reference to Cloud Link
+	CloudLink *views.ObjectRefType `protobuf:"bytes,2,opt,name=cloud_link,json=cloudLink,proto3" json:"cloud_link,omitempty"`
+	// Choose Site Network
 	//
-	// Types that are valid to be assigned to TgwCidrChoice:
-	//	*TGWType_ReservedTgwCidr
-	//	*TGWType_TgwCidr
-	TgwCidrChoice isTGWType_TgwCidrChoice `protobuf_oneof:"tgw_cidr_choice"`
+	// x-displayName: "Choose Site Network"
+	// Please use Outside Network if Private Connectivity to Regional Edge has been configured on
+	// the CloudLink
+	//
+	// Types that are valid to be assigned to NetworkOptions:
+	//	*AWSCloudLinkConfigType_Outside
+	//	*AWSCloudLinkConfigType_Inside
+	NetworkOptions isAWSCloudLinkConfigType_NetworkOptions `protobuf_oneof:"network_options"`
 }
 
-func (m *TGWType) Reset()      { *m = TGWType{} }
-func (*TGWType) ProtoMessage() {}
-func (*TGWType) Descriptor() ([]byte, []int) {
+func (m *AWSCloudLinkConfigType) Reset()      { *m = AWSCloudLinkConfigType{} }
+func (*AWSCloudLinkConfigType) ProtoMessage() {}
+func (*AWSCloudLinkConfigType) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1f46c75610d719ed, []int{1}
 }
-func (m *TGWType) XXX_Unmarshal(b []byte) error {
+func (m *AWSCloudLinkConfigType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *TGWType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *AWSCloudLinkConfigType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -475,121 +523,100 @@ func (m *TGWType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	}
 	return b[:n], nil
 }
-func (m *TGWType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TGWType.Merge(m, src)
+func (m *AWSCloudLinkConfigType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSCloudLinkConfigType.Merge(m, src)
 }
-func (m *TGWType) XXX_Size() int {
+func (m *AWSCloudLinkConfigType) XXX_Size() int {
 	return m.Size()
 }
-func (m *TGWType) XXX_DiscardUnknown() {
-	xxx_messageInfo_TGWType.DiscardUnknown(m)
+func (m *AWSCloudLinkConfigType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSCloudLinkConfigType.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_TGWType proto.InternalMessageInfo
+var xxx_messageInfo_AWSCloudLinkConfigType proto.InternalMessageInfo
 
-type isTGWType_TgwChoice interface {
-	isTGWType_TgwChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isTGWType_TgwCidrChoice interface {
-	isTGWType_TgwCidrChoice()
+type isAWSCloudLinkConfigType_NetworkOptions interface {
+	isAWSCloudLinkConfigType_NetworkOptions()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
 
-type TGWType_NewTgw struct {
-	NewTgw *views.TGWParamsType `protobuf:"bytes,2,opt,name=new_tgw,json=newTgw,proto3,oneof" json:"new_tgw,omitempty"`
+type AWSCloudLinkConfigType_Outside struct {
+	Outside *schema.Empty `protobuf:"bytes,4,opt,name=outside,proto3,oneof" json:"outside,omitempty"`
 }
-type TGWType_ExistingTgw struct {
-	ExistingTgw *views.ExistingTGWType `protobuf:"bytes,3,opt,name=existing_tgw,json=existingTgw,proto3,oneof" json:"existing_tgw,omitempty"`
-}
-type TGWType_ReservedTgwCidr struct {
-	ReservedTgwCidr *schema.Empty `protobuf:"bytes,5,opt,name=reserved_tgw_cidr,json=reservedTgwCidr,proto3,oneof" json:"reserved_tgw_cidr,omitempty"`
-}
-type TGWType_TgwCidr struct {
-	TgwCidr *views.CloudSubnetParamType `protobuf:"bytes,6,opt,name=tgw_cidr,json=tgwCidr,proto3,oneof" json:"tgw_cidr,omitempty"`
+type AWSCloudLinkConfigType_Inside struct {
+	Inside *schema.Empty `protobuf:"bytes,5,opt,name=inside,proto3,oneof" json:"inside,omitempty"`
 }
 
-func (*TGWType_NewTgw) isTGWType_TgwChoice()              {}
-func (*TGWType_ExistingTgw) isTGWType_TgwChoice()         {}
-func (*TGWType_ReservedTgwCidr) isTGWType_TgwCidrChoice() {}
-func (*TGWType_TgwCidr) isTGWType_TgwCidrChoice()         {}
+func (*AWSCloudLinkConfigType_Outside) isAWSCloudLinkConfigType_NetworkOptions() {}
+func (*AWSCloudLinkConfigType_Inside) isAWSCloudLinkConfigType_NetworkOptions()  {}
 
-func (m *TGWType) GetTgwChoice() isTGWType_TgwChoice {
+func (m *AWSCloudLinkConfigType) GetNetworkOptions() isAWSCloudLinkConfigType_NetworkOptions {
 	if m != nil {
-		return m.TgwChoice
+		return m.NetworkOptions
 	}
 	return nil
 }
-func (m *TGWType) GetTgwCidrChoice() isTGWType_TgwCidrChoice {
+
+func (m *AWSCloudLinkConfigType) GetVgwId() string {
 	if m != nil {
-		return m.TgwCidrChoice
+		return m.VgwId
+	}
+	return ""
+}
+
+func (m *AWSCloudLinkConfigType) GetCloudLink() *views.ObjectRefType {
+	if m != nil {
+		return m.CloudLink
 	}
 	return nil
 }
 
-func (m *TGWType) GetNewTgw() *views.TGWParamsType {
-	if x, ok := m.GetTgwChoice().(*TGWType_NewTgw); ok {
-		return x.NewTgw
+func (m *AWSCloudLinkConfigType) GetOutside() *schema.Empty {
+	if x, ok := m.GetNetworkOptions().(*AWSCloudLinkConfigType_Outside); ok {
+		return x.Outside
 	}
 	return nil
 }
 
-func (m *TGWType) GetExistingTgw() *views.ExistingTGWType {
-	if x, ok := m.GetTgwChoice().(*TGWType_ExistingTgw); ok {
-		return x.ExistingTgw
-	}
-	return nil
-}
-
-func (m *TGWType) GetReservedTgwCidr() *schema.Empty {
-	if x, ok := m.GetTgwCidrChoice().(*TGWType_ReservedTgwCidr); ok {
-		return x.ReservedTgwCidr
-	}
-	return nil
-}
-
-func (m *TGWType) GetTgwCidr() *views.CloudSubnetParamType {
-	if x, ok := m.GetTgwCidrChoice().(*TGWType_TgwCidr); ok {
-		return x.TgwCidr
+func (m *AWSCloudLinkConfigType) GetInside() *schema.Empty {
+	if x, ok := m.GetNetworkOptions().(*AWSCloudLinkConfigType_Inside); ok {
+		return x.Inside
 	}
 	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*TGWType) XXX_OneofWrappers() []interface{} {
+func (*AWSCloudLinkConfigType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*TGWType_NewTgw)(nil),
-		(*TGWType_ExistingTgw)(nil),
-		(*TGWType_ReservedTgwCidr)(nil),
-		(*TGWType_TgwCidr)(nil),
+		(*AWSCloudLinkConfigType_Outside)(nil),
+		(*AWSCloudLinkConfigType_Inside)(nil),
 	}
 }
 
-// One Interface
+// Enable Private Workload Routing to CE
 //
-// x-displayName: "One Interface"
-// One interface site is useful when site is only used as ingress gateway to the VPC.
-type SingleInterface struct {
-	// Nodes
+// x-displayName: "Enable"
+// Enable Private Workload Routing to CE
+type EnablePrivateWorkloadRoutingListType struct {
+	// Enable Private Workload Routing to CE
 	//
-	// x-displayName: "Nodes"
-	// This section will show nodes associated with this site.
-	NodeList *AWSManagedNodeList `protobuf:"bytes,1,opt,name=node_list,json=nodeList,proto3" json:"node_list,omitempty"`
+	// x-required
+	// x-displayName: "Subnets"
+	// Enable Private Workload Routing to CE
+	EnablePrivateWorkloadRoutingToCe []*EnablePrivateWorkloadRoutingType `protobuf:"bytes,1,rep,name=enable_private_workload_routing_to_ce,json=enablePrivateWorkloadRoutingToCe,proto3" json:"enable_private_workload_routing_to_ce,omitempty"`
 }
 
-func (m *SingleInterface) Reset()      { *m = SingleInterface{} }
-func (*SingleInterface) ProtoMessage() {}
-func (*SingleInterface) Descriptor() ([]byte, []int) {
+func (m *EnablePrivateWorkloadRoutingListType) Reset()      { *m = EnablePrivateWorkloadRoutingListType{} }
+func (*EnablePrivateWorkloadRoutingListType) ProtoMessage() {}
+func (*EnablePrivateWorkloadRoutingListType) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1f46c75610d719ed, []int{2}
 }
-func (m *SingleInterface) XXX_Unmarshal(b []byte) error {
+func (m *EnablePrivateWorkloadRoutingListType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SingleInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *EnablePrivateWorkloadRoutingListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -597,46 +624,47 @@ func (m *SingleInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 	}
 	return b[:n], nil
 }
-func (m *SingleInterface) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SingleInterface.Merge(m, src)
+func (m *EnablePrivateWorkloadRoutingListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EnablePrivateWorkloadRoutingListType.Merge(m, src)
 }
-func (m *SingleInterface) XXX_Size() int {
+func (m *EnablePrivateWorkloadRoutingListType) XXX_Size() int {
 	return m.Size()
 }
-func (m *SingleInterface) XXX_DiscardUnknown() {
-	xxx_messageInfo_SingleInterface.DiscardUnknown(m)
+func (m *EnablePrivateWorkloadRoutingListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnablePrivateWorkloadRoutingListType.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SingleInterface proto.InternalMessageInfo
+var xxx_messageInfo_EnablePrivateWorkloadRoutingListType proto.InternalMessageInfo
 
-func (m *SingleInterface) GetNodeList() *AWSManagedNodeList {
+func (m *EnablePrivateWorkloadRoutingListType) GetEnablePrivateWorkloadRoutingToCe() []*EnablePrivateWorkloadRoutingType {
 	if m != nil {
-		return m.NodeList
+		return m.EnablePrivateWorkloadRoutingToCe
 	}
 	return nil
 }
 
-// Multiple Interface Site
+// AWS Disk Encryption Key Type
 //
-// x-displayName: "Multiple Interface"
-// Multiple interface site is useful when site is used as ingress/egress gateway to the VPC.
-type MultipleInterface struct {
-	// Nodes
+// x-displayName: "AWS Disk Encryption Key Type"
+// AWS Disk Encryption Key Type
+type AWSDiskEncryptionKeyType struct {
+	// Enable disk encryption
 	//
-	// x-displayName: "Nodes"
-	// This section will show nodes associated with this site.
-	NodeList *AWSManagedNodeList `protobuf:"bytes,1,opt,name=node_list,json=nodeList,proto3" json:"node_list,omitempty"`
+	// x-displayName: "Encryption Key"
+	// x-required
+	// Select an encryption key
+	KeyId string `protobuf:"bytes,1,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"`
 }
 
-func (m *MultipleInterface) Reset()      { *m = MultipleInterface{} }
-func (*MultipleInterface) ProtoMessage() {}
-func (*MultipleInterface) Descriptor() ([]byte, []int) {
+func (m *AWSDiskEncryptionKeyType) Reset()      { *m = AWSDiskEncryptionKeyType{} }
+func (*AWSDiskEncryptionKeyType) ProtoMessage() {}
+func (*AWSDiskEncryptionKeyType) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1f46c75610d719ed, []int{3}
 }
-func (m *MultipleInterface) XXX_Unmarshal(b []byte) error {
+func (m *AWSDiskEncryptionKeyType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MultipleInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *AWSDiskEncryptionKeyType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -644,23 +672,152 @@ func (m *MultipleInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 	}
 	return b[:n], nil
 }
-func (m *MultipleInterface) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MultipleInterface.Merge(m, src)
+func (m *AWSDiskEncryptionKeyType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSDiskEncryptionKeyType.Merge(m, src)
 }
-func (m *MultipleInterface) XXX_Size() int {
+func (m *AWSDiskEncryptionKeyType) XXX_Size() int {
 	return m.Size()
 }
-func (m *MultipleInterface) XXX_DiscardUnknown() {
-	xxx_messageInfo_MultipleInterface.DiscardUnknown(m)
+func (m *AWSDiskEncryptionKeyType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSDiskEncryptionKeyType.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MultipleInterface proto.InternalMessageInfo
+var xxx_messageInfo_AWSDiskEncryptionKeyType proto.InternalMessageInfo
 
-func (m *MultipleInterface) GetNodeList() *AWSManagedNodeList {
+func (m *AWSDiskEncryptionKeyType) GetKeyId() string {
 	if m != nil {
-		return m.NodeList
+		return m.KeyId
+	}
+	return ""
+}
+
+// Enable Private Workload RoutingType
+//
+// x-displayName: "Enable Private Workload RoutingType"
+// Enable Private Workload Routing to CE Type
+type EnablePrivateWorkloadRoutingType struct {
+	// Subnet
+	//
+	// x-displayName: "Subnet"
+	// x-required
+	// Select the Subnet
+	SubnetId string `protobuf:"bytes,3,opt,name=subnet_id,json=subnetId,proto3" json:"subnet_id,omitempty"`
+	// Select VRF
+	//
+	// x-displayName: "Select VRF"
+	// x-required
+	// Select virtual network (VRF) for this interface.
+	// There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which
+	// extend into multiple sites. A site can have 2 Local VRFs, Site Local Outside (SLO), which is
+	// required for every site and Site Local Inside (SLI) which is optional. Global VRFs are
+	// configured via Networking > Segments. A site can have multiple Network Segments (global
+	// VRFs).
+	NetworkOption *views.NetworkSelectType `protobuf:"bytes,2,opt,name=network_option,json=networkOption,proto3" json:"network_option,omitempty"`
+}
+
+func (m *EnablePrivateWorkloadRoutingType) Reset()      { *m = EnablePrivateWorkloadRoutingType{} }
+func (*EnablePrivateWorkloadRoutingType) ProtoMessage() {}
+func (*EnablePrivateWorkloadRoutingType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{4}
+}
+func (m *EnablePrivateWorkloadRoutingType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EnablePrivateWorkloadRoutingType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EnablePrivateWorkloadRoutingType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EnablePrivateWorkloadRoutingType.Merge(m, src)
+}
+func (m *EnablePrivateWorkloadRoutingType) XXX_Size() int {
+	return m.Size()
+}
+func (m *EnablePrivateWorkloadRoutingType) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnablePrivateWorkloadRoutingType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EnablePrivateWorkloadRoutingType proto.InternalMessageInfo
+
+func (m *EnablePrivateWorkloadRoutingType) GetSubnetId() string {
+	if m != nil {
+		return m.SubnetId
+	}
+	return ""
+}
+
+func (m *EnablePrivateWorkloadRoutingType) GetNetworkOption() *views.NetworkSelectType {
+	if m != nil {
+		return m.NetworkOption
 	}
 	return nil
+}
+
+// Transit Gateway
+//
+// x-displayName: "Transit Gateway"
+// Transit Gateway
+type AWSTGWType struct {
+	// Transit Gateway
+	//
+	// x-displayName: "Transit Gateway"
+	// x-example: "tgw-12345678901234567"
+	// x-required
+	// Choose the Transit Gateway
+	TgwId string `protobuf:"bytes,1,opt,name=tgw_id,json=tgwId,proto3" json:"tgw_id,omitempty"`
+	// F5XC Site ASN
+	//
+	// x-displayName: "Customer Edge side Autonomous System Number (ASN)"
+	// x-example: "64501"
+	// x-required
+	// F5XC Site ASN.
+	VolterraSiteAsn uint32 `protobuf:"varint,2,opt,name=volterra_site_asn,json=volterraSiteAsn,proto3" json:"volterra_site_asn,omitempty"`
+}
+
+func (m *AWSTGWType) Reset()      { *m = AWSTGWType{} }
+func (*AWSTGWType) ProtoMessage() {}
+func (*AWSTGWType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{5}
+}
+func (m *AWSTGWType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSTGWType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSTGWType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSTGWType.Merge(m, src)
+}
+func (m *AWSTGWType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSTGWType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSTGWType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSTGWType proto.InternalMessageInfo
+
+func (m *AWSTGWType) GetTgwId() string {
+	if m != nil {
+		return m.TgwId
+	}
+	return ""
+}
+
+func (m *AWSTGWType) GetVolterraSiteAsn() uint32 {
+	if m != nil {
+		return m.VolterraSiteAsn
+	}
+	return 0
 }
 
 // AWSManagedNodeList
@@ -679,7 +836,7 @@ type AWSManagedNodeList struct {
 func (m *AWSManagedNodeList) Reset()      { *m = AWSManagedNodeList{} }
 func (*AWSManagedNodeList) ProtoMessage() {}
 func (*AWSManagedNodeList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1f46c75610d719ed, []int{4}
+	return fileDescriptor_1f46c75610d719ed, []int{6}
 }
 func (m *AWSManagedNodeList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -721,32 +878,33 @@ type AWSManagedNode struct {
 	// x-displayName: "Type"
 	// x-required
 	// x-example: "Control"
-	// Type for this Node, can be Control
+	// Choose to designate this node as control or worker node
 	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
 	// Hostname
 	//
 	// x-displayName: "Hostname"
+	// x-required
 	// Hostname for this Node
 	Hostname string `protobuf:"bytes,2,opt,name=hostname,proto3" json:"hostname,omitempty"`
 	// AWS AZ
 	//
-	// x-displayName: "AWS AZ Name"
+	// x-displayName: "Availablity Zone"
 	// x-required
 	// x-example: "us-west-2a"
-	// AWS availability zone, must be consistent with the selected AWS region.
+	// Choose the Availablity Zone where you want to deploy this node.
 	AwsAzName string `protobuf:"bytes,3,opt,name=aws_az_name,json=awsAzName,proto3" json:"aws_az_name,omitempty"`
 	// AWSOrchestratedInterface
 	//
 	// x-displayName: "Interfaces"
 	// x-required
-	// Interfaces belonging to this node
+	// Interfaces in this CE node
 	InterfaceList []*AWSOrchestratedInterface `protobuf:"bytes,4,rep,name=interface_list,json=interfaceList,proto3" json:"interface_list,omitempty"`
 }
 
 func (m *AWSManagedNode) Reset()      { *m = AWSManagedNode{} }
 func (*AWSManagedNode) ProtoMessage() {}
 func (*AWSManagedNode) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1f46c75610d719ed, []int{5}
+	return fileDescriptor_1f46c75610d719ed, []int{7}
 }
 func (m *AWSManagedNode) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -804,11 +962,6 @@ func (m *AWSManagedNode) GetInterfaceList() []*AWSOrchestratedInterface {
 // x-displayName: "Interfaces"
 // Interfaces belonging to this node
 type AWSOrchestratedInterface struct {
-	// Subnet Choice
-	//
-	// x-displayName: "Specify Subnet"
-	// Select Existing Subnet or Create New
-	Subnet *AWSSubnetChoiceType `protobuf:"bytes,1,opt,name=subnet,proto3" json:"subnet,omitempty"`
 	// Select VRF
 	//
 	// x-displayName: "Select VRF"
@@ -836,12 +989,20 @@ type AWSOrchestratedInterface struct {
 	//	*AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceDisabled
 	//	*AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled
 	SiteToSiteConnectivityInterfaceChoice isAWSOrchestratedInterface_SiteToSiteConnectivityInterfaceChoice `protobuf_oneof:"site_to_site_connectivity_interface_choice"`
+	// AWS Node Interface Configuration Type
+	//
+	// x-displayName: "Configuration"
+	// x-required
+	// Select the interface configuration style you want to adopt. Inherit option will inherit the configuration
+	// from the mapping user did. Override option allows you to choose subnet and security group settings that override
+	// the mappings
+	AwsNodeInterfaceConfiguration *AWSNodeInterfaceConfigurationType `protobuf:"bytes,11,opt,name=aws_node_interface_configuration,json=awsNodeInterfaceConfiguration,proto3" json:"aws_node_interface_configuration,omitempty"`
 }
 
 func (m *AWSOrchestratedInterface) Reset()      { *m = AWSOrchestratedInterface{} }
 func (*AWSOrchestratedInterface) ProtoMessage() {}
 func (*AWSOrchestratedInterface) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1f46c75610d719ed, []int{6}
+	return fileDescriptor_1f46c75610d719ed, []int{8}
 }
 func (m *AWSOrchestratedInterface) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -892,13 +1053,6 @@ func (m *AWSOrchestratedInterface) GetSiteToSiteConnectivityInterfaceChoice() is
 	return nil
 }
 
-func (m *AWSOrchestratedInterface) GetSubnet() *AWSSubnetChoiceType {
-	if m != nil {
-		return m.Subnet
-	}
-	return nil
-}
-
 func (m *AWSOrchestratedInterface) GetNetworkOption() *views.NetworkSelectType {
 	if m != nil {
 		return m.NetworkOption
@@ -927,6 +1081,13 @@ func (m *AWSOrchestratedInterface) GetSiteToSiteConnectivityInterfaceEnabled() *
 	return nil
 }
 
+func (m *AWSOrchestratedInterface) GetAwsNodeInterfaceConfiguration() *AWSNodeInterfaceConfigurationType {
+	if m != nil {
+		return m.AwsNodeInterfaceConfiguration
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AWSOrchestratedInterface) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -935,32 +1096,35 @@ func (*AWSOrchestratedInterface) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// AWS Subnet
+// AWSNodeInterfaceConfigurationType
 //
-// x-displayName: "AWS Subnet"
-// Parameters for subnet
-type AWSSubnetChoiceType struct {
-	// Choice of subnet
+// x-displayName: "AWSNodeInterfaceConfigurationType"
+// Select the interface configuration style you want to adopt. Inherit option will inherit the configuration
+// from the mapping user did. Override option allows you to choose subnet and security group settings that override
+// the mappings
+type AWSNodeInterfaceConfigurationType struct {
+	// Choice of aws node interface configuration
 	//
-	// x-displayName: "Select Existing Subnet or Create New"
-	// x-required
-	// Subnet for the Single interface of the site
+	// x-displayName: "AWS Node Interface Configuration"
+	// Select the interface configuration style you want to adopt. Inherit option will inherit the configuration
+	// from the mapping user did. Override option allows you to choose subnet and security group settings that override
+	// the mappings
 	//
-	// Types that are valid to be assigned to Choice:
-	//	*AWSSubnetChoiceType_SubnetParam
-	//	*AWSSubnetChoiceType_ExistingSubnetId
-	Choice isAWSSubnetChoiceType_Choice `protobuf_oneof:"choice"`
+	// Types that are valid to be assigned to AwsNodeInterfaceConfigurationChoice:
+	//	*AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration
+	//	*AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration
+	AwsNodeInterfaceConfigurationChoice isAWSNodeInterfaceConfigurationType_AwsNodeInterfaceConfigurationChoice `protobuf_oneof:"aws_node_interface_configuration_choice"`
 }
 
-func (m *AWSSubnetChoiceType) Reset()      { *m = AWSSubnetChoiceType{} }
-func (*AWSSubnetChoiceType) ProtoMessage() {}
-func (*AWSSubnetChoiceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1f46c75610d719ed, []int{7}
+func (m *AWSNodeInterfaceConfigurationType) Reset()      { *m = AWSNodeInterfaceConfigurationType{} }
+func (*AWSNodeInterfaceConfigurationType) ProtoMessage() {}
+func (*AWSNodeInterfaceConfigurationType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{9}
 }
-func (m *AWSSubnetChoiceType) XXX_Unmarshal(b []byte) error {
+func (m *AWSNodeInterfaceConfigurationType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AWSSubnetChoiceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *AWSNodeInterfaceConfigurationType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -968,103 +1132,96 @@ func (m *AWSSubnetChoiceType) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 	}
 	return b[:n], nil
 }
-func (m *AWSSubnetChoiceType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AWSSubnetChoiceType.Merge(m, src)
+func (m *AWSNodeInterfaceConfigurationType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSNodeInterfaceConfigurationType.Merge(m, src)
 }
-func (m *AWSSubnetChoiceType) XXX_Size() int {
+func (m *AWSNodeInterfaceConfigurationType) XXX_Size() int {
 	return m.Size()
 }
-func (m *AWSSubnetChoiceType) XXX_DiscardUnknown() {
-	xxx_messageInfo_AWSSubnetChoiceType.DiscardUnknown(m)
+func (m *AWSNodeInterfaceConfigurationType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSNodeInterfaceConfigurationType.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AWSSubnetChoiceType proto.InternalMessageInfo
+var xxx_messageInfo_AWSNodeInterfaceConfigurationType proto.InternalMessageInfo
 
-type isAWSSubnetChoiceType_Choice interface {
-	isAWSSubnetChoiceType_Choice()
+type isAWSNodeInterfaceConfigurationType_AwsNodeInterfaceConfigurationChoice interface {
+	isAWSNodeInterfaceConfigurationType_AwsNodeInterfaceConfigurationChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
 
-type AWSSubnetChoiceType_SubnetParam struct {
-	SubnetParam *AWSCloudSubnetParamType `protobuf:"bytes,1,opt,name=subnet_param,json=subnetParam,proto3,oneof" json:"subnet_param,omitempty"`
+type AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration struct {
+	InheritAwsNodeInterfaceConfiguration *schema.Empty `protobuf:"bytes,2,opt,name=inherit_aws_node_interface_configuration,json=inheritAwsNodeInterfaceConfiguration,proto3,oneof" json:"inherit_aws_node_interface_configuration,omitempty"`
 }
-type AWSSubnetChoiceType_ExistingSubnetId struct {
-	ExistingSubnetId string `protobuf:"bytes,2,opt,name=existing_subnet_id,json=existingSubnetId,proto3,oneof" json:"existing_subnet_id,omitempty"`
+type AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration struct {
+	OverrideAwsNodeInterfaceConfiguration *AWSOverrideNodeInterfaceConfigurationType `protobuf:"bytes,3,opt,name=override_aws_node_interface_configuration,json=overrideAwsNodeInterfaceConfiguration,proto3,oneof" json:"override_aws_node_interface_configuration,omitempty"`
 }
 
-func (*AWSSubnetChoiceType_SubnetParam) isAWSSubnetChoiceType_Choice()      {}
-func (*AWSSubnetChoiceType_ExistingSubnetId) isAWSSubnetChoiceType_Choice() {}
+func (*AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration) isAWSNodeInterfaceConfigurationType_AwsNodeInterfaceConfigurationChoice() {
+}
+func (*AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration) isAWSNodeInterfaceConfigurationType_AwsNodeInterfaceConfigurationChoice() {
+}
 
-func (m *AWSSubnetChoiceType) GetChoice() isAWSSubnetChoiceType_Choice {
+func (m *AWSNodeInterfaceConfigurationType) GetAwsNodeInterfaceConfigurationChoice() isAWSNodeInterfaceConfigurationType_AwsNodeInterfaceConfigurationChoice {
 	if m != nil {
-		return m.Choice
+		return m.AwsNodeInterfaceConfigurationChoice
 	}
 	return nil
 }
 
-func (m *AWSSubnetChoiceType) GetSubnetParam() *AWSCloudSubnetParamType {
-	if x, ok := m.GetChoice().(*AWSSubnetChoiceType_SubnetParam); ok {
-		return x.SubnetParam
+func (m *AWSNodeInterfaceConfigurationType) GetInheritAwsNodeInterfaceConfiguration() *schema.Empty {
+	if x, ok := m.GetAwsNodeInterfaceConfigurationChoice().(*AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration); ok {
+		return x.InheritAwsNodeInterfaceConfiguration
 	}
 	return nil
 }
 
-func (m *AWSSubnetChoiceType) GetExistingSubnetId() string {
-	if x, ok := m.GetChoice().(*AWSSubnetChoiceType_ExistingSubnetId); ok {
-		return x.ExistingSubnetId
+func (m *AWSNodeInterfaceConfigurationType) GetOverrideAwsNodeInterfaceConfiguration() *AWSOverrideNodeInterfaceConfigurationType {
+	if x, ok := m.GetAwsNodeInterfaceConfigurationChoice().(*AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration); ok {
+		return x.OverrideAwsNodeInterfaceConfiguration
 	}
-	return ""
+	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*AWSSubnetChoiceType) XXX_OneofWrappers() []interface{} {
+func (*AWSNodeInterfaceConfigurationType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*AWSSubnetChoiceType_SubnetParam)(nil),
-		(*AWSSubnetChoiceType_ExistingSubnetId)(nil),
+		(*AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration)(nil),
+		(*AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration)(nil),
 	}
 }
 
-// Cloud Subnet Param
+// Override AWS Node Interface Configuration
 //
-// x-displayName: "New Cloud Subnet Parameters"
-// Parameters for creating a new cloud subnet
-type AWSCloudSubnetParamType struct {
-	// Subnet Name
+// x-displayName: "Override AWS Node Interface Configuration"
+// Override AWS Node Interface Configuration
+type AWSOverrideNodeInterfaceConfigurationType struct {
+	// Subnet
 	//
-	// x-displayName: "Subnet Name"
-	// x-example: "subnet-a"
-	// Name for your Subnet
-	//
-	// Types that are valid to be assigned to NameChoice:
-	//	*AWSCloudSubnetParamType_Name
-	//	*AWSCloudSubnetParamType_Autogenerate
-	NameChoice isAWSCloudSubnetParamType_NameChoice `protobuf_oneof:"name_choice"`
-	// IPv4 Subnet
-	//
-	// x-displayName: "IPv4 Subnet"
+	// x-displayName: "Subnet"
 	// x-required
-	// x-example: "10.1.2.0/24"
-	// IPv4 subnet prefix for this subnet
-	Ipv4 string `protobuf:"bytes,4,opt,name=ipv4,proto3" json:"ipv4,omitempty"`
-	// IPv6 Subnet
+	// Choose the subnet associated with this interface
+	SubnetId string `protobuf:"bytes,1,opt,name=subnet_id,json=subnetId,proto3" json:"subnet_id,omitempty"`
+	// Security Group
 	//
-	// x-displayName: "IPv6 Subnet"
-	// x-example: "1234:568:abcd:9100::/64"
-	// IPv6 subnet prefix for this subnet
-	Ipv6 string `protobuf:"bytes,5,opt,name=ipv6,proto3" json:"ipv6,omitempty"`
+	// x-displayName: "Security Group"
+	// x-required
+	// Select the security group associated with this interface
+	SecurityGroup string `protobuf:"bytes,2,opt,name=security_group,json=securityGroup,proto3" json:"security_group,omitempty"`
 }
 
-func (m *AWSCloudSubnetParamType) Reset()      { *m = AWSCloudSubnetParamType{} }
-func (*AWSCloudSubnetParamType) ProtoMessage() {}
-func (*AWSCloudSubnetParamType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1f46c75610d719ed, []int{8}
+func (m *AWSOverrideNodeInterfaceConfigurationType) Reset() {
+	*m = AWSOverrideNodeInterfaceConfigurationType{}
 }
-func (m *AWSCloudSubnetParamType) XXX_Unmarshal(b []byte) error {
+func (*AWSOverrideNodeInterfaceConfigurationType) ProtoMessage() {}
+func (*AWSOverrideNodeInterfaceConfigurationType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{10}
+}
+func (m *AWSOverrideNodeInterfaceConfigurationType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AWSCloudSubnetParamType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *AWSOverrideNodeInterfaceConfigurationType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -1072,99 +1229,352 @@ func (m *AWSCloudSubnetParamType) XXX_Marshal(b []byte, deterministic bool) ([]b
 	}
 	return b[:n], nil
 }
-func (m *AWSCloudSubnetParamType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AWSCloudSubnetParamType.Merge(m, src)
+func (m *AWSOverrideNodeInterfaceConfigurationType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSOverrideNodeInterfaceConfigurationType.Merge(m, src)
 }
-func (m *AWSCloudSubnetParamType) XXX_Size() int {
+func (m *AWSOverrideNodeInterfaceConfigurationType) XXX_Size() int {
 	return m.Size()
 }
-func (m *AWSCloudSubnetParamType) XXX_DiscardUnknown() {
-	xxx_messageInfo_AWSCloudSubnetParamType.DiscardUnknown(m)
+func (m *AWSOverrideNodeInterfaceConfigurationType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSOverrideNodeInterfaceConfigurationType.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AWSCloudSubnetParamType proto.InternalMessageInfo
+var xxx_messageInfo_AWSOverrideNodeInterfaceConfigurationType proto.InternalMessageInfo
 
-type isAWSCloudSubnetParamType_NameChoice interface {
-	isAWSCloudSubnetParamType_NameChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type AWSCloudSubnetParamType_Name struct {
-	Name string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
-}
-type AWSCloudSubnetParamType_Autogenerate struct {
-	Autogenerate *schema.Empty `protobuf:"bytes,3,opt,name=autogenerate,proto3,oneof" json:"autogenerate,omitempty"`
-}
-
-func (*AWSCloudSubnetParamType_Name) isAWSCloudSubnetParamType_NameChoice()         {}
-func (*AWSCloudSubnetParamType_Autogenerate) isAWSCloudSubnetParamType_NameChoice() {}
-
-func (m *AWSCloudSubnetParamType) GetNameChoice() isAWSCloudSubnetParamType_NameChoice {
+func (m *AWSOverrideNodeInterfaceConfigurationType) GetSubnetId() string {
 	if m != nil {
-		return m.NameChoice
+		return m.SubnetId
+	}
+	return ""
+}
+
+func (m *AWSOverrideNodeInterfaceConfigurationType) GetSecurityGroup() string {
+	if m != nil {
+		return m.SecurityGroup
+	}
+	return ""
+}
+
+// AWS Resource Mapping List Type
+//
+// x-displayName: "Resource Mapping List"
+// AWS Resource Mapping List Type
+type AWSResourceMappingListType struct {
+	// AWS Resource Mapping List Type
+	//
+	// x-displayName: "Resource Mapping"
+	// x-required
+	// You can use this section to provide resource mapping for Site Local Outside (SLO), Site Local Inside (SLI) and Segment networks across
+	// availablity zones according to your deployment topology. When resource mapping is provided here, then these resources will be implictly used to
+	// interface configuration. You do not need to provide explicit inputs for interfaces within a CE node.
+	AwsResourceMappings []*AWSResourceMappingType `protobuf:"bytes,1,rep,name=aws_resource_mappings,json=awsResourceMappings,proto3" json:"aws_resource_mappings,omitempty"`
+}
+
+func (m *AWSResourceMappingListType) Reset()      { *m = AWSResourceMappingListType{} }
+func (*AWSResourceMappingListType) ProtoMessage() {}
+func (*AWSResourceMappingListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{11}
+}
+func (m *AWSResourceMappingListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSResourceMappingListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSResourceMappingListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSResourceMappingListType.Merge(m, src)
+}
+func (m *AWSResourceMappingListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSResourceMappingListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSResourceMappingListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSResourceMappingListType proto.InternalMessageInfo
+
+func (m *AWSResourceMappingListType) GetAwsResourceMappings() []*AWSResourceMappingType {
+	if m != nil {
+		return m.AwsResourceMappings
 	}
 	return nil
 }
 
-func (m *AWSCloudSubnetParamType) GetName() string {
-	if x, ok := m.GetNameChoice().(*AWSCloudSubnetParamType_Name); ok {
-		return x.Name
-	}
-	return ""
+// AWS Resource Mapping Type
+//
+// x-displayName: "Resource Mapping"
+// AWS Resource Mapping Type
+type AWSResourceMappingType struct {
+	// Network Type
+	//
+	// x-displayName: "Select VRF"
+	// x-required
+	// Choose the virtual network (VRF) to create mapping for
+	NetworkOption *views.NetworkSelectType `protobuf:"bytes,1,opt,name=network_option,json=networkOption,proto3" json:"network_option,omitempty"`
+	// AWS Resource Mapping Type
+	//
+	// x-displayName: "Resources"
+	// x-required
+	// Choose your existing AWS resources
+	AwsResources []*AWSResources `protobuf:"bytes,2,rep,name=aws_resources,json=awsResources,proto3" json:"aws_resources,omitempty"`
 }
 
-func (m *AWSCloudSubnetParamType) GetAutogenerate() *schema.Empty {
-	if x, ok := m.GetNameChoice().(*AWSCloudSubnetParamType_Autogenerate); ok {
-		return x.Autogenerate
+func (m *AWSResourceMappingType) Reset()      { *m = AWSResourceMappingType{} }
+func (*AWSResourceMappingType) ProtoMessage() {}
+func (*AWSResourceMappingType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{12}
+}
+func (m *AWSResourceMappingType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSResourceMappingType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSResourceMappingType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSResourceMappingType.Merge(m, src)
+}
+func (m *AWSResourceMappingType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSResourceMappingType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSResourceMappingType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSResourceMappingType proto.InternalMessageInfo
+
+func (m *AWSResourceMappingType) GetNetworkOption() *views.NetworkSelectType {
+	if m != nil {
+		return m.NetworkOption
 	}
 	return nil
 }
 
-func (m *AWSCloudSubnetParamType) GetIpv4() string {
+func (m *AWSResourceMappingType) GetAwsResources() []*AWSResources {
 	if m != nil {
-		return m.Ipv4
+		return m.AwsResources
+	}
+	return nil
+}
+
+// AWS IGW choice
+//
+// x-displayName: "AWS IGW choice"
+// With this option, egress site traffic will be routed through an Internet Gateway.
+type AWSIGWGatewayType struct {
+	// Internet Gateway
+	//
+	// x-displayName: "Internet Gateway"
+	// x-required
+	// Choose your Internet Gateway
+	IgwGwId string `protobuf:"bytes,1,opt,name=igw_gw_id,json=igwGwId,proto3" json:"igw_gw_id,omitempty"`
+}
+
+func (m *AWSIGWGatewayType) Reset()      { *m = AWSIGWGatewayType{} }
+func (*AWSIGWGatewayType) ProtoMessage() {}
+func (*AWSIGWGatewayType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{13}
+}
+func (m *AWSIGWGatewayType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSIGWGatewayType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSIGWGatewayType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSIGWGatewayType.Merge(m, src)
+}
+func (m *AWSIGWGatewayType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSIGWGatewayType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSIGWGatewayType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSIGWGatewayType proto.InternalMessageInfo
+
+func (m *AWSIGWGatewayType) GetIgwGwId() string {
+	if m != nil {
+		return m.IgwGwId
 	}
 	return ""
 }
 
-func (m *AWSCloudSubnetParamType) GetIpv6() string {
+// AWS NAT Gateway choice
+//
+// x-displayName: "AWS NAT Gateway choice"
+// With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.
+type AWSNATGatewayType struct {
+	// NAT Gateway
+	//
+	// x-required
+	// x-displayName: "NAT Gateway"
+	// Choose your NAT Gateway
+	NatGwId []string `protobuf:"bytes,2,rep,name=nat_gw_id,json=natGwId,proto3" json:"nat_gw_id,omitempty"`
+}
+
+func (m *AWSNATGatewayType) Reset()      { *m = AWSNATGatewayType{} }
+func (*AWSNATGatewayType) ProtoMessage() {}
+func (*AWSNATGatewayType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{14}
+}
+func (m *AWSNATGatewayType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSNATGatewayType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSNATGatewayType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSNATGatewayType.Merge(m, src)
+}
+func (m *AWSNATGatewayType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSNATGatewayType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSNATGatewayType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSNATGatewayType proto.InternalMessageInfo
+
+func (m *AWSNATGatewayType) GetNatGwId() []string {
 	if m != nil {
-		return m.Ipv6
+		return m.NatGwId
+	}
+	return nil
+}
+
+// AWS Resource Mapping Type
+//
+// x-displayName: "Resources"
+// Resources
+type AWSResources struct {
+	// Availablity Zone
+	//
+	// x-displayName: "Availablity Zone"
+	// x-example: "us-east-1"
+	// x-required
+	// Choose the availablity zone
+	AvailabilityZone string `protobuf:"bytes,1,opt,name=availability_zone,json=availabilityZone,proto3" json:"availability_zone,omitempty"`
+	// Subnet
+	//
+	// x-displayName: "Subnet"
+	// x-example: "subnet-12345678901234567"
+	// x-required
+	// Choose a existing subnet
+	SubnetId string `protobuf:"bytes,2,opt,name=subnet_id,json=subnetId,proto3" json:"subnet_id,omitempty"`
+	// Security Group
+	//
+	// x-displayName: "Security Group"
+	// x-required
+	// Choose a security group
+	SecurityGroup string `protobuf:"bytes,3,opt,name=security_group,json=securityGroup,proto3" json:"security_group,omitempty"`
+}
+
+func (m *AWSResources) Reset()      { *m = AWSResources{} }
+func (*AWSResources) ProtoMessage() {}
+func (*AWSResources) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f46c75610d719ed, []int{15}
+}
+func (m *AWSResources) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSResources) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSResources) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSResources.Merge(m, src)
+}
+func (m *AWSResources) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSResources) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSResources.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSResources proto.InternalMessageInfo
+
+func (m *AWSResources) GetAvailabilityZone() string {
+	if m != nil {
+		return m.AvailabilityZone
 	}
 	return ""
 }
 
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*AWSCloudSubnetParamType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*AWSCloudSubnetParamType_Name)(nil),
-		(*AWSCloudSubnetParamType_Autogenerate)(nil),
+func (m *AWSResources) GetSubnetId() string {
+	if m != nil {
+		return m.SubnetId
 	}
+	return ""
+}
+
+func (m *AWSResources) GetSecurityGroup() string {
+	if m != nil {
+		return m.SecurityGroup
+	}
+	return ""
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.views.securemesh_site_v2.NetworkType", NetworkType_name, NetworkType_value)
+	golang_proto.RegisterEnum("ves.io.schema.views.securemesh_site_v2.NetworkType", NetworkType_name, NetworkType_value)
 	proto.RegisterType((*AWSManagedMode)(nil), "ves.io.schema.views.securemesh_site_v2.AWSManagedMode")
 	golang_proto.RegisterType((*AWSManagedMode)(nil), "ves.io.schema.views.securemesh_site_v2.AWSManagedMode")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.securemesh_site_v2.AWSManagedMode.TagsEntry")
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.securemesh_site_v2.AWSManagedMode.TagsEntry")
-	proto.RegisterType((*TGWType)(nil), "ves.io.schema.views.securemesh_site_v2.TGWType")
-	golang_proto.RegisterType((*TGWType)(nil), "ves.io.schema.views.securemesh_site_v2.TGWType")
-	proto.RegisterType((*SingleInterface)(nil), "ves.io.schema.views.securemesh_site_v2.SingleInterface")
-	golang_proto.RegisterType((*SingleInterface)(nil), "ves.io.schema.views.securemesh_site_v2.SingleInterface")
-	proto.RegisterType((*MultipleInterface)(nil), "ves.io.schema.views.securemesh_site_v2.MultipleInterface")
-	golang_proto.RegisterType((*MultipleInterface)(nil), "ves.io.schema.views.securemesh_site_v2.MultipleInterface")
+	proto.RegisterType((*AWSCloudLinkConfigType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSCloudLinkConfigType")
+	golang_proto.RegisterType((*AWSCloudLinkConfigType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSCloudLinkConfigType")
+	proto.RegisterType((*EnablePrivateWorkloadRoutingListType)(nil), "ves.io.schema.views.securemesh_site_v2.EnablePrivateWorkloadRoutingListType")
+	golang_proto.RegisterType((*EnablePrivateWorkloadRoutingListType)(nil), "ves.io.schema.views.securemesh_site_v2.EnablePrivateWorkloadRoutingListType")
+	proto.RegisterType((*AWSDiskEncryptionKeyType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSDiskEncryptionKeyType")
+	golang_proto.RegisterType((*AWSDiskEncryptionKeyType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSDiskEncryptionKeyType")
+	proto.RegisterType((*EnablePrivateWorkloadRoutingType)(nil), "ves.io.schema.views.securemesh_site_v2.EnablePrivateWorkloadRoutingType")
+	golang_proto.RegisterType((*EnablePrivateWorkloadRoutingType)(nil), "ves.io.schema.views.securemesh_site_v2.EnablePrivateWorkloadRoutingType")
+	proto.RegisterType((*AWSTGWType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSTGWType")
+	golang_proto.RegisterType((*AWSTGWType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSTGWType")
 	proto.RegisterType((*AWSManagedNodeList)(nil), "ves.io.schema.views.securemesh_site_v2.AWSManagedNodeList")
 	golang_proto.RegisterType((*AWSManagedNodeList)(nil), "ves.io.schema.views.securemesh_site_v2.AWSManagedNodeList")
 	proto.RegisterType((*AWSManagedNode)(nil), "ves.io.schema.views.securemesh_site_v2.AWSManagedNode")
 	golang_proto.RegisterType((*AWSManagedNode)(nil), "ves.io.schema.views.securemesh_site_v2.AWSManagedNode")
 	proto.RegisterType((*AWSOrchestratedInterface)(nil), "ves.io.schema.views.securemesh_site_v2.AWSOrchestratedInterface")
 	golang_proto.RegisterType((*AWSOrchestratedInterface)(nil), "ves.io.schema.views.securemesh_site_v2.AWSOrchestratedInterface")
-	proto.RegisterType((*AWSSubnetChoiceType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSSubnetChoiceType")
-	golang_proto.RegisterType((*AWSSubnetChoiceType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSSubnetChoiceType")
-	proto.RegisterType((*AWSCloudSubnetParamType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSCloudSubnetParamType")
-	golang_proto.RegisterType((*AWSCloudSubnetParamType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSCloudSubnetParamType")
+	proto.RegisterType((*AWSNodeInterfaceConfigurationType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSNodeInterfaceConfigurationType")
+	golang_proto.RegisterType((*AWSNodeInterfaceConfigurationType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSNodeInterfaceConfigurationType")
+	proto.RegisterType((*AWSOverrideNodeInterfaceConfigurationType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSOverrideNodeInterfaceConfigurationType")
+	golang_proto.RegisterType((*AWSOverrideNodeInterfaceConfigurationType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSOverrideNodeInterfaceConfigurationType")
+	proto.RegisterType((*AWSResourceMappingListType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSResourceMappingListType")
+	golang_proto.RegisterType((*AWSResourceMappingListType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSResourceMappingListType")
+	proto.RegisterType((*AWSResourceMappingType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSResourceMappingType")
+	golang_proto.RegisterType((*AWSResourceMappingType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSResourceMappingType")
+	proto.RegisterType((*AWSIGWGatewayType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSIGWGatewayType")
+	golang_proto.RegisterType((*AWSIGWGatewayType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSIGWGatewayType")
+	proto.RegisterType((*AWSNATGatewayType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSNATGatewayType")
+	golang_proto.RegisterType((*AWSNATGatewayType)(nil), "ves.io.schema.views.securemesh_site_v2.AWSNATGatewayType")
+	proto.RegisterType((*AWSResources)(nil), "ves.io.schema.views.securemesh_site_v2.AWSResources")
+	golang_proto.RegisterType((*AWSResources)(nil), "ves.io.schema.views.securemesh_site_v2.AWSResources")
 }
 
 func init() {
@@ -1175,167 +1585,204 @@ func init() {
 }
 
 var fileDescriptor_1f46c75610d719ed = []byte{
-	// 2513 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x58, 0x5d, 0x6c, 0xdb, 0xd6,
-	0xf5, 0xf7, 0x95, 0x28, 0x99, 0x3a, 0xfe, 0xa2, 0x6f, 0xe2, 0x84, 0xb1, 0x53, 0x55, 0x31, 0x12,
-	0x47, 0x76, 0x69, 0xd9, 0xa2, 0xfc, 0x15, 0x17, 0xed, 0xbf, 0x96, 0x9b, 0xc6, 0x11, 0xf2, 0xe1,
-	0xd2, 0xfe, 0x27, 0x58, 0xd6, 0x56, 0xa0, 0xc9, 0x6b, 0x9a, 0x8d, 0x44, 0x6a, 0x24, 0x25, 0xc7,
-	0xd9, 0xb2, 0x05, 0x7b, 0xd8, 0xd6, 0x3d, 0x15, 0xc5, 0x1e, 0x86, 0x00, 0x7b, 0x2f, 0xf6, 0xb4,
-	0xe7, 0x32, 0x05, 0x8c, 0x02, 0x03, 0x86, 0x3e, 0xe9, 0xb1, 0xeb, 0x53, 0xab, 0x3c, 0xac, 0xdd,
-	0xcb, 0x8a, 0x61, 0x0f, 0x7d, 0x18, 0xb0, 0xe1, 0x5e, 0x52, 0xb2, 0x64, 0x2b, 0x4e, 0x52, 0x60,
-	0x4f, 0xa2, 0x78, 0xcf, 0xef, 0x77, 0x0e, 0xcf, 0x39, 0xf7, 0x9e, 0x1f, 0x09, 0x0b, 0x35, 0xe2,
-	0x66, 0x4c, 0x7b, 0xc6, 0xd5, 0x76, 0x48, 0x59, 0x9d, 0xa9, 0x99, 0x64, 0xd7, 0x9d, 0x71, 0x89,
-	0x56, 0x75, 0x48, 0x99, 0xb8, 0x3b, 0x45, 0xd7, 0xf4, 0x48, 0xb1, 0x26, 0xcf, 0xa8, 0xbb, 0x6e,
-	0xd1, 0xdb, 0xab, 0x10, 0x37, 0x53, 0x71, 0x6c, 0xcf, 0xc6, 0x13, 0x01, 0x2e, 0x13, 0xe0, 0x32,
-	0x0c, 0x97, 0x39, 0x8a, 0x1b, 0x9d, 0x36, 0x4c, 0x6f, 0xa7, 0xba, 0x95, 0xd1, 0xec, 0xf2, 0x8c,
-	0x61, 0x1b, 0xf6, 0x0c, 0x83, 0x6f, 0x55, 0xb7, 0xd9, 0x3f, 0xf6, 0x87, 0x5d, 0x05, 0xb4, 0xa3,
-	0xa7, 0x3b, 0xc3, 0xb1, 0x88, 0x17, 0x2e, 0xbc, 0x72, 0x64, 0x61, 0xd7, 0x76, 0xee, 0x16, 0x4d,
-	0xcb, 0x23, 0xce, 0xb6, 0xaa, 0x91, 0x99, 0xb6, 0xe0, 0x46, 0xc7, 0x3a, 0x8d, 0xed, 0x8a, 0x67,
-	0xda, 0x56, 0x73, 0xf1, 0x4c, 0xe7, 0x62, 0x3b, 0xee, 0xec, 0xa1, 0x64, 0xa8, 0x25, 0x53, 0x57,
-	0x3d, 0x12, 0xae, 0xa6, 0x8e, 0xa6, 0xaa, 0xd8, 0x49, 0x7d, 0xbe, 0x6b, 0x32, 0x69, 0x26, 0xda,
-	0xbd, 0xbc, 0xdc, 0xcd, 0xaa, 0xcd, 0x60, 0xfc, 0x77, 0x18, 0x06, 0x57, 0x6e, 0x6f, 0x5c, 0x57,
-	0x2d, 0xd5, 0x20, 0xfa, 0x75, 0x5b, 0x27, 0x38, 0x07, 0x40, 0x2b, 0xe0, 0x10, 0xc3, 0xb4, 0x2d,
-	0x11, 0xa5, 0x50, 0x3a, 0x91, 0x3f, 0xf9, 0xbd, 0x8f, 0x7a, 0x3e, 0x79, 0x8c, 0xfa, 0xd3, 0x68,
-	0x16, 0x2d, 0xc7, 0x35, 0xdb, 0xda, 0x36, 0x0d, 0x25, 0xa1, 0xee, 0xba, 0x0a, 0x33, 0xc3, 0x6f,
-	0x41, 0xaf, 0x45, 0x76, 0x8b, 0xb5, 0x8a, 0x26, 0x46, 0x53, 0x28, 0xdd, 0x27, 0x5f, 0xc8, 0x74,
-	0xab, 0xda, 0xca, 0xed, 0x8d, 0x5b, 0xeb, 0xab, 0xeb, 0xaa, 0xa3, 0x96, 0xdd, 0xcd, 0xbd, 0x0a,
-	0xc9, 0x73, 0x7f, 0x7a, 0x8c, 0xd0, 0x5a, 0x8f, 0x12, 0xb7, 0xc8, 0xee, 0xad, 0x8a, 0x86, 0x35,
-	0x88, 0xd7, 0x2a, 0x5a, 0xd1, 0xd4, 0x45, 0x8e, 0x39, 0x2e, 0x84, 0x8e, 0x07, 0x67, 0xd1, 0x32,
-	0x68, 0x25, 0xbb, 0xaa, 0x4f, 0xeb, 0xaa, 0xa7, 0x7e, 0xf2, 0xed, 0x7e, 0x94, 0x73, 0x22, 0xe2,
-	0x1b, 0xf4, 0x62, 0xc2, 0x39, 0x2f, 0x8f, 0xbf, 0x97, 0xae, 0x55, 0xb4, 0xe9, 0xc9, 0xf4, 0x8f,
-	0xd5, 0xe9, 0xfb, 0xb3, 0xd3, 0x97, 0xde, 0xfd, 0xe9, 0xd2, 0x83, 0x9f, 0xb5, 0xae, 0xb3, 0x8b,
-	0x0f, 0x26, 0xcf, 0xaf, 0xf5, 0x28, 0xb1, 0x5a, 0x45, 0xbb, 0xaa, 0x63, 0x02, 0x3c, 0x7d, 0x42,
-	0xcd, 0x21, 0xba, 0x18, 0x67, 0xd1, 0x8e, 0x77, 0x8d, 0xf6, 0xe6, 0xd6, 0xfb, 0x44, 0xf3, 0x14,
-	0xb2, 0xcd, 0x42, 0x9d, 0xf8, 0xe3, 0x83, 0x61, 0x16, 0x01, 0x03, 0x12, 0xcb, 0x33, 0xd5, 0x92,
-	0x4b, 0x43, 0xe3, 0x51, 0x47, 0x56, 0x7a, 0xd5, 0x5d, 0x77, 0xd5, 0x21, 0x3a, 0xfe, 0x0d, 0x02,
-	0xce, 0x53, 0x0d, 0x57, 0xec, 0x4d, 0x45, 0xd3, 0x7d, 0xf2, 0x1b, 0x99, 0xe7, 0xeb, 0xe3, 0x4c,
-	0x67, 0x3d, 0x32, 0x9b, 0xaa, 0xe1, 0x5e, 0xb6, 0x3c, 0x67, 0x2f, 0x2f, 0xd3, 0xa7, 0x4d, 0x3c,
-	0x42, 0xf1, 0x71, 0xfa, 0xec, 0xbf, 0xa0, 0xff, 0x62, 0x8f, 0x50, 0x44, 0x48, 0xd3, 0x2b, 0x78,
-	0x84, 0x7a, 0xa7, 0x62, 0x4e, 0x54, 0xfc, 0x0f, 0x6a, 0x7c, 0xf5, 0xe7, 0x68, 0xfc, 0xb7, 0x8f,
-	0x51, 0x84, 0xef, 0x51, 0x58, 0x04, 0xf8, 0xe3, 0x08, 0x0c, 0x98, 0x96, 0xeb, 0xa9, 0x96, 0x16,
-	0x34, 0x88, 0xc8, 0xb3, 0xf4, 0xfe, 0x32, 0xf2, 0xa5, 0x8f, 0x12, 0x5e, 0x2e, 0x73, 0xaf, 0xa4,
-	0x3a, 0x06, 0xa1, 0xc9, 0xfe, 0xe8, 0x31, 0x7a, 0x82, 0x60, 0x0e, 0x0e, 0xee, 0xe2, 0x8b, 0xe9,
-	0xb9, 0xd4, 0xbd, 0x54, 0x6d, 0x75, 0xfd, 0xff, 0xa5, 0x54, 0x76, 0xe1, 0x4a, 0x3e, 0xa5, 0xac,
-	0x5c, 0x9f, 0x4c, 0x95, 0x89, 0x6e, 0x56, 0xcb, 0xa9, 0x0a, 0x71, 0xb6, 0x6d, 0xa7, 0x4c, 0x99,
-	0x21, 0x07, 0xe0, 0xe5, 0x32, 0x72, 0x08, 0xbb, 0x90, 0x5e, 0x6a, 0xc1, 0x72, 0x72, 0x13, 0xb6,
-	0x63, 0x1a, 0x3b, 0x1d, 0xa0, 0x4b, 0x00, 0xe5, 0xf9, 0xcc, 0x5c, 0x08, 0x7a, 0x25, 0x9d, 0x5d,
-	0x68, 0xa1, 0x16, 0xe6, 0x9a, 0xa8, 0x1a, 0x71, 0xf6, 0x8e, 0x42, 0x5f, 0x65, 0xd0, 0xa5, 0x10,
-	0x3a, 0x9d, 0xce, 0xc9, 0x0c, 0xe8, 0xa6, 0xee, 0xa5, 0xb2, 0xf2, 0x52, 0xea, 0x58, 0x70, 0xab,
-	0x85, 0x94, 0xfe, 0x66, 0x66, 0x68, 0x99, 0xb1, 0x0c, 0x09, 0xdd, 0x74, 0xef, 0x16, 0x5d, 0xf3,
-	0x3e, 0x11, 0xfb, 0x52, 0x28, 0x3d, 0x90, 0x1f, 0xf9, 0xd2, 0x47, 0x91, 0xa5, 0x59, 0xd6, 0x8a,
-	0xdf, 0xee, 0x47, 0xe3, 0x53, 0x9c, 0xf8, 0xf0, 0x5f, 0x51, 0x85, 0xa7, 0x76, 0x1b, 0xe6, 0x7d,
-	0x82, 0xdf, 0x82, 0x13, 0xdb, 0xf3, 0xf7, 0xb4, 0x22, 0x2b, 0xa6, 0xe9, 0xed, 0x15, 0x0d, 0xc7,
-	0xae, 0x56, 0xc4, 0x01, 0xd6, 0x5b, 0x27, 0x0f, 0xd5, 0xfd, 0x72, 0xb9, 0xe2, 0xed, 0xad, 0x21,
-	0x65, 0x98, 0x42, 0x36, 0x42, 0xc4, 0x15, 0x0a, 0xc0, 0xef, 0xc0, 0x88, 0x56, 0x75, 0x3d, 0xbb,
-	0x7c, 0x98, 0x69, 0x90, 0x31, 0x4d, 0x74, 0xed, 0xa0, 0x0e, 0x0a, 0xfa, 0x08, 0x6b, 0x48, 0x39,
-	0x11, 0xd0, 0x74, 0xb2, 0x5f, 0x83, 0x53, 0xc4, 0x70, 0x88, 0xeb, 0x16, 0x0d, 0xd5, 0x23, 0xbb,
-	0xea, 0x5e, 0x51, 0x27, 0xdb, 0x6a, 0xb5, 0xe4, 0x89, 0xc2, 0x31, 0x81, 0x46, 0x94, 0x93, 0x01,
-	0xea, 0x4a, 0x00, 0x7a, 0x33, 0xc0, 0x60, 0x05, 0x06, 0x42, 0x36, 0x4b, 0xf5, 0x8a, 0xc6, 0xae,
-	0x38, 0xcc, 0x48, 0xa4, 0xa7, 0xed, 0xfb, 0x1b, 0x2b, 0x9b, 0x21, 0x83, 0xb6, 0x63, 0x9b, 0x41,
-	0xb2, 0xd7, 0x22, 0x4a, 0x5f, 0x40, 0x72, 0x43, 0xf5, 0xae, 0xec, 0xe2, 0x9f, 0x43, 0x32, 0xe4,
-	0xac, 0x99, 0x8e, 0x57, 0x55, 0x4b, 0xc5, 0x8a, 0x63, 0xd6, 0x54, 0x8f, 0x34, 0x23, 0x16, 0x31,
-	0x73, 0xb2, 0xf8, 0xd4, 0xc3, 0x25, 0x80, 0xad, 0x07, 0xa8, 0x6e, 0xfe, 0xc6, 0x02, 0x07, 0x5d,
-	0x0d, 0xf1, 0x1d, 0x78, 0xa9, 0xe9, 0x50, 0xb3, 0x2d, 0x8b, 0x68, 0x9e, 0x59, 0xa3, 0x45, 0xd0,
-	0x4d, 0x57, 0xdd, 0x2a, 0x11, 0x5d, 0x3c, 0x7d, 0x4c, 0xa2, 0xa2, 0xca, 0x58, 0x08, 0x5e, 0x6d,
-	0xc3, 0xbe, 0x19, 0x42, 0xf1, 0x16, 0x9c, 0xec, 0xc6, 0x2d, 0x8a, 0x8c, 0x72, 0xba, 0xeb, 0x13,
-	0xad, 0x77, 0xf0, 0xad, 0xb2, 0xf3, 0x85, 0x3d, 0x47, 0x54, 0x39, 0xd1, 0xc5, 0x17, 0xd6, 0x41,
-	0x70, 0x4d, 0xcb, 0x28, 0x91, 0x83, 0x61, 0x25, 0x8e, 0x1d, 0x93, 0xb1, 0x2e, 0x87, 0xcf, 0x06,
-	0xc3, 0x5f, 0x6d, 0xc2, 0xd7, 0x38, 0x65, 0xc8, 0xed, 0xbc, 0x85, 0xdf, 0x07, 0x5c, 0xae, 0x96,
-	0x3c, 0xb3, 0xd2, 0xe1, 0xe7, 0x2c, 0xf3, 0x73, 0xe9, 0x79, 0xfd, 0x5c, 0x0f, 0x19, 0xda, 0x3d,
-	0x0d, 0x97, 0x0f, 0xdf, 0xc4, 0x32, 0xf0, 0xad, 0xe4, 0x9f, 0x3b, 0x26, 0xf9, 0x31, 0xa5, 0x65,
-	0x87, 0x57, 0x21, 0xea, 0x19, 0xbb, 0xe2, 0x38, 0x33, 0x9f, 0x79, 0xde, 0x80, 0x36, 0xaf, 0xdc,
-	0x66, 0xa9, 0x8d, 0x29, 0x14, 0x3d, 0xba, 0x08, 0x89, 0xd6, 0xc1, 0x8b, 0x05, 0x88, 0xde, 0x25,
-	0x7b, 0xc1, 0x2c, 0x54, 0xe8, 0x25, 0x3e, 0x09, 0xb1, 0x9a, 0x5a, 0xaa, 0x12, 0x31, 0xc2, 0xee,
-	0x05, 0x7f, 0x96, 0x23, 0x4b, 0x68, 0xb9, 0xfa, 0x99, 0x8f, 0x7e, 0x02, 0x29, 0x18, 0x59, 0xb9,
-	0xbd, 0x91, 0x5a, 0x3d, 0x98, 0x14, 0xa9, 0x89, 0xd4, 0xad, 0xf5, 0x55, 0xdc, 0xbb, 0x20, 0x65,
-	0x25, 0x59, 0x5a, 0x84, 0x51, 0x18, 0xba, 0x61, 0xeb, 0x24, 0xb5, 0xee, 0xd8, 0x15, 0xe2, 0x78,
-	0x26, 0x71, 0x71, 0xef, 0x92, 0x94, 0xcd, 0x4a, 0xf2, 0x02, 0x9c, 0x05, 0x61, 0x95, 0x4e, 0x9a,
-	0xd4, 0x8d, 0x40, 0x7b, 0x98, 0x96, 0x81, 0xf9, 0xac, 0x2c, 0x65, 0xe7, 0x25, 0x59, 0x86, 0x13,
-	0x30, 0x10, 0xac, 0x86, 0xb5, 0xc7, 0x91, 0x9c, 0x9c, 0xbf, 0x00, 0xd8, 0x25, 0x4e, 0xcd, 0xd4,
-	0x08, 0x1d, 0xc2, 0xc5, 0xa0, 0xe7, 0xf1, 0xd0, 0xbe, 0x8f, 0xa2, 0x75, 0x1f, 0x45, 0x1a, 0x3e,
-	0x8a, 0xe6, 0xa4, 0xb9, 0xfc, 0x14, 0x8c, 0x74, 0x1e, 0x2d, 0x4d, 0xcb, 0xe1, 0x7d, 0x1f, 0x0d,
-	0xd4, 0x7d, 0xd4, 0xdf, 0xf0, 0x51, 0x2c, 0x9b, 0x93, 0xb2, 0x73, 0xf9, 0x2c, 0x8c, 0x1c, 0x3a,
-	0x2f, 0x42, 0x5b, 0x71, 0xdf, 0x47, 0x42, 0xdd, 0x47, 0x43, 0x0d, 0x1f, 0xf1, 0xd9, 0x05, 0x29,
-	0xbb, 0x28, 0x65, 0x97, 0xbe, 0xf1, 0x11, 0xca, 0xcf, 0xc2, 0x58, 0xd7, 0x0d, 0xd4, 0xe6, 0xe4,
-	0x74, 0xdd, 0x47, 0xa7, 0xa8, 0x13, 0x39, 0x27, 0xc9, 0x73, 0xf9, 0x71, 0x48, 0xb4, 0x54, 0x0b,
-	0x1e, 0xd9, 0xf7, 0xd1, 0x58, 0xdd, 0x47, 0xa3, 0x6c, 0x7d, 0x51, 0x92, 0x03, 0xd6, 0x0c, 0x9c,
-	0x09, 0x07, 0x6f, 0xc0, 0x59, 0x54, 0x3d, 0x4f, 0xd5, 0x76, 0xca, 0xc4, 0xf2, 0x5c, 0xc6, 0x79,
-	0xae, 0xee, 0xa3, 0x14, 0xc5, 0xe4, 0x72, 0x52, 0x6e, 0xae, 0xc0, 0xf1, 0x11, 0x21, 0x5a, 0xe0,
-	0xf8, 0x84, 0x00, 0x05, 0x8e, 0xef, 0x17, 0x06, 0x0a, 0x1c, 0x3f, 0x24, 0x08, 0x05, 0x8e, 0x3f,
-	0x25, 0x9c, 0x2e, 0x70, 0xfc, 0x19, 0x61, 0xb4, 0xc0, 0xf1, 0xa3, 0xc2, 0x58, 0x81, 0xe3, 0x5f,
-	0x12, 0x92, 0x05, 0x8e, 0x4f, 0x0a, 0x2f, 0x17, 0x38, 0xfe, 0x65, 0x21, 0x55, 0xe0, 0xf8, 0x94,
-	0x70, 0x6e, 0xfc, 0xdf, 0x11, 0xe8, 0x0d, 0x1b, 0x02, 0xbf, 0x16, 0x48, 0x1b, 0xda, 0x52, 0x91,
-	0x63, 0xc4, 0xc2, 0xe6, 0x95, 0xdb, 0x07, 0xba, 0x26, 0x54, 0x34, 0x9b, 0xc6, 0x2e, 0xbe, 0x0a,
-	0xfd, 0xe4, 0x9e, 0xe9, 0x7a, 0xa6, 0x65, 0x30, 0x8e, 0x40, 0x1e, 0x9d, 0xef, 0xca, 0x71, 0x39,
-	0x34, 0x6c, 0xf6, 0x62, 0x8f, 0xd2, 0xd7, 0xc4, 0x52, 0xaa, 0x3c, 0x0c, 0x3b, 0x84, 0x56, 0x99,
-	0xe8, 0x94, 0xaa, 0xa8, 0x99, 0xba, 0x23, 0xc6, 0x8e, 0x1d, 0x32, 0x43, 0x4d, 0xc0, 0xa6, 0xb1,
-	0xbb, 0x6a, 0xea, 0x0e, 0xbe, 0x06, 0x7c, 0x0b, 0x1a, 0x68, 0x9f, 0xc9, 0xae, 0xa1, 0xb0, 0x0e,
-	0xdb, 0xa8, 0x6e, 0x59, 0xc4, 0x63, 0x8f, 0xd5, 0xa6, 0xd6, 0x90, 0xd2, 0xeb, 0x05, 0x6c, 0xf9,
-	0x73, 0x00, 0x8c, 0x2d, 0x28, 0xef, 0x89, 0x7d, 0x1f, 0x45, 0xea, 0x3e, 0x42, 0xb4, 0xdb, 0x64,
-	0x29, 0xc7, 0x8a, 0x37, 0x01, 0x43, 0x4d, 0x87, 0xed, 0x76, 0xb1, 0xba, 0x8f, 0x38, 0x6a, 0x37,
-	0x2f, 0x2d, 0x50, 0xbb, 0x02, 0xc7, 0x23, 0x21, 0x52, 0xe0, 0x78, 0x4e, 0x88, 0x8d, 0x57, 0x60,
-	0xe8, 0xd0, 0x39, 0x84, 0xdf, 0x85, 0x84, 0x65, 0xeb, 0xa4, 0x58, 0x32, 0x5d, 0x8f, 0x6d, 0xc4,
-	0x3e, 0x79, 0xf9, 0xc5, 0x05, 0x15, 0xdd, 0x71, 0xd7, 0x4c, 0xd7, 0xcb, 0x73, 0xdf, 0xf9, 0x08,
-	0x29, 0xbc, 0x15, 0xfe, 0x1f, 0x77, 0x60, 0xf8, 0xc8, 0x89, 0xf4, 0xbf, 0xf6, 0xf9, 0x10, 0x01,
-	0x3e, 0x6a, 0x86, 0xdf, 0xef, 0xf4, 0x4a, 0xa5, 0xe3, 0xc2, 0x0f, 0xf3, 0x9a, 0x1f, 0x61, 0x72,
-	0xe5, 0x23, 0x14, 0x15, 0x1e, 0x22, 0xa6, 0x16, 0x3f, 0x42, 0x11, 0xb1, 0x3d, 0x84, 0x4f, 0xa3,
-	0xed, 0xf2, 0x9f, 0x62, 0x70, 0x1a, 0x38, 0x26, 0x10, 0x43, 0xe1, 0xff, 0xe1, 0xa7, 0x88, 0x41,
-	0xfb, 0x9c, 0x84, 0xd2, 0xbb, 0x6a, 0x5b, 0x9e, 0x63, 0x97, 0x14, 0x66, 0x81, 0xa7, 0x80, 0xdf,
-	0xb1, 0x5d, 0xcf, 0x52, 0xcb, 0xe1, 0x31, 0x98, 0x1f, 0x6c, 0x5a, 0x53, 0x1d, 0xfa, 0x90, 0x53,
-	0x5a, 0xeb, 0x78, 0x09, 0xfa, 0xa8, 0xe4, 0x56, 0xef, 0x17, 0x99, 0x79, 0x94, 0x99, 0x8b, 0xa1,
-	0xb8, 0x17, 0x78, 0xd4, 0x29, 0xef, 0xd9, 0x9b, 0xc5, 0xca, 0xfd, 0x1b, 0x14, 0xf9, 0x6b, 0x04,
-	0x83, 0xad, 0x29, 0x13, 0x24, 0x85, 0x7b, 0x61, 0x3d, 0x7d, 0xd3, 0xd1, 0x76, 0x88, 0xeb, 0x39,
-	0xaa, 0x47, 0xf4, 0x56, 0x7d, 0xf3, 0xc9, 0x66, 0x4e, 0x84, 0x48, 0xf3, 0x8a, 0x6f, 0xcf, 0xd3,
-	0x40, 0xcb, 0x2f, 0x4d, 0xd6, 0xf2, 0x87, 0xe8, 0x33, 0x1f, 0x2d, 0xc2, 0x19, 0x10, 0xd8, 0xc1,
-	0x7d, 0xd5, 0x62, 0x52, 0x92, 0xbe, 0x94, 0xe1, 0x18, 0x3d, 0xd3, 0x73, 0x30, 0x0a, 0x23, 0x2d,
-	0xf6, 0x8e, 0x75, 0x34, 0xf7, 0xb9, 0x8f, 0xde, 0x86, 0x53, 0xc0, 0xaf, 0x85, 0x19, 0x19, 0x85,
-	0x83, 0xec, 0xc1, 0x45, 0x38, 0xb5, 0x52, 0x53, 0xcd, 0x92, 0xba, 0x65, 0x96, 0x4c, 0x6f, 0x2f,
-	0x75, 0xc7, 0xb6, 0x48, 0x2a, 0xbd, 0x72, 0x67, 0x72, 0x74, 0xa0, 0x23, 0x6f, 0x30, 0x08, 0x1c,
-	0xdd, 0x88, 0xa3, 0xf1, 0xa0, 0x48, 0xe3, 0xff, 0x88, 0x83, 0xf8, 0xb4, 0xc7, 0xc3, 0x3f, 0x82,
-	0xb8, 0xcb, 0x36, 0x70, 0xd8, 0xbb, 0xaf, 0xbe, 0x40, 0xc2, 0x82, 0x9d, 0xbf, 0xda, 0x52, 0x4e,
-	0xc1, 0xd6, 0x57, 0x42, 0x42, 0xbc, 0x01, 0x83, 0xcd, 0xd7, 0xe2, 0xe0, 0xb5, 0x34, 0x3c, 0x1a,
-	0xbb, 0x2b, 0xd4, 0x70, 0x8a, 0x6d, 0x90, 0x12, 0xd1, 0xbc, 0x36, 0xb6, 0x81, 0x90, 0xe3, 0x26,
-	0xa3, 0xc0, 0x19, 0x88, 0x96, 0xbd, 0x2a, 0xeb, 0x8d, 0x81, 0xfc, 0xd9, 0x2f, 0x7d, 0xc4, 0x65,
-	0xe7, 0x67, 0x67, 0x69, 0x3d, 0x86, 0xa6, 0x06, 0xf2, 0x7d, 0xb3, 0xd2, 0x7c, 0x56, 0x9e, 0xce,
-	0x2e, 0xe4, 0x96, 0xe6, 0x14, 0x6a, 0x88, 0xab, 0x20, 0x05, 0xa3, 0xc3, 0x0e, 0x22, 0xef, 0x98,
-	0x38, 0x07, 0x2d, 0xd3, 0xd2, 0x0f, 0x89, 0x63, 0x4e, 0xca, 0x1e, 0xe5, 0x22, 0xe5, 0xd8, 0xb4,
-	0x37, 0xcc, 0x4e, 0x4d, 0xd5, 0x4a, 0x67, 0x4b, 0xc8, 0xb9, 0xf0, 0xca, 0xf3, 0xb8, 0x25, 0x56,
-	0xe0, 0x15, 0x8e, 0xf5, 0x3a, 0xf1, 0x0c, 0xaf, 0x97, 0x03, 0x96, 0xe5, 0x8f, 0x23, 0x9f, 0xf9,
-	0x68, 0x09, 0x4e, 0x03, 0x0e, 0x2a, 0xd3, 0xd9, 0x5d, 0x59, 0x78, 0x09, 0x4e, 0x1e, 0x74, 0x5e,
-	0x9b, 0xa4, 0x88, 0xc9, 0x52, 0x4e, 0x5a, 0xfa, 0xdc, 0x47, 0x7f, 0x43, 0x70, 0x19, 0xfa, 0x43,
-	0xf0, 0x2d, 0xaa, 0x56, 0xe4, 0x79, 0x10, 0x83, 0x72, 0x66, 0x82, 0x9f, 0x62, 0x85, 0x1e, 0xf4,
-	0x19, 0xb3, 0x52, 0x9b, 0x83, 0x33, 0xe1, 0x4a, 0x6b, 0x74, 0x85, 0x26, 0xa6, 0x0e, 0x7f, 0x40,
-	0x30, 0x14, 0xca, 0xe7, 0xa6, 0x3e, 0x99, 0xfa, 0x00, 0xc1, 0xaf, 0x10, 0xa4, 0xe1, 0x5c, 0x67,
-	0x57, 0x64, 0x58, 0x82, 0x4a, 0xb6, 0xa6, 0x96, 0x8a, 0xe1, 0x8a, 0x1c, 0xdd, 0xb8, 0x76, 0x13,
-	0x66, 0x20, 0xfd, 0x74, 0x4b, 0xd3, 0x72, 0x4d, 0x9d, 0xb4, 0x03, 0xae, 0xc2, 0x24, 0x24, 0x0f,
-	0x03, 0x88, 0x41, 0x05, 0x40, 0xcb, 0xac, 0x77, 0x23, 0xb8, 0x91, 0x7f, 0x1d, 0xa6, 0x9e, 0xa7,
-	0x3e, 0xe1, 0x2c, 0x12, 0xf6, 0x7d, 0x94, 0xa8, 0xfb, 0x88, 0x6f, 0xf8, 0x88, 0xbb, 0x24, 0x65,
-	0x67, 0x83, 0x11, 0x54, 0xe0, 0xf8, 0x98, 0x10, 0x2f, 0x70, 0x7c, 0x5c, 0xe8, 0x2d, 0x70, 0x7c,
-	0xaf, 0xc0, 0x17, 0x38, 0x9e, 0x17, 0x12, 0xe3, 0x1f, 0x44, 0xe0, 0x44, 0x97, 0xfd, 0x81, 0x75,
-	0xe8, 0x6f, 0xcf, 0x62, 0xb8, 0xe5, 0xfe, 0xef, 0x05, 0xb6, 0x5c, 0xb7, 0x89, 0x4b, 0x15, 0x80,
-	0x7b, 0x70, 0x0b, 0xdf, 0x05, 0x7c, 0xb4, 0x22, 0xe1, 0xe1, 0xfb, 0x6a, 0xf3, 0xfd, 0xb4, 0xf5,
-	0x61, 0x64, 0xd2, 0xb9, 0x28, 0x5f, 0x78, 0x2f, 0x1d, 0x18, 0x3e, 0xeb, 0xdb, 0x88, 0xd0, 0x24,
-	0x0e, 0x42, 0xb8, 0xaa, 0xe7, 0xcf, 0x40, 0xbc, 0x4d, 0x46, 0xa2, 0xba, 0x8f, 0xa2, 0x74, 0x60,
-	0x67, 0x25, 0xb9, 0xc0, 0xf1, 0x51, 0x81, 0x1b, 0xff, 0x6b, 0x04, 0x4e, 0x3f, 0x25, 0x70, 0xbc,
-	0x01, 0x5c, 0xdb, 0x60, 0x78, 0xad, 0xf5, 0xee, 0xec, 0x70, 0x02, 0xfa, 0x01, 0xd1, 0x31, 0x32,
-	0xbc, 0x0c, 0xfd, 0x6a, 0xd5, 0xb3, 0x0d, 0x62, 0x11, 0x7a, 0xd6, 0x85, 0x5a, 0xea, 0x69, 0x7b,
-	0xab, 0xc3, 0x16, 0x4b, 0xc0, 0xd1, 0xce, 0x0e, 0xbf, 0x2b, 0x89, 0xcd, 0x80, 0x62, 0x4e, 0xf4,
-	0xfb, 0xd6, 0xcc, 0xfa, 0x7d, 0xe4, 0xac, 0xc2, 0xac, 0xf0, 0xdb, 0xcc, 0x7a, 0x81, 0xa9, 0xab,
-	0x44, 0xfe, 0xb5, 0xbf, 0x3f, 0x48, 0xeb, 0xa4, 0x6c, 0x67, 0x25, 0x8f, 0xb8, 0x9e, 0xa4, 0x39,
-	0x9e, 0xe4, 0x7a, 0xaa, 0x61, 0x5a, 0x86, 0xe4, 0xda, 0xdb, 0xde, 0x96, 0x6a, 0xdd, 0x2d, 0x96,
-	0x89, 0x26, 0x55, 0x1c, 0x5b, 0xa7, 0x62, 0xa6, 0x8d, 0xfc, 0x61, 0x04, 0x31, 0xca, 0x85, 0xe5,
-	0xf8, 0x3f, 0x5f, 0xa7, 0xb9, 0xcb, 0x27, 0xa1, 0x8f, 0x3e, 0xcc, 0x61, 0x89, 0x8e, 0x02, 0x89,
-	0x2e, 0x07, 0x42, 0x28, 0xff, 0x08, 0xd5, 0xbf, 0x4e, 0xf6, 0x7c, 0xf1, 0x75, 0xb2, 0xe7, 0xbb,
-	0xaf, 0x93, 0xe8, 0x61, 0x23, 0x89, 0x3e, 0x6e, 0x24, 0xd1, 0x5f, 0x1a, 0x49, 0x54, 0x6f, 0x24,
-	0xd1, 0x17, 0x8d, 0x24, 0xfa, 0xaa, 0x91, 0x44, 0xdf, 0x34, 0x92, 0x3d, 0xdf, 0x35, 0x92, 0xe8,
-	0xc3, 0x27, 0xc9, 0x9e, 0xfd, 0x27, 0x49, 0x54, 0x7f, 0x92, 0xec, 0xf9, 0xe2, 0x49, 0xb2, 0xe7,
-	0xce, 0x3b, 0x86, 0x5d, 0xb9, 0x6b, 0x64, 0x6a, 0x76, 0xc9, 0x23, 0x8e, 0xa3, 0x66, 0xaa, 0xee,
-	0x0c, 0xbb, 0xa0, 0x87, 0xc6, 0x74, 0xc5, 0xb1, 0x6b, 0xa6, 0x4e, 0x9c, 0xe9, 0xe6, 0xf2, 0x4c,
-	0x65, 0xcb, 0xb0, 0x67, 0xc8, 0x3d, 0x2f, 0xfc, 0x4e, 0xf8, 0x8c, 0x2f, 0xb4, 0x5b, 0x71, 0xf6,
-	0xf1, 0x30, 0xf7, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xed, 0x44, 0x43, 0x34, 0xd2, 0x15, 0x00,
-	0x00,
+	// 3002 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x59, 0x5f, 0x4c, 0x1b, 0x67,
+	0xb6, 0xe7, 0xb3, 0x07, 0x33, 0x1c, 0x02, 0x0c, 0x1f, 0x81, 0x38, 0x4e, 0xe2, 0x0c, 0x2e, 0x01,
+	0x43, 0x8c, 0x01, 0xdb, 0xfc, 0x09, 0x0f, 0x51, 0x31, 0x45, 0xc4, 0x53, 0x02, 0xe9, 0x40, 0x1b,
+	0x29, 0xf7, 0xde, 0x58, 0x83, 0xfd, 0xc5, 0xcc, 0xc5, 0xcc, 0xf8, 0xce, 0x8c, 0xed, 0x92, 0x36,
+	0xb7, 0xd1, 0xbd, 0xd2, 0xd5, 0x6d, 0xd5, 0x4a, 0xb9, 0x79, 0xb8, 0x5a, 0x45, 0x5a, 0x69, 0x1f,
+	0xf6, 0x61, 0xdb, 0x6a, 0xa5, 0x6a, 0xdf, 0xb6, 0x93, 0x95, 0x50, 0xbb, 0x2b, 0x55, 0x79, 0xe2,
+	0xb1, 0xea, 0xcb, 0xb6, 0x64, 0x1f, 0xda, 0x87, 0x95, 0xfa, 0xb0, 0x0f, 0x7d, 0xeb, 0x6a, 0xbe,
+	0x19, 0x9b, 0x31, 0x18, 0x1b, 0xba, 0x8d, 0xb4, 0x6f, 0xe3, 0x99, 0x73, 0x7e, 0xe7, 0xfb, 0xce,
+	0x39, 0xdf, 0x39, 0xbf, 0xf3, 0x19, 0xa6, 0x4b, 0x44, 0x8f, 0xca, 0xea, 0xb8, 0x9e, 0xd9, 0x24,
+	0xdb, 0xd2, 0x78, 0x49, 0x26, 0x65, 0x7d, 0x5c, 0x27, 0x99, 0xa2, 0x46, 0xb6, 0x89, 0xbe, 0x99,
+	0xd6, 0x65, 0x83, 0xa4, 0x4b, 0xb1, 0x71, 0xa9, 0xac, 0xa7, 0x8d, 0x9d, 0x02, 0xd1, 0xa3, 0x05,
+	0x4d, 0x35, 0x54, 0x3c, 0x64, 0xeb, 0x45, 0x6d, 0xbd, 0x28, 0xd5, 0x8b, 0x1e, 0xd5, 0x0b, 0x8c,
+	0xe5, 0x64, 0x63, 0xb3, 0xb8, 0x11, 0xcd, 0xa8, 0xdb, 0xe3, 0x39, 0x35, 0xa7, 0x8e, 0x53, 0xf5,
+	0x8d, 0xe2, 0x3d, 0xfa, 0x8b, 0xfe, 0xa0, 0x4f, 0x36, 0x6c, 0xe0, 0x5c, 0xed, 0x72, 0x14, 0x62,
+	0x38, 0x1f, 0xae, 0x1e, 0xf9, 0x50, 0x56, 0xb5, 0xad, 0xb4, 0xac, 0x18, 0x44, 0xbb, 0x27, 0x65,
+	0xc8, 0xb8, 0x6b, 0x71, 0x81, 0x0b, 0xb5, 0xc2, 0x6a, 0xc1, 0x90, 0x55, 0xa5, 0xf2, 0xf1, 0x7c,
+	0xed, 0x47, 0xb7, 0xde, 0xc5, 0x43, 0xce, 0x90, 0xf2, 0x72, 0x56, 0x32, 0x88, 0xf3, 0x95, 0x3f,
+	0xea, 0xaa, 0x74, 0x2d, 0xf4, 0x60, 0x5d, 0x67, 0x5a, 0x9e, 0x70, 0x5b, 0xb9, 0x5c, 0x4f, 0xca,
+	0x25, 0x10, 0xfa, 0xf3, 0x59, 0xe8, 0x9a, 0xbf, 0xbd, 0x76, 0x53, 0x52, 0xa4, 0x1c, 0xc9, 0xde,
+	0x54, 0xb3, 0x04, 0x4f, 0x01, 0x58, 0x11, 0xd0, 0x48, 0x4e, 0x56, 0x15, 0x3f, 0xe2, 0x51, 0xb8,
+	0x3d, 0xd9, 0xff, 0x83, 0x89, 0x5a, 0x3e, 0x7d, 0x8a, 0xba, 0xc2, 0x68, 0x0e, 0x32, 0x79, 0xb5,
+	0x98, 0x1d, 0xcb, 0x4a, 0x86, 0x24, 0xb6, 0x4b, 0x65, 0x5d, 0xa4, 0x82, 0x58, 0x02, 0x5f, 0xa9,
+	0x90, 0x49, 0xcb, 0x59, 0x3f, 0x43, 0x55, 0x84, 0xfa, 0x2a, 0x9f, 0x7e, 0xb7, 0xeb, 0x65, 0x34,
+	0x8f, 0xff, 0x65, 0xeb, 0x61, 0x48, 0x1b, 0x8c, 0x85, 0xee, 0x86, 0x4b, 0x85, 0xcc, 0xd8, 0x48,
+	0xf8, 0x5f, 0xa4, 0xb1, 0xfb, 0x13, 0x63, 0xd7, 0xfe, 0xed, 0xad, 0xd9, 0x07, 0x6f, 0x57, 0x9f,
+	0x27, 0x67, 0x1e, 0x8c, 0x0c, 0x8a, 0xad, 0xa5, 0x42, 0x26, 0x95, 0xc5, 0xff, 0x85, 0xa0, 0xdf,
+	0x5a, 0x1a, 0x45, 0x4b, 0x17, 0x75, 0xa2, 0xa5, 0xa5, 0x4c, 0x46, 0x2d, 0x2a, 0x86, 0x3f, 0xc2,
+	0xa3, 0x70, 0x47, 0x2c, 0x14, 0xad, 0x97, 0x2a, 0xab, 0x1b, 0xff, 0x4e, 0x32, 0x86, 0x48, 0xee,
+	0xad, 0xef, 0x14, 0x48, 0x72, 0xe4, 0xa3, 0x07, 0xf8, 0x28, 0xc0, 0xa7, 0x4f, 0x11, 0xc7, 0xa2,
+	0x43, 0xbb, 0xeb, 0x95, 0xca, 0xfa, 0x82, 0xf5, 0xf3, 0x75, 0x9d, 0x68, 0xf3, 0xb6, 0x20, 0xfe,
+	0x5f, 0x04, 0x8c, 0x21, 0xe5, 0x74, 0x7f, 0x1b, 0xef, 0x0d, 0x77, 0xc4, 0x5e, 0x8e, 0x9e, 0x2c,
+	0x3b, 0xa3, 0xb5, 0x5e, 0x8e, 0xae, 0x4b, 0x39, 0x7d, 0x51, 0x31, 0xb4, 0x9d, 0x64, 0xcc, 0xf2,
+	0x44, 0xfb, 0x13, 0xe4, 0x0b, 0x59, 0x7e, 0x79, 0xc7, 0xfa, 0xd5, 0xfa, 0x04, 0x79, 0xb8, 0xb0,
+	0xf5, 0x04, 0x4f, 0x50, 0xdb, 0x68, 0xab, 0xe6, 0xf5, 0xff, 0x88, 0xf6, 0xbf, 0xfe, 0x93, 0xd7,
+	0xf7, 0xde, 0x53, 0xe4, 0x61, 0x5b, 0x44, 0xba, 0x02, 0xfc, 0x3b, 0x04, 0x9d, 0xb2, 0xa2, 0x1b,
+	0x92, 0x92, 0xb1, 0xc3, 0xee, 0x67, 0xa9, 0xeb, 0xdf, 0x47, 0x5f, 0x99, 0x08, 0xb6, 0xa7, 0xa2,
+	0xb1, 0x37, 0xf3, 0x92, 0x96, 0x23, 0x56, 0x24, 0x1e, 0x3f, 0x45, 0xdb, 0x30, 0x05, 0xae, 0xb7,
+	0x78, 0x38, 0x3c, 0xcb, 0xbf, 0xc9, 0x97, 0x16, 0x6e, 0xbd, 0x1e, 0xe1, 0xe3, 0xb1, 0xa5, 0x24,
+	0x2f, 0xce, 0xdf, 0x1c, 0xe1, 0xb7, 0x49, 0x56, 0x2e, 0x6e, 0xf3, 0x05, 0xa2, 0xdd, 0x53, 0xb5,
+	0x6d, 0x0b, 0x1a, 0x12, 0x54, 0x2d, 0xe1, 0xa8, 0x0d, 0x85, 0x27, 0xa7, 0xab, 0x7a, 0xd3, 0x89,
+	0x8a, 0xde, 0xa6, 0x9c, 0xdb, 0x74, 0x6b, 0x55, 0x03, 0x2d, 0x9e, 0xa9, 0xac, 0xd1, 0xf2, 0x3f,
+	0x4e, 0x40, 0x7b, 0x56, 0xd6, 0xb7, 0xd2, 0xba, 0x7c, 0x9f, 0xf8, 0x3b, 0x78, 0x14, 0xee, 0x4c,
+	0x9e, 0xfb, 0xca, 0x44, 0x9e, 0xd9, 0x09, 0x9a, 0x30, 0xdf, 0xed, 0x7a, 0xd9, 0x51, 0x9f, 0xff,
+	0xe1, 0xdf, 0xbc, 0xe1, 0x5b, 0x22, 0x6b, 0x49, 0xae, 0xc9, 0xf7, 0x09, 0x8e, 0x43, 0xbb, 0xa2,
+	0xa6, 0x49, 0x4e, 0x23, 0xba, 0xee, 0x0f, 0xd3, 0x60, 0x9f, 0x3d, 0xe4, 0xf9, 0xc5, 0xed, 0x82,
+	0xb1, 0x73, 0xa3, 0x45, 0x64, 0x15, 0x75, 0x91, 0xca, 0xe1, 0x34, 0x74, 0xda, 0x1a, 0x69, 0x39,
+	0x57, 0x4e, 0xe7, 0xca, 0xfe, 0x61, 0xaa, 0x78, 0xed, 0x14, 0x21, 0x4b, 0x2d, 0xdd, 0x5e, 0x92,
+	0x0c, 0x52, 0x96, 0x76, 0xac, 0xc5, 0xdf, 0x68, 0x11, 0x3b, 0x6c, 0xc4, 0x54, 0xae, 0xbc, 0x54,
+	0x76, 0x19, 0x50, 0x24, 0xc3, 0x32, 0x30, 0x71, 0x6a, 0x03, 0x2b, 0xf3, 0xeb, 0x75, 0x0d, 0xac,
+	0x48, 0xc6, 0x52, 0x19, 0xcf, 0x40, 0x47, 0x41, 0x93, 0x4b, 0x92, 0x41, 0xd2, 0x52, 0x56, 0xf1,
+	0xc7, 0x1a, 0x6e, 0x1c, 0x1c, 0xd1, 0xf9, 0xac, 0x82, 0xef, 0xc0, 0xa5, 0x8a, 0x62, 0x46, 0x55,
+	0x14, 0x92, 0x31, 0xe4, 0x92, 0x6c, 0xec, 0xa4, 0xb3, 0xb2, 0x2e, 0x6d, 0xe4, 0x49, 0xd6, 0x7f,
+	0xae, 0x01, 0x14, 0x12, 0x2f, 0x38, 0xca, 0x0b, 0x2e, 0xdd, 0x57, 0x1c, 0x55, 0x9c, 0x87, 0x1e,
+	0xfb, 0x00, 0xe5, 0x65, 0x65, 0xcb, 0x82, 0xbf, 0x27, 0xe7, 0xfc, 0xd3, 0x14, 0xef, 0xfa, 0x29,
+	0x76, 0x4e, 0x4f, 0xd6, 0xb2, 0xac, 0x6c, 0x2d, 0x50, 0x04, 0xba, 0x7d, 0x24, 0x76, 0x67, 0x6a,
+	0x5f, 0xe3, 0xdb, 0x56, 0xe4, 0xb3, 0x24, 0x9d, 0x97, 0x75, 0xc3, 0xff, 0x12, 0xb5, 0x32, 0x77,
+	0xfa, 0x33, 0xb7, 0xa2, 0x66, 0xc9, 0xb2, 0xac, 0x1b, 0x56, 0x76, 0xd8, 0x4f, 0x58, 0x80, 0x3e,
+	0xc7, 0x1b, 0x4e, 0x41, 0x71, 0x1c, 0xe5, 0x1f, 0x6c, 0xe0, 0x1a, 0x8f, 0xd8, 0xeb, 0x28, 0xd1,
+	0xe5, 0x3b, 0xfe, 0xc1, 0xf7, 0xe0, 0x2c, 0x51, 0xea, 0x40, 0x5d, 0xa1, 0x50, 0xb1, 0x53, 0xac,
+	0x77, 0x7d, 0xe9, 0x36, 0xf5, 0x84, 0x47, 0xc4, 0x36, 0x62, 0x8d, 0x9d, 0xff, 0x46, 0x70, 0xde,
+	0x2e, 0xce, 0xba, 0x5a, 0xd4, 0x32, 0x24, 0xbd, 0x2d, 0x15, 0x0a, 0xb2, 0x92, 0xb3, 0xbd, 0x33,
+	0x44, 0xad, 0x25, 0x4f, 0x61, 0x4d, 0x74, 0x70, 0x6e, 0xda, 0x30, 0x96, 0x5f, 0x68, 0x91, 0x64,
+	0xf6, 0x4c, 0x84, 0xc4, 0x7e, 0x5a, 0xdd, 0x8f, 0x48, 0x60, 0x19, 0x86, 0x2a, 0x9e, 0xab, 0x24,
+	0x99, 0xd5, 0x21, 0xf3, 0xaa, 0x94, 0x4d, 0x6b, 0x6a, 0xd1, 0xb0, 0x16, 0x64, 0xa8, 0xe9, 0x0c,
+	0xf1, 0x8f, 0x36, 0x70, 0xa5, 0x57, 0x1c, 0x70, 0x50, 0x6e, 0xd9, 0x20, 0xb7, 0x1d, 0x0c, 0xd1,
+	0x86, 0x58, 0x57, 0x17, 0x08, 0xfe, 0x35, 0x82, 0x41, 0xc7, 0xb3, 0xc7, 0x9a, 0xa2, 0x7b, 0x9f,
+	0xa2, 0x96, 0x96, 0x4f, 0xba, 0xf7, 0x45, 0xe5, 0x78, 0xc3, 0x07, 0x5e, 0xf8, 0xde, 0x44, 0xe8,
+	0x86, 0x57, 0xe4, 0x49, 0x13, 0x69, 0xbc, 0x02, 0xe7, 0x2a, 0x1e, 0xa1, 0xc5, 0x8d, 0x28, 0x19,
+	0x6d, 0x87, 0xf6, 0x6b, 0x7f, 0xb4, 0x81, 0x0b, 0x18, 0xb1, 0x92, 0x82, 0xaf, 0xc8, 0xfa, 0xd6,
+	0x62, 0x55, 0x09, 0x6b, 0xd0, 0x7b, 0x08, 0x27, 0xbd, 0x45, 0x76, 0xfc, 0xe3, 0x14, 0xeb, 0x34,
+	0x2d, 0xa7, 0x16, 0xf7, 0x55, 0x62, 0x57, 0x19, 0x46, 0xec, 0xc9, 0x1e, 0xfe, 0x10, 0x98, 0x81,
+	0xf6, 0x6a, 0x53, 0xc2, 0x1c, 0x78, 0x2d, 0x83, 0xb4, 0xfb, 0x8b, 0xd6, 0x23, 0x3e, 0x0b, 0xad,
+	0x25, 0x29, 0x5f, 0x24, 0x7e, 0x0f, 0x7d, 0x67, 0xff, 0x98, 0xf3, 0xcc, 0xa2, 0xb9, 0xff, 0xfc,
+	0xcc, 0x44, 0xf7, 0xe1, 0x12, 0xf4, 0xcc, 0xdf, 0x5e, 0xe3, 0x9d, 0x36, 0xc9, 0x0f, 0xf1, 0x6f,
+	0xdc, 0x5a, 0xc0, 0x6c, 0x22, 0x11, 0x99, 0x8c, 0x24, 0x22, 0x33, 0xd0, 0x0f, 0x5c, 0x25, 0x95,
+	0x78, 0x27, 0x97, 0xb0, 0x27, 0x3e, 0x0b, 0x3c, 0xe0, 0x85, 0x45, 0xde, 0x3a, 0x9e, 0xfc, 0x2d,
+	0x4d, 0x2d, 0x10, 0xcd, 0x90, 0x89, 0x8e, 0x61, 0x36, 0x32, 0x39, 0x19, 0x49, 0x4c, 0x45, 0xe2,
+	0x53, 0x70, 0x19, 0x38, 0x7a, 0x06, 0xf8, 0x15, 0x9b, 0x88, 0x59, 0x9a, 0x1d, 0x93, 0x53, 0x91,
+	0xc4, 0x64, 0x24, 0x16, 0x8b, 0xc4, 0x63, 0xc9, 0x04, 0xf4, 0x39, 0x55, 0x38, 0x67, 0x57, 0xd2,
+	0x74, 0x66, 0x53, 0x95, 0x33, 0x04, 0x5f, 0xd8, 0x35, 0xd1, 0xf0, 0x9e, 0x89, 0xba, 0xf7, 0x4d,
+	0xd4, 0x91, 0x98, 0x88, 0xc4, 0xaf, 0x45, 0x12, 0xb3, 0x91, 0xa9, 0x89, 0x6f, 0x4d, 0x84, 0x92,
+	0x13, 0x70, 0xa1, 0x6e, 0x85, 0x74, 0x74, 0x7b, 0x76, 0x4d, 0x74, 0x6e, 0xcf, 0x44, 0xfd, 0xfb,
+	0x26, 0x6a, 0x8d, 0xc5, 0x23, 0x53, 0x89, 0xe4, 0x08, 0x9c, 0xad, 0x39, 0xdd, 0x6e, 0xd1, 0xc1,
+	0x3d, 0x13, 0xf1, 0x96, 0x68, 0x7c, 0x3a, 0x12, 0x9f, 0x49, 0x26, 0xe0, 0xf2, 0xb1, 0xe9, 0xea,
+	0xd2, 0x1a, 0xdd, 0x33, 0xd1, 0x88, 0xa5, 0x95, 0x88, 0x45, 0xa6, 0xe2, 0xc9, 0xab, 0xd0, 0x7f,
+	0x38, 0xea, 0x2e, 0xe1, 0xe8, 0x9e, 0x89, 0xc6, 0xa8, 0xf0, 0x74, 0x24, 0x31, 0x23, 0x30, 0xac,
+	0x87, 0xf3, 0x0a, 0x0c, 0xeb, 0xe5, 0x18, 0x81, 0x61, 0x7d, 0x5c, 0x9b, 0xc0, 0xb0, 0xed, 0x1c,
+	0x08, 0x0c, 0x7b, 0x86, 0xeb, 0x14, 0x18, 0xb6, 0x93, 0xeb, 0x12, 0x18, 0xb6, 0x8b, 0xeb, 0x16,
+	0x18, 0xb6, 0x9b, 0xe3, 0x04, 0x86, 0xe5, 0xb8, 0x1e, 0x81, 0x61, 0x7b, 0x38, 0x2c, 0x30, 0x2c,
+	0xe6, 0x7a, 0x05, 0x86, 0x9d, 0xe4, 0x62, 0x02, 0xc3, 0xf6, 0x73, 0xe7, 0x04, 0x86, 0xf5, 0x73,
+	0xe7, 0x05, 0x86, 0x4d, 0x70, 0x53, 0x02, 0xc3, 0x9e, 0xe7, 0x02, 0x02, 0xc3, 0x06, 0xb8, 0x0b,
+	0x02, 0xc3, 0x5e, 0xe0, 0x2e, 0x0a, 0x0c, 0x7b, 0x91, 0xbb, 0x24, 0x30, 0xec, 0x25, 0x2e, 0x28,
+	0x30, 0x6c, 0x90, 0xbb, 0x2c, 0x30, 0xec, 0x65, 0x8e, 0x17, 0x18, 0x96, 0xe7, 0x06, 0x04, 0x86,
+	0x1d, 0xe0, 0x42, 0x02, 0xc3, 0x86, 0xb8, 0x97, 0x04, 0x86, 0x1d, 0xe1, 0x46, 0x05, 0x86, 0xbd,
+	0xca, 0x45, 0x04, 0x86, 0x1d, 0xe3, 0xa2, 0xa1, 0xbf, 0x78, 0xa0, 0xbf, 0x7e, 0xb5, 0xc7, 0x77,
+	0xc0, 0x57, 0xca, 0x95, 0x2d, 0xca, 0x68, 0xb3, 0xcc, 0x05, 0x87, 0x32, 0x1e, 0x61, 0x62, 0x6e,
+	0xae, 0x98, 0x2b, 0x37, 0xe3, 0x8a, 0xb9, 0x72, 0x2a, 0x8b, 0x37, 0x00, 0x0e, 0x9a, 0x14, 0xcd,
+	0xd9, 0x93, 0xd1, 0xc3, 0xcb, 0x1f, 0x3d, 0x70, 0x29, 0x5a, 0xfc, 0xd5, 0x5a, 0xcc, 0x04, 0x9a,
+	0xf3, 0xd9, 0x8d, 0x4e, 0x6c, 0xaf, 0x36, 0x28, 0x3c, 0x01, 0x6d, 0x6a, 0xd1, 0xd0, 0xe5, 0x2c,
+	0xa1, 0x9c, 0xf7, 0xf8, 0xce, 0x5c, 0x11, 0xc3, 0x51, 0xf0, 0xc9, 0x0a, 0x55, 0x68, 0x6d, 0xa8,
+	0xe0, 0x48, 0x25, 0x43, 0xd0, 0x5d, 0x19, 0x3f, 0x1c, 0xfa, 0x8f, 0xbb, 0x77, 0x4d, 0x64, 0x95,
+	0x67, 0xef, 0xbe, 0x89, 0xbc, 0x89, 0xc8, 0x94, 0x9d, 0x02, 0xa1, 0xbf, 0x22, 0x18, 0x3c, 0x49,
+	0x51, 0xc3, 0x7f, 0x44, 0x70, 0xa5, 0x59, 0x45, 0xb5, 0x8b, 0x37, 0xa2, 0x04, 0xf7, 0xc6, 0xcf,
+	0x51, 0x52, 0x6d, 0xe6, 0x4d, 0xa9, 0xed, 0x63, 0xe4, 0xe1, 0x5e, 0xae, 0x3c, 0xb1, 0xa8, 0xf2,
+	0xe4, 0xb7, 0xf9, 0xed, 0xe3, 0xa7, 0xc8, 0xc3, 0xb5, 0x34, 0xae, 0xb8, 0x56, 0x63, 0x08, 0xbd,
+	0x0a, 0xfe, 0xe3, 0xca, 0x1b, 0x1e, 0x07, 0xdf, 0x16, 0xd9, 0x39, 0xc8, 0x2b, 0xff, 0x0f, 0x26,
+	0x42, 0x75, 0x19, 0x7e, 0xeb, 0x16, 0xd9, 0x49, 0x65, 0x43, 0xbf, 0xf2, 0x02, 0xdf, 0x6c, 0xf9,
+	0x58, 0x81, 0x76, 0xbd, 0xb8, 0xa1, 0x10, 0xc3, 0x02, 0xf6, 0x52, 0xe0, 0xd7, 0xaa, 0x09, 0xeb,
+	0x39, 0x9a, 0xb0, 0x3e, 0x8d, 0xe1, 0x90, 0x3d, 0xe7, 0x8c, 0x68, 0xc3, 0xb1, 0x2b, 0x77, 0xc3,
+	0xb6, 0x7a, 0xe3, 0xf4, 0x65, 0x6d, 0xa1, 0x54, 0x16, 0xaf, 0x41, 0x57, 0x6d, 0xec, 0x9d, 0x2c,
+	0x1e, 0xaa, 0x1b, 0x10, 0xa7, 0x38, 0xae, 0x91, 0x3c, 0xc9, 0x38, 0xdd, 0xeb, 0x93, 0xa7, 0x08,
+	0x89, 0x9d, 0x0e, 0xc6, 0x2a, 0x85, 0x98, 0xfb, 0x04, 0x3d, 0x33, 0xd1, 0xc7, 0x08, 0xfa, 0xc0,
+	0xb7, 0x46, 0x0d, 0x05, 0x3a, 0x5c, 0xdb, 0x82, 0xff, 0x43, 0xd0, 0xe5, 0x20, 0xf1, 0xb6, 0xc6,
+	0xe8, 0x3b, 0xf0, 0x00, 0xc2, 0x30, 0x50, 0xbb, 0x94, 0x28, 0x0d, 0x7a, 0x5e, 0xcd, 0x48, 0xf9,
+	0xb4, 0xf3, 0x25, 0xe6, 0x5d, 0x5b, 0x5e, 0x85, 0x71, 0x08, 0x1f, 0x2f, 0x69, 0x27, 0xb5, 0x5b,
+	0x21, 0x05, 0x3c, 0x04, 0x0f, 0x2b, 0x90, 0xdc, 0x36, 0x51, 0x8c, 0x8a, 0x98, 0xc0, 0xb0, 0x88,
+	0xf3, 0x84, 0x3e, 0x42, 0x00, 0x07, 0xf4, 0x08, 0x67, 0xc0, 0x67, 0xb8, 0x4b, 0xc7, 0x72, 0xa3,
+	0xd2, 0x71, 0x78, 0xde, 0x34, 0x9a, 0xd6, 0x10, 0x83, 0xd6, 0x90, 0x19, 0xe8, 0x29, 0xa9, 0x79,
+	0x83, 0x68, 0x9a, 0x64, 0x67, 0xb9, 0xa4, 0xdb, 0x41, 0xe8, 0x4c, 0x76, 0xd0, 0x08, 0x8f, 0x32,
+	0xfe, 0x1f, 0x7f, 0xf4, 0x8a, 0xdd, 0x15, 0xa9, 0x35, 0xd9, 0x20, 0xf3, 0xba, 0x12, 0x7a, 0x0f,
+	0x01, 0x3e, 0xca, 0x3d, 0xb1, 0xe1, 0xa6, 0xb2, 0xf6, 0xe9, 0x9a, 0xfe, 0x69, 0x54, 0x36, 0x79,
+	0x99, 0xda, 0x7f, 0x8c, 0xbc, 0xdc, 0x43, 0x54, 0xef, 0x30, 0x1d, 0xf0, 0xdc, 0xd0, 0xe7, 0x5e,
+	0xf7, 0x88, 0x6f, 0x69, 0xe3, 0x09, 0x60, 0xe8, 0xb8, 0x68, 0xfb, 0xee, 0xe2, 0xa3, 0x3f, 0x20,
+	0xaa, 0xda, 0xab, 0xf5, 0x88, 0x6d, 0x0b, 0xaa, 0x62, 0x68, 0x6a, 0x5e, 0xf4, 0x59, 0x67, 0x80,
+	0x68, 0x22, 0x95, 0xc4, 0xa3, 0xc0, 0x6e, 0xaa, 0xba, 0xa1, 0x48, 0xdb, 0x0e, 0x01, 0x48, 0x76,
+	0x55, 0xb4, 0xac, 0xe9, 0xf4, 0x21, 0x23, 0x56, 0xbf, 0xe3, 0x79, 0xe8, 0xb0, 0x38, 0xaa, 0x74,
+	0x3f, 0x4d, 0xc5, 0xed, 0xa3, 0x32, 0xd0, 0x34, 0x40, 0xf4, 0x32, 0x61, 0xfe, 0xfe, 0x8a, 0x05,
+	0xf1, 0x00, 0xba, 0xaa, 0xd7, 0x2d, 0xb6, 0xbb, 0x98, 0x53, 0x4f, 0xdb, 0xab, 0x5a, 0x66, 0x93,
+	0xe8, 0x86, 0x26, 0x19, 0x24, 0x9b, 0xaa, 0x80, 0x25, 0xcf, 0xd6, 0xf5, 0x56, 0x67, 0xd5, 0x9a,
+	0xe5, 0xb2, 0xb9, 0x47, 0xe8, 0x33, 0x13, 0xcd, 0xc0, 0x79, 0xe0, 0x28, 0x31, 0x49, 0x29, 0x74,
+	0xa8, 0xa5, 0xcc, 0xac, 0x75, 0x32, 0x12, 0x8b, 0xc4, 0x21, 0x00, 0x7d, 0x55, 0xcc, 0x9a, 0xef,
+	0x28, 0xf1, 0xcc, 0x44, 0xaf, 0x41, 0x3f, 0xb0, 0x37, 0x1c, 0x7f, 0x04, 0xe0, 0xc0, 0x77, 0xd0,
+	0x05, 0x8c, 0x95, 0xbf, 0x01, 0x9f, 0x1d, 0x01, 0x18, 0x86, 0xfe, 0xf9, 0x92, 0x24, 0xe7, 0xa5,
+	0x0d, 0x39, 0x2f, 0x1b, 0x3b, 0xfc, 0x1d, 0x55, 0x21, 0x7c, 0x78, 0xfe, 0xce, 0x48, 0xa0, 0xb3,
+	0xc6, 0x8b, 0xa1, 0x0f, 0x58, 0x5a, 0xf0, 0xea, 0x6e, 0xea, 0x85, 0x94, 0x0a, 0x1c, 0x05, 0xef,
+	0xb6, 0x51, 0xa4, 0xe1, 0xeb, 0x4c, 0x5e, 0xfc, 0xca, 0x44, 0xcc, 0xe4, 0xd4, 0xc4, 0x84, 0xe5,
+	0xb4, 0xee, 0xd1, 0xce, 0x64, 0xc7, 0x44, 0x64, 0x6a, 0x32, 0x36, 0x36, 0x39, 0x1d, 0x9f, 0x4d,
+	0x88, 0x96, 0x20, 0x2e, 0x42, 0xc4, 0xbe, 0x7f, 0x52, 0xed, 0x28, 0xd4, 0xb0, 0xaa, 0x83, 0x68,
+	0x56, 0x27, 0xd0, 0xf6, 0x86, 0x1d, 0x70, 0xd8, 0xc2, 0x58, 0x57, 0xad, 0x13, 0xe5, 0x1e, 0x42,
+	0xab, 0x7b, 0xae, 0x4e, 0xa3, 0x3a, 0x5c, 0x3d, 0x89, 0x59, 0xbb, 0xa1, 0x64, 0xfd, 0xd0, 0xd0,
+	0xea, 0x50, 0x13, 0xab, 0x76, 0x93, 0xc8, 0xe2, 0x5f, 0x20, 0xe0, 0xad, 0xe8, 0xd0, 0xe3, 0x7c,
+	0x60, 0xc4, 0xa6, 0x08, 0x45, 0x8d, 0xa6, 0x02, 0xbd, 0xdc, 0xe8, 0x88, 0xa5, 0x4e, 0x73, 0x19,
+	0xa0, 0x66, 0x49, 0xd5, 0xd6, 0x82, 0x1b, 0xcc, 0x15, 0xa6, 0x4b, 0x52, 0x59, 0x3f, 0x5e, 0x70,
+	0xee, 0xa1, 0xf7, 0x33, 0x13, 0x5d, 0x87, 0x4b, 0x70, 0xee, 0x20, 0x41, 0x6b, 0x24, 0xb0, 0x67,
+	0x72, 0x12, 0x2e, 0xc1, 0xd9, 0x83, 0xcf, 0x2e, 0xe2, 0xdd, 0x1a, 0x8b, 0xc4, 0x23, 0xb3, 0xcf,
+	0x4c, 0xf4, 0x7b, 0x0f, 0xfc, 0x3f, 0x3a, 0x16, 0x23, 0xf4, 0x16, 0x08, 0xcd, 0xf6, 0x1f, 0x55,
+	0x4b, 0x44, 0xd3, 0xac, 0x82, 0xdf, 0x4c, 0x12, 0xf7, 0xaf, 0x3a, 0xa2, 0xb5, 0x56, 0x02, 0x7d,
+	0x29, 0x65, 0x93, 0x68, 0xb2, 0x51, 0xfb, 0x1a, 0x7e, 0x89, 0xa0, 0xfb, 0x0d, 0x59, 0x33, 0x8a,
+	0x52, 0xbe, 0x32, 0x14, 0x8c, 0xbe, 0x8b, 0xe0, 0x7f, 0xd0, 0x8b, 0x6c, 0x54, 0x23, 0xcd, 0x1a,
+	0x55, 0xac, 0x6d, 0xcd, 0x7e, 0x91, 0xbc, 0x0e, 0xa3, 0x27, 0x49, 0x49, 0x87, 0xdb, 0x73, 0xbb,
+	0x26, 0x6a, 0xdf, 0x33, 0x11, 0xbb, 0x6f, 0x22, 0xe6, 0x5a, 0x64, 0x72, 0xc2, 0xee, 0x78, 0x02,
+	0xc3, 0x32, 0x5c, 0xab, 0xc0, 0xb0, 0xad, 0x9c, 0xaf, 0x4a, 0xf0, 0xdb, 0x38, 0x56, 0x60, 0x58,
+	0x96, 0x6b, 0x0f, 0xbd, 0xeb, 0x85, 0x81, 0xa6, 0x19, 0x83, 0x15, 0x08, 0xcb, 0xb6, 0x0b, 0x9b,
+	0x06, 0xc1, 0x29, 0x19, 0xc7, 0x9d, 0x8c, 0x41, 0x07, 0x67, 0xbe, 0x51, 0xf2, 0xe1, 0xdf, 0x22,
+	0x18, 0x39, 0x71, 0xd8, 0x69, 0x69, 0xe9, 0x88, 0xbd, 0x76, 0x9a, 0x9a, 0xee, 0x60, 0x37, 0xde,
+	0xf6, 0x8d, 0x16, 0xf1, 0x4a, 0x65, 0x15, 0x0d, 0xd7, 0x9b, 0xbc, 0x0e, 0xc3, 0xcd, 0x56, 0x59,
+	0x09, 0x53, 0xef, 0xae, 0x89, 0x3c, 0x7b, 0x26, 0x42, 0x16, 0xef, 0x8e, 0x45, 0xe2, 0xd6, 0x10,
+	0xe9, 0x70, 0x93, 0x47, 0x1e, 0x18, 0x39, 0xf1, 0xe2, 0x6a, 0x79, 0x24, 0x7a, 0xf1, 0x3c, 0x52,
+	0x87, 0x2e, 0xea, 0x4c, 0x2b, 0xf9, 0x72, 0x9a, 0x5a, 0x2c, 0x38, 0x0d, 0x7c, 0xb9, 0xf1, 0x05,
+	0x3d, 0x6d, 0x94, 0x61, 0x6d, 0x28, 0x36, 0x78, 0x37, 0xac, 0xe7, 0x1a, 0x1a, 0x7b, 0xfb, 0xee,
+	0xa0, 0xd8, 0x59, 0xb1, 0xb1, 0x64, 0x99, 0x08, 0x7d, 0x8c, 0x20, 0x70, 0xfc, 0xfd, 0x12, 0x7e,
+	0x1f, 0x41, 0x5f, 0xbd, 0x7b, 0x2c, 0xdd, 0xa1, 0x45, 0xd7, 0x7f, 0xfa, 0x1d, 0x16, 0xad, 0x94,
+	0x7e, 0xab, 0x52, 0xd6, 0xed, 0xf4, 0xbd, 0x47, 0xef, 0xb4, 0xf4, 0xd0, 0x87, 0x5e, 0x3a, 0xa3,
+	0xd6, 0x41, 0xaa, 0xd3, 0x5a, 0xd1, 0x3f, 0xde, 0x5a, 0x55, 0xe8, 0x74, 0xef, 0x5e, 0xf7, 0x7b,
+	0xe8, 0xae, 0x13, 0x3f, 0x61, 0xd7, 0xfa, 0x31, 0x8c, 0xe6, 0x8c, 0x6b, 0x9f, 0xfa, 0xdc, 0x17,
+	0x16, 0xed, 0xff, 0x1c, 0xfd, 0xb3, 0x57, 0x4e, 0x18, 0x80, 0xae, 0xea, 0x2d, 0xd1, 0x82, 0x5a,
+	0x54, 0x8c, 0xb9, 0xee, 0x43, 0xae, 0x0a, 0x3d, 0xa0, 0xf7, 0x4c, 0xb5, 0xf7, 0xf2, 0x78, 0x13,
+	0xda, 0xed, 0x2b, 0xfe, 0x53, 0x4c, 0x04, 0x7d, 0xae, 0x89, 0x40, 0x6e, 0x36, 0x11, 0xb4, 0xc9,
+	0xb9, 0xf2, 0x52, 0x39, 0x95, 0x0d, 0x7d, 0x88, 0xa8, 0xfd, 0xda, 0x6b, 0x7b, 0xfc, 0x01, 0x82,
+	0x76, 0xfb, 0x2f, 0x00, 0x6b, 0x01, 0x56, 0x34, 0xdb, 0x93, 0xff, 0xd1, 0x68, 0x01, 0x57, 0x1f,
+	0xa3, 0x70, 0xc8, 0x31, 0xae, 0x48, 0x8d, 0xcf, 0x72, 0x75, 0x6c, 0xf6, 0x36, 0x1b, 0x9b, 0xdb,
+	0x14, 0xc9, 0xb0, 0x56, 0xe9, 0xd4, 0xa5, 0x8f, 0xbd, 0x70, 0xc6, 0x9d, 0x2a, 0x78, 0x05, 0x7a,
+	0x24, 0x17, 0xdb, 0x4c, 0xdf, 0x57, 0x95, 0xca, 0x10, 0x30, 0xd0, 0xa8, 0x04, 0xd9, 0xfc, 0x9c,
+	0x73, 0xeb, 0x5a, 0x44, 0x15, 0xe7, 0xdd, 0xa5, 0xcc, 0xae, 0x2a, 0xab, 0x4d, 0x71, 0x7e, 0xc6,
+	0x42, 0xe6, 0x7d, 0xe1, 0x85, 0x6c, 0x6e, 0xf3, 0x99, 0x89, 0xb2, 0x30, 0x0c, 0x9c, 0x43, 0xd3,
+	0xab, 0x2c, 0x3d, 0xd0, 0x5b, 0xc7, 0x99, 0xc7, 0xcd, 0xd5, 0x21, 0xe8, 0x5a, 0x73, 0x60, 0x79,
+	0x8a, 0x1b, 0xe0, 0x0e, 0x6f, 0x66, 0x74, 0x15, 0x3a, 0x9c, 0x23, 0x49, 0x53, 0xaa, 0x1f, 0xf0,
+	0x5a, 0x6a, 0x7d, 0x31, 0xbd, 0xbc, 0xba, 0x30, 0xbf, 0x9c, 0x5e, 0x7d, 0x7d, 0x7d, 0x2d, 0xf5,
+	0xca, 0x22, 0xd7, 0x82, 0xfb, 0xa0, 0xc7, 0xf5, 0x3e, 0xb5, 0x42, 0x5f, 0x23, 0xdc, 0x01, 0x6d,
+	0x6b, 0x8b, 0x4b, 0x37, 0x17, 0x57, 0xd6, 0x39, 0x4f, 0x80, 0xd9, 0x35, 0x51, 0x4b, 0xf2, 0x09,
+	0xda, 0xfb, 0x26, 0xd8, 0xf2, 0xe5, 0x37, 0xc1, 0x96, 0xef, 0xbf, 0x09, 0xa2, 0x87, 0xfb, 0x41,
+	0xf4, 0x9b, 0xfd, 0x20, 0xfa, 0x62, 0x3f, 0x88, 0xf6, 0xf6, 0x83, 0xe8, 0xcb, 0xfd, 0x20, 0xfa,
+	0x7a, 0x3f, 0x88, 0xbe, 0xdd, 0x0f, 0xb6, 0x7c, 0xbf, 0x1f, 0x44, 0x8f, 0x9e, 0x07, 0x5b, 0x76,
+	0x9f, 0x07, 0xd1, 0xde, 0xf3, 0x60, 0xcb, 0x97, 0xcf, 0x83, 0x2d, 0x77, 0xfe, 0x35, 0xa7, 0x16,
+	0xb6, 0x72, 0xd1, 0xca, 0x6c, 0x1b, 0x2d, 0xea, 0xe3, 0xf4, 0xc1, 0x9a, 0x75, 0xc6, 0x0a, 0x9a,
+	0x5a, 0x92, 0xb3, 0x44, 0x1b, 0xab, 0x7c, 0x1e, 0x2f, 0x6c, 0xe4, 0xd4, 0x71, 0xf2, 0xa6, 0xe1,
+	0xfc, 0xd5, 0xdc, 0xe4, 0x4f, 0xfe, 0x0d, 0x1f, 0xfd, 0xff, 0x39, 0xfe, 0xf7, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x83, 0x71, 0xcb, 0x77, 0x15, 0x20, 0x00, 0x00,
 }
 
+func (x NetworkType) String() string {
+	s, ok := NetworkType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *AWSManagedMode) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1358,16 +1805,10 @@ func (this *AWSManagedMode) Equal(that interface{}) bool {
 	if this.AwsRegion != that1.AwsRegion {
 		return false
 	}
-	if that1.ServiceVpcChoice == nil {
-		if this.ServiceVpcChoice != nil {
-			return false
-		}
-	} else if this.ServiceVpcChoice == nil {
-		return false
-	} else if !this.ServiceVpcChoice.Equal(that1.ServiceVpcChoice) {
+	if this.VpcId != that1.VpcId {
 		return false
 	}
-	if !this.AwsCred.Equal(that1.AwsCred) {
+	if !this.AwsCloudUserAccount.Equal(that1.AwsCloudUserAccount) {
 		return false
 	}
 	if len(this.Tags) != len(that1.Tags) {
@@ -1382,15 +1823,6 @@ func (this *AWSManagedMode) Equal(that interface{}) bool {
 		return false
 	}
 	if this.DiskSize != that1.DiskSize {
-		return false
-	}
-	if that1.SecurityGroupChoice == nil {
-		if this.SecurityGroupChoice != nil {
-			return false
-		}
-	} else if this.SecurityGroupChoice == nil {
-		return false
-	} else if !this.SecurityGroupChoice.Equal(that1.SecurityGroupChoice) {
 		return false
 	}
 	if that1.EgressGatewayChoice == nil {
@@ -1411,34 +1843,49 @@ func (this *AWSManagedMode) Equal(that interface{}) bool {
 	} else if !this.PrivateConnectivityChoice.Equal(that1.PrivateConnectivityChoice) {
 		return false
 	}
-	if that1.SiteType == nil {
-		if this.SiteType != nil {
-			return false
-		}
-	} else if this.SiteType == nil {
-		return false
-	} else if !this.SiteType.Equal(that1.SiteType) {
+	if !this.NodeList.Equal(that1.NodeList) {
 		return false
 	}
-	if that1.CloudConnectAttachments == nil {
-		if this.CloudConnectAttachments != nil {
+	if that1.CloudConnectChoice == nil {
+		if this.CloudConnectChoice != nil {
 			return false
 		}
-	} else if this.CloudConnectAttachments == nil {
+	} else if this.CloudConnectChoice == nil {
 		return false
-	} else if !this.CloudConnectAttachments.Equal(that1.CloudConnectAttachments) {
+	} else if !this.CloudConnectChoice.Equal(that1.CloudConnectChoice) {
+		return false
+	}
+	if !this.AwsResourceMappingList.Equal(that1.AwsResourceMappingList) {
+		return false
+	}
+	if that1.PrivateWorkloadRoutingChoice == nil {
+		if this.PrivateWorkloadRoutingChoice != nil {
+			return false
+		}
+	} else if this.PrivateWorkloadRoutingChoice == nil {
+		return false
+	} else if !this.PrivateWorkloadRoutingChoice.Equal(that1.PrivateWorkloadRoutingChoice) {
+		return false
+	}
+	if that1.DiskEncryptionChoice == nil {
+		if this.DiskEncryptionChoice != nil {
+			return false
+		}
+	} else if this.DiskEncryptionChoice == nil {
+		return false
+	} else if !this.DiskEncryptionChoice.Equal(that1.DiskEncryptionChoice) {
 		return false
 	}
 	return true
 }
-func (this *AWSManagedMode_NewVpc) Equal(that interface{}) bool {
+func (this *AWSManagedMode_NoEgress) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSManagedMode_NewVpc)
+	that1, ok := that.(*AWSManagedMode_NoEgress)
 	if !ok {
-		that2, ok := that.(AWSManagedMode_NewVpc)
+		that2, ok := that.(AWSManagedMode_NoEgress)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1450,19 +1897,19 @@ func (this *AWSManagedMode_NewVpc) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.NewVpc.Equal(that1.NewVpc) {
+	if !this.NoEgress.Equal(that1.NoEgress) {
 		return false
 	}
 	return true
 }
-func (this *AWSManagedMode_VpcId) Equal(that interface{}) bool {
+func (this *AWSManagedMode_EgressIgwGw) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSManagedMode_VpcId)
+	that1, ok := that.(*AWSManagedMode_EgressIgwGw)
 	if !ok {
-		that2, ok := that.(AWSManagedMode_VpcId)
+		that2, ok := that.(AWSManagedMode_EgressIgwGw)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1474,79 +1921,7 @@ func (this *AWSManagedMode_VpcId) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.VpcId != that1.VpcId {
-		return false
-	}
-	return true
-}
-func (this *AWSManagedMode_F5XcSecurityGroup) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AWSManagedMode_F5XcSecurityGroup)
-	if !ok {
-		that2, ok := that.(AWSManagedMode_F5XcSecurityGroup)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.F5XcSecurityGroup.Equal(that1.F5XcSecurityGroup) {
-		return false
-	}
-	return true
-}
-func (this *AWSManagedMode_CustomSecurityGroup) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AWSManagedMode_CustomSecurityGroup)
-	if !ok {
-		that2, ok := that.(AWSManagedMode_CustomSecurityGroup)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CustomSecurityGroup.Equal(that1.CustomSecurityGroup) {
-		return false
-	}
-	return true
-}
-func (this *AWSManagedMode_EgressGatewayDefault) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AWSManagedMode_EgressGatewayDefault)
-	if !ok {
-		that2, ok := that.(AWSManagedMode_EgressGatewayDefault)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EgressGatewayDefault.Equal(that1.EgressGatewayDefault) {
+	if !this.EgressIgwGw.Equal(that1.EgressIgwGw) {
 		return false
 	}
 	return true
@@ -1575,14 +1950,14 @@ func (this *AWSManagedMode_EgressNatGw) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *AWSManagedMode_EgressVirtualPrivateGateway) Equal(that interface{}) bool {
+func (this *AWSManagedMode_PrivateAdn) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSManagedMode_EgressVirtualPrivateGateway)
+	that1, ok := that.(*AWSManagedMode_PrivateAdn)
 	if !ok {
-		that2, ok := that.(AWSManagedMode_EgressVirtualPrivateGateway)
+		that2, ok := that.(AWSManagedMode_PrivateAdn)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1594,7 +1969,7 @@ func (this *AWSManagedMode_EgressVirtualPrivateGateway) Equal(that interface{}) 
 	} else if this == nil {
 		return false
 	}
-	if !this.EgressVirtualPrivateGateway.Equal(that1.EgressVirtualPrivateGateway) {
+	if !this.PrivateAdn.Equal(that1.PrivateAdn) {
 		return false
 	}
 	return true
@@ -1623,14 +1998,14 @@ func (this *AWSManagedMode_PrivateConnectivityDisabled) Equal(that interface{}) 
 	}
 	return true
 }
-func (this *AWSManagedMode_PrivateConnectivity) Equal(that interface{}) bool {
+func (this *AWSManagedMode_CloudLinkConfig) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSManagedMode_PrivateConnectivity)
+	that1, ok := that.(*AWSManagedMode_CloudLinkConfig)
 	if !ok {
-		that2, ok := that.(AWSManagedMode_PrivateConnectivity)
+		that2, ok := that.(AWSManagedMode_CloudLinkConfig)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1642,19 +2017,19 @@ func (this *AWSManagedMode_PrivateConnectivity) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.PrivateConnectivity.Equal(that1.PrivateConnectivity) {
+	if !this.CloudLinkConfig.Equal(that1.CloudLinkConfig) {
 		return false
 	}
 	return true
 }
-func (this *AWSManagedMode_SingleInterface) Equal(that interface{}) bool {
+func (this *AWSManagedMode_DisableCloudConnect) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSManagedMode_SingleInterface)
+	that1, ok := that.(*AWSManagedMode_DisableCloudConnect)
 	if !ok {
-		that2, ok := that.(AWSManagedMode_SingleInterface)
+		that2, ok := that.(AWSManagedMode_DisableCloudConnect)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1666,19 +2041,19 @@ func (this *AWSManagedMode_SingleInterface) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SingleInterface.Equal(that1.SingleInterface) {
+	if !this.DisableCloudConnect.Equal(that1.DisableCloudConnect) {
 		return false
 	}
 	return true
 }
-func (this *AWSManagedMode_MultipleInterface) Equal(that interface{}) bool {
+func (this *AWSManagedMode_EnableCloudConnect) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSManagedMode_MultipleInterface)
+	that1, ok := that.(*AWSManagedMode_EnableCloudConnect)
 	if !ok {
-		that2, ok := that.(AWSManagedMode_MultipleInterface)
+		that2, ok := that.(AWSManagedMode_EnableCloudConnect)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1690,19 +2065,19 @@ func (this *AWSManagedMode_MultipleInterface) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.MultipleInterface.Equal(that1.MultipleInterface) {
+	if !this.EnableCloudConnect.Equal(that1.EnableCloudConnect) {
 		return false
 	}
 	return true
 }
-func (this *AWSManagedMode_Disabled) Equal(that interface{}) bool {
+func (this *AWSManagedMode_DisablePrivateWorkloadRoutingToCe) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSManagedMode_Disabled)
+	that1, ok := that.(*AWSManagedMode_DisablePrivateWorkloadRoutingToCe)
 	if !ok {
-		that2, ok := that.(AWSManagedMode_Disabled)
+		that2, ok := that.(AWSManagedMode_DisablePrivateWorkloadRoutingToCe)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1714,19 +2089,19 @@ func (this *AWSManagedMode_Disabled) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Disabled.Equal(that1.Disabled) {
+	if !this.DisablePrivateWorkloadRoutingToCe.Equal(that1.DisablePrivateWorkloadRoutingToCe) {
 		return false
 	}
 	return true
 }
-func (this *AWSManagedMode_Tgw) Equal(that interface{}) bool {
+func (this *AWSManagedMode_EnablePrivateWorkloadRoutingList) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSManagedMode_Tgw)
+	that1, ok := that.(*AWSManagedMode_EnablePrivateWorkloadRoutingList)
 	if !ok {
-		that2, ok := that.(AWSManagedMode_Tgw)
+		that2, ok := that.(AWSManagedMode_EnablePrivateWorkloadRoutingList)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1738,19 +2113,19 @@ func (this *AWSManagedMode_Tgw) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Tgw.Equal(that1.Tgw) {
+	if !this.EnablePrivateWorkloadRoutingList.Equal(that1.EnablePrivateWorkloadRoutingList) {
 		return false
 	}
 	return true
 }
-func (this *TGWType) Equal(that interface{}) bool {
+func (this *AWSManagedMode_DisableDiskEncryption) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*TGWType)
+	that1, ok := that.(*AWSManagedMode_DisableDiskEncryption)
 	if !ok {
-		that2, ok := that.(TGWType)
+		that2, ok := that.(AWSManagedMode_DisableDiskEncryption)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1762,34 +2137,19 @@ func (this *TGWType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if that1.TgwChoice == nil {
-		if this.TgwChoice != nil {
-			return false
-		}
-	} else if this.TgwChoice == nil {
-		return false
-	} else if !this.TgwChoice.Equal(that1.TgwChoice) {
-		return false
-	}
-	if that1.TgwCidrChoice == nil {
-		if this.TgwCidrChoice != nil {
-			return false
-		}
-	} else if this.TgwCidrChoice == nil {
-		return false
-	} else if !this.TgwCidrChoice.Equal(that1.TgwCidrChoice) {
+	if !this.DisableDiskEncryption.Equal(that1.DisableDiskEncryption) {
 		return false
 	}
 	return true
 }
-func (this *TGWType_NewTgw) Equal(that interface{}) bool {
+func (this *AWSManagedMode_DiskEncryptionKey) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*TGWType_NewTgw)
+	that1, ok := that.(*AWSManagedMode_DiskEncryptionKey)
 	if !ok {
-		that2, ok := that.(TGWType_NewTgw)
+		that2, ok := that.(AWSManagedMode_DiskEncryptionKey)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1801,19 +2161,19 @@ func (this *TGWType_NewTgw) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.NewTgw.Equal(that1.NewTgw) {
+	if !this.DiskEncryptionKey.Equal(that1.DiskEncryptionKey) {
 		return false
 	}
 	return true
 }
-func (this *TGWType_ExistingTgw) Equal(that interface{}) bool {
+func (this *AWSCloudLinkConfigType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*TGWType_ExistingTgw)
+	that1, ok := that.(*AWSCloudLinkConfigType)
 	if !ok {
-		that2, ok := that.(TGWType_ExistingTgw)
+		that2, ok := that.(AWSCloudLinkConfigType)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1825,19 +2185,31 @@ func (this *TGWType_ExistingTgw) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ExistingTgw.Equal(that1.ExistingTgw) {
+	if this.VgwId != that1.VgwId {
+		return false
+	}
+	if !this.CloudLink.Equal(that1.CloudLink) {
+		return false
+	}
+	if that1.NetworkOptions == nil {
+		if this.NetworkOptions != nil {
+			return false
+		}
+	} else if this.NetworkOptions == nil {
+		return false
+	} else if !this.NetworkOptions.Equal(that1.NetworkOptions) {
 		return false
 	}
 	return true
 }
-func (this *TGWType_ReservedTgwCidr) Equal(that interface{}) bool {
+func (this *AWSCloudLinkConfigType_Outside) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*TGWType_ReservedTgwCidr)
+	that1, ok := that.(*AWSCloudLinkConfigType_Outside)
 	if !ok {
-		that2, ok := that.(TGWType_ReservedTgwCidr)
+		that2, ok := that.(AWSCloudLinkConfigType_Outside)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1849,19 +2221,19 @@ func (this *TGWType_ReservedTgwCidr) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ReservedTgwCidr.Equal(that1.ReservedTgwCidr) {
+	if !this.Outside.Equal(that1.Outside) {
 		return false
 	}
 	return true
 }
-func (this *TGWType_TgwCidr) Equal(that interface{}) bool {
+func (this *AWSCloudLinkConfigType_Inside) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*TGWType_TgwCidr)
+	that1, ok := that.(*AWSCloudLinkConfigType_Inside)
 	if !ok {
-		that2, ok := that.(TGWType_TgwCidr)
+		that2, ok := that.(AWSCloudLinkConfigType_Inside)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1873,19 +2245,19 @@ func (this *TGWType_TgwCidr) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.TgwCidr.Equal(that1.TgwCidr) {
+	if !this.Inside.Equal(that1.Inside) {
 		return false
 	}
 	return true
 }
-func (this *SingleInterface) Equal(that interface{}) bool {
+func (this *EnablePrivateWorkloadRoutingListType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SingleInterface)
+	that1, ok := that.(*EnablePrivateWorkloadRoutingListType)
 	if !ok {
-		that2, ok := that.(SingleInterface)
+		that2, ok := that.(EnablePrivateWorkloadRoutingListType)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1897,19 +2269,48 @@ func (this *SingleInterface) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.NodeList.Equal(that1.NodeList) {
+	if len(this.EnablePrivateWorkloadRoutingToCe) != len(that1.EnablePrivateWorkloadRoutingToCe) {
+		return false
+	}
+	for i := range this.EnablePrivateWorkloadRoutingToCe {
+		if !this.EnablePrivateWorkloadRoutingToCe[i].Equal(that1.EnablePrivateWorkloadRoutingToCe[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AWSDiskEncryptionKeyType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSDiskEncryptionKeyType)
+	if !ok {
+		that2, ok := that.(AWSDiskEncryptionKeyType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.KeyId != that1.KeyId {
 		return false
 	}
 	return true
 }
-func (this *MultipleInterface) Equal(that interface{}) bool {
+func (this *EnablePrivateWorkloadRoutingType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*MultipleInterface)
+	that1, ok := that.(*EnablePrivateWorkloadRoutingType)
 	if !ok {
-		that2, ok := that.(MultipleInterface)
+		that2, ok := that.(EnablePrivateWorkloadRoutingType)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1921,7 +2322,37 @@ func (this *MultipleInterface) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.NodeList.Equal(that1.NodeList) {
+	if this.SubnetId != that1.SubnetId {
+		return false
+	}
+	if !this.NetworkOption.Equal(that1.NetworkOption) {
+		return false
+	}
+	return true
+}
+func (this *AWSTGWType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSTGWType)
+	if !ok {
+		that2, ok := that.(AWSTGWType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.TgwId != that1.TgwId {
+		return false
+	}
+	if this.VolterraSiteAsn != that1.VolterraSiteAsn {
 		return false
 	}
 	return true
@@ -2012,9 +2443,6 @@ func (this *AWSOrchestratedInterface) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Subnet.Equal(that1.Subnet) {
-		return false
-	}
 	if !this.NetworkOption.Equal(that1.NetworkOption) {
 		return false
 	}
@@ -2028,6 +2456,9 @@ func (this *AWSOrchestratedInterface) Equal(that interface{}) bool {
 	} else if this.SiteToSiteConnectivityInterfaceChoice == nil {
 		return false
 	} else if !this.SiteToSiteConnectivityInterfaceChoice.Equal(that1.SiteToSiteConnectivityInterfaceChoice) {
+		return false
+	}
+	if !this.AwsNodeInterfaceConfiguration.Equal(that1.AwsNodeInterfaceConfiguration) {
 		return false
 	}
 	return true
@@ -2080,14 +2511,14 @@ func (this *AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled) Equ
 	}
 	return true
 }
-func (this *AWSSubnetChoiceType) Equal(that interface{}) bool {
+func (this *AWSNodeInterfaceConfigurationType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSSubnetChoiceType)
+	that1, ok := that.(*AWSNodeInterfaceConfigurationType)
 	if !ok {
-		that2, ok := that.(AWSSubnetChoiceType)
+		that2, ok := that.(AWSNodeInterfaceConfigurationType)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2099,25 +2530,25 @@ func (this *AWSSubnetChoiceType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if that1.Choice == nil {
-		if this.Choice != nil {
+	if that1.AwsNodeInterfaceConfigurationChoice == nil {
+		if this.AwsNodeInterfaceConfigurationChoice != nil {
 			return false
 		}
-	} else if this.Choice == nil {
+	} else if this.AwsNodeInterfaceConfigurationChoice == nil {
 		return false
-	} else if !this.Choice.Equal(that1.Choice) {
+	} else if !this.AwsNodeInterfaceConfigurationChoice.Equal(that1.AwsNodeInterfaceConfigurationChoice) {
 		return false
 	}
 	return true
 }
-func (this *AWSSubnetChoiceType_SubnetParam) Equal(that interface{}) bool {
+func (this *AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSSubnetChoiceType_SubnetParam)
+	that1, ok := that.(*AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration)
 	if !ok {
-		that2, ok := that.(AWSSubnetChoiceType_SubnetParam)
+		that2, ok := that.(AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2129,19 +2560,19 @@ func (this *AWSSubnetChoiceType_SubnetParam) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SubnetParam.Equal(that1.SubnetParam) {
+	if !this.InheritAwsNodeInterfaceConfiguration.Equal(that1.InheritAwsNodeInterfaceConfiguration) {
 		return false
 	}
 	return true
 }
-func (this *AWSSubnetChoiceType_ExistingSubnetId) Equal(that interface{}) bool {
+func (this *AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSSubnetChoiceType_ExistingSubnetId)
+	that1, ok := that.(*AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration)
 	if !ok {
-		that2, ok := that.(AWSSubnetChoiceType_ExistingSubnetId)
+		that2, ok := that.(AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2153,19 +2584,19 @@ func (this *AWSSubnetChoiceType_ExistingSubnetId) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.ExistingSubnetId != that1.ExistingSubnetId {
+	if !this.OverrideAwsNodeInterfaceConfiguration.Equal(that1.OverrideAwsNodeInterfaceConfiguration) {
 		return false
 	}
 	return true
 }
-func (this *AWSCloudSubnetParamType) Equal(that interface{}) bool {
+func (this *AWSOverrideNodeInterfaceConfigurationType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSCloudSubnetParamType)
+	that1, ok := that.(*AWSOverrideNodeInterfaceConfigurationType)
 	if !ok {
-		that2, ok := that.(AWSCloudSubnetParamType)
+		that2, ok := that.(AWSOverrideNodeInterfaceConfigurationType)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2177,31 +2608,22 @@ func (this *AWSCloudSubnetParamType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if that1.NameChoice == nil {
-		if this.NameChoice != nil {
-			return false
-		}
-	} else if this.NameChoice == nil {
-		return false
-	} else if !this.NameChoice.Equal(that1.NameChoice) {
+	if this.SubnetId != that1.SubnetId {
 		return false
 	}
-	if this.Ipv4 != that1.Ipv4 {
-		return false
-	}
-	if this.Ipv6 != that1.Ipv6 {
+	if this.SecurityGroup != that1.SecurityGroup {
 		return false
 	}
 	return true
 }
-func (this *AWSCloudSubnetParamType_Name) Equal(that interface{}) bool {
+func (this *AWSResourceMappingListType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSCloudSubnetParamType_Name)
+	that1, ok := that.(*AWSResourceMappingListType)
 	if !ok {
-		that2, ok := that.(AWSCloudSubnetParamType_Name)
+		that2, ok := that.(AWSResourceMappingListType)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2213,19 +2635,80 @@ func (this *AWSCloudSubnetParamType_Name) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.Name != that1.Name {
+	if len(this.AwsResourceMappings) != len(that1.AwsResourceMappings) {
+		return false
+	}
+	for i := range this.AwsResourceMappings {
+		if !this.AwsResourceMappings[i].Equal(that1.AwsResourceMappings[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AWSResourceMappingType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSResourceMappingType)
+	if !ok {
+		that2, ok := that.(AWSResourceMappingType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NetworkOption.Equal(that1.NetworkOption) {
+		return false
+	}
+	if len(this.AwsResources) != len(that1.AwsResources) {
+		return false
+	}
+	for i := range this.AwsResources {
+		if !this.AwsResources[i].Equal(that1.AwsResources[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AWSIGWGatewayType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSIGWGatewayType)
+	if !ok {
+		that2, ok := that.(AWSIGWGatewayType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.IgwGwId != that1.IgwGwId {
 		return false
 	}
 	return true
 }
-func (this *AWSCloudSubnetParamType_Autogenerate) Equal(that interface{}) bool {
+func (this *AWSNATGatewayType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AWSCloudSubnetParamType_Autogenerate)
+	that1, ok := that.(*AWSNATGatewayType)
 	if !ok {
-		that2, ok := that.(AWSCloudSubnetParamType_Autogenerate)
+		that2, ok := that.(AWSNATGatewayType)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2237,7 +2720,42 @@ func (this *AWSCloudSubnetParamType_Autogenerate) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Autogenerate.Equal(that1.Autogenerate) {
+	if len(this.NatGwId) != len(that1.NatGwId) {
+		return false
+	}
+	for i := range this.NatGwId {
+		if this.NatGwId[i] != that1.NatGwId[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *AWSResources) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSResources)
+	if !ok {
+		that2, ok := that.(AWSResources)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.AvailabilityZone != that1.AvailabilityZone {
+		return false
+	}
+	if this.SubnetId != that1.SubnetId {
+		return false
+	}
+	if this.SecurityGroup != that1.SecurityGroup {
 		return false
 	}
 	return true
@@ -2246,14 +2764,12 @@ func (this *AWSManagedMode) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 22)
+	s := make([]string, 0, 24)
 	s = append(s, "&securemesh_site_v2.AWSManagedMode{")
 	s = append(s, "AwsRegion: "+fmt.Sprintf("%#v", this.AwsRegion)+",\n")
-	if this.ServiceVpcChoice != nil {
-		s = append(s, "ServiceVpcChoice: "+fmt.Sprintf("%#v", this.ServiceVpcChoice)+",\n")
-	}
-	if this.AwsCred != nil {
-		s = append(s, "AwsCred: "+fmt.Sprintf("%#v", this.AwsCred)+",\n")
+	s = append(s, "VpcId: "+fmt.Sprintf("%#v", this.VpcId)+",\n")
+	if this.AwsCloudUserAccount != nil {
+		s = append(s, "AwsCloudUserAccount: "+fmt.Sprintf("%#v", this.AwsCloudUserAccount)+",\n")
 	}
 	keysForTags := make([]string, 0, len(this.Tags))
 	for k, _ := range this.Tags {
@@ -2270,62 +2786,44 @@ func (this *AWSManagedMode) GoString() string {
 	}
 	s = append(s, "InstanceType: "+fmt.Sprintf("%#v", this.InstanceType)+",\n")
 	s = append(s, "DiskSize: "+fmt.Sprintf("%#v", this.DiskSize)+",\n")
-	if this.SecurityGroupChoice != nil {
-		s = append(s, "SecurityGroupChoice: "+fmt.Sprintf("%#v", this.SecurityGroupChoice)+",\n")
-	}
 	if this.EgressGatewayChoice != nil {
 		s = append(s, "EgressGatewayChoice: "+fmt.Sprintf("%#v", this.EgressGatewayChoice)+",\n")
 	}
 	if this.PrivateConnectivityChoice != nil {
 		s = append(s, "PrivateConnectivityChoice: "+fmt.Sprintf("%#v", this.PrivateConnectivityChoice)+",\n")
 	}
-	if this.SiteType != nil {
-		s = append(s, "SiteType: "+fmt.Sprintf("%#v", this.SiteType)+",\n")
+	if this.NodeList != nil {
+		s = append(s, "NodeList: "+fmt.Sprintf("%#v", this.NodeList)+",\n")
 	}
-	if this.CloudConnectAttachments != nil {
-		s = append(s, "CloudConnectAttachments: "+fmt.Sprintf("%#v", this.CloudConnectAttachments)+",\n")
+	if this.CloudConnectChoice != nil {
+		s = append(s, "CloudConnectChoice: "+fmt.Sprintf("%#v", this.CloudConnectChoice)+",\n")
+	}
+	if this.AwsResourceMappingList != nil {
+		s = append(s, "AwsResourceMappingList: "+fmt.Sprintf("%#v", this.AwsResourceMappingList)+",\n")
+	}
+	if this.PrivateWorkloadRoutingChoice != nil {
+		s = append(s, "PrivateWorkloadRoutingChoice: "+fmt.Sprintf("%#v", this.PrivateWorkloadRoutingChoice)+",\n")
+	}
+	if this.DiskEncryptionChoice != nil {
+		s = append(s, "DiskEncryptionChoice: "+fmt.Sprintf("%#v", this.DiskEncryptionChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *AWSManagedMode_NewVpc) GoString() string {
+func (this *AWSManagedMode_NoEgress) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_NewVpc{` +
-		`NewVpc:` + fmt.Sprintf("%#v", this.NewVpc) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_NoEgress{` +
+		`NoEgress:` + fmt.Sprintf("%#v", this.NoEgress) + `}`}, ", ")
 	return s
 }
-func (this *AWSManagedMode_VpcId) GoString() string {
+func (this *AWSManagedMode_EgressIgwGw) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_VpcId{` +
-		`VpcId:` + fmt.Sprintf("%#v", this.VpcId) + `}`}, ", ")
-	return s
-}
-func (this *AWSManagedMode_F5XcSecurityGroup) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_F5XcSecurityGroup{` +
-		`F5XcSecurityGroup:` + fmt.Sprintf("%#v", this.F5XcSecurityGroup) + `}`}, ", ")
-	return s
-}
-func (this *AWSManagedMode_CustomSecurityGroup) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_CustomSecurityGroup{` +
-		`CustomSecurityGroup:` + fmt.Sprintf("%#v", this.CustomSecurityGroup) + `}`}, ", ")
-	return s
-}
-func (this *AWSManagedMode_EgressGatewayDefault) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_EgressGatewayDefault{` +
-		`EgressGatewayDefault:` + fmt.Sprintf("%#v", this.EgressGatewayDefault) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_EgressIgwGw{` +
+		`EgressIgwGw:` + fmt.Sprintf("%#v", this.EgressIgwGw) + `}`}, ", ")
 	return s
 }
 func (this *AWSManagedMode_EgressNatGw) GoString() string {
@@ -2336,12 +2834,12 @@ func (this *AWSManagedMode_EgressNatGw) GoString() string {
 		`EgressNatGw:` + fmt.Sprintf("%#v", this.EgressNatGw) + `}`}, ", ")
 	return s
 }
-func (this *AWSManagedMode_EgressVirtualPrivateGateway) GoString() string {
+func (this *AWSManagedMode_PrivateAdn) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_EgressVirtualPrivateGateway{` +
-		`EgressVirtualPrivateGateway:` + fmt.Sprintf("%#v", this.EgressVirtualPrivateGateway) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_PrivateAdn{` +
+		`PrivateAdn:` + fmt.Sprintf("%#v", this.PrivateAdn) + `}`}, ", ")
 	return s
 }
 func (this *AWSManagedMode_PrivateConnectivityDisabled) GoString() string {
@@ -2352,114 +2850,137 @@ func (this *AWSManagedMode_PrivateConnectivityDisabled) GoString() string {
 		`PrivateConnectivityDisabled:` + fmt.Sprintf("%#v", this.PrivateConnectivityDisabled) + `}`}, ", ")
 	return s
 }
-func (this *AWSManagedMode_PrivateConnectivity) GoString() string {
+func (this *AWSManagedMode_CloudLinkConfig) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_PrivateConnectivity{` +
-		`PrivateConnectivity:` + fmt.Sprintf("%#v", this.PrivateConnectivity) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_CloudLinkConfig{` +
+		`CloudLinkConfig:` + fmt.Sprintf("%#v", this.CloudLinkConfig) + `}`}, ", ")
 	return s
 }
-func (this *AWSManagedMode_SingleInterface) GoString() string {
+func (this *AWSManagedMode_DisableCloudConnect) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_SingleInterface{` +
-		`SingleInterface:` + fmt.Sprintf("%#v", this.SingleInterface) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_DisableCloudConnect{` +
+		`DisableCloudConnect:` + fmt.Sprintf("%#v", this.DisableCloudConnect) + `}`}, ", ")
 	return s
 }
-func (this *AWSManagedMode_MultipleInterface) GoString() string {
+func (this *AWSManagedMode_EnableCloudConnect) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_MultipleInterface{` +
-		`MultipleInterface:` + fmt.Sprintf("%#v", this.MultipleInterface) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_EnableCloudConnect{` +
+		`EnableCloudConnect:` + fmt.Sprintf("%#v", this.EnableCloudConnect) + `}`}, ", ")
 	return s
 }
-func (this *AWSManagedMode_Disabled) GoString() string {
+func (this *AWSManagedMode_DisablePrivateWorkloadRoutingToCe) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_Disabled{` +
-		`Disabled:` + fmt.Sprintf("%#v", this.Disabled) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_DisablePrivateWorkloadRoutingToCe{` +
+		`DisablePrivateWorkloadRoutingToCe:` + fmt.Sprintf("%#v", this.DisablePrivateWorkloadRoutingToCe) + `}`}, ", ")
 	return s
 }
-func (this *AWSManagedMode_Tgw) GoString() string {
+func (this *AWSManagedMode_EnablePrivateWorkloadRoutingList) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_Tgw{` +
-		`Tgw:` + fmt.Sprintf("%#v", this.Tgw) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_EnablePrivateWorkloadRoutingList{` +
+		`EnablePrivateWorkloadRoutingList:` + fmt.Sprintf("%#v", this.EnablePrivateWorkloadRoutingList) + `}`}, ", ")
 	return s
 }
-func (this *TGWType) GoString() string {
+func (this *AWSManagedMode_DisableDiskEncryption) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_DisableDiskEncryption{` +
+		`DisableDiskEncryption:` + fmt.Sprintf("%#v", this.DisableDiskEncryption) + `}`}, ", ")
+	return s
+}
+func (this *AWSManagedMode_DiskEncryptionKey) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.AWSManagedMode_DiskEncryptionKey{` +
+		`DiskEncryptionKey:` + fmt.Sprintf("%#v", this.DiskEncryptionKey) + `}`}, ", ")
+	return s
+}
+func (this *AWSCloudLinkConfigType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 8)
-	s = append(s, "&securemesh_site_v2.TGWType{")
-	if this.TgwChoice != nil {
-		s = append(s, "TgwChoice: "+fmt.Sprintf("%#v", this.TgwChoice)+",\n")
+	s = append(s, "&securemesh_site_v2.AWSCloudLinkConfigType{")
+	s = append(s, "VgwId: "+fmt.Sprintf("%#v", this.VgwId)+",\n")
+	if this.CloudLink != nil {
+		s = append(s, "CloudLink: "+fmt.Sprintf("%#v", this.CloudLink)+",\n")
 	}
-	if this.TgwCidrChoice != nil {
-		s = append(s, "TgwCidrChoice: "+fmt.Sprintf("%#v", this.TgwCidrChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *TGWType_NewTgw) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.TGWType_NewTgw{` +
-		`NewTgw:` + fmt.Sprintf("%#v", this.NewTgw) + `}`}, ", ")
-	return s
-}
-func (this *TGWType_ExistingTgw) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.TGWType_ExistingTgw{` +
-		`ExistingTgw:` + fmt.Sprintf("%#v", this.ExistingTgw) + `}`}, ", ")
-	return s
-}
-func (this *TGWType_ReservedTgwCidr) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.TGWType_ReservedTgwCidr{` +
-		`ReservedTgwCidr:` + fmt.Sprintf("%#v", this.ReservedTgwCidr) + `}`}, ", ")
-	return s
-}
-func (this *TGWType_TgwCidr) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.TGWType_TgwCidr{` +
-		`TgwCidr:` + fmt.Sprintf("%#v", this.TgwCidr) + `}`}, ", ")
-	return s
-}
-func (this *SingleInterface) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&securemesh_site_v2.SingleInterface{")
-	if this.NodeList != nil {
-		s = append(s, "NodeList: "+fmt.Sprintf("%#v", this.NodeList)+",\n")
+	if this.NetworkOptions != nil {
+		s = append(s, "NetworkOptions: "+fmt.Sprintf("%#v", this.NetworkOptions)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *MultipleInterface) GoString() string {
+func (this *AWSCloudLinkConfigType_Outside) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.AWSCloudLinkConfigType_Outside{` +
+		`Outside:` + fmt.Sprintf("%#v", this.Outside) + `}`}, ", ")
+	return s
+}
+func (this *AWSCloudLinkConfigType_Inside) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.AWSCloudLinkConfigType_Inside{` +
+		`Inside:` + fmt.Sprintf("%#v", this.Inside) + `}`}, ", ")
+	return s
+}
+func (this *EnablePrivateWorkloadRoutingListType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 5)
-	s = append(s, "&securemesh_site_v2.MultipleInterface{")
-	if this.NodeList != nil {
-		s = append(s, "NodeList: "+fmt.Sprintf("%#v", this.NodeList)+",\n")
+	s = append(s, "&securemesh_site_v2.EnablePrivateWorkloadRoutingListType{")
+	if this.EnablePrivateWorkloadRoutingToCe != nil {
+		s = append(s, "EnablePrivateWorkloadRoutingToCe: "+fmt.Sprintf("%#v", this.EnablePrivateWorkloadRoutingToCe)+",\n")
 	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSDiskEncryptionKeyType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&securemesh_site_v2.AWSDiskEncryptionKeyType{")
+	s = append(s, "KeyId: "+fmt.Sprintf("%#v", this.KeyId)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *EnablePrivateWorkloadRoutingType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&securemesh_site_v2.EnablePrivateWorkloadRoutingType{")
+	s = append(s, "SubnetId: "+fmt.Sprintf("%#v", this.SubnetId)+",\n")
+	if this.NetworkOption != nil {
+		s = append(s, "NetworkOption: "+fmt.Sprintf("%#v", this.NetworkOption)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSTGWType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&securemesh_site_v2.AWSTGWType{")
+	s = append(s, "TgwId: "+fmt.Sprintf("%#v", this.TgwId)+",\n")
+	s = append(s, "VolterraSiteAsn: "+fmt.Sprintf("%#v", this.VolterraSiteAsn)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -2496,15 +3017,15 @@ func (this *AWSOrchestratedInterface) GoString() string {
 	}
 	s := make([]string, 0, 9)
 	s = append(s, "&securemesh_site_v2.AWSOrchestratedInterface{")
-	if this.Subnet != nil {
-		s = append(s, "Subnet: "+fmt.Sprintf("%#v", this.Subnet)+",\n")
-	}
 	if this.NetworkOption != nil {
 		s = append(s, "NetworkOption: "+fmt.Sprintf("%#v", this.NetworkOption)+",\n")
 	}
 	s = append(s, "Mtu: "+fmt.Sprintf("%#v", this.Mtu)+",\n")
 	if this.SiteToSiteConnectivityInterfaceChoice != nil {
 		s = append(s, "SiteToSiteConnectivityInterfaceChoice: "+fmt.Sprintf("%#v", this.SiteToSiteConnectivityInterfaceChoice)+",\n")
+	}
+	if this.AwsNodeInterfaceConfiguration != nil {
+		s = append(s, "AwsNodeInterfaceConfiguration: "+fmt.Sprintf("%#v", this.AwsNodeInterfaceConfiguration)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -2525,63 +3046,103 @@ func (this *AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled) GoS
 		`SiteToSiteConnectivityInterfaceEnabled:` + fmt.Sprintf("%#v", this.SiteToSiteConnectivityInterfaceEnabled) + `}`}, ", ")
 	return s
 }
-func (this *AWSSubnetChoiceType) GoString() string {
+func (this *AWSNodeInterfaceConfigurationType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&securemesh_site_v2.AWSSubnetChoiceType{")
-	if this.Choice != nil {
-		s = append(s, "Choice: "+fmt.Sprintf("%#v", this.Choice)+",\n")
+	s = append(s, "&securemesh_site_v2.AWSNodeInterfaceConfigurationType{")
+	if this.AwsNodeInterfaceConfigurationChoice != nil {
+		s = append(s, "AwsNodeInterfaceConfigurationChoice: "+fmt.Sprintf("%#v", this.AwsNodeInterfaceConfigurationChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *AWSSubnetChoiceType_SubnetParam) GoString() string {
+func (this *AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSSubnetChoiceType_SubnetParam{` +
-		`SubnetParam:` + fmt.Sprintf("%#v", this.SubnetParam) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration{` +
+		`InheritAwsNodeInterfaceConfiguration:` + fmt.Sprintf("%#v", this.InheritAwsNodeInterfaceConfiguration) + `}`}, ", ")
 	return s
 }
-func (this *AWSSubnetChoiceType_ExistingSubnetId) GoString() string {
+func (this *AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSSubnetChoiceType_ExistingSubnetId{` +
-		`ExistingSubnetId:` + fmt.Sprintf("%#v", this.ExistingSubnetId) + `}`}, ", ")
+	s := strings.Join([]string{`&securemesh_site_v2.AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration{` +
+		`OverrideAwsNodeInterfaceConfiguration:` + fmt.Sprintf("%#v", this.OverrideAwsNodeInterfaceConfiguration) + `}`}, ", ")
 	return s
 }
-func (this *AWSCloudSubnetParamType) GoString() string {
+func (this *AWSOverrideNodeInterfaceConfigurationType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
-	s = append(s, "&securemesh_site_v2.AWSCloudSubnetParamType{")
-	if this.NameChoice != nil {
-		s = append(s, "NameChoice: "+fmt.Sprintf("%#v", this.NameChoice)+",\n")
-	}
-	s = append(s, "Ipv4: "+fmt.Sprintf("%#v", this.Ipv4)+",\n")
-	s = append(s, "Ipv6: "+fmt.Sprintf("%#v", this.Ipv6)+",\n")
+	s := make([]string, 0, 6)
+	s = append(s, "&securemesh_site_v2.AWSOverrideNodeInterfaceConfigurationType{")
+	s = append(s, "SubnetId: "+fmt.Sprintf("%#v", this.SubnetId)+",\n")
+	s = append(s, "SecurityGroup: "+fmt.Sprintf("%#v", this.SecurityGroup)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *AWSCloudSubnetParamType_Name) GoString() string {
+func (this *AWSResourceMappingListType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSCloudSubnetParamType_Name{` +
-		`Name:` + fmt.Sprintf("%#v", this.Name) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&securemesh_site_v2.AWSResourceMappingListType{")
+	if this.AwsResourceMappings != nil {
+		s = append(s, "AwsResourceMappings: "+fmt.Sprintf("%#v", this.AwsResourceMappings)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
-func (this *AWSCloudSubnetParamType_Autogenerate) GoString() string {
+func (this *AWSResourceMappingType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&securemesh_site_v2.AWSCloudSubnetParamType_Autogenerate{` +
-		`Autogenerate:` + fmt.Sprintf("%#v", this.Autogenerate) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&securemesh_site_v2.AWSResourceMappingType{")
+	if this.NetworkOption != nil {
+		s = append(s, "NetworkOption: "+fmt.Sprintf("%#v", this.NetworkOption)+",\n")
+	}
+	if this.AwsResources != nil {
+		s = append(s, "AwsResources: "+fmt.Sprintf("%#v", this.AwsResources)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSIGWGatewayType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&securemesh_site_v2.AWSIGWGatewayType{")
+	s = append(s, "IgwGwId: "+fmt.Sprintf("%#v", this.IgwGwId)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSNATGatewayType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&securemesh_site_v2.AWSNATGatewayType{")
+	s = append(s, "NatGwId: "+fmt.Sprintf("%#v", this.NatGwId)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSResources) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&securemesh_site_v2.AWSResources{")
+	s = append(s, "AvailabilityZone: "+fmt.Sprintf("%#v", this.AvailabilityZone)+",\n")
+	s = append(s, "SubnetId: "+fmt.Sprintf("%#v", this.SubnetId)+",\n")
+	s = append(s, "SecurityGroup: "+fmt.Sprintf("%#v", this.SecurityGroup)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func valueToGoStringAwsTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
@@ -2611,29 +3172,20 @@ func (m *AWSManagedMode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.CloudConnectAttachments != nil {
-		{
-			size := m.CloudConnectAttachments.Size()
-			i -= size
-			if _, err := m.CloudConnectAttachments.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.SiteType != nil {
-		{
-			size := m.SiteType.Size()
-			i -= size
-			if _, err := m.SiteType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.PrivateConnectivityChoice != nil {
 		{
 			size := m.PrivateConnectivityChoice.Size()
 			i -= size
 			if _, err := m.PrivateConnectivityChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.PrivateWorkloadRoutingChoice != nil {
+		{
+			size := m.PrivateWorkloadRoutingChoice.Size()
+			i -= size
+			if _, err := m.PrivateWorkloadRoutingChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -2647,14 +3199,65 @@ func (m *AWSManagedMode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.SecurityGroupChoice != nil {
+	if m.DiskEncryptionChoice != nil {
 		{
-			size := m.SecurityGroupChoice.Size()
+			size := m.DiskEncryptionChoice.Size()
 			i -= size
-			if _, err := m.SecurityGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.DiskEncryptionChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
+	}
+	if m.AwsCloudUserAccount != nil {
+		{
+			size, err := m.AwsCloudUserAccount.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xe2
+	}
+	if m.AwsResourceMappingList != nil {
+		{
+			size, err := m.AwsResourceMappingList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xb2
+	}
+	if m.CloudConnectChoice != nil {
+		{
+			size := m.CloudConnectChoice.Size()
+			i -= size
+			if _, err := m.CloudConnectChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NodeList != nil {
+		{
+			size, err := m.NodeList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
 	}
 	if m.DiskSize != 0 {
 		i = encodeVarintAwsTypes(dAtA, i, uint64(m.DiskSize))
@@ -2692,26 +3295,12 @@ func (m *AWSManagedMode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x3a
 		}
 	}
-	if m.AwsCred != nil {
-		{
-			size, err := m.AwsCred.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
+	if len(m.VpcId) > 0 {
+		i -= len(m.VpcId)
+		copy(dAtA[i:], m.VpcId)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.VpcId)))
 		i--
-		dAtA[i] = 0x32
-	}
-	if m.ServiceVpcChoice != nil {
-		{
-			size := m.ServiceVpcChoice.Size()
-			i -= size
-			if _, err := m.ServiceVpcChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
+		dAtA[i] = 0x22
 	}
 	if len(m.AwsRegion) > 0 {
 		i -= len(m.AwsRegion)
@@ -2723,152 +3312,6 @@ func (m *AWSManagedMode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *AWSManagedMode_NewVpc) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_NewVpc) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.NewVpc != nil {
-		{
-			size, err := m.NewVpc.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AWSManagedMode_VpcId) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_VpcId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.VpcId)
-	copy(dAtA[i:], m.VpcId)
-	i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.VpcId)))
-	i--
-	dAtA[i] = 0x22
-	return len(dAtA) - i, nil
-}
-func (m *AWSManagedMode_F5XcSecurityGroup) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_F5XcSecurityGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.F5XcSecurityGroup != nil {
-		{
-			size, err := m.F5XcSecurityGroup.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x6a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AWSManagedMode_CustomSecurityGroup) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_CustomSecurityGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.CustomSecurityGroup != nil {
-		{
-			size, err := m.CustomSecurityGroup.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x72
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AWSManagedMode_EgressGatewayDefault) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_EgressGatewayDefault) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.EgressGatewayDefault != nil {
-		{
-			size, err := m.EgressGatewayDefault.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x82
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AWSManagedMode_EgressNatGw) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_EgressNatGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.EgressNatGw != nil {
-		{
-			size, err := m.EgressNatGw.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x8a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AWSManagedMode_EgressVirtualPrivateGateway) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_EgressVirtualPrivateGateway) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.EgressVirtualPrivateGateway != nil {
-		{
-			size, err := m.EgressVirtualPrivateGateway.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x92
-	}
-	return len(dAtA) - i, nil
-}
 func (m *AWSManagedMode_PrivateConnectivityDisabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -2892,16 +3335,16 @@ func (m *AWSManagedMode_PrivateConnectivityDisabled) MarshalToSizedBuffer(dAtA [
 	}
 	return len(dAtA) - i, nil
 }
-func (m *AWSManagedMode_PrivateConnectivity) MarshalTo(dAtA []byte) (int, error) {
+func (m *AWSManagedMode_DisableCloudConnect) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *AWSManagedMode_PrivateConnectivity) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSManagedMode_DisableCloudConnect) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.PrivateConnectivity != nil {
+	if m.DisableCloudConnect != nil {
 		{
-			size, err := m.PrivateConnectivity.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.DisableCloudConnect.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2909,68 +3352,91 @@ func (m *AWSManagedMode_PrivateConnectivity) MarshalToSizedBuffer(dAtA []byte) (
 			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x1
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSManagedMode_EnableCloudConnect) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSManagedMode_EnableCloudConnect) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableCloudConnect != nil {
+		{
+			size, err := m.EnableCloudConnect.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSManagedMode_EgressIgwGw) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSManagedMode_EgressIgwGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EgressIgwGw != nil {
+		{
+			size, err := m.EgressIgwGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSManagedMode_NoEgress) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSManagedMode_NoEgress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoEgress != nil {
+		{
+			size, err := m.NoEgress.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xc2
 	}
 	return len(dAtA) - i, nil
 }
-func (m *AWSManagedMode_SingleInterface) MarshalTo(dAtA []byte) (int, error) {
+func (m *AWSManagedMode_DisablePrivateWorkloadRoutingToCe) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *AWSManagedMode_SingleInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSManagedMode_DisablePrivateWorkloadRoutingToCe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SingleInterface != nil {
+	if m.DisablePrivateWorkloadRoutingToCe != nil {
 		{
-			size, err := m.SingleInterface.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xda
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AWSManagedMode_MultipleInterface) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_MultipleInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.MultipleInterface != nil {
-		{
-			size, err := m.MultipleInterface.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xe2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AWSManagedMode_Disabled) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSManagedMode_Disabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Disabled != nil {
-		{
-			size, err := m.Disabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.DisablePrivateWorkloadRoutingToCe.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2980,20 +3446,20 @@ func (m *AWSManagedMode_Disabled) MarshalToSizedBuffer(dAtA []byte) (int, error)
 		i--
 		dAtA[i] = 0x2
 		i--
-		dAtA[i] = 0x8a
+		dAtA[i] = 0xd2
 	}
 	return len(dAtA) - i, nil
 }
-func (m *AWSManagedMode_Tgw) MarshalTo(dAtA []byte) (int, error) {
+func (m *AWSManagedMode_DisableDiskEncryption) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *AWSManagedMode_Tgw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSManagedMode_DisableDiskEncryption) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.Tgw != nil {
+	if m.DisableDiskEncryption != nil {
 		{
-			size, err := m.Tgw.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.DisableDiskEncryption.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3002,12 +3468,127 @@ func (m *AWSManagedMode_Tgw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSManagedMode_DiskEncryptionKey) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSManagedMode_DiskEncryptionKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DiskEncryptionKey != nil {
+		{
+			size, err := m.DiskEncryptionKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSManagedMode_EgressNatGw) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSManagedMode_EgressNatGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EgressNatGw != nil {
+		{
+			size, err := m.EgressNatGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSManagedMode_PrivateAdn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSManagedMode_PrivateAdn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.PrivateAdn != nil {
+		{
+			size, err := m.PrivateAdn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
 		i--
 		dAtA[i] = 0x92
 	}
 	return len(dAtA) - i, nil
 }
-func (m *TGWType) Marshal() (dAtA []byte, err error) {
+func (m *AWSManagedMode_EnablePrivateWorkloadRoutingList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSManagedMode_EnablePrivateWorkloadRoutingList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnablePrivateWorkloadRoutingList != nil {
+		{
+			size, err := m.EnablePrivateWorkloadRoutingList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSManagedMode_CloudLinkConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSManagedMode_CloudLinkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CloudLinkConfig != nil {
+		{
+			size, err := m.CloudLinkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSCloudLinkConfigType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -3017,47 +3598,28 @@ func (m *TGWType) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *TGWType) MarshalTo(dAtA []byte) (int, error) {
+func (m *AWSCloudLinkConfigType) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *TGWType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSCloudLinkConfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.TgwCidrChoice != nil {
+	if m.NetworkOptions != nil {
 		{
-			size := m.TgwCidrChoice.Size()
+			size := m.NetworkOptions.Size()
 			i -= size
-			if _, err := m.TgwCidrChoice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.NetworkOptions.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
 	}
-	if m.TgwChoice != nil {
+	if m.CloudLink != nil {
 		{
-			size := m.TgwChoice.Size()
-			i -= size
-			if _, err := m.TgwChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *TGWType_NewTgw) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *TGWType_NewTgw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.NewTgw != nil {
-		{
-			size, err := m.NewTgw.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.CloudLink.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3067,18 +3629,26 @@ func (m *TGWType_NewTgw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
+	if len(m.VgwId) > 0 {
+		i -= len(m.VgwId)
+		copy(dAtA[i:], m.VgwId)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.VgwId)))
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
-func (m *TGWType_ExistingTgw) MarshalTo(dAtA []byte) (int, error) {
+
+func (m *AWSCloudLinkConfigType_Outside) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *TGWType_ExistingTgw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSCloudLinkConfigType_Outside) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.ExistingTgw != nil {
+	if m.Outside != nil {
 		{
-			size, err := m.ExistingTgw.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Outside.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3086,20 +3656,20 @@ func (m *TGWType_ExistingTgw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x22
 	}
 	return len(dAtA) - i, nil
 }
-func (m *TGWType_ReservedTgwCidr) MarshalTo(dAtA []byte) (int, error) {
+func (m *AWSCloudLinkConfigType_Inside) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *TGWType_ReservedTgwCidr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSCloudLinkConfigType_Inside) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.ReservedTgwCidr != nil {
+	if m.Inside != nil {
 		{
-			size, err := m.ReservedTgwCidr.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Inside.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3111,28 +3681,7 @@ func (m *TGWType_ReservedTgwCidr) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
-func (m *TGWType_TgwCidr) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *TGWType_TgwCidr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.TgwCidr != nil {
-		{
-			size, err := m.TgwCidr.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
-func (m *SingleInterface) Marshal() (dAtA []byte, err error) {
+func (m *EnablePrivateWorkloadRoutingListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -3142,32 +3691,64 @@ func (m *SingleInterface) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SingleInterface) MarshalTo(dAtA []byte) (int, error) {
+func (m *EnablePrivateWorkloadRoutingListType) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SingleInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *EnablePrivateWorkloadRoutingListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NodeList != nil {
-		{
-			size, err := m.NodeList.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
+	if len(m.EnablePrivateWorkloadRoutingToCe) > 0 {
+		for iNdEx := len(m.EnablePrivateWorkloadRoutingToCe) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.EnablePrivateWorkloadRoutingToCe[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintAwsTypes(dAtA, i, uint64(size))
 			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+			i--
+			dAtA[i] = 0xa
 		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSDiskEncryptionKeyType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSDiskEncryptionKeyType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSDiskEncryptionKeyType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.KeyId) > 0 {
+		i -= len(m.KeyId)
+		copy(dAtA[i:], m.KeyId)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.KeyId)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *MultipleInterface) Marshal() (dAtA []byte, err error) {
+func (m *EnablePrivateWorkloadRoutingType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -3177,25 +3758,67 @@ func (m *MultipleInterface) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MultipleInterface) MarshalTo(dAtA []byte) (int, error) {
+func (m *EnablePrivateWorkloadRoutingType) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MultipleInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *EnablePrivateWorkloadRoutingType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NodeList != nil {
+	if len(m.SubnetId) > 0 {
+		i -= len(m.SubnetId)
+		copy(dAtA[i:], m.SubnetId)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.SubnetId)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.NetworkOption != nil {
 		{
-			size, err := m.NodeList.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.NetworkOption.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
 			i -= size
 			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSTGWType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSTGWType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSTGWType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VolterraSiteAsn != 0 {
+		i = encodeVarintAwsTypes(dAtA, i, uint64(m.VolterraSiteAsn))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.TgwId) > 0 {
+		i -= len(m.TgwId)
+		copy(dAtA[i:], m.TgwId)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.TgwId)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -3317,6 +3940,18 @@ func (m *AWSOrchestratedInterface) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if m.AwsNodeInterfaceConfiguration != nil {
+		{
+			size, err := m.AwsNodeInterfaceConfiguration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
 	if m.SiteToSiteConnectivityInterfaceChoice != nil {
 		{
 			size := m.SiteToSiteConnectivityInterfaceChoice.Size()
@@ -3342,18 +3977,6 @@ func (m *AWSOrchestratedInterface) MarshalToSizedBuffer(dAtA []byte) (int, error
 		}
 		i--
 		dAtA[i] = 0x12
-	}
-	if m.Subnet != nil {
-		{
-			size, err := m.Subnet.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -3400,7 +4023,7 @@ func (m *AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled) Marsha
 	}
 	return len(dAtA) - i, nil
 }
-func (m *AWSSubnetChoiceType) Marshal() (dAtA []byte, err error) {
+func (m *AWSNodeInterfaceConfigurationType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -3410,21 +4033,21 @@ func (m *AWSSubnetChoiceType) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AWSSubnetChoiceType) MarshalTo(dAtA []byte) (int, error) {
+func (m *AWSNodeInterfaceConfigurationType) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *AWSSubnetChoiceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSNodeInterfaceConfigurationType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Choice != nil {
+	if m.AwsNodeInterfaceConfigurationChoice != nil {
 		{
-			size := m.Choice.Size()
+			size := m.AwsNodeInterfaceConfigurationChoice.Size()
 			i -= size
-			if _, err := m.Choice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.AwsNodeInterfaceConfigurationChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3432,16 +4055,16 @@ func (m *AWSSubnetChoiceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *AWSSubnetChoiceType_SubnetParam) MarshalTo(dAtA []byte) (int, error) {
+func (m *AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *AWSSubnetChoiceType_SubnetParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SubnetParam != nil {
+	if m.InheritAwsNodeInterfaceConfiguration != nil {
 		{
-			size, err := m.SubnetParam.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.InheritAwsNodeInterfaceConfiguration.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3449,94 +4072,20 @@ func (m *AWSSubnetChoiceType_SubnetParam) MarshalToSizedBuffer(dAtA []byte) (int
 			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 	}
 	return len(dAtA) - i, nil
 }
-func (m *AWSSubnetChoiceType_ExistingSubnetId) MarshalTo(dAtA []byte) (int, error) {
+func (m *AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *AWSSubnetChoiceType_ExistingSubnetId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	i -= len(m.ExistingSubnetId)
-	copy(dAtA[i:], m.ExistingSubnetId)
-	i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.ExistingSubnetId)))
-	i--
-	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
-}
-func (m *AWSCloudSubnetParamType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AWSCloudSubnetParamType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSCloudSubnetParamType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Ipv6) > 0 {
-		i -= len(m.Ipv6)
-		copy(dAtA[i:], m.Ipv6)
-		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.Ipv6)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.Ipv4) > 0 {
-		i -= len(m.Ipv4)
-		copy(dAtA[i:], m.Ipv4)
-		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.Ipv4)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.NameChoice != nil {
+	if m.OverrideAwsNodeInterfaceConfiguration != nil {
 		{
-			size := m.NameChoice.Size()
-			i -= size
-			if _, err := m.NameChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AWSCloudSubnetParamType_Name) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSCloudSubnetParamType_Name) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.Name)
-	copy(dAtA[i:], m.Name)
-	i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.Name)))
-	i--
-	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
-}
-func (m *AWSCloudSubnetParamType_Autogenerate) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AWSCloudSubnetParamType_Autogenerate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Autogenerate != nil {
-		{
-			size, err := m.Autogenerate.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.OverrideAwsNodeInterfaceConfiguration.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3548,6 +4097,235 @@ func (m *AWSCloudSubnetParamType_Autogenerate) MarshalToSizedBuffer(dAtA []byte)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AWSOverrideNodeInterfaceConfigurationType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSOverrideNodeInterfaceConfigurationType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSOverrideNodeInterfaceConfigurationType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SecurityGroup) > 0 {
+		i -= len(m.SecurityGroup)
+		copy(dAtA[i:], m.SecurityGroup)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.SecurityGroup)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.SubnetId) > 0 {
+		i -= len(m.SubnetId)
+		copy(dAtA[i:], m.SubnetId)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.SubnetId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSResourceMappingListType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSResourceMappingListType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSResourceMappingListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AwsResourceMappings) > 0 {
+		for iNdEx := len(m.AwsResourceMappings) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AwsResourceMappings[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSResourceMappingType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSResourceMappingType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSResourceMappingType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AwsResources) > 0 {
+		for iNdEx := len(m.AwsResources) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AwsResources[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.NetworkOption != nil {
+		{
+			size, err := m.NetworkOption.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAwsTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSIGWGatewayType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSIGWGatewayType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSIGWGatewayType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.IgwGwId) > 0 {
+		i -= len(m.IgwGwId)
+		copy(dAtA[i:], m.IgwGwId)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.IgwGwId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSNATGatewayType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSNATGatewayType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSNATGatewayType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.NatGwId) > 0 {
+		for iNdEx := len(m.NatGwId) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NatGwId[iNdEx])
+			copy(dAtA[i:], m.NatGwId[iNdEx])
+			i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.NatGwId[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSResources) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSResources) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSResources) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SecurityGroup) > 0 {
+		i -= len(m.SecurityGroup)
+		copy(dAtA[i:], m.SecurityGroup)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.SecurityGroup)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.SubnetId) > 0 {
+		i -= len(m.SubnetId)
+		copy(dAtA[i:], m.SubnetId)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.SubnetId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.AvailabilityZone) > 0 {
+		i -= len(m.AvailabilityZone)
+		copy(dAtA[i:], m.AvailabilityZone)
+		i = encodeVarintAwsTypes(dAtA, i, uint64(len(m.AvailabilityZone)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintAwsTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovAwsTypes(v)
 	base := offset
@@ -3569,11 +4347,8 @@ func (m *AWSManagedMode) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
-	if m.ServiceVpcChoice != nil {
-		n += m.ServiceVpcChoice.Size()
-	}
-	if m.AwsCred != nil {
-		l = m.AwsCred.Size()
+	l = len(m.VpcId)
+	if l > 0 {
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
 	if len(m.Tags) > 0 {
@@ -3591,78 +4366,128 @@ func (m *AWSManagedMode) Size() (n int) {
 	if m.DiskSize != 0 {
 		n += 1 + sovAwsTypes(uint64(m.DiskSize))
 	}
-	if m.SecurityGroupChoice != nil {
-		n += m.SecurityGroupChoice.Size()
+	if m.PrivateConnectivityChoice != nil {
+		n += m.PrivateConnectivityChoice.Size()
+	}
+	if m.NodeList != nil {
+		l = m.NodeList.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
+	}
+	if m.CloudConnectChoice != nil {
+		n += m.CloudConnectChoice.Size()
+	}
+	if m.AwsResourceMappingList != nil {
+		l = m.AwsResourceMappingList.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
 	}
 	if m.EgressGatewayChoice != nil {
 		n += m.EgressGatewayChoice.Size()
 	}
-	if m.PrivateConnectivityChoice != nil {
-		n += m.PrivateConnectivityChoice.Size()
+	if m.PrivateWorkloadRoutingChoice != nil {
+		n += m.PrivateWorkloadRoutingChoice.Size()
 	}
-	if m.SiteType != nil {
-		n += m.SiteType.Size()
+	if m.AwsCloudUserAccount != nil {
+		l = m.AwsCloudUserAccount.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
 	}
-	if m.CloudConnectAttachments != nil {
-		n += m.CloudConnectAttachments.Size()
+	if m.DiskEncryptionChoice != nil {
+		n += m.DiskEncryptionChoice.Size()
 	}
 	return n
 }
 
-func (m *AWSManagedMode_NewVpc) Size() (n int) {
+func (m *AWSManagedMode_PrivateConnectivityDisabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.NewVpc != nil {
-		l = m.NewVpc.Size()
-		n += 1 + l + sovAwsTypes(uint64(l))
+	if m.PrivateConnectivityDisabled != nil {
+		l = m.PrivateConnectivityDisabled.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *AWSManagedMode_VpcId) Size() (n int) {
+func (m *AWSManagedMode_DisableCloudConnect) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.VpcId)
-	n += 1 + l + sovAwsTypes(uint64(l))
-	return n
-}
-func (m *AWSManagedMode_F5XcSecurityGroup) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.F5XcSecurityGroup != nil {
-		l = m.F5XcSecurityGroup.Size()
-		n += 1 + l + sovAwsTypes(uint64(l))
+	if m.DisableCloudConnect != nil {
+		l = m.DisableCloudConnect.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *AWSManagedMode_CustomSecurityGroup) Size() (n int) {
+func (m *AWSManagedMode_EnableCloudConnect) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.CustomSecurityGroup != nil {
-		l = m.CustomSecurityGroup.Size()
-		n += 1 + l + sovAwsTypes(uint64(l))
+	if m.EnableCloudConnect != nil {
+		l = m.EnableCloudConnect.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *AWSManagedMode_EgressGatewayDefault) Size() (n int) {
+func (m *AWSManagedMode_EgressIgwGw) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.EgressGatewayDefault != nil {
-		l = m.EgressGatewayDefault.Size()
+	if m.EgressIgwGw != nil {
+		l = m.EgressIgwGw.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
+	}
+	return n
+}
+func (m *AWSManagedMode_NoEgress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoEgress != nil {
+		l = m.NoEgress.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
+	}
+	return n
+}
+func (m *AWSManagedMode_DisablePrivateWorkloadRoutingToCe) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisablePrivateWorkloadRoutingToCe != nil {
+		l = m.DisablePrivateWorkloadRoutingToCe.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
+	}
+	return n
+}
+func (m *AWSManagedMode_DisableDiskEncryption) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableDiskEncryption != nil {
+		l = m.DisableDiskEncryption.Size()
+		n += 2 + l + sovAwsTypes(uint64(l))
+	}
+	return n
+}
+func (m *AWSManagedMode_DiskEncryptionKey) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiskEncryptionKey != nil {
+		l = m.DiskEncryptionKey.Size()
 		n += 2 + l + sovAwsTypes(uint64(l))
 	}
 	return n
@@ -3679,175 +4504,143 @@ func (m *AWSManagedMode_EgressNatGw) Size() (n int) {
 	}
 	return n
 }
-func (m *AWSManagedMode_EgressVirtualPrivateGateway) Size() (n int) {
+func (m *AWSManagedMode_PrivateAdn) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.EgressVirtualPrivateGateway != nil {
-		l = m.EgressVirtualPrivateGateway.Size()
+	if m.PrivateAdn != nil {
+		l = m.PrivateAdn.Size()
 		n += 2 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *AWSManagedMode_PrivateConnectivityDisabled) Size() (n int) {
+func (m *AWSManagedMode_EnablePrivateWorkloadRoutingList) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.PrivateConnectivityDisabled != nil {
-		l = m.PrivateConnectivityDisabled.Size()
+	if m.EnablePrivateWorkloadRoutingList != nil {
+		l = m.EnablePrivateWorkloadRoutingList.Size()
 		n += 2 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *AWSManagedMode_PrivateConnectivity) Size() (n int) {
+func (m *AWSManagedMode_CloudLinkConfig) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.PrivateConnectivity != nil {
-		l = m.PrivateConnectivity.Size()
+	if m.CloudLinkConfig != nil {
+		l = m.CloudLinkConfig.Size()
 		n += 2 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *AWSManagedMode_SingleInterface) Size() (n int) {
+func (m *AWSCloudLinkConfigType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SingleInterface != nil {
-		l = m.SingleInterface.Size()
-		n += 2 + l + sovAwsTypes(uint64(l))
+	l = len(m.VgwId)
+	if l > 0 {
+		n += 1 + l + sovAwsTypes(uint64(l))
 	}
-	return n
-}
-func (m *AWSManagedMode_MultipleInterface) Size() (n int) {
-	if m == nil {
-		return 0
+	if m.CloudLink != nil {
+		l = m.CloudLink.Size()
+		n += 1 + l + sovAwsTypes(uint64(l))
 	}
-	var l int
-	_ = l
-	if m.MultipleInterface != nil {
-		l = m.MultipleInterface.Size()
-		n += 2 + l + sovAwsTypes(uint64(l))
-	}
-	return n
-}
-func (m *AWSManagedMode_Disabled) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Disabled != nil {
-		l = m.Disabled.Size()
-		n += 2 + l + sovAwsTypes(uint64(l))
-	}
-	return n
-}
-func (m *AWSManagedMode_Tgw) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Tgw != nil {
-		l = m.Tgw.Size()
-		n += 2 + l + sovAwsTypes(uint64(l))
-	}
-	return n
-}
-func (m *TGWType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.TgwChoice != nil {
-		n += m.TgwChoice.Size()
-	}
-	if m.TgwCidrChoice != nil {
-		n += m.TgwCidrChoice.Size()
+	if m.NetworkOptions != nil {
+		n += m.NetworkOptions.Size()
 	}
 	return n
 }
 
-func (m *TGWType_NewTgw) Size() (n int) {
+func (m *AWSCloudLinkConfigType_Outside) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.NewTgw != nil {
-		l = m.NewTgw.Size()
+	if m.Outside != nil {
+		l = m.Outside.Size()
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *TGWType_ExistingTgw) Size() (n int) {
+func (m *AWSCloudLinkConfigType_Inside) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.ExistingTgw != nil {
-		l = m.ExistingTgw.Size()
+	if m.Inside != nil {
+		l = m.Inside.Size()
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *TGWType_ReservedTgwCidr) Size() (n int) {
+func (m *EnablePrivateWorkloadRoutingListType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.ReservedTgwCidr != nil {
-		l = m.ReservedTgwCidr.Size()
-		n += 1 + l + sovAwsTypes(uint64(l))
+	if len(m.EnablePrivateWorkloadRoutingToCe) > 0 {
+		for _, e := range m.EnablePrivateWorkloadRoutingToCe {
+			l = e.Size()
+			n += 1 + l + sovAwsTypes(uint64(l))
+		}
 	}
 	return n
 }
-func (m *TGWType_TgwCidr) Size() (n int) {
+
+func (m *AWSDiskEncryptionKeyType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.TgwCidr != nil {
-		l = m.TgwCidr.Size()
-		n += 1 + l + sovAwsTypes(uint64(l))
-	}
-	return n
-}
-func (m *SingleInterface) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.NodeList != nil {
-		l = m.NodeList.Size()
+	l = len(m.KeyId)
+	if l > 0 {
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
 
-func (m *MultipleInterface) Size() (n int) {
+func (m *EnablePrivateWorkloadRoutingType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.NodeList != nil {
-		l = m.NodeList.Size()
+	if m.NetworkOption != nil {
+		l = m.NetworkOption.Size()
 		n += 1 + l + sovAwsTypes(uint64(l))
+	}
+	l = len(m.SubnetId)
+	if l > 0 {
+		n += 1 + l + sovAwsTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AWSTGWType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TgwId)
+	if l > 0 {
+		n += 1 + l + sovAwsTypes(uint64(l))
+	}
+	if m.VolterraSiteAsn != 0 {
+		n += 1 + sovAwsTypes(uint64(m.VolterraSiteAsn))
 	}
 	return n
 }
@@ -3900,10 +4693,6 @@ func (m *AWSOrchestratedInterface) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Subnet != nil {
-		l = m.Subnet.Size()
-		n += 1 + l + sovAwsTypes(uint64(l))
-	}
 	if m.NetworkOption != nil {
 		l = m.NetworkOption.Size()
 		n += 1 + l + sovAwsTypes(uint64(l))
@@ -3913,6 +4702,10 @@ func (m *AWSOrchestratedInterface) Size() (n int) {
 	}
 	if m.SiteToSiteConnectivityInterfaceChoice != nil {
 		n += m.SiteToSiteConnectivityInterfaceChoice.Size()
+	}
+	if m.AwsNodeInterfaceConfiguration != nil {
+		l = m.AwsNodeInterfaceConfiguration.Size()
+		n += 1 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
@@ -3941,78 +4734,137 @@ func (m *AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled) Size()
 	}
 	return n
 }
-func (m *AWSSubnetChoiceType) Size() (n int) {
+func (m *AWSNodeInterfaceConfigurationType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Choice != nil {
-		n += m.Choice.Size()
+	if m.AwsNodeInterfaceConfigurationChoice != nil {
+		n += m.AwsNodeInterfaceConfigurationChoice.Size()
 	}
 	return n
 }
 
-func (m *AWSSubnetChoiceType_SubnetParam) Size() (n int) {
+func (m *AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SubnetParam != nil {
-		l = m.SubnetParam.Size()
+	if m.InheritAwsNodeInterfaceConfiguration != nil {
+		l = m.InheritAwsNodeInterfaceConfiguration.Size()
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
-func (m *AWSSubnetChoiceType_ExistingSubnetId) Size() (n int) {
+func (m *AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.ExistingSubnetId)
-	n += 1 + l + sovAwsTypes(uint64(l))
+	if m.OverrideAwsNodeInterfaceConfiguration != nil {
+		l = m.OverrideAwsNodeInterfaceConfiguration.Size()
+		n += 1 + l + sovAwsTypes(uint64(l))
+	}
 	return n
 }
-func (m *AWSCloudSubnetParamType) Size() (n int) {
+func (m *AWSOverrideNodeInterfaceConfigurationType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.NameChoice != nil {
-		n += m.NameChoice.Size()
-	}
-	l = len(m.Ipv4)
+	l = len(m.SubnetId)
 	if l > 0 {
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
-	l = len(m.Ipv6)
+	l = len(m.SecurityGroup)
 	if l > 0 {
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
 	return n
 }
 
-func (m *AWSCloudSubnetParamType_Name) Size() (n int) {
+func (m *AWSResourceMappingListType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.Name)
-	n += 1 + l + sovAwsTypes(uint64(l))
+	if len(m.AwsResourceMappings) > 0 {
+		for _, e := range m.AwsResourceMappings {
+			l = e.Size()
+			n += 1 + l + sovAwsTypes(uint64(l))
+		}
+	}
 	return n
 }
-func (m *AWSCloudSubnetParamType_Autogenerate) Size() (n int) {
+
+func (m *AWSResourceMappingType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Autogenerate != nil {
-		l = m.Autogenerate.Size()
+	if m.NetworkOption != nil {
+		l = m.NetworkOption.Size()
+		n += 1 + l + sovAwsTypes(uint64(l))
+	}
+	if len(m.AwsResources) > 0 {
+		for _, e := range m.AwsResources {
+			l = e.Size()
+			n += 1 + l + sovAwsTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AWSIGWGatewayType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.IgwGwId)
+	if l > 0 {
+		n += 1 + l + sovAwsTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AWSNATGatewayType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.NatGwId) > 0 {
+		for _, s := range m.NatGwId {
+			l = len(s)
+			n += 1 + l + sovAwsTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AWSResources) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.AvailabilityZone)
+	if l > 0 {
+		n += 1 + l + sovAwsTypes(uint64(l))
+	}
+	l = len(m.SubnetId)
+	if l > 0 {
+		n += 1 + l + sovAwsTypes(uint64(l))
+	}
+	l = len(m.SecurityGroup)
+	if l > 0 {
 		n += 1 + l + sovAwsTypes(uint64(l))
 	}
 	return n
@@ -4040,86 +4892,18 @@ func (this *AWSManagedMode) String() string {
 	mapStringForTags += "}"
 	s := strings.Join([]string{`&AWSManagedMode{`,
 		`AwsRegion:` + fmt.Sprintf("%v", this.AwsRegion) + `,`,
-		`ServiceVpcChoice:` + fmt.Sprintf("%v", this.ServiceVpcChoice) + `,`,
-		`AwsCred:` + strings.Replace(fmt.Sprintf("%v", this.AwsCred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`VpcId:` + fmt.Sprintf("%v", this.VpcId) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`InstanceType:` + fmt.Sprintf("%v", this.InstanceType) + `,`,
 		`DiskSize:` + fmt.Sprintf("%v", this.DiskSize) + `,`,
-		`SecurityGroupChoice:` + fmt.Sprintf("%v", this.SecurityGroupChoice) + `,`,
-		`EgressGatewayChoice:` + fmt.Sprintf("%v", this.EgressGatewayChoice) + `,`,
 		`PrivateConnectivityChoice:` + fmt.Sprintf("%v", this.PrivateConnectivityChoice) + `,`,
-		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
-		`CloudConnectAttachments:` + fmt.Sprintf("%v", this.CloudConnectAttachments) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AWSManagedMode_NewVpc) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AWSManagedMode_NewVpc{`,
-		`NewVpc:` + strings.Replace(fmt.Sprintf("%v", this.NewVpc), "AWSVPCParamsType", "views.AWSVPCParamsType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AWSManagedMode_VpcId) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AWSManagedMode_VpcId{`,
-		`VpcId:` + fmt.Sprintf("%v", this.VpcId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AWSManagedMode_F5XcSecurityGroup) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AWSManagedMode_F5XcSecurityGroup{`,
-		`F5XcSecurityGroup:` + strings.Replace(fmt.Sprintf("%v", this.F5XcSecurityGroup), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AWSManagedMode_CustomSecurityGroup) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AWSManagedMode_CustomSecurityGroup{`,
-		`CustomSecurityGroup:` + strings.Replace(fmt.Sprintf("%v", this.CustomSecurityGroup), "SecurityGroupType", "views.SecurityGroupType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AWSManagedMode_EgressGatewayDefault) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AWSManagedMode_EgressGatewayDefault{`,
-		`EgressGatewayDefault:` + strings.Replace(fmt.Sprintf("%v", this.EgressGatewayDefault), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AWSManagedMode_EgressNatGw) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AWSManagedMode_EgressNatGw{`,
-		`EgressNatGw:` + strings.Replace(fmt.Sprintf("%v", this.EgressNatGw), "AWSNATGatewaychoiceType", "views.AWSNATGatewaychoiceType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AWSManagedMode_EgressVirtualPrivateGateway) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AWSManagedMode_EgressVirtualPrivateGateway{`,
-		`EgressVirtualPrivateGateway:` + strings.Replace(fmt.Sprintf("%v", this.EgressVirtualPrivateGateway), "AWSVirtualPrivateGatewaychoiceType", "views.AWSVirtualPrivateGatewaychoiceType", 1) + `,`,
+		`NodeList:` + strings.Replace(this.NodeList.String(), "AWSManagedNodeList", "AWSManagedNodeList", 1) + `,`,
+		`CloudConnectChoice:` + fmt.Sprintf("%v", this.CloudConnectChoice) + `,`,
+		`AwsResourceMappingList:` + strings.Replace(this.AwsResourceMappingList.String(), "AWSResourceMappingListType", "AWSResourceMappingListType", 1) + `,`,
+		`EgressGatewayChoice:` + fmt.Sprintf("%v", this.EgressGatewayChoice) + `,`,
+		`PrivateWorkloadRoutingChoice:` + fmt.Sprintf("%v", this.PrivateWorkloadRoutingChoice) + `,`,
+		`AwsCloudUserAccount:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudUserAccount), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`DiskEncryptionChoice:` + fmt.Sprintf("%v", this.DiskEncryptionChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4134,123 +4918,191 @@ func (this *AWSManagedMode_PrivateConnectivityDisabled) String() string {
 	}, "")
 	return s
 }
-func (this *AWSManagedMode_PrivateConnectivity) String() string {
+func (this *AWSManagedMode_DisableCloudConnect) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSManagedMode_PrivateConnectivity{`,
-		`PrivateConnectivity:` + strings.Replace(fmt.Sprintf("%v", this.PrivateConnectivity), "PrivateConnectConfigType", "views.PrivateConnectConfigType", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_DisableCloudConnect{`,
+		`DisableCloudConnect:` + strings.Replace(fmt.Sprintf("%v", this.DisableCloudConnect), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSManagedMode_SingleInterface) String() string {
+func (this *AWSManagedMode_EnableCloudConnect) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSManagedMode_SingleInterface{`,
-		`SingleInterface:` + strings.Replace(fmt.Sprintf("%v", this.SingleInterface), "SingleInterface", "SingleInterface", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_EnableCloudConnect{`,
+		`EnableCloudConnect:` + strings.Replace(fmt.Sprintf("%v", this.EnableCloudConnect), "AWSTGWType", "AWSTGWType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSManagedMode_MultipleInterface) String() string {
+func (this *AWSManagedMode_EgressIgwGw) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSManagedMode_MultipleInterface{`,
-		`MultipleInterface:` + strings.Replace(fmt.Sprintf("%v", this.MultipleInterface), "MultipleInterface", "MultipleInterface", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_EgressIgwGw{`,
+		`EgressIgwGw:` + strings.Replace(fmt.Sprintf("%v", this.EgressIgwGw), "AWSIGWGatewayType", "AWSIGWGatewayType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSManagedMode_Disabled) String() string {
+func (this *AWSManagedMode_NoEgress) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSManagedMode_Disabled{`,
-		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_NoEgress{`,
+		`NoEgress:` + strings.Replace(fmt.Sprintf("%v", this.NoEgress), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSManagedMode_Tgw) String() string {
+func (this *AWSManagedMode_DisablePrivateWorkloadRoutingToCe) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSManagedMode_Tgw{`,
-		`Tgw:` + strings.Replace(fmt.Sprintf("%v", this.Tgw), "TGWType", "TGWType", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_DisablePrivateWorkloadRoutingToCe{`,
+		`DisablePrivateWorkloadRoutingToCe:` + strings.Replace(fmt.Sprintf("%v", this.DisablePrivateWorkloadRoutingToCe), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *TGWType) String() string {
+func (this *AWSManagedMode_DisableDiskEncryption) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&TGWType{`,
-		`TgwChoice:` + fmt.Sprintf("%v", this.TgwChoice) + `,`,
-		`TgwCidrChoice:` + fmt.Sprintf("%v", this.TgwCidrChoice) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_DisableDiskEncryption{`,
+		`DisableDiskEncryption:` + strings.Replace(fmt.Sprintf("%v", this.DisableDiskEncryption), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *TGWType_NewTgw) String() string {
+func (this *AWSManagedMode_DiskEncryptionKey) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&TGWType_NewTgw{`,
-		`NewTgw:` + strings.Replace(fmt.Sprintf("%v", this.NewTgw), "TGWParamsType", "views.TGWParamsType", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_DiskEncryptionKey{`,
+		`DiskEncryptionKey:` + strings.Replace(fmt.Sprintf("%v", this.DiskEncryptionKey), "AWSDiskEncryptionKeyType", "AWSDiskEncryptionKeyType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *TGWType_ExistingTgw) String() string {
+func (this *AWSManagedMode_EgressNatGw) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&TGWType_ExistingTgw{`,
-		`ExistingTgw:` + strings.Replace(fmt.Sprintf("%v", this.ExistingTgw), "ExistingTGWType", "views.ExistingTGWType", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_EgressNatGw{`,
+		`EgressNatGw:` + strings.Replace(fmt.Sprintf("%v", this.EgressNatGw), "AWSNATGatewayType", "AWSNATGatewayType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *TGWType_ReservedTgwCidr) String() string {
+func (this *AWSManagedMode_PrivateAdn) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&TGWType_ReservedTgwCidr{`,
-		`ReservedTgwCidr:` + strings.Replace(fmt.Sprintf("%v", this.ReservedTgwCidr), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_PrivateAdn{`,
+		`PrivateAdn:` + strings.Replace(fmt.Sprintf("%v", this.PrivateAdn), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *TGWType_TgwCidr) String() string {
+func (this *AWSManagedMode_EnablePrivateWorkloadRoutingList) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&TGWType_TgwCidr{`,
-		`TgwCidr:` + strings.Replace(fmt.Sprintf("%v", this.TgwCidr), "CloudSubnetParamType", "views.CloudSubnetParamType", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_EnablePrivateWorkloadRoutingList{`,
+		`EnablePrivateWorkloadRoutingList:` + strings.Replace(fmt.Sprintf("%v", this.EnablePrivateWorkloadRoutingList), "EnablePrivateWorkloadRoutingListType", "EnablePrivateWorkloadRoutingListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *SingleInterface) String() string {
+func (this *AWSManagedMode_CloudLinkConfig) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SingleInterface{`,
-		`NodeList:` + strings.Replace(this.NodeList.String(), "AWSManagedNodeList", "AWSManagedNodeList", 1) + `,`,
+	s := strings.Join([]string{`&AWSManagedMode_CloudLinkConfig{`,
+		`CloudLinkConfig:` + strings.Replace(fmt.Sprintf("%v", this.CloudLinkConfig), "AWSCloudLinkConfigType", "AWSCloudLinkConfigType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *MultipleInterface) String() string {
+func (this *AWSCloudLinkConfigType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&MultipleInterface{`,
-		`NodeList:` + strings.Replace(this.NodeList.String(), "AWSManagedNodeList", "AWSManagedNodeList", 1) + `,`,
+	s := strings.Join([]string{`&AWSCloudLinkConfigType{`,
+		`VgwId:` + fmt.Sprintf("%v", this.VgwId) + `,`,
+		`CloudLink:` + strings.Replace(fmt.Sprintf("%v", this.CloudLink), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`NetworkOptions:` + fmt.Sprintf("%v", this.NetworkOptions) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSCloudLinkConfigType_Outside) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSCloudLinkConfigType_Outside{`,
+		`Outside:` + strings.Replace(fmt.Sprintf("%v", this.Outside), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSCloudLinkConfigType_Inside) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSCloudLinkConfigType_Inside{`,
+		`Inside:` + strings.Replace(fmt.Sprintf("%v", this.Inside), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EnablePrivateWorkloadRoutingListType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForEnablePrivateWorkloadRoutingToCe := "[]*EnablePrivateWorkloadRoutingType{"
+	for _, f := range this.EnablePrivateWorkloadRoutingToCe {
+		repeatedStringForEnablePrivateWorkloadRoutingToCe += strings.Replace(f.String(), "EnablePrivateWorkloadRoutingType", "EnablePrivateWorkloadRoutingType", 1) + ","
+	}
+	repeatedStringForEnablePrivateWorkloadRoutingToCe += "}"
+	s := strings.Join([]string{`&EnablePrivateWorkloadRoutingListType{`,
+		`EnablePrivateWorkloadRoutingToCe:` + repeatedStringForEnablePrivateWorkloadRoutingToCe + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSDiskEncryptionKeyType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSDiskEncryptionKeyType{`,
+		`KeyId:` + fmt.Sprintf("%v", this.KeyId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EnablePrivateWorkloadRoutingType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EnablePrivateWorkloadRoutingType{`,
+		`NetworkOption:` + strings.Replace(fmt.Sprintf("%v", this.NetworkOption), "NetworkSelectType", "views.NetworkSelectType", 1) + `,`,
+		`SubnetId:` + fmt.Sprintf("%v", this.SubnetId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSTGWType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSTGWType{`,
+		`TgwId:` + fmt.Sprintf("%v", this.TgwId) + `,`,
+		`VolterraSiteAsn:` + fmt.Sprintf("%v", this.VolterraSiteAsn) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4293,10 +5145,10 @@ func (this *AWSOrchestratedInterface) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AWSOrchestratedInterface{`,
-		`Subnet:` + strings.Replace(this.Subnet.String(), "AWSSubnetChoiceType", "AWSSubnetChoiceType", 1) + `,`,
 		`NetworkOption:` + strings.Replace(fmt.Sprintf("%v", this.NetworkOption), "NetworkSelectType", "views.NetworkSelectType", 1) + `,`,
 		`Mtu:` + fmt.Sprintf("%v", this.Mtu) + `,`,
 		`SiteToSiteConnectivityInterfaceChoice:` + fmt.Sprintf("%v", this.SiteToSiteConnectivityInterfaceChoice) + `,`,
+		`AwsNodeInterfaceConfiguration:` + strings.Replace(this.AwsNodeInterfaceConfiguration.String(), "AWSNodeInterfaceConfigurationType", "AWSNodeInterfaceConfigurationType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4321,64 +5173,106 @@ func (this *AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled) Str
 	}, "")
 	return s
 }
-func (this *AWSSubnetChoiceType) String() string {
+func (this *AWSNodeInterfaceConfigurationType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSSubnetChoiceType{`,
-		`Choice:` + fmt.Sprintf("%v", this.Choice) + `,`,
+	s := strings.Join([]string{`&AWSNodeInterfaceConfigurationType{`,
+		`AwsNodeInterfaceConfigurationChoice:` + fmt.Sprintf("%v", this.AwsNodeInterfaceConfigurationChoice) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSSubnetChoiceType_SubnetParam) String() string {
+func (this *AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSSubnetChoiceType_SubnetParam{`,
-		`SubnetParam:` + strings.Replace(fmt.Sprintf("%v", this.SubnetParam), "AWSCloudSubnetParamType", "AWSCloudSubnetParamType", 1) + `,`,
+	s := strings.Join([]string{`&AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration{`,
+		`InheritAwsNodeInterfaceConfiguration:` + strings.Replace(fmt.Sprintf("%v", this.InheritAwsNodeInterfaceConfiguration), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSSubnetChoiceType_ExistingSubnetId) String() string {
+func (this *AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSSubnetChoiceType_ExistingSubnetId{`,
-		`ExistingSubnetId:` + fmt.Sprintf("%v", this.ExistingSubnetId) + `,`,
+	s := strings.Join([]string{`&AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration{`,
+		`OverrideAwsNodeInterfaceConfiguration:` + strings.Replace(fmt.Sprintf("%v", this.OverrideAwsNodeInterfaceConfiguration), "AWSOverrideNodeInterfaceConfigurationType", "AWSOverrideNodeInterfaceConfigurationType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSCloudSubnetParamType) String() string {
+func (this *AWSOverrideNodeInterfaceConfigurationType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSCloudSubnetParamType{`,
-		`NameChoice:` + fmt.Sprintf("%v", this.NameChoice) + `,`,
-		`Ipv4:` + fmt.Sprintf("%v", this.Ipv4) + `,`,
-		`Ipv6:` + fmt.Sprintf("%v", this.Ipv6) + `,`,
+	s := strings.Join([]string{`&AWSOverrideNodeInterfaceConfigurationType{`,
+		`SubnetId:` + fmt.Sprintf("%v", this.SubnetId) + `,`,
+		`SecurityGroup:` + fmt.Sprintf("%v", this.SecurityGroup) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSCloudSubnetParamType_Name) String() string {
+func (this *AWSResourceMappingListType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSCloudSubnetParamType_Name{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+	repeatedStringForAwsResourceMappings := "[]*AWSResourceMappingType{"
+	for _, f := range this.AwsResourceMappings {
+		repeatedStringForAwsResourceMappings += strings.Replace(f.String(), "AWSResourceMappingType", "AWSResourceMappingType", 1) + ","
+	}
+	repeatedStringForAwsResourceMappings += "}"
+	s := strings.Join([]string{`&AWSResourceMappingListType{`,
+		`AwsResourceMappings:` + repeatedStringForAwsResourceMappings + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AWSCloudSubnetParamType_Autogenerate) String() string {
+func (this *AWSResourceMappingType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AWSCloudSubnetParamType_Autogenerate{`,
-		`Autogenerate:` + strings.Replace(fmt.Sprintf("%v", this.Autogenerate), "Empty", "schema.Empty", 1) + `,`,
+	repeatedStringForAwsResources := "[]*AWSResources{"
+	for _, f := range this.AwsResources {
+		repeatedStringForAwsResources += strings.Replace(f.String(), "AWSResources", "AWSResources", 1) + ","
+	}
+	repeatedStringForAwsResources += "}"
+	s := strings.Join([]string{`&AWSResourceMappingType{`,
+		`NetworkOption:` + strings.Replace(fmt.Sprintf("%v", this.NetworkOption), "NetworkSelectType", "views.NetworkSelectType", 1) + `,`,
+		`AwsResources:` + repeatedStringForAwsResources + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSIGWGatewayType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSIGWGatewayType{`,
+		`IgwGwId:` + fmt.Sprintf("%v", this.IgwGwId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSNATGatewayType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSNATGatewayType{`,
+		`NatGwId:` + fmt.Sprintf("%v", this.NatGwId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSResources) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSResources{`,
+		`AvailabilityZone:` + fmt.Sprintf("%v", this.AvailabilityZone) + `,`,
+		`SubnetId:` + fmt.Sprintf("%v", this.SubnetId) + `,`,
+		`SecurityGroup:` + fmt.Sprintf("%v", this.SecurityGroup) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4452,41 +5346,6 @@ func (m *AWSManagedMode) Unmarshal(dAtA []byte) error {
 			}
 			m.AwsRegion = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NewVpc", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.AWSVPCParamsType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServiceVpcChoice = &AWSManagedMode_NewVpc{v}
-			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field VpcId", wireType)
@@ -4517,43 +5376,7 @@ func (m *AWSManagedMode) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceVpcChoice = &AWSManagedMode_VpcId{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AwsCred", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AwsCred == nil {
-				m.AwsCred = &views.ObjectRefType{}
-			}
-			if err := m.AwsCred.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.VpcId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
@@ -4733,181 +5556,6 @@ func (m *AWSManagedMode) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 13:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field F5XcSecurityGroup", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SecurityGroupChoice = &AWSManagedMode_F5XcSecurityGroup{v}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomSecurityGroup", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.SecurityGroupType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SecurityGroupChoice = &AWSManagedMode_CustomSecurityGroup{v}
-			iNdEx = postIndex
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EgressGatewayDefault", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EgressGatewayChoice = &AWSManagedMode_EgressGatewayDefault{v}
-			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EgressNatGw", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.AWSNATGatewaychoiceType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EgressGatewayChoice = &AWSManagedMode_EgressNatGw{v}
-			iNdEx = postIndex
-		case 18:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EgressVirtualPrivateGateway", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.AWSVirtualPrivateGatewaychoiceType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EgressGatewayChoice = &AWSManagedMode_EgressVirtualPrivateGateway{v}
-			iNdEx = postIndex
 		case 23:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PrivateConnectivityDisabled", wireType)
@@ -4943,9 +5591,9 @@ func (m *AWSManagedMode) Unmarshal(dAtA []byte) error {
 			}
 			m.PrivateConnectivityChoice = &AWSManagedMode_PrivateConnectivityDisabled{v}
 			iNdEx = postIndex
-		case 24:
+		case 35:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrivateConnectivity", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeList", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4972,85 +5620,16 @@ func (m *AWSManagedMode) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &views.PrivateConnectConfigType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.NodeList == nil {
+				m.NodeList = &AWSManagedNodeList{}
+			}
+			if err := m.NodeList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.PrivateConnectivityChoice = &AWSManagedMode_PrivateConnectivity{v}
 			iNdEx = postIndex
-		case 27:
+		case 36:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SingleInterface", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SingleInterface{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SiteType = &AWSManagedMode_SingleInterface{v}
-			iNdEx = postIndex
-		case 28:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MultipleInterface", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &MultipleInterface{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SiteType = &AWSManagedMode_MultipleInterface{v}
-			iNdEx = postIndex
-		case 33:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableCloudConnect", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5081,11 +5660,11 @@ func (m *AWSManagedMode) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.CloudConnectAttachments = &AWSManagedMode_Disabled{v}
+			m.CloudConnectChoice = &AWSManagedMode_DisableCloudConnect{v}
 			iNdEx = postIndex
-		case 34:
+		case 37:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Tgw", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableCloudConnect", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5112,11 +5691,398 @@ func (m *AWSManagedMode) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &TGWType{}
+			v := &AWSTGWType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.CloudConnectAttachments = &AWSManagedMode_Tgw{v}
+			m.CloudConnectChoice = &AWSManagedMode_EnableCloudConnect{v}
+			iNdEx = postIndex
+		case 38:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsResourceMappingList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AwsResourceMappingList == nil {
+				m.AwsResourceMappingList = &AWSResourceMappingListType{}
+			}
+			if err := m.AwsResourceMappingList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 39:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EgressIgwGw", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSIGWGatewayType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EgressGatewayChoice = &AWSManagedMode_EgressIgwGw{v}
+			iNdEx = postIndex
+		case 40:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoEgress", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EgressGatewayChoice = &AWSManagedMode_NoEgress{v}
+			iNdEx = postIndex
+		case 42:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisablePrivateWorkloadRoutingToCe", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PrivateWorkloadRoutingChoice = &AWSManagedMode_DisablePrivateWorkloadRoutingToCe{v}
+			iNdEx = postIndex
+		case 44:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudUserAccount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AwsCloudUserAccount == nil {
+				m.AwsCloudUserAccount = &views.ObjectRefType{}
+			}
+			if err := m.AwsCloudUserAccount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 46:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableDiskEncryption", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DiskEncryptionChoice = &AWSManagedMode_DisableDiskEncryption{v}
+			iNdEx = postIndex
+		case 47:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiskEncryptionKey", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSDiskEncryptionKeyType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DiskEncryptionChoice = &AWSManagedMode_DiskEncryptionKey{v}
+			iNdEx = postIndex
+		case 48:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EgressNatGw", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSNATGatewayType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EgressGatewayChoice = &AWSManagedMode_EgressNatGw{v}
+			iNdEx = postIndex
+		case 50:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateAdn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EgressGatewayChoice = &AWSManagedMode_PrivateAdn{v}
+			iNdEx = postIndex
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePrivateWorkloadRoutingList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &EnablePrivateWorkloadRoutingListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PrivateWorkloadRoutingChoice = &AWSManagedMode_EnablePrivateWorkloadRoutingList{v}
+			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudLinkConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSCloudLinkConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PrivateConnectivityChoice = &AWSManagedMode_CloudLinkConfig{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -5142,7 +6108,7 @@ func (m *AWSManagedMode) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *TGWType) Unmarshal(dAtA []byte) error {
+func (m *AWSCloudLinkConfigType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -5165,15 +6131,378 @@ func (m *TGWType) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: TGWType: wiretype end group for non-group")
+			return fmt.Errorf("proto: AWSCloudLinkConfigType: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TGWType: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AWSCloudLinkConfigType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VgwId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VgwId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudLink", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CloudLink == nil {
+				m.CloudLink = &views.ObjectRefType{}
+			}
+			if err := m.CloudLink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Outside", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NetworkOptions = &AWSCloudLinkConfigType_Outside{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Inside", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NetworkOptions = &AWSCloudLinkConfigType_Inside{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EnablePrivateWorkloadRoutingListType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EnablePrivateWorkloadRoutingListType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EnablePrivateWorkloadRoutingListType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePrivateWorkloadRoutingToCe", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EnablePrivateWorkloadRoutingToCe = append(m.EnablePrivateWorkloadRoutingToCe, &EnablePrivateWorkloadRoutingType{})
+			if err := m.EnablePrivateWorkloadRoutingToCe[len(m.EnablePrivateWorkloadRoutingToCe)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSDiskEncryptionKeyType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSDiskEncryptionKeyType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSDiskEncryptionKeyType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KeyId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.KeyId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EnablePrivateWorkloadRoutingType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EnablePrivateWorkloadRoutingType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EnablePrivateWorkloadRoutingType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NewTgw", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NetworkOption", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5200,17 +6529,18 @@ func (m *TGWType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &views.TGWParamsType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.NetworkOption == nil {
+				m.NetworkOption = &views.NetworkSelectType{}
+			}
+			if err := m.NetworkOption.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.TgwChoice = &TGWType_NewTgw{v}
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExistingTgw", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetId", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowAwsTypes
@@ -5220,96 +6550,23 @@ func (m *TGWType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthAwsTypes
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthAwsTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &views.ExistingTGWType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TgwChoice = &TGWType_ExistingTgw{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ReservedTgwCidr", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TgwCidrChoice = &TGWType_ReservedTgwCidr{v}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TgwCidr", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.CloudSubnetParamType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TgwCidrChoice = &TGWType_TgwCidr{v}
+			m.SubnetId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -5335,7 +6592,7 @@ func (m *TGWType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SingleInterface) Unmarshal(dAtA []byte) error {
+func (m *AWSTGWType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -5358,17 +6615,17 @@ func (m *SingleInterface) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SingleInterface: wiretype end group for non-group")
+			return fmt.Errorf("proto: AWSTGWType: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SingleInterface: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AWSTGWType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NodeList", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TgwId", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowAwsTypes
@@ -5378,86 +6635,29 @@ func (m *SingleInterface) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthAwsTypes
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthAwsTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.NodeList == nil {
-				m.NodeList = &AWSManagedNodeList{}
-			}
-			if err := m.NodeList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.TgwId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAwsTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolterraSiteAsn", wireType)
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MultipleInterface) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAwsTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MultipleInterface: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MultipleInterface: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NodeList", wireType)
-			}
-			var msglen int
+			m.VolterraSiteAsn = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowAwsTypes
@@ -5467,28 +6667,11 @@ func (m *MultipleInterface) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				m.VolterraSiteAsn |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.NodeList == nil {
-				m.NodeList = &AWSManagedNodeList{}
-			}
-			if err := m.NodeList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipAwsTypes(dAtA[iNdEx:])
@@ -5812,42 +6995,6 @@ func (m *AWSOrchestratedInterface) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: AWSOrchestratedInterface: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Subnet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Subnet == nil {
-				m.Subnet = &AWSSubnetChoiceType{}
-			}
-			if err := m.Subnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field NetworkOption", wireType)
@@ -5973,62 +7120,9 @@ func (m *AWSOrchestratedInterface) Unmarshal(dAtA []byte) error {
 			}
 			m.SiteToSiteConnectivityInterfaceChoice = &AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled{v}
 			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAwsTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AWSSubnetChoiceType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAwsTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AWSSubnetChoiceType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AWSSubnetChoiceType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
+		case 11:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SubnetParam", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsNodeInterfaceConfiguration", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -6055,43 +7149,12 @@ func (m *AWSSubnetChoiceType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &AWSCloudSubnetParamType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.AwsNodeInterfaceConfiguration == nil {
+				m.AwsNodeInterfaceConfiguration = &AWSNodeInterfaceConfigurationType{}
+			}
+			if err := m.AwsNodeInterfaceConfiguration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Choice = &AWSSubnetChoiceType_SubnetParam{v}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExistingSubnetId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Choice = &AWSSubnetChoiceType_ExistingSubnetId{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6117,7 +7180,7 @@ func (m *AWSSubnetChoiceType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AWSCloudSubnetParamType) Unmarshal(dAtA []byte) error {
+func (m *AWSNodeInterfaceConfigurationType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -6140,47 +7203,15 @@ func (m *AWSCloudSubnetParamType) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AWSCloudSubnetParamType: wiretype end group for non-group")
+			return fmt.Errorf("proto: AWSNodeInterfaceConfigurationType: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AWSCloudSubnetParamType: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AWSNodeInterfaceConfigurationType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAwsTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAwsTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.NameChoice = &AWSCloudSubnetParamType_Name{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Autogenerate", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field InheritAwsNodeInterfaceConfiguration", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -6211,11 +7242,99 @@ func (m *AWSCloudSubnetParamType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.NameChoice = &AWSCloudSubnetParamType_Autogenerate{v}
+			m.AwsNodeInterfaceConfigurationChoice = &AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration{v}
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field OverrideAwsNodeInterfaceConfiguration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSOverrideNodeInterfaceConfigurationType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AwsNodeInterfaceConfigurationChoice = &AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSOverrideNodeInterfaceConfigurationType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSOverrideNodeInterfaceConfigurationType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSOverrideNodeInterfaceConfigurationType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetId", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -6243,11 +7362,11 @@ func (m *AWSCloudSubnetParamType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Ipv4 = string(dAtA[iNdEx:postIndex])
+			m.SubnetId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SecurityGroup", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -6275,7 +7394,536 @@ func (m *AWSCloudSubnetParamType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Ipv6 = string(dAtA[iNdEx:postIndex])
+			m.SecurityGroup = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSResourceMappingListType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSResourceMappingListType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSResourceMappingListType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsResourceMappings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AwsResourceMappings = append(m.AwsResourceMappings, &AWSResourceMappingType{})
+			if err := m.AwsResourceMappings[len(m.AwsResourceMappings)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSResourceMappingType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSResourceMappingType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSResourceMappingType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NetworkOption", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.NetworkOption == nil {
+				m.NetworkOption = &views.NetworkSelectType{}
+			}
+			if err := m.NetworkOption.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsResources", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AwsResources = append(m.AwsResources, &AWSResources{})
+			if err := m.AwsResources[len(m.AwsResources)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSIGWGatewayType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSIGWGatewayType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSIGWGatewayType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IgwGwId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IgwGwId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSNATGatewayType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSNATGatewayType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSNATGatewayType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NatGwId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NatGwId = append(m.NatGwId, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAwsTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSResources) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAwsTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSResources: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSResources: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityZone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AvailabilityZone = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SubnetId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecurityGroup", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAwsTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAwsTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SecurityGroup = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

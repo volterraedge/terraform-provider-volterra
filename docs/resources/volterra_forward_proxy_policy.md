@@ -22,44 +22,14 @@ resource "volterra_forward_proxy_policy" "example" {
 
   // One of the arguments from this list "any_proxy drp_http_connect network_connector proxy_label_selector" must be set
 
-  any_proxy = true
+  proxy_label_selector {
+    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+  }
 
   // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
 
-  rule_list {
-    rules {
-      action = "action"
-
-      // One of the arguments from this list "all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list" must be set
-
-      tls_list {
-        tls_list {
-          // One of the arguments from this list "exact_value regex_value suffix_value" must be set
-
-          exact_value = "abc.zyz.com"
-        }
-      }
-
-      // One of the arguments from this list "no_http_connect_port port_matcher" can be set
-
-      no_http_connect_port = true
-      metadata {
-        description = "Virtual Host for acmecorp website"
-
-        disable = true
-
-        name = "acmecorp-web"
-      }
-      rule_description = "Rule to block example.com"
-      rule_name = "my-policy-allow-github.com"
-
-      // One of the arguments from this list "all_sources inside_sources interface ip_prefix_set label_selector namespace prefix_list" must be set
-
-      inside_sources = true
-    }
-  }
+  allow_all = true
 }
-
 ```
 
 Argument Reference
@@ -484,4 +454,4 @@ Domains in SNI for TLS connections.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured forward_proxy_policy.
+*   `id` - This is the id of the configured forward_proxy_policy.

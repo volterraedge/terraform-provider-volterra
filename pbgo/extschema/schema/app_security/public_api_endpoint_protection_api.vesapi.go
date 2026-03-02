@@ -74,9 +74,7 @@ func NewAPIEndpointProtectionRuleSuggestionAPIGrpcClient(cc *grpc.ClientConn) se
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetSuggestedAPIEndpointProtectionRule"] = ccl.doRPCGetSuggestedAPIEndpointProtectionRule
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -165,7 +163,6 @@ func (c *APIEndpointProtectionRuleSuggestionAPIRestClient) doRPCGetSuggestedAPIE
 	pbRsp := &GetSuggestedAPIEndpointProtectionRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedAPIEndpointProtectionRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -199,9 +196,7 @@ func NewAPIEndpointProtectionRuleSuggestionAPIRestClient(baseURL string, hc http
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetSuggestedAPIEndpointProtectionRule"] = ccl.doRPCGetSuggestedAPIEndpointProtectionRule
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -282,7 +277,6 @@ func (s *aPIEndpointProtectionRuleSuggestionAPISrv) GetSuggestedAPIEndpointProte
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedAPIEndpointProtectionRuleRsp", rsp)...)
 
 	return rsp, nil

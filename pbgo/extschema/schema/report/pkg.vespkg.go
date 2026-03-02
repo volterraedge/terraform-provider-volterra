@@ -14,25 +14,18 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.report.ReportDataATB"] = ReportDataATBValidator()
-
 	vr["ves.io.schema.report.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.report.Object"] = ObjectValidator()
-
 	vr["ves.io.schema.report.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.report.GetResponse"] = GetResponseValidator()
-
 	vr["ves.io.schema.report.AttachmentValue"] = AttachmentValueValidator()
 	vr["ves.io.schema.report.DownloadReportRequest"] = DownloadReportRequestValidator()
 	vr["ves.io.schema.report.DownloadReportResponse"] = DownloadReportResponseValidator()
-
 	vr["ves.io.schema.report.ReportHeader"] = ReportHeaderValidator()
-
 	vr["ves.io.schema.report.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.report.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.report.ReportDeliveryStatus"] = ReportDeliveryStatusValidator()
 	vr["ves.io.schema.report.ReportGenerationStatus"] = ReportGenerationStatusValidator()
-
 	vr["ves.io.schema.report.AttackImpact"] = AttackImpactValidator()
 	vr["ves.io.schema.report.AttackImpactData"] = AttackImpactDataValidator()
 	vr["ves.io.schema.report.AttackSources"] = AttackSourcesValidator()
@@ -45,30 +38,24 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.report.ThreatDetailsData"] = ThreatDetailsDataValidator()
 	vr["ves.io.schema.report.WaapReportFieldData"] = WaapReportFieldDataValidator()
 	vr["ves.io.schema.report.WaapReportFieldDataList"] = WaapReportFieldDataListValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.EntryFactory["ves.io.schema.report.Object"] = NewEntryObject
 	mdr.EntryStoreMap["ves.io.schema.report.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.report.Object"] = reflect.TypeOf(&DBObject{})
 	mdr.EntryIndexers["ves.io.schema.report.Object"] = GetObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.report.API"] = "report"
 	sm["ves.io.schema.report.CustomAPI"] = "report"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -77,9 +64,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.report.Object"] = APISwaggerJSON
@@ -93,16 +78,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.report.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.report.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.report.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.report.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.report.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.report.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -113,22 +93,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.report.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

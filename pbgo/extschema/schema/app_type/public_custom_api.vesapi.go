@@ -43,7 +43,6 @@ func (c *CustomAPIGrpcClient) doRPCAPIEndpointPDF(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.APIEndpointPDF(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCAPIEndpoints(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEndpointsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -52,7 +51,6 @@ func (c *CustomAPIGrpcClient) doRPCAPIEndpoints(ctx context.Context, yamlReq str
 	rsp, err := c.grpcClient.APIEndpoints(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetAPIEndpointLearntSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEndpointLearntSchemaReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -61,7 +59,6 @@ func (c *CustomAPIGrpcClient) doRPCGetAPIEndpointLearntSchema(ctx context.Contex
 	rsp, err := c.grpcClient.GetAPIEndpointLearntSchema(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetServiceAPIEndpointPDF(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ServiceAPIEndpointPDFReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -70,7 +67,6 @@ func (c *CustomAPIGrpcClient) doRPCGetServiceAPIEndpointPDF(ctx context.Context,
 	rsp, err := c.grpcClient.GetServiceAPIEndpointPDF(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetServiceAPIEndpoints(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ServiceAPIEndpointsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -79,7 +75,6 @@ func (c *CustomAPIGrpcClient) doRPCGetServiceAPIEndpoints(ctx context.Context, y
 	rsp, err := c.grpcClient.GetServiceAPIEndpoints(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SwaggerSpecReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -88,7 +83,6 @@ func (c *CustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.GetSwaggerSpec(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCOverridePop(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &OverridePopReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -97,7 +91,6 @@ func (c *CustomAPIGrpcClient) doRPCOverridePop(ctx context.Context, yamlReq stri
 	rsp, err := c.grpcClient.OverridePop(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCOverridePush(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &OverridePushReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -106,7 +99,6 @@ func (c *CustomAPIGrpcClient) doRPCOverridePush(ctx context.Context, yamlReq str
 	rsp, err := c.grpcClient.OverridePush(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCOverrides(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &OverridesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -147,25 +139,15 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["APIEndpointPDF"] = ccl.doRPCAPIEndpointPDF
-
 	rpcFns["APIEndpoints"] = ccl.doRPCAPIEndpoints
-
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
-
 	rpcFns["GetServiceAPIEndpointPDF"] = ccl.doRPCGetServiceAPIEndpointPDF
-
 	rpcFns["GetServiceAPIEndpoints"] = ccl.doRPCGetServiceAPIEndpoints
-
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
-
 	rpcFns["OverridePop"] = ccl.doRPCOverridePop
-
 	rpcFns["OverridePush"] = ccl.doRPCOverridePush
-
 	rpcFns["Overrides"] = ccl.doRPCOverrides
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -254,7 +236,6 @@ func (c *CustomAPIRestClient) doRPCAPIEndpointPDF(ctx context.Context, callOpts 
 	pbRsp := &APIEndpointPDFRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointPDFRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -262,7 +243,6 @@ func (c *CustomAPIRestClient) doRPCAPIEndpointPDF(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCAPIEndpoints(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -341,7 +321,6 @@ func (c *CustomAPIRestClient) doRPCAPIEndpoints(ctx context.Context, callOpts *s
 	pbRsp := &APIEndpointsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -349,7 +328,6 @@ func (c *CustomAPIRestClient) doRPCAPIEndpoints(ctx context.Context, callOpts *s
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -430,7 +408,6 @@ func (c *CustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.Contex
 	pbRsp := &APIEndpointLearntSchemaRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointLearntSchemaRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -438,7 +415,6 @@ func (c *CustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.Contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpointPDF(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -517,7 +493,6 @@ func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpointPDF(ctx context.Context,
 	pbRsp := &APIEndpointPDFRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointPDFRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -525,7 +500,6 @@ func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpointPDF(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpoints(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -605,7 +579,6 @@ func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpoints(ctx context.Context, c
 	pbRsp := &APIEndpointsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -613,7 +586,6 @@ func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpoints(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -691,7 +663,6 @@ func (c *CustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts 
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -699,7 +670,6 @@ func (c *CustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCOverridePop(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -775,7 +745,6 @@ func (c *CustomAPIRestClient) doRPCOverridePop(ctx context.Context, callOpts *se
 	pbRsp := &OverridePopRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.OverridePopRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -783,7 +752,6 @@ func (c *CustomAPIRestClient) doRPCOverridePop(ctx context.Context, callOpts *se
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCOverridePush(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -860,7 +828,6 @@ func (c *CustomAPIRestClient) doRPCOverridePush(ctx context.Context, callOpts *s
 	pbRsp := &OverridePushRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.OverridePushRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -868,7 +835,6 @@ func (c *CustomAPIRestClient) doRPCOverridePush(ctx context.Context, callOpts *s
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCOverrides(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -944,7 +910,6 @@ func (c *CustomAPIRestClient) doRPCOverrides(ctx context.Context, callOpts *serv
 	pbRsp := &OverridesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.OverridesRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -978,25 +943,15 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["APIEndpointPDF"] = ccl.doRPCAPIEndpointPDF
-
 	rpcFns["APIEndpoints"] = ccl.doRPCAPIEndpoints
-
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
-
 	rpcFns["GetServiceAPIEndpointPDF"] = ccl.doRPCGetServiceAPIEndpointPDF
-
 	rpcFns["GetServiceAPIEndpoints"] = ccl.doRPCGetServiceAPIEndpoints
-
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
-
 	rpcFns["OverridePop"] = ccl.doRPCOverridePop
-
 	rpcFns["OverridePush"] = ccl.doRPCOverridePush
-
 	rpcFns["Overrides"] = ccl.doRPCOverrides
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1109,7 +1064,6 @@ func (s *customAPISrv) APIEndpointPDF(ctx context.Context, in *APIEndpointPDFReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_type.APIEndpointPDFRsp", rsp)...)
 
 	return rsp, nil
@@ -1158,7 +1112,6 @@ func (s *customAPISrv) APIEndpoints(ctx context.Context, in *APIEndpointsReq) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_type.APIEndpointsRsp", rsp)...)
 
 	return rsp, nil
@@ -1207,7 +1160,6 @@ func (s *customAPISrv) GetAPIEndpointLearntSchema(ctx context.Context, in *APIEn
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_type.APIEndpointLearntSchemaRsp", rsp)...)
 
 	return rsp, nil
@@ -1256,7 +1208,6 @@ func (s *customAPISrv) GetServiceAPIEndpointPDF(ctx context.Context, in *Service
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_type.APIEndpointPDFRsp", rsp)...)
 
 	return rsp, nil
@@ -1305,7 +1256,6 @@ func (s *customAPISrv) GetServiceAPIEndpoints(ctx context.Context, in *ServiceAP
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_type.APIEndpointsRsp", rsp)...)
 
 	return rsp, nil
@@ -1354,7 +1304,6 @@ func (s *customAPISrv) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq) (
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -1403,7 +1352,6 @@ func (s *customAPISrv) OverridePop(ctx context.Context, in *OverridePopReq) (*Ov
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_type.OverridePopRsp", rsp)...)
 
 	return rsp, nil
@@ -1452,7 +1400,6 @@ func (s *customAPISrv) OverridePush(ctx context.Context, in *OverridePushReq) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_type.OverridePushRsp", rsp)...)
 
 	return rsp, nil
@@ -1501,7 +1448,6 @@ func (s *customAPISrv) Overrides(ctx context.Context, in *OverridesReq) (*Overri
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_type.OverridesRsp", rsp)...)
 
 	return rsp, nil
@@ -2664,6 +2610,15 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "HTTP Method",
                     "x-ves-example": "GET"
                 },
+                "owasp_categories": {
+                    "type": "array",
+                    "description": " Categories of the vulnerability as per the OWASP API Top 10",
+                    "title": "owasp_categories",
+                    "items": {
+                        "$ref": "#/definitions/schemaOwaspCategory"
+                    },
+                    "x-displayname": "OWASP Categories"
+                },
                 "pdf_info": {
                     "description": " Metrics supported currently are request_size response_size latency_with_data, latency_no_data, request_rate, error_rate, response_throughput.\n PDF is calculated for each combination of (Tenant, App type, API endpoint).\n API endpoint is determined from automatically identified API (collapsed_url) and method.",
                     "title": "Probability Density Function",
@@ -3634,6 +3589,29 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaOwaspCategory": {
+            "type": "object",
+            "description": "Represents a category of vulnerability as defined in the OWASP API Top 10",
+            "title": "OWASP Category",
+            "x-displayname": "OWASP Category",
+            "x-ves-proto-message": "ves.io.schema.OwaspCategory",
+            "properties": {
+                "link_to_owasp": {
+                    "type": "string",
+                    "description": " Link to the OWASP documentation for this category\n\nExample: - \"https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/\"-",
+                    "title": "OWASP reference link",
+                    "x-displayname": "OWASP Reference Link",
+                    "x-ves-example": "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of the OWASP API security category\n\nExample: - \"API1:2023\"-",
+                    "title": "Category name",
+                    "x-displayname": "Category Name",
+                    "x-ves-example": "API1:2023"
                 }
             }
         }

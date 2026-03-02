@@ -44,7 +44,6 @@ func (c *CustomAPIGrpcClient) doRPCSetCloudSiteInfo(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.SetCloudSiteInfo(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSetVIPInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetVIPInfoRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *CustomAPIGrpcClient) doRPCSetVIPInfo(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.SetVIPInfo(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSetVPCK8SHostnames(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetVPCK8SHostnamesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -62,7 +60,6 @@ func (c *CustomAPIGrpcClient) doRPCSetVPCK8SHostnames(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.SetVPCK8SHostnames(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCValidateConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views.ValidateConfigRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -103,15 +100,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SetCloudSiteInfo"] = ccl.doRPCSetCloudSiteInfo
-
 	rpcFns["SetVIPInfo"] = ccl.doRPCSetVIPInfo
-
 	rpcFns["SetVPCK8SHostnames"] = ccl.doRPCSetVPCK8SHostnames
-
 	rpcFns["ValidateConfig"] = ccl.doRPCValidateConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -200,7 +192,6 @@ func (c *CustomAPIRestClient) doRPCSetCloudSiteInfo(ctx context.Context, callOpt
 	pbRsp := &SetCloudSiteInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -208,7 +199,6 @@ func (c *CustomAPIRestClient) doRPCSetCloudSiteInfo(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSetVIPInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -287,7 +277,6 @@ func (c *CustomAPIRestClient) doRPCSetVIPInfo(ctx context.Context, callOpts *ser
 	pbRsp := &SetVIPInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.aws_vpc_site.SetVIPInfoResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -295,7 +284,6 @@ func (c *CustomAPIRestClient) doRPCSetVIPInfo(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSetVPCK8SHostnames(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -374,7 +362,6 @@ func (c *CustomAPIRestClient) doRPCSetVPCK8SHostnames(ctx context.Context, callO
 	pbRsp := &SetVPCK8SHostnamesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.aws_vpc_site.SetVPCK8SHostnamesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -382,7 +369,6 @@ func (c *CustomAPIRestClient) doRPCSetVPCK8SHostnames(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCValidateConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -458,7 +444,6 @@ func (c *CustomAPIRestClient) doRPCValidateConfig(ctx context.Context, callOpts 
 	pbRsp := &ves_io_schema_views.ValidateConfigResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.ValidateConfigResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -492,15 +477,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SetCloudSiteInfo"] = ccl.doRPCSetCloudSiteInfo
-
 	rpcFns["SetVIPInfo"] = ccl.doRPCSetVIPInfo
-
 	rpcFns["SetVPCK8SHostnames"] = ccl.doRPCSetVPCK8SHostnames
-
 	rpcFns["ValidateConfig"] = ccl.doRPCValidateConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -593,7 +573,6 @@ func (s *customAPISrv) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInf
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_vpc_site.SetCloudSiteInfoResponse", rsp)...)
 
 	return rsp, nil
@@ -642,7 +621,6 @@ func (s *customAPISrv) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_vpc_site.SetVIPInfoResponse", rsp)...)
 
 	return rsp, nil
@@ -691,7 +669,6 @@ func (s *customAPISrv) SetVPCK8SHostnames(ctx context.Context, in *SetVPCK8SHost
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_vpc_site.SetVPCK8SHostnamesResponse", rsp)...)
 
 	return rsp, nil
@@ -740,7 +717,6 @@ func (s *customAPISrv) ValidateConfig(ctx context.Context, in *ves_io_schema_vie
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.ValidateConfigResponse", rsp)...)
 
 	return rsp, nil

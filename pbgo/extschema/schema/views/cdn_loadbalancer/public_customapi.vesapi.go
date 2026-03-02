@@ -44,7 +44,6 @@ func (c *CustomAPIGrpcClient) doRPCCDNAccessLogAggregationQuery(ctx context.Cont
 	rsp, err := c.grpcClient.CDNAccessLogAggregationQuery(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCDNAccessLogs(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CDNAccessLogRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *CustomAPIGrpcClient) doRPCCDNAccessLogs(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.CDNAccessLogs(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCDNCachePurge(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_common_cdn.LilacCDNCachePurgeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -62,7 +60,6 @@ func (c *CustomAPIGrpcClient) doRPCCDNCachePurge(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.CDNCachePurge(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCDNMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LilacCDNMetricsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -71,7 +68,6 @@ func (c *CustomAPIGrpcClient) doRPCCDNMetrics(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.CDNMetrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetServiceOperation(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_common_cdn.GetServiceOperationReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -80,7 +76,6 @@ func (c *CustomAPIGrpcClient) doRPCGetServiceOperation(ctx context.Context, yaml
 	rsp, err := c.grpcClient.GetServiceOperation(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListServiceOperations(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_common_cdn.ListServiceOperationsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -89,7 +84,6 @@ func (c *CustomAPIGrpcClient) doRPCListServiceOperations(ctx context.Context, ya
 	rsp, err := c.grpcClient.ListServiceOperations(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SubscribeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -98,7 +92,6 @@ func (c *CustomAPIGrpcClient) doRPCSubscribe(ctx context.Context, yamlReq string
 	rsp, err := c.grpcClient.Subscribe(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUnsubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnsubscribeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -139,23 +132,14 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CDNAccessLogAggregationQuery"] = ccl.doRPCCDNAccessLogAggregationQuery
-
 	rpcFns["CDNAccessLogs"] = ccl.doRPCCDNAccessLogs
-
 	rpcFns["CDNCachePurge"] = ccl.doRPCCDNCachePurge
-
 	rpcFns["CDNMetrics"] = ccl.doRPCCDNMetrics
-
 	rpcFns["GetServiceOperation"] = ccl.doRPCGetServiceOperation
-
 	rpcFns["ListServiceOperations"] = ccl.doRPCListServiceOperations
-
 	rpcFns["Subscribe"] = ccl.doRPCSubscribe
-
 	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -247,7 +231,6 @@ func (c *CustomAPIRestClient) doRPCCDNAccessLogAggregationQuery(ctx context.Cont
 	pbRsp := &CDNLogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.CDNLogAggregationResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -255,7 +238,6 @@ func (c *CustomAPIRestClient) doRPCCDNAccessLogAggregationQuery(ctx context.Cont
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCDNAccessLogs(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -338,7 +320,6 @@ func (c *CustomAPIRestClient) doRPCCDNAccessLogs(ctx context.Context, callOpts *
 	pbRsp := &CDNLogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.CDNLogResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -346,7 +327,6 @@ func (c *CustomAPIRestClient) doRPCCDNAccessLogs(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCDNCachePurge(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -425,7 +405,6 @@ func (c *CustomAPIRestClient) doRPCCDNCachePurge(ctx context.Context, callOpts *
 	pbRsp := &ves_io_schema_views_common_cdn.LilacCDNCachePurgeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.LilacCDNCachePurgeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -433,7 +412,6 @@ func (c *CustomAPIRestClient) doRPCCDNCachePurge(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCDNMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -520,7 +498,6 @@ func (c *CustomAPIRestClient) doRPCCDNMetrics(ctx context.Context, callOpts *ser
 	pbRsp := &LilacCDNMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -528,7 +505,6 @@ func (c *CustomAPIRestClient) doRPCCDNMetrics(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetServiceOperation(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -605,7 +581,6 @@ func (c *CustomAPIRestClient) doRPCGetServiceOperation(ctx context.Context, call
 	pbRsp := &ves_io_schema_views_common_cdn.GetServiceOperationRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.GetServiceOperationRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -613,7 +588,6 @@ func (c *CustomAPIRestClient) doRPCGetServiceOperation(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListServiceOperations(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -690,7 +664,6 @@ func (c *CustomAPIRestClient) doRPCListServiceOperations(ctx context.Context, ca
 	pbRsp := &ves_io_schema_views_common_cdn.ListServiceOperationsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.ListServiceOperationsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -698,7 +671,6 @@ func (c *CustomAPIRestClient) doRPCListServiceOperations(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -772,7 +744,6 @@ func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *serv
 	pbRsp := &SubscribeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.SubscribeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -780,7 +751,6 @@ func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *serv
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -854,7 +824,6 @@ func (c *CustomAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *se
 	pbRsp := &UnsubscribeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.UnsubscribeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -888,23 +857,14 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CDNAccessLogAggregationQuery"] = ccl.doRPCCDNAccessLogAggregationQuery
-
 	rpcFns["CDNAccessLogs"] = ccl.doRPCCDNAccessLogs
-
 	rpcFns["CDNCachePurge"] = ccl.doRPCCDNCachePurge
-
 	rpcFns["CDNMetrics"] = ccl.doRPCCDNMetrics
-
 	rpcFns["GetServiceOperation"] = ccl.doRPCGetServiceOperation
-
 	rpcFns["ListServiceOperations"] = ccl.doRPCListServiceOperations
-
 	rpcFns["Subscribe"] = ccl.doRPCSubscribe
-
 	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1013,7 +973,6 @@ func (s *customAPISrv) CDNAccessLogAggregationQuery(ctx context.Context, in *CDN
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.CDNLogAggregationResponse", rsp)...)
 
 	return rsp, nil
@@ -1062,7 +1021,6 @@ func (s *customAPISrv) CDNAccessLogs(ctx context.Context, in *CDNAccessLogReques
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.CDNLogResponse", rsp)...)
 
 	return rsp, nil
@@ -1111,7 +1069,6 @@ func (s *customAPISrv) CDNCachePurge(ctx context.Context, in *ves_io_schema_view
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.LilacCDNCachePurgeResponse", rsp)...)
 
 	return rsp, nil
@@ -1160,7 +1117,6 @@ func (s *customAPISrv) CDNMetrics(ctx context.Context, in *LilacCDNMetricsReques
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -1209,7 +1165,6 @@ func (s *customAPISrv) GetServiceOperation(ctx context.Context, in *ves_io_schem
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.GetServiceOperationRsp", rsp)...)
 
 	return rsp, nil
@@ -1258,7 +1213,6 @@ func (s *customAPISrv) ListServiceOperations(ctx context.Context, in *ves_io_sch
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.ListServiceOperationsRsp", rsp)...)
 
 	return rsp, nil
@@ -1307,7 +1261,6 @@ func (s *customAPISrv) Subscribe(ctx context.Context, in *SubscribeRequest) (*Su
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.SubscribeResponse", rsp)...)
 
 	return rsp, nil
@@ -1356,7 +1309,6 @@ func (s *customAPISrv) Unsubscribe(ctx context.Context, in *UnsubscribeRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.UnsubscribeResponse", rsp)...)
 
 	return rsp, nil
@@ -2016,7 +1968,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/cdn_loadbalancer/{name}/cache-purge": {
             "post": {
                 "summary": "Purge CDN Cache",
-                "description": "Initiate Purge for Edge CDN Cache",
+                "description": "Initiate Purge for Edge CDN Cache\nDEPRECATED. use CDN Purge Command",
                 "operationId": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge",
                 "responses": {
                     "200": {
@@ -2107,6 +2059,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdncachepurge"
                 },
+                "x-ves-deprecated": "Use CDN Purge Command",
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge"
             },
             "x-displayname": "Custom API for CDN LoadBalancer",
@@ -3088,7 +3041,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.common_cdn.GetServiceOperationRsp",
             "properties": {
                 "error": {
-                    "description": " Errors(if any) while listing items from collection ",
+                    "description": " Errors(if any) while listing items from collection",
                     "title": "error",
                     "$ref": "#/definitions/schemaErrorType",
                     "x-displayname": "Errors"
@@ -3131,7 +3084,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "pattern": {
                     "type": "string",
-                    "description": "Exclusive with [hostname purge_all url]\n Purge cached content using PCRE 1 compliant regular expression.\n\nExample: - \".*\\.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pcre_regex: true\n",
+                    "description": "Exclusive with [hostname purge_all url]\n Purge cached content using PCRE 1 compliant regular expression.\n\nExample: - \".*\\.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Regex Pattern to match",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3139,8 +3092,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": ".*\\.ts",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.pcre_regex": "true"
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "purge_all": {

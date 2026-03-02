@@ -42,7 +42,6 @@ func (c *CustomDataAPIGrpcClient) doRPCDCClusterGroupsSummary(ctx context.Contex
 	rsp, err := c.grpcClient.DCClusterGroupsSummary(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCDCClusterTopology(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DCClusterTopologyRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomDataAPIGrpcClient) doRPCDCClusterTopology(ctx context.Context, ya
 	rsp, err := c.grpcClient.DCClusterTopology(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCGetNetworkRouteTables(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NetworkRouteTablesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomDataAPIGrpcClient) doRPCGetNetworkRouteTables(ctx context.Context
 	rsp, err := c.grpcClient.GetNetworkRouteTables(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCGetRouteTable(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RouteTableRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomDataAPIGrpcClient) doRPCGetRouteTable(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.GetRouteTable(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCGetSiteNetworks(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SiteNetworksRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *CustomDataAPIGrpcClient) doRPCGetSiteNetworks(ctx context.Context, yaml
 	rsp, err := c.grpcClient.GetSiteNetworks(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCGetTGWRouteTables(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &TGWRouteTablesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +82,6 @@ func (c *CustomDataAPIGrpcClient) doRPCGetTGWRouteTables(ctx context.Context, ya
 	rsp, err := c.grpcClient.GetTGWRouteTables(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCSiteMeshGroupsSummary(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SiteMeshGroupsSummaryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +90,6 @@ func (c *CustomDataAPIGrpcClient) doRPCSiteMeshGroupsSummary(ctx context.Context
 	rsp, err := c.grpcClient.SiteMeshGroupsSummary(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCSiteMeshTopology(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SiteMeshTopologyRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -105,7 +98,6 @@ func (c *CustomDataAPIGrpcClient) doRPCSiteMeshTopology(ctx context.Context, yam
 	rsp, err := c.grpcClient.SiteMeshTopology(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCSiteTopology(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SiteTopologyRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -146,25 +138,15 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DCClusterGroupsSummary"] = ccl.doRPCDCClusterGroupsSummary
-
 	rpcFns["DCClusterTopology"] = ccl.doRPCDCClusterTopology
-
 	rpcFns["GetNetworkRouteTables"] = ccl.doRPCGetNetworkRouteTables
-
 	rpcFns["GetRouteTable"] = ccl.doRPCGetRouteTable
-
 	rpcFns["GetSiteNetworks"] = ccl.doRPCGetSiteNetworks
-
 	rpcFns["GetTGWRouteTables"] = ccl.doRPCGetTGWRouteTables
-
 	rpcFns["SiteMeshGroupsSummary"] = ccl.doRPCSiteMeshGroupsSummary
-
 	rpcFns["SiteMeshTopology"] = ccl.doRPCSiteMeshTopology
-
 	rpcFns["SiteTopology"] = ccl.doRPCSiteTopology
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -249,7 +231,6 @@ func (c *CustomDataAPIRestClient) doRPCDCClusterGroupsSummary(ctx context.Contex
 	pbRsp := &TopologyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.TopologyResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -257,7 +238,6 @@ func (c *CustomDataAPIRestClient) doRPCDCClusterGroupsSummary(ctx context.Contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCDCClusterTopology(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -333,7 +313,6 @@ func (c *CustomDataAPIRestClient) doRPCDCClusterTopology(ctx context.Context, ca
 	pbRsp := &TopologyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.TopologyResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -341,7 +320,6 @@ func (c *CustomDataAPIRestClient) doRPCDCClusterTopology(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCGetNetworkRouteTables(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -429,7 +407,6 @@ func (c *CustomDataAPIRestClient) doRPCGetNetworkRouteTables(ctx context.Context
 	pbRsp := &NetworkRouteTablesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.NetworkRouteTablesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -437,7 +414,6 @@ func (c *CustomDataAPIRestClient) doRPCGetNetworkRouteTables(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCGetRouteTable(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -512,7 +488,6 @@ func (c *CustomDataAPIRestClient) doRPCGetRouteTable(ctx context.Context, callOp
 	pbRsp := &RouteTableResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.RouteTableResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -520,7 +495,6 @@ func (c *CustomDataAPIRestClient) doRPCGetRouteTable(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCGetSiteNetworks(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -595,7 +569,6 @@ func (c *CustomDataAPIRestClient) doRPCGetSiteNetworks(ctx context.Context, call
 	pbRsp := &SiteNetworksResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.SiteNetworksResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -603,7 +576,6 @@ func (c *CustomDataAPIRestClient) doRPCGetSiteNetworks(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCGetTGWRouteTables(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -684,7 +656,6 @@ func (c *CustomDataAPIRestClient) doRPCGetTGWRouteTables(ctx context.Context, ca
 	pbRsp := &TGWRouteTablesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.TGWRouteTablesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -692,7 +663,6 @@ func (c *CustomDataAPIRestClient) doRPCGetTGWRouteTables(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCSiteMeshGroupsSummary(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -766,7 +736,6 @@ func (c *CustomDataAPIRestClient) doRPCSiteMeshGroupsSummary(ctx context.Context
 	pbRsp := &TopologyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.TopologyResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -774,7 +743,6 @@ func (c *CustomDataAPIRestClient) doRPCSiteMeshGroupsSummary(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCSiteMeshTopology(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -850,7 +818,6 @@ func (c *CustomDataAPIRestClient) doRPCSiteMeshTopology(ctx context.Context, cal
 	pbRsp := &TopologyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.TopologyResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -858,7 +825,6 @@ func (c *CustomDataAPIRestClient) doRPCSiteMeshTopology(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCSiteTopology(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -938,7 +904,6 @@ func (c *CustomDataAPIRestClient) doRPCSiteTopology(ctx context.Context, callOpt
 	pbRsp := &TopologyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.TopologyResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -972,25 +937,15 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DCClusterGroupsSummary"] = ccl.doRPCDCClusterGroupsSummary
-
 	rpcFns["DCClusterTopology"] = ccl.doRPCDCClusterTopology
-
 	rpcFns["GetNetworkRouteTables"] = ccl.doRPCGetNetworkRouteTables
-
 	rpcFns["GetRouteTable"] = ccl.doRPCGetRouteTable
-
 	rpcFns["GetSiteNetworks"] = ccl.doRPCGetSiteNetworks
-
 	rpcFns["GetTGWRouteTables"] = ccl.doRPCGetTGWRouteTables
-
 	rpcFns["SiteMeshGroupsSummary"] = ccl.doRPCSiteMeshGroupsSummary
-
 	rpcFns["SiteMeshTopology"] = ccl.doRPCSiteMeshTopology
-
 	rpcFns["SiteTopology"] = ccl.doRPCSiteTopology
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1103,7 +1058,6 @@ func (s *customDataAPISrv) DCClusterGroupsSummary(ctx context.Context, in *DCClu
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.TopologyResponse", rsp)...)
 
 	return rsp, nil
@@ -1152,7 +1106,6 @@ func (s *customDataAPISrv) DCClusterTopology(ctx context.Context, in *DCClusterT
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.TopologyResponse", rsp)...)
 
 	return rsp, nil
@@ -1201,7 +1154,6 @@ func (s *customDataAPISrv) GetNetworkRouteTables(ctx context.Context, in *Networ
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.NetworkRouteTablesResponse", rsp)...)
 
 	return rsp, nil
@@ -1250,7 +1202,6 @@ func (s *customDataAPISrv) GetRouteTable(ctx context.Context, in *RouteTableRequ
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.RouteTableResponse", rsp)...)
 
 	return rsp, nil
@@ -1299,7 +1250,6 @@ func (s *customDataAPISrv) GetSiteNetworks(ctx context.Context, in *SiteNetworks
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.SiteNetworksResponse", rsp)...)
 
 	return rsp, nil
@@ -1348,7 +1298,6 @@ func (s *customDataAPISrv) GetTGWRouteTables(ctx context.Context, in *TGWRouteTa
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.TGWRouteTablesResponse", rsp)...)
 
 	return rsp, nil
@@ -1397,7 +1346,6 @@ func (s *customDataAPISrv) SiteMeshGroupsSummary(ctx context.Context, in *SiteMe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.TopologyResponse", rsp)...)
 
 	return rsp, nil
@@ -1446,7 +1394,6 @@ func (s *customDataAPISrv) SiteMeshTopology(ctx context.Context, in *SiteMeshTop
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.TopologyResponse", rsp)...)
 
 	return rsp, nil
@@ -1495,7 +1442,6 @@ func (s *customDataAPISrv) SiteTopology(ctx context.Context, in *SiteTopologyReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.TopologyResponse", rsp)...)
 
 	return rsp, nil
@@ -2642,7 +2588,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_MANAGEMENT is used for management purposes",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -2657,7 +2603,8 @@ var CustomDataAPISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
                 "VIRTUAL_NETWORK_IP_FABRIC",
-                "VIRTUAL_NETWORK_SEGMENT"
+                "VIRTUAL_NETWORK_SEGMENT",
+                "VIRTUAL_NETWORK_MANAGEMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -2796,6 +2743,60 @@ var CustomDataAPISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaMetricValue"
                     },
                     "x-displayname": "Value"
+                }
+            }
+        },
+        "schematopologyNetworkType": {
+            "type": "object",
+            "description": "A canonical form of the network.",
+            "title": "Network",
+            "x-displayname": "network",
+            "x-ves-proto-message": "ves.io.schema.topology.NetworkType",
+            "properties": {
+                "cidr_v4": {
+                    "type": "array",
+                    "description": " IPv4 Cidr",
+                    "title": "IPv4 Cidr",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv4 Cidr"
+                },
+                "cidr_v6": {
+                    "type": "array",
+                    "description": " IPv6 Cidr",
+                    "title": "IPv6 Cidr",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Cidr"
+                },
+                "load_balancer": {
+                    "type": "array",
+                    "description": " Load Balancer Present in this Network",
+                    "title": "Load Balancer",
+                    "items": {
+                        "$ref": "#/definitions/topologyLoadBalancer"
+                    },
+                    "x-displayname": "Load Balancer"
+                },
+                "network_peers": {
+                    "type": "array",
+                    "description": " Reference to the network peers",
+                    "title": "Network peers",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Network Peers"
+                },
+                "region": {
+                    "type": "array",
+                    "description": " Reference to the regions",
+                    "title": "Region",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Region"
                 }
             }
         },
@@ -4307,60 +4308,6 @@ var CustomDataAPISwaggerJSON string = `{
                 }
             }
         },
-        "topologyNetworkType": {
-            "type": "object",
-            "description": "A canonical form of the network.",
-            "title": "Network",
-            "x-displayname": "network",
-            "x-ves-proto-message": "ves.io.schema.topology.NetworkType",
-            "properties": {
-                "cidr_v4": {
-                    "type": "array",
-                    "description": " IPv4 Cidr",
-                    "title": "IPv4 Cidr",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "IPv4 Cidr"
-                },
-                "cidr_v6": {
-                    "type": "array",
-                    "description": " IPv6 Cidr",
-                    "title": "IPv6 Cidr",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "IPv6 Cidr"
-                },
-                "load_balancer": {
-                    "type": "array",
-                    "description": " Load Balancer Present in this Network",
-                    "title": "Load Balancer",
-                    "items": {
-                        "$ref": "#/definitions/topologyLoadBalancer"
-                    },
-                    "x-displayname": "Load Balancer"
-                },
-                "network_peers": {
-                    "type": "array",
-                    "description": " Reference to the network peers",
-                    "title": "Network peers",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Network Peers"
-                },
-                "region": {
-                    "type": "array",
-                    "description": " Reference to the regions",
-                    "title": "Region",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Region"
-                }
-            }
-        },
         "topologyNodeMetaData": {
             "type": "object",
             "description": "Metadata for node",
@@ -4477,7 +4424,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "info": {
                     "description": " Information about the Network.",
                     "title": "Info",
-                    "$ref": "#/definitions/topologyNetworkType",
+                    "$ref": "#/definitions/schematopologyNetworkType",
                     "x-displayname": "Info"
                 },
                 "metric": {
@@ -4981,7 +4928,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologySiteAppTypeEnum": {
             "type": "string",
-            "description": "Site App Type\n\n - SITE_APPTYPE_NONE: Not applicable \n\nNot applicable\n - SITE_APPTYPE_APPSTACK: AppStack Site\n\nAppStack Site\n - SITE_APPTYPE_MESH: Mesh site \n\nMesh site",
+            "description": "Site App Type\n\n - SITE_APPTYPE_NONE: Not applicable\n\nNot applicable\n - SITE_APPTYPE_APPSTACK: AppStack Site\n\nAppStack Site\n - SITE_APPTYPE_MESH: Mesh site\n\nMesh site",
             "title": "Site App Type",
             "enum": [
                 "SITE_APPTYPE_NONE",

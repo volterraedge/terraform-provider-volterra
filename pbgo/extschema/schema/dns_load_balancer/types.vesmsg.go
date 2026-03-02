@@ -74,19 +74,15 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRuleListDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRuleListDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -102,7 +98,6 @@ func (m *CreateSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -112,7 +107,6 @@ func (m *CreateSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
 	}
-
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -130,7 +124,6 @@ func (m *CreateSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -139,7 +132,6 @@ func (m *CreateSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRuleList() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -149,7 +141,6 @@ func (m *CreateSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "rule_list." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -157,7 +148,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) RecordTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ResourceRecordType)
@@ -171,9 +161,7 @@ func (v *ValidateCreateSpecType) RecordTypeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) RuleListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rule_list")
@@ -182,11 +170,9 @@ func (v *ValidateCreateSpecType) RuleListValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := LoadBalancingRuleListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -206,50 +192,36 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fallback_pool"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fallback_pool"))
 		if err := fv(ctx, m.GetFallbackPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["record_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_type"))
 		if err := fv(ctx, m.GetRecordType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["response_cache"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_cache"))
 		if err := fv(ctx, m.GetResponseCache(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule_list"))
 		if err := fv(ctx, m.GetRuleList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -279,9 +251,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_list"] = vFn
-
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
-
 	v.FldValidators["fallback_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -339,21 +309,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFallbackPoolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRuleListDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRuleListDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
@@ -379,7 +345,6 @@ func (m *GetSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDnsZonesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -407,12 +372,10 @@ func (m *GetSpecType) GetDnsZonesDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GetSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -428,7 +391,6 @@ func (m *GetSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -438,7 +400,6 @@ func (m *GetSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Interfa
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
 	}
-
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -456,7 +417,6 @@ func (m *GetSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Interfa
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -465,7 +425,6 @@ func (m *GetSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRuleList() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -475,7 +434,6 @@ func (m *GetSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "rule_list." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -483,7 +441,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) RecordTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ResourceRecordType)
@@ -497,9 +454,7 @@ func (v *ValidateGetSpecType) RecordTypeValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) RuleListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rule_list")
@@ -508,11 +463,9 @@ func (v *ValidateGetSpecType) RuleListValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := LoadBalancingRuleListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -532,9 +485,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zones"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zones"))
 		for idx, item := range m.GetDnsZones() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -542,52 +493,37 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fallback_pool"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fallback_pool"))
 		if err := fv(ctx, m.GetFallbackPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["record_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_type"))
 		if err := fv(ctx, m.GetRecordType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["response_cache"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_cache"))
 		if err := fv(ctx, m.GetResponseCache(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule_list"))
 		if err := fv(ctx, m.GetRuleList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -617,11 +553,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_list"] = vFn
-
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
-
 	v.FldValidators["dns_zones"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["fallback_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -679,21 +612,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFallbackPoolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRuleListDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRuleListDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
@@ -719,7 +648,6 @@ func (m *GlobalSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDnsZonesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -747,12 +675,10 @@ func (m *GlobalSpecType) GetDnsZonesDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -768,7 +694,6 @@ func (m *GlobalSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -778,7 +703,6 @@ func (m *GlobalSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
 	}
-
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -796,7 +720,6 @@ func (m *GlobalSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -805,7 +728,6 @@ func (m *GlobalSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRuleList() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -815,7 +737,6 @@ func (m *GlobalSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "rule_list." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -823,7 +744,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RecordTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ResourceRecordType)
@@ -837,9 +757,7 @@ func (v *ValidateGlobalSpecType) RecordTypeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) RuleListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rule_list")
@@ -848,11 +766,9 @@ func (v *ValidateGlobalSpecType) RuleListValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := LoadBalancingRuleListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -872,9 +788,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zones"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zones"))
 		for idx, item := range m.GetDnsZones() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -882,52 +796,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fallback_pool"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fallback_pool"))
 		if err := fv(ctx, m.GetFallbackPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["record_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_type"))
 		if err := fv(ctx, m.GetRecordType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["response_cache"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_cache"))
 		if err := fv(ctx, m.GetResponseCache(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule_list"))
 		if err := fv(ctx, m.GetRuleList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -957,11 +856,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_list"] = vFn
-
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
-
 	v.FldValidators["dns_zones"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["fallback_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1019,21 +915,17 @@ func (m *LoadBalancingRule) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetClientChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetClientChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *LoadBalancingRule) GetActionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetActionChoice().(type) {
 	case *LoadBalancingRule_Pool:
-
 		vref := m.GetPool()
 		if vref == nil {
 			return nil, nil
@@ -1049,11 +941,8 @@ func (m *LoadBalancingRule) GetActionChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *LoadBalancingRule_Nxdomain:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -1069,7 +958,6 @@ func (m *LoadBalancingRule) GetActionChoiceDBEntries(ctx context.Context, d db.I
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
 		}
-
 		vref := m.GetPool()
 		if vref == nil {
 			return nil, nil
@@ -1087,9 +975,7 @@ func (m *LoadBalancingRule) GetActionChoiceDBEntries(ctx context.Context, d db.I
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *LoadBalancingRule_Nxdomain:
-
 	}
 
 	return entries, nil
@@ -1102,11 +988,8 @@ func (m *LoadBalancingRule) GetClientChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetClientChoice().(type) {
 	case *LoadBalancingRule_GeoLocationLabelSelector:
-
 		return nil, nil
-
 	case *LoadBalancingRule_GeoLocationSet:
-
 		vref := m.GetGeoLocationSet()
 		if vref == nil {
 			return nil, nil
@@ -1122,13 +1005,9 @@ func (m *LoadBalancingRule) GetClientChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *LoadBalancingRule_AsnList:
-
 		return nil, nil
-
 	case *LoadBalancingRule_AsnMatcher:
-
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -1138,13 +1017,9 @@ func (m *LoadBalancingRule) GetClientChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *LoadBalancingRule_IpPrefixList:
-
 		return nil, nil
-
 	case *LoadBalancingRule_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -1154,11 +1029,9 @@ func (m *LoadBalancingRule) GetClientChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateLoadBalancingRule struct {
@@ -1172,7 +1045,6 @@ func (v *ValidateLoadBalancingRule) ActionChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateLoadBalancingRule) ClientChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1180,9 +1052,7 @@ func (v *ValidateLoadBalancingRule) ClientChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateLoadBalancingRule) ScoreValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for score")
@@ -1238,7 +1108,6 @@ func (v *ValidateLoadBalancingRule) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -1318,25 +1187,19 @@ func (v *ValidateLoadBalancingRule) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["score"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("score"))
 		if err := fv(ctx, m.GetScore(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLoadBalancingRuleValidator = func() *ValidateLoadBalancingRule {
 	v := &ValidateLoadBalancingRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1344,7 +1207,6 @@ var DefaultLoadBalancingRuleValidator = func() *ValidateLoadBalancingRule {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhActionChoice := v.ActionChoiceValidationRuleHandler
 	rulesActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1355,7 +1217,6 @@ var DefaultLoadBalancingRuleValidator = func() *ValidateLoadBalancingRule {
 		panic(errMsg)
 	}
 	v.FldValidators["action_choice"] = vFn
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1378,9 +1239,7 @@ var DefaultLoadBalancingRuleValidator = func() *ValidateLoadBalancingRule {
 		panic(errMsg)
 	}
 	v.FldValidators["score"] = vFn
-
 	v.FldValidators["action_choice.pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["client_choice.geo_location_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.geo_location_set"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["client_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
@@ -1438,7 +1297,6 @@ func (m *LoadBalancingRuleList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRulesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1446,7 +1304,6 @@ func (m *LoadBalancingRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
@@ -1460,7 +1317,6 @@ func (m *LoadBalancingRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateLoadBalancingRuleList struct {
@@ -1468,7 +1324,6 @@ type ValidateLoadBalancingRuleList struct {
 }
 
 func (v *ValidateLoadBalancingRuleList) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1528,22 +1383,18 @@ func (v *ValidateLoadBalancingRuleList) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLoadBalancingRuleListValidator = func() *ValidateLoadBalancingRuleList {
 	v := &ValidateLoadBalancingRuleList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1621,19 +1472,15 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRuleListDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRuleListDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -1649,7 +1496,6 @@ func (m *ReplaceSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1659,7 +1505,6 @@ func (m *ReplaceSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Int
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
 	}
-
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -1677,7 +1522,6 @@ func (m *ReplaceSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Int
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1686,7 +1530,6 @@ func (m *ReplaceSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRuleList() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -1696,7 +1539,6 @@ func (m *ReplaceSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "rule_list." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1704,7 +1546,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) RecordTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ResourceRecordType)
@@ -1718,9 +1559,7 @@ func (v *ValidateReplaceSpecType) RecordTypeValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) RuleListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rule_list")
@@ -1729,11 +1568,9 @@ func (v *ValidateReplaceSpecType) RuleListValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := LoadBalancingRuleListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1753,50 +1590,36 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fallback_pool"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fallback_pool"))
 		if err := fv(ctx, m.GetFallbackPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["record_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_type"))
 		if err := fv(ctx, m.GetRecordType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["response_cache"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_cache"))
 		if err := fv(ctx, m.GetResponseCache(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rule_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rule_list"))
 		if err := fv(ctx, m.GetRuleList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1826,9 +1649,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_list"] = vFn
-
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
-
 	v.FldValidators["fallback_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1945,16 +1766,13 @@ func (v *ValidateResponseCache) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseCacheValidator = func() *ValidateResponseCache {
 	v := &ValidateResponseCache{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1962,7 +1780,6 @@ var DefaultResponseCacheValidator = func() *ValidateResponseCache {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhResponseCacheParametersChoice := v.ResponseCacheParametersChoiceValidationRuleHandler
 	rulesResponseCacheParametersChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1973,7 +1790,6 @@ var DefaultResponseCacheValidator = func() *ValidateResponseCache {
 		panic(errMsg)
 	}
 	v.FldValidators["response_cache_parameters_choice"] = vFn
-
 	v.FldValidators["response_cache_parameters_choice.response_cache_parameters"] = ResponseCacheParametersValidator().Validate
 
 	return v
@@ -2025,7 +1841,6 @@ type ValidateResponseCacheParameters struct {
 }
 
 func (v *ValidateResponseCacheParameters) CacheCidrIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_cidr_ipv4")
@@ -2033,9 +1848,7 @@ func (v *ValidateResponseCacheParameters) CacheCidrIpv4ValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateResponseCacheParameters) CacheCidrIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_cidr_ipv6")
@@ -2043,9 +1856,7 @@ func (v *ValidateResponseCacheParameters) CacheCidrIpv6ValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateResponseCacheParameters) CacheTtlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_ttl")
@@ -2067,41 +1878,30 @@ func (v *ValidateResponseCacheParameters) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cache_cidr_ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_cidr_ipv4"))
 		if err := fv(ctx, m.GetCacheCidrIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cache_cidr_ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_cidr_ipv6"))
 		if err := fv(ctx, m.GetCacheCidrIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cache_ttl"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_ttl"))
 		if err := fv(ctx, m.GetCacheTtl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseCacheParametersValidator = func() *ValidateResponseCacheParameters {
 	v := &ValidateResponseCacheParameters{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

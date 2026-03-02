@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_elastic_ip.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.cloud_elastic_ip.Object"] = ObjectValidator()
 	vr["ves.io.schema.cloud_elastic_ip.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.cloud_elastic_ip.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.cloud_elastic_ip.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.cloud_elastic_ip.DeleteRequest"] = DeleteRequestValidator()
@@ -28,10 +26,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_elastic_ip.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.cloud_elastic_ip.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cloud_elastic_ip.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.cloud_elastic_ip.ForceDeleteCloudElasticIPRequest"] = ForceDeleteCloudElasticIPRequestValidator()
 	vr["ves.io.schema.cloud_elastic_ip.ForceDeleteCloudElasticIPResponse"] = ForceDeleteCloudElasticIPResponseValidator()
-
 	vr["ves.io.schema.cloud_elastic_ip.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.cloud_elastic_ip.DeleteSpecType"] = DeleteSpecTypeValidator()
 	vr["ves.io.schema.cloud_elastic_ip.ElasticIPInfoType"] = ElasticIPInfoTypeValidator()
@@ -39,7 +35,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_elastic_ip.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.cloud_elastic_ip.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.cloud_elastic_ip.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -51,26 +46,21 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.cloud_elastic_ip.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.cloud_elastic_ip.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.cloud_elastic_ip.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.cloud_elastic_ip.API"] = "config"
 	sm["ves.io.schema.cloud_elastic_ip.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -79,9 +69,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.cloud_elastic_ip.Object"] = APISwaggerJSON
@@ -95,16 +83,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.cloud_elastic_ip.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.cloud_elastic_ip.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.cloud_elastic_ip.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.cloud_elastic_ip.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.cloud_elastic_ip.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.cloud_elastic_ip.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -115,22 +98,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.cloud_elastic_ip.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

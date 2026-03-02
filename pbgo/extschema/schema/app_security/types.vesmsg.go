@@ -133,25 +133,19 @@ func (v *ValidateAggregationRequest) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_trend_request"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_trend_request"))
 		if err := fv(ctx, m.GetIsTrendRequest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAggregationRequestValidator = func() *ValidateAggregationRequest {
 	v := &ValidateAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggregation_type.date_aggregation"] = DateAggregationValidator().Validate
 	v.FldValidators["aggregation_type.field_aggregation"] = FieldAggregationValidator().Validate
 	v.FldValidators["aggregation_type.cardinality_aggregation"] = CardinalityAggregationValidator().Validate
@@ -207,7 +201,6 @@ type ValidateCardinalityAggregation struct {
 }
 
 func (v *ValidateCardinalityAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(KeyField)
@@ -235,23 +228,18 @@ func (v *ValidateCardinalityAggregation) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field"))
 		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCardinalityAggregationValidator = func() *ValidateCardinalityAggregation {
 	v := &ValidateCardinalityAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -320,7 +308,6 @@ type ValidateDateAggregation struct {
 }
 
 func (v *ValidateDateAggregation) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -342,18 +329,13 @@ func (v *ValidateDateAggregation) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		for key, value := range m.GetSubAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -361,16 +343,13 @@ func (v *ValidateDateAggregation) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDateAggregationValidator = func() *ValidateDateAggregation {
 	v := &ValidateDateAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -390,7 +369,6 @@ var DefaultDateAggregationValidator = func() *ValidateDateAggregation {
 		panic(errMsg)
 	}
 	v.FldValidators["step"] = vFn
-
 	v.FldValidators["sub_aggs"] = DateSubAggregationValidator().Validate
 
 	return v
@@ -478,16 +456,13 @@ func (v *ValidateDateSubAggregation) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDateSubAggregationValidator = func() *ValidateDateSubAggregation {
 	v := &ValidateDateSubAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggregation_type.field_aggregation"] = FieldAggregationValidator().Validate
 	v.FldValidators["aggregation_type.multi_field_aggregation"] = MultiFieldAggregationValidator().Validate
 
@@ -540,7 +515,6 @@ type ValidateFieldAggregation struct {
 }
 
 func (v *ValidateFieldAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(KeyField)
@@ -554,9 +528,7 @@ func (v *ValidateFieldAggregation) FieldValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateFieldAggregation) TopkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for topk")
@@ -578,14 +550,11 @@ func (v *ValidateFieldAggregation) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field"))
 		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetOrderBy().(type) {
@@ -600,11 +569,8 @@ func (v *ValidateFieldAggregation) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		for key, value := range m.GetSubAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -612,25 +578,19 @@ func (v *ValidateFieldAggregation) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topk"))
 		if err := fv(ctx, m.GetTopk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFieldAggregationValidator = func() *ValidateFieldAggregation {
 	v := &ValidateFieldAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -661,9 +621,7 @@ var DefaultFieldAggregationValidator = func() *ValidateFieldAggregation {
 		panic(errMsg)
 	}
 	v.FldValidators["topk"] = vFn
-
 	v.FldValidators["order_by.metrics_aggregation"] = MetricsAggregationValidator().Validate
-
 	v.FldValidators["sub_aggs"] = FieldSubAggregationValidator().Validate
 
 	return v
@@ -740,16 +698,13 @@ func (v *ValidateFieldSubAggregation) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFieldSubAggregationValidator = func() *ValidateFieldSubAggregation {
 	v := &ValidateFieldSubAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggregation_type.cardinality_aggregation"] = CardinalityAggregationValidator().Validate
 
 	return v
@@ -826,16 +781,13 @@ func (v *ValidateMetricsAggregation) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMetricsAggregationValidator = func() *ValidateMetricsAggregation {
 	v := &ValidateMetricsAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aggregation_type.percentile"] = PercentileAggregationValidator().Validate
 
 	return v
@@ -887,7 +839,6 @@ type ValidateMultiFieldAggregation struct {
 }
 
 func (v *ValidateMultiFieldAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(MultiKeyField)
@@ -901,9 +852,7 @@ func (v *ValidateMultiFieldAggregation) FieldValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateMultiFieldAggregation) TopkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for topk")
@@ -925,14 +874,11 @@ func (v *ValidateMultiFieldAggregation) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field"))
 		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetOrderBy().(type) {
@@ -947,11 +893,8 @@ func (v *ValidateMultiFieldAggregation) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		for key, value := range m.GetSubAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -959,25 +902,19 @@ func (v *ValidateMultiFieldAggregation) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topk"))
 		if err := fv(ctx, m.GetTopk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMultiFieldAggregationValidator = func() *ValidateMultiFieldAggregation {
 	v := &ValidateMultiFieldAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1008,9 +945,7 @@ var DefaultMultiFieldAggregationValidator = func() *ValidateMultiFieldAggregatio
 		panic(errMsg)
 	}
 	v.FldValidators["topk"] = vFn
-
 	v.FldValidators["order_by.metrics_aggregation"] = MetricsAggregationValidator().Validate
-
 	v.FldValidators["sub_aggs"] = MultiFieldSubAggregationValidator().Validate
 
 	return v
@@ -1105,16 +1040,13 @@ func (v *ValidateMultiFieldSubAggregation) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMultiFieldSubAggregationValidator = func() *ValidateMultiFieldSubAggregation {
 	v := &ValidateMultiFieldSubAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1122,7 +1054,6 @@ var DefaultMultiFieldSubAggregationValidator = func() *ValidateMultiFieldSubAggr
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAggregationType := v.AggregationTypeValidationRuleHandler
 	rulesAggregationType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1133,7 +1064,6 @@ var DefaultMultiFieldSubAggregationValidator = func() *ValidateMultiFieldSubAggr
 		panic(errMsg)
 	}
 	v.FldValidators["aggregation_type"] = vFn
-
 	v.FldValidators["aggregation_type.cardinality_aggregation"] = CardinalityAggregationValidator().Validate
 
 	return v
@@ -1185,7 +1115,6 @@ type ValidatePercentileAggregation struct {
 }
 
 func (v *ValidatePercentileAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(MetricField)
@@ -1199,9 +1128,7 @@ func (v *ValidatePercentileAggregation) FieldValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePercentileAggregation) PercentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewDoubleValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for percent")
@@ -1223,32 +1150,24 @@ func (v *ValidatePercentileAggregation) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field"))
 		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["percent"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("percent"))
 		if err := fv(ctx, m.GetPercent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPercentileAggregationValidator = func() *ValidatePercentileAggregation {
 	v := &ValidatePercentileAggregation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

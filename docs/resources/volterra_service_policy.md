@@ -20,7 +20,7 @@ Example Usage
 resource "volterra_service_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
-  algo      = ["algo"]
+  algo      = "FIRST_MATCH"
 
   // One of the arguments from this list "deny_list rule_list legacy_rule_list allow_all_requests deny_all_requests internally_generated allow_list" must be set
 
@@ -57,7 +57,6 @@ resource "volterra_service_policy" "example" {
   // One of the arguments from this list "any_server server_name server_selector server_name_matcher" must be set
   any_server = true
 }
-
 ```
 
 Argument Reference
@@ -79,7 +78,10 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`algo` - (Required) - DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action (`String`).
+`algo` - (Required) This will define the rule combining algorithm. It can take one of the following values:
+  - `FIRST_MATCH`: Rules are evaluated sequentially till a matching rule is identified
+  - `ALLOW_OVERRIDES`: Rules with an ALLOW action are evaluated prior to rules with a DENY action
+  - `DENY_OVERRIDES`: Rules with a DENY action are evaluated prior to rules with an ALLOW action (`String`).
 
 `port_matcher` - (Optional) The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.. See [Port Matcher ](#port-matcher) below for details.
 
@@ -974,4 +976,4 @@ Source traffic is matched against selected segments.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured service_policy.
+-   `id` - This is the id of the configured service_policy.

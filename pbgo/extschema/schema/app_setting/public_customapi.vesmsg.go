@@ -76,9 +76,7 @@ func (v *ValidateSuspiciousUser) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["logs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("logs"))
 		for idx, item := range m.GetLogs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -86,27 +84,19 @@ func (v *ValidateSuspiciousUser) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["suspicion_score"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("suspicion_score"))
 		if err := fv(ctx, m.GetSuspicionScore(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_id"))
 		if err := fv(ctx, m.GetUserId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -163,7 +153,6 @@ type ValidateSuspiciousUserStatusReq struct {
 }
 
 func (v *ValidateSuspiciousUserStatusReq) TopnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for topn")
@@ -185,68 +174,48 @@ func (v *ValidateSuspiciousUserStatusReq) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topn"))
 		if err := fv(ctx, m.GetTopn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuspiciousUserStatusReqValidator = func() *ValidateSuspiciousUserStatusReq {
 	v := &ValidateSuspiciousUserStatusReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -328,9 +297,7 @@ func (v *ValidateSuspiciousUserStatusRsp) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["suspicious_users"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("suspicious_users"))
 		for idx, item := range m.GetSuspiciousUsers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -338,9 +305,7 @@ func (v *ValidateSuspiciousUserStatusRsp) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

@@ -64,7 +64,6 @@ type ValidateDiscoveredServiceHealthStatusRequest struct {
 }
 
 func (v *ValidateDiscoveredServiceHealthStatusRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -72,9 +71,7 @@ func (v *ValidateDiscoveredServiceHealthStatusRequest) NamespaceValidationRuleHa
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDiscoveredServiceHealthStatusRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -96,32 +93,24 @@ func (v *ValidateDiscoveredServiceHealthStatusRequest) Validate(ctx context.Cont
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDiscoveredServiceHealthStatusRequestValidator = func() *ValidateDiscoveredServiceHealthStatusRequest {
 	v := &ValidateDiscoveredServiceHealthStatusRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -213,9 +202,7 @@ func (v *ValidateDiscoveredServiceHealthStatusResponse) Validate(ctx context.Con
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -223,18 +210,13 @@ func (v *ValidateDiscoveredServiceHealthStatusResponse) Validate(ctx context.Con
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_server_pool_members_health"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_server_pool_members_health"))
 		if err := fv(ctx, m.GetVirtualServerPoolMembersHealth(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -303,18 +285,13 @@ func (v *ValidateVirtualServerPoolHealthStatusListResponseItem) Validate(ctx con
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -322,9 +299,7 @@ func (v *ValidateVirtualServerPoolHealthStatusListResponseItem) Validate(ctx con
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -393,9 +368,7 @@ func (v *ValidateVirtualServerPoolMemberHealth) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["virtual_server_pool_members"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_server_pool_members"))
 		for idx, item := range m.GetVirtualServerPoolMembers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -403,9 +376,7 @@ func (v *ValidateVirtualServerPoolMemberHealth) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

@@ -66,7 +66,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) CommentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for comments")
@@ -88,9 +87,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bot_infra_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_infra_names"))
 		for idx, item := range m.GetBotInfraNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -98,16 +95,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["comments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("comments"))
 		if err := fv(ctx, m.GetComments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetPolicyChoice().(type) {
@@ -144,43 +137,31 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_user"))
 		if err := fv(ctx, m.GetUpdateUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version_number"))
 		if err := fv(ctx, m.GetVersionNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version_status"))
 		if err := fv(ctx, m.GetVersionStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -199,7 +180,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["comments"] = vFn
-
 	v.FldValidators["policy_choice.endpoint_policy_content"] = ves_io_schema_shape_bot_defense.ProtectedEndpointsValidator().Validate
 	v.FldValidators["policy_choice.allowlist_policy_content"] = ves_io_schema_shape_bot_defense.IPAllowlistsValidator().Validate
 	v.FldValidators["policy_choice.network_policy_content"] = ves_io_schema_shape_bot_defense.NetworkPolicyContentValidator().Validate
@@ -289,9 +269,7 @@ func (v *ValidateVersionStatus) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

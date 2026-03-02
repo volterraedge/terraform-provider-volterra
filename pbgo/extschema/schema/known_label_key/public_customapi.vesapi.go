@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Create(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDelete(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DeleteRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCDelete(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Delete(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Delete"] = ccl.doRPCDelete
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -186,7 +180,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.known_label_key.CreateResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -194,7 +187,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -270,7 +262,6 @@ func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.
 	pbRsp := &DeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.known_label_key.DeleteResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -278,7 +269,6 @@ func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -355,7 +345,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.known_label_key.GetResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -389,13 +378,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Delete"] = ccl.doRPCDelete
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -484,7 +469,6 @@ func (s *customAPISrv) Create(ctx context.Context, in *CreateRequest) (*CreateRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.known_label_key.CreateResponse", rsp)...)
 
 	return rsp, nil
@@ -533,7 +517,6 @@ func (s *customAPISrv) Delete(ctx context.Context, in *DeleteRequest) (*DeleteRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.known_label_key.DeleteResponse", rsp)...)
 
 	return rsp, nil
@@ -582,7 +565,6 @@ func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, e
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.known_label_key.GetResponse", rsp)...)
 
 	return rsp, nil

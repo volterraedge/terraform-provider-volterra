@@ -24,7 +24,6 @@ resource "volterra_dns_domain" "example" {
 
   volterra_managed = true
 }
-
 ```
 
 Argument Reference
@@ -75,5 +74,5 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured dns_domain.
--	`txt_record` - This is the txt-record of the configured dns_domain.
+*   `id` - This is the id of the configured dns_domain.
+*   `txt_record` - This is the txt-record of the configured dns_domain.

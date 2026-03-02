@@ -80,9 +80,7 @@ func (v *ValidateAWSPolicyType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["missing_permissions_aws_tgw_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("missing_permissions_aws_tgw_site"))
 		for idx, item := range m.GetMissingPermissionsAwsTgwSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -90,11 +88,8 @@ func (v *ValidateAWSPolicyType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["missing_permissions_aws_vpc_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("missing_permissions_aws_vpc_site"))
 		for idx, item := range m.GetMissingPermissionsAwsVpcSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -102,27 +97,19 @@ func (v *ValidateAWSPolicyType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["support_aws_tgw_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("support_aws_tgw_site"))
 		if err := fv(ctx, m.GetSupportAwsTgwSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["support_aws_vpc_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("support_aws_vpc_site"))
 		if err := fv(ctx, m.GetSupportAwsVpcSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -191,25 +178,18 @@ func (v *ValidateAWSRouteAttributes) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["propagated"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("propagated"))
 		if err := fv(ctx, m.GetPropagated(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw"))
 		if err := fv(ctx, m.GetTgw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -272,15 +252,12 @@ func (m *AWSTGWAttachment) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *AWSTGWAttachment) GetCloudConnectDRefInfo() ([]db.DRefInfo, error) {
@@ -305,7 +282,6 @@ func (m *AWSTGWAttachment) GetCloudConnectDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCloudConnectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -324,7 +300,6 @@ func (m *AWSTGWAttachment) GetCloudConnectDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -350,7 +325,6 @@ func (m *AWSTGWAttachment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -369,7 +343,6 @@ func (m *AWSTGWAttachment) GetSegmentDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -390,36 +363,25 @@ func (v *ValidateAWSTGWAttachment) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["associated_route_table_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("associated_route_table_id"))
 		if err := fv(ctx, m.GetAssociatedRouteTableId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["association_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("association_state"))
 		if err := fv(ctx, m.GetAssociationState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cidr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr"))
 		if err := fv(ctx, m.GetCidr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cloud_connect"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_connect"))
 		for idx, item := range m.GetCloudConnect() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -427,56 +389,38 @@ func (v *ValidateAWSTGWAttachment) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_id"))
 		if err := fv(ctx, m.GetResourceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_name"))
 		if err := fv(ctx, m.GetResourceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_type"))
 		if err := fv(ctx, m.GetResourceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment"))
 		for idx, item := range m.GetSegment() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -484,9 +428,7 @@ func (v *ValidateAWSTGWAttachment) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -555,52 +497,36 @@ func (v *ValidateAWSTGWAttachmentMetaData) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_id"))
 		if err := fv(ctx, m.GetResourceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_name"))
 		if err := fv(ctx, m.GetResourceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_type"))
 		if err := fv(ctx, m.GetResourceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -669,9 +595,7 @@ func (v *ValidateAWSTgwRouteAttributes) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["next_hop_attachment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("next_hop_attachment"))
 		for idx, item := range m.GetNextHopAttachment() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -679,18 +603,13 @@ func (v *ValidateAWSTgwRouteAttributes) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_type"))
 		if err := fv(ctx, m.GetRouteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -759,34 +678,24 @@ func (v *ValidateAddressInfoType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_name"))
 		if err := fv(ctx, m.GetDnsName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["primary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("primary"))
 		if err := fv(ctx, m.GetPrimary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -855,25 +764,18 @@ func (v *ValidateAzureResourceGroupInfo) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site_rg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_rg"))
 		if err := fv(ctx, m.GetSiteRg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network_rg"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_network_rg"))
 		if err := fv(ctx, m.GetVirtualNetworkRg(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -931,7 +833,6 @@ func (m *AzureVnetPeer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPeerNetworkDRefInfo()
-
 }
 
 func (m *AzureVnetPeer) GetPeerNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -956,7 +857,6 @@ func (m *AzureVnetPeer) GetPeerNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPeerNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -975,7 +875,6 @@ func (m *AzureVnetPeer) GetPeerNetworkDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -996,9 +895,7 @@ func (v *ValidateAzureVnetPeer) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["peer_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peer_network"))
 		for idx, item := range m.GetPeerNetwork() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1006,18 +903,13 @@ func (v *ValidateAzureVnetPeer) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["peering_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("peering_state"))
 		if err := fv(ctx, m.GetPeeringState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1086,14 +978,11 @@ func (v *ValidateCloudPolicyType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_provider_error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_provider_error"))
 		if err := fv(ctx, m.GetCloudProviderError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetCloudType().(type) {
@@ -1108,18 +997,13 @@ func (v *ValidateCloudPolicyType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["permissions_populated"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("permissions_populated"))
 		if err := fv(ctx, m.GetPermissionsPopulated(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1188,16 +1072,12 @@ func (v *ValidateDCClusterGroupType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1266,45 +1146,31 @@ func (v *ValidateGCPRouteAttributes) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_version"))
 		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_name"))
 		if err := fv(ctx, m.GetRouteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_type"))
 		if err := fv(ctx, m.GetRouteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scope_limits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scope_limits"))
 		for idx, item := range m.GetScopeLimits() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1312,9 +1178,7 @@ func (v *ValidateGCPRouteAttributes) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1372,7 +1236,6 @@ func (m *InstanceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfacesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1380,7 +1243,6 @@ func (m *InstanceType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInterfaces() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetInterfaces() {
 		driSet, err := e.GetDRefInfo()
@@ -1394,7 +1256,6 @@ func (m *InstanceType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateInstanceType struct {
@@ -1414,54 +1275,37 @@ func (v *ValidateInstanceType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["architecture"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("architecture"))
 		if err := fv(ctx, m.GetArchitecture(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["availability_zone"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("availability_zone"))
 		if err := fv(ctx, m.GetAvailabilityZone(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cpu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cpu"))
 		if err := fv(ctx, m.GetCpu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["f5xc_node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("f5xc_node_name"))
 		if err := fv(ctx, m.GetF5XcNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_type"))
 		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interfaces"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interfaces"))
 		for idx, item := range m.GetInterfaces() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1469,56 +1313,38 @@ func (v *ValidateInstanceType) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["platform"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("platform"))
 		if err := fv(ctx, m.GetPlatform(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_address"))
 		if err := fv(ctx, m.GetPrivateAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_dns_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_dns_name"))
 		if err := fv(ctx, m.GetPrivateDnsName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_address"))
 		if err := fv(ctx, m.GetPublicAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_dns_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_dns_name"))
 		if err := fv(ctx, m.GetPublicDnsName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["security_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("security_group"))
 		for idx, item := range m.GetSecurityGroup() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1526,16 +1352,13 @@ func (v *ValidateInstanceType) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInstanceTypeValidator = func() *ValidateInstanceType {
 	v := &ValidateInstanceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["interfaces"] = NetworkInterfaceTypeValidator().Validate
 
 	return v
@@ -1599,25 +1422,18 @@ func (v *ValidateLoadBalancer) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1675,7 +1491,6 @@ func (m *MetaType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCredsDRefInfo()
-
 }
 
 func (m *MetaType) GetCredsDRefInfo() ([]db.DRefInfo, error) {
@@ -1700,7 +1515,6 @@ func (m *MetaType) GetCredsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCredsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1719,7 +1533,6 @@ func (m *MetaType) GetCredsDBEntries(ctx context.Context, d db.Interface) ([]db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1740,9 +1553,7 @@ func (v *ValidateMetaType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["creds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creds"))
 		for idx, item := range m.GetCreds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1750,65 +1561,44 @@ func (v *ValidateMetaType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["owner_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("owner_id"))
 		if err := fv(ctx, m.GetOwnerId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_type"))
 		if err := fv(ctx, m.GetProviderType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["raw_json"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("raw_json"))
 		if err := fv(ctx, m.GetRawJson(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1816,9 +1606,7 @@ func (v *ValidateMetaType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1876,7 +1664,6 @@ func (m *NetworkInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSubnetDRefInfo()
-
 }
 
 func (m *NetworkInterfaceType) GetSubnetDRefInfo() ([]db.DRefInfo, error) {
@@ -1901,7 +1688,6 @@ func (m *NetworkInterfaceType) GetSubnetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSubnetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1920,7 +1706,6 @@ func (m *NetworkInterfaceType) GetSubnetDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1941,27 +1726,19 @@ func (v *ValidateNetworkInterfaceType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["f5xc_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("f5xc_status"))
 		if err := fv(ctx, m.GetF5XcStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_addresses"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_addresses"))
 		for idx, item := range m.GetPrivateAddresses() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1969,11 +1746,8 @@ func (v *ValidateNetworkInterfaceType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_address"))
 		for idx, item := range m.GetPublicAddress() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1981,11 +1755,8 @@ func (v *ValidateNetworkInterfaceType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["security_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("security_group"))
 		for idx, item := range m.GetSecurityGroup() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1993,20 +1764,14 @@ func (v *ValidateNetworkInterfaceType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet"))
 		for idx, item := range m.GetSubnet() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2014,16 +1779,13 @@ func (v *ValidateNetworkInterfaceType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkInterfaceTypeValidator = func() *ValidateNetworkInterfaceType {
 	v := &ValidateNetworkInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["f5xc_status"] = ves_io_schema_site.InterfaceStatusValidator().Validate
 
 	return v
@@ -2076,7 +1838,6 @@ func (m *NetworkPeerType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPeerChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2086,7 +1847,6 @@ func (m *NetworkPeerType) GetPeerChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPeerChoice().(type) {
 	case *NetworkPeerType_VnetPeer:
-
 		drInfos, err := m.GetVnetPeer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVnetPeer().GetDRefInfo() FAILED")
@@ -2096,11 +1856,9 @@ func (m *NetworkPeerType) GetPeerChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "vnet_peer." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateNetworkPeerType struct {
@@ -2133,9 +1891,7 @@ func (v *ValidateNetworkPeerType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2198,15 +1954,12 @@ func (m *NetworkType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRegionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRegionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *NetworkType) GetNetworkPeersDRefInfo() ([]db.DRefInfo, error) {
@@ -2231,7 +1984,6 @@ func (m *NetworkType) GetNetworkPeersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkPeersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2250,7 +2002,6 @@ func (m *NetworkType) GetNetworkPeersDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2276,7 +2027,6 @@ func (m *NetworkType) GetRegionDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRegionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2295,7 +2045,6 @@ func (m *NetworkType) GetRegionDBEntries(ctx context.Context, d db.Interface) ([
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2316,9 +2065,7 @@ func (v *ValidateNetworkType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cidr_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr_v4"))
 		for idx, item := range m.GetCidrV4() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2326,11 +2073,8 @@ func (v *ValidateNetworkType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cidr_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr_v6"))
 		for idx, item := range m.GetCidrV6() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2338,11 +2082,8 @@ func (v *ValidateNetworkType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["load_balancer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("load_balancer"))
 		for idx, item := range m.GetLoadBalancer() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2350,11 +2091,8 @@ func (v *ValidateNetworkType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_peers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_peers"))
 		for idx, item := range m.GetNetworkPeers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2362,11 +2100,8 @@ func (v *ValidateNetworkType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		for idx, item := range m.GetRegion() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2374,9 +2109,7 @@ func (v *ValidateNetworkType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2434,7 +2167,6 @@ func (m *ProviderInfo) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudLinkDRefInfo()
-
 }
 
 func (m *ProviderInfo) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
@@ -2459,7 +2191,6 @@ func (m *ProviderInfo) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCloudLinkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2478,7 +2209,6 @@ func (m *ProviderInfo) GetCloudLinkDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2499,18 +2229,13 @@ func (v *ValidateProviderInfo) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["azure_rg_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_rg_info"))
 		if err := fv(ctx, m.GetAzureRgInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cloud_link"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_link"))
 		for idx, item := range m.GetCloudLink() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2518,11 +2243,8 @@ func (v *ValidateProviderInfo) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_zones"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_zones"))
 		for idx, item := range m.GetGcpZones() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2530,18 +2252,13 @@ func (v *ValidateProviderInfo) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2604,33 +2321,27 @@ func (m *RouteTableType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetImplicitSubnetDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetImplicitSubnetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSubnetDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSubnetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTransitGatewayDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTransitGatewayDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *RouteTableType) GetExplicitSubnetDRefInfo() ([]db.DRefInfo, error) {
@@ -2655,7 +2366,6 @@ func (m *RouteTableType) GetExplicitSubnetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetExplicitSubnetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2674,7 +2384,6 @@ func (m *RouteTableType) GetExplicitSubnetDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2700,7 +2409,6 @@ func (m *RouteTableType) GetImplicitSubnetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetImplicitSubnetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2719,7 +2427,6 @@ func (m *RouteTableType) GetImplicitSubnetDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2745,7 +2452,6 @@ func (m *RouteTableType) GetNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2764,7 +2470,6 @@ func (m *RouteTableType) GetNetworkDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2790,7 +2495,6 @@ func (m *RouteTableType) GetSubnetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSubnetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2809,7 +2513,6 @@ func (m *RouteTableType) GetSubnetDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2835,7 +2538,6 @@ func (m *RouteTableType) GetTransitGatewayDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTransitGatewayDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2854,7 +2556,6 @@ func (m *RouteTableType) GetTransitGatewayDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2875,9 +2576,7 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["associations"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("associations"))
 		for idx, item := range m.GetAssociations() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2885,11 +2584,8 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["explicit_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("explicit_subnet"))
 		for idx, item := range m.GetExplicitSubnet() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2897,11 +2593,8 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["implicit_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("implicit_subnet"))
 		for idx, item := range m.GetImplicitSubnet() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2909,11 +2602,8 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network"))
 		for idx, item := range m.GetNetwork() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2921,11 +2611,8 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["propagations"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("propagations"))
 		for idx, item := range m.GetPropagations() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2933,29 +2620,20 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_table_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table_state"))
 		if err := fv(ctx, m.GetRouteTableState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["route_table_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("route_table_type"))
 		if err := fv(ctx, m.GetRouteTableType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("routes"))
 		for idx, item := range m.GetRoutes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2963,11 +2641,8 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet"))
 		for idx, item := range m.GetSubnet() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2975,11 +2650,8 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transit_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transit_gateway"))
 		for idx, item := range m.GetTransitGateway() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2987,9 +2659,7 @@ func (v *ValidateRouteTableType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -3082,63 +2752,43 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination"))
 		if err := fv(ctx, m.GetDestination(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["next_hop_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("next_hop_type"))
 		if err := fv(ctx, m.GetNextHopType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nexthop"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nexthop"))
 		if err := fv(ctx, m.GetNexthop(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["source"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("source"))
 		if err := fv(ctx, m.GetSource(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_defined_route_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_defined_route_name"))
 		if err := fv(ctx, m.GetUserDefinedRouteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -3201,27 +2851,22 @@ func (m *SiteMeshGroupType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTopologySiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTopologySiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *SiteMeshGroupType) GetHubDRefInfo() ([]db.DRefInfo, error) {
@@ -3246,7 +2891,6 @@ func (m *SiteMeshGroupType) GetHubDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHubDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3265,7 +2909,6 @@ func (m *SiteMeshGroupType) GetHubDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3276,11 +2919,8 @@ func (m *SiteMeshGroupType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetMeshChoice().(type) {
 	case *SiteMeshGroupType_HubMesh:
-
 		return nil, nil
-
 	case *SiteMeshGroupType_SpokeMesh:
-
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -3290,15 +2930,11 @@ func (m *SiteMeshGroupType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "spoke_mesh." + dri.DRField
 		}
 		return drInfos, err
-
 	case *SiteMeshGroupType_FullMesh:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *SiteMeshGroupType) GetTopologySiteDRefInfo() ([]db.DRefInfo, error) {
@@ -3323,7 +2959,6 @@ func (m *SiteMeshGroupType) GetTopologySiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTopologySiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3342,7 +2977,6 @@ func (m *SiteMeshGroupType) GetTopologySiteDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3368,7 +3002,6 @@ func (m *SiteMeshGroupType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3387,7 +3020,6 @@ func (m *SiteMeshGroupType) GetVirtualSiteDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3396,7 +3028,6 @@ type ValidateSiteMeshGroupType struct {
 }
 
 func (v *ValidateSiteMeshGroupType) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3456,9 +3087,7 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["hub"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hub"))
 		for idx, item := range m.GetHub() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3466,7 +3095,6 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetMeshChoice().(type) {
@@ -3503,20 +3131,14 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topology_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topology_site"))
 		for idx, item := range m.GetTopologySite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3524,33 +3146,25 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteMeshGroupTypeValidator = func() *ValidateSiteMeshGroupType {
 	v := &ValidateSiteMeshGroupType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3569,7 +3183,6 @@ var DefaultSiteMeshGroupTypeValidator = func() *ValidateSiteMeshGroupType {
 		panic(errMsg)
 	}
 	v.FldValidators["virtual_site"] = vFn
-
 	v.FldValidators["mesh_choice.spoke_mesh"] = ves_io_schema_site_mesh_group.SpokeMeshGroupTypeValidator().Validate
 
 	return v
@@ -3627,27 +3240,22 @@ func (m *SiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProviderInfoDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProviderInfoDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTgwDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTgwDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *SiteType) GetDcClusterGroupDRefInfo() ([]db.DRefInfo, error) {
@@ -3672,7 +3280,6 @@ func (m *SiteType) GetDcClusterGroupDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDcClusterGroupDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3691,7 +3298,6 @@ func (m *SiteType) GetDcClusterGroupDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3717,7 +3323,6 @@ func (m *SiteType) GetNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3736,7 +3341,6 @@ func (m *SiteType) GetNetworkDBEntries(ctx context.Context, d db.Interface) ([]d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3745,7 +3349,6 @@ func (m *SiteType) GetProviderInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProviderInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProviderInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProviderInfo().GetDRefInfo() FAILED")
@@ -3755,7 +3358,6 @@ func (m *SiteType) GetProviderInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "provider_info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *SiteType) GetTgwDRefInfo() ([]db.DRefInfo, error) {
@@ -3780,7 +3382,6 @@ func (m *SiteType) GetTgwDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTgwDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3799,7 +3400,6 @@ func (m *SiteType) GetTgwDBEntries(ctx context.Context, d db.Interface) ([]db.En
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3820,18 +3420,13 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type"))
 		if err := fv(ctx, m.GetAppType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dc_cluster_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dc_cluster_group"))
 		for idx, item := range m.GetDcClusterGroup() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3839,20 +3434,14 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gateway_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gateway_type"))
 		if err := fv(ctx, m.GetGatewayType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network"))
 		for idx, item := range m.GetNetwork() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3860,38 +3449,26 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["orchestration_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("orchestration_mode"))
 		if err := fv(ctx, m.GetOrchestrationMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider_info"))
 		if err := fv(ctx, m.GetProviderInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw"))
 		for idx, item := range m.GetTgw() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3899,9 +3476,7 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -3964,15 +3539,12 @@ func (m *SubnetType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRegionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRegionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *SubnetType) GetNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -3997,7 +3569,6 @@ func (m *SubnetType) GetNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4016,7 +3587,6 @@ func (m *SubnetType) GetNetworkDBEntries(ctx context.Context, d db.Interface) ([
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4042,7 +3612,6 @@ func (m *SubnetType) GetRegionDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRegionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4061,7 +3630,6 @@ func (m *SubnetType) GetRegionDBEntries(ctx context.Context, d db.Interface) ([]
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4082,18 +3650,13 @@ func (v *ValidateSubnetType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["availability_zone"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("availability_zone"))
 		if err := fv(ctx, m.GetAvailabilityZone(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cidr_v4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr_v4"))
 		for idx, item := range m.GetCidrV4() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4101,11 +3664,8 @@ func (v *ValidateSubnetType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cidr_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cidr_v6"))
 		for idx, item := range m.GetCidrV6() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4113,20 +3673,14 @@ func (v *ValidateSubnetType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_type"))
 		if err := fv(ctx, m.GetInterfaceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network"))
 		for idx, item := range m.GetNetwork() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4134,11 +3688,8 @@ func (v *ValidateSubnetType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		for idx, item := range m.GetRegion() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4146,9 +3697,7 @@ func (v *ValidateSubnetType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -4211,15 +3760,12 @@ func (m *TransitGatewayType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -4227,7 +3773,6 @@ func (m *TransitGatewayType) GetAttachmentsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAttachments() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAttachments() {
 		driSet, err := e.GetDRefInfo()
@@ -4241,7 +3786,6 @@ func (m *TransitGatewayType) GetAttachmentsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *TransitGatewayType) GetNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -4266,7 +3810,6 @@ func (m *TransitGatewayType) GetNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4285,7 +3828,6 @@ func (m *TransitGatewayType) GetNetworkDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4306,9 +3848,7 @@ func (v *ValidateTransitGatewayType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attachments"))
 		for idx, item := range m.GetAttachments() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4316,29 +3856,20 @@ func (v *ValidateTransitGatewayType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["auto_accept_shared_attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auto_accept_shared_attachments"))
 		if err := fv(ctx, m.GetAutoAcceptSharedAttachments(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_support"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_support"))
 		if err := fv(ctx, m.GetDnsSupport(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network"))
 		for idx, item := range m.GetNetwork() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4346,18 +3877,13 @@ func (v *ValidateTransitGatewayType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpn_ecmp_support"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpn_ecmp_support"))
 		if err := fv(ctx, m.GetVpnEcmpSupport(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -4420,15 +3946,12 @@ func (m *TunnelSetType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTunnelsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTunnelsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *TunnelSetType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -4453,7 +3976,6 @@ func (m *TunnelSetType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4472,7 +3994,6 @@ func (m *TunnelSetType) GetSiteDBEntries(ctx context.Context, d db.Interface) ([
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4481,7 +4002,6 @@ func (m *TunnelSetType) GetTunnelsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTunnels() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetTunnels() {
 		driSet, err := e.GetDRefInfo()
@@ -4495,7 +4015,6 @@ func (m *TunnelSetType) GetTunnelsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateTunnelSetType struct {
@@ -4515,9 +4034,7 @@ func (v *ValidateTunnelSetType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		for idx, item := range m.GetSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4525,11 +4042,8 @@ func (v *ValidateTunnelSetType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnels"))
 		for idx, item := range m.GetTunnels() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4537,16 +4051,13 @@ func (v *ValidateTunnelSetType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTunnelSetTypeValidator = func() *ValidateTunnelSetType {
 	v := &ValidateTunnelSetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["tunnels"] = TunnelTypeValidator().Validate
 
 	return v
@@ -4604,21 +4115,17 @@ func (m *TunnelType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTgwDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTgwDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -4626,7 +4133,6 @@ func (m *TunnelType) GetConnectionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetConnection() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetConnection().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetConnection().GetDRefInfo() FAILED")
@@ -4636,7 +4142,6 @@ func (m *TunnelType) GetConnectionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "connection." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *TunnelType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -4661,7 +4166,6 @@ func (m *TunnelType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4680,7 +4184,6 @@ func (m *TunnelType) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4706,7 +4209,6 @@ func (m *TunnelType) GetTgwDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTgwDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4725,7 +4227,6 @@ func (m *TunnelType) GetTgwDBEntries(ctx context.Context, d db.Interface) ([]db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4746,18 +4247,13 @@ func (v *ValidateTunnelType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection"))
 		if err := fv(ctx, m.GetConnection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		for idx, item := range m.GetSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4765,11 +4261,8 @@ func (v *ValidateTunnelType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw"))
 		for idx, item := range m.GetTgw() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4777,16 +4270,13 @@ func (v *ValidateTunnelType) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTunnelTypeValidator = func() *ValidateTunnelType {
 	v := &ValidateTunnelType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["connection"] = ves_io_schema_site.TunnelConnectionStatusValidator().Validate
 
 	return v

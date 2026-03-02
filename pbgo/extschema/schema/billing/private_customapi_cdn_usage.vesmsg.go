@@ -66,7 +66,6 @@ type ValidateLilacCDNMetricsRequest struct {
 }
 
 func (v *ValidateLilacCDNMetricsRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -74,9 +73,7 @@ func (v *ValidateLilacCDNMetricsRequest) NamespaceValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNMetricsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
@@ -84,9 +81,7 @@ func (v *ValidateLilacCDNMetricsRequest) StartTimeValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNMetricsRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -94,9 +89,7 @@ func (v *ValidateLilacCDNMetricsRequest) StepValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNMetricsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
@@ -104,9 +97,7 @@ func (v *ValidateLilacCDNMetricsRequest) EndTimeValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNMetricsRequest) FieldSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -152,9 +143,7 @@ func (v *ValidateLilacCDNMetricsRequest) FieldSelectorValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLilacCDNMetricsRequest) GroupByValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -214,26 +203,19 @@ func (v *ValidateLilacCDNMetricsRequest) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_time"))
 		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["field_selector"]; exists {
 		vOpts := append(opts, db.WithValidateField("field_selector"))
 		if err := fv(ctx, m.GetFieldSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filter"))
 		for idx, item := range m.GetFilter() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -241,51 +223,37 @@ func (v *ValidateLilacCDNMetricsRequest) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_by"]; exists {
 		vOpts := append(opts, db.WithValidateField("group_by"))
 		if err := fv(ctx, m.GetGroupBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLilacCDNMetricsRequestValidator = func() *ValidateLilacCDNMetricsRequest {
 	v := &ValidateLilacCDNMetricsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -362,7 +330,6 @@ var DefaultLilacCDNMetricsRequestValidator = func() *ValidateLilacCDNMetricsRequ
 		panic(errMsg)
 	}
 	v.FldValidators["group_by"] = vFn
-
 	v.FldValidators["filter"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNMetricsFilterValidator().Validate
 
 	return v
@@ -414,7 +381,6 @@ type ValidateLilacCDNMetricsResponse struct {
 }
 
 func (v *ValidateLilacCDNMetricsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -436,9 +402,7 @@ func (v *ValidateLilacCDNMetricsResponse) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -446,25 +410,19 @@ func (v *ValidateLilacCDNMetricsResponse) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLilacCDNMetricsResponseValidator = func() *ValidateLilacCDNMetricsResponse {
 	v := &ValidateLilacCDNMetricsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

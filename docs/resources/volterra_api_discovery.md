@@ -20,7 +20,6 @@ resource "volterra_api_discovery" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -55,4 +54,4 @@ Select your custom authentication types to be detected in the API discovery.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured api_discovery.
+*   `id` - This is the id of the configured api_discovery.

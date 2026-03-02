@@ -26,6 +26,160 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *CBIPClusterStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CBIPClusterStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CBIPClusterStatus) DeepCopy() *CBIPClusterStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CBIPClusterStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CBIPClusterStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CBIPClusterStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CBIPClusterStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCBIPClusterStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCBIPClusterStatus) DevicesStatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for devices_status")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CBIPDeviceStatus, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CBIPDeviceStatusValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for devices_status")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CBIPDeviceStatus)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CBIPDeviceStatus, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated devices_status")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items devices_status")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCBIPClusterStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CBIPClusterStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CBIPClusterStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["cluster_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("cluster_name"))
+		if err := fv(ctx, m.GetClusterName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["condition"]; exists {
+		vOpts := append(opts, db.WithValidateField("condition"))
+		if err := fv(ctx, m.GetCondition(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["devices_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("devices_status"))
+		if err := fv(ctx, m.GetDevicesStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCBIPClusterStatusValidator = func() *ValidateCBIPClusterStatus {
+	v := &ValidateCBIPClusterStatus{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDevicesStatus := v.DevicesStatusValidationRuleHandler
+	rulesDevicesStatus := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhDevicesStatus(rulesDevicesStatus)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CBIPClusterStatus.devices_status: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["devices_status"] = vFn
+	v.FldValidators["condition"] = ves_io_schema.ConditionTypeValidator().Validate
+
+	return v
+}()
+
+func CBIPClusterStatusValidator() db.Validator {
+	return DefaultCBIPClusterStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CBIPDeviceStatus) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -66,10 +220,55 @@ type ValidateCBIPDeviceStatus struct {
 }
 
 func (v *ValidateCBIPDeviceStatus) CbipMgmtIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cbip_mgmt_ip")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateCBIPDeviceStatus) ConditionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for conditions")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ConditionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ConditionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for conditions")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ConditionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ConditionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated conditions")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items conditions")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -88,32 +287,30 @@ func (v *ValidateCBIPDeviceStatus) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cbip_mgmt_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cbip_mgmt_ip"))
 		if err := fv(ctx, m.GetCbipMgmtIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["condition"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("condition"))
 		if err := fv(ctx, m.GetCondition(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["conditions"]; exists {
+		vOpts := append(opts, db.WithValidateField("conditions"))
+		if err := fv(ctx, m.GetConditions(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCBIPDeviceStatusValidator = func() *ValidateCBIPDeviceStatus {
 	v := &ValidateCBIPDeviceStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -134,6 +331,18 @@ var DefaultCBIPDeviceStatusValidator = func() *ValidateCBIPDeviceStatus {
 	}
 	v.FldValidators["cbip_mgmt_ip"] = vFn
 
+	vrhConditions := v.ConditionsValidationRuleHandler
+	rulesConditions := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhConditions(rulesConditions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CBIPDeviceStatus.conditions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["conditions"] = vFn
 	v.FldValidators["condition"] = ves_io_schema.ConditionTypeValidator().Validate
 
 	return v
@@ -197,9 +406,7 @@ func (v *ValidateCBIPStatusType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["device_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_status"))
 		for idx, item := range m.GetDeviceStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -207,25 +414,19 @@ func (v *ValidateCBIPStatusType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCBIPStatusTypeValidator = func() *ValidateCBIPStatusType {
 	v := &ValidateCBIPStatusType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["device_status"] = CBIPDeviceStatusValidator().Validate
 
 	return v
@@ -251,7 +452,6 @@ func (m *SpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetGcSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SpecType.gc_spec")
 	}
@@ -292,7 +492,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -300,7 +499,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
@@ -310,7 +508,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSpecType struct {
@@ -330,23 +527,18 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v

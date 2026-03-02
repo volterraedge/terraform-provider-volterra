@@ -29,18 +29,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.stored_object.PresignedUrlData"] = PresignedUrlDataValidator()
 	vr["ves.io.schema.stored_object.StoredObjectDescriptor"] = StoredObjectDescriptorValidator()
 	vr["ves.io.schema.stored_object.VersionDescriptor"] = VersionDescriptorValidator()
-
 	vr["ves.io.schema.stored_object.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.stored_object.Object"] = ObjectValidator()
 	vr["ves.io.schema.stored_object.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.stored_object.GlobalSpecType"] = GlobalSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.EntryFactory["ves.io.schema.stored_object.Object"] = NewEntryObject
 	mdr.EntryStoreMap["ves.io.schema.stored_object.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.stored_object.Object"] = reflect.TypeOf(&DBObject{})
@@ -49,26 +44,21 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.stored_object.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.stored_object.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.stored_object.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.stored_object.CustomPrivateAPI.CreateObject"] = "ves.io.schema.stored_object.CreateObjectRequest"
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.stored_object.CustomAPI.CreateObject"] = "ves.io.schema.stored_object.CreateObjectRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.stored_object.CustomAPI"] = "object_store"
 	sm["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = "object_store"
 	sm["ves.io.schema.stored_object.MobileIntegratorCustomAPI"] = "object_store"
-
+	sm["ves.io.schema.stored_object.MobileSdkSelfServeCustomAPI"] = "object_store"
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -77,14 +67,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.stored_object.Object"] = CustomPrivateAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.stored_object.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.stored_object.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
 		if isExternal {
@@ -95,16 +81,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.stored_object.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.stored_object.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.stored_object.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.stored_object.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -115,16 +96,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.stored_object.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.stored_object.Object"] = MobileAppShieldCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = NewMobileAppShieldCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = NewMobileAppShieldCustomAPIRestClient
 		if isExternal {
@@ -135,16 +111,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewMobileAppShieldCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.stored_object.Object"] = MobileIntegratorCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.stored_object.MobileIntegratorCustomAPI"] = NewMobileIntegratorCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.stored_object.MobileIntegratorCustomAPI"] = NewMobileIntegratorCustomAPIRestClient
 		if isExternal {
@@ -155,22 +126,32 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.stored_object.MobileIntegratorCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewMobileIntegratorCustomAPIServer(svc)
 		}
-
 	}()
-
+	customCSR = mdr.PubCustomServiceRegistry
+	func() {
+		// set swagger jsons for our and external schemas
+		customCSR.SwaggerRegistry["ves.io.schema.stored_object.Object"] = MobileSdkSelfServeCustomAPISwaggerJSON
+		customCSR.GrpcClientRegistry["ves.io.schema.stored_object.MobileSdkSelfServeCustomAPI"] = NewMobileSdkSelfServeCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.stored_object.MobileSdkSelfServeCustomAPI"] = NewMobileSdkSelfServeCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.stored_object.MobileSdkSelfServeCustomAPI"] = RegisterMobileSdkSelfServeCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.stored_object.MobileSdkSelfServeCustomAPI"] = RegisterGwMobileSdkSelfServeCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.stored_object.MobileSdkSelfServeCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewMobileSdkSelfServeCustomAPIServer(svc)
+		}
+	}()
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

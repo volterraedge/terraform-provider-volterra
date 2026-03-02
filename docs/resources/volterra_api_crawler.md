@@ -37,8 +37,12 @@ resource "volterra_api_crawler" "example" {
 
         // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
-        wingman_secret_info {
-          name = "ChargeBack-API-Key"
+        blindfold_secret_info {
+          decryption_provider = "value"
+
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+          store_provider = "value"
         }
       }
 
@@ -46,7 +50,6 @@ resource "volterra_api_crawler" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -155,4 +158,4 @@ Enter the password to assign credentials for the selected domain to crawl.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured api_crawler.
+*   `id` - This is the id of the configured api_crawler.

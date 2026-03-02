@@ -74,9 +74,7 @@ func NewThreatCampaignAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetThreatCampaignById"] = ccl.doRPCGetThreatCampaignById
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -162,7 +160,6 @@ func (c *ThreatCampaignAPIRestClient) doRPCGetThreatCampaignById(ctx context.Con
 	pbRsp := &ThreatCampaign{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.ThreatCampaign", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,9 +193,7 @@ func NewThreatCampaignAPIRestClient(baseURL string, hc http.Client) server.Custo
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetThreatCampaignById"] = ccl.doRPCGetThreatCampaignById
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -279,7 +274,6 @@ func (s *threatCampaignAPISrv) GetThreatCampaignById(ctx context.Context, in *Th
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.ThreatCampaign", rsp)...)
 
 	return rsp, nil

@@ -70,15 +70,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTopologySpecDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTopologySpecDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -86,7 +83,6 @@ func (m *GlobalSpecType) GetTopologyMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTopologyMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTopologyMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTopologyMetadata().GetDRefInfo() FAILED")
@@ -96,7 +92,6 @@ func (m *GlobalSpecType) GetTopologyMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "topology_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -104,7 +99,6 @@ func (m *GlobalSpecType) GetTopologySpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTopologySpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTopologySpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTopologySpec().GetDRefInfo() FAILED")
@@ -114,7 +108,6 @@ func (m *GlobalSpecType) GetTopologySpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "topology_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -134,9 +127,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["main_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("main_nodes"))
 		for idx, item := range m.GetMainNodes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -144,27 +135,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topology_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topology_metadata"))
 		if err := fv(ctx, m.GetTopologyMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["topology_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("topology_spec"))
 		if err := fv(ctx, m.GetTopologySpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

@@ -78,50 +78,36 @@ func (v *ValidateCA) Validate(ctx context.Context, pm interface{}, opts ...db.Va
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pem"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pem"))
 		if err := fv(ctx, m.GetPem(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCAValidator = func() *ValidateCA {
 	v := &ValidateCA{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["password"] = EncryptedPasswordValidator().Validate
 
 	return v
@@ -185,34 +171,24 @@ func (v *ValidateCredentialsExpiry) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["max_api_certificate_expiry_days"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_api_certificate_expiry_days"))
 		if err := fv(ctx, m.GetMaxApiCertificateExpiryDays(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_api_token_expiry_days"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_api_token_expiry_days"))
 		if err := fv(ctx, m.GetMaxApiTokenExpiryDays(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_kube_config_expiry_days"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_kube_config_expiry_days"))
 		if err := fv(ctx, m.GetMaxKubeConfigExpiryDays(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -281,7 +257,6 @@ func (v *ValidateEmpty) Validate(ctx context.Context, pm interface{}, opts ...db
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -338,7 +313,6 @@ type ValidateEncryptedPassword struct {
 }
 
 func (v *ValidateEncryptedPassword) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for Password")
@@ -360,32 +334,24 @@ func (v *ValidateEncryptedPassword) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["Password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("Password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["Version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("Version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEncryptedPasswordValidator = func() *ValidateEncryptedPassword {
 	v := &ValidateEncryptedPassword{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -428,7 +394,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetShapeSharedInstanceAuthKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.shape_shared_instance_auth_key")
 	}
@@ -474,15 +439,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSharedPublicVipDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSharedPublicVipDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetDownstreamCosDRefInfo() ([]db.DRefInfo, error) {
@@ -507,7 +469,6 @@ func (m *GlobalSpecType) GetDownstreamCosDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDownstreamCosDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -526,7 +487,6 @@ func (m *GlobalSpecType) GetDownstreamCosDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -552,7 +512,6 @@ func (m *GlobalSpecType) GetSharedPublicVipDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSharedPublicVipDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -571,7 +530,6 @@ func (m *GlobalSpecType) GetSharedPublicVipDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -580,7 +538,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) PublicVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for public_vip")
@@ -588,9 +545,7 @@ func (v *ValidateGlobalSpecType) PublicVipValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TgwAsnOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_asn_offset")
@@ -598,9 +553,7 @@ func (v *ValidateGlobalSpecType) TgwAsnOffsetValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SharedPublicVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -646,9 +599,7 @@ func (v *ValidateGlobalSpecType) SharedPublicVipValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CompanyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for company_name")
@@ -656,9 +607,7 @@ func (v *ValidateGlobalSpecType) CompanyNameValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TenantFqdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_fqdn")
@@ -666,9 +615,7 @@ func (v *ValidateGlobalSpecType) TenantFqdnValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AddonServicesSubscribedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -708,9 +655,7 @@ func (v *ValidateGlobalSpecType) AddonServicesSubscribedValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DirectConnectAsnOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_asn_offset")
@@ -718,9 +663,7 @@ func (v *ValidateGlobalSpecType) DirectConnectAsnOffsetValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DownstreamCosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -766,9 +709,7 @@ func (v *ValidateGlobalSpecType) DownstreamCosValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OriginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.SignupOrigin)
@@ -796,79 +737,55 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["addon_services_subscribed"]; exists {
 		vOpts := append(opts, db.WithValidateField("addon_services_subscribed"))
 		if err := fv(ctx, m.GetAddonServicesSubscribed(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["company_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("company_name"))
 		if err := fv(ctx, m.GetCompanyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["crm_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("crm_info"))
 		if err := fv(ctx, m.GetCrmInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_disable_public_ap"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_disable_public_ap"))
 		if err := fv(ctx, m.GetDefaultDisablePublicAp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deleted"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deleted"))
 		if err := fv(ctx, m.GetDeleted(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_asn_offset"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_asn_offset"))
 		if err := fv(ctx, m.GetDirectConnectAsnOffset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["downstream_cos"]; exists {
 		vOpts := append(opts, db.WithValidateField("downstream_cos"))
 		if err := fv(ctx, m.GetDownstreamCos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["k8s_server_sub_ca_latest_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("k8s_server_sub_ca_latest_version"))
 		if err := fv(ctx, m.GetK8SServerSubCaLatestVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["k8s_server_sub_cas"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("k8s_server_sub_cas"))
 		for idx, item := range m.GetK8SServerSubCas() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -876,47 +793,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["log_headers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("log_headers"))
 		if err := fv(ctx, m.GetLogHeaders(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin"))
 		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plan_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plan_type"))
 		if err := fv(ctx, m.GetPlanType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_root_ca_latest_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_root_ca_latest_version"))
 		if err := fv(ctx, m.GetProxyRootCaLatestVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_root_cas"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_root_cas"))
 		for idx, item := range m.GetProxyRootCas() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -924,114 +826,79 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_vip"))
 		if err := fv(ctx, m.GetPublicVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["shape_shared_instance_auth_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("shape_shared_instance_auth_key"))
 		if err := fv(ctx, m.GetShapeSharedInstanceAuthKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["shared_public_vip"]; exists {
 		vOpts := append(opts, db.WithValidateField("shared_public_vip"))
 		if err := fv(ctx, m.GetSharedPublicVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_network_stack"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_network_stack"))
 		if err := fv(ctx, m.GetSiteNetworkStack(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spoke_vpc_manual_attachment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spoke_vpc_manual_attachment"))
 		if err := fv(ctx, m.GetSpokeVpcManualAttachment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_control"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_control"))
 		if err := fv(ctx, m.GetTenantControl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_fqdn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_fqdn"))
 		if err := fv(ctx, m.GetTenantFqdn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_type"))
 		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_asn_offset"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_asn_offset"))
 		if err := fv(ctx, m.GetTgwAsnOffset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["use_global_ain_vrf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("use_global_ain_vrf"))
 		if err := fv(ctx, m.GetUseGlobalAinVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1138,15 +1005,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin"] = vFn
-
 	v.FldValidators["k8s_server_sub_cas"] = SubCAValidator().Validate
-
 	v.FldValidators["proxy_root_cas"] = CAValidator().Validate
-
 	v.FldValidators["shape_shared_instance_auth_key"] = ves_io_schema.SecretTypeValidator().Validate
-
 	v.FldValidators["crm_info"] = ves_io_schema.CRMInfoValidator().Validate
-
 	v.FldValidators["tenant_control"] = TenantControlConfigValidator().Validate
 
 	return v
@@ -1212,9 +1074,7 @@ func (v *ValidatePrivateDeactivateTenantRequest) InitiatorUserEmailValidationRul
 	}
 	return oValidatorFn_UserEmail, nil
 }
-
 func (v *ValidatePrivateDeactivateTenantRequest) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
@@ -1222,9 +1082,7 @@ func (v *ValidatePrivateDeactivateTenantRequest) TenantIdValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePrivateDeactivateTenantRequest) InitiatedViaValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for initiated_via")
@@ -1246,23 +1104,17 @@ func (v *ValidatePrivateDeactivateTenantRequest) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["feedback"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("feedback"))
 		if err := fv(ctx, m.GetFeedback(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["initiated_via"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("initiated_via"))
 		if err := fv(ctx, m.GetInitiatedVia(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["initiator"]; exists {
@@ -1309,34 +1161,25 @@ func (v *ValidatePrivateDeactivateTenantRequest) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reason"))
 		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_id"))
 		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPrivateDeactivateTenantRequestValidator = func() *ValidatePrivateDeactivateTenantRequest {
 	v := &ValidatePrivateDeactivateTenantRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1344,7 +1187,6 @@ var DefaultPrivateDeactivateTenantRequestValidator = func() *ValidatePrivateDeac
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhInitiator := v.InitiatorValidationRuleHandler
 	rulesInitiator := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1355,7 +1197,6 @@ var DefaultPrivateDeactivateTenantRequestValidator = func() *ValidatePrivateDeac
 		panic(errMsg)
 	}
 	v.FldValidators["initiator"] = vFn
-
 	vrhInitiatorUserEmail := v.InitiatorUserEmailValidationRuleHandler
 	rulesInitiatorUserEmail := map[string]string{
 		"ves.io.schema.rules.string.email": "true",
@@ -1365,7 +1206,6 @@ var DefaultPrivateDeactivateTenantRequestValidator = func() *ValidatePrivateDeac
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PrivateDeactivateTenantRequest.initiator_user_email: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["initiator.user_email"] = vFnMap["initiator.user_email"]
 
 	vrhTenantId := v.TenantIdValidationRuleHandler
@@ -1451,16 +1291,12 @@ func (v *ValidatePrivateDeactivateTenantResponse) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["job_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("job_id"))
 		if err := fv(ctx, m.GetJobId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1529,50 +1365,36 @@ func (v *ValidateSubCA) Validate(ctx context.Context, pm interface{}, opts ...db
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["CaName"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("CaName"))
 		if err := fv(ctx, m.GetCaName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["Password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("Password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["SubCAPEM"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("SubCAPEM"))
 		if err := fv(ctx, m.GetSubCAPEM(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["Version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("Version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSubCAValidator = func() *ValidateSubCA {
 	v := &ValidateSubCA{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["Password"] = EncryptedPasswordValidator().Validate
 
 	return v
@@ -1624,7 +1446,6 @@ type ValidateTenantControlConfig struct {
 }
 
 func (v *ValidateTenantControlConfig) TenantNodePercentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_node_percent")
@@ -1646,23 +1467,18 @@ func (v *ValidateTenantControlConfig) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tenant_node_percent"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_node_percent"))
 		if err := fv(ctx, m.GetTenantNodePercent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTenantControlConfigValidator = func() *ValidateTenantControlConfig {
 	v := &ValidateTenantControlConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

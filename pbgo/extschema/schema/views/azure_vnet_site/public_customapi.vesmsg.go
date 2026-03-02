@@ -78,41 +78,30 @@ func (v *ValidateSetCloudSiteInfoRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["azure_vnet_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_vnet_info"))
 		if err := fv(ctx, m.GetAzureVnetInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetCloudSiteInfoRequestValidator = func() *ValidateSetCloudSiteInfoRequest {
 	v := &ValidateSetCloudSiteInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["azure_vnet_info"] = AzureVnetSiteInfoTypeValidator().Validate
 
 	return v
@@ -176,7 +165,6 @@ func (v *ValidateSetCloudSiteInfoResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -233,7 +221,6 @@ type ValidateSetVIPInfoRequest struct {
 }
 
 func (v *ValidateSetVIPInfoRequest) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -293,40 +280,30 @@ func (v *ValidateSetVIPInfoRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
 		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
 		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetVIPInfoRequestValidator = func() *ValidateSetVIPInfoRequest {
 	v := &ValidateSetVIPInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -407,7 +384,6 @@ func (v *ValidateSetVIPInfoResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

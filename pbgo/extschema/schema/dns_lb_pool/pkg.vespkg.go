@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_lb_pool.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.dns_lb_pool.Object"] = ObjectValidator()
 	vr["ves.io.schema.dns_lb_pool.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.dns_lb_pool.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.dns_lb_pool.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.dns_lb_pool.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_lb_pool.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.dns_lb_pool.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.dns_lb_pool.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.dns_lb_pool.AAAAPool"] = AAAAPoolValidator()
 	vr["ves.io.schema.dns_lb_pool.APool"] = APoolValidator()
 	vr["ves.io.schema.dns_lb_pool.AddressMember"] = AddressMemberValidator()
@@ -41,7 +38,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_lb_pool.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.dns_lb_pool.SRVMember"] = SRVMemberValidator()
 	vr["ves.io.schema.dns_lb_pool.SRVPool"] = SRVPoolValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -53,25 +49,58 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.dns_lb_pool.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.dns_lb_pool.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.dns_lb_pool.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.dns_lb_pool.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.cname_pool.health_check_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_lb_pool.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.cname_pool.health_check_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_lb_pool.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.cname_pool.health_check_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.cname_pool.health_check_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.cname_pool.health_check_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_lb_pool.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.cname_pool.health_check_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.dns_lb_pool.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.cname_pool.health_check_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.dns_lb_pool.API"] = "config/dns"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["dns"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config-dns",
 		ServiceSelector: "bifrost\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -80,9 +109,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.dns_lb_pool.Object"] = APISwaggerJSON
@@ -96,22 +123,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.dns_lb_pool.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.dns_lb_pool.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.dns_lb_pool.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

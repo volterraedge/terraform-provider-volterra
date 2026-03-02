@@ -74,15 +74,12 @@ func (m *ChallengeRuleSpec) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -92,15 +89,10 @@ func (m *ChallengeRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *ChallengeRuleSpec_AnyAsn:
-
 		return nil, nil
-
 	case *ChallengeRuleSpec_AsnList:
-
 		return nil, nil
-
 	case *ChallengeRuleSpec_AsnMatcher:
-
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -110,11 +102,9 @@ func (m *ChallengeRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -124,15 +114,10 @@ func (m *ChallengeRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *ChallengeRuleSpec_AnyIp:
-
 		return nil, nil
-
 	case *ChallengeRuleSpec_IpPrefixList:
-
 		return nil, nil
-
 	case *ChallengeRuleSpec_IpMatcher:
-
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -142,11 +127,9 @@ func (m *ChallengeRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateChallengeRuleSpec struct {
@@ -168,9 +151,7 @@ func (v *ValidateChallengeRuleSpec) ClientChoiceClientNameValidationRuleHandler(
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateChallengeRuleSpec) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -216,9 +197,7 @@ func (v *ValidateChallengeRuleSpec) HeadersValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateChallengeRuleSpec) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -264,9 +243,7 @@ func (v *ValidateChallengeRuleSpec) QueryParamsValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateChallengeRuleSpec) ArgMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -312,9 +289,7 @@ func (v *ValidateChallengeRuleSpec) ArgMatchersValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateChallengeRuleSpec) CookieMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -374,13 +349,11 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["arg_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("arg_matchers"))
 		if err := fv(ctx, m.GetArgMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetAsnChoice().(type) {
@@ -417,16 +390,12 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["body_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["challenge_action"]; exists {
@@ -473,7 +442,6 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetClientChoice().(type) {
@@ -521,50 +489,36 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_matcher"))
 		if err := fv(ctx, m.GetDomainMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_method"))
 		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetIpChoice().(type) {
@@ -601,24 +555,18 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_params"]; exists {
 		vOpts := append(opts, db.WithValidateField("query_params"))
 		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetTlsFingerprintChoice().(type) {
@@ -644,16 +592,13 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
 	v := &ValidateChallengeRuleSpec{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -661,7 +606,6 @@ var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChallengeAction := v.ChallengeActionValidationRuleHandler
 	rulesChallengeAction := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -672,7 +616,6 @@ var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
 		panic(errMsg)
 	}
 	v.FldValidators["challenge_action"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -682,7 +625,6 @@ var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ChallengeRuleSpec.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
 
 	vrhHeaders := v.HeadersValidationRuleHandler
@@ -728,25 +670,17 @@ var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
 		panic(errMsg)
 	}
 	v.FldValidators["cookie_matchers"] = vFn
-
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
-
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
-
 	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
 	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
-
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
-
 	v.FldValidators["body_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 
 	return v
@@ -804,45 +738,37 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDstAsnChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDstAsnChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDstIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDstIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetGotoPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -852,7 +778,6 @@ func (m *CreateSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *CreateSpecType_AsnMatcher:
-
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -862,19 +787,13 @@ func (m *CreateSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_AnyAsn:
-
 		return nil, nil
-
 	case *CreateSpecType_AsnList:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -884,15 +803,10 @@ func (m *CreateSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDstAsnChoice().(type) {
 	case *CreateSpecType_AnyDstAsn:
-
 		return nil, nil
-
 	case *CreateSpecType_DstAsnList:
-
 		return nil, nil
-
 	case *CreateSpecType_DstAsnMatcher:
-
 		drInfos, err := m.GetDstAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstAsnMatcher().GetDRefInfo() FAILED")
@@ -902,11 +816,9 @@ func (m *CreateSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dst_asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -916,15 +828,10 @@ func (m *CreateSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDstIpChoice().(type) {
 	case *CreateSpecType_AnyDstIp:
-
 		return nil, nil
-
 	case *CreateSpecType_DstIpPrefixList:
-
 		return nil, nil
-
 	case *CreateSpecType_DstIpMatcher:
-
 		drInfos, err := m.GetDstIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstIpMatcher().GetDRefInfo() FAILED")
@@ -934,11 +841,9 @@ func (m *CreateSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dst_ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *CreateSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -963,7 +868,6 @@ func (m *CreateSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -982,7 +886,6 @@ func (m *CreateSpecType) GetGotoPolicyDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -993,7 +896,6 @@ func (m *CreateSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *CreateSpecType_IpMatcher:
-
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -1003,19 +905,13 @@ func (m *CreateSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_AnyIp:
-
 		return nil, nil
-
 	case *CreateSpecType_IpPrefixList:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *CreateSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
@@ -1040,7 +936,6 @@ func (m *CreateSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1059,7 +954,6 @@ func (m *CreateSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1068,7 +962,6 @@ func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
@@ -1078,7 +971,6 @@ func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "segment_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -1092,7 +984,6 @@ func (v *ValidateCreateSpecType) AsnChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ClientChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1108,7 +999,6 @@ func (v *ValidateCreateSpecType) ClientChoiceClientNameValidationRuleHandler(rul
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateCreateSpecType) IpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1116,9 +1006,7 @@ func (v *ValidateCreateSpecType) IpChoiceValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -1132,9 +1020,7 @@ func (v *ValidateCreateSpecType) ActionValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1180,9 +1066,7 @@ func (v *ValidateCreateSpecType) HeadersValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1228,9 +1112,7 @@ func (v *ValidateCreateSpecType) QueryParamsValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ArgMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1276,9 +1158,7 @@ func (v *ValidateCreateSpecType) ArgMatchersValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) CookieMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1324,9 +1204,7 @@ func (v *ValidateCreateSpecType) CookieMatchersValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) WafActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for waf_action")
@@ -1335,19 +1213,15 @@ func (v *ValidateCreateSpecType) WafActionValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_policy.WafActionValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) RateLimiterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1393,9 +1267,7 @@ func (v *ValidateCreateSpecType) RateLimiterValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SchemeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1435,9 +1307,7 @@ func (v *ValidateCreateSpecType) SchemeValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.ChallengeAction)
@@ -1451,9 +1321,7 @@ func (v *ValidateCreateSpecType) ChallengeActionValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1499,9 +1367,7 @@ func (v *ValidateCreateSpecType) GotoPolicyValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1561,31 +1427,23 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_group_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_matcher"))
 		if err := fv(ctx, m.GetApiGroupMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["arg_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("arg_matchers"))
 		if err := fv(ctx, m.GetArgMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["asn_choice"]; exists {
@@ -1632,34 +1490,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["body_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_action"))
 		if err := fv(ctx, m.GetBotAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["challenge_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("challenge_action"))
 		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -1728,42 +1576,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_role"))
 		if err := fv(ctx, m.GetClientRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
 		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_matcher"))
 		if err := fv(ctx, m.GetDomainMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetDstAsnChoice().(type) {
@@ -1800,7 +1636,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetDstIpChoice().(type) {
@@ -1837,41 +1672,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["goto_policy"]; exists {
 		vOpts := append(opts, db.WithValidateField("goto_policy"))
 		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_method"))
 		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ip_choice"]; exists {
@@ -1918,55 +1742,44 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
 		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jwt_claims"]; exists {
 		vOpts := append(opts, db.WithValidateField("jwt_claims"))
 		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["log_rule_evaluation"]; exists {
+		vOpts := append(opts, db.WithValidateField("log_rule_evaluation"))
+		if err := fv(ctx, m.GetLogRuleEvaluation(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
 		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mum_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mum_action"))
 		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_server_subsets_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_server_subsets_action"))
 		for key, value := range m.GetOriginServerSubsetsAction() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1974,85 +1787,60 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port_matcher"))
 		if err := fv(ctx, m.GetPortMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_params"]; exists {
 		vOpts := append(opts, db.WithValidateField("query_params"))
 		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limiter"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiter"))
 		if err := fv(ctx, m.GetRateLimiter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_constraints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_constraints"))
 		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_policy"))
 		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_selector"))
 		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
 		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetTlsFingerprintChoice().(type) {
@@ -2078,43 +1866,31 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url_matcher"))
 		if err := fv(ctx, m.GetUrlMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_matcher"))
 		if err := fv(ctx, m.GetVirtualHostMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_action"))
 		if err := fv(ctx, m.GetWafAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2122,7 +1898,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2133,7 +1908,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["asn_choice"] = vFn
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2144,7 +1918,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_choice"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -2154,9 +1927,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
-
 	vrhIpChoice := v.IpChoiceValidationRuleHandler
 	rulesIpChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2290,60 +2061,36 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["jwt_claims"] = vFn
-
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 	v.FldValidators["client_choice.ip_threat_category_list"] = IPThreatCategoryListTypeValidator().Validate
-
 	v.FldValidators["dst_asn_choice.dst_asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 	v.FldValidators["dst_asn_choice.dst_asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
-
 	v.FldValidators["dst_ip_choice.dst_ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 	v.FldValidators["dst_ip_choice.dst_ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
-
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
-
 	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
 	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
-
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
-
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
-
 	v.FldValidators["client_role"] = ves_io_schema_policy.RoleMatcherTypeValidator().Validate
-
 	v.FldValidators["api_group_matcher"] = ves_io_schema_policy.StringMatcherTypeValidator().Validate
-
 	v.FldValidators["port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
-
 	v.FldValidators["body_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
-
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
-
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-
 	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
-
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
-
 	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
-
 	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
-
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
@@ -2401,45 +2148,37 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDstAsnChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDstAsnChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDstIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDstIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetGotoPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2449,7 +2188,6 @@ func (m *GetSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *GetSpecType_AsnMatcher:
-
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -2459,19 +2197,13 @@ func (m *GetSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_AnyAsn:
-
 		return nil, nil
-
 	case *GetSpecType_AsnList:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2481,15 +2213,10 @@ func (m *GetSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDstAsnChoice().(type) {
 	case *GetSpecType_AnyDstAsn:
-
 		return nil, nil
-
 	case *GetSpecType_DstAsnList:
-
 		return nil, nil
-
 	case *GetSpecType_DstAsnMatcher:
-
 		drInfos, err := m.GetDstAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstAsnMatcher().GetDRefInfo() FAILED")
@@ -2499,11 +2226,9 @@ func (m *GetSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dst_asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2513,15 +2238,10 @@ func (m *GetSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDstIpChoice().(type) {
 	case *GetSpecType_AnyDstIp:
-
 		return nil, nil
-
 	case *GetSpecType_DstIpPrefixList:
-
 		return nil, nil
-
 	case *GetSpecType_DstIpMatcher:
-
 		drInfos, err := m.GetDstIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstIpMatcher().GetDRefInfo() FAILED")
@@ -2531,11 +2251,9 @@ func (m *GetSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dst_ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -2560,7 +2278,6 @@ func (m *GetSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2579,7 +2296,6 @@ func (m *GetSpecType) GetGotoPolicyDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2590,7 +2306,6 @@ func (m *GetSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *GetSpecType_IpMatcher:
-
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -2600,19 +2315,13 @@ func (m *GetSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_AnyIp:
-
 		return nil, nil
-
 	case *GetSpecType_IpPrefixList:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
@@ -2637,7 +2346,6 @@ func (m *GetSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2656,7 +2364,6 @@ func (m *GetSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2665,7 +2372,6 @@ func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
@@ -2675,7 +2381,6 @@ func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "segment_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -2689,7 +2394,6 @@ func (v *ValidateGetSpecType) AsnChoiceValidationRuleHandler(rules map[string]st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ClientChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2705,7 +2409,6 @@ func (v *ValidateGetSpecType) ClientChoiceClientNameValidationRuleHandler(rules 
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateGetSpecType) IpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2713,9 +2416,7 @@ func (v *ValidateGetSpecType) IpChoiceValidationRuleHandler(rules map[string]str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -2729,9 +2430,7 @@ func (v *ValidateGetSpecType) ActionValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2777,9 +2476,7 @@ func (v *ValidateGetSpecType) HeadersValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2825,9 +2522,7 @@ func (v *ValidateGetSpecType) QueryParamsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ArgMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2873,9 +2568,7 @@ func (v *ValidateGetSpecType) ArgMatchersValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) CookieMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2921,9 +2614,7 @@ func (v *ValidateGetSpecType) CookieMatchersValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) WafActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for waf_action")
@@ -2932,19 +2623,15 @@ func (v *ValidateGetSpecType) WafActionValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_policy.WafActionValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) RateLimiterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2990,9 +2677,7 @@ func (v *ValidateGetSpecType) RateLimiterValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SchemeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3032,9 +2717,7 @@ func (v *ValidateGetSpecType) SchemeValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.ChallengeAction)
@@ -3048,9 +2731,7 @@ func (v *ValidateGetSpecType) ChallengeActionValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3096,9 +2777,7 @@ func (v *ValidateGetSpecType) GotoPolicyValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3158,31 +2837,23 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_group_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_matcher"))
 		if err := fv(ctx, m.GetApiGroupMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["arg_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("arg_matchers"))
 		if err := fv(ctx, m.GetArgMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["asn_choice"]; exists {
@@ -3229,34 +2900,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["body_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_action"))
 		if err := fv(ctx, m.GetBotAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["challenge_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("challenge_action"))
 		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -3325,42 +2986,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_role"))
 		if err := fv(ctx, m.GetClientRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
 		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_matcher"))
 		if err := fv(ctx, m.GetDomainMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetDstAsnChoice().(type) {
@@ -3397,7 +3046,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetDstIpChoice().(type) {
@@ -3434,41 +3082,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["goto_policy"]; exists {
 		vOpts := append(opts, db.WithValidateField("goto_policy"))
 		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_method"))
 		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ip_choice"]; exists {
@@ -3515,55 +3152,44 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
 		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jwt_claims"]; exists {
 		vOpts := append(opts, db.WithValidateField("jwt_claims"))
 		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["log_rule_evaluation"]; exists {
+		vOpts := append(opts, db.WithValidateField("log_rule_evaluation"))
+		if err := fv(ctx, m.GetLogRuleEvaluation(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
 		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mum_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mum_action"))
 		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_server_subsets_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_server_subsets_action"))
 		for key, value := range m.GetOriginServerSubsetsAction() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -3571,85 +3197,60 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port_matcher"))
 		if err := fv(ctx, m.GetPortMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_params"]; exists {
 		vOpts := append(opts, db.WithValidateField("query_params"))
 		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limiter"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiter"))
 		if err := fv(ctx, m.GetRateLimiter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_constraints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_constraints"))
 		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_policy"))
 		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_selector"))
 		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
 		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetTlsFingerprintChoice().(type) {
@@ -3675,43 +3276,31 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url_matcher"))
 		if err := fv(ctx, m.GetUrlMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_matcher"))
 		if err := fv(ctx, m.GetVirtualHostMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_action"))
 		if err := fv(ctx, m.GetWafAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3719,7 +3308,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3730,7 +3318,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["asn_choice"] = vFn
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3741,7 +3328,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_choice"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -3751,9 +3337,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
-
 	vrhIpChoice := v.IpChoiceValidationRuleHandler
 	rulesIpChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3887,60 +3471,36 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["jwt_claims"] = vFn
-
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 	v.FldValidators["client_choice.ip_threat_category_list"] = IPThreatCategoryListTypeValidator().Validate
-
 	v.FldValidators["dst_asn_choice.dst_asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 	v.FldValidators["dst_asn_choice.dst_asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
-
 	v.FldValidators["dst_ip_choice.dst_ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 	v.FldValidators["dst_ip_choice.dst_ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
-
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
-
 	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
 	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
-
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
-
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
-
 	v.FldValidators["client_role"] = ves_io_schema_policy.RoleMatcherTypeValidator().Validate
-
 	v.FldValidators["api_group_matcher"] = ves_io_schema_policy.StringMatcherTypeValidator().Validate
-
 	v.FldValidators["port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
-
 	v.FldValidators["body_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
-
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
-
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-
 	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
-
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
-
 	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
-
 	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
-
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
@@ -3998,51 +3558,42 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDstAsnChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDstAsnChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDstIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDstIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetForwardingClassDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetForwardingClassDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetGotoPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -4052,7 +3603,6 @@ func (m *GlobalSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *GlobalSpecType_AsnMatcher:
-
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -4062,19 +3612,13 @@ func (m *GlobalSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_AnyAsn:
-
 		return nil, nil
-
 	case *GlobalSpecType_AsnList:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -4084,15 +3628,10 @@ func (m *GlobalSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDstAsnChoice().(type) {
 	case *GlobalSpecType_AnyDstAsn:
-
 		return nil, nil
-
 	case *GlobalSpecType_DstAsnList:
-
 		return nil, nil
-
 	case *GlobalSpecType_DstAsnMatcher:
-
 		drInfos, err := m.GetDstAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstAsnMatcher().GetDRefInfo() FAILED")
@@ -4102,11 +3641,9 @@ func (m *GlobalSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dst_asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -4116,15 +3653,10 @@ func (m *GlobalSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDstIpChoice().(type) {
 	case *GlobalSpecType_AnyDstIp:
-
 		return nil, nil
-
 	case *GlobalSpecType_DstIpPrefixList:
-
 		return nil, nil
-
 	case *GlobalSpecType_DstIpMatcher:
-
 		drInfos, err := m.GetDstIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstIpMatcher().GetDRefInfo() FAILED")
@@ -4134,11 +3666,9 @@ func (m *GlobalSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dst_ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetForwardingClassDRefInfo() ([]db.DRefInfo, error) {
@@ -4163,7 +3693,6 @@ func (m *GlobalSpecType) GetForwardingClassDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetForwardingClassDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4182,7 +3711,6 @@ func (m *GlobalSpecType) GetForwardingClassDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4208,7 +3736,6 @@ func (m *GlobalSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4227,7 +3754,6 @@ func (m *GlobalSpecType) GetGotoPolicyDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4238,7 +3764,6 @@ func (m *GlobalSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *GlobalSpecType_IpMatcher:
-
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -4248,19 +3773,13 @@ func (m *GlobalSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_AnyIp:
-
 		return nil, nil
-
 	case *GlobalSpecType_IpPrefixList:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
@@ -4285,7 +3804,6 @@ func (m *GlobalSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4304,7 +3822,6 @@ func (m *GlobalSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4313,7 +3830,6 @@ func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
@@ -4323,7 +3839,6 @@ func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "segment_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -4337,7 +3852,6 @@ func (v *ValidateGlobalSpecType) AsnChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ClientChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4353,7 +3867,6 @@ func (v *ValidateGlobalSpecType) ClientChoiceClientNameValidationRuleHandler(rul
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateGlobalSpecType) IpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4361,9 +3874,7 @@ func (v *ValidateGlobalSpecType) IpChoiceValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -4377,9 +3888,7 @@ func (v *ValidateGlobalSpecType) ActionValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4425,9 +3934,7 @@ func (v *ValidateGlobalSpecType) HeadersValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4473,9 +3980,7 @@ func (v *ValidateGlobalSpecType) QueryParamsValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ArgMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4521,9 +4026,7 @@ func (v *ValidateGlobalSpecType) ArgMatchersValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CookieMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4569,9 +4072,7 @@ func (v *ValidateGlobalSpecType) CookieMatchersValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) WafActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for waf_action")
@@ -4580,19 +4081,15 @@ func (v *ValidateGlobalSpecType) WafActionValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_policy.WafActionValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) RateLimiterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4638,9 +4135,7 @@ func (v *ValidateGlobalSpecType) RateLimiterValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ForwardingClassValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4686,9 +4181,7 @@ func (v *ValidateGlobalSpecType) ForwardingClassValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SchemeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4728,9 +4221,7 @@ func (v *ValidateGlobalSpecType) SchemeValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.ChallengeAction)
@@ -4744,9 +4235,7 @@ func (v *ValidateGlobalSpecType) ChallengeActionValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4792,9 +4281,7 @@ func (v *ValidateGlobalSpecType) GotoPolicyValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AdditionalApiGroupMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4840,9 +4327,7 @@ func (v *ValidateGlobalSpecType) AdditionalApiGroupMatchersValidationRuleHandler
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4902,39 +4387,29 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["additional_api_group_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("additional_api_group_matchers"))
 		if err := fv(ctx, m.GetAdditionalApiGroupMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_group_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_matcher"))
 		if err := fv(ctx, m.GetApiGroupMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["arg_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("arg_matchers"))
 		if err := fv(ctx, m.GetArgMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["asn_choice"]; exists {
@@ -4981,34 +4456,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["body_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_action"))
 		if err := fv(ctx, m.GetBotAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["challenge_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("challenge_action"))
 		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -5077,42 +4542,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_role"))
 		if err := fv(ctx, m.GetClientRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
 		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_matcher"))
 		if err := fv(ctx, m.GetDomainMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetDstAsnChoice().(type) {
@@ -5149,7 +4602,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetDstIpChoice().(type) {
@@ -5186,58 +4638,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["forwarding_class"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class"))
 		if err := fv(ctx, m.GetForwardingClass(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["goto_policy"]; exists {
 		vOpts := append(opts, db.WithValidateField("goto_policy"))
 		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["graphql_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("graphql_settings"))
 		if err := fv(ctx, m.GetGraphqlSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_method"))
 		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ip_choice"]; exists {
@@ -5284,64 +4720,50 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
 		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jwt_claims"]; exists {
 		vOpts := append(opts, db.WithValidateField("jwt_claims"))
 		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["log_rule_evaluation"]; exists {
+		vOpts := append(opts, db.WithValidateField("log_rule_evaluation"))
+		if err := fv(ctx, m.GetLogRuleEvaluation(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
 		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mum_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mum_action"))
 		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["openapi_validation_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("openapi_validation_action"))
 		if err := fv(ctx, m.GetOpenapiValidationAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_server_subsets_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_server_subsets_action"))
 		for key, value := range m.GetOriginServerSubsetsAction() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -5349,103 +4771,72 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port_matcher"))
 		if err := fv(ctx, m.GetPortMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_params"]; exists {
 		vOpts := append(opts, db.WithValidateField("query_params"))
 		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limiter"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiter"))
 		if err := fv(ctx, m.GetRateLimiter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_constraints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_constraints"))
 		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["response_masking_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_masking_config"))
 		if err := fv(ctx, m.GetResponseMaskingConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_policy"))
 		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_selector"))
 		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
 		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["threat_mesh_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("threat_mesh_action"))
 		if err := fv(ctx, m.GetThreatMeshAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetTlsFingerprintChoice().(type) {
@@ -5471,52 +4862,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url_matcher"))
 		if err := fv(ctx, m.GetUrlMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_identity_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_identity_matcher"))
 		if err := fv(ctx, m.GetUserIdentityMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_matcher"))
 		if err := fv(ctx, m.GetVirtualHostMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_action"))
 		if err := fv(ctx, m.GetWafAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5524,7 +4900,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5535,7 +4910,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["asn_choice"] = vFn
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5546,7 +4920,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_choice"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -5556,9 +4929,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
-
 	vrhIpChoice := v.IpChoiceValidationRuleHandler
 	rulesIpChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5714,70 +5085,41 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["jwt_claims"] = vFn
-
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 	v.FldValidators["client_choice.ip_threat_category_list"] = IPThreatCategoryListTypeValidator().Validate
-
 	v.FldValidators["dst_asn_choice.dst_asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 	v.FldValidators["dst_asn_choice.dst_asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
-
 	v.FldValidators["dst_ip_choice.dst_ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 	v.FldValidators["dst_ip_choice.dst_ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
-
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
-
 	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
 	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
-
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
-
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
-
 	v.FldValidators["client_role"] = ves_io_schema_policy.RoleMatcherTypeValidator().Validate
-
 	v.FldValidators["api_group_matcher"] = ves_io_schema_policy.StringMatcherTypeValidator().Validate
-
 	v.FldValidators["port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
-
 	v.FldValidators["body_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
-
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
-
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
-
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
-
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-
 	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
-
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
-
 	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
-
 	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["user_identity_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
-
 	v.FldValidators["graphql_settings"] = ves_io_schema_policy.GraphQLSettingsTypeValidator().Validate
-
 	v.FldValidators["openapi_validation_action"] = ves_io_schema_policy.OpenApiValidationActionValidator().Validate
-
 	v.FldValidators["threat_mesh_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
-
 	v.FldValidators["response_masking_config"] = ves_io_schema_policy.MaskingConfigValidator().Validate
 
 	return v
@@ -5829,7 +5171,6 @@ type ValidateIPThreatCategoryListType struct {
 }
 
 func (v *ValidateIPThreatCategoryListType) IpThreatCategoriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -5889,22 +5230,18 @@ func (v *ValidateIPThreatCategoryListType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_threat_categories"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_threat_categories"))
 		if err := fv(ctx, m.GetIpThreatCategories(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPThreatCategoryListTypeValidator = func() *ValidateIPThreatCategoryListType {
 	v := &ValidateIPThreatCategoryListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5981,35 +5318,31 @@ func (m *RateLimiterRuleSpec) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAsnChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAsnChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	return drInfos, nil
-
 }
 
 func (m *RateLimiterRuleSpec) GetActionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetActionChoice().(type) {
 	case *RateLimiterRuleSpec_BypassRateLimiter:
-
 		return nil, nil
-
 	case *RateLimiterRuleSpec_ApplyRateLimiter:
-
 		return nil, nil
-
 	case *RateLimiterRuleSpec_CustomRateLimiter:
-
 		vref := m.GetCustomRateLimiter()
 		if vref == nil {
 			return nil, nil
@@ -6025,7 +5358,6 @@ func (m *RateLimiterRuleSpec) GetActionChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -6037,15 +5369,12 @@ func (m *RateLimiterRuleSpec) GetActionChoiceDBEntries(ctx context.Context, d db
 
 	switch m.GetActionChoice().(type) {
 	case *RateLimiterRuleSpec_BypassRateLimiter:
-
 	case *RateLimiterRuleSpec_ApplyRateLimiter:
-
 	case *RateLimiterRuleSpec_CustomRateLimiter:
 		refdType, err := d.TypeForEntryKind("", "", "rate_limiter.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: rate_limiter")
 		}
-
 		vref := m.GetCustomRateLimiter()
 		if vref == nil {
 			return nil, nil
@@ -6063,7 +5392,6 @@ func (m *RateLimiterRuleSpec) GetActionChoiceDBEntries(ctx context.Context, d db
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -6076,15 +5404,10 @@ func (m *RateLimiterRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *RateLimiterRuleSpec_AnyAsn:
-
 		return nil, nil
-
 	case *RateLimiterRuleSpec_AsnList:
-
 		return nil, nil
-
 	case *RateLimiterRuleSpec_AsnMatcher:
-
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -6094,11 +5417,9 @@ func (m *RateLimiterRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -6108,15 +5429,10 @@ func (m *RateLimiterRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *RateLimiterRuleSpec_AnyIp:
-
 		return nil, nil
-
 	case *RateLimiterRuleSpec_IpPrefixList:
-
 		return nil, nil
-
 	case *RateLimiterRuleSpec_IpMatcher:
-
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -6126,11 +5442,25 @@ func (m *RateLimiterRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
+}
 
+// GetDRefInfo for the field's type
+func (m *RateLimiterRuleSpec) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 }
 
 type ValidateRateLimiterRuleSpec struct {
@@ -6144,7 +5474,6 @@ func (v *ValidateRateLimiterRuleSpec) ActionChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateRateLimiterRuleSpec) CountryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6152,9 +5481,7 @@ func (v *ValidateRateLimiterRuleSpec) CountryChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateRateLimiterRuleSpec) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6259,7 +5586,6 @@ func (v *ValidateRateLimiterRuleSpec) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetAsnChoice().(type) {
@@ -6296,7 +5622,6 @@ func (v *ValidateRateLimiterRuleSpec) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["country_choice"]; exists {
@@ -6332,33 +5657,24 @@ func (v *ValidateRateLimiterRuleSpec) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_matcher"))
 		if err := fv(ctx, m.GetDomainMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_method"))
 		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetIpChoice().(type) {
@@ -6395,25 +5711,25 @@ func (v *ValidateRateLimiterRuleSpec) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRateLimiterRuleSpecValidator = func() *ValidateRateLimiterRuleSpec {
 	v := &ValidateRateLimiterRuleSpec{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6421,7 +5737,6 @@ var DefaultRateLimiterRuleSpecValidator = func() *ValidateRateLimiterRuleSpec {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhActionChoice := v.ActionChoiceValidationRuleHandler
 	rulesActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6432,7 +5747,6 @@ var DefaultRateLimiterRuleSpecValidator = func() *ValidateRateLimiterRuleSpec {
 		panic(errMsg)
 	}
 	v.FldValidators["action_choice"] = vFn
-
 	vrhCountryChoice := v.CountryChoiceValidationRuleHandler
 	rulesCountryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6455,22 +5769,16 @@ var DefaultRateLimiterRuleSpecValidator = func() *ValidateRateLimiterRuleSpec {
 		panic(errMsg)
 	}
 	v.FldValidators["headers"] = vFn
-
 	v.FldValidators["action_choice.custom_rate_limiter"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
-
 	v.FldValidators["country_choice.country_list"] = ves_io_schema_policy.CountryCodeListValidator().Validate
-
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
-
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
-
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
-
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -6527,45 +5835,37 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDstAsnChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDstAsnChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDstIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDstIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetGotoPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -6575,7 +5875,6 @@ func (m *ReplaceSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *ReplaceSpecType_AsnMatcher:
-
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -6585,19 +5884,13 @@ func (m *ReplaceSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_AnyAsn:
-
 		return nil, nil
-
 	case *ReplaceSpecType_AsnList:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -6607,15 +5900,10 @@ func (m *ReplaceSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDstAsnChoice().(type) {
 	case *ReplaceSpecType_AnyDstAsn:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DstAsnList:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DstAsnMatcher:
-
 		drInfos, err := m.GetDstAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstAsnMatcher().GetDRefInfo() FAILED")
@@ -6625,11 +5913,9 @@ func (m *ReplaceSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dst_asn_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -6639,15 +5925,10 @@ func (m *ReplaceSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDstIpChoice().(type) {
 	case *ReplaceSpecType_AnyDstIp:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DstIpPrefixList:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DstIpMatcher:
-
 		drInfos, err := m.GetDstIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstIpMatcher().GetDRefInfo() FAILED")
@@ -6657,11 +5938,9 @@ func (m *ReplaceSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dst_ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ReplaceSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -6686,7 +5965,6 @@ func (m *ReplaceSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6705,7 +5983,6 @@ func (m *ReplaceSpecType) GetGotoPolicyDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -6716,7 +5993,6 @@ func (m *ReplaceSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *ReplaceSpecType_IpMatcher:
-
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -6726,19 +6002,13 @@ func (m *ReplaceSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_matcher." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_AnyIp:
-
 		return nil, nil
-
 	case *ReplaceSpecType_IpPrefixList:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ReplaceSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
@@ -6763,7 +6033,6 @@ func (m *ReplaceSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6782,7 +6051,6 @@ func (m *ReplaceSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -6791,7 +6059,6 @@ func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
@@ -6801,7 +6068,6 @@ func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "segment_policy." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -6815,7 +6081,6 @@ func (v *ValidateReplaceSpecType) AsnChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ClientChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6831,7 +6096,6 @@ func (v *ValidateReplaceSpecType) ClientChoiceClientNameValidationRuleHandler(ru
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateReplaceSpecType) IpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6839,9 +6103,7 @@ func (v *ValidateReplaceSpecType) IpChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -6855,9 +6117,7 @@ func (v *ValidateReplaceSpecType) ActionValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6903,9 +6163,7 @@ func (v *ValidateReplaceSpecType) HeadersValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6951,9 +6209,7 @@ func (v *ValidateReplaceSpecType) QueryParamsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ArgMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6999,9 +6255,7 @@ func (v *ValidateReplaceSpecType) ArgMatchersValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) CookieMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7047,9 +6301,7 @@ func (v *ValidateReplaceSpecType) CookieMatchersValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) WafActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for waf_action")
@@ -7058,19 +6310,15 @@ func (v *ValidateReplaceSpecType) WafActionValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_policy.WafActionValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) RateLimiterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7116,9 +6364,7 @@ func (v *ValidateReplaceSpecType) RateLimiterValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SchemeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7158,9 +6404,7 @@ func (v *ValidateReplaceSpecType) SchemeValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.ChallengeAction)
@@ -7174,9 +6418,7 @@ func (v *ValidateReplaceSpecType) ChallengeActionValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7222,9 +6464,7 @@ func (v *ValidateReplaceSpecType) GotoPolicyValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7284,31 +6524,23 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_group_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_matcher"))
 		if err := fv(ctx, m.GetApiGroupMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["arg_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("arg_matchers"))
 		if err := fv(ctx, m.GetArgMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["asn_choice"]; exists {
@@ -7355,34 +6587,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["body_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_action"))
 		if err := fv(ctx, m.GetBotAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["challenge_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("challenge_action"))
 		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -7451,42 +6673,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_role"))
 		if err := fv(ctx, m.GetClientRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
 		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_matcher"))
 		if err := fv(ctx, m.GetDomainMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetDstAsnChoice().(type) {
@@ -7523,7 +6733,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetDstIpChoice().(type) {
@@ -7560,41 +6769,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["goto_policy"]; exists {
 		vOpts := append(opts, db.WithValidateField("goto_policy"))
 		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_method"))
 		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ip_choice"]; exists {
@@ -7641,55 +6839,44 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_reputation_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
 		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jwt_claims"]; exists {
 		vOpts := append(opts, db.WithValidateField("jwt_claims"))
 		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["log_rule_evaluation"]; exists {
+		vOpts := append(opts, db.WithValidateField("log_rule_evaluation"))
+		if err := fv(ctx, m.GetLogRuleEvaluation(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
 		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mum_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mum_action"))
 		if err := fv(ctx, m.GetMumAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_server_subsets_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_server_subsets_action"))
 		for key, value := range m.GetOriginServerSubsetsAction() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -7697,85 +6884,60 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port_matcher"))
 		if err := fv(ctx, m.GetPortMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_params"]; exists {
 		vOpts := append(opts, db.WithValidateField("query_params"))
 		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rate_limiter"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiter"))
 		if err := fv(ctx, m.GetRateLimiter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_constraints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_constraints"))
 		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_policy"))
 		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_selector"))
 		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
 		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetTlsFingerprintChoice().(type) {
@@ -7801,43 +6963,31 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url_matcher"))
 		if err := fv(ctx, m.GetUrlMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_matcher"))
 		if err := fv(ctx, m.GetVirtualHostMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_action"))
 		if err := fv(ctx, m.GetWafAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7845,7 +6995,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7856,7 +7005,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["asn_choice"] = vFn
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7867,7 +7015,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_choice"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -7877,9 +7024,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
-
 	vrhIpChoice := v.IpChoiceValidationRuleHandler
 	rulesIpChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8013,60 +7158,36 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["jwt_claims"] = vFn
-
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 	v.FldValidators["client_choice.ip_threat_category_list"] = IPThreatCategoryListTypeValidator().Validate
-
 	v.FldValidators["dst_asn_choice.dst_asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 	v.FldValidators["dst_asn_choice.dst_asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
-
 	v.FldValidators["dst_ip_choice.dst_ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 	v.FldValidators["dst_ip_choice.dst_ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
-
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
-
 	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
 	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
-
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
-
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
-
 	v.FldValidators["client_role"] = ves_io_schema_policy.RoleMatcherTypeValidator().Validate
-
 	v.FldValidators["api_group_matcher"] = ves_io_schema_policy.StringMatcherTypeValidator().Validate
-
 	v.FldValidators["port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
-
 	v.FldValidators["body_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
-
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
-
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-
 	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
-
 	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
-
 	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
-
 	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
-
 	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
-
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
@@ -8616,6 +7737,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
 	m.LabelMatcher = f.GetLabelMatcher()
+	m.LogRuleEvaluation = f.GetLogRuleEvaluation()
 	m.MobileIdentifierMatcherAction = f.GetMobileIdentifierMatcherAction()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
@@ -8692,6 +7814,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
 	f.LabelMatcher = m1.LabelMatcher
+	f.LogRuleEvaluation = m1.LogRuleEvaluation
 	f.MobileIdentifierMatcherAction = m1.MobileIdentifierMatcherAction
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction
@@ -9026,6 +8149,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
 	m.LabelMatcher = f.GetLabelMatcher()
+	m.LogRuleEvaluation = f.GetLogRuleEvaluation()
 	m.MobileIdentifierMatcherAction = f.GetMobileIdentifierMatcherAction()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
@@ -9102,6 +8226,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
 	f.LabelMatcher = m1.LabelMatcher
+	f.LogRuleEvaluation = m1.LogRuleEvaluation
 	f.MobileIdentifierMatcherAction = m1.MobileIdentifierMatcherAction
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction
@@ -9242,6 +8367,7 @@ func (m *RateLimiterRuleSpec) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.Path = f.GetPath()
+	m.SegmentPolicy = f.GetSegmentPolicy()
 }
 
 func (m *RateLimiterRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
@@ -9277,6 +8403,7 @@ func (m *RateLimiterRuleSpec) toGlobalSpecType(f *GlobalSpecType, withDeepCopy b
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.Path = m1.Path
+	f.SegmentPolicy = m1.SegmentPolicy
 }
 
 func (m *RateLimiterRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
@@ -9583,6 +8710,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
 	m.LabelMatcher = f.GetLabelMatcher()
+	m.LogRuleEvaluation = f.GetLogRuleEvaluation()
 	m.MobileIdentifierMatcherAction = f.GetMobileIdentifierMatcherAction()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
@@ -9659,6 +8787,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
 	f.LabelMatcher = m1.LabelMatcher
+	f.LogRuleEvaluation = m1.LogRuleEvaluation
 	f.MobileIdentifierMatcherAction = m1.MobileIdentifierMatcherAction
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction

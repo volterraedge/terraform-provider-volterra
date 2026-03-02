@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.user.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.user.Object"] = ObjectValidator()
 	vr["ves.io.schema.user.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.user.CreateUserRequest"] = CreateUserRequestValidator()
 	vr["ves.io.schema.user.CreateUserResponse"] = CreateUserResponseValidator()
 	vr["ves.io.schema.user.LastLoginUpdateRequest"] = LastLoginUpdateRequestValidator()
@@ -26,7 +24,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.user.ListByNotifPrefResponse"] = ListByNotifPrefResponseValidator()
 	vr["ves.io.schema.user.ListByNotifPrefResponseItem"] = ListByNotifPrefResponseItemValidator()
 	vr["ves.io.schema.user.PrivateCascadeDeleteRequest"] = PrivateCascadeDeleteRequestValidator()
-
 	vr["ves.io.schema.user.AcceptTOSRequest"] = AcceptTOSRequestValidator()
 	vr["ves.io.schema.user.AcceptTOSResponse"] = AcceptTOSResponseValidator()
 	vr["ves.io.schema.user.AssignRoleRequest"] = AssignRoleRequestValidator()
@@ -51,14 +48,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.user.UserGroupRequest"] = UserGroupRequestValidator()
 	vr["ves.io.schema.user.UserGroupResponse"] = UserGroupResponseValidator()
 	vr["ves.io.schema.user.UserRoleRequest"] = UserRoleRequestValidator()
-
 	vr["ves.io.schema.user.AddonServiceStatus"] = AddonServiceStatusValidator()
 	vr["ves.io.schema.user.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.user.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.user.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.user.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.user.TileAccess"] = TileAccessValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -70,20 +65,16 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.user.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.user.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.user.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.user.CustomAPI"] = "web"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -92,14 +83,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.user.Object"] = CustomPrivateAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.user.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.user.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
 		if isExternal {
@@ -110,16 +97,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.user.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.user.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.user.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.user.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -130,22 +112,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.user.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

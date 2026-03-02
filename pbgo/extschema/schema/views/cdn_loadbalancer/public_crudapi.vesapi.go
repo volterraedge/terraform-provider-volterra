@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.cdn_loadbalancer.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -4246,7 +4223,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeBotDefenseType",
             "properties": {
                 "disable_cors_support": {
-                    "description": "Exclusive with [enable_cors_support]\n Blocks Bot Defense from working with existing CORS policies on your \n application. This will significantly impact Bot Defense's ability to \n protect against Bot Attacks.",
+                    "description": "Exclusive with [enable_cors_support]\n Blocks Bot Defense from working with existing CORS policies on your\n application. This will significantly impact Bot Defense's ability to\n protect against Bot Attacks.",
                     "title": "Disable CORS Support",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
@@ -5055,6 +5032,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "common_wafAuthorizationServer": {
+            "type": "object",
+            "description": "Reference to Authorization Server object",
+            "title": "authorization_server",
+            "x-displayname": "Authorization Servers",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.AuthorizationServer",
+            "properties": {
+                "authorization_servers": {
+                    "type": "array",
+                    "description": " Authorization Servers are configured separately in the 'Shared Objects' section of the Web App \u0026\n API Protection workspace and used to fetch JWKS for JWT validation.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "authorization_server_name",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Authorization Server Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "common_wafBasePathsType": {
             "type": "object",
             "title": "base_paths",
@@ -5097,7 +5096,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Any Domain"
                 },
                 "any_url": {
-                    "description": "Exclusive with [api_endpoint api_groups base_path]\n Any URL ",
+                    "description": "Exclusive with [api_endpoint api_groups base_path]\n Any URL",
                     "title": "any_url",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Any URL"
@@ -5537,7 +5536,7 @@ var APISwaggerJSON string = `{
             "description": "JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming\nJWTs before they are passed to your API origin. JWT Validation will also stop requests with expired\ntokens or tokens that are not yet valid.",
             "title": "JWT Validation",
             "x-displayname": "JWT Validation",
-            "x-ves-oneof-field-jwks_configuration": "[\"jwks_config\"]",
+            "x-ves-oneof-field-jwks_configuration": "[\"authorization_server\",\"jwks_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_waf.JWTValidation",
             "properties": {
                 "action": {
@@ -5550,11 +5549,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "authorization_server": {
+                    "description": "Exclusive with [jwks_config]\n Automatically fetch JWKS from URI endpoint",
+                    "title": "authorization_server",
+                    "$ref": "#/definitions/common_wafAuthorizationServer",
+                    "x-displayname": "Authorization Servers"
+                },
                 "jwks_config": {
-                    "description": "Exclusive with []\n The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.",
+                    "description": "Exclusive with [authorization_server]\n Manually provide JWKS",
                     "title": "jwks_config",
                     "$ref": "#/definitions/common_wafJWKS",
-                    "x-displayname": "JSON Web Key Set (JWKS)"
+                    "x-displayname": "Local Input"
                 },
                 "mandatory_claims": {
                     "description": " Configuration for validation of mandatory claims. The system will verify that the claim exists in JWT.\n If the claim does not exist JWT token validation will fail.",
@@ -8842,7 +8847,7 @@ var APISwaggerJSON string = `{
                 },
                 "period_multiplier": {
                     "type": "integer",
-                    "description": " This setting, combined with Per Period units, provides a duration \n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " This setting, combined with Per Period units, provides a duration\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
                     "title": "period_multiplier",
                     "format": "int64",
                     "x-displayname": "Periods",
@@ -9449,10 +9454,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -10850,6 +10855,13 @@ var APISwaggerJSON string = `{
             "x-displayname": "Path Matcher",
             "x-ves-proto-message": "ves.io.schema.policy.PathMatcherType",
             "properties": {
+                "encoded_path_matcher": {
+                    "type": "boolean",
+                    "description": "Match against the encoded, escaped path",
+                    "title": "Encoded_Path",
+                    "format": "boolean",
+                    "x-displayname": "Match Encoded Path"
+                },
                 "exact_values": {
                     "type": "array",
                     "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -11963,7 +11975,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Cross-Site Request Forgery Protection"
                 },
                 "custom_cache_rule": {
-                    "description": "\n Caching policies for CDN. ",
+                    "description": "\n Caching policies for CDN.",
                     "$ref": "#/definitions/common_cache_ruleCustomCacheRule",
                     "x-displayname": "Custom Cache Rules"
                 },
@@ -12334,7 +12346,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Cross-Site Request Forgery Protection"
                 },
                 "custom_cache_rule": {
-                    "description": "\n Caching policies for CDN. ",
+                    "description": "\n Caching policies for CDN.",
                     "$ref": "#/definitions/common_cache_ruleCustomCacheRule",
                     "x-displayname": "Custom Cache Rules"
                 },
@@ -12904,7 +12916,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Cross-Site Request Forgery Protection"
                 },
                 "custom_cache_rule": {
-                    "description": "\n Caching policies for CDN. ",
+                    "description": "\n Caching policies for CDN.",
                     "$ref": "#/definitions/common_cache_ruleCustomCacheRule",
                     "x-displayname": "Custom Cache Rules"
                 },
@@ -13208,7 +13220,7 @@ var APISwaggerJSON string = `{
                 },
                 "cache_ttl_override": {
                     "type": "string",
-                    "description": "Exclusive with [cache_disabled cache_ttl_default]\n Always override the Cahce TTL provided by Origin \n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "description": "Exclusive with [cache_disabled cache_ttl_default]\n Always override the Cahce TTL provided by Origin\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
                     "title": "Override Cache TTL Provided by Origin",
                     "x-displayname": "Override Cache TTL (d/ h/ m/ s)",
                     "x-ves-validation-rules": {

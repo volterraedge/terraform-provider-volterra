@@ -19,13 +19,12 @@ Example Usage
 resource "volterra_secret_policy_rule" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
-  action    = ["action"]
+  action    = "action"
 
   // One of the arguments from this list "client_name client_name_matcher client_selector" must be set
 
   client_name = "ver.re01.int.ves.io"
 }
-
 ```
 
 Argument Reference
@@ -82,4 +81,4 @@ The predicate evaluates to true if the expressions in the label selector are tru
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured secret_policy_rule.
+*   `id` - This is the id of the configured secret_policy_rule.

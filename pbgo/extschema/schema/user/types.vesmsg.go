@@ -64,7 +64,6 @@ type ValidateAddonServiceStatus struct {
 }
 
 func (v *ValidateAddonServiceStatus) DisplayNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for display_name")
@@ -86,41 +85,30 @@ func (v *ValidateAddonServiceStatus) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access"))
 		if err := fv(ctx, m.GetAccess(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAddonServiceStatusValidator = func() *ValidateAddonServiceStatus {
 	v := &ValidateAddonServiceStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -190,7 +178,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetContactsDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
@@ -215,7 +202,6 @@ func (m *CreateSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetContactsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -234,7 +220,6 @@ func (m *CreateSpecType) GetContactsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -255,9 +240,7 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["contacts"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("contacts"))
 		for idx, item := range m.GetContacts() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -265,54 +248,37 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["first_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_name"))
 		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["locale"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("locale"))
 		if err := fv(ctx, m.GetLocale(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -370,7 +336,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetContactsDRefInfo()
-
 }
 
 func (m *GetSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
@@ -395,7 +360,6 @@ func (m *GetSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetContactsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -414,7 +378,6 @@ func (m *GetSpecType) GetContactsDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -435,9 +398,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["contacts"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("contacts"))
 		for idx, item := range m.GetContacts() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -445,54 +406,37 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["first_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_name"))
 		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["locale"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("locale"))
 		if err := fv(ctx, m.GetLocale(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -555,15 +499,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetGroupsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetGroupsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
@@ -588,7 +529,6 @@ func (m *GlobalSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetContactsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -607,7 +547,6 @@ func (m *GlobalSpecType) GetContactsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -633,7 +572,6 @@ func (m *GlobalSpecType) GetGroupsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetGroupsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -652,7 +590,6 @@ func (m *GlobalSpecType) GetGroupsDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -673,9 +610,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["contacts"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("contacts"))
 		for idx, item := range m.GetContacts() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -683,38 +618,26 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_owner"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_owner"))
 		if err := fv(ctx, m.GetDomainOwner(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["first_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("groups"))
 		for idx, item := range m.GetGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -722,99 +645,67 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idm_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idm_type"))
 		if err := fv(ctx, m.GetIdmType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_login_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_login_timestamp"))
 		if err := fv(ctx, m.GetLastLoginTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_name"))
 		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["locale"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("locale"))
 		if err := fv(ctx, m.GetLocale(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sync_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sync_mode"))
 		if err := fv(ctx, m.GetSyncMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_accepted"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_accepted"))
 		if err := fv(ctx, m.GetTosAccepted(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_accepted_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_accepted_at"))
 		if err := fv(ctx, m.GetTosAcceptedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_version"))
 		if err := fv(ctx, m.GetTosVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -872,7 +763,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetContactsDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
@@ -897,7 +787,6 @@ func (m *ReplaceSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetContactsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -916,7 +805,6 @@ func (m *ReplaceSpecType) GetContactsDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -937,9 +825,7 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["contacts"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("contacts"))
 		for idx, item := range m.GetContacts() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -947,36 +833,25 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["first_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_name"))
 		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["locale"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("locale"))
 		if err := fv(ctx, m.GetLocale(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1033,7 +908,6 @@ type ValidateTileAccess struct {
 }
 
 func (v *ValidateTileAccess) DisplayNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for display_name")
@@ -1055,32 +929,24 @@ func (v *ValidateTileAccess) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTileAccessValidator = func() *ValidateTileAccess {
 	v := &ValidateTileAccess{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

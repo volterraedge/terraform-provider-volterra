@@ -74,9 +74,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetDataplaneServers"] = ccl.doRPCGetDataplaneServers
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -163,7 +161,6 @@ func (c *CustomAPIRestClient) doRPCGetDataplaneServers(ctx context.Context, call
 	pbRsp := &GetDataplaneServersResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.nginx.one.nginx_server.GetDataplaneServersResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -197,9 +194,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetDataplaneServers"] = ccl.doRPCGetDataplaneServers
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -283,7 +278,6 @@ func (s *customAPISrv) GetDataplaneServers(ctx context.Context, in *GetDataplane
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.nginx.one.nginx_server.GetDataplaneServersResponse", rsp)...)
 
 	return rsp, nil
@@ -604,7 +598,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " Server name list specified as ${server_name} in nginx config. If no value is\n specified corresponding to this variable, \"default\" is used\n Reference: https://nginx.org/en/docs/http/ngx_http_core_module.html#server\n Note: This is an extension of what is stored in metadata.name \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Server name list specified as ${server_name} in nginx config. If no value is\n specified corresponding to this variable, \"default\" is used\n Reference: https://nginx.org/en/docs/http/ngx_http_core_module.html#server\n Note: This is an extension of what is stored in metadata.name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "domains",
                     "items": {
                         "type": "string"

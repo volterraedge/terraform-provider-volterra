@@ -466,7 +466,7 @@ const (
 	// Indicates a closed issue, resolved and customer approved
 	STATUS_CLOSED SupportTicketStatus = 6
 	// x-displayName: "Failed"
-	// Indicates a failed ticket, a failed ticket didn't make it into Zendesk and a customer should create new one instead
+	// Indicates a failed ticket, a failed ticket didn't make it into Salesforce and a customer should create new one instead
 	STATUS_FAILED SupportTicketStatus = 7
 )
 

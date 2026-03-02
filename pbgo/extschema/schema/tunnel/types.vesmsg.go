@@ -102,9 +102,7 @@ func (v *ValidateConfigureType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -135,7 +133,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.params")
 	}
@@ -181,15 +178,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -197,7 +191,6 @@ func (m *CreateSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetLocalIp() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetLocalIp().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetLocalIp().GetDRefInfo() FAILED")
@@ -207,7 +200,6 @@ func (m *CreateSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "local_ip." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -215,7 +207,6 @@ func (m *CreateSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetParams().GetDRefInfo() FAILED")
@@ -225,7 +216,6 @@ func (m *CreateSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -233,7 +223,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TunnelType)
@@ -247,9 +236,7 @@ func (v *ValidateCreateSpecType) TunnelTypeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) LocalIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for local_ip")
@@ -258,15 +245,12 @@ func (v *ValidateCreateSpecType) LocalIpValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) RemoteIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for remote_ip")
@@ -275,7 +259,6 @@ func (v *ValidateCreateSpecType) RemoteIpValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -295,50 +278,36 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["local_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_ip"))
 		if err := fv(ctx, m.GetLocalIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("params"))
 		if err := fv(ctx, m.GetParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["remote_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("remote_ip"))
 		if err := fv(ctx, m.GetRemoteIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -380,7 +349,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["remote_ip"] = vFn
-
 	v.FldValidators["params"] = TunnelParamsValidator().Validate
 
 	return v
@@ -444,9 +412,7 @@ func (v *ValidateESPProposal) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["authentication_algos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("authentication_algos"))
 		for idx, item := range m.GetAuthenticationAlgos() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -454,11 +420,8 @@ func (v *ValidateESPProposal) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dh_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dh_groups"))
 		for idx, item := range m.GetDhGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -466,11 +429,8 @@ func (v *ValidateESPProposal) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["encryption_algos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("encryption_algos"))
 		for idx, item := range m.GetEncryptionAlgos() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -478,9 +438,7 @@ func (v *ValidateESPProposal) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -511,7 +469,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.params")
 	}
@@ -557,15 +514,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -573,7 +527,6 @@ func (m *GetSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetLocalIp() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetLocalIp().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetLocalIp().GetDRefInfo() FAILED")
@@ -583,7 +536,6 @@ func (m *GetSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "local_ip." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -591,7 +543,6 @@ func (m *GetSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetParams().GetDRefInfo() FAILED")
@@ -601,7 +552,6 @@ func (m *GetSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -609,7 +559,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TunnelType)
@@ -623,9 +572,7 @@ func (v *ValidateGetSpecType) TunnelTypeValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) LocalIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for local_ip")
@@ -634,15 +581,12 @@ func (v *ValidateGetSpecType) LocalIpValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) RemoteIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for remote_ip")
@@ -651,7 +595,6 @@ func (v *ValidateGetSpecType) RemoteIpValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -671,50 +614,36 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["local_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_ip"))
 		if err := fv(ctx, m.GetLocalIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("params"))
 		if err := fv(ctx, m.GetParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["remote_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("remote_ip"))
 		if err := fv(ctx, m.GetRemoteIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -756,7 +685,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["remote_ip"] = vFn
-
 	v.FldValidators["params"] = TunnelParamsValidator().Validate
 
 	return v
@@ -782,7 +710,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.params")
 	}
@@ -828,15 +755,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -844,7 +768,6 @@ func (m *GlobalSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetLocalIp() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetLocalIp().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetLocalIp().GetDRefInfo() FAILED")
@@ -854,7 +777,6 @@ func (m *GlobalSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "local_ip." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -862,7 +784,6 @@ func (m *GlobalSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetParams().GetDRefInfo() FAILED")
@@ -872,7 +793,6 @@ func (m *GlobalSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -886,9 +806,7 @@ func (v *ValidateGlobalSpecType) TunnelAttributeValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TunnelType)
@@ -902,9 +820,7 @@ func (v *ValidateGlobalSpecType) TunnelTypeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) LocalIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for local_ip")
@@ -913,15 +829,12 @@ func (v *ValidateGlobalSpecType) LocalIpValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) RemoteIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for remote_ip")
@@ -930,7 +843,6 @@ func (v *ValidateGlobalSpecType) RemoteIpValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -950,50 +862,35 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cfg_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cfg_type"))
 		if err := fv(ctx, m.GetCfgType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment_vpn_tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment_vpn_tunnel_type"))
 		if err := fv(ctx, m.GetDeploymentVpnTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_ip"))
 		if err := fv(ctx, m.GetLocalIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("params"))
 		if err := fv(ctx, m.GetParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["remote_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("remote_ip"))
 		if err := fv(ctx, m.GetRemoteIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tunnel_attribute"]; exists {
@@ -1029,25 +926,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1055,7 +946,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTunnelAttribute := v.TunnelAttributeValidationRuleHandler
 	rulesTunnelAttribute := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1100,7 +990,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["remote_ip"] = vFn
-
 	v.FldValidators["params"] = TunnelParamsValidator().Validate
 
 	return v
@@ -1164,9 +1053,7 @@ func (v *ValidateIKEProposal) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["authentication_algos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("authentication_algos"))
 		for idx, item := range m.GetAuthenticationAlgos() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1174,11 +1061,8 @@ func (v *ValidateIKEProposal) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dh_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dh_groups"))
 		for idx, item := range m.GetDhGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1186,11 +1070,8 @@ func (v *ValidateIKEProposal) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["encryption_algos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("encryption_algos"))
 		for idx, item := range m.GetEncryptionAlgos() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1198,11 +1079,8 @@ func (v *ValidateIKEProposal) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prf"))
 		for idx, item := range m.GetPrf() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1210,9 +1088,7 @@ func (v *ValidateIKEProposal) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1270,7 +1146,6 @@ func (m *InterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetLocalIntfDRefInfo()
-
 }
 
 func (m *InterfaceType) GetLocalIntfDRefInfo() ([]db.DRefInfo, error) {
@@ -1295,7 +1170,6 @@ func (m *InterfaceType) GetLocalIntfDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetLocalIntfDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1314,7 +1188,6 @@ func (m *InterfaceType) GetLocalIntfDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1323,7 +1196,6 @@ type ValidateInterfaceType struct {
 }
 
 func (v *ValidateInterfaceType) LocalIntfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1383,22 +1255,18 @@ func (v *ValidateInterfaceType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["local_intf"]; exists {
 		vOpts := append(opts, db.WithValidateField("local_intf"))
 		if err := fv(ctx, m.GetLocalIntf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInterfaceTypeValidator = func() *ValidateInterfaceType {
 	v := &ValidateInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1441,7 +1309,6 @@ func (m *IpsecTunnelParams) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetIpsecPsk().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting IpsecTunnelParams.ipsec_psk")
 	}
@@ -1487,15 +1354,12 @@ func (m *IpsecTunnelParams) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIkePhase2ProfileDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIkePhase2ProfileDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *IpsecTunnelParams) GetIkePhase1ProfileDRefInfo() ([]db.DRefInfo, error) {
@@ -1520,7 +1384,6 @@ func (m *IpsecTunnelParams) GetIkePhase1ProfileDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetIkePhase1ProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1539,7 +1402,6 @@ func (m *IpsecTunnelParams) GetIkePhase1ProfileDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1565,7 +1427,6 @@ func (m *IpsecTunnelParams) GetIkePhase2ProfileDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetIkePhase2ProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1584,7 +1445,6 @@ func (m *IpsecTunnelParams) GetIkePhase2ProfileDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1593,7 +1453,6 @@ type ValidateIpsecTunnelParams struct {
 }
 
 func (v *ValidateIpsecTunnelParams) DpdKeepAliveTimerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dpd_keep_alive_timer")
@@ -1615,36 +1474,25 @@ func (v *ValidateIpsecTunnelParams) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dpd_keep_alive_timer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dpd_keep_alive_timer"))
 		if err := fv(ctx, m.GetDpdKeepAliveTimer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["esp_proposal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("esp_proposal"))
 		if err := fv(ctx, m.GetEspProposal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ike_phase1_key_lifetime"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ike_phase1_key_lifetime"))
 		if err := fv(ctx, m.GetIkePhase1KeyLifetime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ike_phase1_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ike_phase1_profile"))
 		for idx, item := range m.GetIkePhase1Profile() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1652,20 +1500,14 @@ func (v *ValidateIpsecTunnelParams) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ike_phase2_key_lifetime"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ike_phase2_key_lifetime"))
 		if err := fv(ctx, m.GetIkePhase2KeyLifetime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ike_phase2_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ike_phase2_profile"))
 		for idx, item := range m.GetIkePhase2Profile() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1673,70 +1515,49 @@ func (v *ValidateIpsecTunnelParams) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ike_proposal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ike_proposal"))
 		if err := fv(ctx, m.GetIkeProposal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ike_reauth_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ike_reauth_timeout"))
 		if err := fv(ctx, m.GetIkeReauthTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipsec_psk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipsec_psk"))
 		if err := fv(ctx, m.GetIpsecPsk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_ike_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_ike_id"))
 		if err := fv(ctx, m.GetLocalIkeId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["remote_ike_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("remote_ike_id"))
 		if err := fv(ctx, m.GetRemoteIkeId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_initiator"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_initiator"))
 		if err := fv(ctx, m.GetTunnelInitiator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpsecTunnelParamsValidator = func() *ValidateIpsecTunnelParams {
 	v := &ValidateIpsecTunnelParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1756,7 +1577,6 @@ var DefaultIpsecTunnelParamsValidator = func() *ValidateIpsecTunnelParams {
 		panic(errMsg)
 	}
 	v.FldValidators["dpd_keep_alive_timer"] = vFn
-
 	v.FldValidators["ipsec_psk"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -1809,7 +1629,6 @@ func (m *LocalIpAddressSelector) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTypeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1819,7 +1638,6 @@ func (m *LocalIpAddressSelector) GetTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetType().(type) {
 	case *LocalIpAddressSelector_Intf:
-
 		drInfos, err := m.GetIntf().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIntf().GetDRefInfo() FAILED")
@@ -1829,13 +1647,9 @@ func (m *LocalIpAddressSelector) GetTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "intf." + dri.DRField
 		}
 		return drInfos, err
-
 	case *LocalIpAddressSelector_IpAddress:
-
 		return nil, nil
-
 	case *LocalIpAddressSelector_NodeInterface:
-
 		drInfos, err := m.GetNodeInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNodeInterface().GetDRefInfo() FAILED")
@@ -1845,11 +1659,9 @@ func (m *LocalIpAddressSelector) GetTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "node_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateLocalIpAddressSelector struct {
@@ -1904,16 +1716,13 @@ func (v *ValidateLocalIpAddressSelector) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLocalIpAddressSelectorValidator = func() *ValidateLocalIpAddressSelector {
 	v := &ValidateLocalIpAddressSelector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["type.intf"] = InterfaceTypeValidator().Validate
 	v.FldValidators["type.ip_address"] = LocalIpAddressTypeValidator().Validate
 	v.FldValidators["type.node_interface"] = ves_io_schema.NodeInterfaceTypeValidator().Validate
@@ -1973,9 +1782,7 @@ func (v *ValidateLocalIpAddressType) TypeValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateLocalIpAddressType) VirtualNetworkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_network_type")
@@ -1984,7 +1791,6 @@ func (v *ValidateLocalIpAddressType) VirtualNetworkTypeValidationRuleHandler(rul
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2038,25 +1844,19 @@ func (v *ValidateLocalIpAddressType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_network_type"))
 		if err := fv(ctx, m.GetVirtualNetworkType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLocalIpAddressTypeValidator = func() *ValidateLocalIpAddressType {
 	v := &ValidateLocalIpAddressType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2064,7 +1864,6 @@ var DefaultLocalIpAddressTypeValidator = func() *ValidateLocalIpAddressType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2086,7 +1885,6 @@ var DefaultLocalIpAddressTypeValidator = func() *ValidateLocalIpAddressType {
 		panic(errMsg)
 	}
 	v.FldValidators["virtual_network_type"] = vFn
-
 	v.FldValidators["type.ip_address"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -2138,7 +1936,6 @@ type ValidateRemoteEndpointType struct {
 }
 
 func (v *ValidateRemoteEndpointType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2190,22 +1987,18 @@ func (v *ValidateRemoteEndpointType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoints"))
 		if err := fv(ctx, m.GetEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRemoteEndpointTypeValidator = func() *ValidateRemoteEndpointType {
 	v := &ValidateRemoteEndpointType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2312,16 +2105,13 @@ func (v *ValidateRemoteIpAddressSelector) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRemoteIpAddressSelectorValidator = func() *ValidateRemoteIpAddressSelector {
 	v := &ValidateRemoteIpAddressSelector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["type.ip"] = ves_io_schema.IpAddressTypeValidator().Validate
 	v.FldValidators["type.endpoints"] = RemoteEndpointTypeValidator().Validate
 
@@ -2386,23 +2176,18 @@ func (v *ValidateRemoteNodeAttributes) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRemoteNodeAttributesValidator = func() *ValidateRemoteNodeAttributes {
 	v := &ValidateRemoteNodeAttributes{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["ip"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
@@ -2428,7 +2213,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.params")
 	}
@@ -2474,15 +2258,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2490,7 +2271,6 @@ func (m *ReplaceSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetLocalIp() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetLocalIp().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetLocalIp().GetDRefInfo() FAILED")
@@ -2500,7 +2280,6 @@ func (m *ReplaceSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "local_ip." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -2508,7 +2287,6 @@ func (m *ReplaceSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetParams().GetDRefInfo() FAILED")
@@ -2518,7 +2296,6 @@ func (m *ReplaceSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -2526,7 +2303,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TunnelType)
@@ -2540,9 +2316,7 @@ func (v *ValidateReplaceSpecType) TunnelTypeValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) LocalIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for local_ip")
@@ -2551,15 +2325,12 @@ func (v *ValidateReplaceSpecType) LocalIpValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) RemoteIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for remote_ip")
@@ -2568,7 +2339,6 @@ func (v *ValidateReplaceSpecType) RemoteIpValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2588,50 +2358,36 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["local_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_ip"))
 		if err := fv(ctx, m.GetLocalIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("params"))
 		if err := fv(ctx, m.GetParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["remote_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("remote_ip"))
 		if err := fv(ctx, m.GetRemoteIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2673,7 +2429,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["remote_ip"] = vFn
-
 	v.FldValidators["params"] = TunnelParamsValidator().Validate
 
 	return v
@@ -2699,7 +2454,6 @@ func (m *TunnelParams) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetIpsec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TunnelParams.ipsec")
 	}
@@ -2740,7 +2494,6 @@ func (m *TunnelParams) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTypeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2750,7 +2503,6 @@ func (m *TunnelParams) GetTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetType().(type) {
 	case *TunnelParams_Ipsec:
-
 		drInfos, err := m.GetIpsec().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpsec().GetDRefInfo() FAILED")
@@ -2760,11 +2512,9 @@ func (m *TunnelParams) GetTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ipsec." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateTunnelParams struct {
@@ -2797,16 +2547,13 @@ func (v *ValidateTunnelParams) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTunnelParamsValidator = func() *ValidateTunnelParams {
 	v := &ValidateTunnelParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["type.ipsec"] = IpsecTunnelParamsValidator().Validate
 
 	return v

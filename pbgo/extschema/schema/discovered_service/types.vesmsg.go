@@ -69,11 +69,9 @@ func (m *ConsulService) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveryObjectDRefInfo()
-
 }
 
 func (m *ConsulService) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -89,7 +87,6 @@ func (m *ConsulService) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetDiscoveryObjectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -99,7 +96,6 @@ func (m *ConsulService) GetDiscoveryObjectDBEntries(ctx context.Context, d db.In
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
 	}
-
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -117,7 +113,6 @@ func (m *ConsulService) GetDiscoveryObjectDBEntries(ctx context.Context, d db.In
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -126,7 +121,6 @@ type ValidateConsulService struct {
 }
 
 func (v *ValidateConsulService) ServiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_name")
@@ -134,9 +128,7 @@ func (v *ValidateConsulService) ServiceNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateConsulService) PodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -182,9 +174,7 @@ func (v *ValidateConsulService) PodsValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateConsulService) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -244,48 +234,36 @@ func (v *ValidateConsulService) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovery_object"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_object"))
 		if err := fv(ctx, m.GetDiscoveryObject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pods"]; exists {
 		vOpts := append(opts, db.WithValidateField("pods"))
 		if err := fv(ctx, m.GetPods(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("ports"))
 		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_name"))
 		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConsulServiceValidator = func() *ValidateConsulService {
 	v := &ValidateConsulService{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -326,7 +304,6 @@ var DefaultConsulServiceValidator = func() *ValidateConsulService {
 		panic(errMsg)
 	}
 	v.FldValidators["ports"] = vFn
-
 	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -384,21 +361,17 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -424,7 +397,6 @@ func (m *CreateSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHttpLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -452,7 +424,6 @@ func (m *CreateSpecType) GetHttpLoadBalancersDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -463,7 +434,6 @@ func (m *CreateSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetServiceType().(type) {
 	case *CreateSpecType_VirtualServer:
-
 		drInfos, err := m.GetVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfo() FAILED")
@@ -473,9 +443,7 @@ func (m *CreateSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_K8SService:
-
 		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
@@ -485,9 +453,7 @@ func (m *CreateSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "k8s_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_ConsulService:
-
 		drInfos, err := m.GetConsulService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
@@ -497,9 +463,7 @@ func (m *CreateSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "consul_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_N1DiscoveredServer:
-
 		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfo() FAILED")
@@ -509,9 +473,7 @@ func (m *CreateSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "n1_discovered_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_ThirdParty:
-
 		drInfos, err := m.GetThirdParty().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfo() FAILED")
@@ -521,11 +483,9 @@ func (m *CreateSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "third_party." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *CreateSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -551,7 +511,6 @@ func (m *CreateSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTcpLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -579,7 +538,6 @@ func (m *CreateSpecType) GetTcpLoadBalancersDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -594,7 +552,6 @@ func (v *ValidateCreateSpecType) ServiceTypeValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) VisibilityActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -616,9 +573,7 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_load_balancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_load_balancers"))
 		for idx, item := range m.GetHttpLoadBalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -626,7 +581,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_type"]; exists {
@@ -695,11 +649,8 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_load_balancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_load_balancers"))
 		for idx, item := range m.GetTcpLoadBalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -707,7 +658,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["visibility_action_choice"]; exists {
@@ -743,16 +693,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -760,7 +707,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServiceType := v.ServiceTypeValidationRuleHandler
 	rulesServiceType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -771,7 +717,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_type"] = vFn
-
 	vrhVisibilityActionChoice := v.VisibilityActionChoiceValidationRuleHandler
 	rulesVisibilityActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -782,15 +727,12 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["visibility_action_choice"] = vFn
-
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
 	v.FldValidators["service_type.k8s_service"] = K8SServiceValidator().Validate
 	v.FldValidators["service_type.consul_service"] = ConsulServiceValidator().Validate
 	v.FldValidators["service_type.n1_discovered_server"] = NginxOneDiscoveredServerValidator().Validate
 	v.FldValidators["service_type.third_party"] = ThirdPartyApplicationDiscoveryValidator().Validate
-
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["tcp_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -848,21 +790,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -888,7 +826,6 @@ func (m *GetSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHttpLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -916,7 +853,6 @@ func (m *GetSpecType) GetHttpLoadBalancersDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -927,7 +863,6 @@ func (m *GetSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetServiceType().(type) {
 	case *GetSpecType_VirtualServer:
-
 		drInfos, err := m.GetVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfo() FAILED")
@@ -937,9 +872,7 @@ func (m *GetSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_K8SService:
-
 		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
@@ -949,9 +882,7 @@ func (m *GetSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "k8s_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_ConsulService:
-
 		drInfos, err := m.GetConsulService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
@@ -961,9 +892,7 @@ func (m *GetSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "consul_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_N1DiscoveredServer:
-
 		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfo() FAILED")
@@ -973,9 +902,7 @@ func (m *GetSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "n1_discovered_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_ThirdParty:
-
 		drInfos, err := m.GetThirdParty().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfo() FAILED")
@@ -985,11 +912,9 @@ func (m *GetSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "third_party." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -1015,7 +940,6 @@ func (m *GetSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTcpLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1043,7 +967,6 @@ func (m *GetSpecType) GetTcpLoadBalancersDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1058,7 +981,6 @@ func (v *ValidateGetSpecType) ServiceTypeValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VisibilityActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1080,9 +1002,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_load_balancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_load_balancers"))
 		for idx, item := range m.GetHttpLoadBalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1090,7 +1010,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_type"]; exists {
@@ -1159,11 +1078,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_load_balancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_load_balancers"))
 		for idx, item := range m.GetTcpLoadBalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1171,7 +1087,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["visibility_action_choice"]; exists {
@@ -1207,16 +1122,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1224,7 +1136,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServiceType := v.ServiceTypeValidationRuleHandler
 	rulesServiceType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1235,7 +1146,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_type"] = vFn
-
 	vrhVisibilityActionChoice := v.VisibilityActionChoiceValidationRuleHandler
 	rulesVisibilityActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1246,15 +1156,12 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["visibility_action_choice"] = vFn
-
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
 	v.FldValidators["service_type.k8s_service"] = K8SServiceValidator().Validate
 	v.FldValidators["service_type.consul_service"] = ConsulServiceValidator().Validate
 	v.FldValidators["service_type.n1_discovered_server"] = NginxOneDiscoveredServerValidator().Validate
 	v.FldValidators["service_type.third_party"] = ThirdPartyApplicationDiscoveryValidator().Validate
-
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["tcp_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1312,33 +1219,27 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInternalVirtualHostDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInternalVirtualHostDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -1364,7 +1265,6 @@ func (m *GlobalSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHttpLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1392,12 +1292,10 @@ func (m *GlobalSpecType) GetHttpLoadBalancersDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetInternalVirtualHostDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetInternalVirtualHost()
 	if vref == nil {
 		return nil, nil
@@ -1413,7 +1311,6 @@ func (m *GlobalSpecType) GetInternalVirtualHostDRefInfo() ([]db.DRefInfo, error)
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetInternalVirtualHostDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1423,7 +1320,6 @@ func (m *GlobalSpecType) GetInternalVirtualHostDBEntries(ctx context.Context, d 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_virtual_server")
 	}
-
 	vref := m.GetInternalVirtualHost()
 	if vref == nil {
 		return nil, nil
@@ -1441,7 +1337,6 @@ func (m *GlobalSpecType) GetInternalVirtualHostDBEntries(ctx context.Context, d 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1452,7 +1347,6 @@ func (m *GlobalSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetServiceType().(type) {
 	case *GlobalSpecType_VirtualServer:
-
 		drInfos, err := m.GetVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfo() FAILED")
@@ -1462,9 +1356,7 @@ func (m *GlobalSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_K8SService:
-
 		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
@@ -1474,9 +1366,7 @@ func (m *GlobalSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "k8s_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_ConsulService:
-
 		drInfos, err := m.GetConsulService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
@@ -1486,9 +1376,7 @@ func (m *GlobalSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "consul_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_N1DiscoveredServer:
-
 		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfo() FAILED")
@@ -1498,9 +1386,7 @@ func (m *GlobalSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "n1_discovered_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_ThirdParty:
-
 		drInfos, err := m.GetThirdParty().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfo() FAILED")
@@ -1510,11 +1396,9 @@ func (m *GlobalSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "third_party." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -1540,7 +1424,6 @@ func (m *GlobalSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTcpLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1568,12 +1451,10 @@ func (m *GlobalSpecType) GetTcpLoadBalancersDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1589,7 +1470,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1599,7 +1479,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1617,7 +1496,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1632,7 +1510,6 @@ func (v *ValidateGlobalSpecType) ServiceTypeValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VisibilityActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1654,9 +1531,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_load_balancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_load_balancers"))
 		for idx, item := range m.GetHttpLoadBalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1664,16 +1539,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_virtual_host"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_virtual_host"))
 		if err := fv(ctx, m.GetInternalVirtualHost(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_type"]; exists {
@@ -1742,11 +1613,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_load_balancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_load_balancers"))
 		for idx, item := range m.GetTcpLoadBalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1754,16 +1622,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["visibility_action_choice"]; exists {
@@ -1799,16 +1663,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1816,7 +1677,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServiceType := v.ServiceTypeValidationRuleHandler
 	rulesServiceType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1827,7 +1687,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_type"] = vFn
-
 	vrhVisibilityActionChoice := v.VisibilityActionChoiceValidationRuleHandler
 	rulesVisibilityActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1838,19 +1697,14 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["visibility_action_choice"] = vFn
-
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
 	v.FldValidators["service_type.k8s_service"] = K8SServiceValidator().Validate
 	v.FldValidators["service_type.consul_service"] = ConsulServiceValidator().Validate
 	v.FldValidators["service_type.n1_discovered_server"] = NginxOneDiscoveredServerValidator().Validate
 	v.FldValidators["service_type.third_party"] = ThirdPartyApplicationDiscoveryValidator().Validate
-
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["tcp_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["internal_virtual_host"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1903,11 +1757,9 @@ func (m *K8SService) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveryObjectDRefInfo()
-
 }
 
 func (m *K8SService) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -1923,7 +1775,6 @@ func (m *K8SService) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetDiscoveryObjectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1933,7 +1784,6 @@ func (m *K8SService) GetDiscoveryObjectDBEntries(ctx context.Context, d db.Inter
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
 	}
-
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -1951,7 +1801,6 @@ func (m *K8SService) GetDiscoveryObjectDBEntries(ctx context.Context, d db.Inter
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1960,7 +1809,6 @@ type ValidateK8SService struct {
 }
 
 func (v *ValidateK8SService) ServiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_name")
@@ -1968,9 +1816,7 @@ func (v *ValidateK8SService) ServiceNameValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateK8SService) PodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2016,9 +1862,7 @@ func (v *ValidateK8SService) PodsValidationRuleHandler(rules map[string]string) 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateK8SService) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2078,48 +1922,36 @@ func (v *ValidateK8SService) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovery_object"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_object"))
 		if err := fv(ctx, m.GetDiscoveryObject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pods"]; exists {
 		vOpts := append(opts, db.WithValidateField("pods"))
 		if err := fv(ctx, m.GetPods(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("ports"))
 		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_name"))
 		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultK8SServiceValidator = func() *ValidateK8SService {
 	v := &ValidateK8SService{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2160,7 +1992,6 @@ var DefaultK8SServiceValidator = func() *ValidateK8SService {
 		panic(errMsg)
 	}
 	v.FldValidators["ports"] = vFn
-
 	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2213,11 +2044,9 @@ func (m *NginxOneDiscoveredServer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNginxServiceDiscoveryRefDRefInfo()
-
 }
 
 func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetNginxServiceDiscoveryRef()
 	if vref == nil {
 		return nil, nil
@@ -2233,7 +2062,6 @@ func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRefDRefInfo() ([]db.D
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetNginxServiceDiscoveryRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2243,7 +2071,6 @@ func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRefDBEntries(ctx cont
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: nginx_service_discovery")
 	}
-
 	vref := m.GetNginxServiceDiscoveryRef()
 	if vref == nil {
 		return nil, nil
@@ -2261,7 +2088,6 @@ func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRefDBEntries(ctx cont
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2270,7 +2096,6 @@ type ValidateNginxOneDiscoveredServer struct {
 }
 
 func (v *ValidateNginxOneDiscoveredServer) ServerBlockValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_block")
@@ -2278,9 +2103,7 @@ func (v *ValidateNginxOneDiscoveredServer) ServerBlockValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNginxOneDiscoveredServer) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -2288,9 +2111,7 @@ func (v *ValidateNginxOneDiscoveredServer) PortValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNginxOneDiscoveredServer) NginxOneObjectIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nginx_one_object_id")
@@ -2298,9 +2119,7 @@ func (v *ValidateNginxOneDiscoveredServer) NginxOneObjectIdValidationRuleHandler
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNginxOneDiscoveredServer) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2354,67 +2173,48 @@ func (v *ValidateNginxOneDiscoveredServer) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
 		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
 		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_service_discovery_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_service_discovery_ref"))
 		if err := fv(ctx, m.GetNginxServiceDiscoveryRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_block"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_block"))
 		if err := fv(ctx, m.GetServerBlock(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNginxOneDiscoveredServerValidator = func() *ValidateNginxOneDiscoveredServer {
 	v := &ValidateNginxOneDiscoveredServer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2473,7 +2273,6 @@ var DefaultNginxOneDiscoveredServerValidator = func() *ValidateNginxOneDiscovere
 		panic(errMsg)
 	}
 	v.FldValidators["domains"] = vFn
-
 	v.FldValidators["nginx_service_discovery_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2531,21 +2330,17 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -2571,7 +2366,6 @@ func (m *ReplaceSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) 
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHttpLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2599,7 +2393,6 @@ func (m *ReplaceSpecType) GetHttpLoadBalancersDBEntries(ctx context.Context, d d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2610,7 +2403,6 @@ func (m *ReplaceSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetServiceType().(type) {
 	case *ReplaceSpecType_VirtualServer:
-
 		drInfos, err := m.GetVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfo() FAILED")
@@ -2620,9 +2412,7 @@ func (m *ReplaceSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_K8SService:
-
 		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
@@ -2632,9 +2422,7 @@ func (m *ReplaceSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "k8s_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_ConsulService:
-
 		drInfos, err := m.GetConsulService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
@@ -2644,9 +2432,7 @@ func (m *ReplaceSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "consul_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_N1DiscoveredServer:
-
 		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfo() FAILED")
@@ -2656,9 +2442,7 @@ func (m *ReplaceSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "n1_discovered_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_ThirdParty:
-
 		drInfos, err := m.GetThirdParty().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfo() FAILED")
@@ -2668,11 +2452,9 @@ func (m *ReplaceSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "third_party." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ReplaceSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -2698,7 +2480,6 @@ func (m *ReplaceSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTcpLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2726,7 +2507,6 @@ func (m *ReplaceSpecType) GetTcpLoadBalancersDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2741,7 +2521,6 @@ func (v *ValidateReplaceSpecType) ServiceTypeValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) VisibilityActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2763,9 +2542,7 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_load_balancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_load_balancers"))
 		for idx, item := range m.GetHttpLoadBalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2773,7 +2550,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_type"]; exists {
@@ -2842,11 +2618,8 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_load_balancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_load_balancers"))
 		for idx, item := range m.GetTcpLoadBalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2854,7 +2627,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["visibility_action_choice"]; exists {
@@ -2890,16 +2662,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2907,7 +2676,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServiceType := v.ServiceTypeValidationRuleHandler
 	rulesServiceType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2918,7 +2686,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_type"] = vFn
-
 	vrhVisibilityActionChoice := v.VisibilityActionChoiceValidationRuleHandler
 	rulesVisibilityActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2929,15 +2696,12 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["visibility_action_choice"] = vFn
-
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
 	v.FldValidators["service_type.k8s_service"] = K8SServiceValidator().Validate
 	v.FldValidators["service_type.consul_service"] = ConsulServiceValidator().Validate
 	v.FldValidators["service_type.n1_discovered_server"] = NginxOneDiscoveredServerValidator().Validate
 	v.FldValidators["service_type.third_party"] = ThirdPartyApplicationDiscoveryValidator().Validate
-
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["tcp_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2990,11 +2754,9 @@ func (m *ThirdPartyApplicationDiscovery) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveryObjectDRefInfo()
-
 }
 
 func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -3010,7 +2772,6 @@ func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObjectDRefInfo() ([]db.DRef
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetDiscoveryObjectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3020,7 +2781,6 @@ func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObjectDBEntries(ctx context
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
 	}
-
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -3038,7 +2798,6 @@ func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObjectDBEntries(ctx context
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3059,23 +2818,18 @@ func (v *ValidateThirdPartyApplicationDiscovery) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovery_object"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_object"))
 		if err := fv(ctx, m.GetDiscoveryObject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThirdPartyApplicationDiscoveryValidator = func() *ValidateThirdPartyApplicationDiscovery {
 	v := &ValidateThirdPartyApplicationDiscovery{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -3128,11 +2882,9 @@ func (m *VirtualServer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveryObjectDRefInfo()
-
 }
 
 func (m *VirtualServer) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -3148,7 +2900,6 @@ func (m *VirtualServer) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetDiscoveryObjectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3158,7 +2909,6 @@ func (m *VirtualServer) GetDiscoveryObjectDBEntries(ctx context.Context, d db.In
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
 	}
-
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -3176,7 +2926,6 @@ func (m *VirtualServer) GetDiscoveryObjectDBEntries(ctx context.Context, d db.In
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3185,7 +2934,6 @@ type ValidateVirtualServer struct {
 }
 
 func (v *ValidateVirtualServer) PartitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for partition")
@@ -3193,9 +2941,7 @@ func (v *ValidateVirtualServer) PartitionValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -3203,9 +2949,7 @@ func (v *ValidateVirtualServer) PortValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) StatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(VirtualServerStatus)
@@ -3219,9 +2963,7 @@ func (v *ValidateVirtualServer) StatusValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) CbipClusterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cbip_cluster")
@@ -3229,9 +2971,7 @@ func (v *ValidateVirtualServer) CbipClusterValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) BigipVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bigip_version")
@@ -3239,9 +2979,7 @@ func (v *ValidateVirtualServer) BigipVersionValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) IpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_address")
@@ -3249,9 +2987,7 @@ func (v *ValidateVirtualServer) IpAddressValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -3259,9 +2995,7 @@ func (v *ValidateVirtualServer) DescriptionValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) EnabledStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(VirtualServerEnabledState)
@@ -3275,9 +3009,7 @@ func (v *ValidateVirtualServer) EnabledStateValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) MgmtIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mgmt_ip")
@@ -3285,9 +3017,7 @@ func (v *ValidateVirtualServer) MgmtIpValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
@@ -3295,9 +3025,7 @@ func (v *ValidateVirtualServer) ServerNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualServer) SubPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sub_path")
@@ -3319,131 +3047,90 @@ func (v *ValidateVirtualServer) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bigip_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_version"))
 		if err := fv(ctx, m.GetBigipVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cbip_cluster"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cbip_cluster"))
 		if err := fv(ctx, m.GetCbipCluster(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["discovery_object"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_object"))
 		if err := fv(ctx, m.GetDiscoveryObject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enabled_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enabled_state"))
 		if err := fv(ctx, m.GetEnabledState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_address"))
 		if err := fv(ctx, m.GetIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mgmt_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mgmt_ip"))
 		if err := fv(ctx, m.GetMgmtIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["partition"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("partition"))
 		if err := fv(ctx, m.GetPartition(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_path"))
 		if err := fv(ctx, m.GetSubPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVirtualServerValidator = func() *ValidateVirtualServer {
 	v := &ValidateVirtualServer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3578,7 +3265,6 @@ var DefaultVirtualServerValidator = func() *ValidateVirtualServer {
 		panic(errMsg)
 	}
 	v.FldValidators["sub_path"] = vFn
-
 	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

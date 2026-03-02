@@ -64,7 +64,6 @@ type ValidateAwsSubnetList struct {
 }
 
 func (v *ValidateAwsSubnetList) SubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -118,22 +117,18 @@ func (v *ValidateAwsSubnetList) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["subnet_id"]; exists {
 		vOpts := append(opts, db.WithValidateField("subnet_id"))
 		if err := fv(ctx, m.GetSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAwsSubnetListValidator = func() *ValidateAwsSubnetList {
 	v := &ValidateAwsSubnetList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -206,7 +201,6 @@ type ValidateAwsVpcList struct {
 }
 
 func (v *ValidateAwsVpcList) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -260,22 +254,18 @@ func (v *ValidateAwsVpcList) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAwsVpcListValidator = func() *ValidateAwsVpcList {
 	v := &ValidateAwsVpcList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -384,16 +374,13 @@ func (v *ValidateIpAddressType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpAddressTypeValidator = func() *ValidateIpAddressType {
 	v := &ValidateIpAddressType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["ver.ipv4"] = Ipv4AddressTypeValidator().Validate
 	v.FldValidators["ver.ipv6"] = Ipv6AddressTypeValidator().Validate
 
@@ -500,16 +487,13 @@ func (v *ValidateIpSubnetType) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpSubnetTypeValidator = func() *ValidateIpSubnetType {
 	v := &ValidateIpSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -517,7 +501,6 @@ var DefaultIpSubnetTypeValidator = func() *ValidateIpSubnetType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhVer := v.VerValidationRuleHandler
 	rulesVer := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -528,7 +511,6 @@ var DefaultIpSubnetTypeValidator = func() *ValidateIpSubnetType {
 		panic(errMsg)
 	}
 	v.FldValidators["ver"] = vFn
-
 	v.FldValidators["ver.ipv4"] = Ipv4SubnetTypeValidator().Validate
 	v.FldValidators["ver.ipv6"] = Ipv6SubnetTypeValidator().Validate
 
@@ -581,7 +563,6 @@ type ValidateIpv4AddressType struct {
 }
 
 func (v *ValidateIpv4AddressType) AddrValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for addr")
@@ -603,23 +584,18 @@ func (v *ValidateIpv4AddressType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["addr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addr"))
 		if err := fv(ctx, m.GetAddr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpv4AddressTypeValidator = func() *ValidateIpv4AddressType {
 	v := &ValidateIpv4AddressType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -688,7 +664,6 @@ type ValidateIpv4SubnetType struct {
 }
 
 func (v *ValidateIpv4SubnetType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix")
@@ -696,9 +671,7 @@ func (v *ValidateIpv4SubnetType) PrefixValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIpv4SubnetType) PlenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for plen")
@@ -720,32 +693,24 @@ func (v *ValidateIpv4SubnetType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["plen"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plen"))
 		if err := fv(ctx, m.GetPlen(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpv4SubnetTypeValidator = func() *ValidateIpv4SubnetType {
 	v := &ValidateIpv4SubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -825,7 +790,6 @@ type ValidateIpv6AddressType struct {
 }
 
 func (v *ValidateIpv6AddressType) AddrValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for addr")
@@ -847,23 +811,18 @@ func (v *ValidateIpv6AddressType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["addr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addr"))
 		if err := fv(ctx, m.GetAddr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpv6AddressTypeValidator = func() *ValidateIpv6AddressType {
 	v := &ValidateIpv6AddressType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -932,7 +891,6 @@ type ValidateIpv6SubnetType struct {
 }
 
 func (v *ValidateIpv6SubnetType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix")
@@ -940,9 +898,7 @@ func (v *ValidateIpv6SubnetType) PrefixValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIpv6SubnetType) PlenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for plen")
@@ -964,32 +920,24 @@ func (v *ValidateIpv6SubnetType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["plen"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plen"))
 		if err := fv(ctx, m.GetPlen(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpv6SubnetTypeValidator = func() *ValidateIpv6SubnetType {
 	v := &ValidateIpv6SubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1069,7 +1017,6 @@ type ValidateMacAddressType struct {
 }
 
 func (v *ValidateMacAddressType) MacValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mac")
@@ -1091,23 +1038,18 @@ func (v *ValidateMacAddressType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mac"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mac"))
 		if err := fv(ctx, m.GetMac(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMacAddressTypeValidator = func() *ValidateMacAddressType {
 	v := &ValidateMacAddressType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1176,7 +1118,6 @@ type ValidatePrefixListType struct {
 }
 
 func (v *ValidatePrefixListType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1216,9 +1157,7 @@ func (v *ValidatePrefixListType) PrefixValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePrefixListType) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1272,30 +1211,24 @@ func (v *ValidatePrefixListType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPrefixListTypeValidator = func() *ValidatePrefixListType {
 	v := &ValidatePrefixListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

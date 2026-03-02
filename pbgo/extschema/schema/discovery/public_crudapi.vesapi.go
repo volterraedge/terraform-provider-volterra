@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.discovery.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2237,9 +2214,45 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "discoveryCBIPClusterStatus": {
+            "type": "object",
+            "title": "Status for each cbip cluster",
+            "x-ves-proto-message": "ves.io.schema.discovery.CBIPClusterStatus",
+            "properties": {
+                "cluster_name": {
+                    "type": "string",
+                    "description": " Name of the cBIP cluster",
+                    "title": "Cluster name\nx-displayName: \"Cluster Name\"\nName of the cBIP cluster",
+                    "x-displayname": "Cluster Name"
+                },
+                "condition": {
+                    "description": " Status condition of the cBIP cluster",
+                    "title": "Status condition",
+                    "$ref": "#/definitions/schemaConditionType",
+                    "x-displayname": "Condition"
+                },
+                "devices_status": {
+                    "type": "array",
+                    "description": " Device status of the cBIP cluster\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "Devices status\nx-displayName: \"Devices Status\"\nx-required\nDevice status of the cBIP cluster",
+                    "minItems": 1,
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/discoveryCBIPDeviceStatus"
+                    },
+                    "x-displayname": "Devices Status",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
         "discoveryCBIPDeviceStatus": {
             "type": "object",
-            "title": "Status for each cbip device",
+            "title": "Status for each BIG-IP device",
             "x-ves-proto-message": "ves.io.schema.discovery.CBIPDeviceStatus",
             "properties": {
                 "cbip_mgmt_ip": {
@@ -2254,29 +2267,42 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
-                "condition": {
-                    "description": " Discovery Status condition of the device",
-                    "title": "Status condition",
-                    "$ref": "#/definitions/schemaConditionType",
-                    "x-displayname": "Conditions"
+                "conditions": {
+                    "type": "array",
+                    "description": " Discovery Status conditions of the device\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "Status conditions",
+                    "minItems": 1,
+                    "maxItems": 4,
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
         "discoveryCBIPStatusType": {
             "type": "object",
-            "description": "This status captures the status of the cBIP discovery and its internal objects like LB.",
-            "title": "Status for cBIP Discovery",
-            "x-displayname": "cBIP Discovery Status",
-            "x-ves-proto-message": "ves.io.schema.discovery.CBIPStatusType",
+            "description": "x-displayName: \"BIG-IP Discovery Status\"\nThis status captures the status of the BIG-IP discovery and its internal objects like LB.",
+            "title": "Status for BIG-IP Discovery",
             "properties": {
                 "device_status": {
                     "type": "array",
-                    "description": " Status of the discovery task for each cbip device",
-                    "title": "cbip Device Discovery Status",
+                    "description": "x-displayName: \"Device Discovery Status\"\nStatus of the discovery task for each cbip device",
+                    "title": "BIG-IP Device Discovery Status",
                     "items": {
                         "$ref": "#/definitions/discoveryCBIPDeviceStatus"
-                    },
-                    "x-displayname": "Device Discovery Status"
+                    }
+                },
+                "domain": {
+                    "type": "string",
+                    "description": "x-displayName: \"LB domain\"\nDomain name of the internal LB",
+                    "title": "Internal LB"
                 }
             }
         },
@@ -2400,9 +2426,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "mgmt_port": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Classic BIG-IP Management Port",
                     "$ref": "#/definitions/discoveryManagementPort",
-                    "x-displayname": "Management Port"
+                    "x-displayname": "Management Port",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace_mapping": {
                     "description": "Exclusive with [default_all]\n Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.",
@@ -2702,7 +2733,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No cluster identifier"
                 },
                 "where": {
-                    "description": " Site for which discovery is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Site for which discovery is valid\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/schemaNetworkSiteRefSelector",
                     "x-displayname": "Site",
                     "x-ves-required": "true",
@@ -2966,7 +2997,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No cluster identifier"
                 },
                 "where": {
-                    "description": " Site for which discovery is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Site for which discovery is valid\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/schemaNetworkSiteRefSelector",
                     "x-displayname": "Site",
                     "x-ves-required": "true",
@@ -3335,12 +3366,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": " Management Port of the BIGIP HA cluster\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Management Port of the BIGIP HA cluster\n\nExample: - \"443\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Management Port",
                     "format": "int64",
                     "x-displayname": "Management Port",
                     "x-ves-example": "443",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
@@ -3389,11 +3422,13 @@ var APISwaggerJSON string = `{
                 },
                 "partition_regex": {
                     "type": "string",
-                    "description": " The regex here will be used to match BIG-IP partition(s).\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.regex: true\n",
+                    "description": " The regex here will be used to match BIG-IP partition(s).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.regex: true\n",
                     "title": "Classic BIG-IP Partition Regex",
                     "maxLength": 256,
                     "x-displayname": "Regex To Match BIG-IP device partition(s)",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "256",
                         "ves.io.schema.rules.string.regex": "true"
                     }
@@ -3540,7 +3575,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No cluster identifier"
                 },
                 "where": {
-                    "description": " Site for which discovery is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Site for which discovery is valid\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/schemaNetworkSiteRefSelector",
                     "x-displayname": "Site",
                     "x-ves-required": "true",
@@ -3596,11 +3631,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "Discovery Status",
             "x-ves-proto-message": "ves.io.schema.discovery.StatusObject",
             "properties": {
-                "cbip_status": {
-                    "description": "\n CBIPStatusType captures the status of the cbip discovery\n workflow, especially the internal LB status on the CE",
-                    "title": "cbip_discovery_status\nThis and VerStatusType should be oneofs",
-                    "$ref": "#/definitions/discoveryCBIPStatusType",
-                    "x-displayname": "cBIP Status"
+                "cbip_clusters_status": {
+                    "type": "array",
+                    "description": " CBIPClusterStatus captures the status\n of the cBIP cluster discovery workflow, especially the device status\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "cbip_clusters_status\nx-displayName: \"cBIP Clusters Status\"\nx-required\nCBIPClusterStatus captures the status\nof the cBIP cluster discovery workflow, especially the device status",
+                    "minItems": 1,
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/discoveryCBIPClusterStatus"
+                    },
+                    "x-displayname": "cBIP Clusters Status",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 },
                 "conditions": {
                     "type": "array",
@@ -3686,14 +3732,14 @@ var APISwaggerJSON string = `{
         },
         "discoveryThirdPartyDiscoveryType": {
             "type": "object",
-            "description": "Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\nSee Tech Docs for details setup instractions.",
+            "description": "Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\nSee Tech Docs for details setup instructions.",
             "title": "Third Party Application",
             "x-displayname": "Discovery",
             "x-ves-proto-message": "ves.io.schema.discovery.ThirdPartyDiscoveryType",
             "properties": {
                 "applications": {
                     "type": "array",
-                    "description": " Defines names to identify and distingish log source system or platforms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 320\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.ip_prefix: true\n",
+                    "description": " Defines names to identify and distinguish log source system or platforms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 320\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.ip_prefix: true\n",
                     "title": "Third Party Application",
                     "minItems": 1,
                     "maxItems": 320,
@@ -4020,10 +4066,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -4055,14 +4101,15 @@ var APISwaggerJSON string = `{
         },
         "schemaDiscoveryType": {
             "type": "string",
-            "description": "Specifies whether the discovery is from Kubernetes or Consul cluster\n\nInvalid Discovery mechanism\nDiscover from Kubernetes cluster\nDiscover from Consul service\nDiscover from Classic BIG-IP Clusters\nDiscover for Third Party Application",
+            "description": "Specifies the type of discovery\n\nInvalid Discovery mechanism\nDiscover from Kubernetes cluster\nDiscover from Consul service\nDiscover from Classic BIG-IP Clusters\nDiscover for Third Party Application\nDiscover from Nginx One",
             "title": "DiscoveryType",
             "enum": [
                 "INVALID_DISCOVERY",
                 "K8S",
                 "CONSUL",
                 "CLASSIC_BIGIP",
-                "THIRD_PARTY"
+                "THIRD_PARTY",
+                "NGINX_ONE"
             ],
             "default": "INVALID_DISCOVERY",
             "x-displayname": "Discovery Type",
@@ -4823,7 +4870,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_MANAGEMENT is used for management purposes",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -4838,7 +4885,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
                 "VIRTUAL_NETWORK_IP_FABRIC",
-                "VIRTUAL_NETWORK_SEGMENT"
+                "VIRTUAL_NETWORK_SEGMENT",
+                "VIRTUAL_NETWORK_MANAGEMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",

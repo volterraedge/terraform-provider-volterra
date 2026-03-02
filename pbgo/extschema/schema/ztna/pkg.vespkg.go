@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ztna.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.ztna.Object"] = ObjectValidator()
 	vr["ves.io.schema.ztna.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.ztna.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.ztna.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.ztna.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ztna.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.ztna.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.ztna.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.ztna.AclResourceEntry"] = AclResourceEntryValidator()
 	vr["ves.io.schema.ztna.ActionType"] = ActionTypeValidator()
 	vr["ves.io.schema.ztna.ActiveDirectoryAuth"] = ActiveDirectoryAuthValidator()
@@ -48,7 +45,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ztna.ResourceAssign"] = ResourceAssignValidator()
 	vr["ves.io.schema.ztna.Rules"] = RulesValidator()
 	vr["ves.io.schema.ztna.SequenceAction"] = SequenceActionValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -60,11 +56,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.ztna.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.ztna.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.ztna.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ztna.API.Create"] = []string{
 		"spec.per_session.external_server.admin_password.blindfold_secret_info_internal",
 		"spec.per_session.external_server.admin_password.secret_encoding_type",
@@ -75,9 +69,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.per_session.sequence_action.next_action.log_on.customization.#.password.vault_secret_info",
 		"spec.per_session.sequence_action.next_action.log_on.customization.#.password.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.ztna.API.Create"] = "ves.io.schema.ztna.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ztna.API.Replace"] = []string{
 		"spec.per_session.external_server.admin_password.blindfold_secret_info_internal",
 		"spec.per_session.external_server.admin_password.secret_encoding_type",
@@ -88,23 +80,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.per_session.sequence_action.next_action.log_on.customization.#.password.vault_secret_info",
 		"spec.per_session.sequence_action.next_action.log_on.customization.#.password.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.ztna.API.Replace"] = "ves.io.schema.ztna.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.ztna.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -113,9 +100,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.ztna.Object"] = APISwaggerJSON
@@ -129,22 +114,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.ztna.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.ztna.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.ztna.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -20,23 +20,39 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.crudapi.ObjectListRspItem"] = ObjectListRspItemValidator()
 	vr["ves.io.schema.cloud_connect.crudapi.ObjectReplaceReq"] = ObjectReplaceReqValidator()
 	vr["ves.io.schema.cloud_connect.crudapi.ObjectReplaceRsp"] = ObjectReplaceRspValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.cloud_connect.crudapi.API.Create"] = []string{
+		"spec.gc_spec.aws_tgw_site",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.crudapi.API.Create"] = []string{
+		"spec.gc_spec.aws_tgw_site",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.crudapi.API.Get"] = []string{
+		"spec.gc_spec.aws_tgw_site",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.aws_tgw_site",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.aws_tgw_site",
+	}
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.cloud_connect.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.aws_tgw_site",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.aws_tgw_site",
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -46,7 +62,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	csr = mdr.PvtCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.cloud_connect.Object"] = APISwaggerJSON
@@ -60,22 +75,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.cloud_connect.crudapi.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.cloud_connect.crudapi.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.cloud_connect.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

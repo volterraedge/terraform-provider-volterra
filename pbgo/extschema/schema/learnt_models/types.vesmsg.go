@@ -76,36 +76,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["benign_bot_heuristic_fp_handle"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("benign_bot_heuristic_fp_handle"))
 		if err := fv(ctx, m.GetBenignBotHeuristicFpHandle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["distinct_users_heuristic_fp_handle"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("distinct_users_heuristic_fp_handle"))
 		if err := fv(ctx, m.GetDistinctUsersHeuristicFpHandle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_req_random_data_fp_handle"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_req_random_data_fp_handle"))
 		if err := fv(ctx, m.GetHttpReqRandomDataFpHandle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["models"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("models"))
 		for key, value := range m.GetModels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -113,36 +102,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["threat_mesh_extended_file_handle"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("threat_mesh_extended_file_handle"))
 		if err := fv(ctx, m.GetThreatMeshExtendedFileHandle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["threat_mesh_file_handle"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("threat_mesh_file_handle"))
 		if err := fv(ctx, m.GetThreatMeshFileHandle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["threat_mesh_zipped_extended_file_handle"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("threat_mesh_zipped_extended_file_handle"))
 		if err := fv(ctx, m.GetThreatMeshZippedExtendedFileHandle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -211,25 +189,18 @@ func (v *ValidateModel) Validate(ctx context.Context, pm interface{}, opts ...db
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

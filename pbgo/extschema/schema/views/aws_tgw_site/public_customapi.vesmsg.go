@@ -79,52 +79,37 @@ func (v *ValidateSetTGWInfoRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_info"))
 		if err := fv(ctx, m.GetDirectConnectInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tgw_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tgw_info"))
 		if err := fv(ctx, m.GetTgwInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetTGWInfoRequestValidator = func() *ValidateSetTGWInfoRequest {
 	v := &ValidateSetTGWInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
-
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
@@ -188,7 +173,6 @@ func (v *ValidateSetTGWInfoResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -245,7 +229,6 @@ type ValidateSetVIPInfoRequest struct {
 }
 
 func (v *ValidateSetVIPInfoRequest) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -305,40 +288,30 @@ func (v *ValidateSetVIPInfoRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
 		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
 		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetVIPInfoRequestValidator = func() *ValidateSetVIPInfoRequest {
 	v := &ValidateSetVIPInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -419,7 +392,6 @@ func (v *ValidateSetVIPInfoResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -488,27 +460,19 @@ func (v *ValidateSetVPCIpPrefixesRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_ip_prefixes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_ip_prefixes"))
 		for key, value := range m.GetVpcIpPrefixes() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -516,16 +480,13 @@ func (v *ValidateSetVPCIpPrefixesRequest) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetVPCIpPrefixesRequestValidator = func() *ValidateSetVPCIpPrefixesRequest {
 	v := &ValidateSetVPCIpPrefixesRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["vpc_ip_prefixes"] = VPCIpPrefixesTypeValidator().Validate
 
 	return v
@@ -589,7 +550,6 @@ func (v *ValidateSetVPCIpPrefixesResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -658,27 +618,19 @@ func (v *ValidateSetVPNTunnelsRequest) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnels"))
 		for idx, item := range m.GetTunnels() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -686,16 +638,13 @@ func (v *ValidateSetVPNTunnelsRequest) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetVPNTunnelsRequestValidator = func() *ValidateSetVPNTunnelsRequest {
 	v := &ValidateSetVPNTunnelsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["tunnels"] = AWSVPNTunnelConfigTypeValidator().Validate
 
 	return v
@@ -759,7 +708,6 @@ func (v *ValidateSetVPNTunnelsResponse) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

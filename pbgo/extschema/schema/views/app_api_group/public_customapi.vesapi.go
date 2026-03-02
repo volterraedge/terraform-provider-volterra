@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCEvaluateApiGroup(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.EvaluateApiGroup(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetApiGroupsStats(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetApiGroupsStatsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["EvaluateApiGroup"] = ccl.doRPCEvaluateApiGroup
-
 	rpcFns["GetApiGroupsStats"] = ccl.doRPCGetApiGroupsStats
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -174,7 +170,6 @@ func (c *CustomAPIRestClient) doRPCEvaluateApiGroup(ctx context.Context, callOpt
 	pbRsp := &EvaluateApiGroupRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.app_api_group.EvaluateApiGroupRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -182,7 +177,6 @@ func (c *CustomAPIRestClient) doRPCEvaluateApiGroup(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetApiGroupsStats(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -257,7 +251,6 @@ func (c *CustomAPIRestClient) doRPCGetApiGroupsStats(ctx context.Context, callOp
 	pbRsp := &GetApiGroupsStatsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.app_api_group.GetApiGroupsStatsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -291,11 +284,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["EvaluateApiGroup"] = ccl.doRPCEvaluateApiGroup
-
 	rpcFns["GetApiGroupsStats"] = ccl.doRPCGetApiGroupsStats
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -383,7 +373,6 @@ func (s *customAPISrv) EvaluateApiGroup(ctx context.Context, in *EvaluateApiGrou
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.app_api_group.EvaluateApiGroupRsp", rsp)...)
 
 	return rsp, nil
@@ -432,7 +421,6 @@ func (s *customAPISrv) GetApiGroupsStats(ctx context.Context, in *GetApiGroupsSt
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.app_api_group.GetApiGroupsStatsRsp", rsp)...)
 
 	return rsp, nil

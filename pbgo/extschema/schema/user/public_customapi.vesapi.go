@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCAcceptTOS(ctx context.Context, yamlReq string
 	rsp, err := c.grpcClient.AcceptTOS(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCAddUserToGroup(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UserGroupRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCAddUserToGroup(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.AddUserToGroup(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCAssignRole(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &AssignRoleRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCAssignRole(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.AssignRole(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CascadeDeleteRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.CascadeDelete(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UserRoleRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Create(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetUserRoleRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +82,6 @@ func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts
 	rsp, err := c.grpcClient.Get(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetTOS(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetTOSRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -96,7 +90,6 @@ func (c *CustomAPIGrpcClient) doRPCGetTOS(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.GetTOS(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListUserRoleRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -105,7 +98,6 @@ func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opt
 	rsp, err := c.grpcClient.List(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRemoveUserFromGroup(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UserGroupRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -114,7 +106,6 @@ func (c *CustomAPIGrpcClient) doRPCRemoveUserFromGroup(ctx context.Context, yaml
 	rsp, err := c.grpcClient.RemoveUserFromGroup(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCReplace(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UserRoleRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -123,7 +114,6 @@ func (c *CustomAPIGrpcClient) doRPCReplace(ctx context.Context, yamlReq string, 
 	rsp, err := c.grpcClient.Replace(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCResetPassword(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -132,7 +122,6 @@ func (c *CustomAPIGrpcClient) doRPCResetPassword(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.ResetPassword(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCResetPasswordByAdmin(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ResetPasswordByAdminRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -141,7 +130,6 @@ func (c *CustomAPIGrpcClient) doRPCResetPasswordByAdmin(ctx context.Context, yam
 	rsp, err := c.grpcClient.ResetPasswordByAdmin(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSendPasswordEmail(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SendPasswordEmailRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -150,7 +138,6 @@ func (c *CustomAPIGrpcClient) doRPCSendPasswordEmail(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.SendPasswordEmail(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSyncUser(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -191,35 +178,20 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AcceptTOS"] = ccl.doRPCAcceptTOS
-
 	rpcFns["AddUserToGroup"] = ccl.doRPCAddUserToGroup
-
 	rpcFns["AssignRole"] = ccl.doRPCAssignRole
-
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
-
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["GetTOS"] = ccl.doRPCGetTOS
-
 	rpcFns["List"] = ccl.doRPCList
-
 	rpcFns["RemoveUserFromGroup"] = ccl.doRPCRemoveUserFromGroup
-
 	rpcFns["Replace"] = ccl.doRPCReplace
-
 	rpcFns["ResetPassword"] = ccl.doRPCResetPassword
-
 	rpcFns["ResetPasswordByAdmin"] = ccl.doRPCResetPasswordByAdmin
-
 	rpcFns["SendPasswordEmail"] = ccl.doRPCSendPasswordEmail
-
 	rpcFns["SyncUser"] = ccl.doRPCSyncUser
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -308,7 +280,6 @@ func (c *CustomAPIRestClient) doRPCAcceptTOS(ctx context.Context, callOpts *serv
 	pbRsp := &AcceptTOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.AcceptTOSResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -316,7 +287,6 @@ func (c *CustomAPIRestClient) doRPCAcceptTOS(ctx context.Context, callOpts *serv
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCAddUserToGroup(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -394,7 +364,6 @@ func (c *CustomAPIRestClient) doRPCAddUserToGroup(ctx context.Context, callOpts 
 	pbRsp := &UserGroupResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.UserGroupResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -402,7 +371,6 @@ func (c *CustomAPIRestClient) doRPCAddUserToGroup(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCAssignRole(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -481,7 +449,6 @@ func (c *CustomAPIRestClient) doRPCAssignRole(ctx context.Context, callOpts *ser
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -489,7 +456,6 @@ func (c *CustomAPIRestClient) doRPCAssignRole(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -565,7 +531,6 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -573,7 +538,6 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -660,7 +624,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Object", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -668,7 +631,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -743,7 +705,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetUserRoleResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.GetUserRoleResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -751,7 +712,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetTOS(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -826,7 +786,6 @@ func (c *CustomAPIRestClient) doRPCGetTOS(ctx context.Context, callOpts *server.
 	pbRsp := &GetTOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.GetTOSResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -834,7 +793,6 @@ func (c *CustomAPIRestClient) doRPCGetTOS(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -909,7 +867,6 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	pbRsp := &ListUserRoleResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.ListUserRoleResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -917,7 +874,6 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRemoveUserFromGroup(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -995,7 +951,6 @@ func (c *CustomAPIRestClient) doRPCRemoveUserFromGroup(ctx context.Context, call
 	pbRsp := &UserGroupResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.UserGroupResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1003,7 +958,6 @@ func (c *CustomAPIRestClient) doRPCRemoveUserFromGroup(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1090,7 +1044,6 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Object", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1098,7 +1051,6 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCResetPassword(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1172,7 +1124,6 @@ func (c *CustomAPIRestClient) doRPCResetPassword(ctx context.Context, callOpts *
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1180,7 +1131,6 @@ func (c *CustomAPIRestClient) doRPCResetPassword(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCResetPasswordByAdmin(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1255,7 +1205,6 @@ func (c *CustomAPIRestClient) doRPCResetPasswordByAdmin(ctx context.Context, cal
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1263,7 +1212,6 @@ func (c *CustomAPIRestClient) doRPCResetPasswordByAdmin(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSendPasswordEmail(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1339,7 +1287,6 @@ func (c *CustomAPIRestClient) doRPCSendPasswordEmail(ctx context.Context, callOp
 	pbRsp := &SendPasswordEmailResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.SendPasswordEmailResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1347,7 +1294,6 @@ func (c *CustomAPIRestClient) doRPCSendPasswordEmail(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSyncUser(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1421,7 +1367,6 @@ func (c *CustomAPIRestClient) doRPCSyncUser(ctx context.Context, callOpts *serve
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1455,35 +1400,20 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AcceptTOS"] = ccl.doRPCAcceptTOS
-
 	rpcFns["AddUserToGroup"] = ccl.doRPCAddUserToGroup
-
 	rpcFns["AssignRole"] = ccl.doRPCAssignRole
-
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
-
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["GetTOS"] = ccl.doRPCGetTOS
-
 	rpcFns["List"] = ccl.doRPCList
-
 	rpcFns["RemoveUserFromGroup"] = ccl.doRPCRemoveUserFromGroup
-
 	rpcFns["Replace"] = ccl.doRPCReplace
-
 	rpcFns["ResetPassword"] = ccl.doRPCResetPassword
-
 	rpcFns["ResetPasswordByAdmin"] = ccl.doRPCResetPasswordByAdmin
-
 	rpcFns["SendPasswordEmail"] = ccl.doRPCSendPasswordEmail
-
 	rpcFns["SyncUser"] = ccl.doRPCSyncUser
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1616,7 +1546,6 @@ func (s *customAPISrv) AcceptTOS(ctx context.Context, in *AcceptTOSRequest) (*Ac
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.AcceptTOSResponse", rsp)...)
 
 	return rsp, nil
@@ -1665,7 +1594,6 @@ func (s *customAPISrv) AddUserToGroup(ctx context.Context, in *UserGroupRequest)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.UserGroupResponse", rsp)...)
 
 	return rsp, nil
@@ -1714,7 +1642,6 @@ func (s *customAPISrv) AssignRole(ctx context.Context, in *AssignRoleRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
@@ -1763,7 +1690,6 @@ func (s *customAPISrv) CascadeDelete(ctx context.Context, in *CascadeDeleteReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.CascadeDeleteResponse", rsp)...)
 
 	return rsp, nil
@@ -1812,7 +1738,6 @@ func (s *customAPISrv) Create(ctx context.Context, in *UserRoleRequest) (*Object
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Object", rsp)...)
 
 	return rsp, nil
@@ -1861,7 +1786,6 @@ func (s *customAPISrv) Get(ctx context.Context, in *GetUserRoleRequest) (*GetUse
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.GetUserRoleResponse", rsp)...)
 
 	return rsp, nil
@@ -1910,7 +1834,6 @@ func (s *customAPISrv) GetTOS(ctx context.Context, in *GetTOSRequest) (*GetTOSRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.GetTOSResponse", rsp)...)
 
 	return rsp, nil
@@ -1959,7 +1882,6 @@ func (s *customAPISrv) List(ctx context.Context, in *ListUserRoleRequest) (*List
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.ListUserRoleResponse", rsp)...)
 
 	return rsp, nil
@@ -2008,7 +1930,6 @@ func (s *customAPISrv) RemoveUserFromGroup(ctx context.Context, in *UserGroupReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.UserGroupResponse", rsp)...)
 
 	return rsp, nil
@@ -2057,7 +1978,6 @@ func (s *customAPISrv) Replace(ctx context.Context, in *UserRoleRequest) (*Objec
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Object", rsp)...)
 
 	return rsp, nil
@@ -2106,7 +2026,6 @@ func (s *customAPISrv) ResetPassword(ctx context.Context, in *Empty) (*Empty, er
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
@@ -2155,7 +2074,6 @@ func (s *customAPISrv) ResetPasswordByAdmin(ctx context.Context, in *ResetPasswo
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
@@ -2204,7 +2122,6 @@ func (s *customAPISrv) SendPasswordEmail(ctx context.Context, in *SendPasswordEm
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.SendPasswordEmailResponse", rsp)...)
 
 	return rsp, nil
@@ -2253,7 +2170,6 @@ func (s *customAPISrv) SyncUser(ctx context.Context, in *Empty) (*Empty, error) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
@@ -4036,7 +3952,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -4226,10 +4142,13 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Value of namespace is always \"system\".\n\nExample: - \"value\"-",
+                    "description": " Value of namespace is always \"system\".\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "tos_accepted": {
                     "type": "string",
@@ -4308,10 +4227,13 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace the requesting user is calling the action from\n\nExample: - \"system\"-",
+                    "description": " Namespace the requesting user is calling the action from\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "namespaces_role": {
                     "description": " namespace role to assign",
@@ -4461,10 +4383,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Value of namespace is always \"system\" \n\nExample: - \"value\"-",
+                    "description": " Value of namespace is always \"system\"\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },
@@ -4477,7 +4402,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "delete_ok": {
                     "type": "boolean",
-                    "description": " status of the deleted objects. \n \"true\" value indicates that the operation had been successful for all the objects.\n \"false\" value indicates that at least one of the delete operations had been unsuccessful.\n\nExample: - \"true\"-",
+                    "description": " status of the deleted objects.\n \"true\" value indicates that the operation had been successful for all the objects.\n \"false\" value indicates that at least one of the delete operations had been unsuccessful.\n\nExample: - \"true\"-",
                     "title": "delete_ok",
                     "format": "boolean",
                     "x-displayname": "Delete Ok",
@@ -4675,7 +4600,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "last_login_timestamp": {
                     "type": "string",
-                    "description": " Last login timestamp when user successfully login to access VoltConsole. ",
+                    "description": " Last login timestamp when user successfully login to access VoltConsole.",
                     "title": "Last login timestamp",
                     "format": "date-time",
                     "x-displayname": "Last login timestamp"
@@ -4791,7 +4716,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "tile_access": {
                     "type": "object",
-                    "description": " Primary Navigation Tile access based on Plan and Addon service subscription. ",
+                    "description": " Primary Navigation Tile access based on Plan and Addon service subscription.",
                     "title": "Tile Access",
                     "x-displayname": "Tile Access"
                 },
@@ -5047,7 +4972,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "last_login_timestamp": {
                     "type": "string",
-                    "description": " Last login timestamp when user successfully login to access VoltConsole. ",
+                    "description": " Last login timestamp when user successfully login to access VoltConsole.",
                     "title": "Last login timestamp",
                     "format": "date-time",
                     "x-displayname": "Last login timestamp"
@@ -5260,10 +5185,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Value of namespace is always \"system\" \n\nExample: - \"value\"-",
+                    "description": " Value of namespace is always \"system\"\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },
@@ -5416,10 +5344,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " All users of a tenant must be created in tenant's system namespace.\n\nExample: - \"system\"-",
+                    "description": " All users of a tenant must be created in tenant's system namespace.\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "namespace_roles": {
                     "type": "array",

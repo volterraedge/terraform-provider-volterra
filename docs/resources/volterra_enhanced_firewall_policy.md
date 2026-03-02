@@ -22,13 +22,12 @@ resource "volterra_enhanced_firewall_policy" "example" {
 
   // One of the arguments from this list "allow_all allowed_destinations allowed_sources denied_destinations denied_sources deny_all rule_list" must be set
 
-  allowed_sources {
+  allowed_destinations {
     ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
 
     prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
   }
 }
-
 ```
 
 Argument Reference
@@ -393,4 +392,4 @@ Select specific protocol and port ranges traffic to match.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured enhanced_firewall_policy.
+*   `id` - This is the id of the configured enhanced_firewall_policy.

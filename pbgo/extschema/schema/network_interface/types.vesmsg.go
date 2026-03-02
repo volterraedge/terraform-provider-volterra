@@ -68,7 +68,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -78,11 +77,8 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *CreateSpecType_DedicatedInterface:
-
 		return nil, nil
-
 	case *CreateSpecType_EthernetInterface:
-
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -92,9 +88,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ethernet_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_TunnelInterface:
-
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -104,9 +98,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tunnel_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_LegacyInterface:
-
 		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
@@ -116,19 +108,13 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "legacy_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_DedicatedManagementInterface:
-
 		return nil, nil
-
 	case *CreateSpecType_Layer2Interface:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -234,16 +220,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -251,7 +234,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -262,7 +244,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_choice"] = vFn
-
 	v.FldValidators["interface_choice.dedicated_interface"] = DedicatedInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.ethernet_interface"] = EthernetInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
@@ -320,13 +301,11 @@ func (m *DHCPIPV6NetworkType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkPrefixChoiceDRefInfo()
-
 }
 
 func (m *DHCPIPV6NetworkType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetNetworkPrefixChoice().(type) {
 	case *DHCPIPV6NetworkType_NetworkPrefixAllocator:
-
 		vref := m.GetNetworkPrefixAllocator()
 		if vref == nil {
 			return nil, nil
@@ -342,7 +321,6 @@ func (m *DHCPIPV6NetworkType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, e
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -358,7 +336,6 @@ func (m *DHCPIPV6NetworkType) GetNetworkPrefixChoiceDBEntries(ctx context.Contex
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: address_allocator")
 		}
-
 		vref := m.GetNetworkPrefixAllocator()
 		if vref == nil {
 			return nil, nil
@@ -376,7 +353,6 @@ func (m *DHCPIPV6NetworkType) GetNetworkPrefixChoiceDBEntries(ctx context.Contex
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -401,9 +377,7 @@ func (v *ValidateDHCPIPV6NetworkType) NetworkPrefixChoiceNetworkPrefixValidation
 	}
 	return oValidatorFn_NetworkPrefix, nil
 }
-
 func (v *ValidateDHCPIPV6NetworkType) PoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -449,9 +423,7 @@ func (v *ValidateDHCPIPV6NetworkType) PoolsValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPIPV6NetworkType) PoolSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(DHCPPoolSettingType)
@@ -513,33 +485,25 @@ func (v *ValidateDHCPIPV6NetworkType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pool_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pool_settings"))
 		if err := fv(ctx, m.GetPoolSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("pools"))
 		if err := fv(ctx, m.GetPools(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPIPV6NetworkTypeValidator = func() *ValidateDHCPIPV6NetworkType {
 	v := &ValidateDHCPIPV6NetworkType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -547,7 +511,6 @@ var DefaultDHCPIPV6NetworkTypeValidator = func() *ValidateDHCPIPV6NetworkType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNetworkPrefixChoice := v.NetworkPrefixChoiceValidationRuleHandler
 	rulesNetworkPrefixChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -558,7 +521,6 @@ var DefaultDHCPIPV6NetworkTypeValidator = func() *ValidateDHCPIPV6NetworkType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_prefix_choice"] = vFn
-
 	vrhNetworkPrefixChoiceNetworkPrefix := v.NetworkPrefixChoiceNetworkPrefixValidationRuleHandler
 	rulesNetworkPrefixChoiceNetworkPrefix := map[string]string{
 		"ves.io.schema.rules.string.ipv6_prefix": "true",
@@ -568,7 +530,6 @@ var DefaultDHCPIPV6NetworkTypeValidator = func() *ValidateDHCPIPV6NetworkType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DHCPIPV6NetworkType.network_prefix_choice_network_prefix: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["network_prefix_choice.network_prefix"] = vFnMap["network_prefix_choice.network_prefix"]
 
 	vrhPools := v.PoolsValidationRuleHandler
@@ -593,7 +554,6 @@ var DefaultDHCPIPV6NetworkTypeValidator = func() *ValidateDHCPIPV6NetworkType {
 		panic(errMsg)
 	}
 	v.FldValidators["pool_settings"] = vFn
-
 	v.FldValidators["network_prefix_choice.network_prefix_allocator"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -645,7 +605,6 @@ type ValidateDHCPIPV6PoolType struct {
 }
 
 func (v *ValidateDHCPIPV6PoolType) StartIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_ip")
@@ -653,9 +612,7 @@ func (v *ValidateDHCPIPV6PoolType) StartIpValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPIPV6PoolType) EndIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_ip")
@@ -677,41 +634,30 @@ func (v *ValidateDHCPIPV6PoolType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_ip"))
 		if err := fv(ctx, m.GetEndIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["exclude"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("exclude"))
 		if err := fv(ctx, m.GetExclude(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_ip"))
 		if err := fv(ctx, m.GetStartIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPIPV6PoolTypeValidator = func() *ValidateDHCPIPV6PoolType {
 	v := &ValidateDHCPIPV6PoolType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -792,7 +738,6 @@ func (m *DHCPIPV6StatefulServer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDhcpNetworksDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -800,7 +745,6 @@ func (m *DHCPIPV6StatefulServer) GetDhcpNetworksDRefInfo() ([]db.DRefInfo, error
 	if m.GetDhcpNetworks() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetDhcpNetworks() {
 		driSet, err := e.GetDRefInfo()
@@ -814,7 +758,6 @@ func (m *DHCPIPV6StatefulServer) GetDhcpNetworksDRefInfo() ([]db.DRefInfo, error
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateDHCPIPV6StatefulServer struct {
@@ -828,9 +771,7 @@ func (v *ValidateDHCPIPV6StatefulServer) InterfacesAddressingChoiceValidationRul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPIPV6StatefulServer) DhcpNetworksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -876,9 +817,7 @@ func (v *ValidateDHCPIPV6StatefulServer) DhcpNetworksValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPIPV6StatefulServer) FixedIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -935,21 +874,17 @@ func (v *ValidateDHCPIPV6StatefulServer) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dhcp_networks"]; exists {
 		vOpts := append(opts, db.WithValidateField("dhcp_networks"))
 		if err := fv(ctx, m.GetDhcpNetworks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fixed_ip_map"]; exists {
 		vOpts := append(opts, db.WithValidateField("fixed_ip_map"))
 		if err := fv(ctx, m.GetFixedIpMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["interfaces_addressing_choice"]; exists {
@@ -996,16 +931,13 @@ func (v *ValidateDHCPIPV6StatefulServer) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPIPV6StatefulServerValidator = func() *ValidateDHCPIPV6StatefulServer {
 	v := &ValidateDHCPIPV6StatefulServer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1013,7 +945,6 @@ var DefaultDHCPIPV6StatefulServerValidator = func() *ValidateDHCPIPV6StatefulSer
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhInterfacesAddressingChoice := v.InterfacesAddressingChoiceValidationRuleHandler
 	rulesInterfacesAddressingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1052,7 +983,6 @@ var DefaultDHCPIPV6StatefulServerValidator = func() *ValidateDHCPIPV6StatefulSer
 		panic(errMsg)
 	}
 	v.FldValidators["fixed_ip_map"] = vFn
-
 	v.FldValidators["interfaces_addressing_choice.interface_ip_map"] = DHCPInterfaceIPV6TypeValidator().Validate
 
 	return v
@@ -1104,7 +1034,6 @@ type ValidateDHCPInterfaceIPType struct {
 }
 
 func (v *ValidateDHCPInterfaceIPType) InterfaceIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1161,22 +1090,18 @@ func (v *ValidateDHCPInterfaceIPType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface_ip_map"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_ip_map"))
 		if err := fv(ctx, m.GetInterfaceIpMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPInterfaceIPTypeValidator = func() *ValidateDHCPInterfaceIPType {
 	v := &ValidateDHCPInterfaceIPType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1248,7 +1173,6 @@ type ValidateDHCPInterfaceIPV6Type struct {
 }
 
 func (v *ValidateDHCPInterfaceIPV6Type) InterfaceIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -1305,22 +1229,18 @@ func (v *ValidateDHCPInterfaceIPV6Type) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface_ip_map"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_ip_map"))
 		if err := fv(ctx, m.GetInterfaceIpMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPInterfaceIPV6TypeValidator = func() *ValidateDHCPInterfaceIPV6Type {
 	v := &ValidateDHCPInterfaceIPV6Type{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1393,13 +1313,11 @@ func (m *DHCPNetworkType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkPrefixChoiceDRefInfo()
-
 }
 
 func (m *DHCPNetworkType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetNetworkPrefixChoice().(type) {
 	case *DHCPNetworkType_NetworkPrefixAllocator:
-
 		vref := m.GetNetworkPrefixAllocator()
 		if vref == nil {
 			return nil, nil
@@ -1415,7 +1333,6 @@ func (m *DHCPNetworkType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -1431,7 +1348,6 @@ func (m *DHCPNetworkType) GetNetworkPrefixChoiceDBEntries(ctx context.Context, d
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: address_allocator")
 		}
-
 		vref := m.GetNetworkPrefixAllocator()
 		if vref == nil {
 			return nil, nil
@@ -1449,7 +1365,6 @@ func (m *DHCPNetworkType) GetNetworkPrefixChoiceDBEntries(ctx context.Context, d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -1474,7 +1389,6 @@ func (v *ValidateDHCPNetworkType) DnsChoiceDnsAddressValidationRuleHandler(rules
 	}
 	return oValidatorFn_DnsAddress, nil
 }
-
 func (v *ValidateDHCPNetworkType) GatewayChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1490,7 +1404,6 @@ func (v *ValidateDHCPNetworkType) GatewayChoiceDgwAddressValidationRuleHandler(r
 	}
 	return oValidatorFn_DgwAddress, nil
 }
-
 func (v *ValidateDHCPNetworkType) NetworkPrefixChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1506,9 +1419,7 @@ func (v *ValidateDHCPNetworkType) NetworkPrefixChoiceNetworkPrefixValidationRule
 	}
 	return oValidatorFn_NetworkPrefix, nil
 }
-
 func (v *ValidateDHCPNetworkType) PoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1554,9 +1465,7 @@ func (v *ValidateDHCPNetworkType) PoolsValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPNetworkType) PoolSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(DHCPPoolSettingType)
@@ -1618,7 +1527,6 @@ func (v *ValidateDHCPNetworkType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["gateway_choice"]; exists {
@@ -1665,7 +1573,6 @@ func (v *ValidateDHCPNetworkType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_prefix_choice"]; exists {
@@ -1701,33 +1608,25 @@ func (v *ValidateDHCPNetworkType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pool_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pool_settings"))
 		if err := fv(ctx, m.GetPoolSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("pools"))
 		if err := fv(ctx, m.GetPools(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 	v := &ValidateDHCPNetworkType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1735,7 +1634,6 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDnsChoice := v.DnsChoiceValidationRuleHandler
 	rulesDnsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1746,7 +1644,6 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 		panic(errMsg)
 	}
 	v.FldValidators["dns_choice"] = vFn
-
 	vrhDnsChoiceDnsAddress := v.DnsChoiceDnsAddressValidationRuleHandler
 	rulesDnsChoiceDnsAddress := map[string]string{
 		"ves.io.schema.rules.string.ipv4": "true",
@@ -1756,9 +1653,7 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DHCPNetworkType.dns_choice_dns_address: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["dns_choice.dns_address"] = vFnMap["dns_choice.dns_address"]
-
 	vrhGatewayChoice := v.GatewayChoiceValidationRuleHandler
 	rulesGatewayChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1769,7 +1664,6 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 		panic(errMsg)
 	}
 	v.FldValidators["gateway_choice"] = vFn
-
 	vrhGatewayChoiceDgwAddress := v.GatewayChoiceDgwAddressValidationRuleHandler
 	rulesGatewayChoiceDgwAddress := map[string]string{
 		"ves.io.schema.rules.string.ipv4": "true",
@@ -1779,9 +1673,7 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DHCPNetworkType.gateway_choice_dgw_address: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["gateway_choice.dgw_address"] = vFnMap["gateway_choice.dgw_address"]
-
 	vrhNetworkPrefixChoice := v.NetworkPrefixChoiceValidationRuleHandler
 	rulesNetworkPrefixChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1792,7 +1684,6 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_prefix_choice"] = vFn
-
 	vrhNetworkPrefixChoiceNetworkPrefix := v.NetworkPrefixChoiceNetworkPrefixValidationRuleHandler
 	rulesNetworkPrefixChoiceNetworkPrefix := map[string]string{
 		"ves.io.schema.rules.string.ipv4_prefix": "true",
@@ -1802,7 +1693,6 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DHCPNetworkType.network_prefix_choice_network_prefix: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["network_prefix_choice.network_prefix"] = vFnMap["network_prefix_choice.network_prefix"]
 
 	vrhPools := v.PoolsValidationRuleHandler
@@ -1827,7 +1717,6 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 		panic(errMsg)
 	}
 	v.FldValidators["pool_settings"] = vFn
-
 	v.FldValidators["network_prefix_choice.network_prefix_allocator"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1879,7 +1768,6 @@ type ValidateDHCPPoolType struct {
 }
 
 func (v *ValidateDHCPPoolType) StartIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_ip")
@@ -1887,9 +1775,7 @@ func (v *ValidateDHCPPoolType) StartIpValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPPoolType) EndIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_ip")
@@ -1911,41 +1797,30 @@ func (v *ValidateDHCPPoolType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_ip"))
 		if err := fv(ctx, m.GetEndIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["exclude"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("exclude"))
 		if err := fv(ctx, m.GetExclude(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_ip"))
 		if err := fv(ctx, m.GetStartIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPPoolTypeValidator = func() *ValidateDHCPPoolType {
 	v := &ValidateDHCPPoolType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2026,7 +1901,6 @@ func (m *DHCPServerParametersType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDhcpNetworksDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2034,7 +1908,6 @@ func (m *DHCPServerParametersType) GetDhcpNetworksDRefInfo() ([]db.DRefInfo, err
 	if m.GetDhcpNetworks() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetDhcpNetworks() {
 		driSet, err := e.GetDRefInfo()
@@ -2048,7 +1921,6 @@ func (m *DHCPServerParametersType) GetDhcpNetworksDRefInfo() ([]db.DRefInfo, err
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateDHCPServerParametersType struct {
@@ -2062,9 +1934,7 @@ func (v *ValidateDHCPServerParametersType) InterfacesAddressingChoiceValidationR
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPServerParametersType) DhcpNetworksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2110,9 +1980,7 @@ func (v *ValidateDHCPServerParametersType) DhcpNetworksValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPServerParametersType) FixedIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2155,9 +2023,7 @@ func (v *ValidateDHCPServerParametersType) FixedIpMapValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDHCPServerParametersType) DhcpOption82TagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dhcp_option82_tag")
@@ -2179,30 +2045,23 @@ func (v *ValidateDHCPServerParametersType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dhcp_networks"]; exists {
 		vOpts := append(opts, db.WithValidateField("dhcp_networks"))
 		if err := fv(ctx, m.GetDhcpNetworks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dhcp_option82_tag"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dhcp_option82_tag"))
 		if err := fv(ctx, m.GetDhcpOption82Tag(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fixed_ip_map"]; exists {
 		vOpts := append(opts, db.WithValidateField("fixed_ip_map"))
 		if err := fv(ctx, m.GetFixedIpMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["interfaces_addressing_choice"]; exists {
@@ -2249,16 +2108,13 @@ func (v *ValidateDHCPServerParametersType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPServerParametersTypeValidator = func() *ValidateDHCPServerParametersType {
 	v := &ValidateDHCPServerParametersType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2266,7 +2122,6 @@ var DefaultDHCPServerParametersTypeValidator = func() *ValidateDHCPServerParamet
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhInterfacesAddressingChoice := v.InterfacesAddressingChoiceValidationRuleHandler
 	rulesInterfacesAddressingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2316,7 +2171,6 @@ var DefaultDHCPServerParametersTypeValidator = func() *ValidateDHCPServerParamet
 		panic(errMsg)
 	}
 	v.FldValidators["dhcp_option82_tag"] = vFn
-
 	v.FldValidators["interfaces_addressing_choice.interface_ip_map"] = DHCPInterfaceIPTypeValidator().Validate
 
 	return v
@@ -2382,7 +2236,6 @@ func (v *ValidateDedicatedInterfaceType) NodeChoiceNodeValidationRuleHandler(rul
 	}
 	return oValidatorFn_Node, nil
 }
-
 func (v *ValidateDedicatedInterfaceType) PrimaryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2390,9 +2243,7 @@ func (v *ValidateDedicatedInterfaceType) PrimaryChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDedicatedInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
@@ -2400,9 +2251,7 @@ func (v *ValidateDedicatedInterfaceType) DeviceValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDedicatedInterfaceType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -2410,9 +2259,7 @@ func (v *ValidateDedicatedInterfaceType) MtuValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDedicatedInterfaceType) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
@@ -2434,14 +2281,11 @@ func (v *ValidateDedicatedInterfaceType) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["device"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMonitoringChoice().(type) {
@@ -2467,16 +2311,12 @@ func (v *ValidateDedicatedInterfaceType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["node_choice"]; exists {
@@ -2512,7 +2352,6 @@ func (v *ValidateDedicatedInterfaceType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["primary_choice"]; exists {
@@ -2548,25 +2387,19 @@ func (v *ValidateDedicatedInterfaceType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDedicatedInterfaceTypeValidator = func() *ValidateDedicatedInterfaceType {
 	v := &ValidateDedicatedInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2574,7 +2407,6 @@ var DefaultDedicatedInterfaceTypeValidator = func() *ValidateDedicatedInterfaceT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2585,7 +2417,6 @@ var DefaultDedicatedInterfaceTypeValidator = func() *ValidateDedicatedInterfaceT
 		panic(errMsg)
 	}
 	v.FldValidators["node_choice"] = vFn
-
 	vrhNodeChoiceNode := v.NodeChoiceNodeValidationRuleHandler
 	rulesNodeChoiceNode := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -2596,9 +2427,7 @@ var DefaultDedicatedInterfaceTypeValidator = func() *ValidateDedicatedInterfaceT
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DedicatedInterfaceType.node_choice_node: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["node_choice.node"] = vFnMap["node_choice.node"]
-
 	vrhPrimaryChoice := v.PrimaryChoiceValidationRuleHandler
 	rulesPrimaryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2709,9 +2538,7 @@ func (v *ValidateDedicatedManagementInterfaceType) NodeChoiceNodeValidationRuleH
 	}
 	return oValidatorFn_Node, nil
 }
-
 func (v *ValidateDedicatedManagementInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
@@ -2719,9 +2546,7 @@ func (v *ValidateDedicatedManagementInterfaceType) DeviceValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDedicatedManagementInterfaceType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -2743,23 +2568,17 @@ func (v *ValidateDedicatedManagementInterfaceType) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["device"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["node_choice"]; exists {
@@ -2795,16 +2614,13 @@ func (v *ValidateDedicatedManagementInterfaceType) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDedicatedManagementInterfaceTypeValidator = func() *ValidateDedicatedManagementInterfaceType {
 	v := &ValidateDedicatedManagementInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2812,7 +2628,6 @@ var DefaultDedicatedManagementInterfaceTypeValidator = func() *ValidateDedicated
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2823,7 +2638,6 @@ var DefaultDedicatedManagementInterfaceTypeValidator = func() *ValidateDedicated
 		panic(errMsg)
 	}
 	v.FldValidators["node_choice"] = vFn
-
 	vrhNodeChoiceNode := v.NodeChoiceNodeValidationRuleHandler
 	rulesNodeChoiceNode := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -2834,7 +2648,6 @@ var DefaultDedicatedManagementInterfaceTypeValidator = func() *ValidateDedicated
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DedicatedManagementInterfaceType.node_choice_node: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["node_choice.node"] = vFnMap["node_choice.node"]
 
 	vrhDevice := v.DeviceValidationRuleHandler
@@ -2916,21 +2729,17 @@ func (m *EthernetInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpv6AddressChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpv6AddressChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2940,11 +2749,8 @@ func (m *EthernetInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetAddressChoice().(type) {
 	case *EthernetInterfaceType_DhcpClient:
-
 		return nil, nil
-
 	case *EthernetInterfaceType_DhcpServer:
-
 		drInfos, err := m.GetDhcpServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfo() FAILED")
@@ -2954,9 +2760,7 @@ func (m *EthernetInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "dhcp_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *EthernetInterfaceType_StaticIp:
-
 		drInfos, err := m.GetStaticIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIp().GetDRefInfo() FAILED")
@@ -2966,11 +2770,9 @@ func (m *EthernetInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "static_ip." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2980,11 +2782,8 @@ func (m *EthernetInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetIpv6AddressChoice().(type) {
 	case *EthernetInterfaceType_NoIpv6Address:
-
 		return nil, nil
-
 	case *EthernetInterfaceType_StaticIpv6Address:
-
 		drInfos, err := m.GetStaticIpv6Address().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIpv6Address().GetDRefInfo() FAILED")
@@ -2994,9 +2793,7 @@ func (m *EthernetInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "static_ipv6_address." + dri.DRField
 		}
 		return drInfos, err
-
 	case *EthernetInterfaceType_Ipv6AutoConfig:
-
 		drInfos, err := m.GetIpv6AutoConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpv6AutoConfig().GetDRefInfo() FAILED")
@@ -3006,25 +2803,18 @@ func (m *EthernetInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "ipv6_auto_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *EthernetInterfaceType_SiteLocalNetwork:
-
 		return nil, nil
-
 	case *EthernetInterfaceType_SiteLocalInsideNetwork:
-
 		return nil, nil
-
 	case *EthernetInterfaceType_InsideNetwork:
-
 		vref := m.GetInsideNetwork()
 		if vref == nil {
 			return nil, nil
@@ -3040,13 +2830,9 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *EthernetInterfaceType_StorageNetwork:
-
 		return nil, nil
-
 	case *EthernetInterfaceType_Srv6Network:
-
 		vref := m.GetSrv6Network()
 		if vref == nil {
 			return nil, nil
@@ -3062,13 +2848,9 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *EthernetInterfaceType_IpFabricNetwork:
-
 		return nil, nil
-
 	case *EthernetInterfaceType_SegmentNetwork:
-
 		vref := m.GetSegmentNetwork()
 		if vref == nil {
 			return nil, nil
@@ -3084,7 +2866,6 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -3096,15 +2877,12 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d
 
 	switch m.GetNetworkChoice().(type) {
 	case *EthernetInterfaceType_SiteLocalNetwork:
-
 	case *EthernetInterfaceType_SiteLocalInsideNetwork:
-
 	case *EthernetInterfaceType_InsideNetwork:
 		refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
 		}
-
 		vref := m.GetInsideNetwork()
 		if vref == nil {
 			return nil, nil
@@ -3122,15 +2900,12 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *EthernetInterfaceType_StorageNetwork:
-
 	case *EthernetInterfaceType_Srv6Network:
 		refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
 		}
-
 		vref := m.GetSrv6Network()
 		if vref == nil {
 			return nil, nil
@@ -3148,15 +2923,12 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *EthernetInterfaceType_IpFabricNetwork:
-
 	case *EthernetInterfaceType_SegmentNetwork:
 		refdType, err := d.TypeForEntryKind("", "", "segment.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 		}
-
 		vref := m.GetSegmentNetwork()
 		if vref == nil {
 			return nil, nil
@@ -3174,7 +2946,6 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -3191,7 +2962,6 @@ func (v *ValidateEthernetInterfaceType) AddressChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEthernetInterfaceType) NetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3199,7 +2969,6 @@ func (v *ValidateEthernetInterfaceType) NetworkChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEthernetInterfaceType) NodeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3215,7 +2984,6 @@ func (v *ValidateEthernetInterfaceType) NodeChoiceNodeValidationRuleHandler(rule
 	}
 	return oValidatorFn_Node, nil
 }
-
 func (v *ValidateEthernetInterfaceType) PrimaryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3223,7 +2991,6 @@ func (v *ValidateEthernetInterfaceType) PrimaryChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEthernetInterfaceType) VlanChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3239,9 +3006,7 @@ func (v *ValidateEthernetInterfaceType) VlanChoiceVlanIdValidationRuleHandler(ru
 	}
 	return oValidatorFn_VlanId, nil
 }
-
 func (v *ValidateEthernetInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
@@ -3249,9 +3014,7 @@ func (v *ValidateEthernetInterfaceType) DeviceValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateEthernetInterfaceType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -3259,9 +3022,7 @@ func (v *ValidateEthernetInterfaceType) MtuValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateEthernetInterfaceType) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
@@ -3328,16 +3089,12 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetIpv6AddressChoice().(type) {
@@ -3374,7 +3131,6 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetMonitoringChoice().(type) {
@@ -3400,16 +3156,12 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_choice"]; exists {
@@ -3500,7 +3252,6 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["node_choice"]; exists {
@@ -3536,7 +3287,6 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["primary_choice"]; exists {
@@ -3572,16 +3322,12 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vlan_choice"]; exists {
@@ -3617,16 +3363,13 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceType {
 	v := &ValidateEthernetInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3634,7 +3377,6 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
 	rulesAddressChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3645,7 +3387,6 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["address_choice"] = vFn
-
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3656,7 +3397,6 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["network_choice"] = vFn
-
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3667,7 +3407,6 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["node_choice"] = vFn
-
 	vrhNodeChoiceNode := v.NodeChoiceNodeValidationRuleHandler
 	rulesNodeChoiceNode := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -3678,9 +3417,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field EthernetInterfaceType.node_choice_node: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["node_choice.node"] = vFnMap["node_choice.node"]
-
 	vrhPrimaryChoice := v.PrimaryChoiceValidationRuleHandler
 	rulesPrimaryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3691,7 +3428,6 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["primary_choice"] = vFn
-
 	vrhVlanChoice := v.VlanChoiceValidationRuleHandler
 	rulesVlanChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3702,7 +3438,6 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["vlan_choice"] = vFn
-
 	vrhVlanChoiceVlanId := v.VlanChoiceVlanIdValidationRuleHandler
 	rulesVlanChoiceVlanId := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -3713,7 +3448,6 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field EthernetInterfaceType.vlan_choice_vlan_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["vlan_choice.vlan_id"] = vFnMap["vlan_choice.vlan_id"]
 
 	vrhDevice := v.DeviceValidationRuleHandler
@@ -3751,13 +3485,10 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["priority"] = vFn
-
 	v.FldValidators["address_choice.dhcp_server"] = DHCPServerParametersTypeValidator().Validate
 	v.FldValidators["address_choice.static_ip"] = StaticIPParametersTypeValidator().Validate
-
 	v.FldValidators["ipv6_address_choice.static_ipv6_address"] = StaticIPParametersTypeValidator().Validate
 	v.FldValidators["ipv6_address_choice.ipv6_auto_config"] = IPV6AutoConfigTypeValidator().Validate
-
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["network_choice.srv6_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["network_choice.segment_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -3817,33 +3548,27 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetParentNetworkInterfaceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetParentNetworkInterfaceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTunnelDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, error) {
@@ -3868,7 +3593,6 @@ func (m *GetSpecType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAddressAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3887,7 +3611,6 @@ func (m *GetSpecType) GetAddressAllocatorDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3898,11 +3621,8 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *GetSpecType_DedicatedInterface:
-
 		return nil, nil
-
 	case *GetSpecType_EthernetInterface:
-
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -3912,9 +3632,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ethernet_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_TunnelInterface:
-
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -3924,9 +3642,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tunnel_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_LegacyInterface:
-
 		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
@@ -3936,19 +3652,13 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "legacy_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_DedicatedManagementInterface:
-
 		return nil, nil
-
 	case *GetSpecType_Layer2Interface:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetParentNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
@@ -3973,7 +3683,6 @@ func (m *GetSpecType) GetParentNetworkInterfaceDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetParentNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3992,7 +3701,6 @@ func (m *GetSpecType) GetParentNetworkInterfaceDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4001,7 +3709,6 @@ func (m *GetSpecType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTunnel() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTunnel().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTunnel().GetDRefInfo() FAILED")
@@ -4011,7 +3718,6 @@ func (m *GetSpecType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tunnel." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GetSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -4036,7 +3742,6 @@ func (m *GetSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4055,7 +3760,6 @@ func (m *GetSpecType) GetVirtualNetworkDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4070,9 +3774,7 @@ func (v *ValidateGetSpecType) InterfaceChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceType)
@@ -4086,9 +3788,7 @@ func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -4096,9 +3796,7 @@ func (v *ValidateGetSpecType) MtuValidationRuleHandler(rules map[string]string) 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4144,9 +3842,7 @@ func (v *ValidateGetSpecType) VirtualNetworkValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DhcpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceDHCP)
@@ -4160,9 +3856,7 @@ func (v *ValidateGetSpecType) DhcpAddressValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) StaticAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4208,9 +3902,7 @@ func (v *ValidateGetSpecType) StaticAddressesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DHCPServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceDHCPServer)
@@ -4224,9 +3916,7 @@ func (v *ValidateGetSpecType) DHCPServerValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DeviceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device_name")
@@ -4234,9 +3924,7 @@ func (v *ValidateGetSpecType) DeviceNameValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ParentNetworkInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4282,9 +3970,7 @@ func (v *ValidateGetSpecType) ParentNetworkInterfaceValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VlanTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_tag")
@@ -4292,9 +3978,7 @@ func (v *ValidateGetSpecType) VlanTagValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
@@ -4302,9 +3986,7 @@ func (v *ValidateGetSpecType) PriorityValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AddressAllocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4350,9 +4032,7 @@ func (v *ValidateGetSpecType) AddressAllocatorValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) InterfaceIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -4409,58 +4089,41 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["DHCP_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("DHCP_server"))
 		if err := fv(ctx, m.GetDHCPServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["DNS_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("DNS_server"))
 		if err := fv(ctx, m.GetDNSServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address_allocator"]; exists {
 		vOpts := append(opts, db.WithValidateField("address_allocator"))
 		if err := fv(ctx, m.GetAddressAllocator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_gateway"))
 		if err := fv(ctx, m.GetDefaultGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_name"))
 		if err := fv(ctx, m.GetDeviceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dhcp_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dhcp_address"))
 		if err := fv(ctx, m.GetDhcpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["interface_choice"]; exists {
@@ -4540,24 +4203,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_ip_map"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_ip_map"))
 		if err := fv(ctx, m.GetInterfaceIpMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_primary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_primary"))
 		if err := fv(ctx, m.GetIsPrimary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMonitoringChoice().(type) {
@@ -4583,94 +4240,67 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["parent_network_interface"]; exists {
 		vOpts := append(opts, db.WithValidateField("parent_network_interface"))
 		if err := fv(ctx, m.GetParentNetworkInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_addresses"))
 		if err := fv(ctx, m.GetStaticAddresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel"))
 		if err := fv(ctx, m.GetTunnel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan_tag"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_tag"))
 		if err := fv(ctx, m.GetVlanTag(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan_tagging"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_tagging"))
 		if err := fv(ctx, m.GetVlanTagging(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4678,7 +4308,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4827,18 +4456,14 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_ip_map"] = vFn
-
 	v.FldValidators["interface_choice.dedicated_interface"] = DedicatedInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.ethernet_interface"] = EthernetInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.legacy_interface"] = LegacyInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = DedicatedManagementInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.layer2_interface"] = Layer2InterfaceTypeValidator().Validate
-
 	v.FldValidators["default_gateway"] = NetworkInterfaceDFGWValidator().Validate
-
 	v.FldValidators["DNS_server"] = NetworkInterfaceDNSValidator().Validate
-
 	v.FldValidators["tunnel"] = NetworkInterfaceTunnelValidator().Validate
 
 	return v
@@ -4896,57 +4521,47 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetDhcpServerParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDhcpServerParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpv4StaticAddressesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpv4StaticAddressesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpv6AutoConfigDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpv6AutoConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpv6StaticAddressesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpv6StaticAddressesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetParentNetworkInterfaceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetParentNetworkInterfaceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTunnelDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, error) {
@@ -4971,7 +4586,6 @@ func (m *GlobalSpecType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAddressAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4990,7 +4604,6 @@ func (m *GlobalSpecType) GetAddressAllocatorDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4999,7 +4612,6 @@ func (m *GlobalSpecType) GetDhcpServerParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDhcpServerParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDhcpServerParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDhcpServerParams().GetDRefInfo() FAILED")
@@ -5009,7 +4621,6 @@ func (m *GlobalSpecType) GetDhcpServerParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "dhcp_server_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -5019,11 +4630,8 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *GlobalSpecType_DedicatedInterface:
-
 		return nil, nil
-
 	case *GlobalSpecType_EthernetInterface:
-
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -5033,9 +4641,7 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ethernet_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_TunnelInterface:
-
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -5045,17 +4651,11 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tunnel_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Legacy:
-
 		return nil, nil
-
 	case *GlobalSpecType_DedicatedManagementInterface:
-
 		return nil, nil
-
 	case *GlobalSpecType_LoopbackInterface:
-
 		drInfos, err := m.GetLoopbackInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLoopbackInterface().GetDRefInfo() FAILED")
@@ -5065,15 +4665,11 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "loopback_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Layer2Interface:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -5081,7 +4677,6 @@ func (m *GlobalSpecType) GetIpv4StaticAddressesDRefInfo() ([]db.DRefInfo, error)
 	if m.GetIpv4StaticAddresses() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetIpv4StaticAddresses().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetIpv4StaticAddresses().GetDRefInfo() FAILED")
@@ -5091,7 +4686,6 @@ func (m *GlobalSpecType) GetIpv4StaticAddressesDRefInfo() ([]db.DRefInfo, error)
 		dri.DRField = "ipv4_static_addresses." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -5099,7 +4693,6 @@ func (m *GlobalSpecType) GetIpv6AutoConfigDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIpv6AutoConfig() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetIpv6AutoConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetIpv6AutoConfig().GetDRefInfo() FAILED")
@@ -5109,7 +4702,6 @@ func (m *GlobalSpecType) GetIpv6AutoConfigDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "ipv6_auto_config." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -5117,7 +4709,6 @@ func (m *GlobalSpecType) GetIpv6StaticAddressesDRefInfo() ([]db.DRefInfo, error)
 	if m.GetIpv6StaticAddresses() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetIpv6StaticAddresses().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetIpv6StaticAddresses().GetDRefInfo() FAILED")
@@ -5127,7 +4718,6 @@ func (m *GlobalSpecType) GetIpv6StaticAddressesDRefInfo() ([]db.DRefInfo, error)
 		dri.DRField = "ipv6_static_addresses." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GlobalSpecType) GetParentNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
@@ -5152,7 +4742,6 @@ func (m *GlobalSpecType) GetParentNetworkInterfaceDRefInfo() ([]db.DRefInfo, err
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetParentNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5171,7 +4760,6 @@ func (m *GlobalSpecType) GetParentNetworkInterfaceDBEntries(ctx context.Context,
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -5180,7 +4768,6 @@ func (m *GlobalSpecType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTunnel() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTunnel().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTunnel().GetDRefInfo() FAILED")
@@ -5190,7 +4777,6 @@ func (m *GlobalSpecType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tunnel." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GlobalSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -5215,7 +4801,6 @@ func (m *GlobalSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5234,7 +4819,6 @@ func (m *GlobalSpecType) GetVirtualNetworkDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -5249,9 +4833,7 @@ func (v *ValidateGlobalSpecType) InterfaceChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceType)
@@ -5265,9 +4847,7 @@ func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -5275,9 +4855,7 @@ func (v *ValidateGlobalSpecType) MtuValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5323,9 +4901,7 @@ func (v *ValidateGlobalSpecType) VirtualNetworkValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DhcpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceDHCP)
@@ -5339,9 +4915,7 @@ func (v *ValidateGlobalSpecType) DhcpAddressValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) StaticAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5387,9 +4961,7 @@ func (v *ValidateGlobalSpecType) StaticAddressesValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DHCPServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceDHCPServer)
@@ -5403,9 +4975,7 @@ func (v *ValidateGlobalSpecType) DHCPServerValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DeviceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device_name")
@@ -5413,9 +4983,7 @@ func (v *ValidateGlobalSpecType) DeviceNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ParentNetworkInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5461,9 +5029,7 @@ func (v *ValidateGlobalSpecType) ParentNetworkInterfaceValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VlanTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_tag")
@@ -5471,9 +5037,7 @@ func (v *ValidateGlobalSpecType) VlanTagValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
@@ -5481,9 +5045,7 @@ func (v *ValidateGlobalSpecType) PriorityValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AddressAllocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5529,9 +5091,7 @@ func (v *ValidateGlobalSpecType) AddressAllocatorValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) InterfaceIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -5574,9 +5134,7 @@ func (v *ValidateGlobalSpecType) InterfaceIpMapValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) StaticIpv6AddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5636,67 +5194,47 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["DHCP_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("DHCP_server"))
 		if err := fv(ctx, m.GetDHCPServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["DNS_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("DNS_server"))
 		if err := fv(ctx, m.GetDNSServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address_allocator"]; exists {
 		vOpts := append(opts, db.WithValidateField("address_allocator"))
 		if err := fv(ctx, m.GetAddressAllocator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_gateway"))
 		if err := fv(ctx, m.GetDefaultGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_name"))
 		if err := fv(ctx, m.GetDeviceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dhcp_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dhcp_address"))
 		if err := fv(ctx, m.GetDhcpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dhcp_server_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dhcp_server_params"))
 		if err := fv(ctx, m.GetDhcpServerParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["interface_choice"]; exists {
@@ -5787,51 +5325,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_ip_map"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_ip_map"))
 		if err := fv(ctx, m.GetInterfaceIpMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv4_static_addresses"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv4_static_addresses"))
 		if err := fv(ctx, m.GetIpv4StaticAddresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_auto_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6_auto_config"))
 		if err := fv(ctx, m.GetIpv6AutoConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_static_addresses"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6_static_addresses"))
 		if err := fv(ctx, m.GetIpv6StaticAddresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_primary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_primary"))
 		if err := fv(ctx, m.GetIsPrimary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMonitoringChoice().(type) {
@@ -5857,42 +5380,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_config"))
 		if err := fv(ctx, m.GetNetworkConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["parent_network_interface"]; exists {
 		vOpts := append(opts, db.WithValidateField("parent_network_interface"))
 		if err := fv(ctx, m.GetParentNetworkInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSegmentMultiplexing().(type) {
@@ -5918,85 +5429,61 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_addresses"))
 		if err := fv(ctx, m.GetStaticAddresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_ipv6_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_ipv6_addresses"))
 		if err := fv(ctx, m.GetStaticIpv6Addresses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel"))
 		if err := fv(ctx, m.GetTunnel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vhost_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vhost_type"))
 		if err := fv(ctx, m.GetVhostType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan_tag"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_tag"))
 		if err := fv(ctx, m.GetVlanTag(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan_tagging"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_tagging"))
 		if err := fv(ctx, m.GetVlanTagging(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6004,7 +5491,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6165,28 +5651,19 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["static_ipv6_addresses"] = vFn
-
 	v.FldValidators["interface_choice.dedicated_interface"] = DedicatedInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.ethernet_interface"] = EthernetInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = DedicatedManagementInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.loopback_interface"] = LoopbackInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.layer2_interface"] = Layer2InterfaceTypeValidator().Validate
-
 	v.FldValidators["default_gateway"] = NetworkInterfaceDFGWValidator().Validate
-
 	v.FldValidators["DNS_server"] = NetworkInterfaceDNSValidator().Validate
-
 	v.FldValidators["tunnel"] = NetworkInterfaceTunnelValidator().Validate
-
 	v.FldValidators["dhcp_server_params"] = DHCPServerParametersTypeValidator().Validate
-
 	v.FldValidators["ipv6_static_addresses"] = StaticIPParametersTypeValidator().Validate
-
 	v.FldValidators["vhost_type"] = VhostInterfaceTypeValidator().Validate
-
 	v.FldValidators["ipv4_static_addresses"] = StaticIPParametersTypeValidator().Validate
-
 	v.FldValidators["ipv6_auto_config"] = IPV6AutoConfigTypeValidator().Validate
 
 	return v
@@ -6239,7 +5716,6 @@ func (m *IPV6AutoConfigRouterType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAddressChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -6249,7 +5725,6 @@ func (m *IPV6AutoConfigRouterType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 	switch m.GetAddressChoice().(type) {
 	case *IPV6AutoConfigRouterType_Stateful:
-
 		drInfos, err := m.GetStateful().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStateful().GetDRefInfo() FAILED")
@@ -6259,11 +5734,9 @@ func (m *IPV6AutoConfigRouterType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "stateful." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateIPV6AutoConfigRouterType struct {
@@ -6333,25 +5806,19 @@ func (v *ValidateIPV6AutoConfigRouterType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_config"))
 		if err := fv(ctx, m.GetDnsConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV6AutoConfigRouterTypeValidator = func() *ValidateIPV6AutoConfigRouterType {
 	v := &ValidateIPV6AutoConfigRouterType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6359,7 +5826,6 @@ var DefaultIPV6AutoConfigRouterTypeValidator = func() *ValidateIPV6AutoConfigRou
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
 	rulesAddressChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6370,7 +5836,6 @@ var DefaultIPV6AutoConfigRouterTypeValidator = func() *ValidateIPV6AutoConfigRou
 		panic(errMsg)
 	}
 	v.FldValidators["address_choice"] = vFn
-
 	vrhAddressChoiceNetworkPrefix := v.AddressChoiceNetworkPrefixValidationRuleHandler
 	rulesAddressChoiceNetworkPrefix := map[string]string{
 		"ves.io.schema.rules.string.ipv6_prefix": "true",
@@ -6381,11 +5846,8 @@ var DefaultIPV6AutoConfigRouterTypeValidator = func() *ValidateIPV6AutoConfigRou
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field IPV6AutoConfigRouterType.address_choice_network_prefix: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["address_choice.network_prefix"] = vFnMap["address_choice.network_prefix"]
-
 	v.FldValidators["address_choice.stateful"] = DHCPIPV6StatefulServerValidator().Validate
-
 	v.FldValidators["dns_config"] = IPV6DnsConfigValidator().Validate
 
 	return v
@@ -6438,7 +5900,6 @@ func (m *IPV6AutoConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAutoconfigChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -6448,11 +5909,8 @@ func (m *IPV6AutoConfigType) GetAutoconfigChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetAutoconfigChoice().(type) {
 	case *IPV6AutoConfigType_Host:
-
 		return nil, nil
-
 	case *IPV6AutoConfigType_Router:
-
 		drInfos, err := m.GetRouter().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRouter().GetDRefInfo() FAILED")
@@ -6462,11 +5920,9 @@ func (m *IPV6AutoConfigType) GetAutoconfigChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "router." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateIPV6AutoConfigType struct {
@@ -6528,16 +5984,13 @@ func (v *ValidateIPV6AutoConfigType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV6AutoConfigTypeValidator = func() *ValidateIPV6AutoConfigType {
 	v := &ValidateIPV6AutoConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6545,7 +5998,6 @@ var DefaultIPV6AutoConfigTypeValidator = func() *ValidateIPV6AutoConfigType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAutoconfigChoice := v.AutoconfigChoiceValidationRuleHandler
 	rulesAutoconfigChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6556,7 +6008,6 @@ var DefaultIPV6AutoConfigTypeValidator = func() *ValidateIPV6AutoConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["autoconfig_choice"] = vFn
-
 	v.FldValidators["autoconfig_choice.router"] = IPV6AutoConfigRouterTypeValidator().Validate
 
 	return v
@@ -6662,16 +6113,13 @@ func (v *ValidateIPV6DnsConfig) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV6DnsConfigValidator = func() *ValidateIPV6DnsConfig {
 	v := &ValidateIPV6DnsConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6679,7 +6127,6 @@ var DefaultIPV6DnsConfigValidator = func() *ValidateIPV6DnsConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDnsChoice := v.DnsChoiceValidationRuleHandler
 	rulesDnsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6690,7 +6137,6 @@ var DefaultIPV6DnsConfigValidator = func() *ValidateIPV6DnsConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["dns_choice"] = vFn
-
 	v.FldValidators["dns_choice.local_dns"] = IPV6LocalDnsAddressValidator().Validate
 	v.FldValidators["dns_choice.configured_list"] = IPV6DnsListValidator().Validate
 
@@ -6743,7 +6189,6 @@ type ValidateIPV6DnsList struct {
 }
 
 func (v *ValidateIPV6DnsList) DnsListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6797,22 +6242,18 @@ func (v *ValidateIPV6DnsList) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("dns_list"))
 		if err := fv(ctx, m.GetDnsList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV6DnsListValidator = func() *ValidateIPV6DnsList {
 	v := &ValidateIPV6DnsList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6958,16 +6399,13 @@ func (v *ValidateIPV6LocalDnsAddress) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV6LocalDnsAddressValidator = func() *ValidateIPV6LocalDnsAddress {
 	v := &ValidateIPV6LocalDnsAddress{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6975,7 +6413,6 @@ var DefaultIPV6LocalDnsAddressValidator = func() *ValidateIPV6LocalDnsAddress {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLocalDnsChoice := v.LocalDnsChoiceValidationRuleHandler
 	rulesLocalDnsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6986,7 +6423,6 @@ var DefaultIPV6LocalDnsAddressValidator = func() *ValidateIPV6LocalDnsAddress {
 		panic(errMsg)
 	}
 	v.FldValidators["local_dns_choice"] = vFn
-
 	vrhLocalDnsChoiceConfiguredAddress := v.LocalDnsChoiceConfiguredAddressValidationRuleHandler
 	rulesLocalDnsChoiceConfiguredAddress := map[string]string{
 		"ves.io.schema.rules.string.ipv6": "true",
@@ -6996,7 +6432,6 @@ var DefaultIPV6LocalDnsAddressValidator = func() *ValidateIPV6LocalDnsAddress {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field IPV6LocalDnsAddress.local_dns_choice_configured_address: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["local_dns_choice.configured_address"] = vFnMap["local_dns_choice.configured_address"]
 
 	return v
@@ -7113,16 +6548,13 @@ func (v *ValidateLayer2InterfaceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLayer2InterfaceTypeValidator = func() *ValidateLayer2InterfaceType {
 	v := &ValidateLayer2InterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7130,7 +6562,6 @@ var DefaultLayer2InterfaceTypeValidator = func() *ValidateLayer2InterfaceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLayer2InterfaceChoice := v.Layer2InterfaceChoiceValidationRuleHandler
 	rulesLayer2InterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7141,7 +6572,6 @@ var DefaultLayer2InterfaceTypeValidator = func() *ValidateLayer2InterfaceType {
 		panic(errMsg)
 	}
 	v.FldValidators["layer2_interface_choice"] = vFn
-
 	v.FldValidators["layer2_interface_choice.l2vlan_interface"] = Layer2VlanInterfaceTypeValidator().Validate
 	v.FldValidators["layer2_interface_choice.l2vlan_slo_interface"] = Layer2SloVlanInterfaceTypeValidator().Validate
 	v.FldValidators["layer2_interface_choice.l2sriov_interface"] = Layer2SriovInterfaceTypeValidator().Validate
@@ -7195,7 +6625,6 @@ type ValidateLayer2SloVlanInterfaceType struct {
 }
 
 func (v *ValidateLayer2SloVlanInterfaceType) VlanIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_id")
@@ -7217,23 +6646,18 @@ func (v *ValidateLayer2SloVlanInterfaceType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vlan_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_id"))
 		if err := fv(ctx, m.GetVlanId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLayer2SloVlanInterfaceTypeValidator = func() *ValidateLayer2SloVlanInterfaceType {
 	v := &ValidateLayer2SloVlanInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7318,9 +6742,7 @@ func (v *ValidateLayer2SriovInterfaceType) VlanChoiceVlanIdValidationRuleHandler
 	}
 	return oValidatorFn_VlanId, nil
 }
-
 func (v *ValidateLayer2SriovInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
@@ -7342,14 +6764,11 @@ func (v *ValidateLayer2SriovInterfaceType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["device"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vlan_choice"]; exists {
@@ -7385,16 +6804,13 @@ func (v *ValidateLayer2SriovInterfaceType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLayer2SriovInterfaceTypeValidator = func() *ValidateLayer2SriovInterfaceType {
 	v := &ValidateLayer2SriovInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7402,7 +6818,6 @@ var DefaultLayer2SriovInterfaceTypeValidator = func() *ValidateLayer2SriovInterf
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhVlanChoice := v.VlanChoiceValidationRuleHandler
 	rulesVlanChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7413,7 +6828,6 @@ var DefaultLayer2SriovInterfaceTypeValidator = func() *ValidateLayer2SriovInterf
 		panic(errMsg)
 	}
 	v.FldValidators["vlan_choice"] = vFn
-
 	vrhVlanChoiceVlanId := v.VlanChoiceVlanIdValidationRuleHandler
 	rulesVlanChoiceVlanId := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -7424,7 +6838,6 @@ var DefaultLayer2SriovInterfaceTypeValidator = func() *ValidateLayer2SriovInterf
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Layer2SriovInterfaceType.vlan_choice_vlan_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["vlan_choice.vlan_id"] = vFnMap["vlan_choice.vlan_id"]
 
 	vrhDevice := v.DeviceValidationRuleHandler
@@ -7489,7 +6902,6 @@ type ValidateLayer2VlanInterfaceType struct {
 }
 
 func (v *ValidateLayer2VlanInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
@@ -7497,9 +6909,7 @@ func (v *ValidateLayer2VlanInterfaceType) DeviceValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLayer2VlanInterfaceType) VlanIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_id")
@@ -7521,32 +6931,24 @@ func (v *ValidateLayer2VlanInterfaceType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["device"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_id"))
 		if err := fv(ctx, m.GetVlanId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLayer2VlanInterfaceTypeValidator = func() *ValidateLayer2VlanInterfaceType {
 	v := &ValidateLayer2VlanInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7636,21 +7038,17 @@ func (m *LegacyInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTunnelDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *LegacyInterfaceType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, error) {
@@ -7675,7 +7073,6 @@ func (m *LegacyInterfaceType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, erro
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAddressAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7694,7 +7091,6 @@ func (m *LegacyInterfaceType) GetAddressAllocatorDBEntries(ctx context.Context, 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -7703,7 +7099,6 @@ func (m *LegacyInterfaceType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTunnel() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTunnel().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTunnel().GetDRefInfo() FAILED")
@@ -7713,7 +7108,6 @@ func (m *LegacyInterfaceType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tunnel." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *LegacyInterfaceType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
@@ -7738,7 +7132,6 @@ func (m *LegacyInterfaceType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -7757,7 +7150,6 @@ func (m *LegacyInterfaceType) GetVirtualNetworkDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -7766,7 +7158,6 @@ type ValidateLegacyInterfaceType struct {
 }
 
 func (v *ValidateLegacyInterfaceType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceType)
@@ -7780,9 +7171,7 @@ func (v *ValidateLegacyInterfaceType) TypeValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLegacyInterfaceType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -7790,9 +7179,7 @@ func (v *ValidateLegacyInterfaceType) MtuValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLegacyInterfaceType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7838,9 +7225,7 @@ func (v *ValidateLegacyInterfaceType) VirtualNetworkValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLegacyInterfaceType) DhcpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceDHCP)
@@ -7854,9 +7239,7 @@ func (v *ValidateLegacyInterfaceType) DhcpAddressValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLegacyInterfaceType) DHCPServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceDHCPServer)
@@ -7870,9 +7253,7 @@ func (v *ValidateLegacyInterfaceType) DHCPServerValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLegacyInterfaceType) DeviceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device_name")
@@ -7880,9 +7261,7 @@ func (v *ValidateLegacyInterfaceType) DeviceNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLegacyInterfaceType) VlanTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_tag")
@@ -7890,9 +7269,7 @@ func (v *ValidateLegacyInterfaceType) VlanTagValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLegacyInterfaceType) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
@@ -7900,9 +7277,7 @@ func (v *ValidateLegacyInterfaceType) PriorityValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLegacyInterfaceType) AddressAllocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7962,58 +7337,41 @@ func (v *ValidateLegacyInterfaceType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["DHCP_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("DHCP_server"))
 		if err := fv(ctx, m.GetDHCPServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["DNS_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("DNS_server"))
 		if err := fv(ctx, m.GetDNSServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address_allocator"]; exists {
 		vOpts := append(opts, db.WithValidateField("address_allocator"))
 		if err := fv(ctx, m.GetAddressAllocator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_gateway"))
 		if err := fv(ctx, m.GetDefaultGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_name"))
 		if err := fv(ctx, m.GetDeviceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dhcp_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dhcp_address"))
 		if err := fv(ctx, m.GetDhcpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMonitoringChoice().(type) {
@@ -8039,29 +7397,20 @@ func (v *ValidateLegacyInterfaceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_addresses"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("static_addresses"))
 		for idx, item := range m.GetStaticAddresses() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -8069,60 +7418,43 @@ func (v *ValidateLegacyInterfaceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel"))
 		if err := fv(ctx, m.GetTunnel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan_tag"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_tag"))
 		if err := fv(ctx, m.GetVlanTag(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan_tagging"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_tagging"))
 		if err := fv(ctx, m.GetVlanTagging(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLegacyInterfaceTypeValidator = func() *ValidateLegacyInterfaceType {
 	v := &ValidateLegacyInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8232,13 +7564,9 @@ var DefaultLegacyInterfaceTypeValidator = func() *ValidateLegacyInterfaceType {
 		panic(errMsg)
 	}
 	v.FldValidators["address_allocator"] = vFn
-
 	v.FldValidators["static_addresses"] = ves_io_schema.Ipv4SubnetTypeValidator().Validate
-
 	v.FldValidators["default_gateway"] = NetworkInterfaceDFGWValidator().Validate
-
 	v.FldValidators["DNS_server"] = NetworkInterfaceDNSValidator().Validate
-
 	v.FldValidators["tunnel"] = NetworkInterfaceTunnelValidator().Validate
 
 	return v
@@ -8302,7 +7630,6 @@ func (v *ValidateLinkQualityMonitorConfig) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -8365,15 +7692,12 @@ func (m *LoopbackInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpv6AddressChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpv6AddressChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -8383,11 +7707,8 @@ func (m *LoopbackInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetAddressChoice().(type) {
 	case *LoopbackInterfaceType_DhcpClient:
-
 		return nil, nil
-
 	case *LoopbackInterfaceType_DhcpServer:
-
 		drInfos, err := m.GetDhcpServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfo() FAILED")
@@ -8397,9 +7718,7 @@ func (m *LoopbackInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "dhcp_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *LoopbackInterfaceType_StaticIp:
-
 		drInfos, err := m.GetStaticIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIp().GetDRefInfo() FAILED")
@@ -8409,11 +7728,9 @@ func (m *LoopbackInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "static_ip." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -8423,11 +7740,8 @@ func (m *LoopbackInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetIpv6AddressChoice().(type) {
 	case *LoopbackInterfaceType_NoIpv6Address:
-
 		return nil, nil
-
 	case *LoopbackInterfaceType_StaticIpv6Address:
-
 		drInfos, err := m.GetStaticIpv6Address().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIpv6Address().GetDRefInfo() FAILED")
@@ -8437,11 +7751,9 @@ func (m *LoopbackInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "static_ipv6_address." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateLoopbackInterfaceType struct {
@@ -8455,7 +7767,6 @@ func (v *ValidateLoopbackInterfaceType) AddressChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateLoopbackInterfaceType) NetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8463,7 +7774,6 @@ func (v *ValidateLoopbackInterfaceType) NetworkChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateLoopbackInterfaceType) NodeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8479,9 +7789,7 @@ func (v *ValidateLoopbackInterfaceType) NodeChoiceNodeValidationRuleHandler(rule
 	}
 	return oValidatorFn_Node, nil
 }
-
 func (v *ValidateLoopbackInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
@@ -8489,9 +7797,7 @@ func (v *ValidateLoopbackInterfaceType) DeviceValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLoopbackInterfaceType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -8558,16 +7864,12 @@ func (v *ValidateLoopbackInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetIpv6AddressChoice().(type) {
@@ -8593,16 +7895,12 @@ func (v *ValidateLoopbackInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_choice"]; exists {
@@ -8649,7 +7947,6 @@ func (v *ValidateLoopbackInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["node_choice"]; exists {
@@ -8685,16 +7982,13 @@ func (v *ValidateLoopbackInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceType {
 	v := &ValidateLoopbackInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8702,7 +7996,6 @@ var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
 	rulesAddressChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8713,7 +8006,6 @@ var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["address_choice"] = vFn
-
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8724,7 +8016,6 @@ var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["network_choice"] = vFn
-
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8735,7 +8026,6 @@ var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["node_choice"] = vFn
-
 	vrhNodeChoiceNode := v.NodeChoiceNodeValidationRuleHandler
 	rulesNodeChoiceNode := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -8746,7 +8036,6 @@ var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LoopbackInterfaceType.node_choice_node: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["node_choice.node"] = vFnMap["node_choice.node"]
 
 	vrhDevice := v.DeviceValidationRuleHandler
@@ -8772,10 +8061,8 @@ var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["mtu"] = vFn
-
 	v.FldValidators["address_choice.dhcp_server"] = DHCPServerParametersTypeValidator().Validate
 	v.FldValidators["address_choice.static_ip"] = StaticIPParametersTypeValidator().Validate
-
 	v.FldValidators["ipv6_address_choice.static_ipv6_address"] = StaticIPParametersTypeValidator().Validate
 
 	return v
@@ -8827,7 +8114,6 @@ type ValidateNetworkInterfaceDFGW struct {
 }
 
 func (v *ValidateNetworkInterfaceDFGW) DefaultGatewayModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceGatewayMode)
@@ -8855,32 +8141,24 @@ func (v *ValidateNetworkInterfaceDFGW) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_gateway_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_gateway_address"))
 		if err := fv(ctx, m.GetDefaultGatewayAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_gateway_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_gateway_mode"))
 		if err := fv(ctx, m.GetDefaultGatewayMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkInterfaceDFGWValidator = func() *ValidateNetworkInterfaceDFGW {
 	v := &ValidateNetworkInterfaceDFGW{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8899,7 +8177,6 @@ var DefaultNetworkInterfaceDFGWValidator = func() *ValidateNetworkInterfaceDFGW 
 		panic(errMsg)
 	}
 	v.FldValidators["default_gateway_mode"] = vFn
-
 	v.FldValidators["default_gateway_address"] = ves_io_schema.Ipv4AddressTypeValidator().Validate
 
 	return v
@@ -8951,7 +8228,6 @@ type ValidateNetworkInterfaceDNS struct {
 }
 
 func (v *ValidateNetworkInterfaceDNS) DnsModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(NetworkInterfaceDNSMode)
@@ -8979,18 +8255,13 @@ func (v *ValidateNetworkInterfaceDNS) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_mode"))
 		if err := fv(ctx, m.GetDnsMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_server"))
 		for idx, item := range m.GetDnsServer() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -8998,16 +8269,13 @@ func (v *ValidateNetworkInterfaceDNS) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkInterfaceDNSValidator = func() *ValidateNetworkInterfaceDNS {
 	v := &ValidateNetworkInterfaceDNS{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9026,7 +8294,6 @@ var DefaultNetworkInterfaceDNSValidator = func() *ValidateNetworkInterfaceDNS {
 		panic(errMsg)
 	}
 	v.FldValidators["dns_mode"] = vFn
-
 	v.FldValidators["dns_server"] = ves_io_schema.Ipv4AddressTypeValidator().Validate
 
 	return v
@@ -9090,16 +8357,12 @@ func (v *ValidateNetworkInterfaceStatus) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["up_down"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("up_down"))
 		if err := fv(ctx, m.GetUpDown(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -9157,7 +8420,6 @@ func (m *NetworkInterfaceTunnel) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTunnelDRefInfo()
-
 }
 
 func (m *NetworkInterfaceTunnel) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
@@ -9182,7 +8444,6 @@ func (m *NetworkInterfaceTunnel) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTunnelDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -9201,7 +8462,6 @@ func (m *NetworkInterfaceTunnel) GetTunnelDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -9210,7 +8470,6 @@ type ValidateNetworkInterfaceTunnel struct {
 }
 
 func (v *ValidateNetworkInterfaceTunnel) TunnelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -9270,22 +8529,18 @@ func (v *ValidateNetworkInterfaceTunnel) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tunnel"]; exists {
 		vOpts := append(opts, db.WithValidateField("tunnel"))
 		if err := fv(ctx, m.GetTunnel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkInterfaceTunnelValidator = func() *ValidateNetworkInterfaceTunnel {
 	v := &ValidateNetworkInterfaceTunnel{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9355,7 +8610,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -9365,11 +8619,8 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *ReplaceSpecType_DedicatedInterface:
-
 		return nil, nil
-
 	case *ReplaceSpecType_EthernetInterface:
-
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -9379,9 +8630,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ethernet_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_TunnelInterface:
-
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -9391,9 +8640,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tunnel_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_LegacyInterface:
-
 		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
@@ -9403,19 +8650,13 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "legacy_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_DedicatedManagementInterface:
-
 		return nil, nil
-
 	case *ReplaceSpecType_Layer2Interface:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -9521,16 +8762,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9538,7 +8776,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9549,7 +8786,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_choice"] = vFn
-
 	v.FldValidators["interface_choice.dedicated_interface"] = DedicatedInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.ethernet_interface"] = EthernetInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
@@ -9607,7 +8843,6 @@ func (m *StaticIPParametersType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkPrefixChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -9617,15 +8852,10 @@ func (m *StaticIPParametersType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo
 	}
 	switch m.GetNetworkPrefixChoice().(type) {
 	case *StaticIPParametersType_NodeStaticIp:
-
 		return nil, nil
-
 	case *StaticIPParametersType_ClusterStaticIp:
-
 		return nil, nil
-
 	case *StaticIPParametersType_FleetStaticIp:
-
 		drInfos, err := m.GetFleetStaticIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFleetStaticIp().GetDRefInfo() FAILED")
@@ -9635,11 +8865,9 @@ func (m *StaticIPParametersType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo
 			dri.DRField = "fleet_static_ip." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateStaticIPParametersType struct {
@@ -9712,16 +8940,13 @@ func (v *ValidateStaticIPParametersType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStaticIPParametersTypeValidator = func() *ValidateStaticIPParametersType {
 	v := &ValidateStaticIPParametersType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9729,7 +8954,6 @@ var DefaultStaticIPParametersTypeValidator = func() *ValidateStaticIPParametersT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNetworkPrefixChoice := v.NetworkPrefixChoiceValidationRuleHandler
 	rulesNetworkPrefixChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9740,7 +8964,6 @@ var DefaultStaticIPParametersTypeValidator = func() *ValidateStaticIPParametersT
 		panic(errMsg)
 	}
 	v.FldValidators["network_prefix_choice"] = vFn
-
 	v.FldValidators["network_prefix_choice.node_static_ip"] = StaticIpParametersNodeTypeValidator().Validate
 	v.FldValidators["network_prefix_choice.cluster_static_ip"] = StaticIpParametersClusterTypeValidator().Validate
 	v.FldValidators["network_prefix_choice.fleet_static_ip"] = StaticIpParametersFleetTypeValidator().Validate
@@ -9794,7 +9017,6 @@ type ValidateStaticIpParametersClusterType struct {
 }
 
 func (v *ValidateStaticIpParametersClusterType) InterfaceIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -9846,22 +9068,18 @@ func (v *ValidateStaticIpParametersClusterType) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface_ip_map"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_ip_map"))
 		if err := fv(ctx, m.GetInterfaceIpMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStaticIpParametersClusterTypeValidator = func() *ValidateStaticIpParametersClusterType {
 	v := &ValidateStaticIpParametersClusterType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9933,11 +9151,9 @@ func (m *StaticIpParametersFleetType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkPrefixAllocatorDRefInfo()
-
 }
 
 func (m *StaticIpParametersFleetType) GetNetworkPrefixAllocatorDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetNetworkPrefixAllocator()
 	if vref == nil {
 		return nil, nil
@@ -9953,7 +9169,6 @@ func (m *StaticIpParametersFleetType) GetNetworkPrefixAllocatorDRefInfo() ([]db.
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetNetworkPrefixAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -9963,7 +9178,6 @@ func (m *StaticIpParametersFleetType) GetNetworkPrefixAllocatorDBEntries(ctx con
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: address_allocator")
 	}
-
 	vref := m.GetNetworkPrefixAllocator()
 	if vref == nil {
 		return nil, nil
@@ -9981,7 +9195,6 @@ func (m *StaticIpParametersFleetType) GetNetworkPrefixAllocatorDBEntries(ctx con
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -9990,7 +9203,6 @@ type ValidateStaticIpParametersFleetType struct {
 }
 
 func (v *ValidateStaticIpParametersFleetType) DefaultGwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for default_gw")
@@ -9998,9 +9210,7 @@ func (v *ValidateStaticIpParametersFleetType) DefaultGwValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateStaticIpParametersFleetType) DnsServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_server")
@@ -10022,41 +9232,30 @@ func (v *ValidateStaticIpParametersFleetType) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_gw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_gw"))
 		if err := fv(ctx, m.GetDefaultGw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_server"))
 		if err := fv(ctx, m.GetDnsServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_prefix_allocator"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_prefix_allocator"))
 		if err := fv(ctx, m.GetNetworkPrefixAllocator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStaticIpParametersFleetTypeValidator = func() *ValidateStaticIpParametersFleetType {
 	v := &ValidateStaticIpParametersFleetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -10086,7 +9285,6 @@ var DefaultStaticIpParametersFleetTypeValidator = func() *ValidateStaticIpParame
 		panic(errMsg)
 	}
 	v.FldValidators["dns_server"] = vFn
-
 	v.FldValidators["network_prefix_allocator"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -10138,7 +9336,6 @@ type ValidateStaticIpParametersNodeType struct {
 }
 
 func (v *ValidateStaticIpParametersNodeType) IpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_address")
@@ -10146,9 +9343,7 @@ func (v *ValidateStaticIpParametersNodeType) IpAddressValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateStaticIpParametersNodeType) DefaultGwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for default_gw")
@@ -10156,9 +9351,7 @@ func (v *ValidateStaticIpParametersNodeType) DefaultGwValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateStaticIpParametersNodeType) DnsServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_server")
@@ -10180,41 +9373,30 @@ func (v *ValidateStaticIpParametersNodeType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_gw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_gw"))
 		if err := fv(ctx, m.GetDefaultGw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_server"))
 		if err := fv(ctx, m.GetDnsServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_address"))
 		if err := fv(ctx, m.GetIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStaticIpParametersNodeTypeValidator = func() *ValidateStaticIpParametersNodeType {
 	v := &ValidateStaticIpParametersNodeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -10312,27 +9494,22 @@ func (m *TunnelInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticIpDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticIpDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTunnelDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *TunnelInterfaceType) GetCloudConnectDRefInfo() ([]db.DRefInfo, error) {
@@ -10357,7 +9534,6 @@ func (m *TunnelInterfaceType) GetCloudConnectDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCloudConnectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10376,22 +9552,16 @@ func (m *TunnelInterfaceType) GetCloudConnectDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *TunnelInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *TunnelInterfaceType_SiteLocalNetwork:
-
 		return nil, nil
-
 	case *TunnelInterfaceType_SiteLocalInsideNetwork:
-
 		return nil, nil
-
 	case *TunnelInterfaceType_InsideNetwork:
-
 		vref := m.GetInsideNetwork()
 		if vref == nil {
 			return nil, nil
@@ -10407,7 +9577,6 @@ func (m *TunnelInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -10419,15 +9588,12 @@ func (m *TunnelInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d d
 
 	switch m.GetNetworkChoice().(type) {
 	case *TunnelInterfaceType_SiteLocalNetwork:
-
 	case *TunnelInterfaceType_SiteLocalInsideNetwork:
-
 	case *TunnelInterfaceType_InsideNetwork:
 		refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
 		}
-
 		vref := m.GetInsideNetwork()
 		if vref == nil {
 			return nil, nil
@@ -10445,7 +9611,6 @@ func (m *TunnelInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -10456,7 +9621,6 @@ func (m *TunnelInterfaceType) GetStaticIpDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticIp() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetStaticIp().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetStaticIp().GetDRefInfo() FAILED")
@@ -10466,11 +9630,9 @@ func (m *TunnelInterfaceType) GetStaticIpDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "static_ip." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *TunnelInterfaceType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetTunnel()
 	if vref == nil {
 		return nil, nil
@@ -10486,7 +9648,6 @@ func (m *TunnelInterfaceType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetTunnelDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -10496,7 +9657,6 @@ func (m *TunnelInterfaceType) GetTunnelDBEntries(ctx context.Context, d db.Inter
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: tunnel")
 	}
-
 	vref := m.GetTunnel()
 	if vref == nil {
 		return nil, nil
@@ -10514,7 +9674,6 @@ func (m *TunnelInterfaceType) GetTunnelDBEntries(ctx context.Context, d db.Inter
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -10529,7 +9688,6 @@ func (v *ValidateTunnelInterfaceType) NetworkChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateTunnelInterfaceType) NodeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -10545,9 +9703,7 @@ func (v *ValidateTunnelInterfaceType) NodeChoiceNodeValidationRuleHandler(rules 
 	}
 	return oValidatorFn_Node, nil
 }
-
 func (v *ValidateTunnelInterfaceType) TunnelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for tunnel")
@@ -10556,19 +9712,15 @@ func (v *ValidateTunnelInterfaceType) TunnelValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTunnelInterfaceType) StaticIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for static_ip")
@@ -10577,19 +9729,15 @@ func (v *ValidateTunnelInterfaceType) StaticIpValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := StaticIPParametersTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTunnelInterfaceType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -10597,9 +9745,7 @@ func (v *ValidateTunnelInterfaceType) MtuValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTunnelInterfaceType) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
@@ -10607,9 +9753,7 @@ func (v *ValidateTunnelInterfaceType) PriorityValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTunnelInterfaceType) CloudConnectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -10669,22 +9813,17 @@ func (v *ValidateTunnelInterfaceType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_connect"]; exists {
 		vOpts := append(opts, db.WithValidateField("cloud_connect"))
 		if err := fv(ctx, m.GetCloudConnect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_choice"]; exists {
@@ -10731,7 +9870,6 @@ func (v *ValidateTunnelInterfaceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["node_choice"]; exists {
@@ -10767,43 +9905,31 @@ func (v *ValidateTunnelInterfaceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["static_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("static_ip"))
 		if err := fv(ctx, m.GetStaticIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel"))
 		if err := fv(ctx, m.GetTunnel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 	v := &ValidateTunnelInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -10811,7 +9937,6 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -10822,7 +9947,6 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_choice"] = vFn
-
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -10833,7 +9957,6 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 		panic(errMsg)
 	}
 	v.FldValidators["node_choice"] = vFn
-
 	vrhNodeChoiceNode := v.NodeChoiceNodeValidationRuleHandler
 	rulesNodeChoiceNode := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -10844,7 +9967,6 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field TunnelInterfaceType.node_choice_node: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["node_choice.node"] = vFnMap["node_choice.node"]
 
 	vrhTunnel := v.TunnelValidationRuleHandler
@@ -10902,7 +10024,6 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud_connect"] = vFn
-
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -11019,16 +10140,13 @@ func (v *ValidateVhostInterfaceType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVhostInterfaceTypeValidator = func() *ValidateVhostInterfaceType {
 	v := &ValidateVhostInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -11036,7 +10154,6 @@ var DefaultVhostInterfaceTypeValidator = func() *ValidateVhostInterfaceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHostChoice := v.HostChoiceValidationRuleHandler
 	rulesHostChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 F5 Inc. All rights reserved.
+// Copyright (c) 2026 F5 Inc. All rights reserved.
 //
 
 package volterra
@@ -336,11 +336,13 @@ func getSiteReplaceForm(d *schema.ResourceData,
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-				coordinates.Latitude = w.(float32)
+				val64 := w.(float64)
+				coordinates.Latitude = float32(val64)
 			}
 
 			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-				coordinates.Longitude = w.(float32)
+				val64 := w.(float64)
+				coordinates.Longitude = float32(val64)
 			}
 
 		}

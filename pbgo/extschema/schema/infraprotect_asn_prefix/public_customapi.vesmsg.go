@@ -70,9 +70,7 @@ func (v *ValidateUpdateASNPrefixIRROverrideRequest) IrrOverrideValidationRuleHan
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateASNPrefixIRROverrideRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -128,34 +126,25 @@ func (v *ValidateUpdateASNPrefixIRROverrideRequest) Validate(ctx context.Context
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateASNPrefixIRROverrideRequestValidator = func() *ValidateUpdateASNPrefixIRROverrideRequest {
 	v := &ValidateUpdateASNPrefixIRROverrideRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -163,7 +152,6 @@ var DefaultUpdateASNPrefixIRROverrideRequestValidator = func() *ValidateUpdateAS
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIrrOverride := v.IrrOverrideValidationRuleHandler
 	rulesIrrOverride := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -247,7 +235,6 @@ func (v *ValidateUpdateASNPrefixIRROverrideResponse) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -310,9 +297,7 @@ func (v *ValidateUpdateASNPrefixReviewStatusRequest) ReviewTypeValidationRuleHan
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateASNPrefixReviewStatusRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -334,23 +319,17 @@ func (v *ValidateUpdateASNPrefixReviewStatusRequest) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["review_type"]; exists {
@@ -397,16 +376,13 @@ func (v *ValidateUpdateASNPrefixReviewStatusRequest) Validate(ctx context.Contex
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateASNPrefixReviewStatusRequestValidator = func() *ValidateUpdateASNPrefixReviewStatusRequest {
 	v := &ValidateUpdateASNPrefixReviewStatusRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -414,7 +390,6 @@ var DefaultUpdateASNPrefixReviewStatusRequestValidator = func() *ValidateUpdateA
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhReviewType := v.ReviewTypeValidationRuleHandler
 	rulesReviewType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -498,7 +473,6 @@ func (v *ValidateUpdateASNPrefixReviewStatusResponse) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

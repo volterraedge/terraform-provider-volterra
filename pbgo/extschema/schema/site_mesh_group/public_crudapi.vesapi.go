@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.site_mesh_group.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2325,10 +2302,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -2950,16 +2927,78 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemasite_mesh_groupBFD": {
+            "type": "object",
+            "description": "BFD parameters.",
+            "title": "BFD",
+            "x-displayname": "BFD",
+            "x-ves-proto-message": "ves.io.schema.site_mesh_group.BFD",
+            "properties": {
+                "multiplier": {
+                    "type": "integer",
+                    "description": " Specify Number of missed packets to bring session down\"\n\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 2\n  ves.io.schema.rules.uint32.lte: 255\n",
+                    "title": "Multiplier",
+                    "format": "int64",
+                    "x-displayname": "Multiplier",
+                    "x-ves-example": "3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "2",
+                        "ves.io.schema.rules.uint32.lte": "255"
+                    }
+                },
+                "receive_interval_milliseconds": {
+                    "type": "integer",
+                    "description": " BFD receive interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 300\n  ves.io.schema.rules.uint32.lte: 60000\n",
+                    "title": "Receive Interval in milliseconds",
+                    "format": "int64",
+                    "x-displayname": "Minimum Receive Interval",
+                    "x-ves-example": "3000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "300",
+                        "ves.io.schema.rules.uint32.lte": "60000"
+                    }
+                },
+                "transmit_interval_milliseconds": {
+                    "type": "integer",
+                    "description": " BFD transmit interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 300\n  ves.io.schema.rules.uint32.lte: 60000\n",
+                    "title": "Transmit Interval in milliseconds",
+                    "format": "int64",
+                    "x-displayname": "Transmit Interval",
+                    "x-ves-example": "3000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "300",
+                        "ves.io.schema.rules.uint32.lte": "60000"
+                    }
+                }
+            }
+        },
         "schemasite_mesh_groupCreateSpecType": {
             "type": "object",
             "description": "Create a Site Mesh Group in system namespace of user",
             "title": "Create site mesh group",
             "x-displayname": "Create Site Mesh Group",
             "x-ves-displayorder": "1,3,4",
+            "x-ves-oneof-field-bfd_choice": "[\"bfd_disabled\",\"bfd_enabled\"]",
             "x-ves-oneof-field-mesh_choice": "[\"full_mesh\",\"hub_mesh\",\"spoke_mesh\"]",
             "x-ves-oneof-field-re_fallback": "[\"disable_re_fallback\",\"enable_re_fallback\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.CreateSpecType",
             "properties": {
+                "bfd_disabled": {
+                    "description": "Exclusive with [bfd_enabled]\n Disable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "bfd_enabled": {
+                    "description": "Exclusive with [bfd_disabled]\n Enable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group.",
+                    "$ref": "#/definitions/schemasite_mesh_groupBFD",
+                    "x-displayname": "Enabled"
+                },
                 "disable_re_fallback": {
                     "description": "Exclusive with [enable_re_fallback]\n Disable RE Fallback connectivity when SMG fails",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -3005,10 +3044,21 @@ var APISwaggerJSON string = `{
             "title": "Get site mesh group",
             "x-displayname": "Get Site Mesh Group",
             "x-ves-displayorder": "1,3,4,2",
+            "x-ves-oneof-field-bfd_choice": "[\"bfd_disabled\",\"bfd_enabled\"]",
             "x-ves-oneof-field-mesh_choice": "[\"full_mesh\",\"hub_mesh\",\"spoke_mesh\"]",
             "x-ves-oneof-field-re_fallback": "[\"disable_re_fallback\",\"enable_re_fallback\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.GetSpecType",
             "properties": {
+                "bfd_disabled": {
+                    "description": "Exclusive with [bfd_enabled]\n Disable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "bfd_enabled": {
+                    "description": "Exclusive with [bfd_disabled]\n Enable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group.",
+                    "$ref": "#/definitions/schemasite_mesh_groupBFD",
+                    "x-displayname": "Enabled"
+                },
                 "disable_re_fallback": {
                     "description": "Exclusive with [enable_re_fallback]\n Disable RE Fallback connectivity when SMG fails",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -3054,10 +3104,21 @@ var APISwaggerJSON string = `{
             "title": "Replace site mesh group",
             "x-displayname": "Replace Site Mesh Group",
             "x-ves-displayorder": "1,3,4",
+            "x-ves-oneof-field-bfd_choice": "[\"bfd_disabled\",\"bfd_enabled\"]",
             "x-ves-oneof-field-mesh_choice": "[\"full_mesh\",\"hub_mesh\",\"spoke_mesh\"]",
             "x-ves-oneof-field-re_fallback": "[\"disable_re_fallback\",\"enable_re_fallback\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.ReplaceSpecType",
             "properties": {
+                "bfd_disabled": {
+                    "description": "Exclusive with [bfd_enabled]\n Disable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "bfd_enabled": {
+                    "description": "Exclusive with [bfd_disabled]\n Enable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group.",
+                    "$ref": "#/definitions/schemasite_mesh_groupBFD",
+                    "x-displayname": "Enabled"
+                },
                 "disable_re_fallback": {
                     "description": "Exclusive with [enable_re_fallback]\n Disable RE Fallback connectivity when SMG fails",
                     "$ref": "#/definitions/ioschemaEmpty",

@@ -64,7 +64,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ObjectTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for object_type")
@@ -72,9 +71,7 @@ func (v *ValidateGlobalSpecType) ObjectTypeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -82,9 +79,7 @@ func (v *ValidateGlobalSpecType) NameValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -92,9 +87,7 @@ func (v *ValidateGlobalSpecType) VersionValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ContentHashValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for content_hash")
@@ -116,50 +109,35 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["content_format"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_format"))
 		if err := fv(ctx, m.GetContentFormat(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_hash"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_hash"))
 		if err := fv(ctx, m.GetContentHash(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_transport"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_transport"))
 		if err := fv(ctx, m.GetContentTransport(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_url_in_storage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_url_in_storage"))
 		if err := fv(ctx, m.GetContentUrlInStorage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetObjectAttributes().(type) {
@@ -207,34 +185,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *GlobalSpecType_MobileSdkSelfServe:
+		if fv, exists := v.FldValidators["object_attributes.mobile_sdk_self_serve"]; exists {
+			val := m.GetObjectAttributes().(*GlobalSpecType_MobileSdkSelfServe).MobileSdkSelfServe
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_sdk_self_serve"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	if fv, exists := v.FldValidators["object_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_type"))
 		if err := fv(ctx, m.GetObjectType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -286,10 +266,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["content_hash"] = vFn
-
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_app_shield"] = MobileAppShieldAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_sdk_self_serve"] = MobileSDKAttributesValidator().Validate
 
 	return v
 }()

@@ -70,11 +70,9 @@ func (m *ApiGroupScopeApiDefinition) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetApiDefinitionDRefInfo()
-
 }
 
 func (m *ApiGroupScopeApiDefinition) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil
@@ -90,7 +88,6 @@ func (m *ApiGroupScopeApiDefinition) GetApiDefinitionDRefInfo() ([]db.DRefInfo, 
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetApiDefinitionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -100,7 +97,6 @@ func (m *ApiGroupScopeApiDefinition) GetApiDefinitionDBEntries(ctx context.Conte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: api_definition")
 	}
-
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil
@@ -118,7 +114,6 @@ func (m *ApiGroupScopeApiDefinition) GetApiDefinitionDBEntries(ctx context.Conte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -127,7 +122,6 @@ type ValidateApiGroupScopeApiDefinition struct {
 }
 
 func (v *ValidateApiGroupScopeApiDefinition) ApiDefinitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_definition")
@@ -136,11 +130,9 @@ func (v *ValidateApiGroupScopeApiDefinition) ApiDefinitionValidationRuleHandler(
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -160,23 +152,18 @@ func (v *ValidateApiGroupScopeApiDefinition) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_definition"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_definition"))
 		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiGroupScopeApiDefinitionValidator = func() *ValidateApiGroupScopeApiDefinition {
 	v := &ValidateApiGroupScopeApiDefinition{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -246,11 +233,9 @@ func (m *ApiGroupScopeBIGIPVirtualServer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetBigipVirtualServerDRefInfo()
-
 }
 
 func (m *ApiGroupScopeBIGIPVirtualServer) GetBigipVirtualServerDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetBigipVirtualServer()
 	if vref == nil {
 		return nil, nil
@@ -266,7 +251,6 @@ func (m *ApiGroupScopeBIGIPVirtualServer) GetBigipVirtualServerDRefInfo() ([]db.
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetBigipVirtualServerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -276,7 +260,6 @@ func (m *ApiGroupScopeBIGIPVirtualServer) GetBigipVirtualServerDBEntries(ctx con
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_virtual_server")
 	}
-
 	vref := m.GetBigipVirtualServer()
 	if vref == nil {
 		return nil, nil
@@ -294,7 +277,6 @@ func (m *ApiGroupScopeBIGIPVirtualServer) GetBigipVirtualServerDBEntries(ctx con
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -303,7 +285,6 @@ type ValidateApiGroupScopeBIGIPVirtualServer struct {
 }
 
 func (v *ValidateApiGroupScopeBIGIPVirtualServer) BigipVirtualServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bigip_virtual_server")
@@ -312,11 +293,9 @@ func (v *ValidateApiGroupScopeBIGIPVirtualServer) BigipVirtualServerValidationRu
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -336,23 +315,18 @@ func (v *ValidateApiGroupScopeBIGIPVirtualServer) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bigip_virtual_server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigip_virtual_server"))
 		if err := fv(ctx, m.GetBigipVirtualServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiGroupScopeBIGIPVirtualServerValidator = func() *ValidateApiGroupScopeBIGIPVirtualServer {
 	v := &ValidateApiGroupScopeBIGIPVirtualServer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -422,11 +396,9 @@ func (m *ApiGroupScopeCDNLoadbalancer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCdnLoadbalancerDRefInfo()
-
 }
 
 func (m *ApiGroupScopeCDNLoadbalancer) GetCdnLoadbalancerDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCdnLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -442,7 +414,6 @@ func (m *ApiGroupScopeCDNLoadbalancer) GetCdnLoadbalancerDRefInfo() ([]db.DRefIn
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCdnLoadbalancerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -452,7 +423,6 @@ func (m *ApiGroupScopeCDNLoadbalancer) GetCdnLoadbalancerDBEntries(ctx context.C
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cdn_loadbalancer")
 	}
-
 	vref := m.GetCdnLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -470,7 +440,6 @@ func (m *ApiGroupScopeCDNLoadbalancer) GetCdnLoadbalancerDBEntries(ctx context.C
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -479,7 +448,6 @@ type ValidateApiGroupScopeCDNLoadbalancer struct {
 }
 
 func (v *ValidateApiGroupScopeCDNLoadbalancer) CdnLoadbalancerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cdn_loadbalancer")
@@ -488,11 +456,9 @@ func (v *ValidateApiGroupScopeCDNLoadbalancer) CdnLoadbalancerValidationRuleHand
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -512,23 +478,18 @@ func (v *ValidateApiGroupScopeCDNLoadbalancer) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cdn_loadbalancer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cdn_loadbalancer"))
 		if err := fv(ctx, m.GetCdnLoadbalancer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiGroupScopeCDNLoadbalancerValidator = func() *ValidateApiGroupScopeCDNLoadbalancer {
 	v := &ValidateApiGroupScopeCDNLoadbalancer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -598,11 +559,9 @@ func (m *ApiGroupScopeHttpLoadbalancer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetHttpLoadbalancerDRefInfo()
-
 }
 
 func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancerDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetHttpLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -618,7 +577,6 @@ func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancerDRefInfo() ([]db.DRef
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetHttpLoadbalancerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -628,7 +586,6 @@ func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancerDBEntries(ctx context
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: http_loadbalancer")
 	}
-
 	vref := m.GetHttpLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -646,7 +603,6 @@ func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancerDBEntries(ctx context
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -655,7 +611,6 @@ type ValidateApiGroupScopeHttpLoadbalancer struct {
 }
 
 func (v *ValidateApiGroupScopeHttpLoadbalancer) HttpLoadbalancerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for http_loadbalancer")
@@ -664,11 +619,9 @@ func (v *ValidateApiGroupScopeHttpLoadbalancer) HttpLoadbalancerValidationRuleHa
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -688,23 +641,18 @@ func (v *ValidateApiGroupScopeHttpLoadbalancer) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_loadbalancer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_loadbalancer"))
 		if err := fv(ctx, m.GetHttpLoadbalancer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiGroupScopeHttpLoadbalancerValidator = func() *ValidateApiGroupScopeHttpLoadbalancer {
 	v := &ValidateApiGroupScopeHttpLoadbalancer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -774,7 +722,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetScopeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -784,11 +731,8 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetScopeChoice().(type) {
 	case *CreateSpecType_Generic:
-
 		return nil, nil
-
 	case *CreateSpecType_HttpLoadbalancer:
-
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
@@ -798,9 +742,7 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_loadbalancer." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_ApiDefinition:
-
 		drInfos, err := m.GetApiDefinition().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
@@ -810,9 +752,7 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "api_definition." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_CdnLoadbalancer:
-
 		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfo() FAILED")
@@ -822,9 +762,7 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "cdn_loadbalancer." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_BigipVirtualServer:
-
 		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
@@ -834,11 +772,9 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "bigip_virtual_server." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -852,9 +788,7 @@ func (v *ValidateCreateSpecType) ScopeChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -914,22 +848,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_group_builder"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_builder"))
 		if err := fv(ctx, m.GetApiGroupBuilder(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["scope_choice"]; exists {
@@ -998,16 +927,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1015,7 +941,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhScopeChoice := v.ScopeChoiceValidationRuleHandler
 	rulesScopeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1038,12 +963,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["elements"] = vFn
-
 	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
 	v.FldValidators["scope_choice.cdn_loadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.bigip_virtual_server"] = ApiGroupScopeBIGIPVirtualServerValidator().Validate
-
 	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
 	return v
@@ -1096,7 +1019,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetScopeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1106,11 +1028,8 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetScopeChoice().(type) {
 	case *GetSpecType_Generic:
-
 		return nil, nil
-
 	case *GetSpecType_HttpLoadbalancer:
-
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
@@ -1120,9 +1039,7 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_loadbalancer." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_ApiDefinition:
-
 		drInfos, err := m.GetApiDefinition().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
@@ -1132,9 +1049,7 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "api_definition." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_CdnLoadbalancer:
-
 		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfo() FAILED")
@@ -1144,9 +1059,7 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "cdn_loadbalancer." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_BigipVirtualServer:
-
 		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
@@ -1156,11 +1069,9 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "bigip_virtual_server." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -1174,9 +1085,7 @@ func (v *ValidateGetSpecType) ScopeChoiceValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1236,31 +1145,23 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoints_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_endpoints_count"))
 		if err := fv(ctx, m.GetApiEndpointsCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_group_builder"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_builder"))
 		if err := fv(ctx, m.GetApiGroupBuilder(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["scope_choice"]; exists {
@@ -1329,16 +1230,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1346,7 +1244,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhScopeChoice := v.ScopeChoiceValidationRuleHandler
 	rulesScopeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1369,12 +1266,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["elements"] = vFn
-
 	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
 	v.FldValidators["scope_choice.cdn_loadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.bigip_virtual_server"] = ApiGroupScopeBIGIPVirtualServerValidator().Validate
-
 	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
 	return v
@@ -1432,15 +1327,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1450,11 +1342,8 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetScopeChoice().(type) {
 	case *GlobalSpecType_Generic:
-
 		return nil, nil
-
 	case *GlobalSpecType_HttpLoadbalancer:
-
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
@@ -1464,9 +1353,7 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_loadbalancer." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_ApiDefinition:
-
 		drInfos, err := m.GetApiDefinition().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
@@ -1476,9 +1363,7 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "api_definition." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_CdnLoadbalancer:
-
 		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfo() FAILED")
@@ -1488,9 +1373,7 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "cdn_loadbalancer." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_BigipVirtualServer:
-
 		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
@@ -1500,15 +1383,12 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "bigip_virtual_server." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1524,7 +1404,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1534,7 +1413,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1552,7 +1430,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1567,9 +1444,7 @@ func (v *ValidateGlobalSpecType) ScopeChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1629,31 +1504,23 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoints_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_endpoints_count"))
 		if err := fv(ctx, m.GetApiEndpointsCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_group_builder"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_builder"))
 		if err := fv(ctx, m.GetApiGroupBuilder(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["scope_choice"]; exists {
@@ -1722,25 +1589,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1748,7 +1609,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhScopeChoice := v.ScopeChoiceValidationRuleHandler
 	rulesScopeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1771,14 +1631,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["elements"] = vFn
-
 	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
 	v.FldValidators["scope_choice.cdn_loadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.bigip_virtual_server"] = ApiGroupScopeBIGIPVirtualServerValidator().Validate
-
 	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1831,7 +1688,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetScopeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1841,11 +1697,8 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetScopeChoice().(type) {
 	case *ReplaceSpecType_Generic:
-
 		return nil, nil
-
 	case *ReplaceSpecType_HttpLoadbalancer:
-
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
@@ -1855,9 +1708,7 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_loadbalancer." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_ApiDefinition:
-
 		drInfos, err := m.GetApiDefinition().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
@@ -1867,9 +1718,7 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "api_definition." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_CdnLoadbalancer:
-
 		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfo() FAILED")
@@ -1879,9 +1728,7 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "cdn_loadbalancer." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_BigipVirtualServer:
-
 		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
@@ -1891,11 +1738,9 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "bigip_virtual_server." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1909,9 +1754,7 @@ func (v *ValidateReplaceSpecType) ScopeChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1971,22 +1814,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_group_builder"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_builder"))
 		if err := fv(ctx, m.GetApiGroupBuilder(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["scope_choice"]; exists {
@@ -2055,16 +1893,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2072,7 +1907,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhScopeChoice := v.ScopeChoiceValidationRuleHandler
 	rulesScopeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2095,12 +1929,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["elements"] = vFn
-
 	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
 	v.FldValidators["scope_choice.cdn_loadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.bigip_virtual_server"] = ApiGroupScopeBIGIPVirtualServerValidator().Validate
-
 	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
 	return v

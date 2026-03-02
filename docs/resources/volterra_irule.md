@@ -19,10 +19,9 @@ Example Usage
 resource "volterra_irule" "example" {
   name        = "acmecorp-web"
   namespace   = "staging"
-  description = ["description"]
+  description = "description"
   irule       = ["when HTTP_REQUEST {if { !([HTTP::host] contains \".example.f5.com\") } {reject}}"]
 }
-
 ```
 
 Argument Reference
@@ -44,11 +43,11 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`description` - (Required) Specify Description for iRule (`String`).
+`spec_description` - (Required) Specify Description for iRule (`String`).
 
 `irule` - (Required) irule content (`String`).
 
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured irule.
+*   `id` - This is the id of the configured irule.

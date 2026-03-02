@@ -20,7 +20,6 @@ resource "volterra_bot_infrastructure" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -45,6 +44,8 @@ Argument Reference
 ###### One of the arguments from this list "create_cloud_hosted" can be set
 
 `create_cloud_hosted` - (Optional) Associates an F5 Cloud Hosted service node to the Bot Defense infrastructure. See [Create Bot Infra Choice Create Cloud Hosted ](#create-bot-infra-choice-create-cloud-hosted) below for details.
+
+`deployment_mode` - (Optional) By default, the mode will be Reverse Proxy. You need to submit a support ticket to request for API mode. (`String`).(Deprecated)
 
 `traffic_type` - (Optional) The type of traffic that is routed to and processed by this infrastructure (Web or Mobile). (`String`).
 
@@ -77,4 +78,4 @@ Test Evaluate new features, settings, and system performance..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured bot_infrastructure.
+*   `id` - This is the id of the configured bot_infrastructure.

@@ -29,7 +29,6 @@ resource "volterra_registration_approval" "example" {
   latitude = 37.3382
   longitude = 121.8863
 }
-
 ```
 
 ### Argument Reference
@@ -61,6 +60,7 @@ Attribute Reference
 
 ---
 
--	`id` - This is the id of Volterra registration object.
+-   `id` - This is the id of Volterra registration object.
 
--	`registration_name` - (Optional) Name of the registration object
+-   `registration_name` - (Optional) Name of the registration object
+

@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.application.uztna_application.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.uztna.application.uztna_application.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.application.uztna_application.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.uztna.application.uztna_application.AppCertificate"] = AppCertificateValidator()
 	vr["ves.io.schema.uztna.application.uztna_application.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.application.uztna_application.GetSpecType"] = GetSpecTypeValidator()
@@ -24,7 +22,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.application.uztna_application.Origin"] = OriginValidator()
 	vr["ves.io.schema.uztna.application.uztna_application.Protocol"] = ProtocolValidator()
 	vr["ves.io.schema.uztna.application.uztna_application.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -36,24 +33,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.uztna.application.uztna_application.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.uztna.application.uztna_application.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.uztna.application.uztna_application.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -62,20 +54,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

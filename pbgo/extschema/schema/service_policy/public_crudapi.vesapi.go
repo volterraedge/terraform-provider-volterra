@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.service_policy.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2875,7 +2852,7 @@ var APISwaggerJSON string = `{
         },
         "policyComparisonOperator": {
             "type": "string",
-            "description": "x-displayName: \"Comparison Operator\"\nSelect from one of the Comparison Operator.\n\n - COMPARISON_EXACT: exact value\n\nx-displayName: \"Exact\"\n - COMPARISON_CONTAIN: contain value\n\nx-displayName: \"Contain\"\n - COMPARISON_START_WITH: start with value \n\nx-displayName: \"Start With\"\n - COMPARISON_END_WITH: end with value \n\nx-displayName: \"End With\"",
+            "description": "x-displayName: \"Comparison Operator\"\nSelect from one of the Comparison Operator.\n\n - COMPARISON_EXACT: exact value\n\nx-displayName: \"Exact\"\n - COMPARISON_CONTAIN: contain value\n\nx-displayName: \"Contain\"\n - COMPARISON_START_WITH: start with value\n\nx-displayName: \"Start With\"\n - COMPARISON_END_WITH: end with value\n\nx-displayName: \"End With\"",
             "title": "Comparison Operator",
             "enum": [
                 "COMPARISON_EXACT",
@@ -4686,10 +4663,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -5508,6 +5485,13 @@ var APISwaggerJSON string = `{
             "x-displayname": "Path Matcher",
             "x-ves-proto-message": "ves.io.schema.policy.PathMatcherType",
             "properties": {
+                "encoded_path_matcher": {
+                    "type": "boolean",
+                    "description": "Match against the encoded, escaped path",
+                    "title": "Encoded_Path",
+                    "format": "boolean",
+                    "x-displayname": "Match Encoded Path"
+                },
                 "exact_values": {
                     "type": "array",
                     "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -6106,6 +6090,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
+                },
+                "log_rule_evaluation": {
+                    "type": "boolean",
+                    "description": " Log the rule match details along with the request and continue to evaluate rules in the sequence.",
+                    "title": "Log Rule Evaluation",
+                    "format": "boolean",
+                    "x-displayname": "Log Rule Evaluation"
                 },
                 "mum_action": {
                     "description": " Specifies how Malicious User Mitigation is handled",
@@ -6820,6 +6811,12 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Label Matcher\"\nx-example: \"['environment', 'location', 'deployment']\"\nA list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\nhere, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\nThe predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\nother labels do not matter.",
                     "title": "label matcher",
                     "$ref": "#/definitions/schemaLabelMatcherType"
+                },
+                "log_rule_evaluation": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Log Rule Evaluation\"\nLog the rule match details along with the request and continue to evaluate rules in the sequence.",
+                    "title": "Log Rule Evaluation",
+                    "format": "boolean"
                 },
                 "malware_protection_action": {
                     "description": "x-displayName: \"Malware Protection Action\"\nSpecifies how Malware Protection is handled",

@@ -74,9 +74,7 @@ func NewNamespaceCloudDataCustomAPIGrpcClient(cc *grpc.ClientConn) server.Custom
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -165,7 +163,6 @@ func (c *NamespaceCloudDataCustomAPIRestClient) doRPCSuggestValues(ctx context.C
 	pbRsp := &SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -199,9 +196,7 @@ func NewNamespaceCloudDataCustomAPIRestClient(baseURL string, hc http.Client) se
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -282,7 +277,6 @@ func (s *namespaceCloudDataCustomAPISrv) SuggestValues(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesResp", rsp)...)
 
 	return rsp, nil

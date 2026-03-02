@@ -64,7 +64,6 @@ type ValidateStorageClassListType struct {
 }
 
 func (v *ValidateStorageClassListType) StorageClassesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -124,22 +123,18 @@ func (v *ValidateStorageClassListType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["storage_classes"]; exists {
 		vOpts := append(opts, db.WithValidateField("storage_classes"))
 		if err := fv(ctx, m.GetStorageClasses(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStorageClassListTypeValidator = func() *ValidateStorageClassListType {
 	v := &ValidateStorageClassListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -209,7 +204,6 @@ type ValidateStorageClassOpenebsEnterpriseType struct {
 }
 
 func (v *ValidateStorageClassOpenebsEnterpriseType) StorageClassSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_class_size")
@@ -231,32 +225,24 @@ func (v *ValidateStorageClassOpenebsEnterpriseType) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["replication"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("replication"))
 		if err := fv(ctx, m.GetReplication(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["storage_class_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("storage_class_size"))
 		if err := fv(ctx, m.GetStorageClassSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStorageClassOpenebsEnterpriseTypeValidator = func() *ValidateStorageClassOpenebsEnterpriseType {
 	v := &ValidateStorageClassOpenebsEnterpriseType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -326,7 +312,6 @@ type ValidateStorageClassType struct {
 }
 
 func (v *ValidateStorageClassType) StorageClassNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_class_name")
@@ -348,32 +333,24 @@ func (v *ValidateStorageClassType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_storage_class"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_storage_class"))
 		if err := fv(ctx, m.GetDefaultStorageClass(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["storage_class_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("storage_class_name"))
 		if err := fv(ctx, m.GetStorageClassName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStorageClassTypeValidator = func() *ValidateStorageClassType {
 	v := &ValidateStorageClassType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

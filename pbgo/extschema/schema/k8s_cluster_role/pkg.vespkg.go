@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.k8s_cluster_role.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.k8s_cluster_role.Object"] = ObjectValidator()
 	vr["ves.io.schema.k8s_cluster_role.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.k8s_cluster_role.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.k8s_cluster_role.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.k8s_cluster_role.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.k8s_cluster_role.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.k8s_cluster_role.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.k8s_cluster_role.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.k8s_cluster_role.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.k8s_cluster_role.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.k8s_cluster_role.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -36,7 +33,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.k8s_cluster_role.PolicyRuleType"] = PolicyRuleTypeValidator()
 	vr["ves.io.schema.k8s_cluster_role.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.k8s_cluster_role.ResourceListType"] = ResourceListTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -48,25 +44,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.k8s_cluster_role.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.k8s_cluster_role.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.k8s_cluster_role.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.k8s_cluster_role.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -75,9 +66,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.k8s_cluster_role.Object"] = APISwaggerJSON
@@ -91,22 +80,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.k8s_cluster_role.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.k8s_cluster_role.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.k8s_cluster_role.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

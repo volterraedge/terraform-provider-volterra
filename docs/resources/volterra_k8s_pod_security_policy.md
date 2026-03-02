@@ -41,13 +41,13 @@ resource "volterra_k8s_pod_security_policy" "example" {
 
     // One of the arguments from this list "default_capabilities no_default_capabilities" must be set
 
-    no_default_capabilities = true
+    default_capabilities {
+      capabilities = ["value"]
+    }
 
     // One of the arguments from this list "drop_capabilities no_drop_capabilities" must be set
 
-    drop_capabilities {
-      capabilities = ["value"]
-    }
+    no_drop_capabilities = true
     forbidden_sysctls = ["value"]
 
     // One of the arguments from this list "fs_group_strategy_options no_fs_groups" must be set
@@ -56,7 +56,15 @@ resource "volterra_k8s_pod_security_policy" "example" {
 
     // One of the arguments from this list "no_run_as_group run_as_group" must be set
 
-    no_run_as_group = true
+    run_as_group {
+      id_ranges {
+        max_id = "3000"
+
+        min_id = "2000"
+      }
+
+      rule = "MustRunAs"
+    }
     host_ipc = true
     host_network = true
     host_pid = true
@@ -82,7 +90,6 @@ resource "volterra_k8s_pod_security_policy" "example" {
     volumes = ["gitRepo"]
   }
 }
-
 ```
 
 Argument Reference
@@ -349,4 +356,4 @@ Controls Allowable run as user values.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured k8s_pod_security_policy.
+*   `id` - This is the id of the configured k8s_pod_security_policy.

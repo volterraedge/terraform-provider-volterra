@@ -35,8 +35,11 @@ resource "volterra_udp_loadbalancer" "example" {
   // One of the arguments from this list "listen_port port_ranges" must be set
 
   listen_port = "53"
-}
 
+  // One of the arguments from this list "active_service_policies no_service_policies service_policies_from_namespace" must be set
+
+  no_service_policies = true
+}
 ```
 
 Argument Reference
@@ -78,7 +81,7 @@ Argument Reference
 
 `domains` - (Optional) A list of domains (host/authority header) that will be matched to this load balancer. (`List of String`).
 
-`enable_per_packet_load_balancing` - (Optional) If enabled: Each packet is directed to an upstream server as the load balancing algorithm dictates. (`Bool`).
+`enable_per_packet_load_balancing` - (Optional) If enabled: Each packet is directed to an upstream server as the load balancing algorithm dictates. (`Bool`).(Deprecated)
 
 ###### One of the arguments from this list "hash_policy_choice_least_active, hash_policy_choice_random, hash_policy_choice_round_robin, hash_policy_choice_source_ip_stickiness" must be set
 
@@ -103,6 +106,14 @@ Argument Reference
 `listen_port` - (Optional) Listen Port for this load balancer (`Int`).
 
 `port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
+
+###### One of the arguments from this list "active_service_policies, no_service_policies, service_policies_from_namespace" must be set
+
+`active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Service Policy Choice Active Service Policies ](#service-policy-choice-active-service-policies) below for details.
+
+`no_service_policies` - (Optional) Do not apply any service policies i.e. bypass the namespace service policy set (`Bool`).
+
+`service_policies_from_namespace` - (Optional) Apply the active service policies configured as part of the namespace service policy set (`Bool`).
 
 ### Origin Pools Weights
 
@@ -266,6 +277,12 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Service Policy Choice Active Service Policies
+
+Apply the specified list of service policies and bypass the namespace service policy set.
+
+`policies` - (Required) If all policies are evaluated and none match, then the request will be denied by default.. See [ref](#ref) below for details.
+
 ### V6 Vip Choice Default V6 Vip
 
 Use the default VIP, system allocated or configured in the virtual network.
@@ -277,4 +294,4 @@ Use the default VIP, system allocated or configured in the virtual network.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured udp_loadbalancer.
+*   `id` - This is the id of the configured udp_loadbalancer.

@@ -99,13 +99,13 @@ type CacheHeaderMatcherType struct {
 	// x-displayName: "Name"
 	// x-example: "Content-Type"
 	// x-required
-	// Name of the header
+	// Select the name of the header from the list
 	Name HeaderOptions `protobuf:"varint,1,opt,name=name,proto3,enum=ves.io.schema.cdn_cache_rule.HeaderOptions" json:"name,omitempty"`
 	// cache_operator
 	//
 	// x-displayName: "Operator"
 	// Available operators
-	Operator *CacheOperator `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
+	Operator *HeaderCacheOperator `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
 func (m *CacheHeaderMatcherType) Reset()      { *m = CacheHeaderMatcherType{} }
@@ -143,7 +143,7 @@ func (m *CacheHeaderMatcherType) GetName() HeaderOptions {
 	return PROXY_HOST
 }
 
-func (m *CacheHeaderMatcherType) GetOperator() *CacheOperator {
+func (m *CacheHeaderMatcherType) GetOperator() *HeaderCacheOperator {
 	if m != nil {
 		return m.Operator
 	}
@@ -331,6 +331,549 @@ func (*CacheOperator) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// Header Cache Operator
+//
+// x-displayName: "Operator"
+type HeaderCacheOperator struct {
+	// Cache Operator
+	//
+	// x-required
+	// x-displayName: "Operator"
+	// Match Operator
+	//
+	// Types that are valid to be assigned to CacheOperator:
+	//	*HeaderCacheOperator_Equals
+	//	*HeaderCacheOperator_DoesNotEqual
+	//	*HeaderCacheOperator_Contains
+	//	*HeaderCacheOperator_DoesNotContain
+	//	*HeaderCacheOperator_Startswith
+	//	*HeaderCacheOperator_DoesNotStartWith
+	//	*HeaderCacheOperator_Endswith
+	//	*HeaderCacheOperator_DoesNotEndWith
+	//	*HeaderCacheOperator_MatchRegex
+	CacheOperator isHeaderCacheOperator_CacheOperator `protobuf_oneof:"cache_operator"`
+}
+
+func (m *HeaderCacheOperator) Reset()      { *m = HeaderCacheOperator{} }
+func (*HeaderCacheOperator) ProtoMessage() {}
+func (*HeaderCacheOperator) Descriptor() ([]byte, []int) {
+	return fileDescriptor_319c6f6fcf27003c, []int{2}
+}
+func (m *HeaderCacheOperator) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HeaderCacheOperator) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HeaderCacheOperator) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HeaderCacheOperator.Merge(m, src)
+}
+func (m *HeaderCacheOperator) XXX_Size() int {
+	return m.Size()
+}
+func (m *HeaderCacheOperator) XXX_DiscardUnknown() {
+	xxx_messageInfo_HeaderCacheOperator.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HeaderCacheOperator proto.InternalMessageInfo
+
+type isHeaderCacheOperator_CacheOperator interface {
+	isHeaderCacheOperator_CacheOperator()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type HeaderCacheOperator_Equals struct {
+	Equals string `protobuf:"bytes,2,opt,name=Equals,proto3,oneof" json:"Equals,omitempty"`
+}
+type HeaderCacheOperator_DoesNotEqual struct {
+	DoesNotEqual string `protobuf:"bytes,3,opt,name=DoesNotEqual,proto3,oneof" json:"DoesNotEqual,omitempty"`
+}
+type HeaderCacheOperator_Contains struct {
+	Contains string `protobuf:"bytes,4,opt,name=Contains,proto3,oneof" json:"Contains,omitempty"`
+}
+type HeaderCacheOperator_DoesNotContain struct {
+	DoesNotContain string `protobuf:"bytes,5,opt,name=DoesNotContain,proto3,oneof" json:"DoesNotContain,omitempty"`
+}
+type HeaderCacheOperator_Startswith struct {
+	Startswith string `protobuf:"bytes,6,opt,name=Startswith,proto3,oneof" json:"Startswith,omitempty"`
+}
+type HeaderCacheOperator_DoesNotStartWith struct {
+	DoesNotStartWith string `protobuf:"bytes,7,opt,name=DoesNotStartWith,proto3,oneof" json:"DoesNotStartWith,omitempty"`
+}
+type HeaderCacheOperator_Endswith struct {
+	Endswith string `protobuf:"bytes,8,opt,name=Endswith,proto3,oneof" json:"Endswith,omitempty"`
+}
+type HeaderCacheOperator_DoesNotEndWith struct {
+	DoesNotEndWith string `protobuf:"bytes,9,opt,name=DoesNotEndWith,proto3,oneof" json:"DoesNotEndWith,omitempty"`
+}
+type HeaderCacheOperator_MatchRegex struct {
+	MatchRegex string `protobuf:"bytes,10,opt,name=MatchRegex,proto3,oneof" json:"MatchRegex,omitempty"`
+}
+
+func (*HeaderCacheOperator_Equals) isHeaderCacheOperator_CacheOperator()           {}
+func (*HeaderCacheOperator_DoesNotEqual) isHeaderCacheOperator_CacheOperator()     {}
+func (*HeaderCacheOperator_Contains) isHeaderCacheOperator_CacheOperator()         {}
+func (*HeaderCacheOperator_DoesNotContain) isHeaderCacheOperator_CacheOperator()   {}
+func (*HeaderCacheOperator_Startswith) isHeaderCacheOperator_CacheOperator()       {}
+func (*HeaderCacheOperator_DoesNotStartWith) isHeaderCacheOperator_CacheOperator() {}
+func (*HeaderCacheOperator_Endswith) isHeaderCacheOperator_CacheOperator()         {}
+func (*HeaderCacheOperator_DoesNotEndWith) isHeaderCacheOperator_CacheOperator()   {}
+func (*HeaderCacheOperator_MatchRegex) isHeaderCacheOperator_CacheOperator()       {}
+
+func (m *HeaderCacheOperator) GetCacheOperator() isHeaderCacheOperator_CacheOperator {
+	if m != nil {
+		return m.CacheOperator
+	}
+	return nil
+}
+
+func (m *HeaderCacheOperator) GetEquals() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_Equals); ok {
+		return x.Equals
+	}
+	return ""
+}
+
+func (m *HeaderCacheOperator) GetDoesNotEqual() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_DoesNotEqual); ok {
+		return x.DoesNotEqual
+	}
+	return ""
+}
+
+func (m *HeaderCacheOperator) GetContains() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_Contains); ok {
+		return x.Contains
+	}
+	return ""
+}
+
+func (m *HeaderCacheOperator) GetDoesNotContain() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_DoesNotContain); ok {
+		return x.DoesNotContain
+	}
+	return ""
+}
+
+func (m *HeaderCacheOperator) GetStartswith() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_Startswith); ok {
+		return x.Startswith
+	}
+	return ""
+}
+
+func (m *HeaderCacheOperator) GetDoesNotStartWith() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_DoesNotStartWith); ok {
+		return x.DoesNotStartWith
+	}
+	return ""
+}
+
+func (m *HeaderCacheOperator) GetEndswith() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_Endswith); ok {
+		return x.Endswith
+	}
+	return ""
+}
+
+func (m *HeaderCacheOperator) GetDoesNotEndWith() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_DoesNotEndWith); ok {
+		return x.DoesNotEndWith
+	}
+	return ""
+}
+
+func (m *HeaderCacheOperator) GetMatchRegex() string {
+	if x, ok := m.GetCacheOperator().(*HeaderCacheOperator_MatchRegex); ok {
+		return x.MatchRegex
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*HeaderCacheOperator) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*HeaderCacheOperator_Equals)(nil),
+		(*HeaderCacheOperator_DoesNotEqual)(nil),
+		(*HeaderCacheOperator_Contains)(nil),
+		(*HeaderCacheOperator_DoesNotContain)(nil),
+		(*HeaderCacheOperator_Startswith)(nil),
+		(*HeaderCacheOperator_DoesNotStartWith)(nil),
+		(*HeaderCacheOperator_Endswith)(nil),
+		(*HeaderCacheOperator_DoesNotEndWith)(nil),
+		(*HeaderCacheOperator_MatchRegex)(nil),
+	}
+}
+
+// Query Param Cache Operator
+//
+// x-displayName: "Operator"
+type QueryParamCacheOperator struct {
+	// Cache Operator
+	//
+	// x-required
+	// x-displayName: "Operator"
+	// Match Operator
+	//
+	// Types that are valid to be assigned to CacheOperator:
+	//	*QueryParamCacheOperator_Equals
+	//	*QueryParamCacheOperator_DoesNotEqual
+	//	*QueryParamCacheOperator_Contains
+	//	*QueryParamCacheOperator_DoesNotContain
+	//	*QueryParamCacheOperator_Startswith
+	//	*QueryParamCacheOperator_DoesNotStartWith
+	//	*QueryParamCacheOperator_Endswith
+	//	*QueryParamCacheOperator_DoesNotEndWith
+	//	*QueryParamCacheOperator_MatchRegex
+	CacheOperator isQueryParamCacheOperator_CacheOperator `protobuf_oneof:"cache_operator"`
+}
+
+func (m *QueryParamCacheOperator) Reset()      { *m = QueryParamCacheOperator{} }
+func (*QueryParamCacheOperator) ProtoMessage() {}
+func (*QueryParamCacheOperator) Descriptor() ([]byte, []int) {
+	return fileDescriptor_319c6f6fcf27003c, []int{3}
+}
+func (m *QueryParamCacheOperator) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryParamCacheOperator) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *QueryParamCacheOperator) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryParamCacheOperator.Merge(m, src)
+}
+func (m *QueryParamCacheOperator) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryParamCacheOperator) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryParamCacheOperator.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryParamCacheOperator proto.InternalMessageInfo
+
+type isQueryParamCacheOperator_CacheOperator interface {
+	isQueryParamCacheOperator_CacheOperator()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type QueryParamCacheOperator_Equals struct {
+	Equals string `protobuf:"bytes,2,opt,name=Equals,proto3,oneof" json:"Equals,omitempty"`
+}
+type QueryParamCacheOperator_DoesNotEqual struct {
+	DoesNotEqual string `protobuf:"bytes,3,opt,name=DoesNotEqual,proto3,oneof" json:"DoesNotEqual,omitempty"`
+}
+type QueryParamCacheOperator_Contains struct {
+	Contains string `protobuf:"bytes,4,opt,name=Contains,proto3,oneof" json:"Contains,omitempty"`
+}
+type QueryParamCacheOperator_DoesNotContain struct {
+	DoesNotContain string `protobuf:"bytes,5,opt,name=DoesNotContain,proto3,oneof" json:"DoesNotContain,omitempty"`
+}
+type QueryParamCacheOperator_Startswith struct {
+	Startswith string `protobuf:"bytes,6,opt,name=Startswith,proto3,oneof" json:"Startswith,omitempty"`
+}
+type QueryParamCacheOperator_DoesNotStartWith struct {
+	DoesNotStartWith string `protobuf:"bytes,7,opt,name=DoesNotStartWith,proto3,oneof" json:"DoesNotStartWith,omitempty"`
+}
+type QueryParamCacheOperator_Endswith struct {
+	Endswith string `protobuf:"bytes,8,opt,name=Endswith,proto3,oneof" json:"Endswith,omitempty"`
+}
+type QueryParamCacheOperator_DoesNotEndWith struct {
+	DoesNotEndWith string `protobuf:"bytes,9,opt,name=DoesNotEndWith,proto3,oneof" json:"DoesNotEndWith,omitempty"`
+}
+type QueryParamCacheOperator_MatchRegex struct {
+	MatchRegex string `protobuf:"bytes,10,opt,name=MatchRegex,proto3,oneof" json:"MatchRegex,omitempty"`
+}
+
+func (*QueryParamCacheOperator_Equals) isQueryParamCacheOperator_CacheOperator()           {}
+func (*QueryParamCacheOperator_DoesNotEqual) isQueryParamCacheOperator_CacheOperator()     {}
+func (*QueryParamCacheOperator_Contains) isQueryParamCacheOperator_CacheOperator()         {}
+func (*QueryParamCacheOperator_DoesNotContain) isQueryParamCacheOperator_CacheOperator()   {}
+func (*QueryParamCacheOperator_Startswith) isQueryParamCacheOperator_CacheOperator()       {}
+func (*QueryParamCacheOperator_DoesNotStartWith) isQueryParamCacheOperator_CacheOperator() {}
+func (*QueryParamCacheOperator_Endswith) isQueryParamCacheOperator_CacheOperator()         {}
+func (*QueryParamCacheOperator_DoesNotEndWith) isQueryParamCacheOperator_CacheOperator()   {}
+func (*QueryParamCacheOperator_MatchRegex) isQueryParamCacheOperator_CacheOperator()       {}
+
+func (m *QueryParamCacheOperator) GetCacheOperator() isQueryParamCacheOperator_CacheOperator {
+	if m != nil {
+		return m.CacheOperator
+	}
+	return nil
+}
+
+func (m *QueryParamCacheOperator) GetEquals() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_Equals); ok {
+		return x.Equals
+	}
+	return ""
+}
+
+func (m *QueryParamCacheOperator) GetDoesNotEqual() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_DoesNotEqual); ok {
+		return x.DoesNotEqual
+	}
+	return ""
+}
+
+func (m *QueryParamCacheOperator) GetContains() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_Contains); ok {
+		return x.Contains
+	}
+	return ""
+}
+
+func (m *QueryParamCacheOperator) GetDoesNotContain() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_DoesNotContain); ok {
+		return x.DoesNotContain
+	}
+	return ""
+}
+
+func (m *QueryParamCacheOperator) GetStartswith() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_Startswith); ok {
+		return x.Startswith
+	}
+	return ""
+}
+
+func (m *QueryParamCacheOperator) GetDoesNotStartWith() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_DoesNotStartWith); ok {
+		return x.DoesNotStartWith
+	}
+	return ""
+}
+
+func (m *QueryParamCacheOperator) GetEndswith() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_Endswith); ok {
+		return x.Endswith
+	}
+	return ""
+}
+
+func (m *QueryParamCacheOperator) GetDoesNotEndWith() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_DoesNotEndWith); ok {
+		return x.DoesNotEndWith
+	}
+	return ""
+}
+
+func (m *QueryParamCacheOperator) GetMatchRegex() string {
+	if x, ok := m.GetCacheOperator().(*QueryParamCacheOperator_MatchRegex); ok {
+		return x.MatchRegex
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*QueryParamCacheOperator) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*QueryParamCacheOperator_Equals)(nil),
+		(*QueryParamCacheOperator_DoesNotEqual)(nil),
+		(*QueryParamCacheOperator_Contains)(nil),
+		(*QueryParamCacheOperator_DoesNotContain)(nil),
+		(*QueryParamCacheOperator_Startswith)(nil),
+		(*QueryParamCacheOperator_DoesNotStartWith)(nil),
+		(*QueryParamCacheOperator_Endswith)(nil),
+		(*QueryParamCacheOperator_DoesNotEndWith)(nil),
+		(*QueryParamCacheOperator_MatchRegex)(nil),
+	}
+}
+
+// Cookie Matcher Cache Operator
+//
+// x-displayName: "Operator"
+type CookieMatcherCacheOperator struct {
+	// Cache Operator
+	//
+	// x-required
+	// x-displayName: "Operator"
+	// Match Operator
+	//
+	// Types that are valid to be assigned to CacheOperator:
+	//	*CookieMatcherCacheOperator_Equals
+	//	*CookieMatcherCacheOperator_DoesNotEqual
+	//	*CookieMatcherCacheOperator_Contains
+	//	*CookieMatcherCacheOperator_DoesNotContain
+	//	*CookieMatcherCacheOperator_Startswith
+	//	*CookieMatcherCacheOperator_DoesNotStartWith
+	//	*CookieMatcherCacheOperator_Endswith
+	//	*CookieMatcherCacheOperator_DoesNotEndWith
+	//	*CookieMatcherCacheOperator_MatchRegex
+	CacheOperator isCookieMatcherCacheOperator_CacheOperator `protobuf_oneof:"cache_operator"`
+}
+
+func (m *CookieMatcherCacheOperator) Reset()      { *m = CookieMatcherCacheOperator{} }
+func (*CookieMatcherCacheOperator) ProtoMessage() {}
+func (*CookieMatcherCacheOperator) Descriptor() ([]byte, []int) {
+	return fileDescriptor_319c6f6fcf27003c, []int{4}
+}
+func (m *CookieMatcherCacheOperator) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CookieMatcherCacheOperator) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CookieMatcherCacheOperator) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CookieMatcherCacheOperator.Merge(m, src)
+}
+func (m *CookieMatcherCacheOperator) XXX_Size() int {
+	return m.Size()
+}
+func (m *CookieMatcherCacheOperator) XXX_DiscardUnknown() {
+	xxx_messageInfo_CookieMatcherCacheOperator.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CookieMatcherCacheOperator proto.InternalMessageInfo
+
+type isCookieMatcherCacheOperator_CacheOperator interface {
+	isCookieMatcherCacheOperator_CacheOperator()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CookieMatcherCacheOperator_Equals struct {
+	Equals string `protobuf:"bytes,2,opt,name=Equals,proto3,oneof" json:"Equals,omitempty"`
+}
+type CookieMatcherCacheOperator_DoesNotEqual struct {
+	DoesNotEqual string `protobuf:"bytes,3,opt,name=DoesNotEqual,proto3,oneof" json:"DoesNotEqual,omitempty"`
+}
+type CookieMatcherCacheOperator_Contains struct {
+	Contains string `protobuf:"bytes,4,opt,name=Contains,proto3,oneof" json:"Contains,omitempty"`
+}
+type CookieMatcherCacheOperator_DoesNotContain struct {
+	DoesNotContain string `protobuf:"bytes,5,opt,name=DoesNotContain,proto3,oneof" json:"DoesNotContain,omitempty"`
+}
+type CookieMatcherCacheOperator_Startswith struct {
+	Startswith string `protobuf:"bytes,6,opt,name=Startswith,proto3,oneof" json:"Startswith,omitempty"`
+}
+type CookieMatcherCacheOperator_DoesNotStartWith struct {
+	DoesNotStartWith string `protobuf:"bytes,7,opt,name=DoesNotStartWith,proto3,oneof" json:"DoesNotStartWith,omitempty"`
+}
+type CookieMatcherCacheOperator_Endswith struct {
+	Endswith string `protobuf:"bytes,8,opt,name=Endswith,proto3,oneof" json:"Endswith,omitempty"`
+}
+type CookieMatcherCacheOperator_DoesNotEndWith struct {
+	DoesNotEndWith string `protobuf:"bytes,9,opt,name=DoesNotEndWith,proto3,oneof" json:"DoesNotEndWith,omitempty"`
+}
+type CookieMatcherCacheOperator_MatchRegex struct {
+	MatchRegex string `protobuf:"bytes,10,opt,name=MatchRegex,proto3,oneof" json:"MatchRegex,omitempty"`
+}
+
+func (*CookieMatcherCacheOperator_Equals) isCookieMatcherCacheOperator_CacheOperator()           {}
+func (*CookieMatcherCacheOperator_DoesNotEqual) isCookieMatcherCacheOperator_CacheOperator()     {}
+func (*CookieMatcherCacheOperator_Contains) isCookieMatcherCacheOperator_CacheOperator()         {}
+func (*CookieMatcherCacheOperator_DoesNotContain) isCookieMatcherCacheOperator_CacheOperator()   {}
+func (*CookieMatcherCacheOperator_Startswith) isCookieMatcherCacheOperator_CacheOperator()       {}
+func (*CookieMatcherCacheOperator_DoesNotStartWith) isCookieMatcherCacheOperator_CacheOperator() {}
+func (*CookieMatcherCacheOperator_Endswith) isCookieMatcherCacheOperator_CacheOperator()         {}
+func (*CookieMatcherCacheOperator_DoesNotEndWith) isCookieMatcherCacheOperator_CacheOperator()   {}
+func (*CookieMatcherCacheOperator_MatchRegex) isCookieMatcherCacheOperator_CacheOperator()       {}
+
+func (m *CookieMatcherCacheOperator) GetCacheOperator() isCookieMatcherCacheOperator_CacheOperator {
+	if m != nil {
+		return m.CacheOperator
+	}
+	return nil
+}
+
+func (m *CookieMatcherCacheOperator) GetEquals() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_Equals); ok {
+		return x.Equals
+	}
+	return ""
+}
+
+func (m *CookieMatcherCacheOperator) GetDoesNotEqual() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_DoesNotEqual); ok {
+		return x.DoesNotEqual
+	}
+	return ""
+}
+
+func (m *CookieMatcherCacheOperator) GetContains() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_Contains); ok {
+		return x.Contains
+	}
+	return ""
+}
+
+func (m *CookieMatcherCacheOperator) GetDoesNotContain() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_DoesNotContain); ok {
+		return x.DoesNotContain
+	}
+	return ""
+}
+
+func (m *CookieMatcherCacheOperator) GetStartswith() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_Startswith); ok {
+		return x.Startswith
+	}
+	return ""
+}
+
+func (m *CookieMatcherCacheOperator) GetDoesNotStartWith() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_DoesNotStartWith); ok {
+		return x.DoesNotStartWith
+	}
+	return ""
+}
+
+func (m *CookieMatcherCacheOperator) GetEndswith() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_Endswith); ok {
+		return x.Endswith
+	}
+	return ""
+}
+
+func (m *CookieMatcherCacheOperator) GetDoesNotEndWith() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_DoesNotEndWith); ok {
+		return x.DoesNotEndWith
+	}
+	return ""
+}
+
+func (m *CookieMatcherCacheOperator) GetMatchRegex() string {
+	if x, ok := m.GetCacheOperator().(*CookieMatcherCacheOperator_MatchRegex); ok {
+		return x.MatchRegex
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CookieMatcherCacheOperator) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CookieMatcherCacheOperator_Equals)(nil),
+		(*CookieMatcherCacheOperator_DoesNotEqual)(nil),
+		(*CookieMatcherCacheOperator_Contains)(nil),
+		(*CookieMatcherCacheOperator_DoesNotContain)(nil),
+		(*CookieMatcherCacheOperator_Startswith)(nil),
+		(*CookieMatcherCacheOperator_DoesNotStartWith)(nil),
+		(*CookieMatcherCacheOperator_Endswith)(nil),
+		(*CookieMatcherCacheOperator_DoesNotEndWith)(nil),
+		(*CookieMatcherCacheOperator_MatchRegex)(nil),
+	}
+}
+
 // PathMatcherType
 //
 // x-displayName: "Path to Match"
@@ -346,7 +889,7 @@ type CDNPathMatcherType struct {
 func (m *CDNPathMatcherType) Reset()      { *m = CDNPathMatcherType{} }
 func (*CDNPathMatcherType) ProtoMessage() {}
 func (*CDNPathMatcherType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{2}
+	return fileDescriptor_319c6f6fcf27003c, []int{5}
 }
 func (m *CDNPathMatcherType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -392,18 +935,18 @@ type CacheCookieMatcherType struct {
 	// x-displayName: "Cookie Name"
 	// x-example: "Session"
 	// x-required
-	// A case-sensitive cookie name.
+	// Enter the name of the cookie to match
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// cache_operator
 	//
 	// x-displayName: "Operator"
-	Operator *CacheOperator `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
+	Operator *CookieMatcherCacheOperator `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
 func (m *CacheCookieMatcherType) Reset()      { *m = CacheCookieMatcherType{} }
 func (*CacheCookieMatcherType) ProtoMessage() {}
 func (*CacheCookieMatcherType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{3}
+	return fileDescriptor_319c6f6fcf27003c, []int{6}
 }
 func (m *CacheCookieMatcherType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -435,7 +978,7 @@ func (m *CacheCookieMatcherType) GetName() string {
 	return ""
 }
 
-func (m *CacheCookieMatcherType) GetOperator() *CacheOperator {
+func (m *CacheCookieMatcherType) GetOperator() *CookieMatcherCacheOperator {
 	if m != nil {
 		return m.Operator
 	}
@@ -453,19 +996,18 @@ type CacheQueryParameterMatcherType struct {
 	// x-displayName: "Key"
 	// x-required
 	// x-example: "assignee_username"
-	// Query parameter key
-	// In the above example, assignee_username is the key
+	// The name of the query parameter to match
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	// cache_operator
 	//
 	// x-displayName: "Operator"
-	Operator *CacheOperator `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
+	Operator *QueryParamCacheOperator `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
 func (m *CacheQueryParameterMatcherType) Reset()      { *m = CacheQueryParameterMatcherType{} }
 func (*CacheQueryParameterMatcherType) ProtoMessage() {}
 func (*CacheQueryParameterMatcherType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{4}
+	return fileDescriptor_319c6f6fcf27003c, []int{7}
 }
 func (m *CacheQueryParameterMatcherType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -497,7 +1039,7 @@ func (m *CacheQueryParameterMatcherType) GetKey() string {
 	return ""
 }
 
-func (m *CacheQueryParameterMatcherType) GetOperator() *CacheOperator {
+func (m *CacheQueryParameterMatcherType) GetOperator() *QueryParamCacheOperator {
 	if m != nil {
 		return m.Operator
 	}
@@ -536,7 +1078,7 @@ type CDNCacheRuleExpression struct {
 func (m *CDNCacheRuleExpression) Reset()      { *m = CDNCacheRuleExpression{} }
 func (*CDNCacheRuleExpression) ProtoMessage() {}
 func (*CDNCacheRuleExpression) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{5}
+	return fileDescriptor_319c6f6fcf27003c, []int{8}
 }
 func (m *CDNCacheRuleExpression) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -612,7 +1154,7 @@ type CDNCacheRuleExpressionList struct {
 func (m *CDNCacheRuleExpressionList) Reset()      { *m = CDNCacheRuleExpressionList{} }
 func (*CDNCacheRuleExpressionList) ProtoMessage() {}
 func (*CDNCacheRuleExpressionList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{6}
+	return fileDescriptor_319c6f6fcf27003c, []int{9}
 }
 func (m *CDNCacheRuleExpressionList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -679,7 +1221,7 @@ type CacheTTLEnableProps struct {
 func (m *CacheTTLEnableProps) Reset()      { *m = CacheTTLEnableProps{} }
 func (*CacheTTLEnableProps) ProtoMessage() {}
 func (*CacheTTLEnableProps) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{7}
+	return fileDescriptor_319c6f6fcf27003c, []int{10}
 }
 func (m *CacheTTLEnableProps) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -745,7 +1287,7 @@ type CacheEligibleOptions struct {
 func (m *CacheEligibleOptions) Reset()      { *m = CacheEligibleOptions{} }
 func (*CacheEligibleOptions) ProtoMessage() {}
 func (*CacheEligibleOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{8}
+	return fileDescriptor_319c6f6fcf27003c, []int{11}
 }
 func (m *CacheEligibleOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -849,7 +1391,7 @@ type CDNCacheRule struct {
 func (m *CDNCacheRule) Reset()      { *m = CDNCacheRule{} }
 func (*CDNCacheRule) ProtoMessage() {}
 func (*CDNCacheRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{9}
+	return fileDescriptor_319c6f6fcf27003c, []int{12}
 }
 func (m *CDNCacheRule) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -949,7 +1491,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{10}
+	return fileDescriptor_319c6f6fcf27003c, []int{13}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -992,7 +1534,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{11}
+	return fileDescriptor_319c6f6fcf27003c, []int{14}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1035,7 +1577,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{12}
+	return fileDescriptor_319c6f6fcf27003c, []int{15}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1078,7 +1620,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_319c6f6fcf27003c, []int{13}
+	return fileDescriptor_319c6f6fcf27003c, []int{16}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1117,6 +1659,12 @@ func init() {
 	golang_proto.RegisterType((*CacheHeaderMatcherType)(nil), "ves.io.schema.cdn_cache_rule.CacheHeaderMatcherType")
 	proto.RegisterType((*CacheOperator)(nil), "ves.io.schema.cdn_cache_rule.CacheOperator")
 	golang_proto.RegisterType((*CacheOperator)(nil), "ves.io.schema.cdn_cache_rule.CacheOperator")
+	proto.RegisterType((*HeaderCacheOperator)(nil), "ves.io.schema.cdn_cache_rule.HeaderCacheOperator")
+	golang_proto.RegisterType((*HeaderCacheOperator)(nil), "ves.io.schema.cdn_cache_rule.HeaderCacheOperator")
+	proto.RegisterType((*QueryParamCacheOperator)(nil), "ves.io.schema.cdn_cache_rule.QueryParamCacheOperator")
+	golang_proto.RegisterType((*QueryParamCacheOperator)(nil), "ves.io.schema.cdn_cache_rule.QueryParamCacheOperator")
+	proto.RegisterType((*CookieMatcherCacheOperator)(nil), "ves.io.schema.cdn_cache_rule.CookieMatcherCacheOperator")
+	golang_proto.RegisterType((*CookieMatcherCacheOperator)(nil), "ves.io.schema.cdn_cache_rule.CookieMatcherCacheOperator")
 	proto.RegisterType((*CDNPathMatcherType)(nil), "ves.io.schema.cdn_cache_rule.CDNPathMatcherType")
 	golang_proto.RegisterType((*CDNPathMatcherType)(nil), "ves.io.schema.cdn_cache_rule.CDNPathMatcherType")
 	proto.RegisterType((*CacheCookieMatcherType)(nil), "ves.io.schema.cdn_cache_rule.CacheCookieMatcherType")
@@ -1151,131 +1699,136 @@ func init() {
 }
 
 var fileDescriptor_319c6f6fcf27003c = []byte{
-	// 1977 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0x4f, 0x6c, 0x1b, 0x59,
-	0x19, 0xf7, 0xb3, 0x9d, 0xc4, 0xf9, 0x9c, 0xda, 0xce, 0x4b, 0x1a, 0x1c, 0x93, 0x9d, 0xce, 0x5a,
-	0xad, 0x08, 0x5d, 0xd7, 0x69, 0x9c, 0xc0, 0xee, 0x86, 0x55, 0xab, 0xb5, 0xeb, 0x4d, 0xba, 0xdb,
-	0x26, 0xd9, 0x49, 0x0a, 0x2c, 0x17, 0x6b, 0xe2, 0xbc, 0x38, 0xa3, 0xda, 0x7e, 0x93, 0x37, 0xe3,
-	0x6c, 0x73, 0x40, 0xea, 0x79, 0xb5, 0xa0, 0x15, 0xdc, 0x80, 0x03, 0xe2, 0xb4, 0x27, 0x04, 0x27,
-	0x24, 0x0c, 0x52, 0xa8, 0x84, 0x84, 0x82, 0x04, 0xb9, 0xac, 0x54, 0x89, 0x0b, 0x75, 0x2e, 0x80,
-	0x38, 0x54, 0xab, 0xbd, 0x83, 0xe6, 0xbd, 0x19, 0x7b, 0xc6, 0x1e, 0x3b, 0x6e, 0x45, 0xf7, 0x80,
-	0x7a, 0xf2, 0xcc, 0xfb, 0xbe, 0xf7, 0xfd, 0x7b, 0xbf, 0xef, 0xf7, 0xde, 0x1b, 0xc3, 0xfc, 0x21,
-	0x31, 0xb2, 0x1a, 0x5d, 0x30, 0xca, 0xfb, 0xa4, 0xa6, 0x2e, 0x94, 0x77, 0xeb, 0xa5, 0xb2, 0x5a,
-	0xde, 0x27, 0x25, 0xd6, 0xa8, 0x92, 0x05, 0xf3, 0x48, 0x27, 0x46, 0x56, 0x67, 0xd4, 0xa4, 0x78,
-	0x4e, 0x68, 0x66, 0x85, 0x66, 0xd6, 0xab, 0x99, 0xba, 0x56, 0xd1, 0xcc, 0xfd, 0xc6, 0x4e, 0xb6,
-	0x4c, 0x6b, 0x0b, 0x15, 0x5a, 0xa1, 0x0b, 0x7c, 0xd2, 0x4e, 0x63, 0x8f, 0xbf, 0xf1, 0x17, 0xfe,
-	0x24, 0x8c, 0xa5, 0x2e, 0x55, 0x28, 0xad, 0x54, 0x49, 0x47, 0xcb, 0xd4, 0x6a, 0xc4, 0x30, 0xd5,
-	0x9a, 0x6e, 0x2b, 0x7c, 0xd5, 0x1b, 0x17, 0xd5, 0x4d, 0x8d, 0xd6, 0xed, 0x50, 0x52, 0xb2, 0x57,
-	0xa8, 0xd3, 0xaa, 0x56, 0x3e, 0x72, 0x07, 0x9b, 0xba, 0xe4, 0xd5, 0x60, 0xb4, 0x61, 0x7a, 0xb2,
-	0x49, 0xcd, 0x7a, 0x15, 0xdc, 0xa2, 0x39, 0xaf, 0xe8, 0x50, 0xad, 0x6a, 0xbb, 0xaa, 0x49, 0xfc,
-	0x7d, 0x1f, 0x6a, 0xe4, 0xc3, 0x92, 0x37, 0xba, 0x4b, 0xbd, 0x1a, 0x86, 0xdb, 0x41, 0xfa, 0x87,
-	0xa3, 0x30, 0x53, 0xb0, 0x4a, 0xb7, 0x46, 0xd4, 0x5d, 0xc2, 0xee, 0xaa, 0x66, 0x79, 0x9f, 0xb0,
-	0xed, 0x23, 0x9d, 0xe0, 0x9b, 0x10, 0xae, 0xab, 0x35, 0x92, 0x44, 0x32, 0x9a, 0x8f, 0xe5, 0x5e,
-	0xcb, 0x0e, 0xaa, 0x79, 0x56, 0x4c, 0xdf, 0x10, 0xce, 0x15, 0x3e, 0x11, 0xdf, 0x85, 0x08, 0xd5,
-	0x09, 0x53, 0x4d, 0xca, 0x92, 0x41, 0x19, 0xcd, 0x47, 0xcf, 0x33, 0xc2, 0x03, 0xd9, 0xb0, 0xa7,
-	0xe4, 0xc3, 0x4f, 0x9b, 0x08, 0x29, 0x6d, 0x13, 0x2b, 0x67, 0xe1, 0x47, 0x4d, 0x94, 0x84, 0x19,
-	0x88, 0x0b, 0x67, 0xb2, 0x49, 0x65, 0x1e, 0x2f, 0x0e, 0x2d, 0x66, 0x72, 0x27, 0x4d, 0xf4, 0x28,
-	0x0c, 0x09, 0x08, 0xaf, 0xab, 0x35, 0x92, 0x8a, 0x88, 0xd8, 0x65, 0x04, 0x7f, 0x0b, 0x42, 0xc4,
-	0x31, 0x79, 0xf5, 0x2f, 0x41, 0xf8, 0x73, 0x10, 0x66, 0x21, 0xee, 0x18, 0xcd, 0x16, 0x0f, 0x1a,
-	0x6a, 0xd5, 0xc8, 0x8d, 0x8a, 0x5f, 0xb8, 0x02, 0x17, 0xdb, 0xa2, 0x5b, 0x94, 0x18, 0xeb, 0xd4,
-	0xe4, 0x92, 0xdc, 0x84, 0xfb, 0x0d, 0x5e, 0x81, 0xc9, 0xb6, 0x5a, 0x81, 0xd6, 0x4d, 0x55, 0xab,
-	0x1b, 0xb9, 0x88, 0xf3, 0x04, 0x5f, 0x87, 0xaf, 0x74, 0x5b, 0xb1, 0x65, 0xb9, 0x98, 0xf7, 0x1d,
-	0x5e, 0x85, 0xa9, 0xb6, 0xea, 0x96, 0xa9, 0x32, 0xd3, 0xf8, 0x50, 0x33, 0xf7, 0x73, 0xd0, 0x79,
-	0x86, 0x6b, 0x30, 0xdb, 0x6d, 0x8d, 0x4b, 0xbf, 0x63, 0x29, 0x26, 0xba, 0x47, 0x3c, 0xb1, 0x15,
-	0xeb, 0xbb, 0xc2, 0x5e, 0xc4, 0x79, 0xf2, 0x8b, 0xad, 0x58, 0xdf, 0xe5, 0xb6, 0x62, 0xde, 0x77,
-	0x4f, 0x6c, 0xbc, 0xd0, 0x0a, 0xa9, 0x90, 0x07, 0x39, 0xe8, 0x3c, 0xc3, 0x5f, 0x11, 0x8c, 0x7c,
-	0x5b, 0xad, 0x36, 0x48, 0xee, 0x8f, 0xa8, 0xa7, 0xaa, 0x7d, 0x6a, 0xe9, 0x53, 0xbb, 0xbe, 0xf5,
-	0xf2, 0xad, 0xce, 0x80, 0x7a, 0xf8, 0xe4, 0xde, 0x37, 0x5f, 0xdf, 0xec, 0xd2, 0x3f, 0x09, 0xc1,
-	0x05, 0x0f, 0x0e, 0x71, 0x12, 0x6c, 0x74, 0x70, 0x10, 0x8f, 0xaf, 0x05, 0x14, 0xfb, 0x1d, 0x5f,
-	0x06, 0x0f, 0x2c, 0x92, 0x21, 0x5b, 0xee, 0x19, 0xc5, 0x73, 0xd0, 0x46, 0x46, 0x32, 0x6c, 0x6b,
-	0xb4, 0x47, 0xf0, 0x3c, 0x74, 0x41, 0x22, 0x39, 0x62, 0xeb, 0x74, 0x8d, 0x63, 0x19, 0x5c, 0xa8,
-	0x48, 0x8e, 0xda, 0x5a, 0xae, 0x31, 0x9c, 0x81, 0x1e, 0x38, 0x24, 0xc7, 0x6c, 0xbd, 0x1e, 0x89,
-	0x15, 0x97, 0x53, 0xa3, 0x64, 0xc4, 0x89, 0xcb, 0x19, 0x71, 0xc5, 0x65, 0x97, 0x2b, 0x39, 0xde,
-	0x15, 0x97, 0x3d, 0x8e, 0x17, 0xc1, 0x85, 0x88, 0x24, 0x58, 0x5a, 0xf9, 0xf8, 0x6f, 0xff, 0x79,
-	0x1c, 0x02, 0x16, 0x49, 0xa0, 0xe4, 0xc3, 0xe0, 0xcf, 0x47, 0x90, 0x15, 0x68, 0x47, 0x29, 0x7f,
-	0x1d, 0x62, 0xa2, 0xed, 0x9d, 0x15, 0xc0, 0xd2, 0x71, 0x13, 0x05, 0x4f, 0x9b, 0x08, 0xb5, 0x9a,
-	0x08, 0xe7, 0x32, 0x4b, 0x99, 0xe5, 0xcc, 0x37, 0x32, 0xdf, 0xcc, 0xbc, 0x9e, 0x79, 0x23, 0xf3,
-	0x66, 0x66, 0xf1, 0xfa, 0xbb, 0xe1, 0x08, 0x4a, 0x04, 0xd3, 0x65, 0xc0, 0x85, 0x5b, 0xeb, 0x9b,
-	0xaa, 0xb9, 0xef, 0x26, 0x2a, 0x37, 0xcf, 0xa0, 0xe7, 0xe0, 0x99, 0x5f, 0xfd, 0xce, 0xcd, 0x33,
-	0xe9, 0x2f, 0x46, 0x6c, 0x4a, 0x2c, 0x50, 0x7a, 0x5f, 0x23, 0x6e, 0x4f, 0x92, 0x8b, 0x12, 0xc7,
-	0xf3, 0x60, 0x25, 0x39, 0xc2, 0x42, 0xf3, 0x0f, 0x83, 0x2f, 0x86, 0xf1, 0xfe, 0x65, 0x31, 0xde,
-	0xab, 0x70, 0x09, 0x92, 0x5c, 0x4f, 0xde, 0x54, 0x99, 0x5a, 0x23, 0x26, 0x61, 0xf2, 0x76, 0x17,
-	0xf5, 0x1d, 0x87, 0x21, 0x66, 0x53, 0xdf, 0xa8, 0x88, 0xf1, 0x25, 0xf1, 0xbd, 0x24, 0xbe, 0x67,
-	0x22, 0xbe, 0x1f, 0x8c, 0x82, 0xc4, 0x61, 0xf6, 0x7e, 0x83, 0xb0, 0xa3, 0x36, 0xd4, 0xdc, 0xf0,
-	0xbf, 0x02, 0xa1, 0xfb, 0xe4, 0xc8, 0x46, 0xff, 0x54, 0x07, 0xfd, 0xd6, 0x53, 0x98, 0x05, 0x65,
-	0xa4, 0x58, 0xf2, 0xff, 0x75, 0x17, 0x7c, 0xd1, 0xee, 0x02, 0x1e, 0xd9, 0x80, 0x2e, 0x38, 0x09,
-	0xc3, 0x04, 0x84, 0xde, 0x23, 0x47, 0xa9, 0x11, 0x1e, 0x29, 0x3c, 0x09, 0x42, 0x8c, 0x6b, 0xc8,
-	0x2f, 0x3b, 0xe1, 0x45, 0x75, 0xc2, 0x67, 0x08, 0xa2, 0xa2, 0xc6, 0xff, 0x5f, 0xfd, 0xf0, 0x87,
-	0x28, 0xcc, 0x14, 0x6e, 0xad, 0x73, 0x6c, 0x2a, 0x8d, 0x2a, 0x29, 0x3e, 0xd0, 0x19, 0x31, 0x0c,
-	0x8d, 0xd6, 0xf1, 0x3d, 0x00, 0x5d, 0x35, 0xf7, 0x4b, 0x35, 0x4b, 0xdb, 0xde, 0x72, 0xae, 0x9f,
-	0x03, 0xf1, 0x9e, 0x6d, 0xcb, 0xc6, 0xf9, 0xb8, 0xee, 0x0c, 0xe3, 0xef, 0x43, 0xe2, 0xc0, 0x42,
-	0x78, 0x49, 0x77, 0x10, 0x6e, 0x1d, 0x39, 0x42, 0xf3, 0xd1, 0xdc, 0x5b, 0x43, 0xf4, 0x4f, 0xdf,
-	0xb6, 0xcd, 0x4f, 0xf3, 0x4e, 0xfd, 0x11, 0x0a, 0x26, 0x22, 0xce, 0x53, 0x12, 0x29, 0xf1, 0x03,
-	0xcf, 0x04, 0x03, 0x53, 0xb8, 0x20, 0x6c, 0xee, 0xf3, 0xe3, 0xb5, 0x91, 0x0c, 0x71, 0xdf, 0xcb,
-	0x43, 0xf8, 0xee, 0xb9, 0x3c, 0xf4, 0xf1, 0x39, 0x51, 0xee, 0x68, 0x1b, 0xf8, 0x00, 0x62, 0x65,
-	0xbe, 0xc5, 0x8a, 0x42, 0x12, 0x96, 0x0c, 0x0f, 0xed, 0xb1, 0x67, 0x6f, 0xee, 0xe3, 0xf1, 0x42,
-	0xd9, 0xad, 0xb8, 0xf2, 0xef, 0xb1, 0xcf, 0x6f, 0x8c, 0x2d, 0x66, 0xf8, 0x01, 0xe3, 0x51, 0x13,
-	0xcd, 0x41, 0x0a, 0xe2, 0x02, 0xbc, 0x05, 0x5a, 0xdf, 0xd5, 0xac, 0xdb, 0x0b, 0x76, 0xe4, 0x27,
-	0x4d, 0xf4, 0xfb, 0x31, 0x38, 0x0e, 0x01, 0x58, 0x2b, 0x27, 0x98, 0xe6, 0xea, 0xaf, 0x43, 0xf0,
-	0xcb, 0x10, 0x5c, 0x86, 0x54, 0x07, 0x00, 0xd9, 0x7e, 0x4c, 0x72, 0x1d, 0x64, 0x3f, 0xad, 0x01,
-	0xa4, 0x32, 0x0f, 0x73, 0x7e, 0x33, 0x7c, 0xf8, 0x65, 0x19, 0xd2, 0x03, 0x6c, 0xf7, 0xa3, 0x9a,
-	0x0c, 0x48, 0x7e, 0xb3, 0xfa, 0xb0, 0xce, 0x1b, 0x70, 0x79, 0x80, 0x8f, 0x41, 0x04, 0xd4, 0x27,
-	0x0f, 0x1f, 0x2e, 0x1a, 0x9c, 0x47, 0x3f, 0x5a, 0xea, 0x93, 0x47, 0x1f, 0x86, 0xfa, 0x4d, 0xd0,
-	0x5e, 0x42, 0x41, 0x50, 0x9f, 0x06, 0x07, 0xad, 0xde, 0xf9, 0x6b, 0x36, 0x78, 0x8d, 0x86, 0x59,
-	0x97, 0xf3, 0x56, 0x61, 0xb8, 0xba, 0x0f, 0xae, 0xf1, 0x30, 0x75, 0x3d, 0xaf, 0x8a, 0x50, 0x80,
-	0x49, 0xd7, 0x9e, 0x2b, 0x5a, 0x20, 0x9d, 0xed, 0xa5, 0x29, 0x0c, 0x05, 0x5a, 0xdf, 0xd3, 0x2a,
-	0x0d, 0x46, 0x76, 0x53, 0xb1, 0x75, 0x6a, 0xca, 0x9d, 0x77, 0xf8, 0x16, 0x4c, 0xd8, 0x17, 0x76,
-	0x31, 0xff, 0xb5, 0x2e, 0x9e, 0x19, 0x38, 0xf9, 0x2d, 0x98, 0x10, 0xad, 0x6e, 0x4f, 0xce, 0x74,
-	0x73, 0xc6, 0xa0, 0xd9, 0xe9, 0xcf, 0x82, 0x90, 0xf2, 0xe7, 0xf0, 0x3b, 0x9a, 0x61, 0xe2, 0x25,
-	0x88, 0x93, 0xf6, 0x48, 0xc9, 0xe7, 0x64, 0x9f, 0x7c, 0x88, 0x94, 0x58, 0x47, 0xc5, 0x3a, 0x5f,
-	0xe3, 0x8f, 0x11, 0x5c, 0xec, 0xb0, 0x51, 0xa9, 0x23, 0xb5, 0xb9, 0x7a, 0xf9, 0xdc, 0x8d, 0xc0,
-	0x27, 0x9c, 0x7c, 0xda, 0xda, 0x0c, 0x7a, 0x19, 0x2c, 0x82, 0x5c, 0x5c, 0x36, 0x55, 0xee, 0x9d,
-	0xb8, 0x62, 0x9c, 0x34, 0x11, 0x85, 0xcb, 0x10, 0xef, 0x8c, 0xc9, 0xfc, 0x1e, 0x30, 0xd9, 0x93,
-	0x1c, 0xac, 0x42, 0xc2, 0xa5, 0x25, 0x0a, 0xba, 0xd4, 0x27, 0x9b, 0x81, 0x75, 0xfd, 0x29, 0x82,
-	0x29, 0x9e, 0xc5, 0xf6, 0xf6, 0x9d, 0x62, 0x5d, 0xdd, 0xa9, 0x92, 0x4d, 0x46, 0x75, 0x03, 0x7f,
-	0x0d, 0xc6, 0x85, 0x31, 0xd3, 0xac, 0x76, 0x95, 0xf2, 0x69, 0x10, 0x29, 0x11, 0x2e, 0xdc, 0x36,
-	0xab, 0x78, 0x19, 0x66, 0xb4, 0x4a, 0x9d, 0x32, 0x52, 0x62, 0xc4, 0xd0, 0x69, 0xdd, 0x20, 0x25,
-	0xb1, 0xac, 0xfc, 0xc0, 0x18, 0x51, 0xa6, 0x85, 0x54, 0xb1, 0x85, 0x02, 0x02, 0xf8, 0x4a, 0xfb,
-	0xda, 0x78, 0x48, 0x18, 0xd3, 0x76, 0x09, 0xbf, 0x71, 0x47, 0x14, 0x81, 0xa7, 0x0d, 0x7b, 0x30,
-	0xfd, 0x8b, 0x20, 0x4c, 0xf3, 0xe8, 0x8a, 0x55, 0xad, 0xa2, 0xed, 0x54, 0x89, 0xfd, 0x59, 0x0a,
-	0xef, 0xc1, 0x45, 0xbe, 0x28, 0xa4, 0xa4, 0x33, 0xfa, 0xe0, 0xa8, 0xb4, 0x4f, 0x0d, 0xb3, 0xd4,
-	0x60, 0x9a, 0x7d, 0x4a, 0x5d, 0x1c, 0x62, 0xdf, 0xf1, 0x26, 0xbc, 0x16, 0x50, 0xb0, 0xb0, 0xb8,
-	0x69, 0x19, 0x5c, 0xa3, 0x86, 0x79, 0x8f, 0x69, 0xb8, 0x01, 0xaf, 0xf4, 0xfa, 0x61, 0xe4, 0xa0,
-	0x41, 0x6c, 0x7f, 0xa1, 0xe7, 0xf7, 0x37, 0xdb, 0xe5, 0x4f, 0x11, 0x66, 0xef, 0x31, 0x2d, 0x7f,
-	0x05, 0x30, 0xb1, 0x33, 0x2e, 0xed, 0x51, 0x26, 0x6c, 0xe1, 0xb8, 0xeb, 0x66, 0x1d, 0xca, 0x65,
-	0x96, 0xec, 0xab, 0xf4, 0x8f, 0x23, 0x30, 0xe1, 0xc6, 0xa2, 0xb5, 0x76, 0x1c, 0x02, 0x7d, 0xda,
-	0x20, 0x62, 0x09, 0x79, 0x03, 0x7c, 0x84, 0x60, 0xba, 0x0b, 0x2c, 0xa5, 0xaa, 0x66, 0x98, 0x36,
-	0xfe, 0xdf, 0x78, 0x1e, 0xfc, 0x5b, 0xed, 0x98, 0x97, 0xce, 0xc1, 0x3f, 0x66, 0xbd, 0x2d, 0xfc,
-	0x26, 0x88, 0x33, 0x45, 0x69, 0xe7, 0x48, 0x57, 0x0d, 0xf1, 0x81, 0x25, 0x9a, 0x9b, 0xee, 0x8a,
-	0xa1, 0x58, 0xd3, 0xcd, 0xa3, 0xb5, 0x80, 0x12, 0xe5, 0xba, 0x79, 0xae, 0x8a, 0x77, 0xfc, 0xca,
-	0xc5, 0xbf, 0xbe, 0x44, 0x73, 0xb9, 0x21, 0x96, 0xa6, 0x0b, 0x5d, 0x6b, 0x01, 0x25, 0xe1, 0xd8,
-	0x7b, 0x87, 0x32, 0xae, 0xb2, 0xf2, 0xf1, 0xc8, 0xe7, 0x37, 0x46, 0xf8, 0x79, 0xe2, 0xa4, 0x89,
-	0xfe, 0x13, 0x86, 0x29, 0xfb, 0x92, 0x1e, 0x75, 0x15, 0x1b, 0x7e, 0x16, 0xb6, 0x3f, 0x39, 0xc9,
-	0x6f, 0x97, 0xc5, 0xf7, 0xd3, 0x8f, 0xc2, 0x90, 0xc6, 0x9e, 0xc4, 0x52, 0x13, 0x22, 0x6a, 0x59,
-	0xd8, 0x0d, 0x9b, 0xac, 0x41, 0xe0, 0x26, 0xce, 0xf5, 0x66, 0x90, 0xf5, 0x85, 0x78, 0xb6, 0xdd,
-	0x97, 0xa9, 0x71, 0xe1, 0x6b, 0x7b, 0xfb, 0x0e, 0xac, 0xe2, 0x95, 0xa1, 0x0c, 0xb8, 0xb0, 0xeb,
-	0x6f, 0xe8, 0x03, 0x7c, 0x73, 0xe8, 0x48, 0xfc, 0x1b, 0x3f, 0x35, 0x73, 0x9b, 0x8f, 0xcb, 0x4e,
-	0xcf, 0xcb, 0xa2, 0xe9, 0x41, 0xc5, 0xab, 0xcf, 0x1c, 0xe3, 0x33, 0xba, 0xb8, 0x8d, 0x5f, 0x7f,
-	0xc6, 0x3a, 0x3a, 0x04, 0x94, 0x8a, 0x89, 0x1a, 0x38, 0xef, 0xf0, 0xfe, 0x90, 0x85, 0xe8, 0xad,
-	0x68, 0x5f, 0x93, 0xb7, 0x61, 0xca, 0x82, 0xba, 0x4c, 0xf7, 0xe4, 0x0e, 0xf8, 0x8d, 0x74, 0xce,
-	0xbf, 0x0b, 0x07, 0xf1, 0x76, 0x7e, 0xd6, 0xd9, 0x7a, 0x55, 0x01, 0x34, 0x1c, 0x39, 0x6e, 0xa2,
-	0xf0, 0x69, 0x13, 0x85, 0xde, 0x0d, 0x47, 0x42, 0x89, 0x70, 0xda, 0x84, 0xd8, 0x6a, 0x95, 0xee,
-	0xa8, 0xd5, 0x2d, 0x9d, 0x94, 0xf9, 0x9d, 0xff, 0x3d, 0x88, 0x76, 0x80, 0x6f, 0xd8, 0x97, 0x9d,
-	0xab, 0xc3, 0xf7, 0xb8, 0x02, 0xed, 0x5d, 0xcb, 0x58, 0xb9, 0xf8, 0xa8, 0x89, 0x26, 0x21, 0x0e,
-	0x20, 0x52, 0xe4, 0xbc, 0x83, 0x16, 0xd3, 0x3a, 0xc4, 0x0a, 0x8c, 0xa8, 0x26, 0x79, 0x31, 0x5e,
-	0x27, 0x4f, 0x6e, 0x74, 0x65, 0x95, 0x3e, 0x80, 0xb8, 0x42, 0xf4, 0xaa, 0x5a, 0xfe, 0xf2, 0x5c,
-	0xd6, 0x20, 0xba, 0x4a, 0xcc, 0x2f, 0xcb, 0xdd, 0xd5, 0x35, 0xb8, 0xe0, 0xf9, 0x4f, 0x06, 0xc7,
-	0x00, 0x36, 0x95, 0x8d, 0xef, 0x7e, 0x50, 0x5a, 0xdb, 0xd8, 0xda, 0x4e, 0x04, 0x70, 0x14, 0xc6,
-	0x94, 0xe2, 0x3b, 0x45, 0xa5, 0xa8, 0x24, 0x10, 0x06, 0x18, 0xdd, 0x2a, 0xac, 0x15, 0xef, 0x16,
-	0x13, 0x41, 0x4b, 0xf1, 0xde, 0x56, 0x51, 0x29, 0xbd, 0xbd, 0x5a, 0x5c, 0xdf, 0x4e, 0x84, 0xf2,
-	0x9f, 0xa0, 0xd3, 0x27, 0x52, 0xe0, 0xf1, 0x13, 0x29, 0xf0, 0xf4, 0x89, 0x84, 0x1e, 0xb6, 0x24,
-	0xf4, 0x69, 0x4b, 0x42, 0x7f, 0x6a, 0x49, 0xe8, 0xb4, 0x25, 0xa1, 0xc7, 0x2d, 0x09, 0xfd, 0xbd,
-	0x25, 0xa1, 0x7f, 0xb4, 0xa4, 0xc0, 0xd3, 0x96, 0x84, 0x3e, 0x39, 0x93, 0x02, 0xc7, 0x67, 0x12,
-	0x3a, 0x3d, 0x93, 0x02, 0x8f, 0xcf, 0xa4, 0xc0, 0xf7, 0x94, 0x0a, 0xd5, 0xef, 0x57, 0xb2, 0x87,
-	0xb4, 0x6a, 0x12, 0xc6, 0xd4, 0x6c, 0xc3, 0x58, 0xe0, 0x0f, 0x7b, 0x94, 0xd5, 0xae, 0xe9, 0x8c,
-	0x1e, 0x6a, 0xbb, 0x84, 0x5d, 0x73, 0xc4, 0x0b, 0xfa, 0x4e, 0x85, 0x2e, 0x90, 0x07, 0xa6, 0xfd,
-	0x8f, 0x95, 0xef, 0x7f, 0x81, 0x3b, 0xa3, 0xfc, 0xcf, 0xab, 0xa5, 0xff, 0x06, 0x00, 0x00, 0xff,
-	0xff, 0x8b, 0xfc, 0x52, 0x19, 0x32, 0x1c, 0x00, 0x00,
+	// 2051 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4f, 0x6c, 0xdb, 0xd6,
+	0x19, 0xd7, 0x13, 0x65, 0x5b, 0xfe, 0xe4, 0xc8, 0xf2, 0xb3, 0xe3, 0xca, 0x9a, 0xcb, 0xb0, 0x42,
+	0x82, 0x79, 0xa9, 0x22, 0xc7, 0xb2, 0xbb, 0xa6, 0x5e, 0xd1, 0xa0, 0x52, 0x54, 0x3b, 0x6d, 0x62,
+	0xbb, 0xb4, 0xb3, 0xae, 0xbd, 0x08, 0xb4, 0xfc, 0x2c, 0x13, 0x91, 0xf4, 0x68, 0x92, 0x72, 0xe3,
+	0xc3, 0x80, 0x60, 0xc7, 0xa2, 0x87, 0x62, 0x1b, 0xb0, 0xc3, 0xb6, 0xc3, 0x86, 0x1d, 0x7a, 0x1a,
+	0xb6, 0xd3, 0x80, 0x69, 0x03, 0xbc, 0x00, 0x03, 0x06, 0x0f, 0xd8, 0x7c, 0x29, 0x10, 0x60, 0x97,
+	0x45, 0xbe, 0x6c, 0xd8, 0x0e, 0x41, 0xb1, 0xfb, 0x06, 0xbe, 0x47, 0x4a, 0xa4, 0x48, 0xc9, 0x4a,
+	0x81, 0x16, 0xc1, 0xe0, 0x93, 0xc9, 0xf7, 0x7d, 0xef, 0xfb, 0xfb, 0xfb, 0xbe, 0xf7, 0x3d, 0xca,
+	0x30, 0x77, 0x40, 0x8c, 0xac, 0x4a, 0xe7, 0x8d, 0xf2, 0x1e, 0xa9, 0x29, 0xf3, 0xe5, 0x9d, 0x7a,
+	0xa9, 0xac, 0x94, 0xf7, 0x48, 0x49, 0x6f, 0x54, 0xc9, 0xbc, 0x79, 0xa8, 0x11, 0x23, 0xab, 0xe9,
+	0xd4, 0xa4, 0x78, 0x96, 0x73, 0x66, 0x39, 0x67, 0xd6, 0xcb, 0x99, 0xba, 0x56, 0x51, 0xcd, 0xbd,
+	0xc6, 0x76, 0xb6, 0x4c, 0x6b, 0xf3, 0x15, 0x5a, 0xa1, 0xf3, 0x6c, 0xd3, 0x76, 0x63, 0x97, 0xbd,
+	0xb1, 0x17, 0xf6, 0xc4, 0x85, 0xa5, 0x2e, 0x55, 0x28, 0xad, 0x54, 0x49, 0x87, 0xcb, 0x54, 0x6b,
+	0xc4, 0x30, 0x95, 0x9a, 0x66, 0x33, 0x7c, 0xcd, 0x6b, 0x17, 0xd5, 0x4c, 0x95, 0xd6, 0x6d, 0x53,
+	0x52, 0x92, 0x97, 0xa8, 0xd1, 0xaa, 0x5a, 0x3e, 0x74, 0x1b, 0x9b, 0xba, 0xe4, 0xe5, 0xd0, 0x69,
+	0xc3, 0xf4, 0x78, 0x93, 0x9a, 0xf1, 0x32, 0xb8, 0x49, 0xb3, 0x5e, 0xd2, 0x81, 0x52, 0x55, 0x77,
+	0x14, 0x93, 0x04, 0xeb, 0x3e, 0x50, 0xc9, 0x87, 0x25, 0xaf, 0x75, 0x97, 0xfc, 0x1c, 0x86, 0x5b,
+	0x41, 0xfa, 0x87, 0xc3, 0x30, 0x5d, 0xb0, 0x42, 0xb7, 0x4a, 0x94, 0x1d, 0xa2, 0xdf, 0x55, 0xcc,
+	0xf2, 0x1e, 0xd1, 0xb7, 0x0e, 0x35, 0x82, 0x6f, 0x42, 0xa4, 0xae, 0xd4, 0x48, 0x12, 0x49, 0x68,
+	0x2e, 0x9e, 0x7b, 0x39, 0xdb, 0x2f, 0xe6, 0x59, 0xbe, 0x7d, 0x9d, 0x2b, 0x97, 0xd9, 0x46, 0xbc,
+	0x09, 0x51, 0xaa, 0x11, 0x5d, 0x31, 0xa9, 0x9e, 0x0c, 0x4b, 0x68, 0x2e, 0x96, 0x5b, 0x18, 0x44,
+	0x08, 0x33, 0x67, 0xdd, 0xde, 0x98, 0x8f, 0x3c, 0x6d, 0x22, 0x24, 0xb7, 0x05, 0x2d, 0x9f, 0x46,
+	0x1e, 0x35, 0x51, 0x12, 0xa6, 0x61, 0x9c, 0x73, 0x4b, 0x26, 0x95, 0x98, 0xd5, 0x58, 0x58, 0xc8,
+	0xe4, 0x8e, 0x9b, 0xe8, 0x51, 0x04, 0x12, 0x10, 0x59, 0x53, 0x6a, 0x24, 0x15, 0xe5, 0x1e, 0x48,
+	0x08, 0xfe, 0x16, 0x86, 0xa8, 0x23, 0xf2, 0xea, 0x5f, 0xc2, 0xf0, 0xe7, 0x30, 0xcc, 0xc0, 0xb8,
+	0x23, 0x34, 0x5b, 0xdc, 0x6f, 0x28, 0x55, 0x23, 0x37, 0xcc, 0xff, 0xc2, 0x15, 0xb8, 0xd8, 0x26,
+	0xdd, 0xa2, 0xc4, 0x58, 0xa3, 0x26, 0xa3, 0xe4, 0xc6, 0xdc, 0x6f, 0xf0, 0x22, 0x4c, 0xb4, 0xd9,
+	0x0a, 0xb4, 0x6e, 0x2a, 0x6a, 0xdd, 0xc8, 0x45, 0x9d, 0x27, 0xf8, 0x06, 0xbc, 0xd0, 0x2d, 0xc5,
+	0xa6, 0xe5, 0xe2, 0xde, 0x77, 0x78, 0x09, 0x26, 0xdb, 0xac, 0x9b, 0xa6, 0xa2, 0x9b, 0xc6, 0x87,
+	0xaa, 0xb9, 0x97, 0x83, 0xce, 0x33, 0x5c, 0x83, 0x99, 0x6e, 0x69, 0x8c, 0xfa, 0x9e, 0xc5, 0x98,
+	0xe8, 0x5e, 0xf1, 0xd8, 0x56, 0xac, 0xef, 0x70, 0x79, 0x51, 0xe7, 0x29, 0xc8, 0xb6, 0x62, 0x7d,
+	0x87, 0xc9, 0x8a, 0x7b, 0xdf, 0x3d, 0xb6, 0xb1, 0x40, 0xcb, 0xa4, 0x42, 0x1e, 0xe4, 0xa0, 0xf3,
+	0x0c, 0x7f, 0x45, 0x30, 0xf4, 0x6d, 0xa5, 0xda, 0x20, 0xb9, 0x3f, 0x22, 0x5f, 0x54, 0x7b, 0xc4,
+	0x32, 0x20, 0x76, 0x3d, 0xe3, 0x15, 0x18, 0x9d, 0x3e, 0xf1, 0x08, 0xf0, 0xbd, 0xa7, 0xbf, 0x81,
+	0xde, 0xa5, 0x7f, 0x24, 0xc0, 0x05, 0x0f, 0x0e, 0x71, 0x12, 0x6c, 0x74, 0x30, 0x28, 0x8f, 0xae,
+	0x86, 0x64, 0xfb, 0x1d, 0x5f, 0x06, 0x0f, 0x2c, 0x92, 0x82, 0x4d, 0xf7, 0xac, 0xe2, 0x59, 0x68,
+	0x23, 0x23, 0x19, 0xb1, 0x39, 0xda, 0x2b, 0x78, 0x0e, 0xba, 0x20, 0x91, 0x1c, 0xb2, 0x79, 0xba,
+	0xd6, 0xb1, 0x04, 0x2e, 0x54, 0x24, 0x87, 0x6d, 0x2e, 0xd7, 0x1a, 0xce, 0x80, 0x0f, 0x0e, 0xc9,
+	0x11, 0x9b, 0xcf, 0x47, 0xb1, 0xec, 0x72, 0x62, 0x94, 0x8c, 0x3a, 0x76, 0x39, 0x2b, 0x2e, 0xbb,
+	0xec, 0x70, 0x25, 0x47, 0xbb, 0xec, 0xb2, 0xd7, 0x71, 0x16, 0x5c, 0x88, 0x48, 0x82, 0xc5, 0x95,
+	0x1f, 0xfb, 0xed, 0x3f, 0x8f, 0x84, 0x11, 0x7d, 0x28, 0x81, 0x92, 0x0f, 0xc3, 0x96, 0x95, 0x1d,
+	0x8e, 0xfc, 0x75, 0x88, 0xf3, 0xca, 0x77, 0xc2, 0x8f, 0xc5, 0xa3, 0x26, 0x0a, 0x9f, 0x34, 0x11,
+	0x6a, 0x35, 0x11, 0xce, 0x65, 0x16, 0x33, 0x4b, 0x99, 0x57, 0x32, 0xdf, 0xcc, 0xbc, 0x9a, 0xb9,
+	0x91, 0x79, 0x2d, 0xb3, 0x70, 0xfd, 0xed, 0x48, 0x14, 0x25, 0xc2, 0xe9, 0x9f, 0x0a, 0x30, 0x19,
+	0xd0, 0x27, 0xce, 0xf3, 0xf3, 0x9c, 0xe4, 0xe7, 0x67, 0x02, 0xbc, 0xf0, 0x6e, 0x83, 0xe8, 0x87,
+	0x1b, 0x8a, 0xae, 0xd4, 0xce, 0x73, 0xf4, 0x3c, 0xe6, 0xe8, 0x17, 0x02, 0xa4, 0x0a, 0x94, 0xde,
+	0x57, 0x89, 0x7d, 0xde, 0x9f, 0xa7, 0xe9, 0x79, 0x4c, 0x53, 0x19, 0x70, 0xe1, 0xd6, 0xda, 0x86,
+	0x62, 0xee, 0xb9, 0xc7, 0xb2, 0xbb, 0xae, 0xa9, 0x0a, 0xb1, 0xa9, 0xea, 0x8c, 0xd1, 0xac, 0x6b,
+	0x9e, 0xfa, 0xd5, 0xef, 0xdc, 0xf3, 0x54, 0xfa, 0x7b, 0xce, 0x00, 0xe8, 0x01, 0x04, 0xd3, 0x24,
+	0xba, 0x06, 0xc0, 0xd1, 0x3c, 0x58, 0x1e, 0x0e, 0xe9, 0xc2, 0xdc, 0xc3, 0xb0, 0x3d, 0xdf, 0x7d,
+	0xe0, 0x9b, 0xef, 0x6e, 0x9c, 0x61, 0x49, 0x4f, 0xcc, 0xf9, 0xc6, 0xbc, 0x7f, 0x59, 0x63, 0x5e,
+	0x1a, 0x24, 0x98, 0xe1, 0x9b, 0x24, 0xd6, 0x4e, 0x88, 0x49, 0x74, 0x69, 0xab, 0x6b, 0xe0, 0x3b,
+	0x8a, 0x40, 0xdc, 0x1e, 0xf8, 0x86, 0xb9, 0xc5, 0xe7, 0xe3, 0xde, 0xf9, 0xb8, 0xf7, 0x6c, 0xe3,
+	0xde, 0x30, 0x88, 0x0c, 0x8f, 0x9d, 0x93, 0xcb, 0x82, 0x9a, 0xbb, 0x18, 0xae, 0x80, 0x70, 0x9f,
+	0x1c, 0xda, 0xb5, 0x30, 0xd9, 0xa9, 0x05, 0xeb, 0x29, 0xa2, 0x87, 0x25, 0x24, 0x5b, 0x74, 0xfc,
+	0x9e, 0xaf, 0x26, 0x5e, 0xe9, 0x5f, 0x13, 0x3d, 0xce, 0x4a, 0x5f, 0x41, 0xfc, 0xc7, 0x2a, 0x88,
+	0x97, 0xe0, 0x12, 0x24, 0xd9, 0x8e, 0x3e, 0xf5, 0x70, 0x1c, 0x81, 0x31, 0x10, 0xde, 0x21, 0x87,
+	0xa9, 0x21, 0x66, 0x33, 0x3c, 0x09, 0x43, 0x9c, 0x71, 0x48, 0xe7, 0x35, 0xf1, 0x65, 0xd5, 0xc4,
+	0x67, 0x08, 0x62, 0x3c, 0xc6, 0xff, 0x5f, 0x95, 0xf1, 0x87, 0x18, 0x4c, 0x17, 0x6e, 0xad, 0x31,
+	0x6c, 0xca, 0x8d, 0x2a, 0x29, 0x3e, 0xd0, 0x74, 0x62, 0x18, 0x2a, 0xad, 0xe3, 0x7b, 0x00, 0x9a,
+	0x62, 0xee, 0x95, 0x6a, 0x16, 0xb7, 0x7d, 0x14, 0x5d, 0x3f, 0xe3, 0x00, 0xf0, 0x1d, 0x67, 0x36,
+	0xce, 0x47, 0x35, 0x67, 0x19, 0x7f, 0x17, 0x12, 0xfb, 0x16, 0xc2, 0x4b, 0x9a, 0x83, 0x70, 0x6b,
+	0x0e, 0x11, 0xe6, 0x62, 0xb9, 0xd7, 0x07, 0x38, 0xe7, 0x7a, 0x16, 0x70, 0x7e, 0x8a, 0xd5, 0xec,
+	0xf7, 0x51, 0x38, 0x11, 0x75, 0x9e, 0x92, 0x48, 0x1e, 0xdf, 0xf7, 0x6c, 0x30, 0x30, 0x85, 0x0b,
+	0x5c, 0xe6, 0x1e, 0xbb, 0x64, 0x18, 0x49, 0x81, 0xe9, 0x5e, 0x1a, 0x40, 0xb7, 0xef, 0x13, 0x4a,
+	0x0f, 0x9d, 0x63, 0xe5, 0x0e, 0xb7, 0x81, 0xf7, 0x21, 0x5e, 0x66, 0x47, 0x1c, 0x0f, 0x24, 0xd1,
+	0x93, 0x91, 0x81, 0x35, 0xfa, 0xce, 0xec, 0x1e, 0x1a, 0x2f, 0x94, 0xdd, 0x8c, 0xcb, 0xff, 0x1e,
+	0xf9, 0xfc, 0x8d, 0x91, 0x85, 0x0c, 0x1b, 0x3c, 0x1e, 0x35, 0xd1, 0x2c, 0xa4, 0x60, 0x9c, 0x83,
+	0xb7, 0x40, 0xeb, 0x3b, 0xaa, 0x69, 0x65, 0xd7, 0xa1, 0x1f, 0x37, 0xd1, 0xef, 0x47, 0xe0, 0x48,
+	0x00, 0xb0, 0x32, 0xc7, 0x3b, 0xcd, 0xd5, 0x5f, 0x0b, 0xf0, 0x4b, 0x01, 0x2e, 0x43, 0xaa, 0x03,
+	0x80, 0x6c, 0xaf, 0x4e, 0x72, 0x1d, 0xa4, 0x20, 0xae, 0x3e, 0x4d, 0x65, 0x0e, 0x66, 0x83, 0x76,
+	0x04, 0xf4, 0x97, 0x25, 0x48, 0xf7, 0x91, 0xdd, 0xab, 0xd5, 0x64, 0x40, 0x0c, 0xda, 0xd5, 0xa3,
+	0xeb, 0xdc, 0x80, 0xcb, 0x7d, 0x74, 0xf4, 0x6b, 0x40, 0x3d, 0xfc, 0x08, 0xe8, 0x45, 0xfd, 0xfd,
+	0xe8, 0xd5, 0x96, 0x7a, 0xf8, 0xd1, 0xa3, 0x43, 0xfd, 0x26, 0x6c, 0xa7, 0x90, 0x37, 0xa8, 0x4f,
+	0xc3, 0xfd, 0xb2, 0x77, 0x76, 0xce, 0xfa, 0xe7, 0x68, 0x90, 0xbc, 0x9c, 0x95, 0x85, 0xc1, 0xe2,
+	0xde, 0x3f, 0xc6, 0x83, 0xc4, 0xf5, 0xac, 0x28, 0x42, 0x01, 0x26, 0x5c, 0x67, 0x2e, 0x2f, 0x81,
+	0x74, 0xd6, 0xdf, 0xa6, 0x30, 0x14, 0x68, 0x7d, 0x57, 0xad, 0x34, 0x74, 0xb2, 0x93, 0x8a, 0xaf,
+	0x51, 0x53, 0xea, 0xbc, 0xc3, 0xb7, 0x60, 0xcc, 0xfe, 0x60, 0xc9, 0xf7, 0xbf, 0xdc, 0xd5, 0x67,
+	0xfa, 0x6e, 0x7e, 0x1d, 0xc6, 0xec, 0x31, 0x98, 0x6f, 0xce, 0x74, 0xf7, 0x8c, 0x7e, 0xbb, 0xd3,
+	0x9f, 0x85, 0x21, 0x15, 0xdc, 0xc3, 0xef, 0xa8, 0x86, 0x89, 0x17, 0x61, 0x9c, 0xb4, 0x57, 0x4a,
+	0x01, 0x13, 0x7f, 0xf2, 0x21, 0x92, 0xe3, 0x1d, 0x16, 0x6b, 0xd2, 0xc6, 0x1f, 0x23, 0xb8, 0xd8,
+	0xe9, 0x46, 0xa5, 0x0e, 0xd5, 0xee, 0xd5, 0x4b, 0x67, 0x1e, 0x04, 0x01, 0xe6, 0xe4, 0xd3, 0xd6,
+	0x61, 0xe0, 0xef, 0x60, 0x51, 0xe4, 0xea, 0x65, 0x93, 0x65, 0xff, 0xc6, 0x65, 0xe3, 0xb8, 0x89,
+	0x28, 0x5c, 0x86, 0xf1, 0xce, 0x9a, 0xc4, 0x6e, 0x04, 0x13, 0x3e, 0xe7, 0x60, 0x05, 0x12, 0x2e,
+	0x2e, 0x1e, 0xd0, 0xc5, 0x1e, 0xde, 0xf4, 0x8d, 0xeb, 0x8f, 0x11, 0x4c, 0x32, 0x2f, 0xb6, 0xb6,
+	0xee, 0x14, 0xeb, 0xca, 0x76, 0x95, 0x6c, 0xe8, 0x54, 0x33, 0xf0, 0xd7, 0x61, 0x94, 0x0b, 0x33,
+	0xcd, 0x6a, 0x57, 0x28, 0x9f, 0x86, 0x91, 0x1c, 0x65, 0xc4, 0x2d, 0xb3, 0x8a, 0x97, 0x60, 0x5a,
+	0xad, 0xd4, 0xa9, 0x4e, 0x4a, 0x3a, 0x31, 0x34, 0x5a, 0x37, 0x48, 0x89, 0xa7, 0x95, 0x8d, 0x8e,
+	0x51, 0x79, 0x8a, 0x53, 0x65, 0x9b, 0xc8, 0x21, 0x80, 0xaf, 0xb4, 0xaf, 0x93, 0x07, 0x44, 0xd7,
+	0xd5, 0x1d, 0xc2, 0xae, 0xe1, 0x51, 0x99, 0xe3, 0x69, 0xdd, 0x5e, 0x4c, 0xff, 0x3c, 0x0c, 0x53,
+	0xcc, 0xba, 0x62, 0x55, 0xad, 0xa8, 0xdb, 0x55, 0x62, 0x7f, 0x9c, 0xc7, 0xbb, 0x70, 0x91, 0x25,
+	0x85, 0x94, 0x34, 0x9d, 0x3e, 0x38, 0x2c, 0xed, 0x51, 0xc3, 0x2c, 0x35, 0x74, 0x75, 0xb0, 0x6f,
+	0xf4, 0x01, 0x0e, 0xaf, 0x86, 0x64, 0xcc, 0x25, 0x6e, 0x58, 0x02, 0x57, 0xa9, 0x61, 0xde, 0xd3,
+	0x55, 0xdc, 0x80, 0x17, 0xfd, 0x7a, 0x74, 0xb2, 0xdf, 0x20, 0xb6, 0x3e, 0xe1, 0x8b, 0xeb, 0x9b,
+	0xe9, 0xd2, 0x27, 0x73, 0xb1, 0xf7, 0x74, 0x35, 0x7f, 0x05, 0x30, 0xb1, 0x3d, 0x2e, 0xed, 0x52,
+	0x9d, 0xcb, 0xc2, 0xe3, 0xae, 0x1b, 0xb7, 0x90, 0xcb, 0x2c, 0xda, 0x57, 0xec, 0x1f, 0x44, 0x61,
+	0xcc, 0x8d, 0x45, 0x2b, 0x77, 0x0c, 0x02, 0x3d, 0xca, 0x20, 0x6a, 0x11, 0x59, 0x01, 0x7c, 0x84,
+	0x60, 0xaa, 0x0b, 0x2c, 0xa5, 0xaa, 0x6a, 0x98, 0x36, 0xfe, 0x6f, 0x7c, 0x11, 0xfc, 0x5b, 0xe5,
+	0x98, 0x17, 0xcf, 0xc0, 0x3f, 0xd6, 0xfd, 0x25, 0xfc, 0x1a, 0xf0, 0x99, 0xa2, 0xb4, 0x7d, 0xa8,
+	0x29, 0x06, 0xff, 0xea, 0x12, 0xcb, 0x4d, 0x75, 0xd9, 0x50, 0xac, 0x69, 0xe6, 0xe1, 0x6a, 0x48,
+	0x8e, 0x31, 0xde, 0x3c, 0x63, 0xc5, 0xdb, 0x41, 0xe1, 0x62, 0x9f, 0x64, 0x62, 0xb9, 0xdc, 0x00,
+	0xa9, 0xe9, 0x42, 0xd7, 0x6a, 0x48, 0x4e, 0x38, 0xf2, 0xde, 0xa2, 0xfc, 0x92, 0xbf, 0xfc, 0xf1,
+	0xd0, 0xe7, 0x6f, 0x0c, 0xb1, 0x79, 0xe2, 0xb8, 0x89, 0xfe, 0x1b, 0x81, 0x49, 0xfb, 0xba, 0x1e,
+	0x73, 0x05, 0x1b, 0x7e, 0x12, 0xb1, 0x3f, 0xb9, 0x4b, 0x6f, 0x96, 0xf9, 0xaf, 0x48, 0x1f, 0x45,
+	0x20, 0x8d, 0x3d, 0x8e, 0xa5, 0xc6, 0xb8, 0xd5, 0x12, 0x97, 0x1b, 0x31, 0xf5, 0x06, 0x81, 0x9b,
+	0x38, 0xe7, 0xf7, 0x20, 0x1b, 0x08, 0xf1, 0x6c, 0xbb, 0x2e, 0x53, 0xa3, 0x5c, 0xd7, 0xd6, 0xd6,
+	0x1d, 0x58, 0xc1, 0xcb, 0x03, 0x09, 0x70, 0x61, 0x37, 0x58, 0xd0, 0xfb, 0xf8, 0xe6, 0xc0, 0x96,
+	0x04, 0x17, 0x7e, 0x6a, 0xfa, 0x36, 0x5b, 0x97, 0x9c, 0x9a, 0x97, 0x78, 0xd1, 0x83, 0x82, 0x57,
+	0x9e, 0xd9, 0xc6, 0x67, 0x54, 0x71, 0x1b, 0xbf, 0xfa, 0x8c, 0x71, 0x74, 0x1a, 0x50, 0x2a, 0xce,
+	0x63, 0xe0, 0xbc, 0xc3, 0xbb, 0x03, 0x06, 0xc2, 0x1f, 0xd1, 0x9e, 0x22, 0x6f, 0xc3, 0xa4, 0x05,
+	0x75, 0x89, 0xee, 0x4a, 0x1d, 0xf0, 0x1b, 0xe9, 0x5c, 0x70, 0x15, 0xf6, 0xeb, 0xdb, 0xf9, 0x19,
+	0xe7, 0xe8, 0x55, 0x38, 0xd0, 0x70, 0xf4, 0xa8, 0x89, 0x22, 0x27, 0x4d, 0x24, 0xbc, 0x1d, 0x89,
+	0x0a, 0x89, 0x48, 0xda, 0x84, 0xf8, 0x4a, 0x95, 0x6e, 0x2b, 0xd5, 0x4d, 0x8d, 0x94, 0xd9, 0xed,
+	0xff, 0x1d, 0x88, 0x75, 0x80, 0x6f, 0xd8, 0x97, 0x9d, 0xab, 0x83, 0xd7, 0xb8, 0x0c, 0xed, 0x53,
+	0xcb, 0x58, 0xbe, 0xf8, 0xa8, 0x89, 0x26, 0x60, 0x1c, 0x80, 0xbb, 0xc8, 0xfa, 0x0e, 0x5a, 0x48,
+	0x6b, 0x10, 0x2f, 0xe8, 0x44, 0x31, 0xc9, 0x97, 0xa3, 0x75, 0xe2, 0xf8, 0x8d, 0x2e, 0xaf, 0xd2,
+	0xfb, 0x30, 0x2e, 0x13, 0xad, 0xaa, 0x94, 0xbf, 0x3a, 0x95, 0x35, 0x88, 0xad, 0x10, 0xf3, 0xab,
+	0x52, 0x77, 0x75, 0x15, 0x2e, 0x78, 0x7e, 0x99, 0xc6, 0x71, 0x80, 0x0d, 0x79, 0xfd, 0x3b, 0xef,
+	0x97, 0x56, 0xd7, 0x37, 0xb7, 0x12, 0x21, 0x1c, 0x83, 0x11, 0xb9, 0xf8, 0x56, 0x51, 0x2e, 0xca,
+	0x09, 0x84, 0x01, 0x86, 0x37, 0x0b, 0xab, 0xc5, 0xbb, 0xc5, 0x44, 0xd8, 0x62, 0xbc, 0xb7, 0x59,
+	0x94, 0x4b, 0x6f, 0xae, 0x14, 0xd7, 0xb6, 0x12, 0x42, 0xfe, 0x13, 0x74, 0xf2, 0x44, 0x0c, 0x3d,
+	0x7e, 0x22, 0x86, 0x9e, 0x3e, 0x11, 0xd1, 0xc3, 0x96, 0x88, 0x3e, 0x6d, 0x89, 0xe8, 0x4f, 0x2d,
+	0x11, 0x9d, 0xb4, 0x44, 0xf4, 0xb8, 0x25, 0xa2, 0xbf, 0xb7, 0x44, 0xf4, 0x8f, 0x96, 0x18, 0x7a,
+	0xda, 0x12, 0xd1, 0x27, 0xa7, 0x62, 0xe8, 0xe8, 0x54, 0x44, 0x27, 0xa7, 0x62, 0xe8, 0xf1, 0xa9,
+	0x18, 0xfa, 0x40, 0xae, 0x50, 0xed, 0x7e, 0x25, 0x7b, 0x40, 0xab, 0x26, 0xd1, 0x75, 0x25, 0xdb,
+	0x30, 0xe6, 0xd9, 0xc3, 0x2e, 0xd5, 0x6b, 0xd7, 0x34, 0x9d, 0x1e, 0xa8, 0x3b, 0x44, 0xbf, 0xe6,
+	0x90, 0xe7, 0xb5, 0xed, 0x0a, 0x9d, 0x27, 0x0f, 0x4c, 0xfb, 0x77, 0xfb, 0xc0, 0xff, 0x88, 0xd8,
+	0x1e, 0x66, 0x3f, 0xe1, 0x2f, 0xfe, 0x2f, 0x00, 0x00, 0xff, 0xff, 0x73, 0xf2, 0xac, 0x54, 0x38,
+	0x21, 0x00, 0x00,
 }
 
 func (x HeaderOptions) String() string {
@@ -1542,6 +2095,744 @@ func (this *CacheOperator_MatchRegex) Equal(that interface{}) bool {
 	that1, ok := that.(*CacheOperator_MatchRegex)
 	if !ok {
 		that2, ok := that.(CacheOperator_MatchRegex)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MatchRegex != that1.MatchRegex {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.CacheOperator == nil {
+		if this.CacheOperator != nil {
+			return false
+		}
+	} else if this.CacheOperator == nil {
+		return false
+	} else if !this.CacheOperator.Equal(that1.CacheOperator) {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_Equals) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_Equals)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_Equals)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Equals != that1.Equals {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_DoesNotEqual) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_DoesNotEqual)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_DoesNotEqual)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotEqual != that1.DoesNotEqual {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_Contains) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_Contains)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_Contains)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Contains != that1.Contains {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_DoesNotContain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_DoesNotContain)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_DoesNotContain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotContain != that1.DoesNotContain {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_Startswith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_Startswith)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_Startswith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Startswith != that1.Startswith {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_DoesNotStartWith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_DoesNotStartWith)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_DoesNotStartWith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotStartWith != that1.DoesNotStartWith {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_Endswith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_Endswith)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_Endswith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Endswith != that1.Endswith {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_DoesNotEndWith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_DoesNotEndWith)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_DoesNotEndWith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotEndWith != that1.DoesNotEndWith {
+		return false
+	}
+	return true
+}
+func (this *HeaderCacheOperator_MatchRegex) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderCacheOperator_MatchRegex)
+	if !ok {
+		that2, ok := that.(HeaderCacheOperator_MatchRegex)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MatchRegex != that1.MatchRegex {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.CacheOperator == nil {
+		if this.CacheOperator != nil {
+			return false
+		}
+	} else if this.CacheOperator == nil {
+		return false
+	} else if !this.CacheOperator.Equal(that1.CacheOperator) {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_Equals) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_Equals)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_Equals)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Equals != that1.Equals {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_DoesNotEqual) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_DoesNotEqual)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_DoesNotEqual)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotEqual != that1.DoesNotEqual {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_Contains) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_Contains)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_Contains)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Contains != that1.Contains {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_DoesNotContain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_DoesNotContain)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_DoesNotContain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotContain != that1.DoesNotContain {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_Startswith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_Startswith)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_Startswith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Startswith != that1.Startswith {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_DoesNotStartWith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_DoesNotStartWith)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_DoesNotStartWith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotStartWith != that1.DoesNotStartWith {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_Endswith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_Endswith)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_Endswith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Endswith != that1.Endswith {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_DoesNotEndWith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_DoesNotEndWith)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_DoesNotEndWith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotEndWith != that1.DoesNotEndWith {
+		return false
+	}
+	return true
+}
+func (this *QueryParamCacheOperator_MatchRegex) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*QueryParamCacheOperator_MatchRegex)
+	if !ok {
+		that2, ok := that.(QueryParamCacheOperator_MatchRegex)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MatchRegex != that1.MatchRegex {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.CacheOperator == nil {
+		if this.CacheOperator != nil {
+			return false
+		}
+	} else if this.CacheOperator == nil {
+		return false
+	} else if !this.CacheOperator.Equal(that1.CacheOperator) {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_Equals) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_Equals)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_Equals)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Equals != that1.Equals {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_DoesNotEqual) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_DoesNotEqual)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_DoesNotEqual)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotEqual != that1.DoesNotEqual {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_Contains) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_Contains)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_Contains)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Contains != that1.Contains {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_DoesNotContain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_DoesNotContain)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_DoesNotContain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotContain != that1.DoesNotContain {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_Startswith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_Startswith)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_Startswith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Startswith != that1.Startswith {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_DoesNotStartWith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_DoesNotStartWith)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_DoesNotStartWith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotStartWith != that1.DoesNotStartWith {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_Endswith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_Endswith)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_Endswith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Endswith != that1.Endswith {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_DoesNotEndWith) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_DoesNotEndWith)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_DoesNotEndWith)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DoesNotEndWith != that1.DoesNotEndWith {
+		return false
+	}
+	return true
+}
+func (this *CookieMatcherCacheOperator_MatchRegex) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CookieMatcherCacheOperator_MatchRegex)
+	if !ok {
+		that2, ok := that.(CookieMatcherCacheOperator_MatchRegex)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2106,6 +3397,258 @@ func (this *CacheOperator_MatchRegex) GoString() string {
 		`MatchRegex:` + fmt.Sprintf("%#v", this.MatchRegex) + `}`}, ", ")
 	return s
 }
+func (this *HeaderCacheOperator) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&cdn_cache_rule.HeaderCacheOperator{")
+	if this.CacheOperator != nil {
+		s = append(s, "CacheOperator: "+fmt.Sprintf("%#v", this.CacheOperator)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HeaderCacheOperator_Equals) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_Equals{` +
+		`Equals:` + fmt.Sprintf("%#v", this.Equals) + `}`}, ", ")
+	return s
+}
+func (this *HeaderCacheOperator_DoesNotEqual) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_DoesNotEqual{` +
+		`DoesNotEqual:` + fmt.Sprintf("%#v", this.DoesNotEqual) + `}`}, ", ")
+	return s
+}
+func (this *HeaderCacheOperator_Contains) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_Contains{` +
+		`Contains:` + fmt.Sprintf("%#v", this.Contains) + `}`}, ", ")
+	return s
+}
+func (this *HeaderCacheOperator_DoesNotContain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_DoesNotContain{` +
+		`DoesNotContain:` + fmt.Sprintf("%#v", this.DoesNotContain) + `}`}, ", ")
+	return s
+}
+func (this *HeaderCacheOperator_Startswith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_Startswith{` +
+		`Startswith:` + fmt.Sprintf("%#v", this.Startswith) + `}`}, ", ")
+	return s
+}
+func (this *HeaderCacheOperator_DoesNotStartWith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_DoesNotStartWith{` +
+		`DoesNotStartWith:` + fmt.Sprintf("%#v", this.DoesNotStartWith) + `}`}, ", ")
+	return s
+}
+func (this *HeaderCacheOperator_Endswith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_Endswith{` +
+		`Endswith:` + fmt.Sprintf("%#v", this.Endswith) + `}`}, ", ")
+	return s
+}
+func (this *HeaderCacheOperator_DoesNotEndWith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_DoesNotEndWith{` +
+		`DoesNotEndWith:` + fmt.Sprintf("%#v", this.DoesNotEndWith) + `}`}, ", ")
+	return s
+}
+func (this *HeaderCacheOperator_MatchRegex) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.HeaderCacheOperator_MatchRegex{` +
+		`MatchRegex:` + fmt.Sprintf("%#v", this.MatchRegex) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&cdn_cache_rule.QueryParamCacheOperator{")
+	if this.CacheOperator != nil {
+		s = append(s, "CacheOperator: "+fmt.Sprintf("%#v", this.CacheOperator)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *QueryParamCacheOperator_Equals) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_Equals{` +
+		`Equals:` + fmt.Sprintf("%#v", this.Equals) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator_DoesNotEqual) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_DoesNotEqual{` +
+		`DoesNotEqual:` + fmt.Sprintf("%#v", this.DoesNotEqual) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator_Contains) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_Contains{` +
+		`Contains:` + fmt.Sprintf("%#v", this.Contains) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator_DoesNotContain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_DoesNotContain{` +
+		`DoesNotContain:` + fmt.Sprintf("%#v", this.DoesNotContain) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator_Startswith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_Startswith{` +
+		`Startswith:` + fmt.Sprintf("%#v", this.Startswith) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator_DoesNotStartWith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_DoesNotStartWith{` +
+		`DoesNotStartWith:` + fmt.Sprintf("%#v", this.DoesNotStartWith) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator_Endswith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_Endswith{` +
+		`Endswith:` + fmt.Sprintf("%#v", this.Endswith) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator_DoesNotEndWith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_DoesNotEndWith{` +
+		`DoesNotEndWith:` + fmt.Sprintf("%#v", this.DoesNotEndWith) + `}`}, ", ")
+	return s
+}
+func (this *QueryParamCacheOperator_MatchRegex) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.QueryParamCacheOperator_MatchRegex{` +
+		`MatchRegex:` + fmt.Sprintf("%#v", this.MatchRegex) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&cdn_cache_rule.CookieMatcherCacheOperator{")
+	if this.CacheOperator != nil {
+		s = append(s, "CacheOperator: "+fmt.Sprintf("%#v", this.CacheOperator)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CookieMatcherCacheOperator_Equals) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_Equals{` +
+		`Equals:` + fmt.Sprintf("%#v", this.Equals) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator_DoesNotEqual) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_DoesNotEqual{` +
+		`DoesNotEqual:` + fmt.Sprintf("%#v", this.DoesNotEqual) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator_Contains) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_Contains{` +
+		`Contains:` + fmt.Sprintf("%#v", this.Contains) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator_DoesNotContain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_DoesNotContain{` +
+		`DoesNotContain:` + fmt.Sprintf("%#v", this.DoesNotContain) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator_Startswith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_Startswith{` +
+		`Startswith:` + fmt.Sprintf("%#v", this.Startswith) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator_DoesNotStartWith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_DoesNotStartWith{` +
+		`DoesNotStartWith:` + fmt.Sprintf("%#v", this.DoesNotStartWith) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator_Endswith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_Endswith{` +
+		`Endswith:` + fmt.Sprintf("%#v", this.Endswith) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator_DoesNotEndWith) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_DoesNotEndWith{` +
+		`DoesNotEndWith:` + fmt.Sprintf("%#v", this.DoesNotEndWith) + `}`}, ", ")
+	return s
+}
+func (this *CookieMatcherCacheOperator_MatchRegex) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_cache_rule.CookieMatcherCacheOperator_MatchRegex{` +
+		`MatchRegex:` + fmt.Sprintf("%#v", this.MatchRegex) + `}`}, ", ")
+	return s
+}
 func (this *CDNPathMatcherType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2496,6 +4039,480 @@ func (m *CacheOperator_MatchRegex) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *CacheOperator_MatchRegex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.MatchRegex)
+	copy(dAtA[i:], m.MatchRegex)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.MatchRegex)))
+	i--
+	dAtA[i] = 0x52
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HeaderCacheOperator) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CacheOperator != nil {
+		{
+			size := m.CacheOperator.Size()
+			i -= size
+			if _, err := m.CacheOperator.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HeaderCacheOperator_Equals) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_Equals) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Equals)
+	copy(dAtA[i:], m.Equals)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Equals)))
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator_DoesNotEqual) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_DoesNotEqual) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotEqual)
+	copy(dAtA[i:], m.DoesNotEqual)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotEqual)))
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator_Contains) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_Contains) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Contains)
+	copy(dAtA[i:], m.Contains)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Contains)))
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator_DoesNotContain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_DoesNotContain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotContain)
+	copy(dAtA[i:], m.DoesNotContain)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotContain)))
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator_Startswith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_Startswith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Startswith)
+	copy(dAtA[i:], m.Startswith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Startswith)))
+	i--
+	dAtA[i] = 0x32
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator_DoesNotStartWith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_DoesNotStartWith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotStartWith)
+	copy(dAtA[i:], m.DoesNotStartWith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotStartWith)))
+	i--
+	dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator_Endswith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_Endswith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Endswith)
+	copy(dAtA[i:], m.Endswith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Endswith)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator_DoesNotEndWith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_DoesNotEndWith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotEndWith)
+	copy(dAtA[i:], m.DoesNotEndWith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotEndWith)))
+	i--
+	dAtA[i] = 0x4a
+	return len(dAtA) - i, nil
+}
+func (m *HeaderCacheOperator_MatchRegex) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderCacheOperator_MatchRegex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.MatchRegex)
+	copy(dAtA[i:], m.MatchRegex)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.MatchRegex)))
+	i--
+	dAtA[i] = 0x52
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryParamCacheOperator) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CacheOperator != nil {
+		{
+			size := m.CacheOperator.Size()
+			i -= size
+			if _, err := m.CacheOperator.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryParamCacheOperator_Equals) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_Equals) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Equals)
+	copy(dAtA[i:], m.Equals)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Equals)))
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator_DoesNotEqual) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_DoesNotEqual) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotEqual)
+	copy(dAtA[i:], m.DoesNotEqual)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotEqual)))
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator_Contains) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_Contains) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Contains)
+	copy(dAtA[i:], m.Contains)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Contains)))
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator_DoesNotContain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_DoesNotContain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotContain)
+	copy(dAtA[i:], m.DoesNotContain)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotContain)))
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator_Startswith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_Startswith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Startswith)
+	copy(dAtA[i:], m.Startswith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Startswith)))
+	i--
+	dAtA[i] = 0x32
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator_DoesNotStartWith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_DoesNotStartWith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotStartWith)
+	copy(dAtA[i:], m.DoesNotStartWith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotStartWith)))
+	i--
+	dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator_Endswith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_Endswith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Endswith)
+	copy(dAtA[i:], m.Endswith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Endswith)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator_DoesNotEndWith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_DoesNotEndWith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotEndWith)
+	copy(dAtA[i:], m.DoesNotEndWith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotEndWith)))
+	i--
+	dAtA[i] = 0x4a
+	return len(dAtA) - i, nil
+}
+func (m *QueryParamCacheOperator_MatchRegex) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryParamCacheOperator_MatchRegex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.MatchRegex)
+	copy(dAtA[i:], m.MatchRegex)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.MatchRegex)))
+	i--
+	dAtA[i] = 0x52
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CookieMatcherCacheOperator) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CacheOperator != nil {
+		{
+			size := m.CacheOperator.Size()
+			i -= size
+			if _, err := m.CacheOperator.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CookieMatcherCacheOperator_Equals) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_Equals) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Equals)
+	copy(dAtA[i:], m.Equals)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Equals)))
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator_DoesNotEqual) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_DoesNotEqual) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotEqual)
+	copy(dAtA[i:], m.DoesNotEqual)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotEqual)))
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator_Contains) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_Contains) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Contains)
+	copy(dAtA[i:], m.Contains)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Contains)))
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator_DoesNotContain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_DoesNotContain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotContain)
+	copy(dAtA[i:], m.DoesNotContain)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotContain)))
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator_Startswith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_Startswith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Startswith)
+	copy(dAtA[i:], m.Startswith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Startswith)))
+	i--
+	dAtA[i] = 0x32
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator_DoesNotStartWith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_DoesNotStartWith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotStartWith)
+	copy(dAtA[i:], m.DoesNotStartWith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotStartWith)))
+	i--
+	dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator_Endswith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_Endswith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Endswith)
+	copy(dAtA[i:], m.Endswith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Endswith)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator_DoesNotEndWith) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_DoesNotEndWith) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DoesNotEndWith)
+	copy(dAtA[i:], m.DoesNotEndWith)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DoesNotEndWith)))
+	i--
+	dAtA[i] = 0x4a
+	return len(dAtA) - i, nil
+}
+func (m *CookieMatcherCacheOperator_MatchRegex) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieMatcherCacheOperator_MatchRegex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	i -= len(m.MatchRegex)
 	copy(dAtA[i:], m.MatchRegex)
@@ -3232,6 +5249,312 @@ func (m *CacheOperator_MatchRegex) Size() (n int) {
 	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
+func (m *HeaderCacheOperator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CacheOperator != nil {
+		n += m.CacheOperator.Size()
+	}
+	return n
+}
+
+func (m *HeaderCacheOperator_Equals) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Equals)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *HeaderCacheOperator_DoesNotEqual) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotEqual)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *HeaderCacheOperator_Contains) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Contains)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *HeaderCacheOperator_DoesNotContain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotContain)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *HeaderCacheOperator_Startswith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Startswith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *HeaderCacheOperator_DoesNotStartWith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotStartWith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *HeaderCacheOperator_Endswith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Endswith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *HeaderCacheOperator_DoesNotEndWith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotEndWith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *HeaderCacheOperator_MatchRegex) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.MatchRegex)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CacheOperator != nil {
+		n += m.CacheOperator.Size()
+	}
+	return n
+}
+
+func (m *QueryParamCacheOperator_Equals) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Equals)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator_DoesNotEqual) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotEqual)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator_Contains) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Contains)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator_DoesNotContain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotContain)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator_Startswith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Startswith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator_DoesNotStartWith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotStartWith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator_Endswith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Endswith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator_DoesNotEndWith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotEndWith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *QueryParamCacheOperator_MatchRegex) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.MatchRegex)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CacheOperator != nil {
+		n += m.CacheOperator.Size()
+	}
+	return n
+}
+
+func (m *CookieMatcherCacheOperator_Equals) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Equals)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator_DoesNotEqual) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotEqual)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator_Contains) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Contains)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator_DoesNotContain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotContain)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator_Startswith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Startswith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator_DoesNotStartWith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotStartWith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator_Endswith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Endswith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator_DoesNotEndWith) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DoesNotEndWith)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CookieMatcherCacheOperator_MatchRegex) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.MatchRegex)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *CDNPathMatcherType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3494,7 +5817,7 @@ func (this *CacheHeaderMatcherType) String() string {
 	}
 	s := strings.Join([]string{`&CacheHeaderMatcherType{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Operator:` + strings.Replace(this.Operator.String(), "CacheOperator", "CacheOperator", 1) + `,`,
+		`Operator:` + strings.Replace(this.Operator.String(), "HeaderCacheOperator", "HeaderCacheOperator", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3599,6 +5922,306 @@ func (this *CacheOperator_MatchRegex) String() string {
 	}, "")
 	return s
 }
+func (this *HeaderCacheOperator) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator{`,
+		`CacheOperator:` + fmt.Sprintf("%v", this.CacheOperator) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_Equals) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_Equals{`,
+		`Equals:` + fmt.Sprintf("%v", this.Equals) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_DoesNotEqual) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_DoesNotEqual{`,
+		`DoesNotEqual:` + fmt.Sprintf("%v", this.DoesNotEqual) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_Contains) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_Contains{`,
+		`Contains:` + fmt.Sprintf("%v", this.Contains) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_DoesNotContain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_DoesNotContain{`,
+		`DoesNotContain:` + fmt.Sprintf("%v", this.DoesNotContain) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_Startswith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_Startswith{`,
+		`Startswith:` + fmt.Sprintf("%v", this.Startswith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_DoesNotStartWith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_DoesNotStartWith{`,
+		`DoesNotStartWith:` + fmt.Sprintf("%v", this.DoesNotStartWith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_Endswith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_Endswith{`,
+		`Endswith:` + fmt.Sprintf("%v", this.Endswith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_DoesNotEndWith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_DoesNotEndWith{`,
+		`DoesNotEndWith:` + fmt.Sprintf("%v", this.DoesNotEndWith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderCacheOperator_MatchRegex) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HeaderCacheOperator_MatchRegex{`,
+		`MatchRegex:` + fmt.Sprintf("%v", this.MatchRegex) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator{`,
+		`CacheOperator:` + fmt.Sprintf("%v", this.CacheOperator) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_Equals) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_Equals{`,
+		`Equals:` + fmt.Sprintf("%v", this.Equals) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_DoesNotEqual) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_DoesNotEqual{`,
+		`DoesNotEqual:` + fmt.Sprintf("%v", this.DoesNotEqual) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_Contains) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_Contains{`,
+		`Contains:` + fmt.Sprintf("%v", this.Contains) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_DoesNotContain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_DoesNotContain{`,
+		`DoesNotContain:` + fmt.Sprintf("%v", this.DoesNotContain) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_Startswith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_Startswith{`,
+		`Startswith:` + fmt.Sprintf("%v", this.Startswith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_DoesNotStartWith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_DoesNotStartWith{`,
+		`DoesNotStartWith:` + fmt.Sprintf("%v", this.DoesNotStartWith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_Endswith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_Endswith{`,
+		`Endswith:` + fmt.Sprintf("%v", this.Endswith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_DoesNotEndWith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_DoesNotEndWith{`,
+		`DoesNotEndWith:` + fmt.Sprintf("%v", this.DoesNotEndWith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *QueryParamCacheOperator_MatchRegex) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&QueryParamCacheOperator_MatchRegex{`,
+		`MatchRegex:` + fmt.Sprintf("%v", this.MatchRegex) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator{`,
+		`CacheOperator:` + fmt.Sprintf("%v", this.CacheOperator) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_Equals) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_Equals{`,
+		`Equals:` + fmt.Sprintf("%v", this.Equals) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_DoesNotEqual) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_DoesNotEqual{`,
+		`DoesNotEqual:` + fmt.Sprintf("%v", this.DoesNotEqual) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_Contains) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_Contains{`,
+		`Contains:` + fmt.Sprintf("%v", this.Contains) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_DoesNotContain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_DoesNotContain{`,
+		`DoesNotContain:` + fmt.Sprintf("%v", this.DoesNotContain) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_Startswith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_Startswith{`,
+		`Startswith:` + fmt.Sprintf("%v", this.Startswith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_DoesNotStartWith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_DoesNotStartWith{`,
+		`DoesNotStartWith:` + fmt.Sprintf("%v", this.DoesNotStartWith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_Endswith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_Endswith{`,
+		`Endswith:` + fmt.Sprintf("%v", this.Endswith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_DoesNotEndWith) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_DoesNotEndWith{`,
+		`DoesNotEndWith:` + fmt.Sprintf("%v", this.DoesNotEndWith) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CookieMatcherCacheOperator_MatchRegex) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CookieMatcherCacheOperator_MatchRegex{`,
+		`MatchRegex:` + fmt.Sprintf("%v", this.MatchRegex) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CDNPathMatcherType) String() string {
 	if this == nil {
 		return "nil"
@@ -3615,7 +6238,7 @@ func (this *CacheCookieMatcherType) String() string {
 	}
 	s := strings.Join([]string{`&CacheCookieMatcherType{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Operator:` + strings.Replace(this.Operator.String(), "CacheOperator", "CacheOperator", 1) + `,`,
+		`Operator:` + strings.Replace(this.Operator.String(), "CookieMatcherCacheOperator", "CookieMatcherCacheOperator", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3626,7 +6249,7 @@ func (this *CacheQueryParameterMatcherType) String() string {
 	}
 	s := strings.Join([]string{`&CacheQueryParameterMatcherType{`,
 		`Key:` + fmt.Sprintf("%v", this.Key) + `,`,
-		`Operator:` + strings.Replace(this.Operator.String(), "CacheOperator", "CacheOperator", 1) + `,`,
+		`Operator:` + strings.Replace(this.Operator.String(), "QueryParamCacheOperator", "QueryParamCacheOperator", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3880,7 +6503,7 @@ func (m *CacheHeaderMatcherType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Operator == nil {
-				m.Operator = &CacheOperator{}
+				m.Operator = &HeaderCacheOperator{}
 			}
 			if err := m.Operator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4251,6 +6874,1029 @@ func (m *CacheOperator) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *HeaderCacheOperator) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HeaderCacheOperator: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HeaderCacheOperator: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Equals", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_Equals{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotEqual", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_DoesNotEqual{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Contains", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_Contains{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotContain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_DoesNotContain{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Startswith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_Startswith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotStartWith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_DoesNotStartWith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Endswith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_Endswith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotEndWith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_DoesNotEndWith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MatchRegex", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &HeaderCacheOperator_MatchRegex{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryParamCacheOperator) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryParamCacheOperator: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryParamCacheOperator: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Equals", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_Equals{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotEqual", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_DoesNotEqual{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Contains", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_Contains{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotContain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_DoesNotContain{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Startswith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_Startswith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotStartWith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_DoesNotStartWith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Endswith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_Endswith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotEndWith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_DoesNotEndWith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MatchRegex", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &QueryParamCacheOperator_MatchRegex{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CookieMatcherCacheOperator) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CookieMatcherCacheOperator: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CookieMatcherCacheOperator: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Equals", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_Equals{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotEqual", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_DoesNotEqual{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Contains", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_Contains{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotContain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_DoesNotContain{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Startswith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_Startswith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotStartWith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_DoesNotStartWith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Endswith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_Endswith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoesNotEndWith", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_DoesNotEndWith{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MatchRegex", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheOperator = &CookieMatcherCacheOperator_MatchRegex{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *CDNPathMatcherType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -4431,7 +8077,7 @@ func (m *CacheCookieMatcherType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Operator == nil {
-				m.Operator = &CacheOperator{}
+				m.Operator = &CookieMatcherCacheOperator{}
 			}
 			if err := m.Operator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4552,7 +8198,7 @@ func (m *CacheQueryParameterMatcherType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Operator == nil {
-				m.Operator = &CacheOperator{}
+				m.Operator = &QueryParamCacheOperator{}
 			}
 			if err := m.Operator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

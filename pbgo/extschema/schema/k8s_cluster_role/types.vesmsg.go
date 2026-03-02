@@ -66,18 +66,14 @@ func (m *CreateSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
 		return nil, nil
 	}
 	return m.GetRuleChoiceSRefInfo()
-
 }
 
 // GetRuleChoiceSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *CreateSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 	switch m.GetRuleChoice().(type) {
 	case *CreateSpecType_PolicyRuleList:
-
 		return nil, nil
-
 	case *CreateSpecType_K8SClusterRoleSelector:
-
 		sref := m.GetK8SClusterRoleSelector()
 		if sref == nil {
 			return nil, nil
@@ -89,7 +85,6 @@ func (m *CreateSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 			Ref:   sref,
 		}
 		return []db.SelrFldInfo{sri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -173,16 +168,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -190,7 +182,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -201,7 +192,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	vrhRuleChoiceYaml := v.RuleChoiceYamlValidationRuleHandler
 	rulesRuleChoiceYaml := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
@@ -212,9 +202,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.rule_choice_yaml: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["rule_choice.yaml"] = vFnMap["rule_choice.yaml"]
-
 	v.FldValidators["rule_choice.policy_rule_list"] = PolicyRuleListTypeValidator().Validate
 	v.FldValidators["rule_choice.k8s_cluster_role_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -267,18 +255,14 @@ func (m *GetSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
 		return nil, nil
 	}
 	return m.GetRuleChoiceSRefInfo()
-
 }
 
 // GetRuleChoiceSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *GetSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 	switch m.GetRuleChoice().(type) {
 	case *GetSpecType_PolicyRuleList:
-
 		return nil, nil
-
 	case *GetSpecType_K8SClusterRoleSelector:
-
 		sref := m.GetK8SClusterRoleSelector()
 		if sref == nil {
 			return nil, nil
@@ -290,7 +274,6 @@ func (m *GetSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 			Ref:   sref,
 		}
 		return []db.SelrFldInfo{sri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -374,16 +357,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -391,7 +371,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -402,7 +381,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	vrhRuleChoiceYaml := v.RuleChoiceYamlValidationRuleHandler
 	rulesRuleChoiceYaml := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
@@ -413,9 +391,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.rule_choice_yaml: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["rule_choice.yaml"] = vFnMap["rule_choice.yaml"]
-
 	v.FldValidators["rule_choice.policy_rule_list"] = PolicyRuleListTypeValidator().Validate
 	v.FldValidators["rule_choice.k8s_cluster_role_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -482,9 +458,7 @@ func (v *ValidateGlobalSpecType) RuleChoiceYamlValidationRuleHandler(rules map[s
 	}
 	return oValidatorFn_Yaml, nil
 }
-
 func (v *ValidateGlobalSpecType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
@@ -506,14 +480,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["generated_yaml"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("generated_yaml"))
 		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["rule_choice"]; exists {
@@ -560,16 +531,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -577,7 +545,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -588,7 +555,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	vrhRuleChoiceYaml := v.RuleChoiceYamlValidationRuleHandler
 	rulesRuleChoiceYaml := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
@@ -599,7 +565,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.rule_choice_yaml: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["rule_choice.yaml"] = vFnMap["rule_choice.yaml"]
 
 	vrhGeneratedYaml := v.GeneratedYamlValidationRuleHandler
@@ -613,7 +578,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["generated_yaml"] = vFn
-
 	v.FldValidators["rule_choice.policy_rule_list"] = PolicyRuleListTypeValidator().Validate
 	v.FldValidators["rule_choice.k8s_cluster_role_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -666,7 +630,6 @@ type ValidateNonResourceURLListType struct {
 }
 
 func (v *ValidateNonResourceURLListType) UrlsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -706,9 +669,7 @@ func (v *ValidateNonResourceURLListType) UrlsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNonResourceURLListType) VerbsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -762,30 +723,24 @@ func (v *ValidateNonResourceURLListType) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["urls"]; exists {
 		vOpts := append(opts, db.WithValidateField("urls"))
 		if err := fv(ctx, m.GetUrls(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["verbs"]; exists {
 		vOpts := append(opts, db.WithValidateField("verbs"))
 		if err := fv(ctx, m.GetVerbs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNonResourceURLListTypeValidator = func() *ValidateNonResourceURLListType {
 	v := &ValidateNonResourceURLListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -873,7 +828,6 @@ type ValidatePolicyRuleListType struct {
 }
 
 func (v *ValidatePolicyRuleListType) PolicyRuleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -933,22 +887,18 @@ func (v *ValidatePolicyRuleListType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policy_rule"]; exists {
 		vOpts := append(opts, db.WithValidateField("policy_rule"))
 		if err := fv(ctx, m.GetPolicyRule(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPolicyRuleListTypeValidator = func() *ValidatePolicyRuleListType {
 	v := &ValidatePolicyRuleListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1074,16 +1024,13 @@ func (v *ValidatePolicyRuleType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPolicyRuleTypeValidator = func() *ValidatePolicyRuleType {
 	v := &ValidatePolicyRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1091,7 +1038,6 @@ var DefaultPolicyRuleTypeValidator = func() *ValidatePolicyRuleType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhResourceChoice := v.ResourceChoiceValidationRuleHandler
 	rulesResourceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1102,7 +1048,6 @@ var DefaultPolicyRuleTypeValidator = func() *ValidatePolicyRuleType {
 		panic(errMsg)
 	}
 	v.FldValidators["resource_choice"] = vFn
-
 	v.FldValidators["resource_choice.resource_list"] = ResourceListTypeValidator().Validate
 	v.FldValidators["resource_choice.non_resource_url_list"] = NonResourceURLListTypeValidator().Validate
 
@@ -1155,18 +1100,14 @@ func (m *ReplaceSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
 		return nil, nil
 	}
 	return m.GetRuleChoiceSRefInfo()
-
 }
 
 // GetRuleChoiceSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *ReplaceSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 	switch m.GetRuleChoice().(type) {
 	case *ReplaceSpecType_PolicyRuleList:
-
 		return nil, nil
-
 	case *ReplaceSpecType_K8SClusterRoleSelector:
-
 		sref := m.GetK8SClusterRoleSelector()
 		if sref == nil {
 			return nil, nil
@@ -1178,7 +1119,6 @@ func (m *ReplaceSpecType) GetRuleChoiceSRefInfo() ([]db.SelrFldInfo, error) {
 			Ref:   sref,
 		}
 		return []db.SelrFldInfo{sri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -1262,16 +1202,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1279,7 +1216,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1290,7 +1226,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rule_choice"] = vFn
-
 	vrhRuleChoiceYaml := v.RuleChoiceYamlValidationRuleHandler
 	rulesRuleChoiceYaml := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
@@ -1301,9 +1236,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.rule_choice_yaml: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["rule_choice.yaml"] = vFnMap["rule_choice.yaml"]
-
 	v.FldValidators["rule_choice.policy_rule_list"] = PolicyRuleListTypeValidator().Validate
 	v.FldValidators["rule_choice.k8s_cluster_role_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -1356,7 +1289,6 @@ type ValidateResourceListType struct {
 }
 
 func (v *ValidateResourceListType) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1396,9 +1328,7 @@ func (v *ValidateResourceListType) ApiGroupsValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateResourceListType) ResourceTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1438,9 +1368,7 @@ func (v *ValidateResourceListType) ResourceTypesValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateResourceListType) ResourceInstancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1480,9 +1408,7 @@ func (v *ValidateResourceListType) ResourceInstancesValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateResourceListType) VerbsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1536,46 +1462,36 @@ func (v *ValidateResourceListType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		if err := fv(ctx, m.GetApiGroups(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_instances"]; exists {
 		vOpts := append(opts, db.WithValidateField("resource_instances"))
 		if err := fv(ctx, m.GetResourceInstances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("resource_types"))
 		if err := fv(ctx, m.GetResourceTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["verbs"]; exists {
 		vOpts := append(opts, db.WithValidateField("verbs"))
 		if err := fv(ctx, m.GetVerbs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResourceListTypeValidator = func() *ValidateResourceListType {
 	v := &ValidateResourceListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

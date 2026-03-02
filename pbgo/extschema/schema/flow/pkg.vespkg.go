@@ -14,7 +14,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.flow.TopFlowAnomaliesResponse"] = TopFlowAnomaliesResponseValidator()
 	vr["ves.io.schema.flow.TopTalkersRequest"] = TopTalkersRequestValidator()
 	vr["ves.io.schema.flow.TopTalkersResponse"] = TopTalkersResponseValidator()
-
 	vr["ves.io.schema.flow.AnomalyData"] = AnomalyDataValidator()
 	vr["ves.io.schema.flow.FieldData"] = FieldDataValidator()
 	vr["ves.io.schema.flow.FlowAnomalyData"] = FlowAnomalyDataValidator()
@@ -26,30 +25,24 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.flow.SubscriptionStatusResponse"] = SubscriptionStatusResponseValidator()
 	vr["ves.io.schema.flow.UnsubscribeRequest"] = UnsubscribeRequestValidator()
 	vr["ves.io.schema.flow.UnsubscribeResponse"] = UnsubscribeResponseValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.flow.CustomAPI"] = "data"
 	sm["ves.io.schema.flow.CustomFlowConnectionAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -58,14 +51,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.flow.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.flow.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.flow.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -76,15 +65,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.flow.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.flow.CustomFlowConnectionAPI"] = CustomFlowConnectionAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.flow.CustomFlowConnectionAPI"] = NewCustomFlowConnectionAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.flow.CustomFlowConnectionAPI"] = NewCustomFlowConnectionAPIRestClient
 		if isExternal {
@@ -95,22 +80,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.flow.CustomFlowConnectionAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomFlowConnectionAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -41,7 +41,6 @@ func (m *BigIqInstanceType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting BigIqInstanceType.password")
 	}
@@ -81,7 +80,6 @@ type ValidateBigIqInstanceType struct {
 }
 
 func (v *ValidateBigIqInstanceType) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
@@ -89,9 +87,7 @@ func (v *ValidateBigIqInstanceType) UsernameValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIqInstanceType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -100,19 +96,15 @@ func (v *ValidateBigIqInstanceType) PasswordValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIqInstanceType) LicensePoolNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for license_pool_name")
@@ -120,9 +112,7 @@ func (v *ValidateBigIqInstanceType) LicensePoolNameValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIqInstanceType) SkuNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sku_name")
@@ -130,9 +120,7 @@ func (v *ValidateBigIqInstanceType) SkuNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIqInstanceType) LicenseServerIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for license_server_ip")
@@ -154,59 +142,42 @@ func (v *ValidateBigIqInstanceType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["license_pool_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("license_pool_name"))
 		if err := fv(ctx, m.GetLicensePoolName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["license_server_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("license_server_ip"))
 		if err := fv(ctx, m.GetLicenseServerIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sku_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sku_name"))
 		if err := fv(ctx, m.GetSkuName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBigIqInstanceTypeValidator = func() *ValidateBigIqInstanceType {
 	v := &ValidateBigIqInstanceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -301,15 +272,12 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPaloAltoFwService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.palo_alto_fw_service")
 	}
-
 	if err := m.GetHttpsManagement().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.https_management")
 	}
-
 	if err := m.GetF5BigIpAwsService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.f5_big_ip_aws_service")
 	}
@@ -355,21 +323,17 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceProviderChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceProviderChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSshManagementChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSshManagementChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -379,11 +343,8 @@ func (m *CreateSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetHttpManagementChoice().(type) {
 	case *CreateSpecType_DisableHttpsManagement:
-
 		return nil, nil
-
 	case *CreateSpecType_HttpsManagement:
-
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -393,11 +354,9 @@ func (m *CreateSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "https_management." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -407,7 +366,6 @@ func (m *CreateSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetServiceProviderChoice().(type) {
 	case *CreateSpecType_PaloAltoFwService:
-
 		drInfos, err := m.GetPaloAltoFwService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPaloAltoFwService().GetDRefInfo() FAILED")
@@ -417,9 +375,7 @@ func (m *CreateSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "palo_alto_fw_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_F5BigIpAwsService:
-
 		drInfos, err := m.GetF5BigIpAwsService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetF5BigIpAwsService().GetDRefInfo() FAILED")
@@ -429,11 +385,9 @@ func (m *CreateSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "f5_big_ip_aws_service." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -443,11 +397,8 @@ func (m *CreateSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetSshManagementChoice().(type) {
 	case *CreateSpecType_DisableSshAccess:
-
 		return nil, nil
-
 	case *CreateSpecType_EnabledSshAccess:
-
 		drInfos, err := m.GetEnabledSshAccess().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnabledSshAccess().GetDRefInfo() FAILED")
@@ -457,11 +408,9 @@ func (m *CreateSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "enabled_ssh_access." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -475,7 +424,6 @@ func (v *ValidateCreateSpecType) HttpManagementChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ServiceProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -483,7 +431,6 @@ func (v *ValidateCreateSpecType) ServiceProviderChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SshManagementChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -539,7 +486,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_provider_choice"]; exists {
@@ -575,7 +521,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ssh_management_choice"]; exists {
@@ -611,16 +556,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -628,7 +570,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHttpManagementChoice := v.HttpManagementChoiceValidationRuleHandler
 	rulesHttpManagementChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -639,7 +580,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_management_choice"] = vFn
-
 	vrhServiceProviderChoice := v.ServiceProviderChoiceValidationRuleHandler
 	rulesServiceProviderChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -650,7 +590,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_provider_choice"] = vFn
-
 	vrhSshManagementChoice := v.SshManagementChoiceValidationRuleHandler
 	rulesSshManagementChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -661,12 +600,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ssh_management_choice"] = vFn
-
 	v.FldValidators["http_management_choice.https_management"] = ServiceHttpsManagementTypeValidator().Validate
-
 	v.FldValidators["service_provider_choice.palo_alto_fw_service"] = PaloAltoFWAWSTypeValidator().Validate
 	v.FldValidators["service_provider_choice.f5_big_ip_aws_service"] = F5BigIpAWSTypeValidator().Validate
-
 	v.FldValidators["ssh_management_choice.enabled_ssh_access"] = SSHManagementTypeValidator().Validate
 
 	return v
@@ -719,7 +655,6 @@ func (m *EndpointRefType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetEndpointDRefInfo()
-
 }
 
 func (m *EndpointRefType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
@@ -744,7 +679,6 @@ func (m *EndpointRefType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetEndpointDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -763,7 +697,6 @@ func (m *EndpointRefType) GetEndpointDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -772,7 +705,6 @@ type ValidateEndpointRefType struct {
 }
 
 func (v *ValidateEndpointRefType) NodeNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for node_name")
@@ -780,9 +712,7 @@ func (v *ValidateEndpointRefType) NodeNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateEndpointRefType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -842,31 +772,24 @@ func (v *ValidateEndpointRefType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["endpoint"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoint"))
 		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_name"))
 		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEndpointRefTypeValidator = func() *ValidateEndpointRefType {
 	v := &ValidateEndpointRefType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -952,7 +875,6 @@ func (v *ValidateEndpointServiceReplaceType) ExternalVipChoiceValidationRuleHand
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEndpointServiceReplaceType) TcpPortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -960,7 +882,6 @@ func (v *ValidateEndpointServiceReplaceType) TcpPortChoiceValidationRuleHandler(
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEndpointServiceReplaceType) UdpPortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1027,7 +948,6 @@ func (v *ValidateEndpointServiceReplaceType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tcp_port_choice"]; exists {
@@ -1096,7 +1016,6 @@ func (v *ValidateEndpointServiceReplaceType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["udp_port_choice"]; exists {
@@ -1132,16 +1051,13 @@ func (v *ValidateEndpointServiceReplaceType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEndpointServiceReplaceTypeValidator = func() *ValidateEndpointServiceReplaceType {
 	v := &ValidateEndpointServiceReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1149,7 +1065,6 @@ var DefaultEndpointServiceReplaceTypeValidator = func() *ValidateEndpointService
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhExternalVipChoice := v.ExternalVipChoiceValidationRuleHandler
 	rulesExternalVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1160,7 +1075,6 @@ var DefaultEndpointServiceReplaceTypeValidator = func() *ValidateEndpointService
 		panic(errMsg)
 	}
 	v.FldValidators["external_vip_choice"] = vFn
-
 	vrhTcpPortChoice := v.TcpPortChoiceValidationRuleHandler
 	rulesTcpPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1171,7 +1085,6 @@ var DefaultEndpointServiceReplaceTypeValidator = func() *ValidateEndpointService
 		panic(errMsg)
 	}
 	v.FldValidators["tcp_port_choice"] = vFn
-
 	vrhUdpPortChoice := v.UdpPortChoiceValidationRuleHandler
 	rulesUdpPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1182,9 +1095,7 @@ var DefaultEndpointServiceReplaceTypeValidator = func() *ValidateEndpointService
 		panic(errMsg)
 	}
 	v.FldValidators["udp_port_choice"] = vFn
-
 	v.FldValidators["tcp_port_choice.custom_tcp_ports"] = ves_io_schema.PortRangesTypeValidator().Validate
-
 	v.FldValidators["udp_port_choice.custom_udp_ports"] = ves_io_schema.PortRangesTypeValidator().Validate
 
 	return v
@@ -1242,7 +1153,6 @@ func (v *ValidateEndpointServiceType) ExternalVipChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEndpointServiceType) InsideVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1258,7 +1168,6 @@ func (v *ValidateEndpointServiceType) InsideVipChoiceConfiguredVipValidationRule
 	}
 	return oValidatorFn_ConfiguredVip, nil
 }
-
 func (v *ValidateEndpointServiceType) TcpPortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1266,7 +1175,6 @@ func (v *ValidateEndpointServiceType) TcpPortChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateEndpointServiceType) UdpPortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1333,7 +1241,6 @@ func (v *ValidateEndpointServiceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["inside_vip_choice"]; exists {
@@ -1369,7 +1276,6 @@ func (v *ValidateEndpointServiceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tcp_port_choice"]; exists {
@@ -1438,7 +1344,6 @@ func (v *ValidateEndpointServiceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["udp_port_choice"]; exists {
@@ -1474,16 +1379,13 @@ func (v *ValidateEndpointServiceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEndpointServiceTypeValidator = func() *ValidateEndpointServiceType {
 	v := &ValidateEndpointServiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1491,7 +1393,6 @@ var DefaultEndpointServiceTypeValidator = func() *ValidateEndpointServiceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhExternalVipChoice := v.ExternalVipChoiceValidationRuleHandler
 	rulesExternalVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1502,7 +1403,6 @@ var DefaultEndpointServiceTypeValidator = func() *ValidateEndpointServiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["external_vip_choice"] = vFn
-
 	vrhInsideVipChoice := v.InsideVipChoiceValidationRuleHandler
 	rulesInsideVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1513,7 +1413,6 @@ var DefaultEndpointServiceTypeValidator = func() *ValidateEndpointServiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["inside_vip_choice"] = vFn
-
 	vrhInsideVipChoiceConfiguredVip := v.InsideVipChoiceConfiguredVipValidationRuleHandler
 	rulesInsideVipChoiceConfiguredVip := map[string]string{
 		"ves.io.schema.rules.string.ip":     "true",
@@ -1524,9 +1423,7 @@ var DefaultEndpointServiceTypeValidator = func() *ValidateEndpointServiceType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field EndpointServiceType.inside_vip_choice_configured_vip: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["inside_vip_choice.configured_vip"] = vFnMap["inside_vip_choice.configured_vip"]
-
 	vrhTcpPortChoice := v.TcpPortChoiceValidationRuleHandler
 	rulesTcpPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1537,7 +1434,6 @@ var DefaultEndpointServiceTypeValidator = func() *ValidateEndpointServiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["tcp_port_choice"] = vFn
-
 	vrhUdpPortChoice := v.UdpPortChoiceValidationRuleHandler
 	rulesUdpPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1548,9 +1444,7 @@ var DefaultEndpointServiceTypeValidator = func() *ValidateEndpointServiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["udp_port_choice"] = vFn
-
 	v.FldValidators["tcp_port_choice.custom_tcp_ports"] = ves_io_schema.PortRangesTypeValidator().Validate
-
 	v.FldValidators["udp_port_choice.custom_udp_ports"] = ves_io_schema.PortRangesTypeValidator().Validate
 
 	return v
@@ -1614,9 +1508,7 @@ func (v *ValidateExternalNLBInfo) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_subnet_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_subnet_info"))
 		for idx, item := range m.GetAwsSubnetInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1624,27 +1516,19 @@ func (v *ValidateExternalNLBInfo) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("region"))
 		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc_id"))
 		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1675,7 +1559,6 @@ func (m *F5BigIpAWSBYOLImageType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetLicense().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting F5BigIpAWSBYOLImageType.license")
 	}
@@ -1715,7 +1598,6 @@ type ValidateF5BigIpAWSBYOLImageType struct {
 }
 
 func (v *ValidateF5BigIpAWSBYOLImageType) ImageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for image")
@@ -1737,32 +1619,24 @@ func (v *ValidateF5BigIpAWSBYOLImageType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["image"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("image"))
 		if err := fv(ctx, m.GetImage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["license"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("license"))
 		if err := fv(ctx, m.GetLicense(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultF5BigIpAWSBYOLImageTypeValidator = func() *ValidateF5BigIpAWSBYOLImageType {
 	v := &ValidateF5BigIpAWSBYOLImageType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1782,7 +1656,6 @@ var DefaultF5BigIpAWSBYOLImageTypeValidator = func() *ValidateF5BigIpAWSBYOLImag
 		panic(errMsg)
 	}
 	v.FldValidators["image"] = vFn
-
 	v.FldValidators["license"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -1910,16 +1783,13 @@ func (v *ValidateF5BigIpAWSMarketPlaceImageType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultF5BigIpAWSMarketPlaceImageTypeValidator = func() *ValidateF5BigIpAWSMarketPlaceImageType {
 	v := &ValidateF5BigIpAWSMarketPlaceImageType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1927,7 +1797,6 @@ var DefaultF5BigIpAWSMarketPlaceImageTypeValidator = func() *ValidateF5BigIpAWSM
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAmiChoice := v.AmiChoiceValidationRuleHandler
 	rulesAmiChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1998,7 +1867,6 @@ type ValidateF5BigIpAWSReplaceType struct {
 }
 
 func (v *ValidateF5BigIpAWSReplaceType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2055,31 +1923,24 @@ func (v *ValidateF5BigIpAWSReplaceType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["endpoint_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_service"))
 		if err := fv(ctx, m.GetEndpointService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultF5BigIpAWSReplaceTypeValidator = func() *ValidateF5BigIpAWSReplaceType {
 	v := &ValidateF5BigIpAWSReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2100,7 +1961,6 @@ var DefaultF5BigIpAWSReplaceTypeValidator = func() *ValidateF5BigIpAWSReplaceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
-
 	v.FldValidators["endpoint_service"] = EndpointServiceReplaceTypeValidator().Validate
 
 	return v
@@ -2153,11 +2013,9 @@ func (m *F5BigIpAWSTGWSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAwsTgwSiteDRefInfo()
-
 }
 
 func (m *F5BigIpAWSTGWSiteType) GetAwsTgwSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAwsTgwSite()
 	if vref == nil {
 		return nil, nil
@@ -2173,7 +2031,6 @@ func (m *F5BigIpAWSTGWSiteType) GetAwsTgwSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAwsTgwSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2183,7 +2040,6 @@ func (m *F5BigIpAWSTGWSiteType) GetAwsTgwSiteDBEntries(ctx context.Context, d db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: aws_tgw_site")
 	}
-
 	vref := m.GetAwsTgwSite()
 	if vref == nil {
 		return nil, nil
@@ -2201,7 +2057,6 @@ func (m *F5BigIpAWSTGWSiteType) GetAwsTgwSiteDBEntries(ctx context.Context, d db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2210,7 +2065,6 @@ type ValidateF5BigIpAWSTGWSiteType struct {
 }
 
 func (v *ValidateF5BigIpAWSTGWSiteType) AwsTgwSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_tgw_site")
@@ -2219,11 +2073,9 @@ func (v *ValidateF5BigIpAWSTGWSiteType) AwsTgwSiteValidationRuleHandler(rules ma
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2243,23 +2095,18 @@ func (v *ValidateF5BigIpAWSTGWSiteType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_tgw_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_tgw_site"))
 		if err := fv(ctx, m.GetAwsTgwSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultF5BigIpAWSTGWSiteTypeValidator = func() *ValidateF5BigIpAWSTGWSiteType {
 	v := &ValidateF5BigIpAWSTGWSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2302,11 +2149,9 @@ func (m *F5BigIpAWSType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetByolImage().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting F5BigIpAWSType.byol_image")
 	}
-
 	if err := m.GetAdminPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting F5BigIpAWSType.admin_password")
 	}
@@ -2347,7 +2192,6 @@ func (m *F5BigIpAWSType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteTypeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2357,7 +2201,6 @@ func (m *F5BigIpAWSType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteTypeChoice().(type) {
 	case *F5BigIpAWSType_AwsTgwSiteParams:
-
 		drInfos, err := m.GetAwsTgwSiteParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsTgwSiteParams().GetDRefInfo() FAILED")
@@ -2367,9 +2210,7 @@ func (m *F5BigIpAWSType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_tgw_site_params." + dri.DRField
 		}
 		return drInfos, err
-
 	case *F5BigIpAWSType_AwsVpcSiteParams:
-
 		drInfos, err := m.GetAwsVpcSiteParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsVpcSiteParams().GetDRefInfo() FAILED")
@@ -2379,11 +2220,9 @@ func (m *F5BigIpAWSType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_vpc_site_params." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateF5BigIpAWSType struct {
@@ -2401,7 +2240,6 @@ func (v *ValidateF5BigIpAWSType) ImageChoiceValidationRuleHandler(rules map[stri
 func (v *ValidateF5BigIpAWSType) ImageChoiceByolImageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return F5BigIpAWSBYOLImageTypeValidator().Validate, nil
 }
-
 func (v *ValidateF5BigIpAWSType) SiteTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2409,9 +2247,7 @@ func (v *ValidateF5BigIpAWSType) SiteTypeChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAWSType) AdminPasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for admin_password")
@@ -2420,19 +2256,15 @@ func (v *ValidateF5BigIpAWSType) AdminPasswordValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAWSType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
@@ -2440,9 +2272,7 @@ func (v *ValidateF5BigIpAWSType) SshKeyValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAWSType) NodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2488,9 +2318,7 @@ func (v *ValidateF5BigIpAWSType) NodesValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAWSType) AdminUsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for admin_username")
@@ -2498,9 +2326,7 @@ func (v *ValidateF5BigIpAWSType) AdminUsernameValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAWSType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -2557,32 +2383,23 @@ func (v *ValidateF5BigIpAWSType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_username"))
 		if err := fv(ctx, m.GetAdminUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint_service"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint_service"))
 		if err := fv(ctx, m.GetEndpointService(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["image_choice"]; exists {
@@ -2618,15 +2435,12 @@ func (v *ValidateF5BigIpAWSType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("nodes"))
 		if err := fv(ctx, m.GetNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_type_choice"]; exists {
@@ -2662,33 +2476,25 @@ func (v *ValidateF5BigIpAWSType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultF5BigIpAWSTypeValidator = func() *ValidateF5BigIpAWSType {
 	v := &ValidateF5BigIpAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2696,7 +2502,6 @@ var DefaultF5BigIpAWSTypeValidator = func() *ValidateF5BigIpAWSType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhImageChoice := v.ImageChoiceValidationRuleHandler
 	rulesImageChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2707,7 +2512,6 @@ var DefaultF5BigIpAWSTypeValidator = func() *ValidateF5BigIpAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["image_choice"] = vFn
-
 	vrhImageChoiceByolImage := v.ImageChoiceByolImageValidationRuleHandler
 	rulesImageChoiceByolImage := map[string]string{
 		"ves.io.schema.rules.string.in": "[\"image1\",\"image2\"]",
@@ -2717,9 +2521,7 @@ var DefaultF5BigIpAWSTypeValidator = func() *ValidateF5BigIpAWSType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSType.image_choice_byol_image: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["image_choice.byol_image"] = vFnMap["image_choice.byol_image"]
-
 	vrhSiteTypeChoice := v.SiteTypeChoiceValidationRuleHandler
 	rulesSiteTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2792,12 +2594,9 @@ var DefaultF5BigIpAWSTypeValidator = func() *ValidateF5BigIpAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
-
 	v.FldValidators["image_choice.market_place_image"] = F5BigIpAWSMarketPlaceImageTypeValidator().Validate
-
 	v.FldValidators["site_type_choice.aws_tgw_site_params"] = F5BigIpAWSTGWSiteTypeValidator().Validate
 	v.FldValidators["site_type_choice.aws_vpc_site_params"] = F5BigIpAWSVPCSiteTypeValidator().Validate
-
 	v.FldValidators["endpoint_service"] = EndpointServiceTypeValidator().Validate
 
 	return v
@@ -2850,11 +2649,9 @@ func (m *F5BigIpAWSVPCSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAwsVpcSiteDRefInfo()
-
 }
 
 func (m *F5BigIpAWSVPCSiteType) GetAwsVpcSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAwsVpcSite()
 	if vref == nil {
 		return nil, nil
@@ -2870,7 +2667,6 @@ func (m *F5BigIpAWSVPCSiteType) GetAwsVpcSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAwsVpcSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2880,7 +2676,6 @@ func (m *F5BigIpAWSVPCSiteType) GetAwsVpcSiteDBEntries(ctx context.Context, d db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: aws_vpc_site")
 	}
-
 	vref := m.GetAwsVpcSite()
 	if vref == nil {
 		return nil, nil
@@ -2898,7 +2693,6 @@ func (m *F5BigIpAWSVPCSiteType) GetAwsVpcSiteDBEntries(ctx context.Context, d db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2907,7 +2701,6 @@ type ValidateF5BigIpAWSVPCSiteType struct {
 }
 
 func (v *ValidateF5BigIpAWSVPCSiteType) AwsVpcSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_vpc_site")
@@ -2916,11 +2709,9 @@ func (v *ValidateF5BigIpAWSVPCSiteType) AwsVpcSiteValidationRuleHandler(rules ma
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2940,23 +2731,18 @@ func (v *ValidateF5BigIpAWSVPCSiteType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_vpc_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_vpc_site"))
 		if err := fv(ctx, m.GetAwsVpcSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultF5BigIpAWSVPCSiteTypeValidator = func() *ValidateF5BigIpAWSVPCSiteType {
 	v := &ValidateF5BigIpAWSVPCSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2999,11 +2785,9 @@ func (m *F5BigIpAppStackBareMetalType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdminPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting F5BigIpAppStackBareMetalType.admin_password")
 	}
-
 	if err := m.GetBigiqInstance().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting F5BigIpAppStackBareMetalType.bigiq_instance")
 	}
@@ -3049,19 +2833,15 @@ func (m *F5BigIpAppStackBareMetalType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNodesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNodesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *F5BigIpAppStackBareMetalType) GetBareMetalSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetBareMetalSite()
 	if vref == nil {
 		return nil, nil
@@ -3077,7 +2857,6 @@ func (m *F5BigIpAppStackBareMetalType) GetBareMetalSiteDRefInfo() ([]db.DRefInfo
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetBareMetalSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3087,7 +2866,6 @@ func (m *F5BigIpAppStackBareMetalType) GetBareMetalSiteDBEntries(ctx context.Con
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: voltstack_site")
 	}
-
 	vref := m.GetBareMetalSite()
 	if vref == nil {
 		return nil, nil
@@ -3105,7 +2883,6 @@ func (m *F5BigIpAppStackBareMetalType) GetBareMetalSiteDBEntries(ctx context.Con
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3114,7 +2891,6 @@ func (m *F5BigIpAppStackBareMetalType) GetNodesDRefInfo() ([]db.DRefInfo, error)
 	if m.GetNodes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetNodes() {
 		driSet, err := e.GetDRefInfo()
@@ -3128,7 +2904,6 @@ func (m *F5BigIpAppStackBareMetalType) GetNodesDRefInfo() ([]db.DRefInfo, error)
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateF5BigIpAppStackBareMetalType struct {
@@ -3136,7 +2911,6 @@ type ValidateF5BigIpAppStackBareMetalType struct {
 }
 
 func (v *ValidateF5BigIpAppStackBareMetalType) AdminUsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for admin_username")
@@ -3144,9 +2918,7 @@ func (v *ValidateF5BigIpAppStackBareMetalType) AdminUsernameValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAppStackBareMetalType) AdminPasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for admin_password")
@@ -3155,19 +2927,15 @@ func (v *ValidateF5BigIpAppStackBareMetalType) AdminPasswordValidationRuleHandle
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAppStackBareMetalType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
@@ -3175,9 +2943,7 @@ func (v *ValidateF5BigIpAppStackBareMetalType) SshKeyValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAppStackBareMetalType) NodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3223,9 +2989,7 @@ func (v *ValidateF5BigIpAppStackBareMetalType) NodesValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAppStackBareMetalType) BareMetalSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bare_metal_site")
@@ -3234,19 +2998,15 @@ func (v *ValidateF5BigIpAppStackBareMetalType) BareMetalSiteValidationRuleHandle
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAppStackBareMetalType) PublicDownloadUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for public_download_url")
@@ -3254,9 +3014,7 @@ func (v *ValidateF5BigIpAppStackBareMetalType) PublicDownloadUrlValidationRuleHa
 
 	return validatorFn, nil
 }
-
 func (v *ValidateF5BigIpAppStackBareMetalType) BigiqInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bigiq_instance")
@@ -3265,11 +3023,9 @@ func (v *ValidateF5BigIpAppStackBareMetalType) BigiqInstanceValidationRuleHandle
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BigIqInstanceTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -3289,76 +3045,54 @@ func (v *ValidateF5BigIpAppStackBareMetalType) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_username"))
 		if err := fv(ctx, m.GetAdminUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bare_metal_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bare_metal_site"))
 		if err := fv(ctx, m.GetBareMetalSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bigiq_instance"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigiq_instance"))
 		if err := fv(ctx, m.GetBigiqInstance(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("nodes"))
 		if err := fv(ctx, m.GetNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_download_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_download_url"))
 		if err := fv(ctx, m.GetPublicDownloadUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultF5BigIpAppStackBareMetalTypeValidator = func() *ValidateF5BigIpAppStackBareMetalType {
 	v := &ValidateF5BigIpAppStackBareMetalType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3511,7 +3245,6 @@ func (v *ValidateForwardingServiceType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -3542,15 +3275,12 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPaloAltoFwService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.palo_alto_fw_service")
 	}
-
 	if err := m.GetHttpsManagement().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.https_management")
 	}
-
 	if err := m.GetF5BigIpAwsService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.f5_big_ip_aws_service")
 	}
@@ -3596,21 +3326,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceProviderChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceProviderChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSshManagementChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSshManagementChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3620,11 +3346,8 @@ func (m *GetSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetHttpManagementChoice().(type) {
 	case *GetSpecType_DisableHttpsManagement:
-
 		return nil, nil
-
 	case *GetSpecType_HttpsManagement:
-
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -3634,11 +3357,9 @@ func (m *GetSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "https_management." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3648,7 +3369,6 @@ func (m *GetSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetServiceProviderChoice().(type) {
 	case *GetSpecType_PaloAltoFwService:
-
 		drInfos, err := m.GetPaloAltoFwService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPaloAltoFwService().GetDRefInfo() FAILED")
@@ -3658,9 +3378,7 @@ func (m *GetSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "palo_alto_fw_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_F5BigIpAwsService:
-
 		drInfos, err := m.GetF5BigIpAwsService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetF5BigIpAwsService().GetDRefInfo() FAILED")
@@ -3670,11 +3388,9 @@ func (m *GetSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "f5_big_ip_aws_service." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3684,11 +3400,8 @@ func (m *GetSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSshManagementChoice().(type) {
 	case *GetSpecType_DisableSshAccess:
-
 		return nil, nil
-
 	case *GetSpecType_EnabledSshAccess:
-
 		drInfos, err := m.GetEnabledSshAccess().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnabledSshAccess().GetDRefInfo() FAILED")
@@ -3698,11 +3411,9 @@ func (m *GetSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "enabled_ssh_access." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -3716,7 +3427,6 @@ func (v *ValidateGetSpecType) HttpManagementChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ServiceProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3724,7 +3434,6 @@ func (v *ValidateGetSpecType) ServiceProviderChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ServiceTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3732,7 +3441,6 @@ func (v *ValidateGetSpecType) ServiceTypeChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SshManagementChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3754,9 +3462,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["commands"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("commands"))
 		for idx, item := range m.GetCommands() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3764,25 +3470,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["finalizer_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("finalizer_timestamp"))
 		if err := fv(ctx, m.GetFinalizerTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["force_delete"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("force_delete"))
 		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["http_management_choice"]; exists {
@@ -3818,11 +3517,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_info"))
 		for idx, item := range m.GetNodeInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -3830,7 +3526,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_provider_choice"]; exists {
@@ -3866,7 +3561,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_type_choice"]; exists {
@@ -3913,7 +3607,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ssh_management_choice"]; exists {
@@ -3949,16 +3642,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3966,7 +3656,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHttpManagementChoice := v.HttpManagementChoiceValidationRuleHandler
 	rulesHttpManagementChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3977,7 +3666,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_management_choice"] = vFn
-
 	vrhServiceProviderChoice := v.ServiceProviderChoiceValidationRuleHandler
 	rulesServiceProviderChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3988,7 +3676,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_provider_choice"] = vFn
-
 	vrhServiceTypeChoice := v.ServiceTypeChoiceValidationRuleHandler
 	rulesServiceTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3999,7 +3686,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_type_choice"] = vFn
-
 	vrhSshManagementChoice := v.SshManagementChoiceValidationRuleHandler
 	rulesSshManagementChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4010,16 +3696,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ssh_management_choice"] = vFn
-
 	v.FldValidators["http_management_choice.https_management"] = ServiceHttpsManagementTypeValidator().Validate
-
 	v.FldValidators["service_provider_choice.palo_alto_fw_service"] = PaloAltoFWAWSTypeValidator().Validate
 	v.FldValidators["service_provider_choice.f5_big_ip_aws_service"] = F5BigIpAWSTypeValidator().Validate
-
 	v.FldValidators["service_type_choice.endpoint_service"] = EndpointServiceTypeValidator().Validate
-
 	v.FldValidators["ssh_management_choice.enabled_ssh_access"] = SSHManagementTypeValidator().Validate
-
 	v.FldValidators["commands"] = SuggestedCommandsValidator().Validate
 
 	return v
@@ -4045,19 +3726,15 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPaloAltoFwService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.palo_alto_fw_service")
 	}
-
 	if err := m.GetHttpsManagement().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.https_management")
 	}
-
 	if err := m.GetF5BigIpAwsService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.f5_big_ip_aws_service")
 	}
-
 	if err := m.GetF5BigIpBareMetalType().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.f5_big_ip_bare_metal_type")
 	}
@@ -4103,75 +3780,62 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetFleetDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFleetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetHttpManagementChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHttpManagementChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetK8SManifestParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetK8SManifestParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetManagementEndpointRefsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetManagementEndpointRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPolicySetDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPolicySetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServiceProviderChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceProviderChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteRefsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSshManagementChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSshManagementChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTfParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTfParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetCloudCredentialsDRefInfo() ([]db.DRefInfo, error) {
@@ -4196,7 +3860,6 @@ func (m *GlobalSpecType) GetCloudCredentialsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCloudCredentialsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4215,7 +3878,6 @@ func (m *GlobalSpecType) GetCloudCredentialsDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4241,7 +3903,6 @@ func (m *GlobalSpecType) GetFleetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFleetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4260,7 +3921,6 @@ func (m *GlobalSpecType) GetFleetDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4271,11 +3931,8 @@ func (m *GlobalSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetHttpManagementChoice().(type) {
 	case *GlobalSpecType_DisableHttpsManagement:
-
 		return nil, nil
-
 	case *GlobalSpecType_HttpsManagement:
-
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -4285,11 +3942,9 @@ func (m *GlobalSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "https_management." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetK8SManifestParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -4314,7 +3969,6 @@ func (m *GlobalSpecType) GetK8SManifestParamsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetK8SManifestParamsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4333,7 +3987,6 @@ func (m *GlobalSpecType) GetK8SManifestParamsDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4342,7 +3995,6 @@ func (m *GlobalSpecType) GetManagementEndpointRefsDRefInfo() ([]db.DRefInfo, err
 	if m.GetManagementEndpointRefs() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetManagementEndpointRefs() {
 		driSet, err := e.GetDRefInfo()
@@ -4356,7 +4008,6 @@ func (m *GlobalSpecType) GetManagementEndpointRefsDRefInfo() ([]db.DRefInfo, err
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
@@ -4381,7 +4032,6 @@ func (m *GlobalSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetOriginPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4400,7 +4050,6 @@ func (m *GlobalSpecType) GetOriginPoolDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4426,7 +4075,6 @@ func (m *GlobalSpecType) GetPolicySetDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPolicySetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4445,7 +4093,6 @@ func (m *GlobalSpecType) GetPolicySetDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4456,7 +4103,6 @@ func (m *GlobalSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetServiceProviderChoice().(type) {
 	case *GlobalSpecType_PaloAltoFwService:
-
 		drInfos, err := m.GetPaloAltoFwService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPaloAltoFwService().GetDRefInfo() FAILED")
@@ -4466,9 +4112,7 @@ func (m *GlobalSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "palo_alto_fw_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_F5BigIpAwsService:
-
 		drInfos, err := m.GetF5BigIpAwsService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetF5BigIpAwsService().GetDRefInfo() FAILED")
@@ -4478,9 +4122,7 @@ func (m *GlobalSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "f5_big_ip_aws_service." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_F5BigIpBareMetalType:
-
 		drInfos, err := m.GetF5BigIpBareMetalType().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetF5BigIpBareMetalType().GetDRefInfo() FAILED")
@@ -4490,11 +4132,9 @@ func (m *GlobalSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "f5_big_ip_bare_metal_type." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetSiteRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -4519,7 +4159,6 @@ func (m *GlobalSpecType) GetSiteRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4538,7 +4177,6 @@ func (m *GlobalSpecType) GetSiteRefsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4549,11 +4187,8 @@ func (m *GlobalSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetSshManagementChoice().(type) {
 	case *GlobalSpecType_DisableSshAccess:
-
 		return nil, nil
-
 	case *GlobalSpecType_EnabledSshAccess:
-
 		drInfos, err := m.GetEnabledSshAccess().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnabledSshAccess().GetDRefInfo() FAILED")
@@ -4563,11 +4198,9 @@ func (m *GlobalSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "enabled_ssh_access." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -4592,7 +4225,6 @@ func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetTfParamsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4611,12 +4243,10 @@ func (m *GlobalSpecType) GetTfParamsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -4632,7 +4262,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4642,7 +4271,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -4660,7 +4288,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -4675,7 +4302,6 @@ func (v *ValidateGlobalSpecType) HttpManagementChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ServiceProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4683,7 +4309,6 @@ func (v *ValidateGlobalSpecType) ServiceProviderChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ServiceTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4691,7 +4316,6 @@ func (v *ValidateGlobalSpecType) ServiceTypeChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SshManagementChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4699,9 +4323,7 @@ func (v *ValidateGlobalSpecType) SshManagementChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PolicySetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4747,9 +4369,7 @@ func (v *ValidateGlobalSpecType) PolicySetValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) InsideVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_vip")
@@ -4757,9 +4377,7 @@ func (v *ValidateGlobalSpecType) InsideVipValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OriginPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4805,9 +4423,7 @@ func (v *ValidateGlobalSpecType) OriginPoolValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SiteRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4867,9 +4483,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_credentials"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_credentials"))
 		for idx, item := range m.GetCloudCredentials() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4877,11 +4491,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["commands"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("commands"))
 		for idx, item := range m.GetCommands() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4889,29 +4500,20 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["external_nlb_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("external_nlb_info"))
 		if err := fv(ctx, m.GetExternalNlbInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["finalizer_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("finalizer_timestamp"))
 		if err := fv(ctx, m.GetFinalizerTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fleet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fleet"))
 		for idx, item := range m.GetFleet() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4919,16 +4521,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["force_delete"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("force_delete"))
 		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["http_management_choice"]; exists {
@@ -4964,20 +4562,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_vip"))
 		if err := fv(ctx, m.GetInsideVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["k8s_manifest_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("k8s_manifest_params"))
 		for idx, item := range m.GetK8SManifestParams() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4985,11 +4577,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["management_endpoint_refs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("management_endpoint_refs"))
 		for idx, item := range m.GetManagementEndpointRefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4997,11 +4586,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_info"))
 		for idx, item := range m.GetNodeInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5009,23 +4595,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pool"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pool"))
 		if err := fv(ctx, m.GetOriginPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_set"]; exists {
 		vOpts := append(opts, db.WithValidateField("policy_set"))
 		if err := fv(ctx, m.GetPolicySet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_provider_choice"]; exists {
@@ -5072,16 +4653,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_type"))
 		if err := fv(ctx, m.GetServiceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_type_choice"]; exists {
@@ -5128,15 +4705,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_refs"))
 		if err := fv(ctx, m.GetSiteRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ssh_management_choice"]; exists {
@@ -5172,11 +4746,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tf_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tf_params"))
 		for idx, item := range m.GetTfParams() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5184,25 +4755,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5210,7 +4775,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHttpManagementChoice := v.HttpManagementChoiceValidationRuleHandler
 	rulesHttpManagementChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5221,7 +4785,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_management_choice"] = vFn
-
 	vrhServiceProviderChoice := v.ServiceProviderChoiceValidationRuleHandler
 	rulesServiceProviderChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5232,7 +4795,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_provider_choice"] = vFn
-
 	vrhServiceTypeChoice := v.ServiceTypeChoiceValidationRuleHandler
 	rulesServiceTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5243,7 +4805,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_type_choice"] = vFn
-
 	vrhSshManagementChoice := v.SshManagementChoiceValidationRuleHandler
 	rulesSshManagementChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5299,21 +4860,14 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_refs"] = vFn
-
 	v.FldValidators["http_management_choice.https_management"] = ServiceHttpsManagementTypeValidator().Validate
-
 	v.FldValidators["service_provider_choice.palo_alto_fw_service"] = PaloAltoFWAWSTypeValidator().Validate
 	v.FldValidators["service_provider_choice.f5_big_ip_aws_service"] = F5BigIpAWSTypeValidator().Validate
 	v.FldValidators["service_provider_choice.f5_big_ip_bare_metal_type"] = F5BigIpAppStackBareMetalTypeValidator().Validate
-
 	v.FldValidators["service_type_choice.endpoint_service"] = EndpointServiceTypeValidator().Validate
-
 	v.FldValidators["ssh_management_choice.enabled_ssh_access"] = SSHManagementTypeValidator().Validate
-
 	v.FldValidators["management_endpoint_refs"] = EndpointRefTypeValidator().Validate
-
 	v.FldValidators["commands"] = SuggestedCommandsValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -5366,11 +4920,9 @@ func (m *InterfaceDetails) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceDRefInfo()
-
 }
 
 func (m *InterfaceDetails) GetInterfaceDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetInterface()
 	if vref == nil {
 		return nil, nil
@@ -5386,7 +4938,6 @@ func (m *InterfaceDetails) GetInterfaceDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5396,7 +4947,6 @@ func (m *InterfaceDetails) GetInterfaceDBEntries(ctx context.Context, d db.Inter
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: subnet")
 	}
-
 	vref := m.GetInterface()
 	if vref == nil {
 		return nil, nil
@@ -5414,7 +4964,6 @@ func (m *InterfaceDetails) GetInterfaceDBEntries(ctx context.Context, d db.Inter
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -5423,7 +4972,6 @@ type ValidateInterfaceDetails struct {
 }
 
 func (v *ValidateInterfaceDetails) InterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for interface")
@@ -5432,19 +4980,15 @@ func (v *ValidateInterfaceDetails) InterfaceValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInterfaceDetails) NetworkSelfIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for network_self_ip")
@@ -5452,9 +4996,7 @@ func (v *ValidateInterfaceDetails) NetworkSelfIpValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInterfaceDetails) NetworkGatewayValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for network_gateway")
@@ -5476,41 +5018,30 @@ func (v *ValidateInterfaceDetails) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface"))
 		if err := fv(ctx, m.GetInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_gateway"))
 		if err := fv(ctx, m.GetNetworkGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_self_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_self_ip"))
 		if err := fv(ctx, m.GetNetworkSelfIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInterfaceDetailsValidator = func() *ValidateInterfaceDetails {
 	v := &ValidateInterfaceDetails{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5614,25 +5145,18 @@ func (v *ValidateNodeInfo) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_name"))
 		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_command"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_command"))
 		if err := fv(ctx, m.GetSshCommand(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -5663,11 +5187,9 @@ func (m *PANAWSAutoSetupType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetManualSshKeys().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting PANAWSAutoSetupType.manual_ssh_keys")
 	}
-
 	if err := m.GetAdminPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting PANAWSAutoSetupType.admin_password")
 	}
@@ -5713,9 +5235,7 @@ func (v *ValidatePANAWSAutoSetupType) SshKeysChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSAutoSetupType) AdminUsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for admin_username")
@@ -5723,9 +5243,7 @@ func (v *ValidatePANAWSAutoSetupType) AdminUsernameValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePANAWSAutoSetupType) AdminPasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for admin_password")
@@ -5734,11 +5252,9 @@ func (v *ValidatePANAWSAutoSetupType) AdminPasswordValidationRuleHandler(rules m
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -5758,23 +5274,17 @@ func (v *ValidatePANAWSAutoSetupType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_username"))
 		if err := fv(ctx, m.GetAdminUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ssh_keys_choice"]; exists {
@@ -5810,16 +5320,13 @@ func (v *ValidatePANAWSAutoSetupType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPANAWSAutoSetupTypeValidator = func() *ValidatePANAWSAutoSetupType {
 	v := &ValidatePANAWSAutoSetupType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5827,7 +5334,6 @@ var DefaultPANAWSAutoSetupTypeValidator = func() *ValidatePANAWSAutoSetupType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSshKeysChoice := v.SshKeysChoiceValidationRuleHandler
 	rulesSshKeysChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5861,7 +5367,6 @@ var DefaultPANAWSAutoSetupTypeValidator = func() *ValidatePANAWSAutoSetupType {
 		panic(errMsg)
 	}
 	v.FldValidators["admin_password"] = vFn
-
 	v.FldValidators["ssh_keys_choice.manual_ssh_keys"] = SSHKeyTypeValidator().Validate
 
 	return v
@@ -5913,7 +5418,6 @@ type ValidatePaloAltoAzNodesAWSType struct {
 }
 
 func (v *ValidatePaloAltoAzNodesAWSType) NodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5973,22 +5477,18 @@ func (v *ValidatePaloAltoAzNodesAWSType) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("nodes"))
 		if err := fv(ctx, m.GetNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPaloAltoAzNodesAWSTypeValidator = func() *ValidatePaloAltoAzNodesAWSType {
 	v := &ValidatePaloAltoAzNodesAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6069,7 +5569,6 @@ type ValidatePaloAltoFWAWSReplaceType struct {
 }
 
 func (v *ValidatePaloAltoFWAWSReplaceType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -6126,22 +5625,18 @@ func (v *ValidatePaloAltoFWAWSReplaceType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPaloAltoFWAWSReplaceTypeValidator = func() *ValidatePaloAltoFWAWSReplaceType {
 	v := &ValidatePaloAltoFWAWSReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6186,11 +5681,9 @@ func (m *PaloAltoFWAWSType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPanoramaServer().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting PaloAltoFWAWSType.panorama_server")
 	}
-
 	if err := m.GetAutoSetup().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting PaloAltoFWAWSType.auto_setup")
 	}
@@ -6231,11 +5724,9 @@ func (m *PaloAltoFWAWSType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAwsTgwSiteDRefInfo()
-
 }
 
 func (m *PaloAltoFWAWSType) GetAwsTgwSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAwsTgwSite()
 	if vref == nil {
 		return nil, nil
@@ -6251,7 +5742,6 @@ func (m *PaloAltoFWAWSType) GetAwsTgwSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAwsTgwSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6261,7 +5751,6 @@ func (m *PaloAltoFWAWSType) GetAwsTgwSiteDBEntries(ctx context.Context, d db.Int
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: aws_tgw_site")
 	}
-
 	vref := m.GetAwsTgwSite()
 	if vref == nil {
 		return nil, nil
@@ -6279,7 +5768,6 @@ func (m *PaloAltoFWAWSType) GetAwsTgwSiteDBEntries(ctx context.Context, d db.Int
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -6294,7 +5782,6 @@ func (v *ValidatePaloAltoFWAWSType) AmiChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoFWAWSType) SetupOptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6310,9 +5797,7 @@ func (v *ValidatePaloAltoFWAWSType) SetupOptionsSshKeyValidationRuleHandler(rule
 	}
 	return oValidatorFn_SshKey, nil
 }
-
 func (v *ValidatePaloAltoFWAWSType) InstanceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(PaloAltoFWAWSInstanceType)
@@ -6326,9 +5811,7 @@ func (v *ValidatePaloAltoFWAWSType) InstanceTypeValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoFWAWSType) AwsTgwSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_tgw_site")
@@ -6337,19 +5820,15 @@ func (v *ValidatePaloAltoFWAWSType) AwsTgwSiteValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoFWAWSType) ServiceNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for service_nodes")
@@ -6358,19 +5837,15 @@ func (v *ValidatePaloAltoFWAWSType) ServiceNodesValidationRuleHandler(rules map[
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := PaloAltoAzNodesAWSTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoFWAWSType) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -6413,9 +5888,7 @@ func (v *ValidatePaloAltoFWAWSType) TagsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoFWAWSType) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
@@ -6471,25 +5944,18 @@ func (v *ValidatePaloAltoFWAWSType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_tgw_site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_tgw_site"))
 		if err := fv(ctx, m.GetAwsTgwSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_type"))
 		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetPanaromaConnection().(type) {
@@ -6515,16 +5981,12 @@ func (v *ValidatePaloAltoFWAWSType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_nodes"))
 		if err := fv(ctx, m.GetServiceNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["setup_options"]; exists {
@@ -6560,33 +6022,25 @@ func (v *ValidatePaloAltoFWAWSType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 	v := &ValidatePaloAltoFWAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6594,7 +6048,6 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAmiChoice := v.AmiChoiceValidationRuleHandler
 	rulesAmiChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6605,7 +6058,6 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["ami_choice"] = vFn
-
 	vrhSetupOptions := v.SetupOptionsValidationRuleHandler
 	rulesSetupOptions := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6616,7 +6068,6 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["setup_options"] = vFn
-
 	vrhSetupOptionsSshKey := v.SetupOptionsSshKeyValidationRuleHandler
 	rulesSetupOptionsSshKey := map[string]string{
 		"ves.io.schema.rules.string.max_len": "8192",
@@ -6627,7 +6078,6 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PaloAltoFWAWSType.setup_options_ssh_key: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["setup_options.ssh_key"] = vFnMap["setup_options.ssh_key"]
 
 	vrhInstanceType := v.InstanceTypeValidationRuleHandler
@@ -6686,9 +6136,7 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["version"] = vFn
-
 	v.FldValidators["panaroma_connection.panorama_server"] = PanoramaServerTypeValidator().Validate
-
 	v.FldValidators["setup_options.auto_setup"] = PANAWSAutoSetupTypeValidator().Validate
 
 	return v
@@ -6746,9 +6194,7 @@ func (v *ValidatePaloAltoServiceNodesAWSType) MgmtSubnetChoiceValidationRuleHand
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoServiceNodesAWSType) NodeNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for node_name")
@@ -6756,9 +6202,7 @@ func (v *ValidatePaloAltoServiceNodesAWSType) NodeNameValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePaloAltoServiceNodesAWSType) AwsAzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_az_name")
@@ -6780,14 +6224,11 @@ func (v *ValidatePaloAltoServiceNodesAWSType) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_az_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_az_name"))
 		if err := fv(ctx, m.GetAwsAzName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["mgmt_subnet_choice"]; exists {
@@ -6823,25 +6264,19 @@ func (v *ValidatePaloAltoServiceNodesAWSType) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_name"))
 		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPaloAltoServiceNodesAWSTypeValidator = func() *ValidatePaloAltoServiceNodesAWSType {
 	v := &ValidatePaloAltoServiceNodesAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6849,7 +6284,6 @@ var DefaultPaloAltoServiceNodesAWSTypeValidator = func() *ValidatePaloAltoServic
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMgmtSubnetChoice := v.MgmtSubnetChoiceValidationRuleHandler
 	rulesMgmtSubnetChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6886,7 +6320,6 @@ var DefaultPaloAltoServiceNodesAWSTypeValidator = func() *ValidatePaloAltoServic
 		panic(errMsg)
 	}
 	v.FldValidators["aws_az_name"] = vFn
-
 	v.FldValidators["mgmt_subnet_choice.mgmt_subnet"] = ves_io_schema_views.CloudSubnetTypeValidator().Validate
 
 	return v
@@ -6912,7 +6345,6 @@ func (m *PanoramaServerType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAuthorizationKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting PanoramaServerType.authorization_key")
 	}
@@ -6952,7 +6384,6 @@ type ValidatePanoramaServerType struct {
 }
 
 func (v *ValidatePanoramaServerType) ServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server")
@@ -6960,9 +6391,7 @@ func (v *ValidatePanoramaServerType) ServerValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePanoramaServerType) AuthorizationKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for authorization_key")
@@ -6971,19 +6400,15 @@ func (v *ValidatePanoramaServerType) AuthorizationKeyValidationRuleHandler(rules
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePanoramaServerType) TemplateStackNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for template_stack_name")
@@ -6991,9 +6416,7 @@ func (v *ValidatePanoramaServerType) TemplateStackNameValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePanoramaServerType) DeviceGroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device_group_name")
@@ -7015,50 +6438,36 @@ func (v *ValidatePanoramaServerType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["authorization_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("authorization_key"))
 		if err := fv(ctx, m.GetAuthorizationKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["device_group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device_group_name"))
 		if err := fv(ctx, m.GetDeviceGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server"))
 		if err := fv(ctx, m.GetServer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["template_stack_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("template_stack_name"))
 		if err := fv(ctx, m.GetTemplateStackName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPanoramaServerTypeValidator = func() *ValidatePanoramaServerType {
 	v := &ValidatePanoramaServerType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7135,15 +6544,12 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPaloAltoFwService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.palo_alto_fw_service")
 	}
-
 	if err := m.GetHttpsManagement().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.https_management")
 	}
-
 	if err := m.GetF5BigIpAwsService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.f5_big_ip_aws_service")
 	}
@@ -7189,15 +6595,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSshManagementChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSshManagementChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -7207,11 +6610,8 @@ func (m *ReplaceSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetHttpManagementChoice().(type) {
 	case *ReplaceSpecType_DisableHttpsManagement:
-
 		return nil, nil
-
 	case *ReplaceSpecType_HttpsManagement:
-
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -7221,11 +6621,9 @@ func (m *ReplaceSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "https_management." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -7235,11 +6633,8 @@ func (m *ReplaceSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetSshManagementChoice().(type) {
 	case *ReplaceSpecType_DisableSshAccess:
-
 		return nil, nil
-
 	case *ReplaceSpecType_EnabledSshAccess:
-
 		drInfos, err := m.GetEnabledSshAccess().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnabledSshAccess().GetDRefInfo() FAILED")
@@ -7249,11 +6644,9 @@ func (m *ReplaceSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "enabled_ssh_access." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -7267,7 +6660,6 @@ func (v *ValidateReplaceSpecType) HttpManagementChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ServiceProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7275,7 +6667,6 @@ func (v *ValidateReplaceSpecType) ServiceProviderChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SshManagementChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7331,7 +6722,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_provider_choice"]; exists {
@@ -7367,7 +6757,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ssh_management_choice"]; exists {
@@ -7403,16 +6792,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7420,7 +6806,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHttpManagementChoice := v.HttpManagementChoiceValidationRuleHandler
 	rulesHttpManagementChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7431,7 +6816,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_management_choice"] = vFn
-
 	vrhServiceProviderChoice := v.ServiceProviderChoiceValidationRuleHandler
 	rulesServiceProviderChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7442,7 +6826,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_provider_choice"] = vFn
-
 	vrhSshManagementChoice := v.SshManagementChoiceValidationRuleHandler
 	rulesSshManagementChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7453,12 +6836,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ssh_management_choice"] = vFn
-
 	v.FldValidators["http_management_choice.https_management"] = ServiceHttpsManagementTypeValidator().Validate
-
 	v.FldValidators["service_provider_choice.palo_alto_fw_service"] = PaloAltoFWAWSReplaceTypeValidator().Validate
 	v.FldValidators["service_provider_choice.f5_big_ip_aws_service"] = F5BigIpAWSReplaceTypeValidator().Validate
-
 	v.FldValidators["ssh_management_choice.enabled_ssh_access"] = SSHManagementTypeValidator().Validate
 
 	return v
@@ -7484,7 +6864,6 @@ func (m *SSHKeyType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPrivateKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SSHKeyType.private_key")
 	}
@@ -7524,7 +6903,6 @@ type ValidateSSHKeyType struct {
 }
 
 func (v *ValidateSSHKeyType) PublicKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for public_key")
@@ -7532,9 +6910,7 @@ func (v *ValidateSSHKeyType) PublicKeyValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSSHKeyType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
@@ -7543,11 +6919,9 @@ func (v *ValidateSSHKeyType) PrivateKeyValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -7567,32 +6941,24 @@ func (v *ValidateSSHKeyType) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["private_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_key"))
 		if err := fv(ctx, m.GetPrivateKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_key"))
 		if err := fv(ctx, m.GetPublicKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSSHKeyTypeValidator = func() *ValidateSSHKeyType {
 	v := &ValidateSSHKeyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7674,7 +7040,6 @@ type ValidateSSHManagementNodePorts struct {
 }
 
 func (v *ValidateSSHManagementNodePorts) NodeNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for node_name")
@@ -7682,9 +7047,7 @@ func (v *ValidateSSHManagementNodePorts) NodeNameValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSSHManagementNodePorts) SshPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_port")
@@ -7706,32 +7069,24 @@ func (v *ValidateSSHManagementNodePorts) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_name"))
 		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_port"))
 		if err := fv(ctx, m.GetSshPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSSHManagementNodePortsValidator = func() *ValidateSSHManagementNodePorts {
 	v := &ValidateSSHManagementNodePorts{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7817,7 +7172,6 @@ func (m *SSHManagementType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAdvertiseChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7827,11 +7181,8 @@ func (m *SSHManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *SSHManagementType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *SSHManagementType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -7841,23 +7192,15 @@ func (m *SSHManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	case *SSHManagementType_AdvertiseOnSli:
-
 		return nil, nil
-
 	case *SSHManagementType_AdvertiseOnSlo:
-
 		return nil, nil
-
 	case *SSHManagementType_AdvertiseOnSloSli:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateSSHManagementType struct {
@@ -7865,7 +7208,6 @@ type ValidateSSHManagementType struct {
 }
 
 func (v *ValidateSSHManagementType) NodeSshPortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7911,9 +7253,7 @@ func (v *ValidateSSHManagementType) NodeSshPortsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSSHManagementType) DomainSuffixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_suffix")
@@ -7992,33 +7332,25 @@ func (v *ValidateSSHManagementType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_suffix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_suffix"))
 		if err := fv(ctx, m.GetDomainSuffix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_ssh_ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("node_ssh_ports"))
 		if err := fv(ctx, m.GetNodeSshPorts(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSSHManagementTypeValidator = func() *ValidateSSHManagementType {
 	v := &ValidateSSHManagementType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8050,7 +7382,6 @@ var DefaultSSHManagementTypeValidator = func() *ValidateSSHManagementType {
 		panic(errMsg)
 	}
 	v.FldValidators["domain_suffix"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 
 	return v
@@ -8076,19 +7407,15 @@ func (m *ServiceHttpsManagementType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdvertiseOnSliVip().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ServiceHttpsManagementType.advertise_on_sli_vip")
 	}
-
 	if err := m.GetAdvertiseOnSloVip().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ServiceHttpsManagementType.advertise_on_slo_vip")
 	}
-
 	if err := m.GetAdvertiseOnSloSli().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ServiceHttpsManagementType.advertise_on_slo_sli")
 	}
-
 	if err := m.GetAdvertiseOnSloInternetVip().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ServiceHttpsManagementType.advertise_on_slo_internet_vip")
 	}
@@ -8134,15 +7461,12 @@ func (m *ServiceHttpsManagementType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInternetChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInternetChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -8152,7 +7476,6 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ServiceHttpsManagementType_AdvertiseOnSliVip:
-
 		drInfos, err := m.GetAdvertiseOnSliVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnSliVip().GetDRefInfo() FAILED")
@@ -8162,9 +7485,7 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 			dri.DRField = "advertise_on_sli_vip." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ServiceHttpsManagementType_AdvertiseOnSloVip:
-
 		drInfos, err := m.GetAdvertiseOnSloVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnSloVip().GetDRefInfo() FAILED")
@@ -8174,9 +7495,7 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 			dri.DRField = "advertise_on_slo_vip." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ServiceHttpsManagementType_AdvertiseOnSloSli:
-
 		drInfos, err := m.GetAdvertiseOnSloSli().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnSloSli().GetDRefInfo() FAILED")
@@ -8186,13 +7505,9 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 			dri.DRField = "advertise_on_slo_sli." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ServiceHttpsManagementType_DisableLocal:
-
 		return nil, nil
-
 	case *ServiceHttpsManagementType_AdvertiseOnSloInternetVip:
-
 		drInfos, err := m.GetAdvertiseOnSloInternetVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnSloInternetVip().GetDRefInfo() FAILED")
@@ -8202,17 +7517,11 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 			dri.DRField = "advertise_on_slo_internet_vip." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ServiceHttpsManagementType_DoNotAdvertiseOnInternet:
-
 		return nil, nil
-
 	case *ServiceHttpsManagementType_AdvertiseOnInternetDefaultVip:
-
 		return nil, nil
-
 	case *ServiceHttpsManagementType_AdvertiseOnInternet:
-
 		drInfos, err := m.GetAdvertiseOnInternet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnInternet().GetDRefInfo() FAILED")
@@ -8222,11 +7531,9 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 			dri.DRField = "advertise_on_internet." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -8236,15 +7543,10 @@ func (m *ServiceHttpsManagementType) GetInternetChoiceDRefInfo() ([]db.DRefInfo,
 	}
 	switch m.GetInternetChoice().(type) {
 	case *ServiceHttpsManagementType_DoNotAdvertise:
-
 		return nil, nil
-
 	case *ServiceHttpsManagementType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *ServiceHttpsManagementType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -8254,11 +7556,9 @@ func (m *ServiceHttpsManagementType) GetInternetChoiceDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateServiceHttpsManagementType struct {
@@ -8272,7 +7572,6 @@ func (v *ValidateServiceHttpsManagementType) AdvertiseChoiceValidationRuleHandle
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateServiceHttpsManagementType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8288,9 +7587,7 @@ func (v *ValidateServiceHttpsManagementType) PortChoiceHttpsPortValidationRuleHa
 	}
 	return oValidatorFn_HttpsPort, nil
 }
-
 func (v *ValidateServiceHttpsManagementType) DomainSuffixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_suffix")
@@ -8412,16 +7709,12 @@ func (v *ValidateServiceHttpsManagementType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_suffix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_suffix"))
 		if err := fv(ctx, m.GetDomainSuffix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetInternetChoice().(type) {
@@ -8458,7 +7751,6 @@ func (v *ValidateServiceHttpsManagementType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -8494,16 +7786,13 @@ func (v *ValidateServiceHttpsManagementType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceHttpsManagementTypeValidator = func() *ValidateServiceHttpsManagementType {
 	v := &ValidateServiceHttpsManagementType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8511,7 +7800,6 @@ var DefaultServiceHttpsManagementTypeValidator = func() *ValidateServiceHttpsMan
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8522,7 +7810,6 @@ var DefaultServiceHttpsManagementTypeValidator = func() *ValidateServiceHttpsMan
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8533,7 +7820,6 @@ var DefaultServiceHttpsManagementTypeValidator = func() *ValidateServiceHttpsMan
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoiceHttpsPort := v.PortChoiceHttpsPortValidationRuleHandler
 	rulesPortChoiceHttpsPort := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -8544,7 +7830,6 @@ var DefaultServiceHttpsManagementTypeValidator = func() *ValidateServiceHttpsMan
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ServiceHttpsManagementType.port_choice_https_port: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.https_port"] = vFnMap["port_choice.https_port"]
 
 	vrhDomainSuffix := v.DomainSuffixValidationRuleHandler
@@ -8558,13 +7843,11 @@ var DefaultServiceHttpsManagementTypeValidator = func() *ValidateServiceHttpsMan
 		panic(errMsg)
 	}
 	v.FldValidators["domain_suffix"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_on_sli_vip"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 	v.FldValidators["advertise_choice.advertise_on_slo_vip"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 	v.FldValidators["advertise_choice.advertise_on_slo_sli"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 	v.FldValidators["advertise_choice.advertise_on_slo_internet_vip"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 	v.FldValidators["advertise_choice.advertise_on_internet"] = ves_io_schema_views.AdvertisePublicValidator().Validate
-
 	v.FldValidators["internet_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 
 	return v
@@ -8622,7 +7905,6 @@ func (v *ValidateServiceNodesAWSType) MgmtSubnetChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateServiceNodesAWSType) TunnelPrefixChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8638,9 +7920,7 @@ func (v *ValidateServiceNodesAWSType) TunnelPrefixChoiceTunnelPrefixValidationRu
 	}
 	return oValidatorFn_TunnelPrefix, nil
 }
-
 func (v *ValidateServiceNodesAWSType) NodeNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for node_name")
@@ -8648,9 +7928,7 @@ func (v *ValidateServiceNodesAWSType) NodeNameValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServiceNodesAWSType) AwsAzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_az_name")
@@ -8672,14 +7950,11 @@ func (v *ValidateServiceNodesAWSType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_az_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_az_name"))
 		if err := fv(ctx, m.GetAwsAzName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["mgmt_subnet_choice"]; exists {
@@ -8715,16 +7990,12 @@ func (v *ValidateServiceNodesAWSType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_name"))
 		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tunnel_prefix_choice"]; exists {
@@ -8760,16 +8031,13 @@ func (v *ValidateServiceNodesAWSType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceNodesAWSTypeValidator = func() *ValidateServiceNodesAWSType {
 	v := &ValidateServiceNodesAWSType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8777,7 +8045,6 @@ var DefaultServiceNodesAWSTypeValidator = func() *ValidateServiceNodesAWSType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMgmtSubnetChoice := v.MgmtSubnetChoiceValidationRuleHandler
 	rulesMgmtSubnetChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8788,7 +8055,6 @@ var DefaultServiceNodesAWSTypeValidator = func() *ValidateServiceNodesAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["mgmt_subnet_choice"] = vFn
-
 	vrhTunnelPrefixChoice := v.TunnelPrefixChoiceValidationRuleHandler
 	rulesTunnelPrefixChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8799,7 +8065,6 @@ var DefaultServiceNodesAWSTypeValidator = func() *ValidateServiceNodesAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["tunnel_prefix_choice"] = vFn
-
 	vrhTunnelPrefixChoiceTunnelPrefix := v.TunnelPrefixChoiceTunnelPrefixValidationRuleHandler
 	rulesTunnelPrefixChoiceTunnelPrefix := map[string]string{
 		"ves.io.schema.rules.string.ipv4_prefix": "true",
@@ -8809,7 +8074,6 @@ var DefaultServiceNodesAWSTypeValidator = func() *ValidateServiceNodesAWSType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ServiceNodesAWSType.tunnel_prefix_choice_tunnel_prefix: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["tunnel_prefix_choice.tunnel_prefix"] = vFnMap["tunnel_prefix_choice.tunnel_prefix"]
 
 	vrhNodeName := v.NodeNameValidationRuleHandler
@@ -8837,7 +8101,6 @@ var DefaultServiceNodesAWSTypeValidator = func() *ValidateServiceNodesAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["aws_az_name"] = vFn
-
 	v.FldValidators["mgmt_subnet_choice.mgmt_subnet"] = ves_io_schema_views.CloudSubnetTypeValidator().Validate
 
 	return v
@@ -8895,15 +8158,12 @@ func (m *ServiceNodesBareMetalType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetInternalInterfaceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetInternalInterfaceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -8911,7 +8171,6 @@ func (m *ServiceNodesBareMetalType) GetExternalInterfaceDRefInfo() ([]db.DRefInf
 	if m.GetExternalInterface() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetExternalInterface().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetExternalInterface().GetDRefInfo() FAILED")
@@ -8921,7 +8180,6 @@ func (m *ServiceNodesBareMetalType) GetExternalInterfaceDRefInfo() ([]db.DRefInf
 		dri.DRField = "external_interface." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -8929,7 +8187,6 @@ func (m *ServiceNodesBareMetalType) GetInternalInterfaceDRefInfo() ([]db.DRefInf
 	if m.GetInternalInterface() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetInternalInterface().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternalInterface().GetDRefInfo() FAILED")
@@ -8939,7 +8196,6 @@ func (m *ServiceNodesBareMetalType) GetInternalInterfaceDRefInfo() ([]db.DRefInf
 		dri.DRField = "internal_interface." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateServiceNodesBareMetalType struct {
@@ -8947,7 +8203,6 @@ type ValidateServiceNodesBareMetalType struct {
 }
 
 func (v *ValidateServiceNodesBareMetalType) NodeNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for node_name")
@@ -8955,9 +8210,7 @@ func (v *ValidateServiceNodesBareMetalType) NodeNameValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServiceNodesBareMetalType) BmVirtualCpuCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(BMNodeVirtualCpuCount)
@@ -8971,9 +8224,7 @@ func (v *ValidateServiceNodesBareMetalType) BmVirtualCpuCountValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServiceNodesBareMetalType) BmNodeMemorySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(BMNodeMemorySize)
@@ -9001,59 +8252,42 @@ func (v *ValidateServiceNodesBareMetalType) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bm_node_memory_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bm_node_memory_size"))
 		if err := fv(ctx, m.GetBmNodeMemorySize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bm_virtual_cpu_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bm_virtual_cpu_count"))
 		if err := fv(ctx, m.GetBmVirtualCpuCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["external_interface"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("external_interface"))
 		if err := fv(ctx, m.GetExternalInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_interface"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_interface"))
 		if err := fv(ctx, m.GetInternalInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_name"))
 		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServiceNodesBareMetalTypeValidator = func() *ValidateServiceNodesBareMetalType {
 	v := &ValidateServiceNodesBareMetalType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9097,9 +8331,7 @@ var DefaultServiceNodesBareMetalTypeValidator = func() *ValidateServiceNodesBare
 		panic(errMsg)
 	}
 	v.FldValidators["bm_node_memory_size"] = vFn
-
 	v.FldValidators["internal_interface"] = InterfaceDetailsValidator().Validate
-
 	v.FldValidators["external_interface"] = InterfaceDetailsValidator().Validate
 
 	return v
@@ -9151,7 +8383,6 @@ type ValidateSuggestedCommands struct {
 }
 
 func (v *ValidateSuggestedCommands) CommandValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for command")
@@ -9159,9 +8390,7 @@ func (v *ValidateSuggestedCommands) CommandValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSuggestedCommands) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -9169,9 +8398,7 @@ func (v *ValidateSuggestedCommands) DescriptionValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSuggestedCommands) WarningValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for warning")
@@ -9193,41 +8420,30 @@ func (v *ValidateSuggestedCommands) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["command"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("command"))
 		if err := fv(ctx, m.GetCommand(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["warning"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("warning"))
 		if err := fv(ctx, m.GetWarning(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuggestedCommandsValidator = func() *ValidateSuggestedCommands {
 	v := &ValidateSuggestedCommands{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

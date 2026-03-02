@@ -76,34 +76,24 @@ func (v *ValidateGetRequest) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_kind"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_kind"))
 		if err := fv(ctx, m.GetViewKind(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_name"))
 		if err := fv(ctx, m.GetViewName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -161,7 +151,6 @@ func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTerraformParametersDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -169,7 +158,6 @@ func (m *GetResponse) GetTerraformParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTerraformParameters() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTerraformParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTerraformParameters().GetDRefInfo() FAILED")
@@ -179,7 +167,6 @@ func (m *GetResponse) GetTerraformParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "terraform_parameters." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetResponse struct {
@@ -199,16 +186,12 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["terraform_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("terraform_parameters"))
 		if err := fv(ctx, m.GetTerraformParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -266,7 +249,6 @@ func (m *GetStatusResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return nil, nil
-
 }
 
 type ValidateGetStatusResponse struct {
@@ -286,23 +268,18 @@ func (v *ValidateGetStatusResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetStatusResponseValidator = func() *ValidateGetStatusResponse {
 	v := &ValidateGetStatusResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["status"] = StatusObjectValidator().Validate
 
 	return v

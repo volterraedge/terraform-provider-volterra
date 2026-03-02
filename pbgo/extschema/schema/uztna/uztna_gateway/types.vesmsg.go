@@ -67,7 +67,6 @@ func (m *BigIpAccessSiteList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetBigipSiteDRefInfo()
-
 }
 
 func (m *BigIpAccessSiteList) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *BigIpAccessSiteList) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetBigipSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *BigIpAccessSiteList) GetBigipSiteDBEntries(ctx context.Context, d db.In
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateBigIpAccessSiteList struct {
 }
 
 func (v *ValidateBigIpAccessSiteList) BigipSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -180,22 +176,18 @@ func (v *ValidateBigIpAccessSiteList) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bigip_site"]; exists {
 		vOpts := append(opts, db.WithValidateField("bigip_site"))
 		if err := fv(ctx, m.GetBigipSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBigIpAccessSiteListValidator = func() *ValidateBigIpAccessSiteList {
 	v := &ValidateBigIpAccessSiteList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -266,7 +258,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetBigIpInstanceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -274,7 +265,6 @@ func (m *CreateSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetBigIpInstance() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
@@ -284,7 +274,6 @@ func (m *CreateSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "big_ip_instance." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -292,7 +281,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) BigIpInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_instance")
@@ -301,19 +289,15 @@ func (v *ValidateCreateSpecType) BigIpInstanceValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BigIpAccessSiteListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ListenersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -373,31 +357,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["big_ip_instance"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("big_ip_instance"))
 		if err := fv(ctx, m.GetBigIpInstance(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listeners"]; exists {
 		vOpts := append(opts, db.WithValidateField("listeners"))
 		if err := fv(ctx, m.GetListeners(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -478,7 +455,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetBigIpInstanceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -486,7 +462,6 @@ func (m *GetSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetBigIpInstance() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
@@ -496,7 +471,6 @@ func (m *GetSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "big_ip_instance." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -504,7 +478,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) BigIpInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_instance")
@@ -513,19 +486,15 @@ func (v *ValidateGetSpecType) BigIpInstanceValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BigIpAccessSiteListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ListenersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -585,31 +554,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["big_ip_instance"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("big_ip_instance"))
 		if err := fv(ctx, m.GetBigIpInstance(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listeners"]; exists {
 		vOpts := append(opts, db.WithValidateField("listeners"))
 		if err := fv(ctx, m.GetListeners(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -690,7 +652,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetBigIpInstanceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -698,7 +659,6 @@ func (m *GlobalSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetBigIpInstance() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
@@ -708,7 +668,6 @@ func (m *GlobalSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "big_ip_instance." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -716,7 +675,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) BigIpInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_instance")
@@ -725,19 +683,15 @@ func (v *ValidateGlobalSpecType) BigIpInstanceValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BigIpAccessSiteListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ListenersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -797,31 +751,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["big_ip_instance"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("big_ip_instance"))
 		if err := fv(ctx, m.GetBigIpInstance(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listeners"]; exists {
 		vOpts := append(opts, db.WithValidateField("listeners"))
 		if err := fv(ctx, m.GetListeners(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -907,6 +854,7 @@ func (v *ValidateListeners) FlowTypeIpv4ValidationRuleHandler(rules map[string]s
 	}
 	return oValidatorFn_Ipv4, nil
 }
+
 func (v *ValidateListeners) FlowTypeIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Ipv6, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -952,16 +900,13 @@ func (v *ValidateListeners) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListenersValidator = func() *ValidateListeners {
 	v := &ValidateListeners{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -969,7 +914,6 @@ var DefaultListenersValidator = func() *ValidateListeners {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFlowTypeIpv4 := v.FlowTypeIpv4ValidationRuleHandler
 	rulesFlowTypeIpv4 := map[string]string{
 		"ves.io.schema.rules.string.ipv4": "true",
@@ -988,7 +932,6 @@ var DefaultListenersValidator = func() *ValidateListeners {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Listeners.flow_type_ipv6: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["flow_type.ipv4"] = vFnMap["flow_type.ipv4"]
 	v.FldValidators["flow_type.ipv6"] = vFnMap["flow_type.ipv6"]
 
@@ -1042,7 +985,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetBigIpInstanceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1050,7 +992,6 @@ func (m *ReplaceSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetBigIpInstance() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
@@ -1060,7 +1001,6 @@ func (m *ReplaceSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "big_ip_instance." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1068,7 +1008,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) BigIpInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_instance")
@@ -1077,19 +1016,15 @@ func (v *ValidateReplaceSpecType) BigIpInstanceValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := BigIpAccessSiteListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ListenersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1149,31 +1084,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["big_ip_instance"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("big_ip_instance"))
 		if err := fv(ctx, m.GetBigIpInstance(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["listeners"]; exists {
 		vOpts := append(opts, db.WithValidateField("listeners"))
 		if err := fv(ctx, m.GetListeners(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

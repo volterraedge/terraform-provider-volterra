@@ -14,13 +14,10 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.code_base_integration.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.api_sec.code_base_integration.Object"] = ObjectValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.api_sec.code_base_integration.UpdateCodeBaseIntegrationReq"] = UpdateCodeBaseIntegrationReqValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.UpdateCodeBaseIntegrationResp"] = UpdateCodeBaseIntegrationRespValidator()
-
 	vr["ves.io.schema.api_sec.code_base_integration.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.DeleteRequest"] = DeleteRequestValidator()
@@ -31,7 +28,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.code_base_integration.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.api_sec.code_base_integration.AzureReposIntegration"] = AzureReposIntegrationValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.BitBucketCloudIntegration"] = BitBucketCloudIntegrationValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.BitBucketServerIntegration"] = BitBucketServerIntegrationValidator()
@@ -45,7 +41,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.code_base_integration.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.IntegrationHealth"] = IntegrationHealthValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -57,11 +52,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.api_sec.code_base_integration.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.api_sec.code_base_integration.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.api_sec.code_base_integration.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.code_base_integration.API.Create"] = []string{
 		"spec.code_base_integration.azure_repos.access_token.blindfold_secret_info_internal",
 		"spec.code_base_integration.azure_repos.access_token.secret_encoding_type",
@@ -92,9 +85,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.code_base_integration.gitlab_enterprise.access_token.vault_secret_info",
 		"spec.code_base_integration.gitlab_enterprise.access_token.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.code_base_integration.API.Create"] = "ves.io.schema.api_sec.code_base_integration.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.code_base_integration.API.Replace"] = []string{
 		"spec.code_base_integration.azure_repos.access_token.blindfold_secret_info_internal",
 		"spec.code_base_integration.azure_repos.access_token.secret_encoding_type",
@@ -125,23 +116,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.code_base_integration.gitlab_enterprise.access_token.vault_secret_info",
 		"spec.code_base_integration.gitlab_enterprise.access_token.wingman_secret_info",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.code_base_integration.API.Replace"] = "ves.io.schema.api_sec.code_base_integration.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.api_sec.code_base_integration.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -150,14 +136,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.api_sec.code_base_integration.Object"] = PrivateCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
 		if isExternal {
@@ -168,11 +150,8 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewPrivateCustomAPIServer(svc)
 		}
-
 	}()
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.api_sec.code_base_integration.Object"] = APISwaggerJSON
@@ -186,22 +165,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.api_sec.code_base_integration.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.api_sec.code_base_integration.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.api_sec.code_base_integration.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

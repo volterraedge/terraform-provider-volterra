@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.site.Object"] = ObjectValidator()
 	vr["ves.io.schema.site.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.site.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.site.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.site.ListRequest"] = ListRequestValidator()
@@ -25,7 +23,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.site.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.site.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.site.ConfigMapListRequest"] = ConfigMapListRequestValidator()
 	vr["ves.io.schema.site.CronJobListRequest"] = CronJobListRequestValidator()
 	vr["ves.io.schema.site.DaemonSetListRequest"] = DaemonSetListRequestValidator()
@@ -49,27 +46,35 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.VirtualMachineInstancesMetricTypeData"] = VirtualMachineInstancesMetricTypeDataValidator()
 	vr["ves.io.schema.site.VirtualMachineInstancesMetricsRequest"] = VirtualMachineInstancesMetricsRequestValidator()
 	vr["ves.io.schema.site.VirtualMachineInstancesMetricsResponse"] = VirtualMachineInstancesMetricsResponseValidator()
-
+	vr["ves.io.schema.site.InterfaceListRequest"] = InterfaceListRequestValidator()
+	vr["ves.io.schema.site.InterfaceListResp"] = InterfaceListRespValidator()
 	vr["ves.io.schema.site.GlobalNetworkItem"] = GlobalNetworkItemValidator()
 	vr["ves.io.schema.site.GlobalNetworkListRequest"] = GlobalNetworkListRequestValidator()
 	vr["ves.io.schema.site.GlobalNetworkListResp"] = GlobalNetworkListRespValidator()
 	vr["ves.io.schema.site.SegmentItem"] = SegmentItemValidator()
 	vr["ves.io.schema.site.SegmentListRequest"] = SegmentListRequestValidator()
 	vr["ves.io.schema.site.SegmentListResp"] = SegmentListRespValidator()
-
 	vr["ves.io.schema.site.SetStateReq"] = SetStateReqValidator()
 	vr["ves.io.schema.site.SetStateResp"] = SetStateRespValidator()
-
 	vr["ves.io.schema.site.UpgradeOSRequest"] = UpgradeOSRequestValidator()
 	vr["ves.io.schema.site.UpgradeOSResponse"] = UpgradeOSResponseValidator()
 	vr["ves.io.schema.site.UpgradeSWRequest"] = UpgradeSWRequestValidator()
 	vr["ves.io.schema.site.UpgradeSWResponse"] = UpgradeSWResponseValidator()
-
 	vr["ves.io.schema.site.CheckSiteExistRequest"] = CheckSiteExistRequestValidator()
 	vr["ves.io.schema.site.CheckSiteExistResponse"] = CheckSiteExistResponseValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsRequest"] = SiteStatusMetricsRequestValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsResponse"] = SiteStatusMetricsResponseValidator()
-
+	vr["ves.io.schema.site.AWSElasticIPAllocationStatusType"] = AWSElasticIPAllocationStatusTypeValidator()
+	vr["ves.io.schema.site.AWSInstanceStatusType"] = AWSInstanceStatusTypeValidator()
+	vr["ves.io.schema.site.AWSNetworkInterfaceStatusType"] = AWSNetworkInterfaceStatusTypeValidator()
+	vr["ves.io.schema.site.AWSOrchestrationStatusType"] = AWSOrchestrationStatusTypeValidator()
+	vr["ves.io.schema.site.AWSRouteTableStatusType"] = AWSRouteTableStatusTypeValidator()
+	vr["ves.io.schema.site.AWSSiteVPCStatusType"] = AWSSiteVPCStatusTypeValidator()
+	vr["ves.io.schema.site.AWSSubnetStatusType"] = AWSSubnetStatusTypeValidator()
+	vr["ves.io.schema.site.AWSTransitGatewayAttachmentStatusType"] = AWSTransitGatewayAttachmentStatusTypeValidator()
+	vr["ves.io.schema.site.AWSTransitGatewayStatus"] = AWSTransitGatewayStatusValidator()
+	vr["ves.io.schema.site.AWSVolumeEncryptionStatusType"] = AWSVolumeEncryptionStatusTypeValidator()
+	vr["ves.io.schema.site.AWSVolumeStatusType"] = AWSVolumeStatusTypeValidator()
 	vr["ves.io.schema.site.AresConnectionStatus"] = AresConnectionStatusValidator()
 	vr["ves.io.schema.site.AzureExpressRouteCircuitStatusType"] = AzureExpressRouteCircuitStatusTypeValidator()
 	vr["ves.io.schema.site.AzureExpressRouteStatusType"] = AzureExpressRouteStatusTypeValidator()
@@ -115,6 +120,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.OS"] = OSValidator()
 	vr["ves.io.schema.site.OfflineSurvivabilityStatus"] = OfflineSurvivabilityStatusValidator()
 	vr["ves.io.schema.site.OperatingSystemStatus"] = OperatingSystemStatusValidator()
+	vr["ves.io.schema.site.OrchestrationStatusType"] = OrchestrationStatusTypeValidator()
 	vr["ves.io.schema.site.OsInfo"] = OsInfoValidator()
 	vr["ves.io.schema.site.Product"] = ProductValidator()
 	vr["ves.io.schema.site.PublishVIPParamsPerAz"] = PublishVIPParamsPerAzValidator()
@@ -124,7 +130,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.RouteServerPeeringStatusType"] = RouteServerPeeringStatusTypeValidator()
 	vr["ves.io.schema.site.RouteServerStatusType"] = RouteServerStatusTypeValidator()
 	vr["ves.io.schema.site.ScalingStatus"] = ScalingStatusValidator()
+	vr["ves.io.schema.site.SecondaryDnsServerIpAddress"] = SecondaryDnsServerIpAddressValidator()
 	vr["ves.io.schema.site.SiteReachabilityStatus"] = SiteReachabilityStatusValidator()
+	vr["ves.io.schema.site.SiteStateStatus"] = SiteStateStatusValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsData"] = SiteStatusMetricsDataValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsFieldData"] = SiteStatusMetricsFieldDataValidator()
 	vr["ves.io.schema.site.SiteToSiteTunnelConnectivity"] = SiteToSiteTunnelConnectivityValidator()
@@ -138,7 +146,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.VirtualNetworkDnsServerConfigurationType"] = VirtualNetworkDnsServerConfigurationTypeValidator()
 	vr["ves.io.schema.site.VnetGatewayStatusType"] = VnetGatewayStatusTypeValidator()
 	vr["ves.io.schema.site.VolterraSoftwareStatus"] = VolterraSoftwareStatusValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -150,11 +157,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.site.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.site.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.site.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "replace_form.spec.bgp_peer_address_v6",
@@ -204,8 +209,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.vip_selection",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
+		{
+			FieldPath:           "status.#.managed_site_orchestration_status",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "status.#.site_errors.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.bgp_peer_address_v6",
@@ -231,8 +243,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "items.#.get_spec.vip_selection",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
+		{
+			FieldPath:           "items.#.status_set.#.managed_site_orchestration_status",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.status_set.#.site_errors.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.site.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.site.ReplaceRequest.spec.bgp_peer_address_v6",
@@ -255,7 +274,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.bgp_peer_address_v6",
@@ -282,28 +300,25 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.site.ConfigKubeConfigAPI"] = "config"
 	sm["ves.io.schema.site.API"] = "config"
 	sm["ves.io.schema.site.CustomDataK8SAPI"] = "data"
+	sm["ves.io.schema.site.CustomInterfaceListAPI"] = "config"
 	sm["ves.io.schema.site.CustomVirtualNetworkListAPI"] = "config"
 	sm["ves.io.schema.site.CustomStateAPI"] = "register"
 	sm["ves.io.schema.site.UamKubeConfigAPI"] = "web"
 	sm["ves.io.schema.site.UpgradeAPI"] = "config"
 	sm["ves.io.schema.site.CustomSiteStatusAPI"] = "data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -312,14 +327,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = PrivateConfigKubeConfigAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.site.PrivateConfigKubeConfigAPI"] = NewPrivateConfigKubeConfigAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.site.PrivateConfigKubeConfigAPI"] = NewPrivateConfigKubeConfigAPIRestClient
 		if isExternal {
@@ -330,16 +341,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.site.PrivateConfigKubeConfigAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewPrivateConfigKubeConfigAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = ConfigKubeConfigAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.site.ConfigKubeConfigAPI"] = NewConfigKubeConfigAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.site.ConfigKubeConfigAPI"] = NewConfigKubeConfigAPIRestClient
 		if isExternal {
@@ -350,11 +356,8 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.site.ConfigKubeConfigAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewConfigKubeConfigAPIServer(svc)
 		}
-
 	}()
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.site.Object"] = APISwaggerJSON
@@ -368,16 +371,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.site.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.site.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.site.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = CustomDataK8SAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.site.CustomDataK8SAPI"] = NewCustomDataK8SAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.site.CustomDataK8SAPI"] = NewCustomDataK8SAPIRestClient
 		if isExternal {
@@ -388,16 +386,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.site.CustomDataK8SAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataK8SAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
+		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = CustomInterfaceListAPISwaggerJSON
+		customCSR.GrpcClientRegistry["ves.io.schema.site.CustomInterfaceListAPI"] = NewCustomInterfaceListAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.site.CustomInterfaceListAPI"] = NewCustomInterfaceListAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.site.CustomInterfaceListAPI"] = RegisterCustomInterfaceListAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.site.CustomInterfaceListAPI"] = RegisterGwCustomInterfaceListAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.site.CustomInterfaceListAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomInterfaceListAPIServer(svc)
+		}
+	}()
+	customCSR = mdr.PubCustomServiceRegistry
+	func() {
+		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = CustomVirtualNetworkListAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.site.CustomVirtualNetworkListAPI"] = NewCustomVirtualNetworkListAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.site.CustomVirtualNetworkListAPI"] = NewCustomVirtualNetworkListAPIRestClient
 		if isExternal {
@@ -408,16 +416,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.site.CustomVirtualNetworkListAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomVirtualNetworkListAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = CustomStateAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.site.CustomStateAPI"] = NewCustomStateAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.site.CustomStateAPI"] = NewCustomStateAPIRestClient
 		if isExternal {
@@ -428,16 +431,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.site.CustomStateAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomStateAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = UamKubeConfigAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.site.UamKubeConfigAPI"] = NewUamKubeConfigAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.site.UamKubeConfigAPI"] = NewUamKubeConfigAPIRestClient
 		if isExternal {
@@ -448,16 +446,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.site.UamKubeConfigAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewUamKubeConfigAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = UpgradeAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.site.UpgradeAPI"] = NewUpgradeAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.site.UpgradeAPI"] = NewUpgradeAPIRestClient
 		if isExternal {
@@ -468,16 +461,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.site.UpgradeAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewUpgradeAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = CustomSiteStatusAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.site.CustomSiteStatusAPI"] = NewCustomSiteStatusAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.site.CustomSiteStatusAPI"] = NewCustomSiteStatusAPIRestClient
 		if isExternal {
@@ -488,22 +476,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.site.CustomSiteStatusAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomSiteStatusAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

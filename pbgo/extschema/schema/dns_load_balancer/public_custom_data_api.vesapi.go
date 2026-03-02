@@ -42,7 +42,6 @@ func (c *CustomDataAPIGrpcClient) doRPCDNSLBHealthStatus(ctx context.Context, ya
 	rsp, err := c.grpcClient.DNSLBHealthStatus(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCDNSLBHealthStatusList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DNSLBHealthStatusListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomDataAPIGrpcClient) doRPCDNSLBHealthStatusList(ctx context.Context
 	rsp, err := c.grpcClient.DNSLBHealthStatusList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCDNSLBPoolHealthStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DNSLBPoolHealthStatusRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomDataAPIGrpcClient) doRPCDNSLBPoolHealthStatus(ctx context.Context
 	rsp, err := c.grpcClient.DNSLBPoolHealthStatus(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCDNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DNSLBPoolMemberHealthStatusRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *CustomDataAPIGrpcClient) doRPCDNSLBPoolMemberHealthStatusChangeEvents(c
 	rsp, err := c.grpcClient.DNSLBPoolMemberHealthStatusChangeEvents(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCDNSLBPoolMemberHealthStatusList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DNSLBPoolMemberHealthStatusListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -110,17 +106,11 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DNSLBHealthStatus"] = ccl.doRPCDNSLBHealthStatus
-
 	rpcFns["DNSLBHealthStatusList"] = ccl.doRPCDNSLBHealthStatusList
-
 	rpcFns["DNSLBPoolHealthStatus"] = ccl.doRPCDNSLBPoolHealthStatus
-
 	rpcFns["DNSLBPoolMemberHealthStatusChangeEvents"] = ccl.doRPCDNSLBPoolMemberHealthStatusChangeEvents
-
 	rpcFns["DNSLBPoolMemberHealthStatusList"] = ccl.doRPCDNSLBPoolMemberHealthStatusList
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -207,7 +197,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBHealthStatus(ctx context.Context, ca
 	pbRsp := &DNSLBHealthStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_load_balancer.DNSLBHealthStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -215,7 +204,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBHealthStatus(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCDNSLBHealthStatusList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -290,7 +278,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBHealthStatusList(ctx context.Context
 	pbRsp := &DNSLBHealthStatusListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_load_balancer.DNSLBHealthStatusListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -298,7 +285,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBHealthStatusList(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCDNSLBPoolHealthStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -375,7 +361,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBPoolHealthStatus(ctx context.Context
 	pbRsp := &DNSLBPoolHealthStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolHealthStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -383,7 +368,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBPoolHealthStatus(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCDNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -461,7 +445,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBPoolMemberHealthStatusChangeEvents(c
 	pbRsp := &DNSLBPoolMemberHealthStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -469,7 +452,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBPoolMemberHealthStatusChangeEvents(c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCDNSLBPoolMemberHealthStatusList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -544,7 +526,6 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBPoolMemberHealthStatusList(ctx conte
 	pbRsp := &DNSLBPoolMemberHealthStatusListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -578,17 +559,11 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DNSLBHealthStatus"] = ccl.doRPCDNSLBHealthStatus
-
 	rpcFns["DNSLBHealthStatusList"] = ccl.doRPCDNSLBHealthStatusList
-
 	rpcFns["DNSLBPoolHealthStatus"] = ccl.doRPCDNSLBPoolHealthStatus
-
 	rpcFns["DNSLBPoolMemberHealthStatusChangeEvents"] = ccl.doRPCDNSLBPoolMemberHealthStatusChangeEvents
-
 	rpcFns["DNSLBPoolMemberHealthStatusList"] = ccl.doRPCDNSLBPoolMemberHealthStatusList
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -685,7 +660,6 @@ func (s *customDataAPISrv) DNSLBHealthStatus(ctx context.Context, in *DNSLBHealt
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBHealthStatusResponse", rsp)...)
 
 	return rsp, nil
@@ -734,7 +708,6 @@ func (s *customDataAPISrv) DNSLBHealthStatusList(ctx context.Context, in *DNSLBH
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBHealthStatusListResponse", rsp)...)
 
 	return rsp, nil
@@ -783,7 +756,6 @@ func (s *customDataAPISrv) DNSLBPoolHealthStatus(ctx context.Context, in *DNSLBP
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBPoolHealthStatusResponse", rsp)...)
 
 	return rsp, nil
@@ -832,7 +804,6 @@ func (s *customDataAPISrv) DNSLBPoolMemberHealthStatusChangeEvents(ctx context.C
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusResponse", rsp)...)
 
 	return rsp, nil
@@ -881,7 +852,6 @@ func (s *customDataAPISrv) DNSLBPoolMemberHealthStatusList(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse", rsp)...)
 
 	return rsp, nil
@@ -1486,7 +1456,7 @@ var CustomDataAPISwaggerJSON string = `{
             "properties": {
                 "dns_lb_pool_members_status_summary": {
                     "type": "array",
-                    "description": " Summary of DNS Load Balancer Pool Members by Health Status ",
+                    "description": " Summary of DNS Load Balancer Pool Members by Health Status",
                     "title": "DNS Load Balancer Pool Members Status Summary",
                     "items": {
                         "$ref": "#/definitions/dns_load_balancerHealthStatusSummary"

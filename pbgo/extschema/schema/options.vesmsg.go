@@ -76,18 +76,13 @@ func (v *ValidateDependencies) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["for"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("for"))
 		if err := fv(ctx, m.GetFor(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["on"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("on"))
 		for idx, item := range m.GetOn() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -95,9 +90,7 @@ func (v *ValidateDependencies) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -166,16 +159,12 @@ func (v *ValidateEnumInfo) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -244,25 +233,18 @@ func (v *ValidateKey) Validate(ctx context.Context, pm interface{}, opts ...db.V
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_path"))
 		if err := fv(ctx, m.GetFieldPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -331,9 +313,7 @@ func (v *ValidateKeys) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["keys"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("keys"))
 		for idx, item := range m.GetKeys() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -341,9 +321,7 @@ func (v *ValidateKeys) Validate(ctx context.Context, pm interface{}, opts ...db.
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -412,16 +390,12 @@ func (v *ValidateLogField) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -490,9 +464,7 @@ func (v *ValidateMetricDef) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["buckets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("buckets"))
 		for idx, item := range m.GetBuckets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -500,20 +472,14 @@ func (v *ValidateMetricDef) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for idx, item := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -521,27 +487,19 @@ func (v *ValidateMetricDef) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -610,18 +568,13 @@ func (v *ValidateOn) Validate(ctx context.Context, pm interface{}, opts ...db.Va
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["via"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("via"))
 		for idx, item := range m.GetVia() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -629,9 +582,7 @@ func (v *ValidateOn) Validate(ctx context.Context, pm interface{}, opts ...db.Va
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -700,34 +651,24 @@ func (v *ValidateThreatLevelInfo) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["max_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_value"))
 		if err := fv(ctx, m.GetMaxValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_value"))
 		if err := fv(ctx, m.GetMinValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -796,43 +737,30 @@ func (v *ValidateVia) Validate(ctx context.Context, pm interface{}, opts ...db.V
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_path"))
 		if err := fv(ctx, m.GetFieldPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gen_field_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gen_field_path"))
 		if err := fv(ctx, m.GetGenFieldPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ref_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ref_type"))
 		if err := fv(ctx, m.GetRefType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

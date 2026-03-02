@@ -38,7 +38,6 @@ resource "volterra_uztna_policy_template" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -111,4 +110,4 @@ This template .
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_policy_template.
+-   `id` - This is the id of the configured uztna_policy_template.

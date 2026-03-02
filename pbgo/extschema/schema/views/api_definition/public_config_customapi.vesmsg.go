@@ -67,7 +67,6 @@ type ValidateAPInventoryReq struct {
 }
 
 func (v *ValidateAPInventoryReq) ApiEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -127,40 +126,30 @@ func (v *ValidateAPInventoryReq) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_endpoints"))
 		if err := fv(ctx, m.GetApiEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAPInventoryReqValidator = func() *ValidateAPInventoryReq {
 	v := &ValidateAPInventoryReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -243,9 +232,7 @@ func (v *ValidateAPInventoryResp) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["updated_api_endpoints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_api_endpoints"))
 		for idx, item := range m.GetUpdatedApiEndpoints() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -253,16 +240,13 @@ func (v *ValidateAPInventoryResp) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAPInventoryRespValidator = func() *ValidateAPInventoryResp {
 	v := &ValidateAPInventoryResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["updated_api_endpoints"] = ves_io_schema_views.ApiOperationValidator().Validate
 
 	return v
@@ -326,9 +310,7 @@ func (v *ValidateGetReferencingAllLoadbalancersResp) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("loadbalancers"))
 		for idx, item := range m.GetLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -336,16 +318,13 @@ func (v *ValidateGetReferencingAllLoadbalancersResp) Validate(ctx context.Contex
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetReferencingAllLoadbalancersRespValidator = func() *ValidateGetReferencingAllLoadbalancersResp {
 	v := &ValidateGetReferencingAllLoadbalancersResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -409,25 +388,18 @@ func (v *ValidateGetReferencingLoadbalancersReq) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -485,7 +457,6 @@ func (m *GetReferencingLoadbalancersResp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetHttpLoadbalancersDRefInfo()
-
 }
 
 func (m *GetReferencingLoadbalancersResp) GetHttpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -511,7 +482,6 @@ func (m *GetReferencingLoadbalancersResp) GetHttpLoadbalancersDRefInfo() ([]db.D
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetHttpLoadbalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -539,7 +509,6 @@ func (m *GetReferencingLoadbalancersResp) GetHttpLoadbalancersDBEntries(ctx cont
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -560,9 +529,7 @@ func (v *ValidateGetReferencingLoadbalancersResp) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_loadbalancers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_loadbalancers"))
 		for idx, item := range m.GetHttpLoadbalancers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -570,16 +537,13 @@ func (v *ValidateGetReferencingLoadbalancersResp) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetReferencingLoadbalancersRespValidator = func() *ValidateGetReferencingLoadbalancersResp {
 	v := &ValidateGetReferencingLoadbalancersResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["http_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -643,16 +607,12 @@ func (v *ValidateListAvailableAPIDefinitionsReq) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -721,9 +681,7 @@ func (v *ValidateListAvailableAPIDefinitionsResp) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["available_api_definitions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("available_api_definitions"))
 		for idx, item := range m.GetAvailableApiDefinitions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -731,16 +689,13 @@ func (v *ValidateListAvailableAPIDefinitionsResp) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListAvailableAPIDefinitionsRespValidator = func() *ValidateListAvailableAPIDefinitionsResp {
 	v := &ValidateListAvailableAPIDefinitionsResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["available_api_definitions"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

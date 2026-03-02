@@ -42,7 +42,6 @@ func (c *PublicConfigCustomAPIGrpcClient) doRPCGetReferencingHttpLoadbalancers(c
 	rsp, err := c.grpcClient.GetReferencingHttpLoadbalancers(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PublicConfigCustomAPIGrpcClient) doRPCGetReferencingLoadbalancers(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetReferencingLoadbalancersReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *PublicConfigCustomAPIGrpcClient) doRPCGetReferencingLoadbalancers(ctx c
 	rsp, err := c.grpcClient.GetReferencingLoadbalancers(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PublicConfigCustomAPIGrpcClient) doRPCListAvailableAPIDefinitions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListAvailableAPIDefinitionsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *PublicConfigCustomAPIGrpcClient) doRPCListAvailableAPIDefinitions(ctx c
 	rsp, err := c.grpcClient.ListAvailableAPIDefinitions(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PublicConfigCustomAPIGrpcClient) doRPCMarkAsNonAPI(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APInventoryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -69,7 +66,6 @@ func (c *PublicConfigCustomAPIGrpcClient) doRPCMarkAsNonAPI(ctx context.Context,
 	rsp, err := c.grpcClient.MarkAsNonAPI(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PublicConfigCustomAPIGrpcClient) doRPCMoveToAPInventory(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APInventoryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -78,7 +74,6 @@ func (c *PublicConfigCustomAPIGrpcClient) doRPCMoveToAPInventory(ctx context.Con
 	rsp, err := c.grpcClient.MoveToAPInventory(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PublicConfigCustomAPIGrpcClient) doRPCRemoveFromAPInventory(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APInventoryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -87,7 +82,6 @@ func (c *PublicConfigCustomAPIGrpcClient) doRPCRemoveFromAPInventory(ctx context
 	rsp, err := c.grpcClient.RemoveFromAPInventory(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PublicConfigCustomAPIGrpcClient) doRPCUnmarkAsNonAPI(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APInventoryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -128,21 +122,13 @@ func NewPublicConfigCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetReferencingHttpLoadbalancers"] = ccl.doRPCGetReferencingHttpLoadbalancers
-
 	rpcFns["GetReferencingLoadbalancers"] = ccl.doRPCGetReferencingLoadbalancers
-
 	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
-
 	rpcFns["MarkAsNonAPI"] = ccl.doRPCMarkAsNonAPI
-
 	rpcFns["MoveToAPInventory"] = ccl.doRPCMoveToAPInventory
-
 	rpcFns["RemoveFromAPInventory"] = ccl.doRPCRemoveFromAPInventory
-
 	rpcFns["UnmarkAsNonAPI"] = ccl.doRPCUnmarkAsNonAPI
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -229,7 +215,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCGetReferencingHttpLoadbalancers(c
 	pbRsp := &GetReferencingLoadbalancersResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.GetReferencingLoadbalancersResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -237,7 +222,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCGetReferencingHttpLoadbalancers(c
 	}
 	return pbRsp, nil
 }
-
 func (c *PublicConfigCustomAPIRestClient) doRPCGetReferencingLoadbalancers(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -313,7 +297,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCGetReferencingLoadbalancers(ctx c
 	pbRsp := &GetReferencingAllLoadbalancersResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.GetReferencingAllLoadbalancersResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -321,7 +304,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCGetReferencingLoadbalancers(ctx c
 	}
 	return pbRsp, nil
 }
-
 func (c *PublicConfigCustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -396,7 +378,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx c
 	pbRsp := &ListAvailableAPIDefinitionsResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -404,7 +385,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx c
 	}
 	return pbRsp, nil
 }
-
 func (c *PublicConfigCustomAPIRestClient) doRPCMarkAsNonAPI(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -483,7 +463,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCMarkAsNonAPI(ctx context.Context,
 	pbRsp := &APInventoryResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.APInventoryResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -491,7 +470,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCMarkAsNonAPI(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *PublicConfigCustomAPIRestClient) doRPCMoveToAPInventory(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -570,7 +548,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCMoveToAPInventory(ctx context.Con
 	pbRsp := &APInventoryResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.APInventoryResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -578,7 +555,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCMoveToAPInventory(ctx context.Con
 	}
 	return pbRsp, nil
 }
-
 func (c *PublicConfigCustomAPIRestClient) doRPCRemoveFromAPInventory(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -657,7 +633,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCRemoveFromAPInventory(ctx context
 	pbRsp := &APInventoryResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.APInventoryResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -665,7 +640,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCRemoveFromAPInventory(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *PublicConfigCustomAPIRestClient) doRPCUnmarkAsNonAPI(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -744,7 +718,6 @@ func (c *PublicConfigCustomAPIRestClient) doRPCUnmarkAsNonAPI(ctx context.Contex
 	pbRsp := &APInventoryResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.APInventoryResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -778,21 +751,13 @@ func NewPublicConfigCustomAPIRestClient(baseURL string, hc http.Client) server.C
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetReferencingHttpLoadbalancers"] = ccl.doRPCGetReferencingHttpLoadbalancers
-
 	rpcFns["GetReferencingLoadbalancers"] = ccl.doRPCGetReferencingLoadbalancers
-
 	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
-
 	rpcFns["MarkAsNonAPI"] = ccl.doRPCMarkAsNonAPI
-
 	rpcFns["MoveToAPInventory"] = ccl.doRPCMoveToAPInventory
-
 	rpcFns["RemoveFromAPInventory"] = ccl.doRPCRemoveFromAPInventory
-
 	rpcFns["UnmarkAsNonAPI"] = ccl.doRPCUnmarkAsNonAPI
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -897,7 +862,6 @@ func (s *publicConfigCustomAPISrv) GetReferencingHttpLoadbalancers(ctx context.C
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetReferencingLoadbalancersResp", rsp)...)
 
 	return rsp, nil
@@ -946,7 +910,6 @@ func (s *publicConfigCustomAPISrv) GetReferencingLoadbalancers(ctx context.Conte
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetReferencingAllLoadbalancersResp", rsp)...)
 
 	return rsp, nil
@@ -995,7 +958,6 @@ func (s *publicConfigCustomAPISrv) ListAvailableAPIDefinitions(ctx context.Conte
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsResp", rsp)...)
 
 	return rsp, nil
@@ -1044,7 +1006,6 @@ func (s *publicConfigCustomAPISrv) MarkAsNonAPI(ctx context.Context, in *APInven
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.APInventoryResp", rsp)...)
 
 	return rsp, nil
@@ -1093,7 +1054,6 @@ func (s *publicConfigCustomAPISrv) MoveToAPInventory(ctx context.Context, in *AP
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.APInventoryResp", rsp)...)
 
 	return rsp, nil
@@ -1142,7 +1102,6 @@ func (s *publicConfigCustomAPISrv) RemoveFromAPInventory(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.APInventoryResp", rsp)...)
 
 	return rsp, nil
@@ -1191,7 +1150,6 @@ func (s *publicConfigCustomAPISrv) UnmarkAsNonAPI(ctx context.Context, in *APInv
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.APInventoryResp", rsp)...)
 
 	return rsp, nil

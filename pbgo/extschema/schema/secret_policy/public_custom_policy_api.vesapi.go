@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCDeletePolicy(ctx context.Context, yamlReq str
 	rsp, err := c.grpcClient.DeletePolicy(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListPolicy(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListPolicyRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCListPolicy(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.ListPolicy(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRecoverPolicy(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RecoverRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DeletePolicy"] = ccl.doRPCDeletePolicy
-
 	rpcFns["ListPolicy"] = ccl.doRPCListPolicy
-
 	rpcFns["RecoverPolicy"] = ccl.doRPCRecoverPolicy
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -185,7 +179,6 @@ func (c *CustomAPIRestClient) doRPCDeletePolicy(ctx context.Context, callOpts *s
 	pbRsp := &SoftDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.secret_policy.SoftDeleteResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -193,7 +186,6 @@ func (c *CustomAPIRestClient) doRPCDeletePolicy(ctx context.Context, callOpts *s
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListPolicy(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -269,7 +261,6 @@ func (c *CustomAPIRestClient) doRPCListPolicy(ctx context.Context, callOpts *ser
 	pbRsp := &ListPolicyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.secret_policy.ListPolicyResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -277,7 +268,6 @@ func (c *CustomAPIRestClient) doRPCListPolicy(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRecoverPolicy(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -353,7 +343,6 @@ func (c *CustomAPIRestClient) doRPCRecoverPolicy(ctx context.Context, callOpts *
 	pbRsp := &RecoverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.secret_policy.RecoverResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -387,13 +376,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DeletePolicy"] = ccl.doRPCDeletePolicy
-
 	rpcFns["ListPolicy"] = ccl.doRPCListPolicy
-
 	rpcFns["RecoverPolicy"] = ccl.doRPCRecoverPolicy
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -482,7 +467,6 @@ func (s *customAPISrv) DeletePolicy(ctx context.Context, in *SoftDeleteRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.secret_policy.SoftDeleteResponse", rsp)...)
 
 	return rsp, nil
@@ -531,7 +515,6 @@ func (s *customAPISrv) ListPolicy(ctx context.Context, in *ListPolicyRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.secret_policy.ListPolicyResponse", rsp)...)
 
 	return rsp, nil
@@ -580,7 +563,6 @@ func (s *customAPISrv) RecoverPolicy(ctx context.Context, in *RecoverRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.secret_policy.RecoverResponse", rsp)...)
 
 	return rsp, nil

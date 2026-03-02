@@ -29,18 +29,16 @@ resource "volterra_tgw_vpc_ip_prefixes" "example" {
     value = ["10.0.0.0/16"]
   }
 }
-
 ```
 
 ### Argument Reference
 
 ---
 
--	`name` - (Required) The value of aws_tgw_site name has to follow DNS-1035 format. (`String`).
+-   `name` - (Required) The value of aws_tgw_site name has to follow DNS-1035 format. (`String`).
 
--	`namespace` - (Required) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
+-   `namespace` - (Required) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
 
--	`vpc_ip_prefixes` - (Required) List of vpc ip prefixes
-
-	-	`name` - (Required) Name of vpc (`String`\)
-	-	`values` - (Required) List of vpc cidrs (`String`\)
+-   `vpc_ip_prefixes` - (Required) List of vpc ip prefixes
+    -   `name` - (Required) Name of vpc (`String`)
+    -   `values` - (Required) List of vpc cidrs (`String`)

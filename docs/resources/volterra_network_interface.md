@@ -50,7 +50,6 @@ resource "volterra_network_interface" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -439,4 +438,4 @@ Configure a untagged ethernet interface.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured network_interface.
+-   `id` - This is the id of the configured network_interface.

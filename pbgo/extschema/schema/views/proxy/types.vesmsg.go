@@ -43,15 +43,12 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.http_proxy")
 	}
-
 	if err := m.GetDynamicProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.dynamic_proxy")
 	}
-
 	if err := m.GetTlsIntercept().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.tls_intercept")
 	}
@@ -97,21 +94,17 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -121,7 +114,6 @@ func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProxyChoice().(type) {
 	case *CreateSpecType_HttpProxy:
-
 		drInfos, err := m.GetHttpProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfo() FAILED")
@@ -131,9 +123,7 @@ func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_DynamicProxy:
-
 		drInfos, err := m.GetDynamicProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfo() FAILED")
@@ -143,11 +133,9 @@ func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dynamic_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -157,11 +145,8 @@ func (m *CreateSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProxyPolicyChoice().(type) {
 	case *CreateSpecType_NoForwardProxyPolicy:
-
 		return nil, nil
-
 	case *CreateSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -171,11 +156,9 @@ func (m *CreateSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -185,7 +168,6 @@ func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteChoice().(type) {
 	case *CreateSpecType_SiteVirtualSites:
-
 		drInfos, err := m.GetSiteVirtualSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfo() FAILED")
@@ -195,15 +177,11 @@ func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site_virtual_sites." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -217,7 +195,6 @@ func (v *ValidateCreateSpecType) NetworkChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -225,7 +202,6 @@ func (v *ValidateCreateSpecType) ProxyChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ProxyPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -233,7 +209,6 @@ func (v *ValidateCreateSpecType) ProxyPolicyChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SiteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -241,7 +216,6 @@ func (v *ValidateCreateSpecType) SiteChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) TlsInterceptionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -249,9 +223,7 @@ func (v *ValidateCreateSpecType) TlsInterceptionChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
@@ -273,14 +245,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connection_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_choice"]; exists {
@@ -316,7 +285,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_choice"]; exists {
@@ -352,7 +320,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_policy_choice"]; exists {
@@ -388,7 +355,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_choice"]; exists {
@@ -424,7 +390,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_interception_choice"]; exists {
@@ -460,16 +425,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -477,7 +439,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -488,7 +449,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_choice"] = vFn
-
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -499,7 +459,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_choice"] = vFn
-
 	vrhProxyPolicyChoice := v.ProxyPolicyChoiceValidationRuleHandler
 	rulesProxyPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -510,7 +469,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_policy_choice"] = vFn
-
 	vrhSiteChoice := v.SiteChoiceValidationRuleHandler
 	rulesSiteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -521,7 +479,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_choice"] = vFn
-
 	vrhTlsInterceptionChoice := v.TlsInterceptionChoiceValidationRuleHandler
 	rulesTlsInterceptionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -543,14 +500,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_timeout"] = vFn
-
 	v.FldValidators["proxy_choice.http_proxy"] = HttpConnectProxyTypeValidator().Validate
 	v.FldValidators["proxy_choice.dynamic_proxy"] = DynamicProxyTypeValidator().Validate
-
 	v.FldValidators["proxy_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["site_choice.site_virtual_sites"] = ves_io_schema_views.AdvertiseSiteVsiteValidator().Validate
-
 	v.FldValidators["tls_interception_choice.tls_intercept"] = ves_io_schema.TlsInterceptionTypeValidator().Validate
 
 	return v
@@ -576,7 +529,6 @@ func (m *DynamicHttpProxyType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetMoreOption().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DynamicHttpProxyType.more_option")
 	}
@@ -617,7 +569,6 @@ func (m *DynamicHttpProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetMoreOptionDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -625,7 +576,6 @@ func (m *DynamicHttpProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMoreOption() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
@@ -635,7 +585,6 @@ func (m *DynamicHttpProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "more_option." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateDynamicHttpProxyType struct {
@@ -655,23 +604,18 @@ func (v *ValidateDynamicHttpProxyType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["more_option"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("more_option"))
 		if err := fv(ctx, m.GetMoreOption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDynamicHttpProxyTypeValidator = func() *ValidateDynamicHttpProxyType {
 	v := &ValidateDynamicHttpProxyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["more_option"] = ves_io_schema_views_http_loadbalancer.AdvancedOptionsTypeValidator().Validate
 
 	return v
@@ -697,11 +641,9 @@ func (m *DynamicHttpsProxyType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DynamicHttpsProxyType.tls_params")
 	}
-
 	if err := m.GetMoreOption().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DynamicHttpsProxyType.more_option")
 	}
@@ -747,15 +689,12 @@ func (m *DynamicHttpsProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetTlsParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -763,7 +702,6 @@ func (m *DynamicHttpsProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMoreOption() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
@@ -773,7 +711,6 @@ func (m *DynamicHttpsProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "more_option." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -781,7 +718,6 @@ func (m *DynamicHttpsProxyType) GetTlsParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParams().GetDRefInfo() FAILED")
@@ -791,7 +727,6 @@ func (m *DynamicHttpsProxyType) GetTlsParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateDynamicHttpsProxyType struct {
@@ -811,34 +746,25 @@ func (v *ValidateDynamicHttpsProxyType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["more_option"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("more_option"))
 		if err := fv(ctx, m.GetMoreOption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_params"))
 		if err := fv(ctx, m.GetTlsParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDynamicHttpsProxyTypeValidator = func() *ValidateDynamicHttpsProxyType {
 	v := &ValidateDynamicHttpsProxyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["tls_params"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
-
 	v.FldValidators["more_option"] = ves_io_schema_views_http_loadbalancer.AdvancedOptionsTypeValidator().Validate
 
 	return v
@@ -864,11 +790,9 @@ func (m *DynamicProxyType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DynamicProxyType.http_proxy")
 	}
-
 	if err := m.GetHttpsProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DynamicProxyType.https_proxy")
 	}
@@ -909,7 +833,6 @@ func (m *DynamicProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProxyChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -919,11 +842,8 @@ func (m *DynamicProxyType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProxyChoice().(type) {
 	case *DynamicProxyType_SniProxy:
-
 		return nil, nil
-
 	case *DynamicProxyType_HttpProxy:
-
 		drInfos, err := m.GetHttpProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfo() FAILED")
@@ -933,9 +853,7 @@ func (m *DynamicProxyType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	case *DynamicProxyType_HttpsProxy:
-
 		drInfos, err := m.GetHttpsProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsProxy().GetDRefInfo() FAILED")
@@ -945,11 +863,9 @@ func (m *DynamicProxyType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "https_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateDynamicProxyType struct {
@@ -963,7 +879,6 @@ func (v *ValidateDynamicProxyType) DnsChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDynamicProxyType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -971,9 +886,7 @@ func (v *ValidateDynamicProxyType) ProxyChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDynamicProxyType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1061,15 +974,12 @@ func (v *ValidateDynamicProxyType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_choice"]; exists {
@@ -1116,16 +1026,13 @@ func (v *ValidateDynamicProxyType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDynamicProxyTypeValidator = func() *ValidateDynamicProxyType {
 	v := &ValidateDynamicProxyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1133,7 +1040,6 @@ var DefaultDynamicProxyTypeValidator = func() *ValidateDynamicProxyType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDnsChoice := v.DnsChoiceValidationRuleHandler
 	rulesDnsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1144,7 +1050,6 @@ var DefaultDynamicProxyTypeValidator = func() *ValidateDynamicProxyType {
 		panic(errMsg)
 	}
 	v.FldValidators["dns_choice"] = vFn
-
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1172,7 +1077,6 @@ var DefaultDynamicProxyTypeValidator = func() *ValidateDynamicProxyType {
 		panic(errMsg)
 	}
 	v.FldValidators["domains"] = vFn
-
 	v.FldValidators["proxy_choice.sni_proxy"] = DynamicSniProxyTypeValidator().Validate
 	v.FldValidators["proxy_choice.http_proxy"] = DynamicHttpProxyTypeValidator().Validate
 	v.FldValidators["proxy_choice.https_proxy"] = DynamicHttpsProxyTypeValidator().Validate
@@ -1226,7 +1130,6 @@ type ValidateDynamicSniProxyType struct {
 }
 
 func (v *ValidateDynamicSniProxyType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
@@ -1248,23 +1151,18 @@ func (v *ValidateDynamicSniProxyType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDynamicSniProxyTypeValidator = func() *ValidateDynamicSniProxyType {
 	v := &ValidateDynamicSniProxyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1307,15 +1205,12 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.http_proxy")
 	}
-
 	if err := m.GetDynamicProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.dynamic_proxy")
 	}
-
 	if err := m.GetTlsIntercept().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.tls_intercept")
 	}
@@ -1361,21 +1256,17 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1385,7 +1276,6 @@ func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProxyChoice().(type) {
 	case *GetSpecType_HttpProxy:
-
 		drInfos, err := m.GetHttpProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfo() FAILED")
@@ -1395,9 +1285,7 @@ func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_DynamicProxy:
-
 		drInfos, err := m.GetDynamicProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfo() FAILED")
@@ -1407,11 +1295,9 @@ func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dynamic_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1421,11 +1307,8 @@ func (m *GetSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProxyPolicyChoice().(type) {
 	case *GetSpecType_NoForwardProxyPolicy:
-
 		return nil, nil
-
 	case *GetSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -1435,11 +1318,9 @@ func (m *GetSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1449,7 +1330,6 @@ func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteChoice().(type) {
 	case *GetSpecType_SiteVirtualSites:
-
 		drInfos, err := m.GetSiteVirtualSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfo() FAILED")
@@ -1459,15 +1339,11 @@ func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site_virtual_sites." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -1481,7 +1357,6 @@ func (v *ValidateGetSpecType) NetworkChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1489,7 +1364,6 @@ func (v *ValidateGetSpecType) ProxyChoiceValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ProxyPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1497,7 +1371,6 @@ func (v *ValidateGetSpecType) ProxyPolicyChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SiteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1505,7 +1378,6 @@ func (v *ValidateGetSpecType) SiteChoiceValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) TlsInterceptionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1513,9 +1385,7 @@ func (v *ValidateGetSpecType) TlsInterceptionChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
@@ -1537,14 +1407,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connection_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_choice"]; exists {
@@ -1580,7 +1447,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_choice"]; exists {
@@ -1616,7 +1482,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_policy_choice"]; exists {
@@ -1652,7 +1517,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_choice"]; exists {
@@ -1688,7 +1552,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_interception_choice"]; exists {
@@ -1724,16 +1587,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1741,7 +1601,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1752,7 +1611,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_choice"] = vFn
-
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1763,7 +1621,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_choice"] = vFn
-
 	vrhProxyPolicyChoice := v.ProxyPolicyChoiceValidationRuleHandler
 	rulesProxyPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1774,7 +1631,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_policy_choice"] = vFn
-
 	vrhSiteChoice := v.SiteChoiceValidationRuleHandler
 	rulesSiteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1785,7 +1641,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_choice"] = vFn
-
 	vrhTlsInterceptionChoice := v.TlsInterceptionChoiceValidationRuleHandler
 	rulesTlsInterceptionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1807,14 +1662,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_timeout"] = vFn
-
 	v.FldValidators["proxy_choice.http_proxy"] = HttpConnectProxyTypeValidator().Validate
 	v.FldValidators["proxy_choice.dynamic_proxy"] = DynamicProxyTypeValidator().Validate
-
 	v.FldValidators["proxy_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["site_choice.site_virtual_sites"] = ves_io_schema_views.AdvertiseSiteVsiteValidator().Validate
-
 	v.FldValidators["tls_interception_choice.tls_intercept"] = ves_io_schema.TlsInterceptionTypeValidator().Validate
 
 	return v
@@ -1840,15 +1691,12 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.http_proxy")
 	}
-
 	if err := m.GetDynamicProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.dynamic_proxy")
 	}
-
 	if err := m.GetTlsIntercept().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.tls_intercept")
 	}
@@ -1894,47 +1742,36 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *GlobalSpecType_SiteLocalNetwork:
-
 		return nil, nil
-
 	case *GlobalSpecType_SiteLocalInsideNetwork:
-
 		return nil, nil
-
 	case *GlobalSpecType_InsideNetwork:
-
 		vref := m.GetInsideNetwork()
 		if vref == nil {
 			return nil, nil
@@ -1950,7 +1787,6 @@ func (m *GlobalSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -1962,15 +1798,12 @@ func (m *GlobalSpecType) GetNetworkChoiceDBEntries(ctx context.Context, d db.Int
 
 	switch m.GetNetworkChoice().(type) {
 	case *GlobalSpecType_SiteLocalNetwork:
-
 	case *GlobalSpecType_SiteLocalInsideNetwork:
-
 	case *GlobalSpecType_InsideNetwork:
 		refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
 		}
-
 		vref := m.GetInsideNetwork()
 		if vref == nil {
 			return nil, nil
@@ -1988,7 +1821,6 @@ func (m *GlobalSpecType) GetNetworkChoiceDBEntries(ctx context.Context, d db.Int
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -2001,7 +1833,6 @@ func (m *GlobalSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProxyChoice().(type) {
 	case *GlobalSpecType_HttpProxy:
-
 		drInfos, err := m.GetHttpProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfo() FAILED")
@@ -2011,9 +1842,7 @@ func (m *GlobalSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_DynamicProxy:
-
 		drInfos, err := m.GetDynamicProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfo() FAILED")
@@ -2023,11 +1852,9 @@ func (m *GlobalSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dynamic_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2037,11 +1864,8 @@ func (m *GlobalSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProxyPolicyChoice().(type) {
 	case *GlobalSpecType_NoForwardProxyPolicy:
-
 		return nil, nil
-
 	case *GlobalSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -2051,11 +1875,9 @@ func (m *GlobalSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2065,7 +1887,6 @@ func (m *GlobalSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteChoice().(type) {
 	case *GlobalSpecType_SiteVirtualSites:
-
 		drInfos, err := m.GetSiteVirtualSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfo() FAILED")
@@ -2075,19 +1896,14 @@ func (m *GlobalSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site_virtual_sites." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2103,7 +1919,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2113,7 +1928,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2131,7 +1945,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2146,7 +1959,6 @@ func (v *ValidateGlobalSpecType) NetworkChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2154,7 +1966,6 @@ func (v *ValidateGlobalSpecType) ProxyChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ProxyPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2162,7 +1973,6 @@ func (v *ValidateGlobalSpecType) ProxyPolicyChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SiteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2170,7 +1980,6 @@ func (v *ValidateGlobalSpecType) SiteChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TlsInterceptionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2178,9 +1987,7 @@ func (v *ValidateGlobalSpecType) TlsInterceptionChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
@@ -2202,14 +2009,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connection_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_choice"]; exists {
@@ -2256,7 +2060,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_choice"]; exists {
@@ -2292,7 +2095,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_policy_choice"]; exists {
@@ -2328,7 +2130,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_choice"]; exists {
@@ -2364,7 +2165,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_interception_choice"]; exists {
@@ -2400,25 +2200,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2426,7 +2220,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2437,7 +2230,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_choice"] = vFn
-
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2448,7 +2240,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_choice"] = vFn
-
 	vrhProxyPolicyChoice := v.ProxyPolicyChoiceValidationRuleHandler
 	rulesProxyPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2459,7 +2250,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_policy_choice"] = vFn
-
 	vrhSiteChoice := v.SiteChoiceValidationRuleHandler
 	rulesSiteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2470,7 +2260,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_choice"] = vFn
-
 	vrhTlsInterceptionChoice := v.TlsInterceptionChoiceValidationRuleHandler
 	rulesTlsInterceptionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2492,18 +2281,12 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_timeout"] = vFn
-
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["proxy_choice.http_proxy"] = HttpConnectProxyTypeValidator().Validate
 	v.FldValidators["proxy_choice.dynamic_proxy"] = DynamicProxyTypeValidator().Validate
-
 	v.FldValidators["proxy_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["site_choice.site_virtual_sites"] = ves_io_schema_views.AdvertiseSiteVsiteValidator().Validate
-
 	v.FldValidators["tls_interception_choice.tls_intercept"] = ves_io_schema.TlsInterceptionTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2529,11 +2312,9 @@ func (m *HttpConnectProxyType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetEnableHttps().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HttpConnectProxyType.enable_https")
 	}
-
 	if err := m.GetMoreOption().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HttpConnectProxyType.more_option")
 	}
@@ -2579,15 +2360,12 @@ func (m *HttpConnectProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2597,11 +2375,8 @@ func (m *HttpConnectProxyType) GetHttpHttpsChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetHttpHttpsChoice().(type) {
 	case *HttpConnectProxyType_EnableHttp:
-
 		return nil, nil
-
 	case *HttpConnectProxyType_EnableHttps:
-
 		drInfos, err := m.GetEnableHttps().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableHttps().GetDRefInfo() FAILED")
@@ -2611,11 +2386,9 @@ func (m *HttpConnectProxyType) GetHttpHttpsChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "enable_https." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2623,7 +2396,6 @@ func (m *HttpConnectProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMoreOption() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
@@ -2633,7 +2405,6 @@ func (m *HttpConnectProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "more_option." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateHttpConnectProxyType struct {
@@ -2695,25 +2466,19 @@ func (v *ValidateHttpConnectProxyType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["more_option"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("more_option"))
 		if err := fv(ctx, m.GetMoreOption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHttpConnectProxyTypeValidator = func() *ValidateHttpConnectProxyType {
 	v := &ValidateHttpConnectProxyType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2721,7 +2486,6 @@ var DefaultHttpConnectProxyTypeValidator = func() *ValidateHttpConnectProxyType 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHttpHttpsChoice := v.HttpHttpsChoiceValidationRuleHandler
 	rulesHttpHttpsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2732,9 +2496,7 @@ var DefaultHttpConnectProxyTypeValidator = func() *ValidateHttpConnectProxyType 
 		panic(errMsg)
 	}
 	v.FldValidators["http_https_choice"] = vFn
-
 	v.FldValidators["http_https_choice.enable_https"] = HttpsConnectTypeValidator().Validate
-
 	v.FldValidators["more_option"] = ves_io_schema_views_http_loadbalancer.AdvancedOptionsTypeValidator().Validate
 
 	return v
@@ -2760,7 +2522,6 @@ func (m *HttpsConnectType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HttpsConnectType.tls_params")
 	}
@@ -2801,7 +2562,6 @@ func (m *HttpsConnectType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTlsParamsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2809,7 +2569,6 @@ func (m *HttpsConnectType) GetTlsParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParams().GetDRefInfo() FAILED")
@@ -2819,7 +2578,6 @@ func (m *HttpsConnectType) GetTlsParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateHttpsConnectType struct {
@@ -2827,7 +2585,6 @@ type ValidateHttpsConnectType struct {
 }
 
 func (v *ValidateHttpsConnectType) ProxyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_name")
@@ -2849,32 +2606,24 @@ func (v *ValidateHttpsConnectType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["proxy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_name"))
 		if err := fv(ctx, m.GetProxyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_params"))
 		if err := fv(ctx, m.GetTlsParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHttpsConnectTypeValidator = func() *ValidateHttpsConnectType {
 	v := &ValidateHttpsConnectType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2894,7 +2643,6 @@ var DefaultHttpsConnectTypeValidator = func() *ValidateHttpsConnectType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_name"] = vFn
-
 	v.FldValidators["tls_params"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 
 	return v
@@ -2920,15 +2668,12 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.http_proxy")
 	}
-
 	if err := m.GetDynamicProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.dynamic_proxy")
 	}
-
 	if err := m.GetTlsIntercept().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.tls_intercept")
 	}
@@ -2974,21 +2719,17 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2998,7 +2739,6 @@ func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProxyChoice().(type) {
 	case *ReplaceSpecType_HttpProxy:
-
 		drInfos, err := m.GetHttpProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfo() FAILED")
@@ -3008,9 +2748,7 @@ func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_DynamicProxy:
-
 		drInfos, err := m.GetDynamicProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfo() FAILED")
@@ -3020,11 +2758,9 @@ func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dynamic_proxy." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3034,11 +2770,8 @@ func (m *ReplaceSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetProxyPolicyChoice().(type) {
 	case *ReplaceSpecType_NoForwardProxyPolicy:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -3048,11 +2781,9 @@ func (m *ReplaceSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3062,7 +2793,6 @@ func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteChoice().(type) {
 	case *ReplaceSpecType_SiteVirtualSites:
-
 		drInfos, err := m.GetSiteVirtualSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfo() FAILED")
@@ -3072,15 +2802,11 @@ func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site_virtual_sites." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -3094,7 +2820,6 @@ func (v *ValidateReplaceSpecType) NetworkChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3102,7 +2827,6 @@ func (v *ValidateReplaceSpecType) ProxyChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ProxyPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3110,7 +2834,6 @@ func (v *ValidateReplaceSpecType) ProxyPolicyChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SiteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3118,7 +2841,6 @@ func (v *ValidateReplaceSpecType) SiteChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) TlsInterceptionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3126,9 +2848,7 @@ func (v *ValidateReplaceSpecType) TlsInterceptionChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
@@ -3150,14 +2870,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connection_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["network_choice"]; exists {
@@ -3193,7 +2910,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_choice"]; exists {
@@ -3229,7 +2945,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["proxy_policy_choice"]; exists {
@@ -3265,7 +2980,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_choice"]; exists {
@@ -3301,7 +3015,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_interception_choice"]; exists {
@@ -3337,16 +3050,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3354,7 +3064,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3365,7 +3074,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_choice"] = vFn
-
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3376,7 +3084,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_choice"] = vFn
-
 	vrhProxyPolicyChoice := v.ProxyPolicyChoiceValidationRuleHandler
 	rulesProxyPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3387,7 +3094,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_policy_choice"] = vFn
-
 	vrhSiteChoice := v.SiteChoiceValidationRuleHandler
 	rulesSiteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3398,7 +3104,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_choice"] = vFn
-
 	vrhTlsInterceptionChoice := v.TlsInterceptionChoiceValidationRuleHandler
 	rulesTlsInterceptionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3420,14 +3125,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_timeout"] = vFn
-
 	v.FldValidators["proxy_choice.http_proxy"] = HttpConnectProxyTypeValidator().Validate
 	v.FldValidators["proxy_choice.dynamic_proxy"] = DynamicProxyTypeValidator().Validate
-
 	v.FldValidators["proxy_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["site_choice.site_virtual_sites"] = ves_io_schema_views.AdvertiseSiteVsiteValidator().Validate
-
 	v.FldValidators["tls_interception_choice.tls_intercept"] = ves_io_schema.TlsInterceptionTypeValidator().Validate
 
 	return v

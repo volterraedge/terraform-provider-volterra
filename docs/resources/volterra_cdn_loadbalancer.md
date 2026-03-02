@@ -22,7 +22,17 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "api_specification api_specification_on_cache_miss disable_api_definition" must be set
 
-  disable_api_definition = true
+  api_specification {
+    api_definition {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "validation_all_spec_endpoints validation_custom_list validation_disabled" must be set
+
+    validation_disabled = true
+  }
 
   // One of the arguments from this list "api_discovery_on_cache_miss disable_api_discovery enable_api_discovery" must be set
 
@@ -86,7 +96,7 @@ resource "volterra_cdn_loadbalancer" "example" {
 
           // One of the arguments from this list "any_target api_endpoint_target api_group base_path" must be set
 
-          base_path = "/v1"
+          any_target = true
         }
 
         sensitive_data_type {
@@ -102,16 +112,93 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "bot_defense bot_defense_advanced disable_bot_defense" must be set
 
-  disable_bot_defense = true
+  bot_defense {
+    // One of the arguments from this list "disable_cors_support enable_cors_support" must be set
+
+    enable_cors_support = true
+
+    policy {
+      // One of the arguments from this list "disable_js_insert js_insert_all_pages js_insert_all_pages_except js_insertion_rules" must be set
+
+      js_insert_all_pages {
+        javascript_location = "javascript_location"
+      }
+
+      javascript_mode = "javascript_mode"
+
+      js_download_path = "value"
+
+      // One of the arguments from this list "disable_mobile_sdk mobile_sdk_config" must be set
+
+      disable_mobile_sdk = true
+      protected_app_endpoints {
+        // One of the arguments from this list "mobile web web_mobile" must be set
+
+        mobile = true
+
+        // One of the arguments from this list "any_domain domain" can be set
+
+        any_domain = true
+
+        // One of the arguments from this list "flow_label undefined_flow_label" must be set
+
+        undefined_flow_label = true
+
+        // One of the arguments from this list "allow_good_bots mitigate_good_bots" must be set
+
+        allow_good_bots = true
+        headers {
+          invert_matcher = true
+
+          // One of the arguments from this list "check_not_present check_present item presence" must be set
+
+          check_not_present = true
+          name = "Accept-Encoding"
+        }
+        http_methods = ["http_methods"]
+        metadata {
+          description = "Virtual Host for acmecorp website"
+
+          disable = true
+
+          name = "acmecorp-web"
+        }
+        mitigation {
+          // One of the arguments from this list "block flag none redirect" can be set
+
+          none = true
+        }
+        path {
+          // One of the arguments from this list "path prefix regex" must be set
+
+          prefix = "/register/"
+        }
+        protocol = "protocol"
+        query_params {
+          invert_matcher = true
+
+          key = "sourceid"
+
+          // One of the arguments from this list "check_not_present check_present item presence" must be set
+
+          check_not_present = true
+        }
+      }
+    }
+
+    regional_endpoint = "regional_endpoint"
+
+    timeout = "300"
+  }
 
   // One of the arguments from this list "client_side_defense disable_client_side_defense" must be set
 
   disable_client_side_defense = true
-  domains = ["www.foo.com"]
+  domains                     = ["www.foo.com"]
 
   // One of the arguments from this list "l7_ddos_action_block l7_ddos_action_default l7_ddos_action_js_challenge l7_ddos_action_none" must be set
 
-  l7_ddos_action_default = true
+  l7_ddos_action_none = true
 
   // One of the arguments from this list "http https https_auto_cert" must be set
 
@@ -160,13 +247,7 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "default_sensitive_data_policy sensitive_data_policy" must be set
 
-  sensitive_data_policy {
-    sensitive_data_policy_ref {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  default_sensitive_data_policy = true
 
   // One of the arguments from this list "slow_ddos_mitigation system_default_timeouts" must be set
 
@@ -180,7 +261,6 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   disable_waf = true
 }
-
 ```
 
 Argument Reference
@@ -258,7 +338,7 @@ Argument Reference
 
 `csrf_policy` - (Optional) Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).. See [Csrf Policy ](#csrf-policy) below for details.
 
-`custom_cache_rule` - (Optional) Caching policies for CDN. . See [Custom Cache Rule ](#custom-cache-rule) below for details.
+`custom_cache_rule` - (Optional) Caching policies for CDN.. See [Custom Cache Rule ](#custom-cache-rule) below for details.
 
 `data_guard_rules` - (Optional) Note: App Firewall should be enabled, to use Data Guard feature.. See [Data Guard Rules ](#data-guard-rules) below for details.
 
@@ -456,7 +536,7 @@ Because CSRF attacks specifically target state-changing requests, the policy onl
 
 ### Custom Cache Rule
 
-Caching policies for CDN. .
+Caching policies for CDN..
 
 `cdn_cache_rules` - (Optional) Reference to CDN Cache Rule configuration object. See [ref](#ref) below for details.
 
@@ -544,13 +624,15 @@ tokens or tokens that are not yet valid..
 
 `action` - (Required) x-required. See [Jwt Validation Action ](#jwt-validation-action) below for details.
 
-###### One of the arguments from this list "auth_server_uri, jwks, jwks_config" must be set
+###### One of the arguments from this list "auth_server_uri, authorization_server, jwks, jwks_config" must be set
 
 `auth_server_uri` - (Optional) JWKS URI will be will be retrieved from this URI (`String`).(Deprecated)
 
+`authorization_server` - (Optional) Automatically fetch JWKS from URI endpoint. See [Jwks Configuration Authorization Server ](#jwks-configuration-authorization-server) below for details.
+
 `jwks` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details. (`String`).(Deprecated)
 
-`jwks_config` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.. See [Jwks Configuration Jwks Config ](#jwks-configuration-jwks-config) below for details.
+`jwks_config` - (Optional) Manually provide JWKS. See [Jwks Configuration Jwks Config ](#jwks-configuration-jwks-config) below for details.
 
 `mandatory_claims` - (Optional) If the claim does not exist JWT token validation will fail.. See [Jwt Validation Mandatory Claims ](#jwt-validation-mandatory-claims) below for details.
 
@@ -1152,13 +1234,15 @@ tokens or tokens that are not yet valid..
 
 `action` - (Required) x-required. See [Jwt Validation Action ](#jwt-validation-action) below for details.
 
-###### One of the arguments from this list "auth_server_uri, jwks, jwks_config" must be set
+###### One of the arguments from this list "auth_server_uri, authorization_server, jwks, jwks_config" must be set
 
 `auth_server_uri` - (Optional) JWKS URI will be will be retrieved from this URI (`String`).(Deprecated)
 
+`authorization_server` - (Optional) Automatically fetch JWKS from URI endpoint. See [Jwks Configuration Authorization Server ](#jwks-configuration-authorization-server) below for details.
+
 `jwks` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details. (`String`).(Deprecated)
 
-`jwks_config` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.. See [Jwks Configuration Jwks Config ](#jwks-configuration-jwks-config) below for details.
+`jwks_config` - (Optional) Manually provide JWKS. See [Jwks Configuration Jwks Config ](#jwks-configuration-jwks-config) below for details.
 
 `mandatory_claims` - (Optional) If the claim does not exist JWT token validation will fail.. See [Jwt Validation Mandatory Claims ](#jwt-validation-mandatory-claims) below for details.
 
@@ -1560,17 +1644,17 @@ Eligible for caching the content.
 
 ###### One of the arguments from this list "hostname_uri, scheme_hostname_request_uri, scheme_hostname_uri, scheme_hostname_uri_query, scheme_proxy_host_request_uri, scheme_proxy_host_uri" must be set
 
-`hostname_uri` - (Optional) . See [Eligible For Cache Hostname Uri ](#eligible-for-cache-hostname-uri) below for details.(Deprecated)
+`hostname_uri` - (Optional). See [Eligible For Cache Hostname Uri ](#eligible-for-cache-hostname-uri) below for details.(Deprecated)
 
-`scheme_hostname_request_uri` - (Optional) . See [Eligible For Cache Scheme Hostname Request Uri ](#eligible-for-cache-scheme-hostname-request-uri) below for details.(Deprecated)
+`scheme_hostname_request_uri` - (Optional). See [Eligible For Cache Scheme Hostname Request Uri ](#eligible-for-cache-scheme-hostname-request-uri) below for details.(Deprecated)
 
-`scheme_hostname_uri` - (Optional) . See [Eligible For Cache Scheme Hostname Uri ](#eligible-for-cache-scheme-hostname-uri) below for details.(Deprecated)
+`scheme_hostname_uri` - (Optional). See [Eligible For Cache Scheme Hostname Uri ](#eligible-for-cache-scheme-hostname-uri) below for details.(Deprecated)
 
-`scheme_hostname_uri_query` - (Optional) . See [Eligible For Cache Scheme Hostname Uri Query ](#eligible-for-cache-scheme-hostname-uri-query) below for details.(Deprecated)
+`scheme_hostname_uri_query` - (Optional). See [Eligible For Cache Scheme Hostname Uri Query ](#eligible-for-cache-scheme-hostname-uri-query) below for details.(Deprecated)
 
-`scheme_proxy_host_request_uri` - (Optional) . See [Eligible For Cache Scheme Proxy Host Request Uri ](#eligible-for-cache-scheme-proxy-host-request-uri) below for details.
+`scheme_proxy_host_request_uri` - (Optional). See [Eligible For Cache Scheme Proxy Host Request Uri ](#eligible-for-cache-scheme-proxy-host-request-uri) below for details.
 
-`scheme_proxy_host_uri` - (Optional) . See [Eligible For Cache Scheme Proxy Host Uri ](#eligible-for-cache-scheme-proxy-host-uri) below for details.
+`scheme_proxy_host_uri` - (Optional). See [Eligible For Cache Scheme Proxy Host Uri ](#eligible-for-cache-scheme-proxy-host-uri) below for details.
 
 ### Cache Actions Eligible For Cache
 
@@ -1644,7 +1728,7 @@ Note that all specified cookie matcher predicates must evaluate to true..
 
 `name` - (Required) A case-sensitive cookie name. (`String`).
 
-`operator` - (Optional) . See [Cookie Matcher Operator ](#cookie-matcher-operator) below for details.
+`operator` - (Optional). See [Cookie Matcher Operator ](#cookie-matcher-operator) below for details.
 
 ### Cache Rule Expression Path Match
 
@@ -1658,7 +1742,7 @@ List of (key, value) query parameters.
 
 `key` - (Required) In the above example, assignee_username is the key (`String`).
 
-`operator` - (Optional) . See [Query Parameters Operator ](#query-parameters-operator) below for details.
+`operator` - (Optional). See [Query Parameters Operator ](#query-parameters-operator) below for details.
 
 ### Cache Rules Rule Expression List
 
@@ -2166,7 +2250,7 @@ Common attributes for the rule including name and description..
 
 ### Destination Type Any Url
 
-Any URL .
+Any URL.
 
 ### Destination Type Api Endpoint
 
@@ -2526,7 +2610,7 @@ GraphQL configuration..
 
 `max_total_length` - (Required) Specify maximum length in bytes for the GraphQL query. (`Int`).
 
-`max_value_length` - (Required) Specify maximum value length in bytes for the GraphQL query. (`Int`).(Deprecated)
+`max_value_length` - (Optional) Specify maximum value length in bytes for the GraphQL query. (`Int`).(Deprecated)
 
 `policy_name` - (Optional) Sets the BD Policy to use (`String`).(Deprecated)
 
@@ -2856,9 +2940,15 @@ Required list of pages to insert Bot Defense client JavaScript..
 
 `path` - (Required) URI path matcher.. See [Rules Path ](#rules-path) below for details.
 
+### Jwks Configuration Authorization Server
+
+Automatically fetch JWKS from URI endpoint.
+
+`authorization_servers` - (Required) API Protection workspace and used to fetch JWKS for JWT validation.. See [ref](#ref) below for details.
+
 ### Jwks Configuration Jwks Config
 
-The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details..
+Manually provide JWKS.
 
 `cleartext` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details. (`String`).
 
@@ -4514,6 +4604,8 @@ http_method.
 
 path.
 
+`encoded_path_matcher` - (Optional)Match against the encoded, escaped path (`Bool`).
+
 `exact_values` - (Optional) A list of exact path values to match the input HTTP path against. (`String`).
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
@@ -5303,4 +5395,4 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cdn_loadbalancer.
+*   `id` - This is the id of the configured cdn_loadbalancer.

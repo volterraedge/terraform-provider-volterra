@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site_mesh_group.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.site_mesh_group.Object"] = ObjectValidator()
 	vr["ves.io.schema.site_mesh_group.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.site_mesh_group.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.site_mesh_group.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.site_mesh_group.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site_mesh_group.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.site_mesh_group.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.site_mesh_group.ReplaceResponse"] = ReplaceResponseValidator()
-
+	vr["ves.io.schema.site_mesh_group.BFD"] = BFDValidator()
 	vr["ves.io.schema.site_mesh_group.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.site_mesh_group.FullMeshGroupType"] = FullMeshGroupTypeValidator()
 	vr["ves.io.schema.site_mesh_group.GetSpecType"] = GetSpecTypeValidator()
@@ -35,7 +33,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site_mesh_group.HubFullMeshGroupType"] = HubFullMeshGroupTypeValidator()
 	vr["ves.io.schema.site_mesh_group.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.site_mesh_group.SpokeMeshGroupType"] = SpokeMeshGroupTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -47,68 +44,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.site_mesh_group.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.site_mesh_group.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.site_mesh_group.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site_mesh_group.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.re_fallback",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_mesh_group.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.re_fallback",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_mesh_group.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "create_form.spec.re_fallback",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.re_fallback",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
-		{
-			FieldPath:           "spec.re_fallback",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_mesh_group.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.re_fallback",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site_mesh_group.API.Replace"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.re_fallback",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.site_mesh_group.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -117,9 +66,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.site_mesh_group.Object"] = APISwaggerJSON
@@ -133,22 +80,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.site_mesh_group.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.site_mesh_group.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.site_mesh_group.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

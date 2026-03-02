@@ -67,7 +67,6 @@ func (m *ConfigSyncGroup) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConfigSyncGroupDRefInfo()
-
 }
 
 func (m *ConfigSyncGroup) GetConfigSyncGroupDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *ConfigSyncGroup) GetConfigSyncGroupDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetConfigSyncGroupDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *ConfigSyncGroup) GetConfigSyncGroupDBEntries(ctx context.Context, d db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateConfigSyncGroup struct {
 }
 
 func (v *ValidateConfigSyncGroup) ConfigSyncGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -180,22 +176,18 @@ func (v *ValidateConfigSyncGroup) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["config_sync_group"]; exists {
 		vOpts := append(opts, db.WithValidateField("config_sync_group"))
 		if err := fv(ctx, m.GetConfigSyncGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConfigSyncGroupValidator = func() *ValidateConfigSyncGroup {
 	v := &ValidateConfigSyncGroup{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -266,7 +258,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveryTargetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -274,7 +265,6 @@ func (m *CreateSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDiscoveryTarget() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDiscoveryTarget().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfo() FAILED")
@@ -284,7 +274,6 @@ func (m *CreateSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "discovery_target." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -292,7 +281,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ServerBlockFiltersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -352,31 +340,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovery_target"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_target"))
 		if err := fv(ctx, m.GetDiscoveryTarget(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_block_filters"]; exists {
 		vOpts := append(opts, db.WithValidateField("server_block_filters"))
 		if err := fv(ctx, m.GetServerBlockFilters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -396,7 +377,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_block_filters"] = vFn
-
 	v.FldValidators["discovery_target"] = DiscoveryTargetValidator().Validate
 
 	return v
@@ -449,7 +429,6 @@ func (m *DiscoveryTarget) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTargetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -459,7 +438,6 @@ func (m *DiscoveryTarget) GetTargetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetTarget().(type) {
 	case *DiscoveryTarget_NginxInstance:
-
 		drInfos, err := m.GetNginxInstance().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNginxInstance().GetDRefInfo() FAILED")
@@ -469,9 +447,7 @@ func (m *DiscoveryTarget) GetTargetDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "nginx_instance." + dri.DRField
 		}
 		return drInfos, err
-
 	case *DiscoveryTarget_ConfigSyncGroup:
-
 		drInfos, err := m.GetConfigSyncGroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConfigSyncGroup().GetDRefInfo() FAILED")
@@ -481,11 +457,9 @@ func (m *DiscoveryTarget) GetTargetDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "config_sync_group." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateDiscoveryTarget struct {
@@ -547,16 +521,13 @@ func (v *ValidateDiscoveryTarget) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDiscoveryTargetValidator = func() *ValidateDiscoveryTarget {
 	v := &ValidateDiscoveryTarget{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -564,7 +535,6 @@ var DefaultDiscoveryTargetValidator = func() *ValidateDiscoveryTarget {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTarget := v.TargetValidationRuleHandler
 	rulesTarget := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -575,7 +545,6 @@ var DefaultDiscoveryTargetValidator = func() *ValidateDiscoveryTarget {
 		panic(errMsg)
 	}
 	v.FldValidators["target"] = vFn
-
 	v.FldValidators["target.nginx_instance"] = NGINXInstanceValidator().Validate
 	v.FldValidators["target.config_sync_group"] = ConfigSyncGroupValidator().Validate
 
@@ -629,7 +598,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveryTargetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -637,7 +605,6 @@ func (m *GetSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDiscoveryTarget() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDiscoveryTarget().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfo() FAILED")
@@ -647,7 +614,6 @@ func (m *GetSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "discovery_target." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -655,7 +621,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ServerBlockFiltersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -715,49 +680,36 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovery_target"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_target"))
 		if err := fv(ctx, m.GetDiscoveryTarget(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
 		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
 		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_block_filters"]; exists {
 		vOpts := append(opts, db.WithValidateField("server_block_filters"))
 		if err := fv(ctx, m.GetServerBlockFilters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -777,7 +729,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_block_filters"] = vFn
-
 	v.FldValidators["discovery_target"] = DiscoveryTargetValidator().Validate
 
 	return v
@@ -830,7 +781,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveryTargetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -838,7 +788,6 @@ func (m *GlobalSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDiscoveryTarget() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDiscoveryTarget().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfo() FAILED")
@@ -848,7 +797,6 @@ func (m *GlobalSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "discovery_target." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -856,7 +804,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ServerBlockFiltersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -916,49 +863,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovery_target"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_target"))
 		if err := fv(ctx, m.GetDiscoveryTarget(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
 		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
 		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_block_filters"]; exists {
 		vOpts := append(opts, db.WithValidateField("server_block_filters"))
 		if err := fv(ctx, m.GetServerBlockFilters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -978,7 +912,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_block_filters"] = vFn
-
 	v.FldValidators["discovery_target"] = DiscoveryTargetValidator().Validate
 
 	return v
@@ -1031,7 +964,6 @@ func (m *NGINXInstance) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNginxInstanceDRefInfo()
-
 }
 
 func (m *NGINXInstance) GetNginxInstanceDRefInfo() ([]db.DRefInfo, error) {
@@ -1056,7 +988,6 @@ func (m *NGINXInstance) GetNginxInstanceDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetNginxInstanceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1075,7 +1006,6 @@ func (m *NGINXInstance) GetNginxInstanceDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1084,7 +1014,6 @@ type ValidateNGINXInstance struct {
 }
 
 func (v *ValidateNGINXInstance) NginxInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1144,22 +1073,18 @@ func (v *ValidateNGINXInstance) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nginx_instance"]; exists {
 		vOpts := append(opts, db.WithValidateField("nginx_instance"))
 		if err := fv(ctx, m.GetNginxInstance(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNGINXInstanceValidator = func() *ValidateNGINXInstance {
 	v := &ValidateNGINXInstance{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1230,7 +1155,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDiscoveryTargetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1238,7 +1162,6 @@ func (m *ReplaceSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDiscoveryTarget() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDiscoveryTarget().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfo() FAILED")
@@ -1248,7 +1171,6 @@ func (m *ReplaceSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "discovery_target." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1256,7 +1178,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ServerBlockFiltersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1316,31 +1237,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovery_target"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_target"))
 		if err := fv(ctx, m.GetDiscoveryTarget(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_block_filters"]; exists {
 		vOpts := append(opts, db.WithValidateField("server_block_filters"))
 		if err := fv(ctx, m.GetServerBlockFilters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1360,7 +1274,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_block_filters"] = vFn
-
 	v.FldValidators["discovery_target"] = DiscoveryTargetValidator().Validate
 
 	return v
@@ -1412,7 +1325,6 @@ type ValidateServerBlockFilter struct {
 }
 
 func (v *ValidateServerBlockFilter) NameRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name_regex")
@@ -1420,9 +1332,7 @@ func (v *ValidateServerBlockFilter) NameRegexValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServerBlockFilter) PortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
@@ -1444,32 +1354,24 @@ func (v *ValidateServerBlockFilter) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name_regex"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name_regex"))
 		if err := fv(ctx, m.GetNameRegex(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port_ranges"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port_ranges"))
 		if err := fv(ctx, m.GetPortRanges(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServerBlockFilterValidator = func() *ValidateServerBlockFilter {
 	v := &ValidateServerBlockFilter{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

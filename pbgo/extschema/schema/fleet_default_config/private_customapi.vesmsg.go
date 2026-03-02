@@ -65,7 +65,6 @@ func (m *FDCRefList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFdcRefListDRefInfo()
-
 }
 
 func (m *FDCRefList) GetFdcRefListDRefInfo() ([]db.DRefInfo, error) {
@@ -90,7 +89,6 @@ func (m *FDCRefList) GetFdcRefListDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetFdcRefListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -109,7 +107,6 @@ func (m *FDCRefList) GetFdcRefListDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -130,9 +127,7 @@ func (v *ValidateFDCRefList) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fdc_ref_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fdc_ref_list"))
 		for idx, item := range m.GetFdcRefList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -140,9 +135,7 @@ func (v *ValidateFDCRefList) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -219,14 +212,11 @@ func (v *ValidateFleetDefaultConfigDependencyMapReq) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["omit_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("omit_uid"))
 		if err := fv(ctx, m.GetOmitUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ref_choice"]; exists {
@@ -262,16 +252,13 @@ func (v *ValidateFleetDefaultConfigDependencyMapReq) Validate(ctx context.Contex
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFleetDefaultConfigDependencyMapReqValidator = func() *ValidateFleetDefaultConfigDependencyMapReq {
 	v := &ValidateFleetDefaultConfigDependencyMapReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -279,7 +266,6 @@ var DefaultFleetDefaultConfigDependencyMapReqValidator = func() *ValidateFleetDe
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRefChoice := v.RefChoiceValidationRuleHandler
 	rulesRefChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -341,7 +327,6 @@ func (m *FleetDefaultConfigDependencyMapRsp) GetDRefInfo() ([]db.DRefInfo, error
 	}
 
 	return m.GetRefMapDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -349,7 +334,6 @@ func (m *FleetDefaultConfigDependencyMapRsp) GetRefMapDRefInfo() ([]db.DRefInfo,
 	if m.GetRefMap() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRefMap() {
 		driSet, err := e.GetDRefInfo()
@@ -363,7 +347,6 @@ func (m *FleetDefaultConfigDependencyMapRsp) GetRefMapDRefInfo() ([]db.DRefInfo,
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateFleetDefaultConfigDependencyMapRsp struct {
@@ -383,9 +366,7 @@ func (v *ValidateFleetDefaultConfigDependencyMapRsp) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ref_map"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ref_map"))
 		for key, value := range m.GetRefMap() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -393,9 +374,7 @@ func (v *ValidateFleetDefaultConfigDependencyMapRsp) Validate(ctx context.Contex
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -464,25 +443,18 @@ func (v *ValidateGetDefaultFleetConfigRequest) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -551,25 +523,18 @@ func (v *ValidateGetDefaultFleetConfigResponse) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cmd_seq"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cmd_seq"))
 		if err := fv(ctx, m.GetCmdSeq(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hash"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hash"))
 		if err := fv(ctx, m.GetHash(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

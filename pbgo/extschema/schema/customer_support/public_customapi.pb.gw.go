@@ -125,7 +125,7 @@ var (
 )
 
 func request_CustomAPI_AdminList_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListRequest
+	var protoReq AdminListRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -159,7 +159,7 @@ func request_CustomAPI_AdminList_0(ctx context.Context, marshaler runtime.Marsha
 }
 
 func local_request_CustomAPI_AdminList_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListRequest
+	var protoReq AdminListRequest
 	var metadata runtime.ServerMetadata
 
 	var (

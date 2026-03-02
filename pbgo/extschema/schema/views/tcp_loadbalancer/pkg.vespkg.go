@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.tcp_loadbalancer.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.tcp_loadbalancer.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.tcp_loadbalancer.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.DeleteRequest"] = DeleteRequestValidator()
@@ -28,10 +26,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.tcp_loadbalancer.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.tcp_loadbalancer.GetDnsInfoRequest"] = GetDnsInfoRequestValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.GetDnsInfoResponse"] = GetDnsInfoResponseValidator()
-
 	vr["ves.io.schema.views.tcp_loadbalancer.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -39,7 +35,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts"] = ProxyTypeTLSTCPAutoCertsValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.views.tcp_loadbalancer.ServicePolicyList"] = ServicePolicyListValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -51,11 +46,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.tcp_loadbalancer.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.tcp_loadbalancer.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.tcp_loadbalancer.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.tcp_loadbalancer.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.tcp_loadbalancer.CreateRequest.spec.advertise_choice.advertise_custom.advertise_where.choice.cloud_edge_segment.ipv6",
@@ -78,14 +71,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.tcp_loadbalancer.API.Create"] = []string{
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.tcp_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -112,7 +103,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.tcp_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -139,9 +129,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.tcp_loadbalancer.API.Create"] = "ves.io.schema.views.tcp_loadbalancer.CreateRequest"
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.tcp_loadbalancer.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -216,7 +204,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.tcp_loadbalancer.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -243,7 +230,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.tcp_loadbalancer.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.tcp_loadbalancer.ReplaceRequest.spec.advertise_choice.advertise_custom.advertise_where.choice.cloud_edge_segment.ipv6",
@@ -266,7 +252,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.tcp_loadbalancer.API.Replace"] = []string{
 		"spec.origin_pools.#",
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.blindfold_secret_info_internal",
@@ -274,7 +259,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.tcp_loadbalancer.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -301,24 +285,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.tcp_loadbalancer.API.Replace"] = "ves.io.schema.views.tcp_loadbalancer.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.tcp_loadbalancer.API"] = "config"
 	sm["ves.io.schema.views.tcp_loadbalancer.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -327,9 +306,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.tcp_loadbalancer.Object"] = APISwaggerJSON
@@ -343,16 +320,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.tcp_loadbalancer.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.tcp_loadbalancer.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.tcp_loadbalancer.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.tcp_loadbalancer.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.tcp_loadbalancer.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.tcp_loadbalancer.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -363,22 +335,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.tcp_loadbalancer.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

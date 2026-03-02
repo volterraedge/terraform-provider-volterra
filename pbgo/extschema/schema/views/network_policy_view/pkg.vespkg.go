@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.network_policy_view.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.network_policy_view.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.network_policy_view.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.network_policy_view.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.network_policy_view.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.views.network_policy_view.DeleteRequest"] = DeleteRequestValidator()
@@ -28,18 +26,15 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.network_policy_view.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.network_policy_view.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.network_policy_view.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.network_policy_view.NetworkPolicyHits"] = NetworkPolicyHitsValidator()
 	vr["ves.io.schema.views.network_policy_view.NetworkPolicyHitsId"] = NetworkPolicyHitsIdValidator()
 	vr["ves.io.schema.views.network_policy_view.NetworkPolicyHitsRequest"] = NetworkPolicyHitsRequestValidator()
 	vr["ves.io.schema.views.network_policy_view.NetworkPolicyHitsResponse"] = NetworkPolicyHitsResponseValidator()
 	vr["ves.io.schema.views.network_policy_view.NetworkPolicyMetricLabelFilter"] = NetworkPolicyMetricLabelFilterValidator()
-
 	vr["ves.io.schema.views.network_policy_view.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.network_policy_view.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.network_policy_view.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.views.network_policy_view.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -51,11 +46,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.network_policy_view.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.network_policy_view.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.network_policy_view.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.network_policy_view.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.network_policy_view.CreateRequest.spec.egress_rules.other_endpoint.prefix_list.ipv6_prefixes",
@@ -70,7 +63,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.network_policy_view.API.Create"] = []string{
 		"spec.egress_rules.#.keys.#",
 		"spec.egress_rules.#.metadata.disable",
@@ -81,7 +73,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ingress_rules.#.rule_description",
 		"spec.ingress_rules.#.rule_name",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.network_policy_view.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.egress_rules.#.prefix_list.ipv6_prefixes.#",
@@ -96,7 +87,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.network_policy_view.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.egress_rules.#.prefix_list.ipv6_prefixes.#",
@@ -111,7 +101,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.network_policy_view.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.egress_rules.#.prefix_list.ipv6_prefixes.#",
@@ -150,7 +139,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.network_policy_view.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.egress_rules.#.prefix_list.ipv6_prefixes.#",
@@ -165,7 +153,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.network_policy_view.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.network_policy_view.ReplaceRequest.spec.egress_rules.other_endpoint.prefix_list.ipv6_prefixes",
@@ -180,7 +167,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.network_policy_view.API.Replace"] = []string{
 		"spec.egress_rules.#.keys.#",
 		"spec.egress_rules.#.metadata.disable",
@@ -191,7 +177,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ingress_rules.#.rule_description",
 		"spec.ingress_rules.#.rule_name",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.network_policy_view.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.egress_rules.#.prefix_list.ipv6_prefixes.#",
@@ -206,22 +191,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.network_policy_view.API"] = "config"
 	sm["ves.io.schema.views.network_policy_view.CustomDataAPI"] = "data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -230,9 +211,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.network_policy_view.Object"] = APISwaggerJSON
@@ -246,16 +225,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.network_policy_view.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.network_policy_view.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.network_policy_view.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.network_policy_view.Object"] = CustomDataAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.network_policy_view.CustomDataAPI"] = NewCustomDataAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.network_policy_view.CustomDataAPI"] = NewCustomDataAPIRestClient
 		if isExternal {
@@ -266,22 +240,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.network_policy_view.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

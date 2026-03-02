@@ -74,9 +74,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["TestGlobalLogReceiver"] = ccl.doRPCTestGlobalLogReceiver
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -163,7 +161,6 @@ func (c *CustomAPIRestClient) doRPCTestGlobalLogReceiver(ctx context.Context, ca
 	pbRsp := &TestGlobalLogReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.global_log_receiver.TestGlobalLogReceiverResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -197,9 +194,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["TestGlobalLogReceiver"] = ccl.doRPCTestGlobalLogReceiver
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -280,7 +275,6 @@ func (s *customAPISrv) TestGlobalLogReceiver(ctx context.Context, in *TestGlobal
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.global_log_receiver.TestGlobalLogReceiverResponse", rsp)...)
 
 	return rsp, nil
@@ -411,6 +405,20 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "global_log_receiverTestConnectionStatus": {
+            "type": "string",
+            "description": "Enumerates Status of Global Log Receiver Test Connection\n\n - UNKNOWN: UNKNOWN\nUnknown status of the test connection.\n - RUNNING: Running\nThe test connection is incomplete/running.\n - SUCCESS: Success\nThe test connection is Successful.\n - FAILED: Failed\nThe test connection is failed.",
+            "title": "Status",
+            "enum": [
+                "UNKNOWN",
+                "RUNNING",
+                "SUCCESS",
+                "FAILED"
+            ],
+            "default": "UNKNOWN",
+            "x-displayname": "Status",
+            "x-ves-proto-enum": "ves.io.schema.global_log_receiver.TestConnectionStatus"
+        },
         "global_log_receiverTestGlobalLogReceiverRequest": {
             "type": "object",
             "description": "Request to send test log",
@@ -443,7 +451,15 @@ var CustomAPISwaggerJSON string = `{
             "description": "Response for the Global Log Receiver test request; empty because the only returned\ninformation is error message.",
             "title": "Test Global Log Receiver Response",
             "x-displayname": "Test Global Log Receiver Response",
-            "x-ves-proto-message": "ves.io.schema.global_log_receiver.TestGlobalLogReceiverResponse"
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.TestGlobalLogReceiverResponse",
+            "properties": {
+                "status": {
+                    "description": " Status",
+                    "title": "Status",
+                    "$ref": "#/definitions/global_log_receiverTestConnectionStatus",
+                    "x-displayname": "Status"
+                }
+            }
         }
     },
     "x-displayname": "Global Log Receiver",

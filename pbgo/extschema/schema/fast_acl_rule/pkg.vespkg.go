@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.fast_acl_rule.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.fast_acl_rule.Object"] = ObjectValidator()
 	vr["ves.io.schema.fast_acl_rule.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.fast_acl_rule.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.fast_acl_rule.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.fast_acl_rule.DeleteRequest"] = DeleteRequestValidator()
@@ -27,13 +25,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.fast_acl_rule.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.fast_acl_rule.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.fast_acl_rule.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.fast_acl_rule.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.fast_acl_rule.FastAclRuleAction"] = FastAclRuleActionValidator()
 	vr["ves.io.schema.fast_acl_rule.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.fast_acl_rule.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.fast_acl_rule.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -45,32 +41,27 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.fast_acl_rule.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.fast_acl_rule.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.fast_acl_rule.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.fast_acl_rule.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.fast_acl_rule.CreateRequest.spec.source.prefix.ipv6_prefix",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.fast_acl_rule.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.prefix.ipv6_prefix.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fast_acl_rule.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.prefix.ipv6_prefix.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fast_acl_rule.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.prefix.ipv6_prefix.#",
@@ -85,42 +76,35 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fast_acl_rule.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.prefix.ipv6_prefix.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.fast_acl_rule.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.fast_acl_rule.ReplaceRequest.spec.source.prefix.ipv6_prefix",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.fast_acl_rule.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.prefix.ipv6_prefix.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.fast_acl_rule.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -129,9 +113,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.fast_acl_rule.Object"] = APISwaggerJSON
@@ -145,22 +127,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.fast_acl_rule.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.fast_acl_rule.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.fast_acl_rule.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

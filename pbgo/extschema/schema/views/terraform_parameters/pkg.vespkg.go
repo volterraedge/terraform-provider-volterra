@@ -25,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.terraform_parameters.DirectConnectType"] = DirectConnectTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.DirectConnectVifInfo"] = DirectConnectVifInfoValidator()
 	vr["ves.io.schema.views.terraform_parameters.SubnetType"] = SubnetTypeValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.AvailabilitySetsInfoType"] = AvailabilitySetsInfoTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.AzureExistingSubnetParamType"] = AzureExistingSubnetParamTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.AzureExpressRouteType"] = AzureExpressRouteTypeValidator()
@@ -38,44 +37,34 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.terraform_parameters.AzureVnetSiteType"] = AzureVnetSiteTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.ExpressRouteCircuitInfo"] = ExpressRouteCircuitInfoValidator()
 	vr["ves.io.schema.views.terraform_parameters.SpokeVnetsInfoType"] = SpokeVnetsInfoTypeValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.BigIPAWSType"] = BigIPAWSTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.BigIPDeviceType"] = BigIPDeviceTypeValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.GCPInstanceType"] = GCPInstanceTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.GCPInterconnectType"] = GCPInterconnectTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.GCPSubnetChoice"] = GCPSubnetChoiceValidator()
 	vr["ves.io.schema.views.terraform_parameters.GCPSubnetParamType"] = GCPSubnetParamTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.GCPVPCNetworkChoice"] = GCPVPCNetworkChoiceValidator()
 	vr["ves.io.schema.views.terraform_parameters.GCPVpcSiteType"] = GCPVpcSiteTypeValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.terraform_parameters.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.PANAWSType"] = PANAWSTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.PaloAltoServicesNodeType"] = PaloAltoServicesNodeTypeValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.ForceDeleteRequest"] = ForceDeleteRequestValidator()
 	vr["ves.io.schema.views.terraform_parameters.ForceDeleteResponse"] = ForceDeleteResponseValidator()
 	vr["ves.io.schema.views.terraform_parameters.RunRequest"] = RunRequestValidator()
 	vr["ves.io.schema.views.terraform_parameters.RunResponse"] = RunResponseValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.views.terraform_parameters.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.views.terraform_parameters.GetStatusResponse"] = GetStatusResponseValidator()
-
 	vr["ves.io.schema.views.terraform_parameters.ApplyStatus"] = ApplyStatusValidator()
 	vr["ves.io.schema.views.terraform_parameters.DeploymentStatusType"] = DeploymentStatusTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.PlanStatus"] = PlanStatusValidator()
 	vr["ves.io.schema.views.terraform_parameters.VIPPortConfig"] = VIPPortConfigValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.EntryFactory["ves.io.schema.views.terraform_parameters.Object"] = NewEntryObject
 	mdr.EntryStoreMap["ves.io.schema.views.terraform_parameters.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.terraform_parameters.Object"] = reflect.TypeOf(&DBObject{})
@@ -84,26 +73,21 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.terraform_parameters.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.terraform_parameters.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.terraform_parameters.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.terraform_parameters.CustomActionAPI"] = "terraform"
 	sm["ves.io.schema.views.terraform_parameters.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -112,14 +96,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.terraform_parameters.Object"] = CustomActionAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.terraform_parameters.CustomActionAPI"] = NewCustomActionAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.terraform_parameters.CustomActionAPI"] = NewCustomActionAPIRestClient
 		if isExternal {
@@ -130,16 +110,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.terraform_parameters.CustomActionAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomActionAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.terraform_parameters.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.terraform_parameters.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.terraform_parameters.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -150,22 +125,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.terraform_parameters.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -42,7 +42,6 @@ func (c *CustomVirtualNetworkListAPIGrpcClient) doRPCGlobalNetworkList(ctx conte
 	rsp, err := c.grpcClient.GlobalNetworkList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomVirtualNetworkListAPIGrpcClient) doRPCSegmentList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SegmentListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomVirtualNetworkListAPIGrpcClient(cc *grpc.ClientConn) server.Custom
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GlobalNetworkList"] = ccl.doRPCGlobalNetworkList
-
 	rpcFns["SegmentList"] = ccl.doRPCSegmentList
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -174,7 +170,6 @@ func (c *CustomVirtualNetworkListAPIRestClient) doRPCGlobalNetworkList(ctx conte
 	pbRsp := &GlobalNetworkListResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.GlobalNetworkListResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -182,7 +177,6 @@ func (c *CustomVirtualNetworkListAPIRestClient) doRPCGlobalNetworkList(ctx conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomVirtualNetworkListAPIRestClient) doRPCSegmentList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -258,7 +252,6 @@ func (c *CustomVirtualNetworkListAPIRestClient) doRPCSegmentList(ctx context.Con
 	pbRsp := &SegmentListResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.SegmentListResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -292,11 +285,8 @@ func NewCustomVirtualNetworkListAPIRestClient(baseURL string, hc http.Client) se
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GlobalNetworkList"] = ccl.doRPCGlobalNetworkList
-
 	rpcFns["SegmentList"] = ccl.doRPCSegmentList
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -381,7 +371,6 @@ func (s *customVirtualNetworkListAPISrv) GlobalNetworkList(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.GlobalNetworkListResp", rsp)...)
 
 	return rsp, nil
@@ -430,7 +419,6 @@ func (s *customVirtualNetworkListAPISrv) SegmentList(ctx context.Context, in *Se
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.SegmentListResp", rsp)...)
 
 	return rsp, nil

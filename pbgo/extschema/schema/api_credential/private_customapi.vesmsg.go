@@ -31,7 +31,6 @@ func (m *ValidateTokenRequest) ToJSON() (string, error) {
 func (m *ValidateTokenRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *ValidateTokenRequest) String() string {
 	if m == nil {
 		return ""
@@ -103,25 +102,18 @@ func (v *ValidateValidateTokenRequest) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("token"))
 		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -190,43 +182,30 @@ func (v *ValidateValidateTokenResponse) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user"))
 		if err := fv(ctx, m.GetUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["valid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("valid"))
 		if err := fv(ctx, m.GetValid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

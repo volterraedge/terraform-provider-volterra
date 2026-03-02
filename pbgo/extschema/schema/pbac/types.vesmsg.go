@@ -64,7 +64,6 @@ type ValidateEmailDL struct {
 }
 
 func (v *ValidateEmailDL) EmailIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -118,22 +117,18 @@ func (v *ValidateEmailDL) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("email_ids"))
 		if err := fv(ctx, m.GetEmailIds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEmailDLValidator = func() *ValidateEmailDL {
 	v := &ValidateEmailDL{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

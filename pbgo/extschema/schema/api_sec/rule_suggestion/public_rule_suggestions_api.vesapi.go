@@ -42,7 +42,6 @@ func (c *RuleSuggestionAPIGrpcClient) doRPCGetSuggestedAPIEndpointProtectionRule
 	rsp, err := c.grpcClient.GetSuggestedAPIEndpointProtectionRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *RuleSuggestionAPIGrpcClient) doRPCGetSuggestedOasValidationRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedOasValidationRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *RuleSuggestionAPIGrpcClient) doRPCGetSuggestedOasValidationRule(ctx con
 	rsp, err := c.grpcClient.GetSuggestedOasValidationRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *RuleSuggestionAPIGrpcClient) doRPCGetSuggestedRateLimitRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedRateLimitRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *RuleSuggestionAPIGrpcClient) doRPCGetSuggestedRateLimitRule(ctx context
 	rsp, err := c.grpcClient.GetSuggestedRateLimitRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *RuleSuggestionAPIGrpcClient) doRPCGetSuggestedSensitiveDataRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedSensitiveDataRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,15 +98,10 @@ func NewRuleSuggestionAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetSuggestedAPIEndpointProtectionRule"] = ccl.doRPCGetSuggestedAPIEndpointProtectionRule
-
 	rpcFns["GetSuggestedOasValidationRule"] = ccl.doRPCGetSuggestedOasValidationRule
-
 	rpcFns["GetSuggestedRateLimitRule"] = ccl.doRPCGetSuggestedRateLimitRule
-
 	rpcFns["GetSuggestedSensitiveDataRule"] = ccl.doRPCGetSuggestedSensitiveDataRule
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -198,7 +190,6 @@ func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedAPIEndpointProtectionRule
 	pbRsp := &GetSuggestedAPIEndpointProtectionRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_sec.rule_suggestion.GetSuggestedAPIEndpointProtectionRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -206,7 +197,6 @@ func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedAPIEndpointProtectionRule
 	}
 	return pbRsp, nil
 }
-
 func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedOasValidationRule(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -287,7 +277,6 @@ func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedOasValidationRule(ctx con
 	pbRsp := &GetSuggestedOasValidationRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_sec.rule_suggestion.GetSuggestedOasValidationRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -295,7 +284,6 @@ func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedOasValidationRule(ctx con
 	}
 	return pbRsp, nil
 }
-
 func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedRateLimitRule(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -373,7 +361,6 @@ func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedRateLimitRule(ctx context
 	pbRsp := &GetSuggestedRateLimitRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_sec.rule_suggestion.GetSuggestedRateLimitRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -381,7 +368,6 @@ func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedRateLimitRule(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedSensitiveDataRule(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -459,7 +445,6 @@ func (c *RuleSuggestionAPIRestClient) doRPCGetSuggestedSensitiveDataRule(ctx con
 	pbRsp := &GetSuggestedSensitiveDataRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_sec.rule_suggestion.GetSuggestedSensitiveDataRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -493,15 +478,10 @@ func NewRuleSuggestionAPIRestClient(baseURL string, hc http.Client) server.Custo
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetSuggestedAPIEndpointProtectionRule"] = ccl.doRPCGetSuggestedAPIEndpointProtectionRule
-
 	rpcFns["GetSuggestedOasValidationRule"] = ccl.doRPCGetSuggestedOasValidationRule
-
 	rpcFns["GetSuggestedRateLimitRule"] = ccl.doRPCGetSuggestedRateLimitRule
-
 	rpcFns["GetSuggestedSensitiveDataRule"] = ccl.doRPCGetSuggestedSensitiveDataRule
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -594,7 +574,6 @@ func (s *ruleSuggestionAPISrv) GetSuggestedAPIEndpointProtectionRule(ctx context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_sec.rule_suggestion.GetSuggestedAPIEndpointProtectionRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -643,7 +622,6 @@ func (s *ruleSuggestionAPISrv) GetSuggestedOasValidationRule(ctx context.Context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_sec.rule_suggestion.GetSuggestedOasValidationRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -692,7 +670,6 @@ func (s *ruleSuggestionAPISrv) GetSuggestedRateLimitRule(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_sec.rule_suggestion.GetSuggestedRateLimitRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -741,7 +718,6 @@ func (s *ruleSuggestionAPISrv) GetSuggestedSensitiveDataRule(ctx context.Context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_sec.rule_suggestion.GetSuggestedSensitiveDataRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -3155,7 +3131,7 @@ var RuleSuggestionAPISwaggerJSON string = `{
         },
         "virtual_hostVirtualHostType": {
             "type": "string",
-            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server\n - UDP_LOAD_BALANCER: UDP LoadBalancer\n\nVirtual Host used as Load Balancer\n - THIRD_PARTY_APPLICATION: THIRD PARTY Virtual Server\n\nVirtual Host representing a Third Party Application",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server\n - UDP_LOAD_BALANCER: UDP LoadBalancer\n\nVirtual Host used as Load Balancer\n - TMM_PROXY: TMM Proxy\n\nVirtual Host for TMM Proxy\n - THIRD_PARTY_APPLICATION: THIRD PARTY Virtual Server\n\nVirtual Host representing a Third Party Application",
             "title": "VirtualHostType",
             "enum": [
                 "VIRTUAL_SERVICE",

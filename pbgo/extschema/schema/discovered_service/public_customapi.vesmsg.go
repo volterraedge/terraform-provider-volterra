@@ -68,7 +68,6 @@ func (m *CreateHTTPLoadBalancerRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetHttpLbRequestDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -76,7 +75,6 @@ func (m *CreateHTTPLoadBalancerRequest) GetHttpLbRequestDRefInfo() ([]db.DRefInf
 	if m.GetHttpLbRequest() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetHttpLbRequest().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHttpLbRequest().GetDRefInfo() FAILED")
@@ -86,7 +84,6 @@ func (m *CreateHTTPLoadBalancerRequest) GetHttpLbRequestDRefInfo() ([]db.DRefInf
 		dri.DRField = "http_lb_request." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateHTTPLoadBalancerRequest struct {
@@ -94,7 +91,6 @@ type ValidateCreateHTTPLoadBalancerRequest struct {
 }
 
 func (v *ValidateCreateHTTPLoadBalancerRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -102,9 +98,7 @@ func (v *ValidateCreateHTTPLoadBalancerRequest) NamespaceValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateHTTPLoadBalancerRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -112,9 +106,7 @@ func (v *ValidateCreateHTTPLoadBalancerRequest) NameValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateHTTPLoadBalancerRequest) HttpLbRequestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for http_lb_request")
@@ -123,11 +115,9 @@ func (v *ValidateCreateHTTPLoadBalancerRequest) HttpLbRequestValidationRuleHandl
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := HTTPLBRequestValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -147,41 +137,30 @@ func (v *ValidateCreateHTTPLoadBalancerRequest) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_lb_request"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_lb_request"))
 		if err := fv(ctx, m.GetHttpLbRequest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateHTTPLoadBalancerRequestValidator = func() *ValidateCreateHTTPLoadBalancerRequest {
 	v := &ValidateCreateHTTPLoadBalancerRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -273,11 +252,9 @@ func (m *CreateHTTPLoadBalancerResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetHttpLoadbalancerDRefInfo()
-
 }
 
 func (m *CreateHTTPLoadBalancerResponse) GetHttpLoadbalancerDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetHttpLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -293,7 +270,6 @@ func (m *CreateHTTPLoadBalancerResponse) GetHttpLoadbalancerDRefInfo() ([]db.DRe
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetHttpLoadbalancerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -303,7 +279,6 @@ func (m *CreateHTTPLoadBalancerResponse) GetHttpLoadbalancerDBEntries(ctx contex
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: http_loadbalancer")
 	}
-
 	vref := m.GetHttpLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -321,7 +296,6 @@ func (m *CreateHTTPLoadBalancerResponse) GetHttpLoadbalancerDBEntries(ctx contex
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -342,23 +316,18 @@ func (v *ValidateCreateHTTPLoadBalancerResponse) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_loadbalancer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_loadbalancer"))
 		if err := fv(ctx, m.GetHttpLoadbalancer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateHTTPLoadBalancerResponseValidator = func() *ValidateCreateHTTPLoadBalancerResponse {
 	v := &ValidateCreateHTTPLoadBalancerResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["http_loadbalancer"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -411,7 +380,6 @@ func (m *CreateTCPLoadBalancerRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTcpLbRequestDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -419,7 +387,6 @@ func (m *CreateTCPLoadBalancerRequest) GetTcpLbRequestDRefInfo() ([]db.DRefInfo,
 	if m.GetTcpLbRequest() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTcpLbRequest().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTcpLbRequest().GetDRefInfo() FAILED")
@@ -429,7 +396,6 @@ func (m *CreateTCPLoadBalancerRequest) GetTcpLbRequestDRefInfo() ([]db.DRefInfo,
 		dri.DRField = "tcp_lb_request." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateTCPLoadBalancerRequest struct {
@@ -437,7 +403,6 @@ type ValidateCreateTCPLoadBalancerRequest struct {
 }
 
 func (v *ValidateCreateTCPLoadBalancerRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -445,9 +410,7 @@ func (v *ValidateCreateTCPLoadBalancerRequest) NamespaceValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateTCPLoadBalancerRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -455,9 +418,7 @@ func (v *ValidateCreateTCPLoadBalancerRequest) NameValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateTCPLoadBalancerRequest) TcpLbRequestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for tcp_lb_request")
@@ -466,11 +427,9 @@ func (v *ValidateCreateTCPLoadBalancerRequest) TcpLbRequestValidationRuleHandler
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := TCPLBRequestValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -490,41 +449,30 @@ func (v *ValidateCreateTCPLoadBalancerRequest) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tcp_lb_request"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_lb_request"))
 		if err := fv(ctx, m.GetTcpLbRequest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateTCPLoadBalancerRequestValidator = func() *ValidateCreateTCPLoadBalancerRequest {
 	v := &ValidateCreateTCPLoadBalancerRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -616,11 +564,9 @@ func (m *CreateTCPLoadBalancerResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTcpLoadbalancerDRefInfo()
-
 }
 
 func (m *CreateTCPLoadBalancerResponse) GetTcpLoadbalancerDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetTcpLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -636,7 +582,6 @@ func (m *CreateTCPLoadBalancerResponse) GetTcpLoadbalancerDRefInfo() ([]db.DRefI
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetTcpLoadbalancerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -646,7 +591,6 @@ func (m *CreateTCPLoadBalancerResponse) GetTcpLoadbalancerDBEntries(ctx context.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: tcp_loadbalancer")
 	}
-
 	vref := m.GetTcpLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -664,7 +608,6 @@ func (m *CreateTCPLoadBalancerResponse) GetTcpLoadbalancerDBEntries(ctx context.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -685,23 +628,18 @@ func (v *ValidateCreateTCPLoadBalancerResponse) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["tcp_loadbalancer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tcp_loadbalancer"))
 		if err := fv(ctx, m.GetTcpLoadbalancer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateTCPLoadBalancerResponseValidator = func() *ValidateCreateTCPLoadBalancerResponse {
 	v := &ValidateCreateTCPLoadBalancerResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["tcp_loadbalancer"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -753,7 +691,6 @@ type ValidateDisableVisibilityRequest struct {
 }
 
 func (v *ValidateDisableVisibilityRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -761,9 +698,7 @@ func (v *ValidateDisableVisibilityRequest) NamespaceValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDisableVisibilityRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -785,32 +720,24 @@ func (v *ValidateDisableVisibilityRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDisableVisibilityRequestValidator = func() *ValidateDisableVisibilityRequest {
 	v := &ValidateDisableVisibilityRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -902,7 +829,6 @@ func (v *ValidateDisableVisibilityResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -959,7 +885,6 @@ type ValidateEnableVisibilityRequest struct {
 }
 
 func (v *ValidateEnableVisibilityRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -967,9 +892,7 @@ func (v *ValidateEnableVisibilityRequest) NamespaceValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateEnableVisibilityRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -991,32 +914,24 @@ func (v *ValidateEnableVisibilityRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEnableVisibilityRequestValidator = func() *ValidateEnableVisibilityRequest {
 	v := &ValidateEnableVisibilityRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1097,11 +1012,9 @@ func (m *EnableVisibilityResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualHostRefDRefInfo()
-
 }
 
 func (m *EnableVisibilityResponse) GetVirtualHostRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetVirtualHostRef()
 	if vref == nil {
 		return nil, nil
@@ -1117,7 +1030,6 @@ func (m *EnableVisibilityResponse) GetVirtualHostRefDRefInfo() ([]db.DRefInfo, e
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetVirtualHostRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1127,7 +1039,6 @@ func (m *EnableVisibilityResponse) GetVirtualHostRefDBEntries(ctx context.Contex
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_host")
 	}
-
 	vref := m.GetVirtualHostRef()
 	if vref == nil {
 		return nil, nil
@@ -1145,7 +1056,6 @@ func (m *EnableVisibilityResponse) GetVirtualHostRefDBEntries(ctx context.Contex
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1166,23 +1076,18 @@ func (v *ValidateEnableVisibilityResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["virtual_host_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host_ref"))
 		if err := fv(ctx, m.GetVirtualHostRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEnableVisibilityResponseValidator = func() *ValidateEnableVisibilityResponse {
 	v := &ValidateEnableVisibilityResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["virtual_host_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1240,21 +1145,17 @@ func (m *HTTPLBRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServerValidationChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServerValidationChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1264,11 +1165,8 @@ func (m *HTTPLBRequest) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *HTTPLBRequest_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *HTTPLBRequest_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -1278,11 +1176,9 @@ func (m *HTTPLBRequest) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1292,11 +1188,8 @@ func (m *HTTPLBRequest) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetLoadbalancerType().(type) {
 	case *HTTPLBRequest_HttpsAutoCert:
-
 		return nil, nil
-
 	case *HTTPLBRequest_Https:
-
 		drInfos, err := m.GetHttps().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
@@ -1306,9 +1199,7 @@ func (m *HTTPLBRequest) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "https." + dri.DRField
 		}
 		return drInfos, err
-
 	case *HTTPLBRequest_Http:
-
 		drInfos, err := m.GetHttp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttp().GetDRefInfo() FAILED")
@@ -1318,17 +1209,14 @@ func (m *HTTPLBRequest) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "http." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *HTTPLBRequest) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetServerValidationChoice().(type) {
 	case *HTTPLBRequest_TrustedCa:
-
 		vref := m.GetTrustedCa()
 		if vref == nil {
 			return nil, nil
@@ -1344,11 +1232,8 @@ func (m *HTTPLBRequest) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, erro
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *HTTPLBRequest_SkipServerVerification:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -1364,7 +1249,6 @@ func (m *HTTPLBRequest) GetServerValidationChoiceDBEntries(ctx context.Context, 
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
 		}
-
 		vref := m.GetTrustedCa()
 		if vref == nil {
 			return nil, nil
@@ -1382,9 +1266,7 @@ func (m *HTTPLBRequest) GetServerValidationChoiceDBEntries(ctx context.Context, 
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *HTTPLBRequest_SkipServerVerification:
-
 	}
 
 	return entries, nil
@@ -1401,7 +1283,6 @@ func (v *ValidateHTTPLBRequest) AdvertiseChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateHTTPLBRequest) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1409,7 +1290,6 @@ func (v *ValidateHTTPLBRequest) LoadbalancerTypeValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateHTTPLBRequest) ServerValidationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1417,9 +1297,7 @@ func (v *ValidateHTTPLBRequest) ServerValidationChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateHTTPLBRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -1427,9 +1305,7 @@ func (v *ValidateHTTPLBRequest) NameValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHTTPLBRequest) DomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain")
@@ -1485,16 +1361,12 @@ func (v *ValidateHTTPLBRequest) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
@@ -1541,16 +1413,12 @@ func (v *ValidateHTTPLBRequest) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["server_validation_choice"]; exists {
@@ -1586,16 +1454,13 @@ func (v *ValidateHTTPLBRequest) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHTTPLBRequestValidator = func() *ValidateHTTPLBRequest {
 	v := &ValidateHTTPLBRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1603,7 +1468,6 @@ var DefaultHTTPLBRequestValidator = func() *ValidateHTTPLBRequest {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1614,7 +1478,6 @@ var DefaultHTTPLBRequestValidator = func() *ValidateHTTPLBRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1625,7 +1488,6 @@ var DefaultHTTPLBRequestValidator = func() *ValidateHTTPLBRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
-
 	vrhServerValidationChoice := v.ServerValidationChoiceValidationRuleHandler
 	rulesServerValidationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1659,12 +1521,9 @@ var DefaultHTTPLBRequestValidator = func() *ValidateHTTPLBRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["domain"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
-
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
-
 	v.FldValidators["server_validation_choice.trusted_ca"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1716,7 +1575,6 @@ type ValidateListServicesRequest struct {
 }
 
 func (v *ValidateListServicesRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -1724,9 +1582,7 @@ func (v *ValidateListServicesRequest) NamespaceValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateListServicesRequest) ServiceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_type")
@@ -1734,9 +1590,7 @@ func (v *ValidateListServicesRequest) ServiceTypeValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateListServicesRequest) DiscoveryNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for discovery_name")
@@ -1758,41 +1612,30 @@ func (v *ValidateListServicesRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["discovery_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("discovery_name"))
 		if err := fv(ctx, m.GetDiscoveryName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_type"))
 		if err := fv(ctx, m.GetServiceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListServicesRequestValidator = func() *ValidateListServicesRequest {
 	v := &ValidateListServicesRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1884,7 +1727,6 @@ func (m *ListServicesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetItemsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1892,7 +1734,6 @@ func (m *ListServicesResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItems() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
@@ -1906,7 +1747,6 @@ func (m *ListServicesResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateListServicesResponse struct {
@@ -1926,9 +1766,7 @@ func (v *ValidateListServicesResponse) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["errors"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("errors"))
 		for idx, item := range m.GetErrors() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1936,11 +1774,8 @@ func (v *ValidateListServicesResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1948,16 +1783,13 @@ func (v *ValidateListServicesResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListServicesResponseValidator = func() *ValidateListServicesResponse {
 	v := &ValidateListServicesResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = ListServicesResponseItemValidator().Validate
 
 	return v
@@ -2010,7 +1842,6 @@ func (m *ListServicesResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGetSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2018,7 +1849,6 @@ func (m *ListServicesResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfo() FAILED")
@@ -2028,7 +1858,6 @@ func (m *ListServicesResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "get_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateListServicesResponseItem struct {
@@ -2048,9 +1877,7 @@ func (v *ValidateListServicesResponseItem) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["annotations"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("annotations"))
 		for key, value := range m.GetAnnotations() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2058,38 +1885,26 @@ func (v *ValidateListServicesResponseItem) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disabled"))
 		if err := fv(ctx, m.GetDisabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["get_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("get_spec"))
 		if err := fv(ctx, m.GetGetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
 		for key, value := range m.GetLabels() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -2097,47 +1912,32 @@ func (v *ValidateListServicesResponseItem) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["owner_view"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("owner_view"))
 		if err := fv(ctx, m.GetOwnerView(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status_set"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status_set"))
 		for idx, item := range m.GetStatusSet() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2145,47 +1945,33 @@ func (v *ValidateListServicesResponseItem) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListServicesResponseItemValidator = func() *ValidateListServicesResponseItem {
 	v := &ValidateListServicesResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
-
 	v.FldValidators["get_spec"] = GetSpecTypeValidator().Validate
-
 	v.FldValidators["status_set"] = StatusObjectValidator().Validate
 
 	return v
@@ -2238,7 +2024,6 @@ func (m *ProxyTypeHttp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAdvertiseChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2248,11 +2033,8 @@ func (m *ProxyTypeHttp) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ProxyTypeHttp_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *ProxyTypeHttp_Site:
-
 		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
@@ -2262,9 +2044,7 @@ func (m *ProxyTypeHttp) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ProxyTypeHttp_VirtualSite:
-
 		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
@@ -2274,11 +2054,9 @@ func (m *ProxyTypeHttp) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_site." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateProxyTypeHttp struct {
@@ -2351,16 +2129,13 @@ func (v *ValidateProxyTypeHttp) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
 	v := &ValidateProxyTypeHttp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2368,7 +2143,6 @@ var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2379,7 +2153,6 @@ var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	v.FldValidators["advertise_choice.site"] = WhereSiteValidator().Validate
 	v.FldValidators["advertise_choice.virtual_site"] = WhereVirtualSiteValidator().Validate
 
@@ -2438,15 +2211,12 @@ func (m *ProxyTypeHttps) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCertificatesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCertificatesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2456,11 +2226,8 @@ func (m *ProxyTypeHttps) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ProxyTypeHttps_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *ProxyTypeHttps_Site:
-
 		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
@@ -2470,9 +2237,7 @@ func (m *ProxyTypeHttps) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ProxyTypeHttps_VirtualSite:
-
 		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
@@ -2482,11 +2247,9 @@ func (m *ProxyTypeHttps) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_site." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ProxyTypeHttps) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
@@ -2511,7 +2274,6 @@ func (m *ProxyTypeHttps) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCertificatesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2530,7 +2292,6 @@ func (m *ProxyTypeHttps) GetCertificatesDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2545,9 +2306,7 @@ func (v *ValidateProxyTypeHttps) AdvertiseChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateProxyTypeHttps) CertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2652,24 +2411,19 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificates"]; exists {
 		vOpts := append(opts, db.WithValidateField("certificates"))
 		if err := fv(ctx, m.GetCertificates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	v := &ValidateProxyTypeHttps{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2677,7 +2431,6 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2700,7 +2453,6 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 		panic(errMsg)
 	}
 	v.FldValidators["certificates"] = vFn
-
 	v.FldValidators["advertise_choice.site"] = WhereSiteValidator().Validate
 	v.FldValidators["advertise_choice.virtual_site"] = WhereVirtualSiteValidator().Validate
 
@@ -2753,7 +2505,6 @@ type ValidateSuggestValuesReq struct {
 }
 
 func (v *ValidateSuggestValuesReq) FieldPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for field_path")
@@ -2761,9 +2512,7 @@ func (v *ValidateSuggestValuesReq) FieldPathValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSuggestValuesReq) MatchValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for match_value")
@@ -2785,50 +2534,36 @@ func (v *ValidateSuggestValuesReq) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_path"))
 		if err := fv(ctx, m.GetFieldPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["match_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match_value"))
 		if err := fv(ctx, m.GetMatchValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_body"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_body"))
 		if err := fv(ctx, m.GetRequestBody(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuggestValuesReqValidator = func() *ValidateSuggestValuesReq {
 	v := &ValidateSuggestValuesReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2920,9 +2655,7 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2930,16 +2663,13 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuggestValuesRespValidator = func() *ValidateSuggestValuesResp {
 	v := &ValidateSuggestValuesResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = SuggestedItemValidator().Validate
 
 	return v
@@ -3003,14 +2733,11 @@ func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetValueChoice().(type) {
@@ -3036,16 +2763,13 @@ func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuggestedItemValidator = func() *ValidateSuggestedItem {
 	v := &ValidateSuggestedItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["value_choice.ref_value"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -3098,7 +2822,6 @@ func (m *TCPLBRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAdvertiseChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3108,11 +2831,8 @@ func (m *TCPLBRequest) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *TCPLBRequest_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *TCPLBRequest_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -3122,11 +2842,9 @@ func (m *TCPLBRequest) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateTCPLBRequest struct {
@@ -3140,7 +2858,6 @@ func (v *ValidateTCPLBRequest) AdvertiseChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateTCPLBRequest) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3156,6 +2873,7 @@ func (v *ValidateTCPLBRequest) PortChoiceListenPortValidationRuleHandler(rules m
 	}
 	return oValidatorFn_ListenPort, nil
 }
+
 func (v *ValidateTCPLBRequest) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -3163,7 +2881,6 @@ func (v *ValidateTCPLBRequest) PortChoicePortRangesValidationRuleHandler(rules m
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateTCPLBRequest) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3171,9 +2888,7 @@ func (v *ValidateTCPLBRequest) SniDefaultLbChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateTCPLBRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -3181,9 +2896,7 @@ func (v *ValidateTCPLBRequest) NameValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTCPLBRequest) DomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain")
@@ -3239,25 +2952,18 @@ func (v *ValidateTCPLBRequest) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -3293,7 +2999,6 @@ func (v *ValidateTCPLBRequest) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
@@ -3329,16 +3034,13 @@ func (v *ValidateTCPLBRequest) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTCPLBRequestValidator = func() *ValidateTCPLBRequest {
 	v := &ValidateTCPLBRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3346,7 +3048,6 @@ var DefaultTCPLBRequestValidator = func() *ValidateTCPLBRequest {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3357,7 +3058,6 @@ var DefaultTCPLBRequestValidator = func() *ValidateTCPLBRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3368,7 +3068,6 @@ var DefaultTCPLBRequestValidator = func() *ValidateTCPLBRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoiceListenPort := v.PortChoiceListenPortValidationRuleHandler
 	rulesPortChoiceListenPort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -3390,10 +3089,8 @@ var DefaultTCPLBRequestValidator = func() *ValidateTCPLBRequest {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field TCPLBRequest.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.listen_port"] = vFnMap["port_choice.listen_port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
-
 	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
 	rulesSniDefaultLbChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3427,7 +3124,6 @@ var DefaultTCPLBRequestValidator = func() *ValidateTCPLBRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["domain"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
 	return v
@@ -3480,7 +3176,6 @@ func (m *WhereSite) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteDRefInfo()
-
 }
 
 func (m *WhereSite) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -3505,7 +3200,6 @@ func (m *WhereSite) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3524,7 +3218,6 @@ func (m *WhereSite) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3533,7 +3226,6 @@ type ValidateWhereSite struct {
 }
 
 func (v *ValidateWhereSite) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3593,22 +3285,18 @@ func (v *ValidateWhereSite) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereSiteValidator = func() *ValidateWhereSite {
 	v := &ValidateWhereSite{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3679,7 +3367,6 @@ func (m *WhereVirtualSite) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualSiteDRefInfo()
-
 }
 
 func (m *WhereVirtualSite) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -3704,7 +3391,6 @@ func (m *WhereVirtualSite) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3723,7 +3409,6 @@ func (m *WhereVirtualSite) GetVirtualSiteDBEntries(ctx context.Context, d db.Int
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3732,7 +3417,6 @@ type ValidateWhereVirtualSite struct {
 }
 
 func (v *ValidateWhereVirtualSite) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3792,22 +3476,18 @@ func (v *ValidateWhereVirtualSite) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["virtual_site"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_site"))
 		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWhereVirtualSiteValidator = func() *ValidateWhereVirtualSite {
 	v := &ValidateWhereVirtualSite{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

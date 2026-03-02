@@ -9,6 +9,7 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+	vr["ves.io.schema.views.AWSDiskEncryption"] = AWSDiskEncryptionValidator()
 	vr["ves.io.schema.views.AWSNATGatewaychoiceType"] = AWSNATGatewaychoiceTypeValidator()
 	vr["ves.io.schema.views.AWSSubnetIdsType"] = AWSSubnetIdsTypeValidator()
 	vr["ves.io.schema.views.AWSSubnetInfoType"] = AWSSubnetInfoTypeValidator()
@@ -61,11 +62,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.ValidateConfigRequest"] = ValidateConfigRequestValidator()
 	vr["ves.io.schema.views.ValidateConfigResponse"] = ValidateConfigResponseValidator()
 	vr["ves.io.schema.views.VifRegionConfig"] = VifRegionConfigValidator()
-
 	vr["ves.io.schema.views.StorageClassListType"] = StorageClassListTypeValidator()
 	vr["ves.io.schema.views.StorageClassOpenebsEnterpriseType"] = StorageClassOpenebsEnterpriseTypeValidator()
 	vr["ves.io.schema.views.StorageClassType"] = StorageClassTypeValidator()
-
 	vr["ves.io.schema.views.AcceleratedNetworkingType"] = AcceleratedNetworkingTypeValidator()
 	vr["ves.io.schema.views.AdminUserCredentialsType"] = AdminUserCredentialsTypeValidator()
 	vr["ves.io.schema.views.AdvertiseCustom"] = AdvertiseCustomValidator()
@@ -87,6 +86,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.KubernetesUpgradeDrain"] = KubernetesUpgradeDrainValidator()
 	vr["ves.io.schema.views.KubernetesUpgradeDrainConfig"] = KubernetesUpgradeDrainConfigValidator()
 	vr["ves.io.schema.views.L3PerformanceEnhancementType"] = L3PerformanceEnhancementTypeValidator()
+	vr["ves.io.schema.views.L7PerformanceEnhancementType"] = L7PerformanceEnhancementTypeValidator()
 	vr["ves.io.schema.views.LinkRefType"] = LinkRefTypeValidator()
 	vr["ves.io.schema.views.MasterNode"] = MasterNodeValidator()
 	vr["ves.io.schema.views.NetworkSelectType"] = NetworkSelectTypeValidator()
@@ -121,23 +121,18 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.WhereVirtualSiteSegment"] = WhereVirtualSiteSegmentValidator()
 	vr["ves.io.schema.views.WhereVirtualSiteSpecifiedVIP"] = WhereVirtualSiteSpecifiedVIPValidator()
 	vr["ves.io.schema.views.XfccHeaderKeys"] = XfccHeaderKeysValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -146,20 +141,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

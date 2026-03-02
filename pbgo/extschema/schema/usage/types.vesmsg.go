@@ -76,16 +76,12 @@ func (v *ValidateFloatUsageType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["current"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current"))
 		if err := fv(ctx, m.GetCurrent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,9 +150,7 @@ func (v *ValidateFloatUsagesType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["usages"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usages"))
 		for key, value := range m.GetUsages() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -164,9 +158,7 @@ func (v *ValidateFloatUsagesType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -235,9 +227,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["object_usages"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_usages"))
 		for key, value := range m.GetObjectUsages() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -245,11 +235,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_usages"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_usages"))
 		for key, value := range m.GetResourceUsages() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -257,9 +244,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -328,16 +313,12 @@ func (v *ValidateUsageType) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["current"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current"))
 		if err := fv(ctx, m.GetCurrent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

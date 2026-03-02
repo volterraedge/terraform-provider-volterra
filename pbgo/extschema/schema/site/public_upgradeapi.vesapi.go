@@ -42,7 +42,6 @@ func (c *UpgradeAPIGrpcClient) doRPCUpgradeOS(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.UpgradeOS(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *UpgradeAPIGrpcClient) doRPCUpgradeSW(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpgradeSWRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewUpgradeAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["UpgradeOS"] = ccl.doRPCUpgradeOS
-
 	rpcFns["UpgradeSW"] = ccl.doRPCUpgradeSW
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -176,7 +172,6 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeOS(ctx context.Context, callOpts *ser
 	pbRsp := &UpgradeOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.UpgradeOSResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -184,7 +179,6 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeOS(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *UpgradeAPIRestClient) doRPCUpgradeSW(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -262,7 +256,6 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeSW(ctx context.Context, callOpts *ser
 	pbRsp := &UpgradeSWResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.UpgradeSWResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -296,11 +289,8 @@ func NewUpgradeAPIRestClient(baseURL string, hc http.Client) server.CustomClient
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["UpgradeOS"] = ccl.doRPCUpgradeOS
-
 	rpcFns["UpgradeSW"] = ccl.doRPCUpgradeSW
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -385,7 +375,6 @@ func (s *upgradeAPISrv) UpgradeOS(ctx context.Context, in *UpgradeOSRequest) (*U
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.UpgradeOSResponse", rsp)...)
 
 	return rsp, nil
@@ -434,7 +423,6 @@ func (s *upgradeAPISrv) UpgradeSW(ctx context.Context, in *UpgradeSWRequest) (*U
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.UpgradeSWResponse", rsp)...)
 
 	return rsp, nil

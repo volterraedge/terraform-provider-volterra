@@ -74,9 +74,7 @@ func NewModuleManagementAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetModuleManagementSettings"] = ccl.doRPCGetModuleManagementSettings
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -162,7 +160,6 @@ func (c *ModuleManagementAPIRestClient) doRPCGetModuleManagementSettings(ctx con
 	pbRsp := &ModuleManagementResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.module_management.ModuleManagementResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,9 +193,7 @@ func NewModuleManagementAPIRestClient(baseURL string, hc http.Client) server.Cus
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetModuleManagementSettings"] = ccl.doRPCGetModuleManagementSettings
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -279,7 +274,6 @@ func (s *moduleManagementAPISrv) GetModuleManagementSettings(ctx context.Context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.module_management.ModuleManagementResponse", rsp)...)
 
 	return rsp, nil
@@ -415,7 +409,7 @@ var ModuleManagementAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.module_management.ModuleManagementResponse",
             "properties": {
                 "glr_configuration": {
-                    "description": " Settings for GLR Configuration. ",
+                    "description": " Settings for GLR Configuration.",
                     "title": "GLR Configuration",
                     "$ref": "#/definitions/module_managementModuleManagement",
                     "x-displayname": "GLR Configuration"

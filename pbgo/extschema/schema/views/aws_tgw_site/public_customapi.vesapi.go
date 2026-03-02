@@ -44,7 +44,6 @@ func (c *CustomAPIGrpcClient) doRPCSetTGWInfo(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.SetTGWInfo(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSetVIPInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetVIPInfoRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *CustomAPIGrpcClient) doRPCSetVIPInfo(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.SetVIPInfo(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSetVPCIpPrefixes(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetVPCIpPrefixesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -62,7 +60,6 @@ func (c *CustomAPIGrpcClient) doRPCSetVPCIpPrefixes(ctx context.Context, yamlReq
 	rsp, err := c.grpcClient.SetVPCIpPrefixes(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSetVPNTunnels(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetVPNTunnelsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -71,7 +68,6 @@ func (c *CustomAPIGrpcClient) doRPCSetVPNTunnels(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.SetVPNTunnels(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCValidateConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views.ValidateConfigRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -112,17 +108,11 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SetTGWInfo"] = ccl.doRPCSetTGWInfo
-
 	rpcFns["SetVIPInfo"] = ccl.doRPCSetVIPInfo
-
 	rpcFns["SetVPCIpPrefixes"] = ccl.doRPCSetVPCIpPrefixes
-
 	rpcFns["SetVPNTunnels"] = ccl.doRPCSetVPNTunnels
-
 	rpcFns["ValidateConfig"] = ccl.doRPCValidateConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -211,7 +201,6 @@ func (c *CustomAPIRestClient) doRPCSetTGWInfo(ctx context.Context, callOpts *ser
 	pbRsp := &SetTGWInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -219,7 +208,6 @@ func (c *CustomAPIRestClient) doRPCSetTGWInfo(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSetVIPInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -298,7 +286,6 @@ func (c *CustomAPIRestClient) doRPCSetVIPInfo(ctx context.Context, callOpts *ser
 	pbRsp := &SetVIPInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.aws_tgw_site.SetVIPInfoResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -306,7 +293,6 @@ func (c *CustomAPIRestClient) doRPCSetVIPInfo(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSetVPCIpPrefixes(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -383,7 +369,6 @@ func (c *CustomAPIRestClient) doRPCSetVPCIpPrefixes(ctx context.Context, callOpt
 	pbRsp := &SetVPCIpPrefixesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -391,7 +376,6 @@ func (c *CustomAPIRestClient) doRPCSetVPCIpPrefixes(ctx context.Context, callOpt
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSetVPNTunnels(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -470,7 +454,6 @@ func (c *CustomAPIRestClient) doRPCSetVPNTunnels(ctx context.Context, callOpts *
 	pbRsp := &SetVPNTunnelsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -478,7 +461,6 @@ func (c *CustomAPIRestClient) doRPCSetVPNTunnels(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCValidateConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -554,7 +536,6 @@ func (c *CustomAPIRestClient) doRPCValidateConfig(ctx context.Context, callOpts 
 	pbRsp := &ves_io_schema_views.ValidateConfigResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.ValidateConfigResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -588,17 +569,11 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SetTGWInfo"] = ccl.doRPCSetTGWInfo
-
 	rpcFns["SetVIPInfo"] = ccl.doRPCSetVIPInfo
-
 	rpcFns["SetVPCIpPrefixes"] = ccl.doRPCSetVPCIpPrefixes
-
 	rpcFns["SetVPNTunnels"] = ccl.doRPCSetVPNTunnels
-
 	rpcFns["ValidateConfig"] = ccl.doRPCValidateConfig
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -695,7 +670,6 @@ func (s *customAPISrv) SetTGWInfo(ctx context.Context, in *SetTGWInfoRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse", rsp)...)
 
 	return rsp, nil
@@ -744,7 +718,6 @@ func (s *customAPISrv) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVIPInfoResponse", rsp)...)
 
 	return rsp, nil
@@ -793,7 +766,6 @@ func (s *customAPISrv) SetVPCIpPrefixes(ctx context.Context, in *SetVPCIpPrefixe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesResponse", rsp)...)
 
 	return rsp, nil
@@ -842,7 +814,6 @@ func (s *customAPISrv) SetVPNTunnels(ctx context.Context, in *SetVPNTunnelsReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse", rsp)...)
 
 	return rsp, nil
@@ -891,7 +862,6 @@ func (s *customAPISrv) ValidateConfig(ctx context.Context, in *ves_io_schema_vie
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.ValidateConfigResponse", rsp)...)
 
 	return rsp, nil

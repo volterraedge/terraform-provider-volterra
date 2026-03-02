@@ -63,6 +63,15 @@ type ValidateListSubscriptionsReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListSubscriptionsReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListSubscriptionsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListSubscriptionsReq)
 	if !ok {
@@ -76,31 +85,42 @@ func (v *ValidateListSubscriptionsReq) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["current"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current"))
 		if err := fv(ctx, m.GetCurrent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListSubscriptionsReqValidator = func() *ValidateListSubscriptionsReq {
 	v := &ValidateListSubscriptionsReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListSubscriptionsReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -163,9 +183,7 @@ func (v *ValidateListSubscriptionsRsp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["subscriptions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subscriptions"))
 		for idx, item := range m.GetSubscriptions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -173,9 +191,7 @@ func (v *ValidateListSubscriptionsRsp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -244,9 +260,7 @@ func (v *ValidatePeriod) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["closed_invoice"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("closed_invoice"))
 		for idx, item := range m.GetClosedInvoice() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -254,38 +268,26 @@ func (v *ValidatePeriod) Validate(ctx context.Context, pm interface{}, opts ...d
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_date"))
 		if err := fv(ctx, m.GetEndDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_end_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_end_date"))
 		if err := fv(ctx, m.GetInternalEndDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_start_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_start_date"))
 		if err := fv(ctx, m.GetInternalStartDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["invoices"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("invoices"))
 		for idx, item := range m.GetInvoices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -293,11 +295,8 @@ func (v *ValidatePeriod) Validate(ctx context.Context, pm interface{}, opts ...d
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["pending_invoice"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("pending_invoice"))
 		for idx, item := range m.GetPendingInvoice() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -305,36 +304,25 @@ func (v *ValidatePeriod) Validate(ctx context.Context, pm interface{}, opts ...d
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_date"))
 		if err := fv(ctx, m.GetStartDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trial"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trial"))
 		if err := fv(ctx, m.GetTrial(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -403,81 +391,55 @@ func (v *ValidateSubscriptionType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cancellation_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cancellation_date"))
 		if err := fv(ctx, m.GetCancellationDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cancelled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cancelled"))
 		if err := fv(ctx, m.GetCancelled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["current"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current"))
 		if err := fv(ctx, m.GetCurrent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_billing_period_end_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_billing_period_end_date"))
 		if err := fv(ctx, m.GetLastBillingPeriodEndDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_billing_period_start_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_billing_period_start_date"))
 		if err := fv(ctx, m.GetLastBillingPeriodStartDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plan_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plan_name"))
 		if err := fv(ctx, m.GetPlanName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plan_object_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plan_object_name"))
 		if err := fv(ctx, m.GetPlanObjectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["previous_billing_periods"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("previous_billing_periods"))
 		for idx, item := range m.GetPreviousBillingPeriods() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -485,18 +447,13 @@ func (v *ValidateSubscriptionType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_date"))
 		if err := fv(ctx, m.GetStartDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

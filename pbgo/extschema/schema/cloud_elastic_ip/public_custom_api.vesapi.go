@@ -74,9 +74,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ForceDeleteCloudElasticIP"] = ccl.doRPCForceDeleteCloudElasticIP
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -162,7 +160,6 @@ func (c *CustomAPIRestClient) doRPCForceDeleteCloudElasticIP(ctx context.Context
 	pbRsp := &ForceDeleteCloudElasticIPResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_elastic_ip.ForceDeleteCloudElasticIPResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,9 +193,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ForceDeleteCloudElasticIP"] = ccl.doRPCForceDeleteCloudElasticIP
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -279,7 +274,6 @@ func (s *customAPISrv) ForceDeleteCloudElasticIP(ctx context.Context, in *ForceD
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_elastic_ip.ForceDeleteCloudElasticIPResponse", rsp)...)
 
 	return rsp, nil

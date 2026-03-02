@@ -16,16 +16,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNLbStatusType"] = CDNLbStatusTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNLoadbalancerStatus"] = CDNLoadbalancerStatusValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.cdn_loadbalancer.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.cdn_loadbalancer.UpdateServiceDomainsRequest"] = UpdateServiceDomainsRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.UpdateServiceDomainsResponse"] = UpdateServiceDomainsResponseValidator()
-
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNLoadBalancerList"] = CDNLoadBalancerListValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.GetCDNSecurityConfigReq"] = GetCDNSecurityConfigReqValidator()
-
 	vr["ves.io.schema.views.cdn_loadbalancer.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.DeleteRequest"] = DeleteRequestValidator()
@@ -36,7 +32,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNAccessLogAggregationRequest"] = CDNAccessLogAggregationRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNAccessLogFilter"] = CDNAccessLogFilterValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNAccessLogRequest"] = CDNAccessLogRequestValidator()
@@ -55,7 +50,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.SubscribeResponse"] = SubscribeResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.UnsubscribeRequest"] = UnsubscribeRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.UnsubscribeResponse"] = UnsubscribeResponseValidator()
-
 	vr["ves.io.schema.views.cdn_loadbalancer.AdvancedOptionsType"] = AdvancedOptionsTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.ApiProtection"] = ApiProtectionValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.AuthenticationOptions"] = AuthenticationOptionsValidator()
@@ -99,7 +93,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.SecurityOptionsType"] = SecurityOptionsTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.TlsCertOptions"] = TlsCertOptionsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.WebApplicationFirewall"] = WebApplicationFirewallValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -111,11 +104,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_definition_choice.api_specification",
@@ -230,7 +221,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-standard"},
 		},
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []string{
 		"spec.add_location",
 		"spec.api_discovery_on_cache_miss",
@@ -248,7 +238,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.other_settings.geo_filtering",
 		"spec.other_settings.ip_filtering",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []string{
 		"spec.add_location",
 		"spec.api_discovery_on_cache_miss",
@@ -266,7 +255,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.other_settings.geo_filtering",
 		"spec.other_settings.ip_filtering",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []string{
 		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
 		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
@@ -405,7 +393,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.waf_exclusion.waf_exclusion_inline_rules.rules.#.metadata.disable",
 		"spec.waf_exclusion_rules.#.metadata.disable",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.api_protection_rules.api_endpoint_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
@@ -496,6 +483,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.more_option.security_options.common_security_controls.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.more_option.security_options.common_security_controls.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -532,11 +523,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.api_protection_rules.api_endpoint_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
@@ -627,6 +621,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.more_option.security_options.common_security_controls.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.more_option.security_options.common_security_controls.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -663,13 +661,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = "ves.io.schema.views.cdn_loadbalancer.CreateRequest"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Get"] = []string{
 		"create_form.spec.add_location",
 		"create_form.spec.api_discovery_on_cache_miss",
@@ -719,7 +719,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"status.#.site_status",
 		"status.#.status",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.api_protection_rules.api_endpoint_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
@@ -810,6 +809,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.more_option.security_options.common_security_controls.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "create_form.spec.more_option.security_options.common_security_controls.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -844,6 +847,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "create_form.spec.policy_based_challenge.rule_list.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
 		},
 		{
 			FieldPath:           "create_form.spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -938,6 +945,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.more_option.security_options.common_security_controls.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.more_option.security_options.common_security_controls.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -972,6 +983,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "replace_form.spec.policy_based_challenge.rule_list.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -1066,6 +1081,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.more_option.security_options.common_security_controls.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.more_option.security_options.common_security_controls.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -1102,11 +1121,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.List"] = []string{
 		"items.#.get_spec.add_location",
 		"items.#.get_spec.api_discovery_on_cache_miss",
@@ -1126,7 +1148,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.status_set.#.site_status",
 		"items.#.status_set.#.status",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.api_protection_rules.api_endpoint_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
@@ -1217,6 +1238,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "items.#.get_spec.more_option.security_options.common_security_controls.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.more_option.security_options.common_security_controls.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -1253,11 +1278,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "items.#.get_spec.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_specification",
@@ -1372,7 +1400,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-standard"},
 		},
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = []string{
 		"spec.add_location",
 		"spec.api_discovery_on_cache_miss",
@@ -1390,7 +1417,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.other_settings.geo_filtering",
 		"spec.other_settings.ip_filtering",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = []string{
 		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
 		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
@@ -1529,7 +1555,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.waf_exclusion.waf_exclusion_inline_rules.rules.#.metadata.disable",
 		"spec.waf_exclusion_rules.#.metadata.disable",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.api_protection_rules.api_endpoint_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
@@ -1620,6 +1645,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.more_option.security_options.common_security_controls.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.more_option.security_options.common_security_controls.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -1656,29 +1685,28 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.policy_based_challenge.rule_list.rules.#.spec.path.encoded_path_matcher",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.cdn_loadbalancer.CustomCDNWAAPAPI"] = "config"
 	sm["ves.io.schema.views.cdn_loadbalancer.API"] = "config"
 	sm["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = "cdn"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -1687,14 +1715,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = PrivateCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
 		if isExternal {
@@ -1705,16 +1729,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewPrivateCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = CustomCDNWAAPAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.cdn_loadbalancer.CustomCDNWAAPAPI"] = NewCustomCDNWAAPAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.cdn_loadbalancer.CustomCDNWAAPAPI"] = NewCustomCDNWAAPAPIRestClient
 		if isExternal {
@@ -1725,11 +1744,8 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.cdn_loadbalancer.CustomCDNWAAPAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomCDNWAAPAPIServer(svc)
 		}
-
 	}()
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = APISwaggerJSON
@@ -1743,16 +1759,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -1763,22 +1774,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

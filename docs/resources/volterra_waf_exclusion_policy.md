@@ -23,7 +23,7 @@ resource "volterra_waf_exclusion_policy" "example" {
   waf_exclusion_rules {
     // One of the arguments from this list "any_domain exact_value suffix_value" must be set
 
-    any_domain = true
+    exact_value = "abc.zyz.com"
 
     expiration_timestamp = "0001-01-01T00:00:00Z"
 
@@ -43,38 +43,9 @@ resource "volterra_waf_exclusion_policy" "example" {
 
     // One of the arguments from this list "app_firewall_detection_control waf_skip_processing" can be set
 
-    app_firewall_detection_control {
-      exclude_attack_type_contexts {
-        context = "context"
-
-        context_name = "example: user-agent for Header"
-
-        exclude_attack_type = "ATTACK_TYPE_SQL_INJECTION"
-      }
-
-      exclude_bot_name_contexts {
-        bot_name = "Hydra"
-      }
-
-      exclude_signature_contexts {
-        context = "context"
-
-        context_name = "example: user-agent for Header"
-
-        signature_id = "10000001"
-      }
-
-      exclude_violation_contexts {
-        context = "context"
-
-        context_name = "example: user-agent for Header"
-
-        exclude_violation = "VIOL_MANDATORY_HEADER"
-      }
-    }
+    waf_skip_processing = true
   }
 }
-
 ```
 
 Argument Reference
@@ -203,4 +174,4 @@ Common attributes for the rule including name and description..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured waf_exclusion_policy.
+*   `id` - This is the id of the configured waf_exclusion_policy.

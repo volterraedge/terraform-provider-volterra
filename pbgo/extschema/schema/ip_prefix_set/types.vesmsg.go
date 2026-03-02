@@ -64,7 +64,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -104,9 +103,7 @@ func (v *ValidateCreateSpecType) PrefixValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -146,9 +143,7 @@ func (v *ValidateCreateSpecType) Ipv6PrefixValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -194,9 +189,7 @@ func (v *ValidateCreateSpecType) Ipv4PrefixesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -256,46 +249,36 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
 		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
 		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -405,7 +388,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -445,9 +427,7 @@ func (v *ValidateGetSpecType) PrefixValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -487,9 +467,7 @@ func (v *ValidateGetSpecType) Ipv6PrefixValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -535,9 +513,7 @@ func (v *ValidateGetSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -597,46 +573,36 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
 		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
 		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -746,7 +712,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -786,9 +751,7 @@ func (v *ValidateGlobalSpecType) PrefixValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -828,9 +791,7 @@ func (v *ValidateGlobalSpecType) Ipv6PrefixValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -876,9 +837,7 @@ func (v *ValidateGlobalSpecType) Ipv4PrefixesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -938,46 +897,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
 		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
 		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1087,7 +1036,6 @@ type ValidateIpv4Prefix struct {
 }
 
 func (v *ValidateIpv4Prefix) Ipv4PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4_prefix")
@@ -1095,9 +1043,7 @@ func (v *ValidateIpv4Prefix) Ipv4PrefixValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIpv4Prefix) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -1119,32 +1065,24 @@ func (v *ValidateIpv4Prefix) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv4_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv4_prefix"))
 		if err := fv(ctx, m.GetIpv4Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpv4PrefixValidator = func() *ValidateIpv4Prefix {
 	v := &ValidateIpv4Prefix{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1226,7 +1164,6 @@ type ValidateIpv6Prefix struct {
 }
 
 func (v *ValidateIpv6Prefix) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6_prefix")
@@ -1234,9 +1171,7 @@ func (v *ValidateIpv6Prefix) Ipv6PrefixValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIpv6Prefix) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -1258,32 +1193,24 @@ func (v *ValidateIpv6Prefix) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIpv6PrefixValidator = func() *ValidateIpv6Prefix {
 	v := &ValidateIpv6Prefix{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1365,7 +1292,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1405,9 +1331,7 @@ func (v *ValidateReplaceSpecType) PrefixValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1447,9 +1371,7 @@ func (v *ValidateReplaceSpecType) Ipv6PrefixValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1495,9 +1417,7 @@ func (v *ValidateReplaceSpecType) Ipv4PrefixesValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1557,46 +1477,36 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
 		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
 		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

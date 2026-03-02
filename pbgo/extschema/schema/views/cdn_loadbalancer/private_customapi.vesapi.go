@@ -74,9 +74,7 @@ func NewPrivateCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["UpdateServiceDomains"] = ccl.doRPCUpdateServiceDomains
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -167,7 +165,6 @@ func (c *PrivateCustomAPIRestClient) doRPCUpdateServiceDomains(ctx context.Conte
 	pbRsp := &UpdateServiceDomainsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.UpdateServiceDomainsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -201,9 +198,7 @@ func NewPrivateCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["UpdateServiceDomains"] = ccl.doRPCUpdateServiceDomains
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -530,7 +525,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 },
                 "service_domains": {
                     "type": "array",
-                    "description": " CNAME provided from service per domain ",
+                    "description": " CNAME provided from service per domain",
                     "title": "Service Domains",
                     "items": {
                         "$ref": "#/definitions/virtual_hostServiceDomain"
@@ -539,7 +534,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " Tenant name \n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Tenant name\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Tenant",
                     "x-displayname": "Tenant",
                     "x-ves-example": "default",

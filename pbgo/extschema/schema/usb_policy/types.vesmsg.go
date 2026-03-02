@@ -64,7 +64,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) AllowedDevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -124,22 +123,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allowed_devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_devices"))
 		if err := fv(ctx, m.GetAllowedDevices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -211,7 +206,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) AllowedDevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -271,22 +265,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allowed_devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_devices"))
 		if err := fv(ctx, m.GetAllowedDevices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -358,7 +348,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) AllowedDevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -418,22 +407,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allowed_devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_devices"))
 		if err := fv(ctx, m.GetAllowedDevices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -505,7 +490,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) AllowedDevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -565,22 +549,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allowed_devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("allowed_devices"))
 		if err := fv(ctx, m.GetAllowedDevices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -664,61 +644,42 @@ func (v *ValidateRule) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["b_device_class"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("b_device_class"))
 		if err := fv(ctx, m.GetBDeviceClass(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["b_device_protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("b_device_protocol"))
 		if err := fv(ctx, m.GetBDeviceProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["b_device_sub_class"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("b_device_sub_class"))
 		if err := fv(ctx, m.GetBDeviceSubClass(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["i_serial"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("i_serial"))
 		if err := fv(ctx, m.GetISerial(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id_product"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id_product"))
 		if err := fv(ctx, m.GetIdProduct(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id_vendor"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id_vendor"))
 		if err := fv(ctx, m.GetIdVendor(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

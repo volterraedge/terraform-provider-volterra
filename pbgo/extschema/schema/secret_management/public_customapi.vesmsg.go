@@ -66,7 +66,6 @@ type ValidateGetPolicyDocumentRequest struct {
 }
 
 func (v *ValidateGetPolicyDocumentRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -74,9 +73,7 @@ func (v *ValidateGetPolicyDocumentRequest) NamespaceValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetPolicyDocumentRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -98,32 +95,24 @@ func (v *ValidateGetPolicyDocumentRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetPolicyDocumentRequestValidator = func() *ValidateGetPolicyDocumentRequest {
 	v := &ValidateGetPolicyDocumentRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -215,23 +204,18 @@ func (v *ValidateGetPolicyDocumentResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetPolicyDocumentResponseValidator = func() *ValidateGetPolicyDocumentResponse {
 	v := &ValidateGetPolicyDocumentResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["data"] = PolicyDataValidator().Validate
 
 	return v
@@ -295,16 +279,12 @@ func (v *ValidateGetPublicKeyRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_version"))
 		if err := fv(ctx, m.GetKeyVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -373,16 +353,12 @@ func (v *ValidateGetPublicKeyResponse) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -451,43 +427,30 @@ func (v *ValidateKeyData) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_version"))
 		if err := fv(ctx, m.GetKeyVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["modulus_base64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("modulus_base64"))
 		if err := fv(ctx, m.GetModulusBase64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_exponent_base64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_exponent_base64"))
 		if err := fv(ctx, m.GetPublicExponentBase64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -544,7 +507,6 @@ type ValidatePolicyData struct {
 }
 
 func (v *ValidatePolicyData) PolicyIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint64ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for policy_id")
@@ -566,59 +528,42 @@ func (v *ValidatePolicyData) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_id"))
 		if err := fv(ctx, m.GetPolicyId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_info"))
 		if err := fv(ctx, m.GetPolicyInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPolicyDataValidator = func() *ValidatePolicyData {
 	v := &ValidatePolicyData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -638,7 +583,6 @@ var DefaultPolicyDataValidator = func() *ValidatePolicyData {
 		panic(errMsg)
 	}
 	v.FldValidators["policy_id"] = vFn
-
 	v.FldValidators["policy_info"] = PolicyInfoTypeValidator().Validate
 
 	return v
@@ -702,18 +646,13 @@ func (v *ValidatePolicyInfoType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["algo"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("algo"))
 		if err := fv(ctx, m.GetAlgo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rules"))
 		for idx, item := range m.GetRules() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -721,16 +660,13 @@ func (v *ValidatePolicyInfoType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPolicyInfoTypeValidator = func() *ValidatePolicyInfoType {
 	v := &ValidatePolicyInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["rules"] = ves_io_schema_secret_policy_rule.GlobalSpecTypeValidator().Validate
 
 	return v

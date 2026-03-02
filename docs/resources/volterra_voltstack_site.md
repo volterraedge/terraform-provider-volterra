@@ -22,15 +22,7 @@ resource "volterra_voltstack_site" "example" {
 
   // One of the arguments from this list "blocked_services default_blocked_services" must be set
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "dns ssh web_user_interface" can be set
-
-      web_user_interface = true
-
-      network_type = "network_type"
-    }
-  }
+  default_blocked_services = true
 
   // One of the arguments from this list "bond_device_list no_bond_devices" must be set
 
@@ -59,34 +51,25 @@ resource "volterra_voltstack_site" "example" {
 
   // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
 
-  default_sriov_interface = true
+  sriov_interfaces {
+    sriov_interface {
+      interface_name = "eth0"
+
+      number_of_vfio_vfs = "2"
+
+      number_of_vfs = "3"
+    }
+  }
 
   // One of the arguments from this list "custom_storage_config default_storage_config" must be set
 
-  custom_storage_config {
-    // One of the arguments from this list "no_static_routes static_routes" must be set
-
-    no_static_routes = true
-
-    // One of the arguments from this list "default_storage_class storage_class_list" must be set
-
-    default_storage_class = true
-
-    // One of the arguments from this list "no_storage_device storage_device_list" must be set
-
-    no_storage_device = true
-
-    // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
-
-    no_storage_interfaces = true
-  }
+  default_storage_config = true
 
   // One of the arguments from this list "allow_all_usb deny_all_usb usb_policy" must be set
 
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
-
 ```
 
 Argument Reference
@@ -628,7 +611,7 @@ This site is not a member of dc cluster group.
 
 ### Dc Cluster Group Connectivity Interface Choice Dc Cluster Group Connectivity Interface Disabled
 
-Do not use this interface to connect to DC Cluster Group peers. .
+Do not use this interface to connect to DC Cluster Group peers..
 
 ### Dc Cluster Group Connectivity Interface Choice Dc Cluster Group Connectivity Interface Enabled
 
@@ -2301,4 +2284,4 @@ Will assign latest available F5XC Software Version.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured voltstack_site.
+*   `id` - This is the id of the configured voltstack_site.

@@ -44,7 +44,6 @@ func (c *CustomAPIPrivateGrpcClient) doRPCGetPathSuggestions(ctx context.Context
 	rsp, err := c.grpcClient.GetPathSuggestions(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIPrivateGrpcClient) doRPCUpdateApiDefinitionReference(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateApiDefinitionRefReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *CustomAPIPrivateGrpcClient) doRPCUpdateApiDefinitionReference(ctx conte
 	rsp, err := c.grpcClient.UpdateApiDefinitionReference(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIPrivateGrpcClient) doRPCUpdateApiInventoryLists(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateApiInventoryListsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -94,13 +92,9 @@ func NewCustomAPIPrivateGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetPathSuggestions"] = ccl.doRPCGetPathSuggestions
-
 	rpcFns["UpdateApiDefinitionReference"] = ccl.doRPCUpdateApiDefinitionReference
-
 	rpcFns["UpdateApiInventoryLists"] = ccl.doRPCUpdateApiInventoryLists
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -188,7 +182,6 @@ func (c *CustomAPIPrivateRestClient) doRPCGetPathSuggestions(ctx context.Context
 	pbRsp := &ves_io_schema.SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,7 +189,6 @@ func (c *CustomAPIPrivateRestClient) doRPCGetPathSuggestions(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIPrivateRestClient) doRPCUpdateApiDefinitionReference(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -273,7 +265,6 @@ func (c *CustomAPIPrivateRestClient) doRPCUpdateApiDefinitionReference(ctx conte
 	pbRsp := &UpdateApiDefinitionRefResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.UpdateApiDefinitionRefResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -281,7 +272,6 @@ func (c *CustomAPIPrivateRestClient) doRPCUpdateApiDefinitionReference(ctx conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIPrivateRestClient) doRPCUpdateApiInventoryLists(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -379,7 +369,6 @@ func (c *CustomAPIPrivateRestClient) doRPCUpdateApiInventoryLists(ctx context.Co
 	pbRsp := &UpdateApiInventoryListsResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.UpdateApiInventoryListsResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -413,13 +402,9 @@ func NewCustomAPIPrivateRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetPathSuggestions"] = ccl.doRPCGetPathSuggestions
-
 	rpcFns["UpdateApiDefinitionReference"] = ccl.doRPCUpdateApiDefinitionReference
-
 	rpcFns["UpdateApiInventoryLists"] = ccl.doRPCUpdateApiInventoryLists
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -967,57 +952,57 @@ var CustomAPIPrivateSwaggerJSON string = `{
             "properties": {
                 "api_inventory_exclusion_list_delta_added": {
                     "type": "array",
-                    "description": " List of API Endpoints that were added to the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of API Endpoints that were added to the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_exclusion_list_delta_added",
-                    "maxItems": 1000,
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Exclusion List Delta Added",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_exclusion_list_delta_removed": {
                     "type": "array",
-                    "description": " List of API Endpoints that were removed from the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of API Endpoints that were removed from the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_exclusion_list_delta_removed",
-                    "maxItems": 1000,
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Exclusion List Delta Removed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_inclusion_list_delta_added": {
                     "type": "array",
-                    "description": " List of API Endpoints that were added to the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of API Endpoints that were added to the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_inclusion_list_delta_added",
-                    "maxItems": 1000,
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Inclusion List Delta Added",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_inclusion_list_delta_removed": {
                     "type": "array",
-                    "description": " List of API Endpoints that were removed from the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of API Endpoints that were removed from the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_inclusion_list_delta_removed",
-                    "maxItems": 1000,
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Inclusion List Delta Removed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -1050,29 +1035,29 @@ var CustomAPIPrivateSwaggerJSON string = `{
                 },
                 "non_api_endpoints_delta_added": {
                     "type": "array",
-                    "description": " List of Non-API Endpoints that were added to the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of Non-API Endpoints that were added to the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "non_api_endpoints_delta_added",
-                    "maxItems": 1000,
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Discovery Exclusion List Delta Added",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "non_api_endpoints_delta_removed": {
                     "type": "array",
-                    "description": " List of Non-API Endpoints that were removed from the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of Non-API Endpoints that were removed from the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "non_api_endpoints_delta_removed",
-                    "maxItems": 1000,
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Discovery Exclusion List Delta Removed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },

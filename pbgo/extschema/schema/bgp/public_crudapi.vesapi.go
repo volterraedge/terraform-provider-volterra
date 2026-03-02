@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.bgp.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2237,6 +2214,82 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpAggregationIPv4": {
+            "type": "object",
+            "description": "Aggregation in BGP occurs only when more specific routes exist in the routing table and applies to outbound advertisements.",
+            "title": "AggregationIPv4",
+            "x-displayname": "Aggregation",
+            "x-ves-proto-message": "ves.io.schema.bgp.AggregationIPv4",
+            "properties": {
+                "ip_prefix": {
+                    "type": "string",
+                    "description": " Specify IPV4 subnet for aggregation.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "title": "ip_prefix",
+                    "x-displayname": "IP Prefix",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4_prefix": "true"
+                    }
+                },
+                "options": {
+                    "type": "array",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "options",
+                    "items": {
+                        "$ref": "#/definitions/bgpAggregationOption"
+                    },
+                    "x-displayname": "Aggregation Options",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "bgpAggregationIPv6": {
+            "type": "object",
+            "description": "Aggregation in BGP occurs only when more specific routes exist in the routing table and applies to outbound advertisements.",
+            "title": "AggregationIPv6",
+            "x-displayname": "Aggregation",
+            "x-ves-proto-message": "ves.io.schema.bgp.AggregationIPv6",
+            "properties": {
+                "ip_prefix": {
+                    "type": "string",
+                    "description": " Specify IPV6 subnet for aggregation.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "ip_prefix",
+                    "x-displayname": "IP Prefix",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
+                    }
+                },
+                "options": {
+                    "type": "array",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "options",
+                    "items": {
+                        "$ref": "#/definitions/bgpAggregationOption"
+                    },
+                    "x-displayname": "Aggregation Options",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "bgpAggregationOption": {
+            "type": "object",
+            "description": "Aggregation options for BGP routes.",
+            "title": "AggregationOption",
+            "x-displayname": "Aggregation Options",
+            "x-ves-oneof-field-aggregation_choice": "[\"summary_only\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.AggregationOption",
+            "properties": {
+                "summary_only": {
+                    "description": "Exclusive with []\n Advertise only the aggregated prefix and suppress all contributing more-specifics to neighbors.",
+                    "title": "summary_only",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Summary Only"
+                }
+            }
+        },
         "bgpBFD": {
             "type": "object",
             "description": "BFD parameters.",
@@ -2246,7 +2299,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "multiplier": {
                     "type": "integer",
-                    "description": " Specify Number of missed packets to bring session down\"\n\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255\n",
+                    "description": " Specify Number of missed packets to bring session down\"\n\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 2\n  ves.io.schema.rules.uint32.lte: 255\n",
                     "title": "Multiplier",
                     "format": "int64",
                     "x-displayname": "Multiplier",
@@ -2254,13 +2307,13 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.gte": "2",
                         "ves.io.schema.rules.uint32.lte": "255"
                     }
                 },
                 "receive_interval_milliseconds": {
                     "type": "integer",
-                    "description": " BFD receive interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255000\n",
+                    "description": " BFD receive interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 300\n  ves.io.schema.rules.uint32.lte: 60000\n",
                     "title": "Receive Interval in milliseconds",
                     "format": "int64",
                     "x-displayname": "Minimum Receive Interval",
@@ -2268,13 +2321,13 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "1",
-                        "ves.io.schema.rules.uint32.lte": "255000"
+                        "ves.io.schema.rules.uint32.gte": "300",
+                        "ves.io.schema.rules.uint32.lte": "60000"
                     }
                 },
                 "transmit_interval_milliseconds": {
                     "type": "integer",
-                    "description": " BFD transmit interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255000\n",
+                    "description": " BFD transmit interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 300\n  ves.io.schema.rules.uint32.lte: 60000\n",
                     "title": "Transmit Interval in milliseconds",
                     "format": "int64",
                     "x-displayname": "Transmit Interval",
@@ -2282,9 +2335,46 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "1",
-                        "ves.io.schema.rules.uint32.lte": "255000"
+                        "ves.io.schema.rules.uint32.gte": "300",
+                        "ves.io.schema.rules.uint32.lte": "60000"
                     }
+                }
+            }
+        },
+        "bgpBfdPeerState": {
+            "type": "string",
+            "description": "Indicates the state of BFD session\n\nBFD session state is unknown\nBFD session is Down\nBFD session is Up\nBFD session is administratively down\nBFD session is initializing",
+            "title": "BFD Peer State",
+            "enum": [
+                "BFD_PEER_UNKNOWN",
+                "BFD_PEER_DOWN",
+                "BFD_PEER_UP",
+                "BFD_PEER_ADMIN_DOWN",
+                "BFD_PEER_INIT"
+            ],
+            "default": "BFD_PEER_UNKNOWN",
+            "x-displayname": "BFD Peer State",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BfdPeerState"
+        },
+        "bgpBfdPeerStatusType": {
+            "type": "object",
+            "description": "Status of BFD session for this BGP peer",
+            "title": "BFD Peer Status",
+            "x-displayname": "BFD Peer Status",
+            "x-ves-proto-message": "ves.io.schema.bgp.BfdPeerStatusType",
+            "properties": {
+                "state": {
+                    "description": " Current state of the BFD session",
+                    "title": "State",
+                    "$ref": "#/definitions/bgpBfdPeerState",
+                    "x-displayname": "State"
+                },
+                "state_change_timestamp": {
+                    "type": "string",
+                    "description": " Timestamp at which last BFD state change happened",
+                    "title": "State Change Timestamp",
+                    "format": "date-time",
+                    "x-displayname": "State Change Timestamp"
                 }
             }
         },
@@ -2365,6 +2455,12 @@ var APISwaggerJSON string = `{
                     "title": "Advertised Prefix Count",
                     "format": "int64",
                     "x-displayname": "Advertised Prefix Count"
+                },
+                "bfd_status": {
+                    "description": " Status of BFD session for this peer. Only present when BFD is enabled for the peer.",
+                    "title": "BFD Status",
+                    "$ref": "#/definitions/bgpBfdPeerStatusType",
+                    "x-displayname": "BFD Status"
                 },
                 "connection_flap_count": {
                     "type": "integer",
@@ -2716,7 +2812,7 @@ var APISwaggerJSON string = `{
                 "enable": {
                     "description": "Exclusive with [disable]\n Enable IPv4 family Route Exchange.",
                     "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/bgpUnicastIPv4",
                     "x-displayname": "Enable IPv4 Unicast"
                 }
             }
@@ -2738,7 +2834,7 @@ var APISwaggerJSON string = `{
                 "enable": {
                     "description": "Exclusive with [disable]\n Enable IPv6 family Route Exchange.",
                     "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/bgpUnicastIPv6",
                     "x-displayname": "Enable IPv6 Unicast"
                 }
             }
@@ -3542,6 +3638,48 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bgpUnicastIPv4": {
+            "type": "object",
+            "description": "IPv4 Unicast",
+            "title": "UnicastIPv4",
+            "x-displayname": "Unicast IPv4",
+            "x-ves-proto-message": "ves.io.schema.bgp.UnicastIPv4",
+            "properties": {
+                "aggregation": {
+                    "type": "array",
+                    "description": " BGP aggregation prefixes are shared among all peers, aggregation configured under any peer will take effect on all peers. Aggregation in BGP occurs only when more specific routes exist in the routing table and applies to outbound advertisements.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "aggregation",
+                    "items": {
+                        "$ref": "#/definitions/bgpAggregationIPv4"
+                    },
+                    "x-displayname": "Aggregation",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "bgpUnicastIPv6": {
+            "type": "object",
+            "description": "IPv6 Unicast",
+            "title": "UnicastIPv6",
+            "x-displayname": "Unicast IPv6",
+            "x-ves-proto-message": "ves.io.schema.bgp.UnicastIPv6",
+            "properties": {
+                "aggregation": {
+                    "type": "array",
+                    "description": " BGP aggregation prefixes are shared among all peers, aggregation configured under any peer will take effect on all peers. Aggregation in BGP occurs only when more specific routes exist in the routing table and applies to outbound advertisements.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "aggregation",
+                    "items": {
+                        "$ref": "#/definitions/bgpAggregationIPv6"
+                    },
+                    "x-displayname": "Aggregation",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "ioschemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
@@ -3630,10 +3768,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -4384,7 +4522,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_MANAGEMENT is used for management purposes",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -4399,7 +4537,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
                 "VIRTUAL_NETWORK_IP_FABRIC",
-                "VIRTUAL_NETWORK_SEGMENT"
+                "VIRTUAL_NETWORK_SEGMENT",
+                "VIRTUAL_NETWORK_MANAGEMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",

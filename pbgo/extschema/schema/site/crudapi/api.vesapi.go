@@ -56,7 +56,6 @@ func (r *ObjectCreateReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // EntryConverter
 func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 	r.FromObject(e)
@@ -76,15 +75,11 @@ func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
 
 // CLIENT side
-
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -93,7 +88,6 @@ func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r.FromObject(e)
 	return r, nil
 }
-
 func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 	r := &ObjectReplaceReq{}
 	if e == nil {
@@ -105,12 +99,10 @@ func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 		// See if uid can be got from Metadata.Uid
 		obj := e.(*object.DBObject)
 		uid = obj.GetMetadata().GetUid()
-
 	}
 	r.ObjectUid = uid
 	return r, nil
 }
-
 func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	ccOpts := server.NewCRUDCallOpts()
 	for _, o := range opts {
@@ -120,7 +112,6 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
-
 func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	r := &ObjectListReq{
 		TenantFilter:      cco.TenantFilter,
@@ -146,7 +137,6 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	}
 	return r, nil
 }
-
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
 	return &ObjectDeleteReq{ObjectUid: uid}
 }
@@ -158,7 +148,6 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -180,11 +169,9 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -202,9 +189,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -228,7 +213,6 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -236,11 +220,9 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -257,11 +239,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -271,11 +251,9 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -285,9 +263,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -312,7 +288,6 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -328,11 +303,9 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
-
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -346,7 +319,6 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -389,7 +361,6 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -457,11 +428,9 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
-
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -543,9 +512,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
-
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -597,7 +564,6 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -605,11 +571,9 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -627,11 +591,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -641,11 +603,9 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -655,9 +615,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.site.crudapi", ".")
@@ -748,7 +706,6 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -795,7 +752,6 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -824,7 +780,6 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
-
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -835,7 +790,6 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
-
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -846,7 +800,6 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
-
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -857,11 +810,9 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.crudapi.API.List")
 	return oah.List(ctx, req)
 }
-
 func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (API_ListStreamClient, error) {
 	return nil, fmt.Errorf("ListStream Not implemented")
 }
-
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -883,7 +834,6 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -904,11 +854,9 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -924,9 +872,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -947,7 +893,6 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -955,11 +900,9 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -977,11 +920,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -991,11 +932,9 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -1005,9 +944,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -1035,7 +972,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1047,7 +983,6 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -1077,7 +1012,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 	}
 	return nil
 }
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1098,7 +1032,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	obj := object.NewDBObject(nil)
 	req.ToObject(obj)
 	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-
 	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1110,7 +1043,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1141,9 +1073,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		return nil, status.Error(codes.ResourceExhausted, errors.Wrap(err, "Replace with NewObjectReplaceRsp").Error())
 	}
 	return rsp, nil
-
 }
-
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1168,7 +1098,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1180,7 +1109,6 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1193,17 +1121,16 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+		return nil, errors.Wrap(err, "List")
 	}
 	rsp, err := NewObjectListRsp(req, rsrcRsp.Items)
 	if err != nil {
-		merr = multierror.Append(merr, err)
+		return rsp, err
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
 	rsp.NextPage = rsrcRsp.NextPage
-	return rsp, merr
+	return rsp, nil
 }
-
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
 	var merr *multierror.Error
 	rsrcReq := &server.ResourceListRequest{
@@ -1215,6 +1142,7 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
 	if err != nil {
 		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+		return errors.ErrOrNil(merr)
 	}
 	streamSvr := &crudAPIListStreamServer{stream}
 	for item := range rsrcRsp.ItemsCh {
@@ -1225,7 +1153,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	}
 	return errors.ErrOrNil(merr)
 }
-
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1314,11 +1241,9 @@ func (r *ObjectGetReq) GetBackrefParam() (bool, []string) {
 func (r *ObjectDeleteReq) ToUid() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectCreateRsp) Key() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectGetRsp) GetBackrefs(ef db.NewEntryFunc) ([]db.Entry, error) {
 	brEnts := []db.Entry{}
 	bRefs := r.GetEntBackrefs()
@@ -1377,7 +1302,6 @@ func NewObjectCreateRsp(e db.Entry) (*ObjectCreateRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo := &ObjectReplaceRsp{}
 	switch e.(type) {
@@ -1391,7 +1315,6 @@ func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*ObjectGetRsp, error) {
 	rspo := &ObjectGetRsp{}
 	e := rsrcRsp.Entry
@@ -1435,7 +1358,6 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 	rspo.Status = statusObjs
 	return rspo, nil
 }
-
 func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*ObjectListRsp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("Nil ObjectListReq")
@@ -1461,7 +1383,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
 			continue
 		}
-
 		tenant := dbObj.GetSystemMetadata().GetTenant()
 		namespace := dbObj.GetMetadata().GetNamespace()
 		name := dbObj.GetMetadata().GetName()
@@ -1484,7 +1405,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 	}
 	return o, errs
 }
-
 func NewObjectDeleteRsp(ec ErrorCode) (*ObjectDeleteRsp, error) {
 	return &ObjectDeleteRsp{Err: ec}, nil
 }
@@ -3053,10 +2973,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -3608,7 +3528,7 @@ var APISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -3819,7 +3739,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_MANAGEMENT is used for management purposes",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -3834,7 +3754,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
                 "VIRTUAL_NETWORK_IP_FABRIC",
-                "VIRTUAL_NETWORK_SEGMENT"
+                "VIRTUAL_NETWORK_SEGMENT",
+                "VIRTUAL_NETWORK_MANAGEMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -3998,9 +3919,9 @@ var APISwaggerJSON string = `{
                 },
                 "inside_nameserver": {
                     "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " Optional IPv4 DNS server to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "inside_nameserver",
-                    "x-displayname": "DNS Server for Inside Network",
+                    "x-displayname": "IPv4 DNS Server for Inside Network",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -4008,9 +3929,9 @@ var APISwaggerJSON string = `{
                 },
                 "inside_nameserver_v6": {
                     "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Optional IPv6 DNS server to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "inside_nameserver_v6",
-                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "x-displayname": "IPv6 DNS Server for Inside Network",
                     "x-ves-example": "1001::1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6": "true"
@@ -4140,9 +4061,9 @@ var APISwaggerJSON string = `{
                 },
                 "outside_nameserver": {
                     "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " Optional IPv4 DNS server to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "outside_nameserver",
-                    "x-displayname": "DNS Server for Outside Network",
+                    "x-displayname": "IPv4 DNS Server for Outside Network",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -4150,9 +4071,9 @@ var APISwaggerJSON string = `{
                 },
                 "outside_nameserver_v6": {
                     "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Optional IPv6 DNS server to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "outside_nameserver_v6",
-                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "x-displayname": "IPv6 DNS Server for Outside Network",
                     "x-ves-example": "1001::1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6": "true"
@@ -4231,6 +4152,11 @@ var APISwaggerJSON string = `{
                     "title": "region",
                     "x-displayname": "Region",
                     "x-ves-example": "east-us-2"
+                },
+                "secondary_dns_server_ip": {
+                    "title": "Secondary Dns Server IP Address",
+                    "$ref": "#/definitions/siteSecondaryDnsServerIpAddress",
+                    "x-displayname": "Secondary DNS Server Information"
                 },
                 "site_state": {
                     "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
@@ -4370,6 +4296,467 @@ var APISwaggerJSON string = `{
                     "title": "vpm",
                     "$ref": "#/definitions/schemaServiceParameters",
                     "x-displayname": "Vpm Parameters"
+                }
+            }
+        },
+        "siteAWSElasticIPAllocationStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Elastic IP Allocation\"\nAWS Elastic IP Allocation",
+            "title": "AWS Elastic IP",
+            "properties": {
+                "allocation_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Allocation ID\"\nAllocation ID",
+                    "title": "Allocation ID"
+                },
+                "association_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Association ID\"\nAssociation ID",
+                    "title": "Association ID"
+                },
+                "private_address": {
+                    "type": "string",
+                    "description": "x-displayName: \"Private IP address\"\nPrivate IP address",
+                    "title": "Private IP address"
+                },
+                "public_address": {
+                    "type": "string",
+                    "description": "x-displayName: \"Allocated IPv4 address\"\nAllocated IPv4 address",
+                    "title": "Allocated IPv4 address"
+                },
+                "state": {
+                    "description": "x-displayName: \"Elastic IP State\"\nElastic IP State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                }
+            }
+        },
+        "siteAWSInstanceStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Instance Status Type\"\nAWS Instance Status Type",
+            "title": "AWS Instance Status Type",
+            "properties": {
+                "ami_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"AMI ID\"\nAMI ID",
+                    "title": "AMI ID"
+                },
+                "host_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"HostName\"\nHostname",
+                    "title": "HostName"
+                },
+                "instance_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Instance ID\"\nInstance ID",
+                    "title": "Instance ID"
+                },
+                "instance_type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Instance Type\"\nInstance Type",
+                    "title": "Instance Type"
+                },
+                "interface_status": {
+                    "type": "array",
+                    "description": "x-displayName: \"Network Interface Status\"\nNetwork Interface Status",
+                    "title": "Network Interface Status",
+                    "items": {
+                        "$ref": "#/definitions/siteAWSNetworkInterfaceStatusType"
+                    }
+                },
+                "state": {
+                    "description": "x-displayName: \"EC2 Instance State\"\nEC2 Instance State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "volume_status": {
+                    "description": "x-displayName: \"Instance Volume\"\nInstance Volume",
+                    "title": "Instance Volume",
+                    "$ref": "#/definitions/siteAWSVolumeStatusType"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                }
+            }
+        },
+        "siteAWSNetworkInterfaceStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Network Interface Status\"\nAWS Network Interface Status Type",
+            "title": "AWS Network Interface Status Type",
+            "properties": {
+                "attachment_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Attachment ID\"\nAttachment ID",
+                    "title": "Attachment ID"
+                },
+                "availablity_zone": {
+                    "type": "string",
+                    "description": "x-displayName: \"Availablity Zone\"\nAvailablity Zone",
+                    "title": "Availablity Zone"
+                },
+                "elastic_ip_status": {
+                    "description": "Elastic IP Status",
+                    "title": "Elastic IP Status\nx-displayName: \"Elastic IP Status\"",
+                    "$ref": "#/definitions/siteAWSElasticIPAllocationStatusType"
+                },
+                "interface_type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Interface type\"",
+                    "title": "Interface type"
+                },
+                "network_interface_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Network Interface ID\"\nNetwork Interface ID",
+                    "title": "Network Interface ID"
+                },
+                "network_type": {
+                    "description": "x-displayName: \"NetworkType\"\nNetwork Type",
+                    "title": "Network Type",
+                    "$ref": "#/definitions/siteNetworkType"
+                },
+                "private_ip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Private IP\"\nPrivate IP",
+                    "title": "Private IP"
+                },
+                "security_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"Security Group\"\nSecurity Group",
+                    "title": "Security Group"
+                },
+                "state": {
+                    "description": "x-displayName: \"Network Interface State\"\nNetwork Interface State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "subnet_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Subnet ID\"\nSubnet ID",
+                    "title": "Subnet ID"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                }
+            }
+        },
+        "siteAWSOrchestrationStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Site Orchestration Status Type\"\nAWS Managed Sites Orchestration Status",
+            "title": "AWS Site Orchestration Status Type",
+            "properties": {
+                "instance_status": {
+                    "type": "array",
+                    "description": "x-displayName: \"AWS Instance Status\"\nAWS Instance Status",
+                    "title": "Instance Status",
+                    "items": {
+                        "$ref": "#/definitions/siteAWSInstanceStatusType"
+                    }
+                },
+                "site_vpc_status": {
+                    "description": "x-displayName: \"Site VPC Status\"\nAWS Site VPC Status",
+                    "title": "AWS Site VPC Status",
+                    "$ref": "#/definitions/siteAWSSiteVPCStatusType"
+                },
+                "subnet_status": {
+                    "type": "array",
+                    "description": "x-displayName: \"Subnet Status\"\nAWS Subnet Status",
+                    "title": "Subnet Status",
+                    "items": {
+                        "$ref": "#/definitions/siteAWSSubnetStatusType"
+                    }
+                },
+                "transit_gateway_status": {
+                    "description": "x-displayName: \"Transit Gateway Status\"\nTransit Gateway Status",
+                    "title": "Transit Gateway Status",
+                    "$ref": "#/definitions/siteAWSTransitGatewayStatus"
+                }
+            }
+        },
+        "siteAWSRouteTableStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Route Table ID\"\nAWS route table ID",
+            "title": "AWS Route Table ID",
+            "properties": {
+                "route_table_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Route Table ID\"\nRoute Table ID",
+                    "title": "Route Table ID"
+                },
+                "state": {
+                    "description": "x-displayName: \"Route Table State\"",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "subnet_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Subnet ID\"\nSubnet ID",
+                    "title": "Subnet ID"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                }
+            }
+        },
+        "siteAWSSiteVPCStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"Site VPC Status\"\nAWS Site VPC Status",
+            "title": "AWS Site VPC Status",
+            "properties": {
+                "state": {
+                    "description": "x-displayName: \"Site VPC Deployment State\"",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "vpc_cidr": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC CIDR\"\nVPC CIDR",
+                    "title": "VPC CIDR"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                },
+                "vpc_owner_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC Owner ID\"\nVPC Owner ID",
+                    "title": "VPC Owner ID"
+                }
+            }
+        },
+        "siteAWSSubnetStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Subnet Status Type\"\nAWS Subnet Status Type",
+            "title": "AWS Subnet Status Type",
+            "properties": {
+                "availablity_zone": {
+                    "type": "string",
+                    "description": "x-displayName: \"Availablity Zone\"\nAvailablity Zone",
+                    "title": "Availablity Zone"
+                },
+                "cidr": {
+                    "type": "string",
+                    "description": "x-displayName: \"Subnet CIDR\"\nSubnet CIDR",
+                    "title": "CIDR"
+                },
+                "route_table": {
+                    "description": "x-displayName: \"Route Table\"\nRoute Table",
+                    "title": "Route Table",
+                    "$ref": "#/definitions/siteAWSRouteTableStatusType"
+                },
+                "state": {
+                    "description": "x-displayName: \"Subnet State\"",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "subnet_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Subnet ID\"\nSubnet ID",
+                    "title": "Subnet ID"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
+                    "title": "VPC ID"
+                }
+            }
+        },
+        "siteAWSTransitGatewayAttachmentResourceType": {
+            "type": "string",
+            "description": "x-displayName: \"AWS Transit Gateway Attachment Resource Type\"\nAWS Transit Gateway Attachment Resource Type\n\n - VPC: VPC Resource Type\n - VPN: VPN Resource Type\n - DIRECT_CONNECT_GATEWAY: Direct Connect Gateway Resource Type\n - CONNECT: Connect Resource Type\n - PEERING: Peering Resource Type\n - TGW_PEERING: TGW Peering Resource Type\n - NETWORK_FUNCTION: Network Function Resource Type",
+            "title": "AWS Transit Gateway Attachment Resource Type",
+            "enum": [
+                "VPC",
+                "VPN",
+                "DIRECT_CONNECT_GATEWAY",
+                "CONNECT",
+                "PEERING",
+                "TGW_PEERING",
+                "NETWORK_FUNCTION"
+            ],
+            "default": "VPC"
+        },
+        "siteAWSTransitGatewayAttachmentStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Transit Gateway Attachment Status Type\"\nAWS Transit Gateway Attachment Status Type",
+            "title": "AWS Transit Gateway Attachment Status Type",
+            "properties": {
+                "resource_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Attachment Resource ID\"",
+                    "title": "Attachment Resource ID"
+                },
+                "resource_owner_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Resource Owner ID\"\nResource Owner ID",
+                    "title": "Resource Owner ID"
+                },
+                "resource_type": {
+                    "description": "x-displayName: \"Resource Type\"\nResource Type",
+                    "title": "Resource Type",
+                    "$ref": "#/definitions/siteAWSTransitGatewayAttachmentResourceType"
+                },
+                "state": {
+                    "description": "x-displayName: \"Attachment State\"\nAttachment State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "tgw_attachment_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"TGW Attachment ID\"\nTGW Attachment ID",
+                    "title": "TGW Attachment ID"
+                }
+            }
+        },
+        "siteAWSTransitGatewayStatus": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Transit Gateway Status\"\nAWS Transit Gateway Status",
+            "title": "AWS Transit Gateway Status",
+            "properties": {
+                "amazon_asn": {
+                    "type": "string",
+                    "description": "x-displayName: \"Amazon ASN\"\nAmazon ASN",
+                    "title": "Amazon ASN",
+                    "format": "uint64"
+                },
+                "cidr_blocks": {
+                    "type": "array",
+                    "description": "x-displayName: \"Transit gateway CIDR blocks\"\nTransit gateway CIDR blocks",
+                    "title": "Transit gateway CIDR blocks",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "owner_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Owner ID\"\nOwner ID",
+                    "title": "Owner ID"
+                },
+                "site_vpc_attachment_state": {
+                    "description": "x-displayName: \"Site VPC Attachment State\"\nSite VPC Attachment State",
+                    "title": "Site VPC Attachment State",
+                    "$ref": "#/definitions/siteAWSTransitGatewayAttachmentStatusType"
+                },
+                "state": {
+                    "description": "x-displayName: \"Transit Gateway State\"\nNetwork Interface State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "transit_gateway_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Transit Gateway ID\"\nTransit Gateway ID",
+                    "title": "Transit Gateway ID"
+                }
+            }
+        },
+        "siteAWSVolumeEncryptionStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Volume Encryption Status Type\"\nAWS Volume Encryption Status Type",
+            "title": "AWS Volume Encryption Status Type",
+            "properties": {
+                "encrypted_enabled": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Volume Encryption Status\"\nVolume Encryption Status",
+                    "title": "Volume Encryption Status",
+                    "format": "boolean"
+                },
+                "kms_key_arn": {
+                    "type": "string",
+                    "description": "x-displayName: \"KMS Key ARN\"\nKMS Key Arn",
+                    "title": "KMS Key arn"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                }
+            }
+        },
+        "siteAWSVolumeStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"AWS Elastic Block Storage\"\nAWS Elastic Block Storage",
+            "title": "AWS Elastic Block Storage",
+            "properties": {
+                "availability_zone": {
+                    "type": "string",
+                    "description": "x-displayName: \"Availablity Zone\"\nAvailablity Zone",
+                    "title": "Availablity Zone"
+                },
+                "disk_size": {
+                    "type": "string",
+                    "description": "x-displayName: \"Disk Size\"\nDisk Size",
+                    "title": "Disk Size"
+                },
+                "encryption": {
+                    "description": "x-displayName: \"Volume Encryption\"\nVolume Encryption",
+                    "title": "Volume Encyption",
+                    "$ref": "#/definitions/siteAWSVolumeEncryptionStatusType"
+                },
+                "state": {
+                    "description": "x-displayName: \"Volume State\"\nVolume State",
+                    "title": "State",
+                    "$ref": "#/definitions/siteCloudResourceState"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": "x-displayName: \"Tags\"\nTags",
+                    "title": "Tags"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Volume Type\"\nVolume Type",
+                    "title": "Volume Type"
+                },
+                "volumeID": {
+                    "type": "string",
+                    "description": "x-displayName: \"Volume ID\"\nVolume ID",
+                    "title": "Volume ID"
                 }
             }
         },
@@ -4728,6 +5115,23 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "siteCloudResourceState": {
+            "type": "string",
+            "description": "x-displayName: \"Cloud Resource Deployment State\"\nCloud Resource Deployment State\n\n - RESOURCE_STATE_NONE: None\n\nx-displayName: \"None\"\nNone\n - RESOURCE_DEPLOYMENT_IN_PROGRESS: In Progress\n\nx-displayName: \"In Progress\"\nResource deployment is in flight.\n - RESOURCE_IS_AVAILABLE: Available\n\nx-displayName: \"Available\"\nResource is deployed and is in available state.\n - RESOURCE_DEPLOYMENT_HAS_FAILED: Failed\n\nx-displayName: \"Failed\"\nResource deployment has failed.\n - RESOURCE_IS_DELETING: Deleting\n\nx-displayName: \"Deleting\"\nResource being deleted\n - RESOURCE_IS_DELETED: Deleted\n\nx-displayName: \"Deleted\"\nResource is deleted\n - RESOURCE_DELETION_FAILED: Resource Failed to Delete\n\nx-displayName: \"Failed to Delete\"\nFailed to Delete\n - INVALID_RESOURCE: INVALID\n\nx-displayName: \"INVALID\"\nResource is invalid and does not exists on the cloud\n - VALID_RESOURCE: VALID\n\nx-displayName: \"VALID\"\nResource is valid and found on the cloud",
+            "title": "Cloud Resource Deployment State",
+            "enum": [
+                "RESOURCE_STATE_NONE",
+                "RESOURCE_DEPLOYMENT_IN_PROGRESS",
+                "RESOURCE_IS_AVAILABLE",
+                "RESOURCE_DEPLOYMENT_HAS_FAILED",
+                "RESOURCE_IS_DELETING",
+                "RESOURCE_IS_DELETED",
+                "RESOURCE_DELETION_FAILED",
+                "INVALID_RESOURCE",
+                "VALID_RESOURCE"
+            ],
+            "default": "RESOURCE_STATE_NONE"
         },
         "siteCoordinates": {
             "type": "object",
@@ -5459,6 +5863,17 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteNetworkType": {
+            "type": "string",
+            "description": "x-displayName \"Network Type\"\nNetwork Type\n\n - SLO: x-displayName \"SLO\"\nSLO Network\n - SLI: x-displayName \"SLI\"\nSLI Network Type\n - SEGMENT: x-displayName \"Segment\"\nSegment Network Type",
+            "title": "Network Type",
+            "enum": [
+                "SLO",
+                "SLI",
+                "SEGMENT"
+            ],
+            "default": "SLO"
+        },
         "siteNode": {
             "type": "object",
             "description": "Node Information for connectivity across sites.",
@@ -5613,6 +6028,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                }
+            }
+        },
+        "siteOrchestrationStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"Site Orchestration Status Type\"\nManaged Sites Orchestration Status",
+            "title": "Site Orchestration Status Type",
+            "properties": {
+                "aws_orchestration_status": {
+                    "description": "x-displayName: \"AWS Site orchestration status\"\nAWS Site orchestration status",
+                    "title": "AWS Site orchestration status",
+                    "$ref": "#/definitions/siteAWSOrchestrationStatusType"
                 }
             }
         },
@@ -5974,6 +6401,54 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteSecondaryDnsServerIpAddress": {
+            "type": "object",
+            "title": "Secondary DNS Server (IPv4/IPv6) Address",
+            "x-displayname": "Secondary DNS Server (IPv4/IPv6) Information",
+            "x-ves-proto-message": "ves.io.schema.site.SecondaryDnsServerIpAddress",
+            "properties": {
+                "secondary_inside_nameserver_v4": {
+                    "type": "string",
+                    "description": " Optional Secondary IPv4 DNS server to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "secondary_inside_nameserver_v4",
+                    "x-displayname": "Secondary IPv4 DNS Server for Inside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "secondary_inside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional Secondary IPv6 DNS server to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "secondary_inside_nameserver_v6",
+                    "x-displayname": "Secondary IPv6 DNS Server for Inside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "secondary_outside_nameserver_v4": {
+                    "type": "string",
+                    "description": " Optional Secondary IPv4 DNS server to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "secondary_outside_nameserver_v4",
+                    "x-displayname": "Secondary IPv4 DNS Server for Outside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "secondary_outside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional Secondary IPv6 DNS server to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "secondary_outside_nameserver_v6",
+                    "x-displayname": "Secondary IPv6 DNS Server for Outside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
         "siteSiteReachabilityStatus": {
             "type": "object",
             "description": "F5XC domain reachability in the site",
@@ -6017,7 +6492,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteState": {
             "type": "string",
-            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.\nSite is in failed state for prolong period of time. Site Status Objects contain more details.\nSite resources are waiting to be updated. Check Status objects for more details\nAn Error occurred while updating cloud resources for F5XC managed site. Check Status objects for more details.\nSite resources orchestration is queued for F5XC managed site. Check Status objects for more details\nSite resources update is queued for F5XC managed site. Check Status objects for more details\nSite resources delete is queued for F5XC managed site. Check Status objects for more details",
             "title": "SiteState",
             "enum": [
                 "ONLINE",
@@ -6037,11 +6512,35 @@ var APISwaggerJSON string = `{
                 "ERROR_DELETING_CLOUD_RESOURCES",
                 "VALIDATION_IN_PROGRESS",
                 "VALIDATION_SUCCESS",
-                "VALIDATION_FAILED"
+                "VALIDATION_FAILED",
+                "FAILED_INACTIVE",
+                "UPDATING_CLOUD_RESOURCES",
+                "ERROR_UPDATING_CLOUD_RESOURCES",
+                "ORCHESTRATION_QUEUED",
+                "UPDATE_QUEUED",
+                "DELETE_QUEUED"
             ],
             "default": "ONLINE",
             "x-displayname": "Site State",
             "x-ves-proto-enum": "ves.io.schema.site.SiteState"
+        },
+        "siteSiteStateStatus": {
+            "type": "object",
+            "description": "x-displayName: \"Site State Status\"\nCurrent site state status",
+            "title": "Site State Status",
+            "properties": {
+                "site_state": {
+                    "description": "x-displayName: \"Site State\"\nSite state defines its state machine and in which operational phase it is\nTODO: WIP. Not fully in use yet. To migrate usage of site state from schema.Site object to SiteStateStatus",
+                    "title": "site_state",
+                    "$ref": "#/definitions/siteSiteState"
+                },
+                "site_state_update_timestamp": {
+                    "type": "string",
+                    "description": "x-displayName: \"Site state update timestamp\"\nTimestamp of site state last change",
+                    "title": "Timestamp for site state last change",
+                    "format": "date-time"
+                }
+            }
         },
         "siteSiteSubtype": {
             "type": "string",
@@ -6810,13 +7309,23 @@ var APISwaggerJSON string = `{
             "properties": {
                 "nameserver": {
                     "type": "string",
-                    "description": "x-displayName: \"DNS Server\"\nx-example: \"1.1.1.1\"\nOptional DNS server IP to be used for name resolution",
+                    "description": "x-displayName: \"IPv4 DNS Server\"\nx-example: \"1.1.1.1\"\nOptional IPv4 DNS server to be used for name resolution",
                     "title": "nameserver"
                 },
                 "nameserver_v6": {
                     "type": "string",
-                    "description": "x-displayName: \"DNS V6 Server\"\nx-example: \"1001::1\"\nOptional DNS V6 server IP to be used for name resolution",
+                    "description": "x-displayName: \"IPv6 DNS Server\"\nx-example: \"1001::1\"\nOptional IPv6 DNS server to be used for name resolution",
                     "title": "nameserver_v6"
+                },
+                "secondary_nameserver": {
+                    "type": "string",
+                    "description": "x-displayName: \"Secondary IPv4 DNS Server\"\nx-example: \"1.1.1.1\"\nOptional Secondary IPv4 DNS server to be used for name resolution",
+                    "title": "secondary_nameserver"
+                },
+                "secondary_nameserver_v6": {
+                    "type": "string",
+                    "description": "x-displayName: \"Secondary IPv6 DNS Server\"\nx-example: \"1001::1\"\nOptional Secondary IPv6 DNS server to be used for name resolution",
+                    "title": "secondary_nameserver_v6"
                 },
                 "virtual_network": {
                     "type": "array",
@@ -7174,7 +7683,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5 Orchestrated Routing"
                 },
                 "manual_routing": {
-                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments.",
                     "title": "Manual Routing",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Manual Routing"
@@ -7494,6 +8003,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsSiteError": {
+            "type": "object",
+            "description": "x-displayName: \"Site Error\"\nSite Error",
+            "title": "Site Error",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": "x-example: \"invalid VPC ID\"\nx-displayName: \"Error Description\"\nError Description",
+                    "title": "Error Description"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": "x-example: \"update VPC ID\"\nx-displayName: \"Suggested Action\"\nSuggested Action",
+                    "title": "Suggested Action"
+                }
+            }
+        },
         "viewsSpecificRE": {
             "type": "object",
             "description": "Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs.",
@@ -7501,6 +8027,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specific RE",
             "x-ves-proto-message": "ves.io.schema.views.SpecificRE",
             "properties": {
+                "backup_re": {
+                    "type": "string",
+                    "description": " Select backup RE for this site, cannot be the same as Primary RE.",
+                    "title": "Backup RE Geography",
+                    "x-displayname": "Backup RE Geography"
+                },
                 "primary_re": {
                     "type": "string",
                     "description": " Select primary RE for this site.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",

@@ -66,7 +66,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) AddonServicesSubscribedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -106,9 +105,7 @@ func (v *ValidateGlobalSpecType) AddonServicesSubscribedValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OriginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.SignupOrigin)
@@ -136,58 +133,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["addon_services_subscribed"]; exists {
 		vOpts := append(opts, db.WithValidateField("addon_services_subscribed"))
 		if err := fv(ctx, m.GetAddonServicesSubscribed(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["crm_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("crm_info"))
 		if err := fv(ctx, m.GetCrmInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin"))
 		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plan_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plan_type"))
 		if err := fv(ctx, m.GetPlanType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_type"))
 		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -217,7 +198,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin"] = vFn
-
 	v.FldValidators["crm_info"] = ves_io_schema.CRMInfoValidator().Validate
 
 	return v

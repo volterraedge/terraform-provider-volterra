@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCustomReplace(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.CustomReplace(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetContent(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetContentRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCGetContent(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.GetContent(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetEndpointPoliciesAndVersionsList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetPoliciesAndVersionsListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,13 +58,20 @@ func (c *CustomAPIGrpcClient) doRPCGetEndpointPoliciesAndVersionsList(ctx contex
 	rsp, err := c.grpcClient.GetEndpointPoliciesAndVersionsList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetEndpointPolicyVersions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PolicyVersionsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.PolicyVersionsRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetEndpointPolicyVersions(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCGetMobileBaseConfigFile(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetMobileBaseConfigFileRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetMobileBaseConfigFileRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetMobileBaseConfigFile(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -101,15 +106,11 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
-
 	rpcFns["GetContent"] = ccl.doRPCGetContent
-
 	rpcFns["GetEndpointPoliciesAndVersionsList"] = ccl.doRPCGetEndpointPoliciesAndVersionsList
-
 	rpcFns["GetEndpointPolicyVersions"] = ccl.doRPCGetEndpointPolicyVersions
-
+	rpcFns["GetMobileBaseConfigFile"] = ccl.doRPCGetMobileBaseConfigFile
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -197,7 +198,6 @@ func (c *CustomAPIRestClient) doRPCCustomReplace(ctx context.Context, callOpts *
 	pbRsp := &CustomReplaceResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomReplaceResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -205,7 +205,6 @@ func (c *CustomAPIRestClient) doRPCCustomReplace(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetContent(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -282,7 +281,6 @@ func (c *CustomAPIRestClient) doRPCGetContent(ctx context.Context, callOpts *ser
 	pbRsp := &GetContentResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetContentResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -290,7 +288,6 @@ func (c *CustomAPIRestClient) doRPCGetContent(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetEndpointPoliciesAndVersionsList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -330,6 +327,7 @@ func (c *CustomAPIRestClient) doRPCGetEndpointPoliciesAndVersionsList(ctx contex
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("deployment_mode", fmt.Sprintf("%v", req.DeploymentMode))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -365,7 +363,6 @@ func (c *CustomAPIRestClient) doRPCGetEndpointPoliciesAndVersionsList(ctx contex
 	pbRsp := &GetPoliciesAndVersionsListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetPoliciesAndVersionsListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -373,7 +370,6 @@ func (c *CustomAPIRestClient) doRPCGetEndpointPoliciesAndVersionsList(ctx contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetEndpointPolicyVersions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -449,7 +445,90 @@ func (c *CustomAPIRestClient) doRPCGetEndpointPolicyVersions(ctx context.Context
 	pbRsp := &PolicyVersionsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.PolicyVersionsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCGetMobileBaseConfigFile(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
+	yamlReq := callOpts.YAMLReq
+	req := &GetMobileBaseConfigFileRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetMobileBaseConfigFileRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("number", fmt.Sprintf("%v", req.Number))
+		q.Add("os", fmt.Sprintf("%v", req.Os))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetMobileBaseConfigFileResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetMobileBaseConfigFileResponse", body)
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -483,15 +562,11 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
-
 	rpcFns["GetContent"] = ccl.doRPCGetContent
-
 	rpcFns["GetEndpointPoliciesAndVersionsList"] = ccl.doRPCGetEndpointPoliciesAndVersionsList
-
 	rpcFns["GetEndpointPolicyVersions"] = ccl.doRPCGetEndpointPolicyVersions
-
+	rpcFns["GetMobileBaseConfigFile"] = ccl.doRPCGetMobileBaseConfigFile
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -517,6 +592,10 @@ func (c *customAPIInprocClient) GetEndpointPoliciesAndVersionsList(ctx context.C
 func (c *customAPIInprocClient) GetEndpointPolicyVersions(ctx context.Context, in *PolicyVersionsRequest, opts ...grpc.CallOption) (*PolicyVersionsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetEndpointPolicyVersions")
 	return c.CustomAPIServer.GetEndpointPolicyVersions(ctx, in)
+}
+func (c *customAPIInprocClient) GetMobileBaseConfigFile(ctx context.Context, in *GetMobileBaseConfigFileRequest, opts ...grpc.CallOption) (*GetMobileBaseConfigFileResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetMobileBaseConfigFile")
+	return c.CustomAPIServer.GetMobileBaseConfigFile(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -584,7 +663,6 @@ func (s *customAPISrv) CustomReplace(ctx context.Context, in *CustomReplaceReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomReplaceResponse", rsp)...)
 
 	return rsp, nil
@@ -633,7 +711,6 @@ func (s *customAPISrv) GetContent(ctx context.Context, in *GetContentRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetContentResponse", rsp)...)
 
 	return rsp, nil
@@ -682,7 +759,6 @@ func (s *customAPISrv) GetEndpointPoliciesAndVersionsList(ctx context.Context, i
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetPoliciesAndVersionsListResponse", rsp)...)
 
 	return rsp, nil
@@ -731,8 +807,55 @@ func (s *customAPISrv) GetEndpointPolicyVersions(ctx context.Context, in *Policy
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.PolicyVersionsResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetMobileBaseConfigFile(ctx context.Context, in *GetMobileBaseConfigFileRequest) (*GetMobileBaseConfigFileResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetMobileBaseConfigFileResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetMobileBaseConfigFileRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetMobileBaseConfigFile' operation on 'bot_endpoint_policy'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetMobileBaseConfigFile"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetMobileBaseConfigFile(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetMobileBaseConfigFileResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -829,6 +952,19 @@ var CustomAPISwaggerJSON string = `{
                         "required": true,
                         "type": "string",
                         "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "deployment_mode",
+                        "description": "x-example: \"Reverse Proxy\"\nDeployment mode is used to scope the query\n\nBy default, the mode will be Reverse Proxy\nYou need to submit an XC support ticket to request for API mode",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "REVERSE_PROXY",
+                            "API_MODE"
+                        ],
+                        "default": "REVERSE_PROXY",
+                        "x-displayname": "API"
                     }
                 ],
                 "tags": [
@@ -1035,6 +1171,119 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/bot_endpoint_policy/{name}/versions/{number}/mobile_base_config/{os}": {
+            "get": {
+                "summary": "Get Mobile Base Configuration File",
+                "description": "Get base config file for a mobile policy",
+                "operationId": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetMobileBaseConfigFile",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/bot_endpoint_policyGetMobileBaseConfigFileResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"\nNamespace is used to scope the query",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"mobile-policy\"\nName of the policy",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "number",
+                        "description": "Number\n\nx-example: \"v1\"\nVersion of the policy",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Version number"
+                    },
+                    {
+                        "name": "os",
+                        "description": "OS\n\nx-example: \"android\"\nOS of the mobile platform",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "MOBILE_OS_UNDEFINED",
+                            "ANDROID",
+                            "IOS"
+                        ],
+                        "x-displayname": "OS"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-bot_defense-bot_endpoint_policy-customapi-getmobilebaseconfigfile"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetMobileBaseConfigFile"
+            },
+            "x-displayname": "Bot Endpoint Policy",
+            "x-ves-proto-service": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/bot_endpoint_policys/{name}/versions/{number}": {
             "get": {
                 "summary": "Get Content",
@@ -1218,7 +1467,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "bot_defenseComparisonOperator": {
             "type": "string",
-            "description": "Select from one of the Comparison Operator.\n\n - EXACT: exact value\n\n - CONTAIN: contain value\n\n - START_WITH: start with value \n\n - END_WITH: end with value \n",
+            "description": "Select from one of the Comparison Operator.\n\n - EXACT: exact value\n\n - CONTAIN: contain value\n\n - START_WITH: start with value\n\n - END_WITH: end with value\n",
             "title": "Domain Comparison Operator",
             "enum": [
                 "EXACT",
@@ -1369,6 +1618,16 @@ var CustomAPISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "bot_defenseDeploymentMode": {
+            "type": "string",
+            "description": "x-displayName: \"Deployment Mode\"\nDeployment Mode\n\n - REVERSE_PROXY: x-displayName: \"Reverse Proxy\"\nBy default, the mode will be Reverse Proxy\n - API_MODE: x-displayName: \"API\"\nYou need to submit an XC support ticket to request for API mode",
+            "title": "DeploymentMode",
+            "enum": [
+                "REVERSE_PROXY",
+                "API_MODE"
+            ],
+            "default": "REVERSE_PROXY"
         },
         "bot_defenseDomainMatcher": {
             "type": "object",
@@ -1542,6 +1801,43 @@ var CustomAPISwaggerJSON string = `{
             "title": "Header Operator Empty Type",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.HeaderOperatorEmptyType"
+        },
+        "bot_defenseKnownBotAllowDenyActionType": {
+            "type": "object",
+            "title": "KnownBotAllowDenyActionType",
+            "x-displayname": "Known Bot Allow And/Or Deny Action Type",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.KnownBotAllowDenyActionType",
+            "properties": {
+                "allow_list": {
+                    "type": "array",
+                    "description": " Select Known Bots to allow to proceed to the origin.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Allow List",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Allow Known Bots",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "deny_list": {
+                    "type": "array",
+                    "description": " Deny list actions will only take effect when the Mitigation Action above is set (e.g., block, redirect, transform). If mitigation action above is set to Continue, Known bots will be flagged.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Deny List",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Deny Known Bots",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "text_block": {
+                    "type": "string",
+                    "title": "All others text_block",
+                    "x-displayname": "All others (not in Allow or Deny)"
+                }
+            }
         },
         "bot_defenseMatcherType": {
             "type": "object",
@@ -1801,10 +2097,17 @@ var CustomAPISwaggerJSON string = `{
             "description": "Protected Application Endpoint.",
             "title": "ProtectedMobileEndpoint",
             "x-displayname": "Protected Mobile Endpoints",
-            "x-ves-displayorder": "1,16,3,4,5,19,21,22,23,8,9",
+            "x-ves-displayorder": "1,16,3,4,5,19,21,22,23,8,30,9",
+            "x-ves-oneof-field-known_bot_controls_action_type": "[\"allow_deny\",\"regular_request\"]",
             "x-ves-oneof-field-mobile_client_action_type": "[\"block\",\"continue\",\"transform\"]",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.ProtectedMobileEndpoint",
             "properties": {
+                "allow_deny": {
+                    "description": "Exclusive with [regular_request]\n Define known bots to allow to the origin or to explicitly deny, regardless of bot detection rules that may be set (e.g., rate limiting) for request that contain valid telemetry .",
+                    "title": "Allow and/or Deny Specific Known Bots",
+                    "$ref": "#/definitions/bot_defenseKnownBotAllowDenyActionType",
+                    "x-displayname": "Allow and/or Deny Specific Known Bots "
+                },
                 "block": {
                     "description": "Exclusive with [continue transform]\n Responsewith custom block message",
                     "title": "Block",
@@ -1882,6 +2185,12 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/bot_defenseQueryOperator",
                     "x-displayname": "Query"
                 },
+                "regular_request": {
+                    "description": "Exclusive with [allow_deny]\n Known bots will be processed defined in the mitigation action above. If known bots that have valid telemetry, they will be allowed to the origin.",
+                    "title": "Regular requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Treat Known Bots as Regular Requests"
+                },
                 "request_body": {
                     "description": " request body matcher",
                     "title": "Request Body",
@@ -1943,10 +2252,17 @@ var CustomAPISwaggerJSON string = `{
             "description": "Protected Application Endpoint.",
             "title": "ProtectedWebEndpoint",
             "x-displayname": "Protected Web Endpoints",
-            "x-ves-displayorder": "1,18,3,4,5,19,20,22,23,8,9",
+            "x-ves-displayorder": "1,18,3,4,5,19,20,22,23,8,30,9",
+            "x-ves-oneof-field-known_bot_controls_action_type": "[\"allow_deny\",\"regular_request\"]",
             "x-ves-oneof-field-web_client_action_type": "[\"block\",\"continue\",\"redirect\",\"transform\"]",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.ProtectedWebEndpoint",
             "properties": {
+                "allow_deny": {
+                    "description": "Exclusive with [regular_request]\n Define known bots to allow to the origin or to explicitly deny, regardless of bot detection rules that may be set (e.g., rate limiting) for request that contain valid telemetry .",
+                    "title": "Allow and/or Deny Specific Known Bots",
+                    "$ref": "#/definitions/bot_defenseKnownBotAllowDenyActionType",
+                    "x-displayname": "Allow and/or Deny Specific Known Bots "
+                },
                 "block": {
                     "description": "Exclusive with [continue redirect transform]\n Responsewith custom block message",
                     "title": "Block",
@@ -2025,6 +2341,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Redirect",
                     "$ref": "#/definitions/bot_defenseWebClientRedirectMitigationActionType",
                     "x-displayname": "Redirect"
+                },
+                "regular_request": {
+                    "description": "Exclusive with [allow_deny]\n Known bots will be processed defined in the mitigation action above. If known bots that have valid telemetry, they will be allowed to the origin.",
+                    "title": "Regular requests",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Treat Known Bots as Regular Requests"
                 },
                 "request_body": {
                     "description": " request body matcher",
@@ -2410,7 +2732,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "bot_defenseResponseCodeOperator": {
             "type": "string",
-            "description": "\n - CODE_EQUALS: EQUALS value\n\n - CODE_NOT_EQUAL_TO: NOT_EQUAL_TO value\n\n - CODE_LESS_THAN: LESS_THAN value \n\n - CODE_GREATER_THAN: GREATER_THAN value \n\n - CODE_LESS_THAN_OR_EQUAlS_TO: LESS_THAN_OR_EQUAlS_TO value \n\n - CODE_GREATER_THAN_OR_EQUAlS_TO: GREATER_THAN_OR_EQUAlS_TO value \n",
+            "description": "\n - CODE_EQUALS: EQUALS value\n\n - CODE_NOT_EQUAL_TO: NOT_EQUAL_TO value\n\n - CODE_LESS_THAN: LESS_THAN value\n\n - CODE_GREATER_THAN: GREATER_THAN value\n\n - CODE_LESS_THAN_OR_EQUAlS_TO: LESS_THAN_OR_EQUAlS_TO value\n\n - CODE_GREATER_THAN_OR_EQUAlS_TO: GREATER_THAN_OR_EQUAlS_TO value\n",
             "title": "Response Code Comparison Operator",
             "enum": [
                 "CODE_EQUALS",
@@ -2811,6 +3133,20 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "bot_defensebot_endpoint_policyReplaceSpecType": {
+            "type": "object",
+            "description": "Replace Bot Endpoint Policy",
+            "title": "Replace Bot Endpoint Policy",
+            "x-displayname": "Replace Bot Endpoint Policy",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceSpecType",
+            "properties": {
+                "endpoint_policy_content": {
+                    "description": " Protected Endpoints List for Endpoint Type",
+                    "$ref": "#/definitions/bot_defenseProtectedEndpoints",
+                    "x-displayname": "Protected Endpoints"
+                }
+            }
+        },
         "bot_endpoint_policyCustomReplaceRequest": {
             "type": "object",
             "title": "CustomReplaceRequest is used to replace contents of a bot_endpoint_policy",
@@ -2834,7 +3170,7 @@ var CustomAPISwaggerJSON string = `{
                 "spec": {
                     "description": " A specification of the configuration object to be replaced.",
                     "title": "spec",
-                    "$ref": "#/definitions/bot_endpoint_policyReplaceSpecType",
+                    "$ref": "#/definitions/bot_defensebot_endpoint_policyReplaceSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2852,6 +3188,28 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Content",
                     "$ref": "#/definitions/bot_defenseProtectedEndpoints",
                     "x-displayname": "Content"
+                }
+            }
+        },
+        "bot_endpoint_policyGetMobileBaseConfigFileResponse": {
+            "type": "object",
+            "description": "Mobile base config file response",
+            "title": "GetMobileBaseConfigFileResponse",
+            "x-displayname": "GetMobileBaseConfigFileResponse",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetMobileBaseConfigFileResponse",
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "description": " Mobile SDK Base Configuration content",
+                    "title": "Mobile SDK Base Configuration content",
+                    "format": "byte",
+                    "x-displayname": "Mobile SDK Base Configuration"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Mobile SDK Base Configuration file name",
+                    "title": "Mobile SDK Base Configuration file name",
+                    "x-displayname": "Mobile SDK Base Configuration file name"
                 }
             }
         },
@@ -2913,26 +3271,23 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "bot_endpoint_policyReplaceSpecType": {
-            "type": "object",
-            "description": "Replace Bot Endpoint Policy",
-            "title": "Replace Bot Endpoint Policy",
-            "x-displayname": "Replace Bot Endpoint Policy",
-            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceSpecType",
-            "properties": {
-                "endpoint_policy_content": {
-                    "description": " Protected Endpoints List for Endpoint Type",
-                    "$ref": "#/definitions/bot_defenseProtectedEndpoints",
-                    "x-displayname": "Protected Endpoints"
-                }
-            }
-        },
         "ioschemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
             "title": "Empty",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "mobile_base_configMobileOS": {
+            "type": "string",
+            "description": "x-displayName: \"Mobile SDK Operating System\"\nDefines an operation system for Mobile SDK\n\n - MOBILE_OS_UNDEFINED: MOBILE_OS_UNDEFINED\n\nx-displayName: \"Undefined\"\nUndefined Operating System\n - ANDROID: ANDROID\n\nx-displayName: \"Android\"\nAndroid\n - IOS: IOS\n\nx-displayName: \"iOS\"\niOS",
+            "title": "MobileOS",
+            "enum": [
+                "MOBILE_OS_UNDEFINED",
+                "ANDROID",
+                "IOS"
+            ],
+            "default": "MOBILE_OS_UNDEFINED"
         },
         "schemaBotPolicyFlowLabelAccountManagementChoiceType": {
             "type": "object",

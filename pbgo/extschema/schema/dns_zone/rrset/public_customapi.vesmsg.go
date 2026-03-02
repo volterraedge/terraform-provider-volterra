@@ -67,7 +67,6 @@ func (m *CreateRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRrsetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -75,7 +74,6 @@ func (m *CreateRequest) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRrset() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRrset().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRrset().GetDRefInfo() FAILED")
@@ -85,7 +83,6 @@ func (m *CreateRequest) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "rrset." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateRequest struct {
@@ -93,7 +90,6 @@ type ValidateCreateRequest struct {
 }
 
 func (v *ValidateCreateRequest) DnsZoneNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_zone_name")
@@ -101,9 +97,7 @@ func (v *ValidateCreateRequest) DnsZoneNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateRequest) GroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for group_name")
@@ -111,9 +105,7 @@ func (v *ValidateCreateRequest) GroupNameValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateRequest) RrsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rrset")
@@ -122,11 +114,9 @@ func (v *ValidateCreateRequest) RrsetValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_dns_zone.RRSetValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -146,41 +136,30 @@ func (v *ValidateCreateRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_name"))
 		if err := fv(ctx, m.GetGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rrset"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rrset"))
 		if err := fv(ctx, m.GetRrset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateRequestValidator = func() *ValidateCreateRequest {
 	v := &ValidateCreateRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -274,7 +253,6 @@ type ValidateDeleteRequest struct {
 }
 
 func (v *ValidateDeleteRequest) DnsZoneNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_zone_name")
@@ -282,9 +260,7 @@ func (v *ValidateDeleteRequest) DnsZoneNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeleteRequest) GroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for group_name")
@@ -292,9 +268,7 @@ func (v *ValidateDeleteRequest) GroupNameValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeleteRequest) RecordNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for record_name")
@@ -302,9 +276,7 @@ func (v *ValidateDeleteRequest) RecordNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDeleteRequest) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
@@ -326,50 +298,36 @@ func (v *ValidateDeleteRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_name"))
 		if err := fv(ctx, m.GetGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["record_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_name"))
 		if err := fv(ctx, m.GetRecordName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDeleteRequestValidator = func() *ValidateDeleteRequest {
 	v := &ValidateDeleteRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -475,7 +433,6 @@ type ValidateGetRequest struct {
 }
 
 func (v *ValidateGetRequest) DnsZoneNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_zone_name")
@@ -483,9 +440,7 @@ func (v *ValidateGetRequest) DnsZoneNameValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetRequest) GroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for group_name")
@@ -493,9 +448,7 @@ func (v *ValidateGetRequest) GroupNameValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetRequest) RecordNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for record_name")
@@ -503,9 +456,7 @@ func (v *ValidateGetRequest) RecordNameValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetRequest) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
@@ -527,50 +478,36 @@ func (v *ValidateGetRequest) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_name"))
 		if err := fv(ctx, m.GetGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["record_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_name"))
 		if err := fv(ctx, m.GetRecordName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetRequestValidator = func() *ValidateGetRequest {
 	v := &ValidateGetRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -677,7 +614,6 @@ func (m *ReplaceRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRrsetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -685,7 +621,6 @@ func (m *ReplaceRequest) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRrset() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRrset().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRrset().GetDRefInfo() FAILED")
@@ -695,7 +630,6 @@ func (m *ReplaceRequest) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "rrset." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceRequest struct {
@@ -703,7 +637,6 @@ type ValidateReplaceRequest struct {
 }
 
 func (v *ValidateReplaceRequest) DnsZoneNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_zone_name")
@@ -711,9 +644,7 @@ func (v *ValidateReplaceRequest) DnsZoneNameValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceRequest) GroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for group_name")
@@ -721,9 +652,7 @@ func (v *ValidateReplaceRequest) GroupNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceRequest) RecordNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for record_name")
@@ -731,9 +660,7 @@ func (v *ValidateReplaceRequest) RecordNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceRequest) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
@@ -741,9 +668,7 @@ func (v *ValidateReplaceRequest) TypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceRequest) RrsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rrset")
@@ -752,11 +677,9 @@ func (v *ValidateReplaceRequest) RrsetValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_dns_zone.RRSetValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -776,59 +699,42 @@ func (v *ValidateReplaceRequest) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_name"))
 		if err := fv(ctx, m.GetGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["record_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_name"))
 		if err := fv(ctx, m.GetRecordName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rrset"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rrset"))
 		if err := fv(ctx, m.GetRrset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceRequestValidator = func() *ValidateReplaceRequest {
 	v := &ValidateReplaceRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -946,7 +852,6 @@ func (m *Response) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRrsetDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -954,7 +859,6 @@ func (m *Response) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRrset() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetRrset().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRrset().GetDRefInfo() FAILED")
@@ -964,7 +868,6 @@ func (m *Response) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "rrset." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateResponse struct {
@@ -972,7 +875,6 @@ type ValidateResponse struct {
 }
 
 func (v *ValidateResponse) RrsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rrset")
@@ -981,11 +883,9 @@ func (v *ValidateResponse) RrsetValidationRuleHandler(rules map[string]string) (
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_dns_zone.RRSetValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1005,68 +905,48 @@ func (v *ValidateResponse) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
 		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_name"))
 		if err := fv(ctx, m.GetGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["record_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("record_name"))
 		if err := fv(ctx, m.GetRecordName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rrset"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rrset"))
 		if err := fv(ctx, m.GetRrset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseValidator = func() *ValidateResponse {
 	v := &ValidateResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

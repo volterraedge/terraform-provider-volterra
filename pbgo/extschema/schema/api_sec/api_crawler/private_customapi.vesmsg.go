@@ -76,43 +76,30 @@ func (v *ValidateRemoveScanStatusReq) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -181,7 +168,6 @@ func (v *ValidateRemoveScanStatusResp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -250,25 +236,18 @@ func (v *ValidateStatusCompleted) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["completed_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("completed_at"))
 		if err := fv(ctx, m.GetCompletedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["no_of_endpoints_found"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("no_of_endpoints_found"))
 		if err := fv(ctx, m.GetNoOfEndpointsFound(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -337,16 +316,12 @@ func (v *ValidateStatusError) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -415,16 +390,12 @@ func (v *ValidateStatusPending) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["config_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("config_at"))
 		if err := fv(ctx, m.GetConfigAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -493,7 +464,6 @@ func (v *ValidateStatusRunning) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -562,16 +532,12 @@ func (v *ValidateStatusStarted) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["started_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("started_at"))
 		if err := fv(ctx, m.GetStartedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -640,50 +606,35 @@ func (v *ValidateUpdateScanStatusReq) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kafka_message_created_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kafka_message_created_at"))
 		if err := fv(ctx, m.GetKafkaMessageCreatedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetStatusMetadata().(type) {
@@ -742,18 +693,13 @@ func (v *ValidateUpdateScanStatusReq) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -822,7 +768,6 @@ func (v *ValidateUpdateScanStatusResp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

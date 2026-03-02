@@ -64,7 +64,6 @@ type ValidateAllowRule struct {
 }
 
 func (v *ValidateAllowRule) ProtocolTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ProtocolType)
@@ -78,9 +77,7 @@ func (v *ValidateAllowRule) ProtocolTypeValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAllowRule) MatchTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for match_type")
@@ -89,11 +86,9 @@ func (v *ValidateAllowRule) MatchTypeValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := MatchRuleTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -113,41 +108,30 @@ func (v *ValidateAllowRule) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["enable_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_status"))
 		if err := fv(ctx, m.GetEnableStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["match_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match_type"))
 		if err := fv(ctx, m.GetMatchType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol_type"))
 		if err := fv(ctx, m.GetProtocolType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAllowRuleValidator = func() *ValidateAllowRule {
 	v := &ValidateAllowRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -239,34 +223,25 @@ func (v *ValidateAttackedDestinationVolumetricThresholds) Validate(ctx context.C
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["per_dst_ip_detection_eps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_dst_ip_detection_eps"))
 		if err := fv(ctx, m.GetPerDstIpDetectionEps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["per_dst_ip_limit_eps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_dst_ip_limit_eps"))
 		if err := fv(ctx, m.GetPerDstIpLimitEps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAttackedDestinationVolumetricThresholdsValidator = func() *ValidateAttackedDestinationVolumetricThresholds {
 	v := &ValidateAttackedDestinationVolumetricThresholds{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["per_dst_ip_detection_eps"] = ThresholdEPSValidator().Validate
-
 	v.FldValidators["per_dst_ip_limit_eps"] = ThresholdEPSValidator().Validate
 
 	return v
@@ -318,7 +293,6 @@ type ValidateBadActorsVolumetricThresholds struct {
 }
 
 func (v *ValidateBadActorsVolumetricThresholds) PerSourceIpDetectionEpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for per_source_ip_detection_eps")
@@ -327,19 +301,15 @@ func (v *ValidateBadActorsVolumetricThresholds) PerSourceIpDetectionEpsValidatio
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ThresholdEPSValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBadActorsVolumetricThresholds) PerSourceIpLimitEpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for per_source_ip_limit_eps")
@@ -348,11 +318,9 @@ func (v *ValidateBadActorsVolumetricThresholds) PerSourceIpLimitEpsValidationRul
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ThresholdEPSValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -372,32 +340,24 @@ func (v *ValidateBadActorsVolumetricThresholds) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["per_source_ip_detection_eps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_source_ip_detection_eps"))
 		if err := fv(ctx, m.GetPerSourceIpDetectionEps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["per_source_ip_limit_eps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("per_source_ip_limit_eps"))
 		if err := fv(ctx, m.GetPerSourceIpLimitEps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBadActorsVolumetricThresholdsValidator = func() *ValidateBadActorsVolumetricThresholds {
 	v := &ValidateBadActorsVolumetricThresholds{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -477,7 +437,6 @@ type ValidateDDoSProfile struct {
 }
 
 func (v *ValidateDDoSProfile) DnsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for dns")
@@ -486,19 +445,15 @@ func (v *ValidateDDoSProfile) DnsValidationRuleHandler(rules map[string]string) 
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := DNSDDoSVectorsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDDoSProfile) AllowRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -558,31 +513,24 @@ func (v *ValidateDDoSProfile) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allow_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("allow_rules"))
 		if err := fv(ctx, m.GetAllowRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns"))
 		if err := fv(ctx, m.GetDns(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDDoSProfileValidator = func() *ValidateDDoSProfile {
 	v := &ValidateDDoSProfile{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -663,7 +611,6 @@ type ValidateDNSDDoSVectors struct {
 }
 
 func (v *ValidateDNSDDoSVectors) DnsFloodVectorsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -709,9 +656,7 @@ func (v *ValidateDNSDDoSVectors) DnsFloodVectorsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDNSDDoSVectors) DnsErrorVectorsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -771,48 +716,36 @@ func (v *ValidateDNSDDoSVectors) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_error_vectors"]; exists {
 		vOpts := append(opts, db.WithValidateField("dns_error_vectors"))
 		if err := fv(ctx, m.GetDnsErrorVectors(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_flood_vectors"]; exists {
 		vOpts := append(opts, db.WithValidateField("dns_flood_vectors"))
 		if err := fv(ctx, m.GetDnsFloodVectors(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nx_domain_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nx_domain_profile"))
 		if err := fv(ctx, m.GetNxDomainProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["oversized_dns_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("oversized_dns_profile"))
 		if err := fv(ctx, m.GetOversizedDnsProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSDDoSVectorsValidator = func() *ValidateDNSDDoSVectors {
 	v := &ValidateDNSDDoSVectors{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -848,9 +781,7 @@ var DefaultDNSDDoSVectorsValidator = func() *ValidateDNSDDoSVectors {
 		panic(errMsg)
 	}
 	v.FldValidators["dns_error_vectors"] = vFn
-
 	v.FldValidators["nx_domain_profile"] = NxDomainVectorsValidator().Validate
-
 	v.FldValidators["oversized_dns_profile"] = OversizedDNSVectorsValidator().Validate
 
 	return v
@@ -902,7 +833,6 @@ type ValidateDNSErrorVector struct {
 }
 
 func (v *ValidateDNSErrorVector) DnsErrorTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(DNSErrorType)
@@ -916,9 +846,7 @@ func (v *ValidateDNSErrorVector) DnsErrorTypeValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDNSErrorVector) DetectionThresholdPercentageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for detection_threshold_percentage")
@@ -940,41 +868,30 @@ func (v *ValidateDNSErrorVector) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["detection_threshold_eps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("detection_threshold_eps"))
 		if err := fv(ctx, m.GetDetectionThresholdEps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["detection_threshold_percentage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("detection_threshold_percentage"))
 		if err := fv(ctx, m.GetDetectionThresholdPercentage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_error_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_error_type"))
 		if err := fv(ctx, m.GetDnsErrorType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSErrorVectorValidator = func() *ValidateDNSErrorVector {
 	v := &ValidateDNSErrorVector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1006,7 +923,6 @@ var DefaultDNSErrorVectorValidator = func() *ValidateDNSErrorVector {
 		panic(errMsg)
 	}
 	v.FldValidators["detection_threshold_percentage"] = vFn
-
 	v.FldValidators["detection_threshold_eps"] = ThresholdEPSValidator().Validate
 
 	return v
@@ -1058,7 +974,6 @@ type ValidateDNSFloodVector struct {
 }
 
 func (v *ValidateDNSFloodVector) QueryTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(DNSQueryType)
@@ -1072,9 +987,7 @@ func (v *ValidateDNSFloodVector) QueryTypeValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDNSFloodVector) StateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(State)
@@ -1102,59 +1015,42 @@ func (v *ValidateDNSFloodVector) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attacked_destination_volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attacked_destination_volumetric_thresholds"))
 		if err := fv(ctx, m.GetAttackedDestinationVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bad_actors_volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bad_actors_volumetric_thresholds"))
 		if err := fv(ctx, m.GetBadActorsVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_type"))
 		if err := fv(ctx, m.GetQueryType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volumetric_thresholds"))
 		if err := fv(ctx, m.GetVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSFloodVectorValidator = func() *ValidateDNSFloodVector {
 	v := &ValidateDNSFloodVector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1184,11 +1080,8 @@ var DefaultDNSFloodVectorValidator = func() *ValidateDNSFloodVector {
 		panic(errMsg)
 	}
 	v.FldValidators["state"] = vFn
-
 	v.FldValidators["volumetric_thresholds"] = VolumetricThresholdsValidator().Validate
-
 	v.FldValidators["bad_actors_volumetric_thresholds"] = BadActorsVolumetricThresholdsValidator().Validate
-
 	v.FldValidators["attacked_destination_volumetric_thresholds"] = AttackedDestinationVolumetricThresholdsValidator().Validate
 
 	return v
@@ -1302,16 +1195,13 @@ func (v *ValidateDestinationPort) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDestinationPortValidator = func() *ValidateDestinationPort {
 	v := &ValidateDestinationPort{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1319,7 +1209,6 @@ var DefaultDestinationPortValidator = func() *ValidateDestinationPort {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1330,7 +1219,6 @@ var DefaultDestinationPortValidator = func() *ValidateDestinationPort {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoicePort := v.ChoicePortValidationRuleHandler
 	rulesChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -1341,7 +1229,6 @@ var DefaultDestinationPortValidator = func() *ValidateDestinationPort {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DestinationPort.choice_port: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.port"] = vFnMap["choice.port"]
 
 	return v
@@ -1455,25 +1342,19 @@ func (v *ValidateMatchIPAddressWithPort) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination_port"))
 		if err := fv(ctx, m.GetDestinationPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMatchIPAddressWithPortValidator = func() *ValidateMatchIPAddressWithPort {
 	v := &ValidateMatchIPAddressWithPort{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1481,7 +1362,6 @@ var DefaultMatchIPAddressWithPortValidator = func() *ValidateMatchIPAddressWithP
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1492,7 +1372,6 @@ var DefaultMatchIPAddressWithPortValidator = func() *ValidateMatchIPAddressWithP
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceAddress := v.ChoiceAddressValidationRuleHandler
 	rulesChoiceAddress := map[string]string{
 		"ves.io.schema.rules.string.ip": "true",
@@ -1502,9 +1381,7 @@ var DefaultMatchIPAddressWithPortValidator = func() *ValidateMatchIPAddressWithP
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field MatchIPAddressWithPort.choice_address: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.address"] = vFnMap["choice.address"]
-
 	v.FldValidators["destination_port"] = DestinationPortValidator().Validate
 
 	return v
@@ -1643,16 +1520,13 @@ func (v *ValidateMatchRuleType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMatchRuleTypeValidator = func() *ValidateMatchRuleType {
 	v := &ValidateMatchRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1660,7 +1534,6 @@ var DefaultMatchRuleTypeValidator = func() *ValidateMatchRuleType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1671,7 +1544,6 @@ var DefaultMatchRuleTypeValidator = func() *ValidateMatchRuleType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.destination_match"] = MatchIPAddressWithPortValidator().Validate
 	v.FldValidators["choice.source_match"] = MatchIPAddressWithPortValidator().Validate
 	v.FldValidators["choice.any_v4"] = DestinationPortValidator().Validate
@@ -1727,7 +1599,6 @@ type ValidateNxDomainLearningParams struct {
 }
 
 func (v *ValidateNxDomainLearningParams) DnsNxDomainLearnPeriodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_nx_domain_learn_period")
@@ -1735,9 +1606,7 @@ func (v *ValidateNxDomainLearningParams) DnsNxDomainLearnPeriodValidationRuleHan
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNxDomainLearningParams) DnsNxDomainRelearnPeriodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_nx_domain_relearn_period")
@@ -1745,9 +1614,7 @@ func (v *ValidateNxDomainLearningParams) DnsNxDomainRelearnPeriodValidationRuleH
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNxDomainLearningParams) DnsNxDomainTrackerSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_nx_domain_tracker_size")
@@ -1769,41 +1636,30 @@ func (v *ValidateNxDomainLearningParams) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_nx_domain_learn_period"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_nx_domain_learn_period"))
 		if err := fv(ctx, m.GetDnsNxDomainLearnPeriod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_nx_domain_relearn_period"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_nx_domain_relearn_period"))
 		if err := fv(ctx, m.GetDnsNxDomainRelearnPeriod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_nx_domain_tracker_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_nx_domain_tracker_size"))
 		if err := fv(ctx, m.GetDnsNxDomainTrackerSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNxDomainLearningParamsValidator = func() *ValidateNxDomainLearningParams {
 	v := &ValidateNxDomainLearningParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1897,7 +1753,6 @@ type ValidateNxDomainVectors struct {
 }
 
 func (v *ValidateNxDomainVectors) StateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(State)
@@ -1925,68 +1780,48 @@ func (v *ValidateNxDomainVectors) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attacked_destination_volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attacked_destination_volumetric_thresholds"))
 		if err := fv(ctx, m.GetAttackedDestinationVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bad_actors_volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bad_actors_volumetric_thresholds"))
 		if err := fv(ctx, m.GetBadActorsVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["learning_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("learning_params"))
 		if err := fv(ctx, m.GetLearningParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["valid_domains"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("valid_domains"))
 		if err := fv(ctx, m.GetValidDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volumetric_thresholds"))
 		if err := fv(ctx, m.GetVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNxDomainVectorsValidator = func() *ValidateNxDomainVectors {
 	v := &ValidateNxDomainVectors{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2005,15 +1840,10 @@ var DefaultNxDomainVectorsValidator = func() *ValidateNxDomainVectors {
 		panic(errMsg)
 	}
 	v.FldValidators["state"] = vFn
-
 	v.FldValidators["volumetric_thresholds"] = VolumetricThresholdsValidator().Validate
-
 	v.FldValidators["learning_params"] = NxDomainLearningParamsValidator().Validate
-
 	v.FldValidators["bad_actors_volumetric_thresholds"] = BadActorsVolumetricThresholdsValidator().Validate
-
 	v.FldValidators["attacked_destination_volumetric_thresholds"] = AttackedDestinationVolumetricThresholdsValidator().Validate
-
 	v.FldValidators["valid_domains"] = ValidDomainsListConfigValidator().Validate
 
 	return v
@@ -2065,7 +1895,6 @@ type ValidateOversizedDNSVectors struct {
 }
 
 func (v *ValidateOversizedDNSVectors) StateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(State)
@@ -2079,9 +1908,7 @@ func (v *ValidateOversizedDNSVectors) StateValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOversizedDNSVectors) MaxDnsSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for max_dns_size")
@@ -2103,59 +1930,42 @@ func (v *ValidateOversizedDNSVectors) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attacked_destination_volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attacked_destination_volumetric_thresholds"))
 		if err := fv(ctx, m.GetAttackedDestinationVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bad_actors_volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bad_actors_volumetric_thresholds"))
 		if err := fv(ctx, m.GetBadActorsVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_dns_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_dns_size"))
 		if err := fv(ctx, m.GetMaxDnsSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volumetric_thresholds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volumetric_thresholds"))
 		if err := fv(ctx, m.GetVolumetricThresholds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOversizedDNSVectorsValidator = func() *ValidateOversizedDNSVectors {
 	v := &ValidateOversizedDNSVectors{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2187,11 +1997,8 @@ var DefaultOversizedDNSVectorsValidator = func() *ValidateOversizedDNSVectors {
 		panic(errMsg)
 	}
 	v.FldValidators["max_dns_size"] = vFn
-
 	v.FldValidators["volumetric_thresholds"] = VolumetricThresholdsValidator().Validate
-
 	v.FldValidators["bad_actors_volumetric_thresholds"] = BadActorsVolumetricThresholdsValidator().Validate
-
 	v.FldValidators["attacked_destination_volumetric_thresholds"] = AttackedDestinationVolumetricThresholdsValidator().Validate
 
 	return v
@@ -2287,16 +2094,13 @@ func (v *ValidateThresholdEPS) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThresholdEPSValidator = func() *ValidateThresholdEPS {
 	v := &ValidateThresholdEPS{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2304,7 +2108,6 @@ var DefaultThresholdEPSValidator = func() *ValidateThresholdEPS {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoiceValue := v.ChoiceValueValidationRuleHandler
 	rulesChoiceValue := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -2315,7 +2118,6 @@ var DefaultThresholdEPSValidator = func() *ValidateThresholdEPS {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ThresholdEPS.choice_value: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.value"] = vFnMap["choice.value"]
 
 	return v
@@ -2367,7 +2169,6 @@ type ValidateValidDomainsListConfig struct {
 }
 
 func (v *ValidateValidDomainsListConfig) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2421,22 +2222,18 @@ func (v *ValidateValidDomainsListConfig) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultValidDomainsListConfigValidator = func() *ValidateValidDomainsListConfig {
 	v := &ValidateValidDomainsListConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2509,7 +2306,6 @@ type ValidateVolumetricThresholds struct {
 }
 
 func (v *ValidateVolumetricThresholds) DetectionThresholdPercentageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for detection_threshold_percentage")
@@ -2531,41 +2327,30 @@ func (v *ValidateVolumetricThresholds) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["detection_threshold_eps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("detection_threshold_eps"))
 		if err := fv(ctx, m.GetDetectionThresholdEps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["detection_threshold_percentage"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("detection_threshold_percentage"))
 		if err := fv(ctx, m.GetDetectionThresholdPercentage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mitigation_threshold_eps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mitigation_threshold_eps"))
 		if err := fv(ctx, m.GetMitigationThresholdEps(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVolumetricThresholdsValidator = func() *ValidateVolumetricThresholds {
 	v := &ValidateVolumetricThresholds{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2585,9 +2370,7 @@ var DefaultVolumetricThresholdsValidator = func() *ValidateVolumetricThresholds 
 		panic(errMsg)
 	}
 	v.FldValidators["detection_threshold_percentage"] = vFn
-
 	v.FldValidators["detection_threshold_eps"] = ThresholdEPSValidator().Validate
-
 	v.FldValidators["mitigation_threshold_eps"] = ThresholdEPSValidator().Validate
 
 	return v

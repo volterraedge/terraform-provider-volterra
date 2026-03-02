@@ -68,7 +68,6 @@ type ValidateApiGroupBuilder struct {
 }
 
 func (v *ValidateApiGroupBuilder) PathFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path_filter")
@@ -76,9 +75,7 @@ func (v *ValidateApiGroupBuilder) PathFilterValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateApiGroupBuilder) IncludedOperationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -124,9 +121,7 @@ func (v *ValidateApiGroupBuilder) IncludedOperationsValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateApiGroupBuilder) ExcludedOperationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -186,57 +181,42 @@ func (v *ValidateApiGroupBuilder) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["excluded_operations"]; exists {
 		vOpts := append(opts, db.WithValidateField("excluded_operations"))
 		if err := fv(ctx, m.GetExcludedOperations(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["included_operations"]; exists {
 		vOpts := append(opts, db.WithValidateField("included_operations"))
 		if err := fv(ctx, m.GetIncludedOperations(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
 		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path_filter"))
 		if err := fv(ctx, m.GetPathFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiGroupBuilderValidator = func() *ValidateApiGroupBuilder {
 	v := &ValidateApiGroupBuilder{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -280,9 +260,7 @@ var DefaultApiGroupBuilderValidator = func() *ValidateApiGroupBuilder {
 		panic(errMsg)
 	}
 	v.FldValidators["excluded_operations"] = vFn
-
 	v.FldValidators["metadata"] = ves_io_schema.MessageMetaTypeValidator().Validate
-
 	v.FldValidators["label_filter"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
 	return v
@@ -334,7 +312,6 @@ type ValidateApiGroupSummary struct {
 }
 
 func (v *ValidateApiGroupSummary) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -342,9 +319,7 @@ func (v *ValidateApiGroupSummary) NameValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateApiGroupSummary) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -404,31 +379,24 @@ func (v *ValidateApiGroupSummary) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiGroupSummaryValidator = func() *ValidateApiGroupSummary {
 	v := &ValidateApiGroupSummary{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -514,9 +482,7 @@ func (v *ValidateCreateSpecType) SchemaUpdatesStrategyValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SwaggerSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -556,9 +522,7 @@ func (v *ValidateCreateSpecType) SwaggerSpecsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ApiInventoryInclusionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -604,9 +568,7 @@ func (v *ValidateCreateSpecType) ApiInventoryInclusionListValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ApiInventoryExclusionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -652,9 +614,7 @@ func (v *ValidateCreateSpecType) ApiInventoryExclusionListValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) NonApiEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -714,29 +674,23 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_exclusion_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_exclusion_list"))
 		if err := fv(ctx, m.GetApiInventoryExclusionList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_inclusion_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_inclusion_list"))
 		if err := fv(ctx, m.GetApiInventoryInclusionList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["non_api_endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("non_api_endpoints"))
 		if err := fv(ctx, m.GetNonApiEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["schema_updates_strategy"]; exists {
@@ -772,24 +726,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["swagger_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("swagger_specs"))
 		if err := fv(ctx, m.GetSwaggerSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -797,7 +746,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSchemaUpdatesStrategy := v.SchemaUpdatesStrategyValidationRuleHandler
 	rulesSchemaUpdatesStrategy := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -825,7 +773,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhApiInventoryInclusionList := v.ApiInventoryInclusionListValidationRuleHandler
 	rulesApiInventoryInclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionList(rulesApiInventoryInclusionList)
@@ -837,7 +785,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhApiInventoryExclusionList := v.ApiInventoryExclusionListValidationRuleHandler
 	rulesApiInventoryExclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionList(rulesApiInventoryExclusionList)
@@ -849,7 +797,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhNonApiEndpoints := v.NonApiEndpointsValidationRuleHandler
 	rulesNonApiEndpoints := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpoints(rulesNonApiEndpoints)
@@ -914,9 +862,7 @@ func (v *ValidateGetSpecType) SchemaUpdatesStrategyValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SwaggerSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -956,9 +902,7 @@ func (v *ValidateGetSpecType) SwaggerSpecsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ApiInventoryInclusionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1004,9 +948,7 @@ func (v *ValidateGetSpecType) ApiInventoryInclusionListValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ApiInventoryExclusionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1052,9 +994,7 @@ func (v *ValidateGetSpecType) ApiInventoryExclusionListValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) NonApiEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1114,9 +1054,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		for idx, item := range m.GetApiGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1124,27 +1062,20 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_exclusion_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_exclusion_list"))
 		if err := fv(ctx, m.GetApiInventoryExclusionList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_inclusion_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_inclusion_list"))
 		if err := fv(ctx, m.GetApiInventoryInclusionList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_api_groups_builders"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_api_groups_builders"))
 		for idx, item := range m.GetDefaultApiGroupsBuilders() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1152,15 +1083,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["non_api_endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("non_api_endpoints"))
 		if err := fv(ctx, m.GetNonApiEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["schema_updates_strategy"]; exists {
@@ -1196,24 +1124,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["swagger_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("swagger_specs"))
 		if err := fv(ctx, m.GetSwaggerSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1221,7 +1144,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSchemaUpdatesStrategy := v.SchemaUpdatesStrategyValidationRuleHandler
 	rulesSchemaUpdatesStrategy := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1249,7 +1171,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhApiInventoryInclusionList := v.ApiInventoryInclusionListValidationRuleHandler
 	rulesApiInventoryInclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionList(rulesApiInventoryInclusionList)
@@ -1261,7 +1183,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhApiInventoryExclusionList := v.ApiInventoryExclusionListValidationRuleHandler
 	rulesApiInventoryExclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionList(rulesApiInventoryExclusionList)
@@ -1273,7 +1195,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhNonApiEndpoints := v.NonApiEndpointsValidationRuleHandler
 	rulesNonApiEndpoints := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpoints(rulesNonApiEndpoints)
@@ -1282,9 +1204,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["non_api_endpoints"] = vFn
-
 	v.FldValidators["default_api_groups_builders"] = ApiGroupBuilderValidator().Validate
-
 	v.FldValidators["api_groups"] = ApiGroupSummaryValidator().Validate
 
 	return v
@@ -1337,11 +1257,9 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetViewInternalDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1357,7 +1275,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1367,7 +1284,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1385,7 +1301,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1400,9 +1315,7 @@ func (v *ValidateGlobalSpecType) SchemaUpdatesStrategyValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SwaggerSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1442,9 +1355,7 @@ func (v *ValidateGlobalSpecType) SwaggerSpecsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ApiInventoryInclusionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1490,9 +1401,7 @@ func (v *ValidateGlobalSpecType) ApiInventoryInclusionListValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ApiInventoryExclusionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1538,9 +1447,7 @@ func (v *ValidateGlobalSpecType) ApiInventoryExclusionListValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) NonApiEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1586,9 +1493,7 @@ func (v *ValidateGlobalSpecType) NonApiEndpointsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ApiInventoryOpenapiSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1642,9 +1547,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		for idx, item := range m.GetApiGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1652,35 +1555,26 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_exclusion_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_exclusion_list"))
 		if err := fv(ctx, m.GetApiInventoryExclusionList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_inclusion_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_inclusion_list"))
 		if err := fv(ctx, m.GetApiInventoryInclusionList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_openapi_spec"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_openapi_spec"))
 		if err := fv(ctx, m.GetApiInventoryOpenapiSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_api_groups_builders"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_api_groups_builders"))
 		for idx, item := range m.GetDefaultApiGroupsBuilders() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1688,15 +1582,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["non_api_endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("non_api_endpoints"))
 		if err := fv(ctx, m.GetNonApiEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["schema_updates_strategy"]; exists {
@@ -1732,33 +1623,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["swagger_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("swagger_specs"))
 		if err := fv(ctx, m.GetSwaggerSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1766,7 +1649,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSchemaUpdatesStrategy := v.SchemaUpdatesStrategyValidationRuleHandler
 	rulesSchemaUpdatesStrategy := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1794,7 +1676,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhApiInventoryInclusionList := v.ApiInventoryInclusionListValidationRuleHandler
 	rulesApiInventoryInclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionList(rulesApiInventoryInclusionList)
@@ -1806,7 +1688,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhApiInventoryExclusionList := v.ApiInventoryExclusionListValidationRuleHandler
 	rulesApiInventoryExclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionList(rulesApiInventoryExclusionList)
@@ -1818,7 +1700,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhNonApiEndpoints := v.NonApiEndpointsValidationRuleHandler
 	rulesNonApiEndpoints := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpoints(rulesNonApiEndpoints)
@@ -1839,11 +1721,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_inventory_openapi_spec"] = vFn
-
 	v.FldValidators["default_api_groups_builders"] = ApiGroupBuilderValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["api_groups"] = ApiGroupSummaryValidator().Validate
 
 	return v
@@ -1901,9 +1780,7 @@ func (v *ValidateReplaceSpecType) SchemaUpdatesStrategyValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SwaggerSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1943,9 +1820,7 @@ func (v *ValidateReplaceSpecType) SwaggerSpecsValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ApiInventoryInclusionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1991,9 +1866,7 @@ func (v *ValidateReplaceSpecType) ApiInventoryInclusionListValidationRuleHandler
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ApiInventoryExclusionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2039,9 +1912,7 @@ func (v *ValidateReplaceSpecType) ApiInventoryExclusionListValidationRuleHandler
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) NonApiEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2101,29 +1972,23 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_exclusion_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_exclusion_list"))
 		if err := fv(ctx, m.GetApiInventoryExclusionList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_inclusion_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_inclusion_list"))
 		if err := fv(ctx, m.GetApiInventoryInclusionList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["non_api_endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("non_api_endpoints"))
 		if err := fv(ctx, m.GetNonApiEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["schema_updates_strategy"]; exists {
@@ -2159,24 +2024,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["swagger_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("swagger_specs"))
 		if err := fv(ctx, m.GetSwaggerSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2184,7 +2044,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSchemaUpdatesStrategy := v.SchemaUpdatesStrategyValidationRuleHandler
 	rulesSchemaUpdatesStrategy := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2212,7 +2071,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhApiInventoryInclusionList := v.ApiInventoryInclusionListValidationRuleHandler
 	rulesApiInventoryInclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionList(rulesApiInventoryInclusionList)
@@ -2224,7 +2083,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhApiInventoryExclusionList := v.ApiInventoryExclusionListValidationRuleHandler
 	rulesApiInventoryExclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionList(rulesApiInventoryExclusionList)
@@ -2236,7 +2095,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhNonApiEndpoints := v.NonApiEndpointsValidationRuleHandler
 	rulesNonApiEndpoints := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpoints(rulesNonApiEndpoints)

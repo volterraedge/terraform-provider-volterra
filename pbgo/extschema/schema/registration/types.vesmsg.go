@@ -67,7 +67,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) InfraValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for infra")
@@ -76,19 +75,15 @@ func (v *ValidateCreateSpecType) InfraValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := InfraValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) TokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for token")
@@ -96,9 +91,7 @@ func (v *ValidateCreateSpecType) TokenValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PassportValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for passport")
@@ -107,11 +100,9 @@ func (v *ValidateCreateSpecType) PassportValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := PassportValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -131,41 +122,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["infra"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra"))
 		if err := fv(ctx, m.GetInfra(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["passport"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("passport"))
 		if err := fv(ctx, m.GetPassport(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("token"))
 		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -256,7 +236,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) InfraValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for infra")
@@ -265,19 +244,15 @@ func (v *ValidateGetSpecType) InfraValidationRuleHandler(rules map[string]string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := InfraValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) TokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for token")
@@ -285,9 +260,7 @@ func (v *ValidateGetSpecType) TokenValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PassportValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for passport")
@@ -296,11 +269,9 @@ func (v *ValidateGetSpecType) PassportValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := PassportValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -320,41 +291,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["infra"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra"))
 		if err := fv(ctx, m.GetInfra(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["passport"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("passport"))
 		if err := fv(ctx, m.GetPassport(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("token"))
 		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -446,7 +406,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -471,7 +430,6 @@ func (m *GlobalSpecType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -490,7 +448,6 @@ func (m *GlobalSpecType) GetSiteDBEntries(ctx context.Context, d db.Interface) (
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -499,7 +456,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) InfraValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for infra")
@@ -508,19 +464,15 @@ func (v *ValidateGlobalSpecType) InfraValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := InfraValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for token")
@@ -528,9 +480,7 @@ func (v *ValidateGlobalSpecType) TokenValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PassportValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for passport")
@@ -539,19 +489,15 @@ func (v *ValidateGlobalSpecType) PassportValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := PassportValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.SiteToSiteTunnelType)
@@ -579,54 +525,46 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_ssh_key"))
 		if err := fv(ctx, m.GetAdminSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["connected_regions"]; exists {
+		vOpts := append(opts, db.WithValidateField("connected_regions"))
+		for idx, item := range m.GetConnectedRegions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["infra"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("infra"))
 		if err := fv(ctx, m.GetInfra(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["long_term_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("long_term_token"))
 		if err := fv(ctx, m.GetLongTermToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["passport"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("passport"))
 		if err := fv(ctx, m.GetPassport(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("role"))
 		for idx, item := range m.GetRole() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -634,11 +572,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		for idx, item := range m.GetSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -646,34 +581,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("token"))
 		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -775,7 +701,6 @@ type ValidateInfra struct {
 }
 
 func (v *ValidateInfra) HostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
@@ -783,9 +708,7 @@ func (v *ValidateInfra) HostnameValidationRuleHandler(rules map[string]string) (
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInfra) InterfacesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -837,130 +760,96 @@ func (v *ValidateInfra) Validate(ctx context.Context, pm interface{}, opts ...db
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["availability_zone"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("availability_zone"))
 		if err := fv(ctx, m.GetAvailabilityZone(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hw"))
 		if err := fv(ctx, m.GetCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hostname"))
 		if err := fv(ctx, m.GetHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hw_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hw_info"))
 		if err := fv(ctx, m.GetHwInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_id"))
 		if err := fv(ctx, m.GetInstanceId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interfaces"]; exists {
 		vOpts := append(opts, db.WithValidateField("interfaces"))
 		if err := fv(ctx, m.GetInterfaces(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_proxy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_proxy"))
 		if err := fv(ctx, m.GetInternetProxy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["is_slo_static"]; exists {
+		vOpts := append(opts, db.WithValidateField("is_slo_static"))
+		if err := fv(ctx, m.GetIsSloStatic(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["machine_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("machine_id"))
 		if err := fv(ctx, m.GetMachineId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["provider"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("provider"))
 		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sw_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sw_info"))
 		if err := fv(ctx, m.GetSwInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timestamp"))
 		if err := fv(ctx, m.GetTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["zone"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("zone"))
 		if err := fv(ctx, m.GetZone(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInfraValidator = func() *ValidateInfra {
 	v := &ValidateInfra{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -990,7 +879,6 @@ var DefaultInfraValidator = func() *ValidateInfra {
 		panic(errMsg)
 	}
 	v.FldValidators["interfaces"] = vFn
-
 	v.FldValidators["hw_info"] = ves_io_schema_site.OsInfoValidator().Validate
 
 	return v
@@ -1054,34 +942,24 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["addr"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addr"))
 		if err := fv(ctx, m.GetAddr(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plen"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plen"))
 		if err := fv(ctx, m.GetPlen(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1150,43 +1028,30 @@ func (v *ValidateInternetProxy) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["http_proxy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("http_proxy"))
 		if err := fv(ctx, m.GetHttpProxy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["https_proxy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("https_proxy"))
 		if err := fv(ctx, m.GetHttpsProxy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["no_proxy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("no_proxy"))
 		if err := fv(ctx, m.GetNoProxy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_cacert_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_cacert_url"))
 		if err := fv(ctx, m.GetProxyCacertUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1257,9 +1122,7 @@ func (v *ValidatePassport) VolterraSwVersionChoiceVolterraSoftwareVersionValidat
 	}
 	return oValidatorFn_VolterraSoftwareVersion, nil
 }
-
 func (v *ValidatePassport) ClusterNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_name")
@@ -1267,9 +1130,7 @@ func (v *ValidatePassport) ClusterNameValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePassport) ClusterTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_type")
@@ -1277,9 +1138,7 @@ func (v *ValidatePassport) ClusterTypeValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePassport) LatitudeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for latitude")
@@ -1287,9 +1146,7 @@ func (v *ValidatePassport) LatitudeValidationRuleHandler(rules map[string]string
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePassport) LongitudeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for longitude")
@@ -1297,9 +1154,7 @@ func (v *ValidatePassport) LongitudeValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePassport) ClusterSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_size")
@@ -1307,9 +1162,7 @@ func (v *ValidatePassport) ClusterSizeValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePassport) PrivateNetworkNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for private_network_name")
@@ -1331,50 +1184,35 @@ func (v *ValidatePassport) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cluster_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster_name"))
 		if err := fv(ctx, m.GetClusterName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster_size"))
 		if err := fv(ctx, m.GetClusterSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cluster_type"))
 		if err := fv(ctx, m.GetClusterType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["latitude"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("latitude"))
 		if err := fv(ctx, m.GetLatitude(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["longitude"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("longitude"))
 		if err := fv(ctx, m.GetLongitude(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetOperatingSystemVersionChoice().(type) {
@@ -1400,16 +1238,12 @@ func (v *ValidatePassport) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_network_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_network_name"))
 		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetVolterraSwVersionChoice().(type) {
@@ -1435,25 +1269,19 @@ func (v *ValidatePassport) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpm_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpm_version"))
 		if err := fv(ctx, m.GetVpmVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPassportValidator = func() *ValidatePassport {
 	v := &ValidatePassport{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1461,7 +1289,6 @@ var DefaultPassportValidator = func() *ValidatePassport {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhOperatingSystemVersionChoiceOperatingSystemVersion := v.OperatingSystemVersionChoiceOperatingSystemVersionValidationRuleHandler
 	rulesOperatingSystemVersionChoiceOperatingSystemVersion := map[string]string{
 		"ves.io.schema.rules.string.max_len": "20",
@@ -1471,9 +1298,7 @@ var DefaultPassportValidator = func() *ValidatePassport {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Passport.operating_system_version_choice_operating_system_version: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["operating_system_version_choice.operating_system_version"] = vFnMap["operating_system_version_choice.operating_system_version"]
-
 	vrhVolterraSwVersionChoiceVolterraSoftwareVersion := v.VolterraSwVersionChoiceVolterraSoftwareVersionValidationRuleHandler
 	rulesVolterraSwVersionChoiceVolterraSoftwareVersion := map[string]string{
 		"ves.io.schema.rules.string.max_len": "20",
@@ -1483,7 +1308,6 @@ var DefaultPassportValidator = func() *ValidatePassport {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Passport.volterra_sw_version_choice_volterra_software_version: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["volterra_sw_version_choice.volterra_software_version"] = vFnMap["volterra_sw_version_choice.volterra_software_version"]
 
 	vrhClusterName := v.ClusterNameValidationRuleHandler
@@ -1617,7 +1441,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -1686,16 +1509,12 @@ func (v *ValidateSWInfo) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["sw_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sw_version"))
 		if err := fv(ctx, m.GetSwVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1764,18 +1583,13 @@ func (v *ValidateWorkloadContext) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_name"))
 		if err := fv(ctx, m.GetAppName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("params"))
 		for key, value := range m.GetParams() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1783,9 +1597,7 @@ func (v *ValidateWorkloadContext) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

@@ -118,16 +118,13 @@ func (v *ValidateDNSSECMode) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSSECModeValidator = func() *ValidateDNSSECMode {
 	v := &ValidateDNSSECMode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -135,7 +132,6 @@ var DefaultDNSSECModeValidator = func() *ValidateDNSSECMode {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMode := v.ModeValidationRuleHandler
 	rulesMode := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -208,7 +204,6 @@ func (v *ValidateDNSSECModeEnable) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -277,9 +272,7 @@ func (v *ValidateDNSSECStatus) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ds_records"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ds_records"))
 		for idx, item := range m.GetDsRecords() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -287,27 +280,20 @@ func (v *ValidateDNSSECStatus) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mode"))
 		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSSECStatusValidator = func() *ValidateDNSSECStatus {
 	v := &ValidateDNSSECStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["mode"] = DNSSECModeValidator().Validate
-
 	v.FldValidators["ds_records"] = DSRecordValidator().Validate
 
 	return v
@@ -359,7 +345,6 @@ type ValidateDSRecord struct {
 }
 
 func (v *ValidateDSRecord) KeyTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for key_tag")
@@ -367,9 +352,7 @@ func (v *ValidateDSRecord) KeyTagValidationRuleHandler(rules map[string]string) 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDSRecord) AlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for algorithm")
@@ -377,9 +360,7 @@ func (v *ValidateDSRecord) AlgorithmValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDSRecord) DigestTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for digest_type")
@@ -387,9 +368,7 @@ func (v *ValidateDSRecord) DigestTypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDSRecord) DigestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for digest")
@@ -397,9 +376,7 @@ func (v *ValidateDSRecord) DigestValidationRuleHandler(rules map[string]string) 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDSRecord) FlagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for flags")
@@ -407,9 +384,7 @@ func (v *ValidateDSRecord) FlagsValidationRuleHandler(rules map[string]string) (
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDSRecord) TtlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ttl")
@@ -431,77 +406,54 @@ func (v *ValidateDSRecord) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("algorithm"))
 		if err := fv(ctx, m.GetAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["digest"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("digest"))
 		if err := fv(ctx, m.GetDigest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["digest_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("digest_type"))
 		if err := fv(ctx, m.GetDigestType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["flags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flags"))
 		if err := fv(ctx, m.GetFlags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key_tag"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_tag"))
 		if err := fv(ctx, m.GetKeyTag(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_key"))
 		if err := fv(ctx, m.GetPublicKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ttl"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ttl"))
 		if err := fv(ctx, m.GetTtl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDSRecordValidator = func() *ValidateDSRecord {
 	v := &ValidateDSRecord{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

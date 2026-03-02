@@ -78,34 +78,24 @@ func (v *ValidateDeleteDoSAutoMitigationRuleReq) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dos_automitigation_rule_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dos_automitigation_rule_name"))
 		if err := fv(ctx, m.GetDosAutomitigationRuleName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -174,16 +164,12 @@ func (v *ValidateDeleteDoSAutoMitigationRuleRsp) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -252,25 +238,18 @@ func (v *ValidateGetDoSAutoMitigationRulesReq) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -328,7 +307,6 @@ func (m *GetDoSAutoMitigationRulesRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDosAutomitigationRulesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -336,7 +314,6 @@ func (m *GetDoSAutoMitigationRulesRsp) GetDosAutomitigationRulesDRefInfo() ([]db
 	if m.GetDosAutomitigationRules() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetDosAutomitigationRules() {
 		driSet, err := e.GetDRefInfo()
@@ -350,7 +327,6 @@ func (m *GetDoSAutoMitigationRulesRsp) GetDosAutomitigationRulesDRefInfo() ([]db
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetDoSAutoMitigationRulesRsp struct {
@@ -370,9 +346,7 @@ func (v *ValidateGetDoSAutoMitigationRulesRsp) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dos_automitigation_rules"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dos_automitigation_rules"))
 		for idx, item := range m.GetDosAutomitigationRules() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -380,16 +354,13 @@ func (v *ValidateGetDoSAutoMitigationRulesRsp) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetDoSAutoMitigationRulesRspValidator = func() *ValidateGetDoSAutoMitigationRulesRsp {
 	v := &ValidateGetDoSAutoMitigationRulesRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["dos_automitigation_rules"] = ves_io_schema_dos_mitigation.DoSMitigationRuleInfoValidator().Validate
 
 	return v
@@ -453,9 +424,7 @@ func (v *ValidateGetSecurityConfigRsp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_protection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_protection"))
 		for idx, item := range m.GetApiProtection() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -463,11 +432,8 @@ func (v *ValidateGetSecurityConfigRsp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_firewall"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_firewall"))
 		for idx, item := range m.GetAppFirewall() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -475,11 +441,8 @@ func (v *ValidateGetSecurityConfigRsp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_firewall_per_route"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_firewall_per_route"))
 		for idx, item := range m.GetAppFirewallPerRoute() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -487,11 +450,8 @@ func (v *ValidateGetSecurityConfigRsp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bot_defense"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_defense"))
 		for idx, item := range m.GetBotDefense() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -499,11 +459,8 @@ func (v *ValidateGetSecurityConfigRsp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_detection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_detection"))
 		for idx, item := range m.GetDdosDetection() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -511,11 +468,8 @@ func (v *ValidateGetSecurityConfigRsp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protected"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protected"))
 		for idx, item := range m.GetProtected() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -523,9 +477,7 @@ func (v *ValidateGetSecurityConfigRsp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

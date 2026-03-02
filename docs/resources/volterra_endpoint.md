@@ -20,7 +20,6 @@ resource "volterra_endpoint" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -99,7 +98,7 @@ Specifies name and TTL used for DNS resolution..
 ### Endpoint Address Service Info
 
 ```
- In case of Consul, tags on the service is matched against service_selector.
+In case of Consul, tags on the service is matched against service_selector.
 ```
 
 `discovery_type` - (Required) Specifies whether the discovery is from Kubernetes or Consul cluster (`String`).
@@ -191,4 +190,4 @@ Use TTL value returned by DNS Server during DNS resolution as DNS refresh interv
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured endpoint.
+*   `id` - This is the id of the configured endpoint.

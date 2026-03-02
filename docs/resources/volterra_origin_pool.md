@@ -25,26 +25,11 @@ resource "volterra_origin_pool" "example" {
   origin_servers {
     // One of the arguments from this list "cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name" must be set
 
-    private_name {
-      dns_name = "value"
-
-      // One of the arguments from this list "inside_network outside_network segment" must be set
-
-      inside_network = true
-      refresh_interval = "20"
-      site_locator {
-        // One of the arguments from this list "site virtual_site" must be set
-
-        site {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
-      snat_pool {
-        // One of the arguments from this list "no_snat_pool snat_pool" can be set
-
-        no_snat_pool = true
+    custom_endpoint_object {
+      endpoint {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
     }
 
@@ -55,13 +40,12 @@ resource "volterra_origin_pool" "example" {
 
   // One of the arguments from this list "automatic_port lb_port port" must be set
 
-  port = "9080"
+  lb_port = true
 
   // One of the arguments from this list "no_tls use_tls" must be set
 
   no_tls = true
 }
-
 ```
 
 Argument Reference
@@ -147,6 +131,12 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistence (`Bool`).
 
+###### One of the arguments from this list "max_requests_per_connection, no_request_limit_per_connection" must be set
+
+`max_requests_per_connection` - (Optional) Enter a value >=1 to define the request limit per connection. (`Int`).
+
+`no_request_limit_per_connection` - (Optional) When selected, no limit is enforced, and connections can handle unlimited requests. (`Bool`).
+
 ###### One of the arguments from this list "disable_outlier_detection, outlier_detection" must be set
 
 `disable_outlier_detection` - (Optional) Outlier detection is disabled (`Bool`).
@@ -179,7 +169,7 @@ List of origin servers in this pool.
 
 ###### One of the arguments from this list "cbip_service, consul_service, custom_endpoint_object, k8s_service, private_ip, private_name, public_ip, public_name, vn_private_ip, vn_private_name" must be set
 
-`cbip_service` - (Optional) Specify origin server with cBIP service name. See [Choice Cbip Service ](#choice-cbip-service) below for details.
+`cbip_service` - (Optional) Specify origin server with BIG-IP service name. See [Choice Cbip Service ](#choice-cbip-service) below for details.
 
 `consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Choice Consul Service ](#choice-consul-service) below for details.
 
@@ -227,7 +217,7 @@ Settings to normalize the headers of upstream requests..
 
 ### Choice Cbip Service
 
-Specify origin server with cBIP service name.
+Specify origin server with BIG-IP service name.
 
 `service_name` - (Required) Name of the discovered Classic BIG-IP virtual server to be used as origin. (`String`).
 
@@ -347,7 +337,7 @@ Specify origin server with public IP.
 
 ###### One of the arguments from this list "ip, ipv6" must be set
 
-`ip` - (Optional) Public IPV4 address (`String`).
+`ip`- (Optional) Public IPV4 address (`String`).
 
 `ipv6` - (Optional) Public IPV6 address (`String`).
 
@@ -522,6 +512,10 @@ Open new upstream connection pool for every new downstream connection.
 ### Map Downstream To Upstream Conn Pool Type Enable Conn Pool Reuse
 
 Reuse upstream connection pool for multiple downstream connections.
+
+### Max Requests Per Connection Choice No Request Limit Per Connection
+
+When selected, no limit is enforced, and connections can handle unlimited requests..
 
 ### Max Session Keys Type Default Session Key Caching
 
@@ -852,4 +846,4 @@ TLS parameters such as min/max TLS version and ciphers.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured origin_pool.
+*   `id` - This is the id of the configured origin_pool.

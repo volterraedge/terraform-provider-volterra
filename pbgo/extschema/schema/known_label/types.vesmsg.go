@@ -65,7 +65,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetKeyRefDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetKeyRefDRefInfo() ([]db.DRefInfo, error) {
@@ -90,7 +89,6 @@ func (m *GlobalSpecType) GetKeyRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetKeyRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -109,7 +107,6 @@ func (m *GlobalSpecType) GetKeyRefDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -130,9 +127,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_ref"))
 		for idx, item := range m.GetKeyRef() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -140,9 +135,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCGetCloudInitConfig(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.GetCloudInitConfig(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCTokenState(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &StateReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetCloudInitConfig"] = ccl.doRPCGetCloudInitConfig
-
 	rpcFns["TokenState"] = ccl.doRPCTokenState
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -138,6 +134,7 @@ func (c *CustomAPIRestClient) doRPCGetCloudInitConfig(ctx context.Context, callO
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("enable_management_network", fmt.Sprintf("%v", req.EnableManagementNetwork))
 		q.Add("provider", fmt.Sprintf("%v", req.Provider))
 		q.Add("site_name", fmt.Sprintf("%v", req.SiteName))
 
@@ -174,7 +171,6 @@ func (c *CustomAPIRestClient) doRPCGetCloudInitConfig(ctx context.Context, callO
 	pbRsp := &GetCloudInitConfigResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.token.GetCloudInitConfigResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -182,7 +178,6 @@ func (c *CustomAPIRestClient) doRPCGetCloudInitConfig(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCTokenState(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -259,7 +254,6 @@ func (c *CustomAPIRestClient) doRPCTokenState(ctx context.Context, callOpts *ser
 	pbRsp := &ObjectChangeResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.token.ObjectChangeResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -293,11 +287,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetCloudInitConfig"] = ccl.doRPCGetCloudInitConfig
-
 	rpcFns["TokenState"] = ccl.doRPCTokenState
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -382,7 +373,6 @@ func (s *customAPISrv) GetCloudInitConfig(ctx context.Context, in *GetCloudInitC
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.token.GetCloudInitConfigResp", rsp)...)
 
 	return rsp, nil
@@ -431,7 +421,6 @@ func (s *customAPISrv) TokenState(ctx context.Context, in *StateReq) (*ObjectCha
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.token.ObjectChangeResp", rsp)...)
 
 	return rsp, nil
@@ -537,6 +526,15 @@ var CustomAPISwaggerJSON string = `{
                         "required": false,
                         "type": "string",
                         "x-displayname": "Site Name"
+                    },
+                    {
+                        "name": "enable_management_network",
+                        "description": "management network choice for this cloud-init config",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean",
+                        "x-displayname": "Management Network choice"
                     }
                 ],
                 "tags": [
@@ -885,7 +883,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },

@@ -74,9 +74,7 @@ func NewPrivateConfigKubeConfigAPIGrpcClient(cc *grpc.ClientConn) server.CustomC
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GlobalAccessEnabled"] = ccl.doRPCGlobalAccessEnabled
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -163,7 +161,6 @@ func (c *PrivateConfigKubeConfigAPIRestClient) doRPCGlobalAccessEnabled(ctx cont
 	pbRsp := &GlobalAccessCheckResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.GlobalAccessCheckResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -197,9 +194,7 @@ func NewPrivateConfigKubeConfigAPIRestClient(baseURL string, hc http.Client) ser
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GlobalAccessEnabled"] = ccl.doRPCGlobalAccessEnabled
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

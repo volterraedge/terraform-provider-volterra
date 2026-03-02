@@ -76,27 +76,19 @@ func (v *ValidateDNSDomainStatus) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dnssec_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dnssec_status"))
 		if err := fv(ctx, m.GetDnssecStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_verification"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_verification"))
 		if err := fv(ctx, m.GetDomainVerification(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_nameservers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_nameservers"))
 		for idx, item := range m.GetVolterraNameservers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -104,9 +96,7 @@ func (v *ValidateDNSDomainStatus) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -175,79 +165,54 @@ func (v *ValidateDNSSECStatus) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("algorithm"))
 		if err := fv(ctx, m.GetAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["digest"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("digest"))
 		if err := fv(ctx, m.GetDigest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["digest_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("digest_type"))
 		if err := fv(ctx, m.GetDigestType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["flags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flags"))
 		if err := fv(ctx, m.GetFlags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key_tag"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_tag"))
 		if err := fv(ctx, m.GetKeyTag(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mode"))
 		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_key"))
 		if err := fv(ctx, m.GetPublicKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ttl"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ttl"))
 		if err := fv(ctx, m.GetTtl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -305,7 +270,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcSpecDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -313,7 +277,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
@@ -323,7 +286,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSpecType struct {
@@ -343,23 +305,18 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_spec"))
 		if err := fv(ctx, m.GetGcSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v

@@ -64,7 +64,6 @@ type ValidateThreatCampaign struct {
 }
 
 func (v *ValidateThreatCampaign) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -72,9 +71,7 @@ func (v *ValidateThreatCampaign) NameValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThreatCampaign) RiskValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for risk")
@@ -82,9 +79,7 @@ func (v *ValidateThreatCampaign) RiskValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThreatCampaign) MalwaresValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -124,9 +119,7 @@ func (v *ValidateThreatCampaign) MalwaresValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThreatCampaign) SystemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -166,9 +159,7 @@ func (v *ValidateThreatCampaign) SystemsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThreatCampaign) LastUpdateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for last_update")
@@ -176,9 +167,7 @@ func (v *ValidateThreatCampaign) LastUpdateValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThreatCampaign) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
@@ -200,71 +189,49 @@ func (v *ValidateThreatCampaign) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attack_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attack_type"))
 		if err := fv(ctx, m.GetAttackType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["intent"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("intent"))
 		if err := fv(ctx, m.GetIntent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_update"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_update"))
 		if err := fv(ctx, m.GetLastUpdate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["malwares"]; exists {
 		vOpts := append(opts, db.WithValidateField("malwares"))
 		if err := fv(ctx, m.GetMalwares(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["references"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("references"))
 		for idx, item := range m.GetReferences() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -272,33 +239,25 @@ func (v *ValidateThreatCampaign) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["risk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("risk"))
 		if err := fv(ctx, m.GetRisk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["systems"]; exists {
 		vOpts := append(opts, db.WithValidateField("systems"))
 		if err := fv(ctx, m.GetSystems(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThreatCampaignValidator = func() *ValidateThreatCampaign {
 	v := &ValidateThreatCampaign{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -422,7 +381,6 @@ type ValidateThreatCampaignRequest struct {
 }
 
 func (v *ValidateThreatCampaignRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
@@ -444,23 +402,18 @@ func (v *ValidateThreatCampaignRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThreatCampaignRequestValidator = func() *ValidateThreatCampaignRequest {
 	v := &ValidateThreatCampaignRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

@@ -67,7 +67,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProtocolPolicerDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -75,7 +74,6 @@ func (m *CreateSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocolPolicer() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetProtocolPolicer() {
 		driSet, err := e.GetDRefInfo()
@@ -89,7 +87,6 @@ func (m *CreateSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCreateSpecType struct {
@@ -97,7 +94,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ProtocolPolicerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -157,22 +153,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["protocol_policer"]; exists {
 		vOpts := append(opts, db.WithValidateField("protocol_policer"))
 		if err := fv(ctx, m.GetProtocolPolicer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -254,7 +246,6 @@ func (v *ValidateDnsType) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -312,7 +303,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProtocolPolicerDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -320,7 +310,6 @@ func (m *GetSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocolPolicer() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetProtocolPolicer() {
 		driSet, err := e.GetDRefInfo()
@@ -334,7 +323,6 @@ func (m *GetSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetSpecType struct {
@@ -342,7 +330,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ProtocolPolicerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -402,22 +389,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["protocol_policer"]; exists {
 		vOpts := append(opts, db.WithValidateField("protocol_policer"))
 		if err := fv(ctx, m.GetProtocolPolicer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -488,7 +471,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProtocolPolicerDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -496,7 +478,6 @@ func (m *GlobalSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocolPolicer() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetProtocolPolicer() {
 		driSet, err := e.GetDRefInfo()
@@ -510,7 +491,6 @@ func (m *GlobalSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -518,7 +498,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ProtocolPolicerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -578,22 +557,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["protocol_policer"]; exists {
 		vOpts := append(opts, db.WithValidateField("protocol_policer"))
 		if err := fv(ctx, m.GetProtocolPolicer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -675,9 +650,7 @@ func (v *ValidateIcmpType) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		for idx, item := range m.GetType() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -685,9 +658,7 @@ func (v *ValidateIcmpType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -745,7 +716,6 @@ func (m *ProtocolPolicerType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicerDRefInfo()
-
 }
 
 func (m *ProtocolPolicerType) GetPolicerDRefInfo() ([]db.DRefInfo, error) {
@@ -770,7 +740,6 @@ func (m *ProtocolPolicerType) GetPolicerDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPolicerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -789,7 +758,6 @@ func (m *ProtocolPolicerType) GetPolicerDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -798,7 +766,6 @@ type ValidateProtocolPolicerType struct {
 }
 
 func (v *ValidateProtocolPolicerType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for protocol")
@@ -807,15 +774,12 @@ func (v *ValidateProtocolPolicerType) ProtocolValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateProtocolPolicerType) PolicerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -875,31 +839,24 @@ func (v *ValidateProtocolPolicerType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policer"]; exists {
 		vOpts := append(opts, db.WithValidateField("policer"))
 		if err := fv(ctx, m.GetPolicer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProtocolPolicerTypeValidator = func() *ValidateProtocolPolicerType {
 	v := &ValidateProtocolPolicerType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1039,9 +996,7 @@ func (v *ValidateProtocolType) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1099,7 +1054,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetProtocolPolicerDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1107,7 +1061,6 @@ func (m *ReplaceSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocolPolicer() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetProtocolPolicer() {
 		driSet, err := e.GetDRefInfo()
@@ -1121,7 +1074,6 @@ func (m *ReplaceSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1129,7 +1081,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ProtocolPolicerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1189,22 +1140,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["protocol_policer"]; exists {
 		vOpts := append(opts, db.WithValidateField("protocol_policer"))
 		if err := fv(ctx, m.GetProtocolPolicer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1286,9 +1233,7 @@ func (v *ValidateTcpType) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["flags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flags"))
 		for idx, item := range m.GetFlags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1296,9 +1241,7 @@ func (v *ValidateTcpType) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1367,7 +1310,6 @@ func (v *ValidateUdpType) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

@@ -170,7 +170,7 @@ type DomainConfiguration struct {
 	// Destructive Methods
 	//
 	// x-displayName: "Run API tests for destructive methods (e.g., DELETE, PUT)."
-	// Enable to allow API test to execute destructive methods. Be cautious as these can alter or delete data
+	// Enable to allow API Testing to execute against destructive methods. Use with caution as these may modify or delete data
 	AllowDestructiveMethods bool `protobuf:"varint,2,opt,name=allow_destructive_methods,json=allowDestructiveMethods,proto3" json:"allow_destructive_methods,omitempty"`
 	// The Domain credentials
 	//

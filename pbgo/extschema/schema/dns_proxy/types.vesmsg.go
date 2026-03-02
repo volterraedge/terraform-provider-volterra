@@ -76,27 +76,22 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginServersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginServersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProtocolInspectionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProtocolInspectionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyAdvertisementDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisementDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
@@ -122,7 +117,6 @@ func (m *CreateSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetIrulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -150,7 +144,6 @@ func (m *CreateSpecType) GetIrulesDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -159,7 +152,6 @@ func (m *CreateSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServers() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOriginServers().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOriginServers().GetDRefInfo() FAILED")
@@ -169,11 +161,9 @@ func (m *CreateSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "origin_servers." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *CreateSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetProtocolInspection()
 	if vref == nil {
 		return nil, nil
@@ -189,7 +179,6 @@ func (m *CreateSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) 
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetProtocolInspectionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -199,7 +188,6 @@ func (m *CreateSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d d
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: protocol_inspection")
 	}
-
 	vref := m.GetProtocolInspection()
 	if vref == nil {
 		return nil, nil
@@ -217,7 +205,6 @@ func (m *CreateSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d d
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -226,7 +213,6 @@ func (m *CreateSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetProxyAdvertisement() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
@@ -236,7 +222,6 @@ func (m *CreateSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 		dri.DRField = "proxy_advertisement." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -244,7 +229,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) TransportTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TransportType)
@@ -258,9 +242,7 @@ func (v *ValidateCreateSpecType) TransportTypeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for origin_servers")
@@ -269,19 +251,15 @@ func (v *ValidateCreateSpecType) OriginServersValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := OriginServersValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) DdosProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ddos_profile")
@@ -290,15 +268,12 @@ func (v *ValidateCreateSpecType) DdosProfileValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) CacheProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cache_profile")
@@ -307,19 +282,15 @@ func (v *ValidateCreateSpecType) CacheProfileValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_virtual_host.DNSCacheProfileValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) IrulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -379,85 +350,60 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cache_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_profile"))
 		if err := fv(ctx, m.GetCacheProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_profile"))
 		if err := fv(ctx, m.GetDdosProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["irules"]; exists {
 		vOpts := append(opts, db.WithValidateField("irules"))
 		if err := fv(ctx, m.GetIrules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["lb_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("lb_algorithm"))
 		if err := fv(ctx, m.GetLbAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol_inspection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol_inspection"))
 		if err := fv(ctx, m.GetProtocolInspection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_advertisement"))
 		if err := fv(ctx, m.GetProxyAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_type"))
 		if err := fv(ctx, m.GetTransportType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -521,11 +467,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["irules"] = vFn
-
 	v.FldValidators["lb_algorithm"] = LBAlgorithmTypeValidator().Validate
-
 	v.FldValidators["proxy_advertisement"] = ProxyAdvertisementTypeValidator().Validate
-
 	v.FldValidators["protocol_inspection"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -583,27 +526,22 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginServersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginServersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProtocolInspectionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProtocolInspectionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyAdvertisementDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisementDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
@@ -629,7 +567,6 @@ func (m *GetSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetIrulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -657,7 +594,6 @@ func (m *GetSpecType) GetIrulesDBEntries(ctx context.Context, d db.Interface) ([
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -666,7 +602,6 @@ func (m *GetSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServers() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOriginServers().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOriginServers().GetDRefInfo() FAILED")
@@ -676,11 +611,9 @@ func (m *GetSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "origin_servers." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GetSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetProtocolInspection()
 	if vref == nil {
 		return nil, nil
@@ -696,7 +629,6 @@ func (m *GetSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetProtocolInspectionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -706,7 +638,6 @@ func (m *GetSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d db.I
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: protocol_inspection")
 	}
-
 	vref := m.GetProtocolInspection()
 	if vref == nil {
 		return nil, nil
@@ -724,7 +655,6 @@ func (m *GetSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d db.I
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -733,7 +663,6 @@ func (m *GetSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProxyAdvertisement() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
@@ -743,7 +672,6 @@ func (m *GetSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "proxy_advertisement." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -751,7 +679,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) TransportTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TransportType)
@@ -765,9 +692,7 @@ func (v *ValidateGetSpecType) TransportTypeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for origin_servers")
@@ -776,19 +701,15 @@ func (v *ValidateGetSpecType) OriginServersValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := OriginServersValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DdosProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ddos_profile")
@@ -797,15 +718,12 @@ func (v *ValidateGetSpecType) DdosProfileValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) CacheProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cache_profile")
@@ -814,19 +732,15 @@ func (v *ValidateGetSpecType) CacheProfileValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_virtual_host.DNSCacheProfileValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) IrulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -886,85 +800,60 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cache_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_profile"))
 		if err := fv(ctx, m.GetCacheProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_profile"))
 		if err := fv(ctx, m.GetDdosProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["irules"]; exists {
 		vOpts := append(opts, db.WithValidateField("irules"))
 		if err := fv(ctx, m.GetIrules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["lb_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("lb_algorithm"))
 		if err := fv(ctx, m.GetLbAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol_inspection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol_inspection"))
 		if err := fv(ctx, m.GetProtocolInspection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_advertisement"))
 		if err := fv(ctx, m.GetProxyAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_type"))
 		if err := fv(ctx, m.GetTransportType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1028,11 +917,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["irules"] = vFn
-
 	v.FldValidators["lb_algorithm"] = LBAlgorithmTypeValidator().Validate
-
 	v.FldValidators["proxy_advertisement"] = ProxyAdvertisementTypeValidator().Validate
-
 	v.FldValidators["protocol_inspection"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1090,33 +976,27 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginServersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginServersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProtocolInspectionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProtocolInspectionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyAdvertisementDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisementDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
@@ -1142,7 +1022,6 @@ func (m *GlobalSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetIrulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1170,7 +1049,6 @@ func (m *GlobalSpecType) GetIrulesDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1179,7 +1057,6 @@ func (m *GlobalSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServers() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOriginServers().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOriginServers().GetDRefInfo() FAILED")
@@ -1189,11 +1066,9 @@ func (m *GlobalSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "origin_servers." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GlobalSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetProtocolInspection()
 	if vref == nil {
 		return nil, nil
@@ -1209,7 +1084,6 @@ func (m *GlobalSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) 
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetProtocolInspectionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1219,7 +1093,6 @@ func (m *GlobalSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d d
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: protocol_inspection")
 	}
-
 	vref := m.GetProtocolInspection()
 	if vref == nil {
 		return nil, nil
@@ -1237,7 +1110,6 @@ func (m *GlobalSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d d
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1246,7 +1118,6 @@ func (m *GlobalSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetProxyAdvertisement() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
@@ -1256,11 +1127,9 @@ func (m *GlobalSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 		dri.DRField = "proxy_advertisement." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1276,7 +1145,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1286,7 +1154,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1304,7 +1171,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1313,7 +1179,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) TransportTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TransportType)
@@ -1327,9 +1192,7 @@ func (v *ValidateGlobalSpecType) TransportTypeValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for origin_servers")
@@ -1338,19 +1201,15 @@ func (v *ValidateGlobalSpecType) OriginServersValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := OriginServersValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DdosProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ddos_profile")
@@ -1359,15 +1218,12 @@ func (v *ValidateGlobalSpecType) DdosProfileValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CacheProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cache_profile")
@@ -1376,19 +1232,15 @@ func (v *ValidateGlobalSpecType) CacheProfileValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_virtual_host.DNSCacheProfileValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IrulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1448,94 +1300,66 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cache_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_profile"))
 		if err := fv(ctx, m.GetCacheProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_profile"))
 		if err := fv(ctx, m.GetDdosProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["irules"]; exists {
 		vOpts := append(opts, db.WithValidateField("irules"))
 		if err := fv(ctx, m.GetIrules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["lb_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("lb_algorithm"))
 		if err := fv(ctx, m.GetLbAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol_inspection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol_inspection"))
 		if err := fv(ctx, m.GetProtocolInspection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_advertisement"))
 		if err := fv(ctx, m.GetProxyAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_type"))
 		if err := fv(ctx, m.GetTransportType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1599,13 +1423,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["irules"] = vFn
-
 	v.FldValidators["lb_algorithm"] = LBAlgorithmTypeValidator().Validate
-
 	v.FldValidators["proxy_advertisement"] = ProxyAdvertisementTypeValidator().Validate
-
 	v.FldValidators["protocol_inspection"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1715,16 +1535,13 @@ func (v *ValidateHealthCheckType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHealthCheckTypeValidator = func() *ValidateHealthCheckType {
 	v := &ValidateHealthCheckType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["choice.tcp_health_check"] = ves_io_schema_healthcheck.DnsProxyTcpHealthCheckValidator().Validate
 	v.FldValidators["choice.udp_health_check"] = ves_io_schema_healthcheck.DnsProxyUdpHealthCheckValidator().Validate
 	v.FldValidators["choice.dns_health_check"] = ves_io_schema_healthcheck.DnsHealthCheckValidator().Validate
@@ -1778,7 +1595,6 @@ type ValidateHealthChecks struct {
 }
 
 func (v *ValidateHealthChecks) HealthCheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1824,9 +1640,7 @@ func (v *ValidateHealthChecks) HealthCheckValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHealthChecks) TimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for timeout")
@@ -1834,9 +1648,7 @@ func (v *ValidateHealthChecks) TimeoutValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHealthChecks) IntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for interval")
@@ -1844,9 +1656,7 @@ func (v *ValidateHealthChecks) IntervalValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHealthChecks) JitterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for jitter")
@@ -1854,9 +1664,7 @@ func (v *ValidateHealthChecks) JitterValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHealthChecks) UnhealthyThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for unhealthy_threshold")
@@ -1864,9 +1672,7 @@ func (v *ValidateHealthChecks) UnhealthyThresholdValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHealthChecks) HealthyThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for healthy_threshold")
@@ -1874,9 +1680,7 @@ func (v *ValidateHealthChecks) HealthyThresholdValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHealthChecks) JitterPercentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for jitter_percent")
@@ -1898,76 +1702,54 @@ func (v *ValidateHealthChecks) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["health_check"]; exists {
 		vOpts := append(opts, db.WithValidateField("health_check"))
 		if err := fv(ctx, m.GetHealthCheck(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["healthy_threshold"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("healthy_threshold"))
 		if err := fv(ctx, m.GetHealthyThreshold(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interval"))
 		if err := fv(ctx, m.GetInterval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jitter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("jitter"))
 		if err := fv(ctx, m.GetJitter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["jitter_percent"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("jitter_percent"))
 		if err := fv(ctx, m.GetJitterPercent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timeout"))
 		if err := fv(ctx, m.GetTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unhealthy_threshold"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unhealthy_threshold"))
 		if err := fv(ctx, m.GetUnhealthyThreshold(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHealthChecksValidator = func() *ValidateHealthChecks {
 	v := &ValidateHealthChecks{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2156,16 +1938,13 @@ func (v *ValidateLBAlgorithmType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLBAlgorithmTypeValidator = func() *ValidateLBAlgorithmType {
 	v := &ValidateLBAlgorithmType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2173,7 +1952,6 @@ var DefaultLBAlgorithmTypeValidator = func() *ValidateLBAlgorithmType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLbAlgorithmChoice := v.LbAlgorithmChoiceValidationRuleHandler
 	rulesLbAlgorithmChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2240,15 +2018,12 @@ func (m *OriginServerType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProximityChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProximityChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2258,15 +2033,10 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetChoice().(type) {
 	case *OriginServerType_PublicIp:
-
 		return nil, nil
-
 	case *OriginServerType_PublicName:
-
 		return nil, nil
-
 	case *OriginServerType_K8SService:
-
 		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
@@ -2276,11 +2046,9 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "k8s_service." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2290,11 +2058,8 @@ func (m *OriginServerType) GetProximityChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProximityChoice().(type) {
 	case *OriginServerType_NoPreference:
-
 		return nil, nil
-
 	case *OriginServerType_SitePreferences:
-
 		drInfos, err := m.GetSitePreferences().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSitePreferences().GetDRefInfo() FAILED")
@@ -2304,11 +2069,9 @@ func (m *OriginServerType) GetProximityChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site_preferences." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateOriginServerType struct {
@@ -2381,7 +2144,6 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetProximityChoice().(type) {
@@ -2407,16 +2169,13 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 	v := &ValidateOriginServerType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2424,7 +2183,6 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2435,11 +2193,9 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.public_ip"] = ves_io_schema_views_origin_pool.OriginServerPublicIPValidator().Validate
 	v.FldValidators["choice.public_name"] = ves_io_schema_views_origin_pool.OriginServerPublicNameValidator().Validate
 	v.FldValidators["choice.k8s_service"] = ves_io_schema_views_origin_pool.OriginServerK8SServiceValidator().Validate
-
 	v.FldValidators["proximity_choice.site_preferences"] = ves_io_schema_views.SiteReferenceListTypeValidator().Validate
 
 	return v
@@ -2492,7 +2248,6 @@ func (m *OriginServers) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOriginServersDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2500,7 +2255,6 @@ func (m *OriginServers) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServers() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
@@ -2514,7 +2268,6 @@ func (m *OriginServers) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateOriginServers struct {
@@ -2522,7 +2275,6 @@ type ValidateOriginServers struct {
 }
 
 func (v *ValidateOriginServers) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2568,9 +2320,7 @@ func (v *ValidateOriginServers) OriginServersValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOriginServers) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for health_checks")
@@ -2579,11 +2329,9 @@ func (v *ValidateOriginServers) HealthChecksValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := HealthChecksValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2603,31 +2351,24 @@ func (v *ValidateOriginServers) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["health_checks"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_checks"))
 		if err := fv(ctx, m.GetHealthChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOriginServersValidator = func() *ValidateOriginServers {
 	v := &ValidateOriginServers{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2711,7 +2452,6 @@ func (m *ProxyAdvertisementType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAdvertiseChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2721,15 +2461,10 @@ func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ProxyAdvertisementType_DoNotAdvertise:
-
 		return nil, nil
-
 	case *ProxyAdvertisementType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	case *ProxyAdvertisementType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -2739,9 +2474,7 @@ func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ProxyAdvertisementType_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -2751,11 +2484,9 @@ func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateProxyAdvertisementType struct {
@@ -2839,16 +2570,13 @@ func (v *ValidateProxyAdvertisementType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProxyAdvertisementTypeValidator = func() *ValidateProxyAdvertisementType {
 	v := &ValidateProxyAdvertisementType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2856,7 +2584,6 @@ var DefaultProxyAdvertisementTypeValidator = func() *ValidateProxyAdvertisementT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2867,7 +2594,6 @@ var DefaultProxyAdvertisementTypeValidator = func() *ValidateProxyAdvertisementT
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
@@ -2926,27 +2652,22 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginServersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginServersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProtocolInspectionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProtocolInspectionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProxyAdvertisementDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisementDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
@@ -2972,7 +2693,6 @@ func (m *ReplaceSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetIrulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3000,7 +2720,6 @@ func (m *ReplaceSpecType) GetIrulesDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3009,7 +2728,6 @@ func (m *ReplaceSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServers() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetOriginServers().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOriginServers().GetDRefInfo() FAILED")
@@ -3019,11 +2737,9 @@ func (m *ReplaceSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "origin_servers." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *ReplaceSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetProtocolInspection()
 	if vref == nil {
 		return nil, nil
@@ -3039,7 +2755,6 @@ func (m *ReplaceSpecType) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error)
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetProtocolInspectionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3049,7 +2764,6 @@ func (m *ReplaceSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: protocol_inspection")
 	}
-
 	vref := m.GetProtocolInspection()
 	if vref == nil {
 		return nil, nil
@@ -3067,7 +2781,6 @@ func (m *ReplaceSpecType) GetProtocolInspectionDBEntries(ctx context.Context, d 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3076,7 +2789,6 @@ func (m *ReplaceSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error)
 	if m.GetProxyAdvertisement() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
@@ -3086,7 +2798,6 @@ func (m *ReplaceSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error)
 		dri.DRField = "proxy_advertisement." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -3094,7 +2805,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) TransportTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(TransportType)
@@ -3108,9 +2818,7 @@ func (v *ValidateReplaceSpecType) TransportTypeValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for origin_servers")
@@ -3119,19 +2827,15 @@ func (v *ValidateReplaceSpecType) OriginServersValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := OriginServersValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) DdosProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ddos_profile")
@@ -3140,15 +2844,12 @@ func (v *ValidateReplaceSpecType) DdosProfileValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) CacheProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cache_profile")
@@ -3157,19 +2858,15 @@ func (v *ValidateReplaceSpecType) CacheProfileValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_virtual_host.DNSCacheProfileValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) IrulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3229,85 +2926,60 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cache_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cache_profile"))
 		if err := fv(ctx, m.GetCacheProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ddos_profile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ddos_profile"))
 		if err := fv(ctx, m.GetDdosProfile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["irules"]; exists {
 		vOpts := append(opts, db.WithValidateField("irules"))
 		if err := fv(ctx, m.GetIrules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["lb_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("lb_algorithm"))
 		if err := fv(ctx, m.GetLbAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_servers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_servers"))
 		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol_inspection"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol_inspection"))
 		if err := fv(ctx, m.GetProtocolInspection(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_advertisement"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_advertisement"))
 		if err := fv(ctx, m.GetProxyAdvertisement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transport_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transport_type"))
 		if err := fv(ctx, m.GetTransportType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3371,11 +3043,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["irules"] = vFn
-
 	v.FldValidators["lb_algorithm"] = LBAlgorithmTypeValidator().Validate
-
 	v.FldValidators["proxy_advertisement"] = ProxyAdvertisementTypeValidator().Validate
-
 	v.FldValidators["protocol_inspection"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

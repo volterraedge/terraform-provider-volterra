@@ -42,7 +42,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yam
 	rsp, err := c.grpcClient.CascadeDelete(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CreateUserRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.Create(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCListByNotificationPreferences(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListByNotifPrefRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCListByNotificationPreferences(ctx cont
 	rsp, err := c.grpcClient.ListByNotificationPreferences(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCUpdateLastLogin(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LastLoginUpdateRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,15 +98,10 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
-
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["ListByNotificationPreferences"] = ccl.doRPCListByNotificationPreferences
-
 	rpcFns["UpdateLastLogin"] = ccl.doRPCUpdateLastLogin
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -197,7 +189,6 @@ func (c *CustomPrivateAPIRestClient) doRPCCascadeDelete(ctx context.Context, cal
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -205,7 +196,6 @@ func (c *CustomPrivateAPIRestClient) doRPCCascadeDelete(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -287,7 +277,6 @@ func (c *CustomPrivateAPIRestClient) doRPCCreate(ctx context.Context, callOpts *
 	pbRsp := &CreateUserResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.CreateUserResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -295,7 +284,6 @@ func (c *CustomPrivateAPIRestClient) doRPCCreate(ctx context.Context, callOpts *
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCListByNotificationPreferences(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -370,7 +358,6 @@ func (c *CustomPrivateAPIRestClient) doRPCListByNotificationPreferences(ctx cont
 	pbRsp := &ListByNotifPrefResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.ListByNotifPrefResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -378,7 +365,6 @@ func (c *CustomPrivateAPIRestClient) doRPCListByNotificationPreferences(ctx cont
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCUpdateLastLogin(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -455,7 +441,6 @@ func (c *CustomPrivateAPIRestClient) doRPCUpdateLastLogin(ctx context.Context, c
 	pbRsp := &LastLoginUpdateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.LastLoginUpdateResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -489,15 +474,10 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
-
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["ListByNotificationPreferences"] = ccl.doRPCListByNotificationPreferences
-
 	rpcFns["UpdateLastLogin"] = ccl.doRPCUpdateLastLogin
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1141,7 +1121,7 @@ var CustomPrivateAPISwaggerJSON string = `{
             "properties": {
                 "delete_ok": {
                     "type": "boolean",
-                    "description": " status of the deleted objects. \n \"true\" value indicates that the operation had been successful for all the objects.\n \"false\" value indicates that at least one of the delete operations had been unsuccessful.\n\nExample: - \"true\"-",
+                    "description": " status of the deleted objects.\n \"true\" value indicates that the operation had been successful for all the objects.\n \"false\" value indicates that at least one of the delete operations had been unsuccessful.\n\nExample: - \"true\"-",
                     "title": "delete_ok",
                     "format": "boolean",
                     "x-displayname": "Delete Ok",

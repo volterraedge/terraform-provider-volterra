@@ -20,15 +20,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_zone.crudapi.ObjectListRspItem"] = ObjectListRspItemValidator()
 	vr["ves.io.schema.dns_zone.crudapi.ObjectReplaceReq"] = ObjectReplaceReqValidator()
 	vr["ves.io.schema.dns_zone.crudapi.ObjectReplaceRsp"] = ObjectReplaceRspValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Create"] = []string{
 		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
 		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
@@ -38,7 +35,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Create"] = []string{
 		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
 		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
@@ -48,9 +44,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.crudapi.API.Create"] = "ves.io.schema.dns_zone.crudapi.ObjectCreateReq"
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Get"] = []string{
 		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
 		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
@@ -60,7 +54,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.List"] = []string{
 		"items.#.spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
 		"items.#.spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
@@ -70,7 +63,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"items.#.spec.gc_spec.secondary.zone_file",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.ListStream"] = []string{
 		"items.#.spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
 		"items.#.spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
@@ -80,7 +72,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"items.#.spec.gc_spec.secondary.zone_file",
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
 		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
@@ -90,7 +81,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
 		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
@@ -100,17 +90,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.crudapi.API.Replace"] = "ves.io.schema.dns_zone.crudapi.ObjectReplaceReq"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -120,7 +106,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 	csr = mdr.PvtCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.dns_zone.Object"] = APISwaggerJSON
@@ -134,22 +119,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.dns_zone.crudapi.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.dns_zone.crudapi.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.dns_zone.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

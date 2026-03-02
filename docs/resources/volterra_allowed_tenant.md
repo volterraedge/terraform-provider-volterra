@@ -21,7 +21,6 @@ resource "volterra_allowed_tenant" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -60,4 +59,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured allowed_tenant.
+-   `id` - This is the id of the configured allowed_tenant.

@@ -34,7 +34,6 @@ resource "volterra_usb_policy" "example" {
     id_vendor = "0x1d6b"
   }
 }
-
 ```
 
 Argument Reference
@@ -77,4 +76,4 @@ List of allowed USB devices.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured usb_policy.
+*   `id` - This is the id of the configured usb_policy.

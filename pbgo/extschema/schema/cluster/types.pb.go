@@ -853,6 +853,25 @@ type GlobalSpecType struct {
 	// Select upstream connection pool reuse state for every downstream connection
 	// This configuration choice is for HTTP(S) LB only.
 	UpstreamConnPoolReuseType *schema.UpstreamConnPoolReuseType `protobuf:"bytes,31,opt,name=upstream_conn_pool_reuse_type,json=upstreamConnPoolReuseType,proto3" json:"upstream_conn_pool_reuse_type,omitempty"`
+	// Cluster Type
+	//
+	// x-displayName: "Cluster Type"
+	// Cluster Type - internal config to handle TMM pools
+	//
+	// Types that are valid to be assigned to ClusterType:
+	//	*GlobalSpecType_DefaultCluster
+	//	*GlobalSpecType_TmmPoolCluster
+	ClusterType isGlobalSpecType_ClusterType `protobuf_oneof:"cluster_type"`
+	// max_requests_per_connection
+	//
+	// x-displayName: "Maximum Requests Per Connection"
+	// x-required
+	// Sets the maximum number of requests allowed per connection to the origin server.
+	//
+	// Types that are valid to be assigned to MaxRequestsPerConnectionChoice:
+	//	*GlobalSpecType_NoRequestLimitPerConnection
+	//	*GlobalSpecType_MaxRequestsPerConnection
+	MaxRequestsPerConnectionChoice isGlobalSpecType_MaxRequestsPerConnectionChoice `protobuf_oneof:"max_requests_per_connection_choice"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -907,6 +926,18 @@ type isGlobalSpecType_ProxyProtocolType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_ClusterType interface {
+	isGlobalSpecType_ClusterType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_MaxRequestsPerConnectionChoice interface {
+	isGlobalSpecType_MaxRequestsPerConnectionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_Http1Config struct {
 	Http1Config *Http1ProtocolOptions `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
@@ -938,6 +969,18 @@ type GlobalSpecType_ProxyProtocolV1 struct {
 type GlobalSpecType_ProxyProtocolV2 struct {
 	ProxyProtocolV2 *schema.Empty `protobuf:"bytes,30,opt,name=proxy_protocol_v2,json=proxyProtocolV2,proto3,oneof" json:"proxy_protocol_v2,omitempty"`
 }
+type GlobalSpecType_DefaultCluster struct {
+	DefaultCluster *schema.Empty `protobuf:"bytes,33,opt,name=default_cluster,json=defaultCluster,proto3,oneof" json:"default_cluster,omitempty"`
+}
+type GlobalSpecType_TmmPoolCluster struct {
+	TmmPoolCluster *TMMPoolType `protobuf:"bytes,34,opt,name=tmm_pool_cluster,json=tmmPoolCluster,proto3,oneof" json:"tmm_pool_cluster,omitempty"`
+}
+type GlobalSpecType_NoRequestLimitPerConnection struct {
+	NoRequestLimitPerConnection *schema.Empty `protobuf:"bytes,37,opt,name=no_request_limit_per_connection,json=noRequestLimitPerConnection,proto3,oneof" json:"no_request_limit_per_connection,omitempty"`
+}
+type GlobalSpecType_MaxRequestsPerConnection struct {
+	MaxRequestsPerConnection uint32 `protobuf:"varint,35,opt,name=max_requests_per_connection,json=maxRequestsPerConnection,proto3,oneof" json:"max_requests_per_connection,omitempty"`
+}
 
 func (*GlobalSpecType_Http1Config) isGlobalSpecType_HttpProtocolType()                             {}
 func (*GlobalSpecType_Http2Options) isGlobalSpecType_HttpProtocolType()                            {}
@@ -949,6 +992,11 @@ func (*GlobalSpecType_DisableLbSourceIpPersistance) isGlobalSpecType_LbSourceIpP
 func (*GlobalSpecType_DisableProxyProtocol) isGlobalSpecType_ProxyProtocolType()                   {}
 func (*GlobalSpecType_ProxyProtocolV1) isGlobalSpecType_ProxyProtocolType()                        {}
 func (*GlobalSpecType_ProxyProtocolV2) isGlobalSpecType_ProxyProtocolType()                        {}
+func (*GlobalSpecType_DefaultCluster) isGlobalSpecType_ClusterType()                               {}
+func (*GlobalSpecType_TmmPoolCluster) isGlobalSpecType_ClusterType()                               {}
+func (*GlobalSpecType_NoRequestLimitPerConnection) isGlobalSpecType_MaxRequestsPerConnectionChoice() {
+}
+func (*GlobalSpecType_MaxRequestsPerConnection) isGlobalSpecType_MaxRequestsPerConnectionChoice() {}
 
 func (m *GlobalSpecType) GetHttpProtocolType() isGlobalSpecType_HttpProtocolType {
 	if m != nil {
@@ -971,6 +1019,18 @@ func (m *GlobalSpecType) GetLbSourceIpPersistanceChoice() isGlobalSpecType_LbSou
 func (m *GlobalSpecType) GetProxyProtocolType() isGlobalSpecType_ProxyProtocolType {
 	if m != nil {
 		return m.ProxyProtocolType
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetClusterType() isGlobalSpecType_ClusterType {
+	if m != nil {
+		return m.ClusterType
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetMaxRequestsPerConnectionChoice() isGlobalSpecType_MaxRequestsPerConnectionChoice {
+	if m != nil {
+		return m.MaxRequestsPerConnectionChoice
 	}
 	return nil
 }
@@ -1158,6 +1218,34 @@ func (m *GlobalSpecType) GetUpstreamConnPoolReuseType() *schema.UpstreamConnPool
 	return nil
 }
 
+func (m *GlobalSpecType) GetDefaultCluster() *schema.Empty {
+	if x, ok := m.GetClusterType().(*GlobalSpecType_DefaultCluster); ok {
+		return x.DefaultCluster
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetTmmPoolCluster() *TMMPoolType {
+	if x, ok := m.GetClusterType().(*GlobalSpecType_TmmPoolCluster); ok {
+		return x.TmmPoolCluster
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetNoRequestLimitPerConnection() *schema.Empty {
+	if x, ok := m.GetMaxRequestsPerConnectionChoice().(*GlobalSpecType_NoRequestLimitPerConnection); ok {
+		return x.NoRequestLimitPerConnection
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetMaxRequestsPerConnection() uint32 {
+	if x, ok := m.GetMaxRequestsPerConnectionChoice().(*GlobalSpecType_MaxRequestsPerConnection); ok {
+		return x.MaxRequestsPerConnection
+	}
+	return 0
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1171,7 +1259,122 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_DisableProxyProtocol)(nil),
 		(*GlobalSpecType_ProxyProtocolV1)(nil),
 		(*GlobalSpecType_ProxyProtocolV2)(nil),
+		(*GlobalSpecType_DefaultCluster)(nil),
+		(*GlobalSpecType_TmmPoolCluster)(nil),
+		(*GlobalSpecType_NoRequestLimitPerConnection)(nil),
+		(*GlobalSpecType_MaxRequestsPerConnection)(nil),
 	}
+}
+
+// TMM Pool
+//
+// x-displayName: "TMM Pool"
+type TMMPoolType struct {
+	// Reference to TMM LB Method object
+	//
+	// x-displayName: "LB Method"
+	// Reference to TMM LB Method object - to be populated by vs_pool
+	TmmLbMethod schema.TMMLBMethodType `protobuf:"varint,1,opt,name=tmm_lb_method,json=tmmLbMethod,proto3,enum=ves.io.schema.TMMLBMethodType" json:"tmm_lb_method,omitempty"`
+	// priority_group_activation_choice
+	//
+	// x-displayName: "Priority Group Activation"
+	// Specifies whether the system load balances traffic according to the priority number assigned to the pool member. The default is Disabled. Once you enable this setting, you can specify pool member priority when you create a new pool or on a pool member's properties screen. The system treats same-priority pool members as a group. To enable priority group activation, select Less than from the list, and in the Available Member(s) field, type a number from 0 to 65535 that represents the minimum number of members that must be available in one priority group before the system directs traffic to members in a lower priority group. When a sufficient number of members become available in the higher priority group, the system again directs traffic to the higher priority group.
+	PriorityGroup *schema.TMMPriorityGroupActivationType `protobuf:"bytes,2,opt,name=priority_group,json=priorityGroup,proto3" json:"priority_group,omitempty"`
+	// Action On Service Down
+	//
+	// x-displayName: "Action On Service Down"
+	// Specifies how the system should respond when the target pool member becomes unavailable. The default is None, meaning that the system takes no action to manage existing connections when a pool member becomes unavailable.
+	// None: Specifies that the system maintains existing connections, but does not send new traffic to the member.
+	// Reject: Specifies that, if there are no pool members available, the system resets and clears the active connections from the connection table and sends a reset (RST) or Internet Control Message Protocol (ICMP) message. If there are pool members available, the system resets and clears the active connections, but sends newly arriving connections to the available pool member and does not send RST or ICMP messages.
+	// Drop: Specifies that the system simply cleans up the connection.
+	// Reselect: Specifies that the system manages established client connections by moving them to an alternative pool member when monitors mark the original pool member down.
+	ActionOnServiceDown *schema.TMMActionOnServiceDownType `protobuf:"bytes,3,opt,name=action_on_service_down,json=actionOnServiceDown,proto3" json:"action_on_service_down,omitempty"`
+	// Request Queuing
+	//
+	// x-displayName: "Request Queuing"
+	// Enables TCP request queueing.
+	RequestQueueConfig *schema.TMMRequestQueuingOptionsType `protobuf:"bytes,4,opt,name=request_queue_config,json=requestQueueConfig,proto3" json:"request_queue_config,omitempty"`
+	// Slow Ramp Time
+	//
+	// x-displayName: "Slow Ramp Time"
+	// Specifies the duration during which the system sends less traffic to a newly-enabled pool member. The amount of traffic is based on the ratio of how long the pool member has been available compared to the slow ramp time, in seconds. Once the pool member has been online for a time greater than the slow ramp time, the pool member receives a full proportion of the incoming traffic. Slow ramp time is particularly useful for the least connections load balancing mode.
+	// Setting this to a nonzero value can cause unexpected Priority Group behavior, such as load balancing to a low-priority member even with enough high-priority servers.
+	SlowRampTime uint32 `protobuf:"varint,5,opt,name=slow_ramp_time,json=slowRampTime,proto3" json:"slow_ramp_time,omitempty"`
+	// Health Monitoring
+	//
+	// x-displayName: "Health Monitors"
+	// Specifies an association between a health or performance monitor and an entire pool, rather than with individual pool members.
+	HealthMonitoring *schema.TMMHealthMonitoringType `protobuf:"bytes,6,opt,name=health_monitoring,json=healthMonitoring,proto3" json:"health_monitoring,omitempty"`
+}
+
+func (m *TMMPoolType) Reset()      { *m = TMMPoolType{} }
+func (*TMMPoolType) ProtoMessage() {}
+func (*TMMPoolType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{6}
+}
+func (m *TMMPoolType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TMMPoolType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TMMPoolType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TMMPoolType.Merge(m, src)
+}
+func (m *TMMPoolType) XXX_Size() int {
+	return m.Size()
+}
+func (m *TMMPoolType) XXX_DiscardUnknown() {
+	xxx_messageInfo_TMMPoolType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TMMPoolType proto.InternalMessageInfo
+
+func (m *TMMPoolType) GetTmmLbMethod() schema.TMMLBMethodType {
+	if m != nil {
+		return m.TmmLbMethod
+	}
+	return schema.ROUND_ROBIN
+}
+
+func (m *TMMPoolType) GetPriorityGroup() *schema.TMMPriorityGroupActivationType {
+	if m != nil {
+		return m.PriorityGroup
+	}
+	return nil
+}
+
+func (m *TMMPoolType) GetActionOnServiceDown() *schema.TMMActionOnServiceDownType {
+	if m != nil {
+		return m.ActionOnServiceDown
+	}
+	return nil
+}
+
+func (m *TMMPoolType) GetRequestQueueConfig() *schema.TMMRequestQueuingOptionsType {
+	if m != nil {
+		return m.RequestQueueConfig
+	}
+	return nil
+}
+
+func (m *TMMPoolType) GetSlowRampTime() uint32 {
+	if m != nil {
+		return m.SlowRampTime
+	}
+	return 0
+}
+
+func (m *TMMPoolType) GetHealthMonitoring() *schema.TMMHealthMonitoringType {
+	if m != nil {
+		return m.HealthMonitoring
+	}
+	return nil
 }
 
 // Create cluster
@@ -1207,12 +1410,16 @@ type CreateSpecType struct {
 	//	*CreateSpecType_ProxyProtocolV2
 	ProxyProtocolType         isCreateSpecType_ProxyProtocolType `protobuf_oneof:"proxy_protocol_type"`
 	UpstreamConnPoolReuseType *schema.UpstreamConnPoolReuseType  `protobuf:"bytes,31,opt,name=upstream_conn_pool_reuse_type,json=upstreamConnPoolReuseType,proto3" json:"upstream_conn_pool_reuse_type,omitempty"`
+	// Types that are valid to be assigned to MaxRequestsPerConnectionChoice:
+	//	*CreateSpecType_NoRequestLimitPerConnection
+	//	*CreateSpecType_MaxRequestsPerConnection
+	MaxRequestsPerConnectionChoice isCreateSpecType_MaxRequestsPerConnectionChoice `protobuf_oneof:"max_requests_per_connection_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f4ccbbce2db2b210, []int{6}
+	return fileDescriptor_f4ccbbce2db2b210, []int{7}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1255,6 +1462,12 @@ type isCreateSpecType_ProxyProtocolType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_MaxRequestsPerConnectionChoice interface {
+	isCreateSpecType_MaxRequestsPerConnectionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_Http1Config struct {
 	Http1Config *Http1ProtocolOptions `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
@@ -1280,6 +1493,12 @@ type CreateSpecType_ProxyProtocolV1 struct {
 type CreateSpecType_ProxyProtocolV2 struct {
 	ProxyProtocolV2 *schema.Empty `protobuf:"bytes,30,opt,name=proxy_protocol_v2,json=proxyProtocolV2,proto3,oneof" json:"proxy_protocol_v2,omitempty"`
 }
+type CreateSpecType_NoRequestLimitPerConnection struct {
+	NoRequestLimitPerConnection *schema.Empty `protobuf:"bytes,37,opt,name=no_request_limit_per_connection,json=noRequestLimitPerConnection,proto3,oneof" json:"no_request_limit_per_connection,omitempty"`
+}
+type CreateSpecType_MaxRequestsPerConnection struct {
+	MaxRequestsPerConnection uint32 `protobuf:"varint,35,opt,name=max_requests_per_connection,json=maxRequestsPerConnection,proto3,oneof" json:"max_requests_per_connection,omitempty"`
+}
 
 func (*CreateSpecType_Http1Config) isCreateSpecType_HttpProtocolType()           {}
 func (*CreateSpecType_Http2Options) isCreateSpecType_HttpProtocolType()          {}
@@ -1289,6 +1508,9 @@ func (*CreateSpecType_PanicThreshold) isCreateSpecType_PanicThresholdType()     
 func (*CreateSpecType_DisableProxyProtocol) isCreateSpecType_ProxyProtocolType() {}
 func (*CreateSpecType_ProxyProtocolV1) isCreateSpecType_ProxyProtocolType()      {}
 func (*CreateSpecType_ProxyProtocolV2) isCreateSpecType_ProxyProtocolType()      {}
+func (*CreateSpecType_NoRequestLimitPerConnection) isCreateSpecType_MaxRequestsPerConnectionChoice() {
+}
+func (*CreateSpecType_MaxRequestsPerConnection) isCreateSpecType_MaxRequestsPerConnectionChoice() {}
 
 func (m *CreateSpecType) GetHttpProtocolType() isCreateSpecType_HttpProtocolType {
 	if m != nil {
@@ -1305,6 +1527,12 @@ func (m *CreateSpecType) GetPanicThresholdType() isCreateSpecType_PanicThreshold
 func (m *CreateSpecType) GetProxyProtocolType() isCreateSpecType_ProxyProtocolType {
 	if m != nil {
 		return m.ProxyProtocolType
+	}
+	return nil
+}
+func (m *CreateSpecType) GetMaxRequestsPerConnectionChoice() isCreateSpecType_MaxRequestsPerConnectionChoice {
+	if m != nil {
+		return m.MaxRequestsPerConnectionChoice
 	}
 	return nil
 }
@@ -1463,6 +1691,20 @@ func (m *CreateSpecType) GetUpstreamConnPoolReuseType() *schema.UpstreamConnPool
 	return nil
 }
 
+func (m *CreateSpecType) GetNoRequestLimitPerConnection() *schema.Empty {
+	if x, ok := m.GetMaxRequestsPerConnectionChoice().(*CreateSpecType_NoRequestLimitPerConnection); ok {
+		return x.NoRequestLimitPerConnection
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetMaxRequestsPerConnection() uint32 {
+	if x, ok := m.GetMaxRequestsPerConnectionChoice().(*CreateSpecType_MaxRequestsPerConnection); ok {
+		return x.MaxRequestsPerConnection
+	}
+	return 0
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1474,6 +1716,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_DisableProxyProtocol)(nil),
 		(*CreateSpecType_ProxyProtocolV1)(nil),
 		(*CreateSpecType_ProxyProtocolV2)(nil),
+		(*CreateSpecType_NoRequestLimitPerConnection)(nil),
+		(*CreateSpecType_MaxRequestsPerConnection)(nil),
 	}
 }
 
@@ -1511,12 +1755,16 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_ProxyProtocolV2
 	ProxyProtocolType         isReplaceSpecType_ProxyProtocolType `protobuf_oneof:"proxy_protocol_type"`
 	UpstreamConnPoolReuseType *schema.UpstreamConnPoolReuseType   `protobuf:"bytes,31,opt,name=upstream_conn_pool_reuse_type,json=upstreamConnPoolReuseType,proto3" json:"upstream_conn_pool_reuse_type,omitempty"`
+	// Types that are valid to be assigned to MaxRequestsPerConnectionChoice:
+	//	*ReplaceSpecType_NoRequestLimitPerConnection
+	//	*ReplaceSpecType_MaxRequestsPerConnection
+	MaxRequestsPerConnectionChoice isReplaceSpecType_MaxRequestsPerConnectionChoice `protobuf_oneof:"max_requests_per_connection_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f4ccbbce2db2b210, []int{7}
+	return fileDescriptor_f4ccbbce2db2b210, []int{8}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1559,6 +1807,12 @@ type isReplaceSpecType_ProxyProtocolType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_MaxRequestsPerConnectionChoice interface {
+	isReplaceSpecType_MaxRequestsPerConnectionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_Http1Config struct {
 	Http1Config *Http1ProtocolOptions `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
@@ -1584,6 +1838,12 @@ type ReplaceSpecType_ProxyProtocolV1 struct {
 type ReplaceSpecType_ProxyProtocolV2 struct {
 	ProxyProtocolV2 *schema.Empty `protobuf:"bytes,30,opt,name=proxy_protocol_v2,json=proxyProtocolV2,proto3,oneof" json:"proxy_protocol_v2,omitempty"`
 }
+type ReplaceSpecType_NoRequestLimitPerConnection struct {
+	NoRequestLimitPerConnection *schema.Empty `protobuf:"bytes,37,opt,name=no_request_limit_per_connection,json=noRequestLimitPerConnection,proto3,oneof" json:"no_request_limit_per_connection,omitempty"`
+}
+type ReplaceSpecType_MaxRequestsPerConnection struct {
+	MaxRequestsPerConnection uint32 `protobuf:"varint,35,opt,name=max_requests_per_connection,json=maxRequestsPerConnection,proto3,oneof" json:"max_requests_per_connection,omitempty"`
+}
 
 func (*ReplaceSpecType_Http1Config) isReplaceSpecType_HttpProtocolType()           {}
 func (*ReplaceSpecType_Http2Options) isReplaceSpecType_HttpProtocolType()          {}
@@ -1593,6 +1853,9 @@ func (*ReplaceSpecType_PanicThreshold) isReplaceSpecType_PanicThresholdType()   
 func (*ReplaceSpecType_DisableProxyProtocol) isReplaceSpecType_ProxyProtocolType() {}
 func (*ReplaceSpecType_ProxyProtocolV1) isReplaceSpecType_ProxyProtocolType()      {}
 func (*ReplaceSpecType_ProxyProtocolV2) isReplaceSpecType_ProxyProtocolType()      {}
+func (*ReplaceSpecType_NoRequestLimitPerConnection) isReplaceSpecType_MaxRequestsPerConnectionChoice() {
+}
+func (*ReplaceSpecType_MaxRequestsPerConnection) isReplaceSpecType_MaxRequestsPerConnectionChoice() {}
 
 func (m *ReplaceSpecType) GetHttpProtocolType() isReplaceSpecType_HttpProtocolType {
 	if m != nil {
@@ -1609,6 +1872,12 @@ func (m *ReplaceSpecType) GetPanicThresholdType() isReplaceSpecType_PanicThresho
 func (m *ReplaceSpecType) GetProxyProtocolType() isReplaceSpecType_ProxyProtocolType {
 	if m != nil {
 		return m.ProxyProtocolType
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetMaxRequestsPerConnectionChoice() isReplaceSpecType_MaxRequestsPerConnectionChoice {
+	if m != nil {
+		return m.MaxRequestsPerConnectionChoice
 	}
 	return nil
 }
@@ -1767,6 +2036,20 @@ func (m *ReplaceSpecType) GetUpstreamConnPoolReuseType() *schema.UpstreamConnPoo
 	return nil
 }
 
+func (m *ReplaceSpecType) GetNoRequestLimitPerConnection() *schema.Empty {
+	if x, ok := m.GetMaxRequestsPerConnectionChoice().(*ReplaceSpecType_NoRequestLimitPerConnection); ok {
+		return x.NoRequestLimitPerConnection
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetMaxRequestsPerConnection() uint32 {
+	if x, ok := m.GetMaxRequestsPerConnectionChoice().(*ReplaceSpecType_MaxRequestsPerConnection); ok {
+		return x.MaxRequestsPerConnection
+	}
+	return 0
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1778,6 +2061,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_DisableProxyProtocol)(nil),
 		(*ReplaceSpecType_ProxyProtocolV1)(nil),
 		(*ReplaceSpecType_ProxyProtocolV2)(nil),
+		(*ReplaceSpecType_NoRequestLimitPerConnection)(nil),
+		(*ReplaceSpecType_MaxRequestsPerConnection)(nil),
 	}
 }
 
@@ -1818,12 +2103,16 @@ type GetSpecType struct {
 	//	*GetSpecType_ProxyProtocolV2
 	ProxyProtocolType         isGetSpecType_ProxyProtocolType   `protobuf_oneof:"proxy_protocol_type"`
 	UpstreamConnPoolReuseType *schema.UpstreamConnPoolReuseType `protobuf:"bytes,31,opt,name=upstream_conn_pool_reuse_type,json=upstreamConnPoolReuseType,proto3" json:"upstream_conn_pool_reuse_type,omitempty"`
+	// Types that are valid to be assigned to MaxRequestsPerConnectionChoice:
+	//	*GetSpecType_NoRequestLimitPerConnection
+	//	*GetSpecType_MaxRequestsPerConnection
+	MaxRequestsPerConnectionChoice isGetSpecType_MaxRequestsPerConnectionChoice `protobuf_oneof:"max_requests_per_connection_choice"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f4ccbbce2db2b210, []int{8}
+	return fileDescriptor_f4ccbbce2db2b210, []int{9}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1872,6 +2161,12 @@ type isGetSpecType_ProxyProtocolType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_MaxRequestsPerConnectionChoice interface {
+	isGetSpecType_MaxRequestsPerConnectionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_Http1Config struct {
 	Http1Config *Http1ProtocolOptions `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
@@ -1903,17 +2198,25 @@ type GetSpecType_ProxyProtocolV1 struct {
 type GetSpecType_ProxyProtocolV2 struct {
 	ProxyProtocolV2 *schema.Empty `protobuf:"bytes,30,opt,name=proxy_protocol_v2,json=proxyProtocolV2,proto3,oneof" json:"proxy_protocol_v2,omitempty"`
 }
+type GetSpecType_NoRequestLimitPerConnection struct {
+	NoRequestLimitPerConnection *schema.Empty `protobuf:"bytes,37,opt,name=no_request_limit_per_connection,json=noRequestLimitPerConnection,proto3,oneof" json:"no_request_limit_per_connection,omitempty"`
+}
+type GetSpecType_MaxRequestsPerConnection struct {
+	MaxRequestsPerConnection uint32 `protobuf:"varint,35,opt,name=max_requests_per_connection,json=maxRequestsPerConnection,proto3,oneof" json:"max_requests_per_connection,omitempty"`
+}
 
-func (*GetSpecType_Http1Config) isGetSpecType_HttpProtocolType()                             {}
-func (*GetSpecType_Http2Options) isGetSpecType_HttpProtocolType()                            {}
-func (*GetSpecType_AutoHttpConfig) isGetSpecType_HttpProtocolType()                          {}
-func (*GetSpecType_NoPanicThreshold) isGetSpecType_PanicThresholdType()                      {}
-func (*GetSpecType_PanicThreshold) isGetSpecType_PanicThresholdType()                        {}
-func (*GetSpecType_EnableLbSourceIpPersistance) isGetSpecType_LbSourceIpPersistanceChoice()  {}
-func (*GetSpecType_DisableLbSourceIpPersistance) isGetSpecType_LbSourceIpPersistanceChoice() {}
-func (*GetSpecType_DisableProxyProtocol) isGetSpecType_ProxyProtocolType()                   {}
-func (*GetSpecType_ProxyProtocolV1) isGetSpecType_ProxyProtocolType()                        {}
-func (*GetSpecType_ProxyProtocolV2) isGetSpecType_ProxyProtocolType()                        {}
+func (*GetSpecType_Http1Config) isGetSpecType_HttpProtocolType()                               {}
+func (*GetSpecType_Http2Options) isGetSpecType_HttpProtocolType()                              {}
+func (*GetSpecType_AutoHttpConfig) isGetSpecType_HttpProtocolType()                            {}
+func (*GetSpecType_NoPanicThreshold) isGetSpecType_PanicThresholdType()                        {}
+func (*GetSpecType_PanicThreshold) isGetSpecType_PanicThresholdType()                          {}
+func (*GetSpecType_EnableLbSourceIpPersistance) isGetSpecType_LbSourceIpPersistanceChoice()    {}
+func (*GetSpecType_DisableLbSourceIpPersistance) isGetSpecType_LbSourceIpPersistanceChoice()   {}
+func (*GetSpecType_DisableProxyProtocol) isGetSpecType_ProxyProtocolType()                     {}
+func (*GetSpecType_ProxyProtocolV1) isGetSpecType_ProxyProtocolType()                          {}
+func (*GetSpecType_ProxyProtocolV2) isGetSpecType_ProxyProtocolType()                          {}
+func (*GetSpecType_NoRequestLimitPerConnection) isGetSpecType_MaxRequestsPerConnectionChoice() {}
+func (*GetSpecType_MaxRequestsPerConnection) isGetSpecType_MaxRequestsPerConnectionChoice()    {}
 
 func (m *GetSpecType) GetHttpProtocolType() isGetSpecType_HttpProtocolType {
 	if m != nil {
@@ -1936,6 +2239,12 @@ func (m *GetSpecType) GetLbSourceIpPersistanceChoice() isGetSpecType_LbSourceIpP
 func (m *GetSpecType) GetProxyProtocolType() isGetSpecType_ProxyProtocolType {
 	if m != nil {
 		return m.ProxyProtocolType
+	}
+	return nil
+}
+func (m *GetSpecType) GetMaxRequestsPerConnectionChoice() isGetSpecType_MaxRequestsPerConnectionChoice {
+	if m != nil {
+		return m.MaxRequestsPerConnectionChoice
 	}
 	return nil
 }
@@ -2108,6 +2417,20 @@ func (m *GetSpecType) GetUpstreamConnPoolReuseType() *schema.UpstreamConnPoolReu
 	return nil
 }
 
+func (m *GetSpecType) GetNoRequestLimitPerConnection() *schema.Empty {
+	if x, ok := m.GetMaxRequestsPerConnectionChoice().(*GetSpecType_NoRequestLimitPerConnection); ok {
+		return x.NoRequestLimitPerConnection
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetMaxRequestsPerConnection() uint32 {
+	if x, ok := m.GetMaxRequestsPerConnectionChoice().(*GetSpecType_MaxRequestsPerConnection); ok {
+		return x.MaxRequestsPerConnection
+	}
+	return 0
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2121,6 +2444,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_DisableProxyProtocol)(nil),
 		(*GetSpecType_ProxyProtocolV1)(nil),
 		(*GetSpecType_ProxyProtocolV2)(nil),
+		(*GetSpecType_NoRequestLimitPerConnection)(nil),
+		(*GetSpecType_MaxRequestsPerConnection)(nil),
 	}
 }
 
@@ -2149,6 +2474,8 @@ func init() {
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cluster.GlobalSpecType")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.GlobalSpecType.DefaultSubsetEntry")
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.GlobalSpecType.DefaultSubsetEntry")
+	proto.RegisterType((*TMMPoolType)(nil), "ves.io.schema.cluster.TMMPoolType")
+	golang_proto.RegisterType((*TMMPoolType)(nil), "ves.io.schema.cluster.TMMPoolType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.cluster.CreateSpecType")
 	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.cluster.CreateSpecType")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.CreateSpecType.DefaultSubsetEntry")
@@ -2169,164 +2496,193 @@ func init() {
 }
 
 var fileDescriptor_f4ccbbce2db2b210 = []byte{
-	// 2508 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0xc1, 0x6f, 0xdb, 0xd6,
-	0xfd, 0xd7, 0x93, 0xe5, 0x44, 0x7e, 0xb6, 0x25, 0xfa, 0xc5, 0x4e, 0x68, 0xc7, 0x51, 0x54, 0xff,
-	0xfa, 0x43, 0x53, 0x97, 0x91, 0x23, 0x39, 0x4e, 0x9c, 0x00, 0x6b, 0x6b, 0x5a, 0x72, 0xec, 0x44,
-	0xb5, 0x14, 0x4a, 0x0e, 0xd6, 0x2e, 0x2b, 0x4b, 0x51, 0xcf, 0x12, 0x6b, 0x8a, 0xe4, 0x48, 0xca,
-	0xb5, 0x31, 0x14, 0x08, 0x72, 0xeb, 0x4e, 0x43, 0x8f, 0xbd, 0xec, 0xb2, 0xc3, 0xd0, 0x3f, 0x61,
-	0xea, 0xc1, 0x28, 0x30, 0xa0, 0xe8, 0x65, 0xc1, 0x0e, 0x5b, 0xd0, 0x53, 0xab, 0x5c, 0xba, 0xcb,
-	0x50, 0xec, 0x34, 0xe4, 0x34, 0xbc, 0x47, 0xd2, 0x96, 0x68, 0x32, 0xa9, 0x1b, 0x0f, 0x58, 0x06,
-	0xdf, 0x4c, 0x7d, 0xbf, 0x9f, 0xcf, 0xf7, 0xf1, 0x7d, 0xbf, 0xef, 0x7d, 0x3e, 0x08, 0x03, 0x5f,
-	0xd9, 0xc6, 0x56, 0x46, 0xd1, 0xe7, 0x2c, 0xb9, 0x89, 0x5b, 0xd2, 0x9c, 0xac, 0xb6, 0x2d, 0x1b,
-	0x9b, 0x73, 0xf6, 0xae, 0x81, 0xad, 0x8c, 0x61, 0xea, 0xb6, 0x8e, 0x26, 0x9c, 0x94, 0x8c, 0x93,
-	0x92, 0x71, 0x53, 0xa6, 0x2e, 0x37, 0x14, 0xbb, 0xd9, 0xae, 0x65, 0x64, 0xbd, 0x35, 0xd7, 0xd0,
-	0x1b, 0xfa, 0x1c, 0xcd, 0xae, 0xb5, 0x37, 0xe9, 0x13, 0x7d, 0xa0, 0x7f, 0x39, 0x2c, 0x53, 0x29,
-	0x5f, 0x21, 0x6c, 0xda, 0x62, 0x4f, 0x95, 0xa9, 0xf3, 0xfd, 0x71, 0xdd, 0xb0, 0x15, 0x5d, 0xf3,
-	0x82, 0x93, 0xfd, 0xc1, 0x5e, 0xdc, 0x74, 0x7f, 0x68, 0x5b, 0x52, 0x95, 0xba, 0x64, 0x63, 0x37,
-	0x9a, 0xf6, 0x45, 0x15, 0xfc, 0x91, 0xd8, 0x47, 0x3d, 0xf3, 0x4d, 0x14, 0x8e, 0x97, 0xda, 0xb6,
-	0xaa, 0x60, 0x33, 0x8f, 0x6d, 0x2c, 0x93, 0x58, 0x75, 0xd7, 0xc0, 0xe8, 0x3a, 0x4c, 0xca, 0xba,
-	0x66, 0x61, 0xb9, 0x6d, 0x2b, 0xdb, 0x58, 0x5c, 0xd8, 0xd9, 0x61, 0x41, 0x1a, 0x5c, 0x1a, 0xe5,
-	0x13, 0xff, 0xea, 0x80, 0xc8, 0x1f, 0xff, 0xbe, 0x37, 0x30, 0x38, 0x3b, 0xc0, 0x3e, 0x88, 0x0b,
-	0x89, 0x9e, 0xb4, 0x85, 0x9d, 0x1d, 0xf4, 0x06, 0x8c, 0x2b, 0x9a, 0x8d, 0xcd, 0x6d, 0x49, 0x65,
-	0xa3, 0x14, 0x91, 0xf4, 0x10, 0xa7, 0x66, 0x63, 0xec, 0xde, 0x9f, 0x5f, 0x15, 0xf6, 0x13, 0xd0,
-	0xcf, 0x20, 0xaa, 0x49, 0x16, 0x16, 0xf1, 0x87, 0x4e, 0x69, 0xd1, 0x56, 0x5a, 0x98, 0x1d, 0x08,
-	0x80, 0xfd, 0xa3, 0x25, 0x30, 0x24, 0xb5, 0xe0, 0x66, 0x56, 0x95, 0x16, 0x46, 0x6f, 0xc1, 0xf1,
-	0x96, 0xb4, 0x73, 0x80, 0x36, 0xb0, 0x29, 0x63, 0xcd, 0x66, 0x63, 0x94, 0x60, 0xd4, 0x23, 0x88,
-	0xcd, 0x46, 0xd9, 0xba, 0x80, 0x5a, 0xd2, 0x8e, 0x87, 0x2e, 0x3b, 0x89, 0x68, 0x1d, 0x9e, 0xef,
-	0x7d, 0xcb, 0x86, 0x64, 0xe3, 0x8f, 0xa4, 0x5d, 0x71, 0x53, 0x52, 0xd4, 0xb6, 0x89, 0xd9, 0xc1,
-	0xc0, 0x37, 0x9e, 0xec, 0x81, 0xdc, 0x72, 0x10, 0x2b, 0x0e, 0xe0, 0xe6, 0xc8, 0x3f, 0xdf, 0x1c,
-	0xca, 0x72, 0x39, 0x6e, 0x9e, 0xbb, 0xca, 0x2d, 0xcc, 0x7c, 0x02, 0xe0, 0x54, 0x41, 0xab, 0x1b,
-	0xba, 0xa2, 0xd9, 0x95, 0x76, 0xcd, 0xc2, 0x76, 0x05, 0xab, 0x58, 0xb6, 0x75, 0x93, 0x6e, 0x71,
-	0x16, 0xc6, 0xb6, 0xf0, 0xae, 0xc5, 0x82, 0xf4, 0xc0, 0xa5, 0x21, 0xfe, 0x82, 0x57, 0x05, 0x7e,
-	0x0a, 0x4e, 0xcf, 0x0c, 0x9a, 0x03, 0x8f, 0x01, 0xa0, 0x45, 0x3f, 0x05, 0x51, 0x86, 0x11, 0x68,
-	0xea, 0xcd, 0xc5, 0x2f, 0x3b, 0x20, 0x05, 0xa7, 0xe1, 0xb9, 0xa2, 0x62, 0xd9, 0x69, 0x7d, 0x33,
-	0x4d, 0x7e, 0x4d, 0x6f, 0xea, 0x66, 0xda, 0xe1, 0x47, 0x20, 0xfb, 0x75, 0x07, 0x20, 0xc8, 0xc0,
-	0xd8, 0x1d, 0xbc, 0x6b, 0xf1, 0x71, 0xa7, 0x04, 0x33, 0x38, 0xf3, 0xb7, 0x28, 0x4c, 0x2c, 0x2b,
-	0xa6, 0xdc, 0x56, 0x6c, 0xde, 0xc4, 0xd2, 0x16, 0x36, 0xd1, 0xdb, 0x30, 0x6e, 0x98, 0x8a, 0x6e,
-	0x2a, 0xf6, 0x2e, 0xed, 0x6d, 0x22, 0x97, 0xca, 0xf4, 0x0f, 0xbb, 0xa0, 0xb7, 0x6d, 0x45, 0x6b,
-	0x94, 0xdd, 0x2c, 0x3e, 0x46, 0xd6, 0x28, 0xec, 0xa3, 0x10, 0x0f, 0x19, 0x59, 0xd7, 0x34, 0x77,
-	0xf7, 0x55, 0xa5, 0xa5, 0xd8, 0x6e, 0xcf, 0xcf, 0x7d, 0xd3, 0x01, 0xb1, 0xec, 0x95, 0xdc, 0xd5,
-	0xde, 0x26, 0x3e, 0x78, 0x10, 0x15, 0x92, 0x07, 0x80, 0x22, 0xc9, 0x27, 0x1c, 0x06, 0xd6, 0xea,
-	0x8a, 0xd6, 0x10, 0x4d, 0xfc, 0xab, 0x36, 0xb6, 0x6c, 0xcb, 0x1d, 0x80, 0x70, 0x0e, 0x17, 0x20,
-	0xb8, 0xf9, 0x28, 0x0b, 0x4f, 0x9b, 0xd8, 0x36, 0x15, 0x6c, 0xb9, 0xad, 0x0f, 0x85, 0x7a, 0x79,
-	0xe8, 0x26, 0x1c, 0x21, 0xa3, 0xb3, 0x5f, 0x72, 0xf0, 0xd9, 0xb8, 0xe1, 0x96, 0xb4, 0xe3, 0x95,
-	0xf3, 0x75, 0xf9, 0x26, 0x1c, 0x5f, 0xb5, 0x6d, 0x23, 0x57, 0x26, 0x07, 0x4a, 0xd6, 0xd5, 0x92,
-	0x73, 0xc0, 0xd0, 0x0c, 0x3c, 0x8d, 0x35, 0xa9, 0xa6, 0xe2, 0x3a, 0xdd, 0xdd, 0x38, 0x1f, 0x27,
-	0xe4, 0xb6, 0xd9, 0xc6, 0x82, 0x17, 0x98, 0xb1, 0x1d, 0x6c, 0xd6, 0x8f, 0xbd, 0x0f, 0x27, 0x9a,
-	0x58, 0xaa, 0x63, 0x53, 0xb4, 0x4d, 0x49, 0xb3, 0x36, 0x75, 0xb3, 0x25, 0x91, 0x08, 0x65, 0x1a,
-	0xce, 0xbd, 0xe6, 0xeb, 0xd3, 0x2a, 0xcd, 0xad, 0xf6, 0xa5, 0x92, 0x11, 0x13, 0xc6, 0x9b, 0x01,
-	0x91, 0x99, 0xdf, 0x9f, 0x85, 0x89, 0x5b, 0xaa, 0x5e, 0x93, 0xd4, 0x8a, 0x81, 0x65, 0x3a, 0x8b,
-	0x77, 0xe1, 0x10, 0x76, 0x27, 0xd5, 0x19, 0xc8, 0xe1, 0xdc, 0xb4, 0xaf, 0x48, 0xa9, 0x46, 0x0e,
-	0x8f, 0x80, 0x37, 0x09, 0x80, 0x9f, 0xf8, 0xfc, 0xe3, 0xb8, 0x87, 0xd8, 0x1f, 0xd3, 0xb4, 0x70,
-	0xc0, 0x82, 0x7e, 0x01, 0x47, 0x9b, 0x58, 0x52, 0xed, 0xa6, 0x28, 0x37, 0xb1, 0xbc, 0x65, 0xb1,
-	0xd1, 0x1f, 0x41, 0xcb, 0x7e, 0xfe, 0xf1, 0xb0, 0x83, 0xa2, 0xa0, 0x7d, 0xe6, 0x98, 0x30, 0xe2,
-	0xfc, 0xbc, 0x4c, 0xb9, 0x90, 0x02, 0xcf, 0xaa, 0xba, 0x54, 0xaf, 0x49, 0xaa, 0xa4, 0xc9, 0xd8,
-	0x14, 0x25, 0xb5, 0x41, 0x46, 0xb2, 0xd9, 0xa2, 0xb3, 0x93, 0xc8, 0x71, 0x99, 0xc0, 0x6b, 0x3b,
-	0x53, 0xec, 0x01, 0x2d, 0x79, 0x18, 0x77, 0xae, 0x27, 0xd4, 0xa0, 0x20, 0xaa, 0xc2, 0xa4, 0xec,
-	0x1c, 0x1c, 0xb1, 0xe6, 0x9c, 0x1c, 0x3a, 0x64, 0xc3, 0xb9, 0xff, 0x0f, 0xa9, 0xd1, 0x7f, 0xcc,
-	0xf8, 0xd8, 0x5e, 0x07, 0x00, 0x21, 0x21, 0xf7, 0x1f, 0xbe, 0x5f, 0x43, 0xc6, 0xdb, 0x2a, 0xd1,
-	0xa2, 0x67, 0x97, 0xcc, 0x20, 0xd9, 0xa0, 0x6c, 0x08, 0x6d, 0xf8, 0x4d, 0xc2, 0x5f, 0x20, 0x25,
-	0x1e, 0x75, 0x7a, 0x2e, 0x8c, 0x74, 0xf7, 0xdb, 0x3f, 0x0d, 0x9c, 0xfa, 0xf4, 0x0b, 0x10, 0x65,
-	0x80, 0x90, 0xc4, 0x7d, 0x50, 0x0b, 0x3d, 0x04, 0x30, 0x51, 0xc7, 0x9b, 0x52, 0x5b, 0xf5, 0x8a,
-	0xb3, 0xa7, 0x68, 0xed, 0xc5, 0x90, 0xda, 0xfd, 0xd3, 0x92, 0xc9, 0x3b, 0x58, 0x87, 0xae, 0xa0,
-	0xd9, 0xe6, 0x2e, 0xff, 0x0a, 0x59, 0xc2, 0x67, 0x5f, 0x80, 0x18, 0x8c, 0x46, 0x9c, 0x65, 0x7c,
-	0xb6, 0xbf, 0x8c, 0xdf, 0x7c, 0x01, 0xa2, 0xf1, 0x88, 0x30, 0x5a, 0xef, 0x85, 0xa1, 0x1a, 0x4c,
-	0x6e, 0x4a, 0xaa, 0x5a, 0x93, 0xe4, 0x2d, 0xd1, 0xd0, 0x55, 0x45, 0xde, 0x65, 0x4f, 0xd3, 0xde,
-	0xbd, 0x11, 0xb2, 0x08, 0x07, 0xb7, 0xe2, 0x62, 0xca, 0x14, 0xc2, 0x8f, 0x78, 0xaf, 0x4e, 0x5b,
-	0x98, 0xd8, 0xec, 0x8b, 0xa2, 0xbb, 0x30, 0x61, 0xab, 0x96, 0x68, 0x48, 0xa6, 0xd4, 0xc2, 0x36,
-	0x36, 0x2d, 0x36, 0x4e, 0x5b, 0xf7, 0xaa, 0xaf, 0xc4, 0x86, 0x61, 0xd9, 0x26, 0x96, 0x5a, 0x55,
-	0xd5, 0x2a, 0x93, 0x5c, 0x8b, 0x6e, 0x6b, 0x8c, 0xf0, 0x0a, 0xa3, 0xb6, 0xfb, 0x23, 0x25, 0x40,
-	0x3c, 0x44, 0x3d, 0x77, 0x1e, 0xd1, 0x2b, 0xbd, 0x6d, 0xb3, 0x43, 0xf4, 0xfa, 0x38, 0xb3, 0xe7,
-	0x2e, 0xa4, 0x57, 0xed, 0xc6, 0x0e, 0xd2, 0xab, 0x4e, 0x36, 0x7a, 0x0b, 0x8e, 0x35, 0x6d, 0xdb,
-	0x10, 0x95, 0xba, 0x8a, 0xf7, 0x29, 0x60, 0x38, 0x45, 0x92, 0x64, 0xaf, 0xd5, 0x55, 0xec, 0x11,
-	0xbc, 0x0f, 0xc7, 0x74, 0x47, 0xb5, 0xc5, 0xba, 0x27, 0xdb, 0xec, 0x08, 0x7d, 0xb5, 0xb0, 0xdd,
-	0x0b, 0x52, 0x79, 0x77, 0x36, 0x19, 0xdd, 0x17, 0x43, 0x32, 0x44, 0x07, 0xd3, 0x49, 0x27, 0x8d,
-	0x14, 0x18, 0xa5, 0xed, 0xc9, 0x3c, 0x6f, 0x3e, 0xbd, 0x7c, 0xb7, 0x43, 0xce, 0xe1, 0x1a, 0xc3,
-	0xfe, 0x30, 0x7a, 0x0f, 0x8e, 0xd5, 0x35, 0x4b, 0x54, 0x75, 0x7d, 0xab, 0x6d, 0x88, 0x9b, 0x52,
-	0x4b, 0x51, 0x77, 0xd9, 0x04, 0xad, 0xf1, 0x6a, 0x48, 0x8d, 0xbc, 0x66, 0x15, 0x69, 0x3a, 0x5d,
-	0x7d, 0xdc, 0xdb, 0x2b, 0x21, 0x59, 0xf7, 0x02, 0x2b, 0x94, 0x06, 0x89, 0x10, 0x11, 0xee, 0xba,
-	0x62, 0xc9, 0xfa, 0x36, 0x36, 0x77, 0xa9, 0xd9, 0x62, 0x93, 0x94, 0xfc, 0xb5, 0x70, 0xf2, 0xbc,
-	0x97, 0xef, 0xe3, 0x67, 0xea, 0xbe, 0x18, 0xba, 0x07, 0x47, 0x48, 0x53, 0xb2, 0xa2, 0xac, 0x6b,
-	0x9b, 0x4a, 0x83, 0x3d, 0xfb, 0xcc, 0xcd, 0x0f, 0xba, 0xe4, 0x9d, 0xcd, 0x5f, 0x8d, 0x08, 0xc3,
-	0x94, 0x68, 0x99, 0xf2, 0xa0, 0x0f, 0xe0, 0x28, 0x79, 0xcc, 0x79, 0x3e, 0x8d, 0x65, 0x9e, 0x4b,
-	0xec, 0x57, 0x1e, 0xe7, 0x4c, 0xfc, 0xe0, 0xae, 0x7d, 0x35, 0x22, 0xd0, 0x95, 0xe6, 0x3c, 0x6d,
-	0x59, 0x81, 0x8c, 0xd4, 0xb6, 0x75, 0x91, 0x4e, 0xa0, 0xbb, 0xfa, 0x73, 0xb4, 0xc8, 0xb8, 0xaf,
-	0x48, 0xa1, 0x65, 0x10, 0xd1, 0x77, 0x97, 0x99, 0x20, 0x28, 0x52, 0xcf, 0x5d, 0xe9, 0x6d, 0x88,
-	0x34, 0x5d, 0x34, 0x24, 0x4d, 0x91, 0x45, 0xbb, 0x69, 0x62, 0xab, 0xa9, 0xab, 0x75, 0x16, 0x3d,
-	0x97, 0x09, 0x08, 0x8c, 0xa6, 0x97, 0x09, 0xac, 0xea, 0xa1, 0xd0, 0x22, 0x4c, 0xfa, 0x89, 0xce,
-	0x38, 0x1e, 0x6e, 0xcf, 0xbd, 0xd5, 0xa8, 0x87, 0x5b, 0x05, 0x42, 0xc2, 0xe8, 0x47, 0xee, 0xc0,
-	0xa9, 0x40, 0xa5, 0x74, 0x1a, 0x3e, 0x7e, 0x24, 0xb9, 0xe4, 0xc7, 0x1e, 0x7f, 0x0c, 0x48, 0xc1,
-	0xef, 0xdd, 0xfd, 0x63, 0x81, 0xc0, 0x36, 0x43, 0x92, 0xd1, 0x7d, 0x78, 0xd1, 0x91, 0x71, 0x51,
-	0xad, 0x89, 0x96, 0xde, 0x36, 0x65, 0x2c, 0x2a, 0x06, 0xf1, 0xa0, 0x96, 0x62, 0xd9, 0x44, 0x44,
-	0xd8, 0xc9, 0xf0, 0xcd, 0x58, 0x8d, 0x0a, 0xe7, 0x1d, 0x78, 0xb1, 0x56, 0xa1, 0xe0, 0x35, 0xa3,
-	0x7c, 0x00, 0x45, 0xef, 0xc3, 0x74, 0x5d, 0xb1, 0x9e, 0x4d, 0x3f, 0xf5, 0x4c, 0xfa, 0x69, 0x17,
-	0x1f, 0xcc, 0x2f, 0xc0, 0xb3, 0x1e, 0xbf, 0x61, 0xea, 0x3b, 0xbb, 0xa2, 0xe1, 0x0e, 0x11, 0x3b,
-	0xfd, 0xdc, 0x0e, 0x0e, 0x08, 0xe3, 0x2e, 0xb6, 0x4c, 0xa0, 0xde, 0xf8, 0xa1, 0x55, 0x38, 0xd6,
-	0xcf, 0x25, 0x6e, 0x67, 0xd9, 0x0b, 0x3f, 0x82, 0x2e, 0x69, 0xf4, 0xf2, 0xdc, 0xcb, 0x06, 0x31,
-	0xe5, 0xd8, 0xd4, 0xd1, 0x99, 0x72, 0xc8, 0x80, 0x17, 0xda, 0xee, 0xe5, 0x4e, 0x86, 0x5d, 0x13,
-	0x0d, 0x5d, 0x57, 0x45, 0x13, 0xb7, 0x2d, 0xec, 0x8c, 0xc8, 0x45, 0xca, 0x7a, 0x29, 0x44, 0x10,
-	0x96, 0x75, 0x4d, 0x2b, 0xeb, 0xba, 0x2a, 0x10, 0x80, 0x73, 0x65, 0x92, 0xc1, 0x10, 0x26, 0xdb,
-	0x61, 0x09, 0x53, 0x6f, 0x43, 0x74, 0x58, 0x1f, 0x11, 0x03, 0x07, 0xb6, 0xb0, 0xe3, 0xb3, 0x87,
-	0x04, 0xf2, 0x27, 0x1a, 0x87, 0x83, 0xdb, 0x92, 0xda, 0xc6, 0xd4, 0x31, 0x0f, 0x09, 0xce, 0xc3,
-	0xcd, 0xe8, 0x22, 0xb8, 0xf9, 0x3b, 0xf0, 0x65, 0x07, 0x7c, 0x06, 0x60, 0x0a, 0x4e, 0x96, 0x4c,
-	0xa5, 0xa1, 0x68, 0xe9, 0x0a, 0x36, 0xb7, 0xb1, 0x69, 0x5d, 0xf2, 0xee, 0x58, 0xeb, 0x75, 0x04,
-	0xb2, 0x70, 0x19, 0xa6, 0xdd, 0x38, 0x59, 0xc1, 0x25, 0xf7, 0x4e, 0x78, 0x3d, 0x7d, 0xa0, 0x56,
-	0x69, 0x74, 0x71, 0x9e, 0x18, 0xd5, 0x2c, 0x97, 0x9d, 0xe7, 0x16, 0xb9, 0x1b, 0x5c, 0xf6, 0x0a,
-	0x97, 0xbd, 0xca, 0x65, 0x17, 0xb8, 0x5c, 0x96, 0xcb, 0x5e, 0xe7, 0x72, 0xd7, 0x21, 0x0b, 0x19,
-	0xd7, 0xb0, 0xa4, 0x5d, 0x6f, 0x62, 0xa1, 0xd8, 0x55, 0x2e, 0x9b, 0x83, 0x93, 0x90, 0xf1, 0xea,
-	0xa5, 0x3d, 0xe7, 0x30, 0xb8, 0xc0, 0x5d, 0xe3, 0xae, 0xf3, 0x19, 0x88, 0xe8, 0xf5, 0xb1, 0xdf,
-	0x1e, 0xb2, 0x95, 0x88, 0xdd, 0xeb, 0x80, 0x73, 0x5f, 0x39, 0x7a, 0x3c, 0xd1, 0xed, 0x80, 0x78,
-	0x6e, 0x9e, 0xcb, 0x5e, 0xe3, 0x72, 0x39, 0xfe, 0x32, 0x1c, 0xf7, 0x9d, 0x6f, 0x07, 0x31, 0xb1,
-	0xd7, 0x01, 0xc8, 0x45, 0x8c, 0x75, 0x3b, 0x60, 0x30, 0xbb, 0xc8, 0x65, 0x6f, 0xf0, 0x0b, 0xf0,
-	0x62, 0xd8, 0xd0, 0x8b, 0x72, 0x53, 0x57, 0x64, 0x8c, 0xd0, 0x5e, 0x07, 0x4c, 0x3d, 0xea, 0x00,
-	0xb6, 0xdb, 0x01, 0xa7, 0x72, 0x0b, 0x5c, 0x3a, 0x77, 0x8d, 0x9f, 0x83, 0x67, 0x7c, 0x53, 0xb3,
-	0xbf, 0xac, 0x69, 0xb7, 0xc8, 0x79, 0xba, 0xac, 0x45, 0x2e, 0x77, 0x83, 0x9b, 0xbf, 0x72, 0x3b,
-	0x16, 0x1f, 0x66, 0x46, 0x6e, 0xc7, 0xe2, 0x13, 0xcc, 0xd9, 0xdb, 0xb1, 0xf8, 0x18, 0x83, 0x6e,
-	0xc7, 0xe2, 0x2c, 0x33, 0x79, 0x3b, 0x16, 0x3f, 0xcf, 0x4c, 0xcf, 0x3c, 0x4a, 0xc2, 0xc4, 0xb2,
-	0x89, 0x25, 0x1b, 0xef, 0xdb, 0xe4, 0x5b, 0x47, 0xb5, 0xc9, 0xc3, 0x3d, 0x36, 0xb9, 0xd7, 0x1c,
-	0xdf, 0xfd, 0x29, 0xe6, 0x38, 0xd1, 0x6f, 0x8e, 0x7d, 0x96, 0x58, 0x3e, 0x4e, 0x4b, 0x1c, 0x66,
-	0x86, 0xd7, 0x5f, 0xcc, 0x0c, 0x1f, 0xb2, 0xc1, 0xf7, 0x8f, 0xd1, 0x06, 0x1f, 0xf6, 0xb9, 0xe2,
-	0x11, 0x6d, 0x6e, 0x7f, 0xb7, 0x03, 0x6c, 0xae, 0xdf, 0xc3, 0x56, 0x8f, 0xc3, 0xc3, 0x1e, 0x72,
-	0xad, 0x77, 0x5e, 0xc4, 0xb5, 0xfa, 0xfd, 0xea, 0xe5, 0x70, 0xbf, 0x1a, 0x64, 0x4d, 0x67, 0x43,
-	0xad, 0xe9, 0x61, 0x17, 0xfa, 0xf3, 0xe3, 0x71, 0xa1, 0x01, 0xfe, 0xf3, 0x97, 0xc7, 0xe7, 0x3f,
-	0x83, 0x9c, 0x67, 0xf9, 0x85, 0xcd, 0x9b, 0xdf, 0xb6, 0x09, 0x2f, 0x6e, 0xdb, 0x0e, 0x19, 0xb5,
-	0xb7, 0x8f, 0x66, 0xd4, 0x02, 0x2c, 0x5a, 0xfe, 0xa8, 0x16, 0x2d, 0xd0, 0x9c, 0xbd, 0x1e, 0x62,
-	0xce, 0x02, 0xdc, 0x18, 0x3e, 0x46, 0x37, 0xf6, 0x0c, 0xeb, 0x55, 0xfc, 0x29, 0xe6, 0x65, 0x35,
-	0x1a, 0x62, 0x5b, 0xf8, 0x23, 0xda, 0x96, 0xd5, 0xe8, 0x61, 0xc3, 0xc2, 0x1f, 0xd1, 0xb0, 0x1c,
-	0xe6, 0xc8, 0xa1, 0x0f, 0x8f, 0xd9, 0xaa, 0xfc, 0x67, 0x4d, 0xca, 0xd8, 0xd7, 0x6f, 0xfa, 0xfe,
-	0x11, 0x89, 0xe7, 0x02, 0x5d, 0xc1, 0xd9, 0x87, 0x4f, 0x41, 0xc0, 0xef, 0xfc, 0x95, 0x10, 0x4f,
-	0xc0, 0x3e, 0x7c, 0x0a, 0x02, 0x23, 0x7c, 0x26, 0x58, 0xdf, 0xcf, 0x3d, 0x7c, 0x0a, 0x82, 0x02,
-	0x3e, 0x61, 0x27, 0x92, 0xfe, 0x97, 0x24, 0x4c, 0x0a, 0xd8, 0x50, 0x25, 0xf9, 0x44, 0xd3, 0x5f,
-	0x52, 0x4d, 0xff, 0x20, 0x44, 0xd3, 0x6f, 0x84, 0x70, 0xfb, 0xda, 0x7d, 0x22, 0xea, 0x27, 0xa2,
-	0x7e, 0x22, 0xea, 0x27, 0xa2, 0x7e, 0x22, 0xea, 0xff, 0x33, 0xa2, 0xfe, 0xd7, 0x31, 0x38, 0x7c,
-	0x0b, 0xdb, 0x27, 0x82, 0xfe, 0x72, 0x0a, 0xfa, 0xfd, 0x10, 0x41, 0x5f, 0x08, 0xfb, 0x16, 0x75,
-	0xd0, 0xea, 0x13, 0x31, 0x3f, 0x11, 0xf3, 0x13, 0x31, 0xff, 0x6f, 0x14, 0xf3, 0x97, 0xfb, 0xe3,
-	0xc8, 0x4f, 0xb3, 0x22, 0x03, 0xc7, 0x65, 0x45, 0x06, 0x8e, 0xc1, 0x8a, 0x0c, 0x9c, 0x58, 0x91,
-	0x23, 0x5b, 0x91, 0x95, 0xe7, 0x7f, 0x76, 0xf8, 0xbf, 0x87, 0x4f, 0xc1, 0xf3, 0x92, 0x5e, 0xd0,
-	0xd2, 0xec, 0x7f, 0x80, 0x98, 0x6d, 0xc1, 0x89, 0x40, 0xdd, 0x47, 0x49, 0x38, 0x2c, 0x94, 0x36,
-	0xd6, 0xf3, 0xa2, 0x50, 0xe2, 0xd7, 0xd6, 0x99, 0x08, 0x1a, 0x83, 0xa3, 0xc5, 0xc2, 0x52, 0xa5,
-	0x2a, 0x0a, 0x85, 0xbb, 0x1b, 0x85, 0x4a, 0x95, 0x01, 0x68, 0x14, 0x0e, 0x09, 0x6b, 0xeb, 0xb7,
-	0xc4, 0xd5, 0xa5, 0xca, 0x2a, 0x13, 0x45, 0x10, 0x9e, 0x12, 0x96, 0xd6, 0xf3, 0xa5, 0x77, 0x98,
-	0x01, 0x02, 0x2f, 0xf2, 0x62, 0xe9, 0x5e, 0x41, 0x10, 0xd6, 0xf2, 0x05, 0x26, 0x36, 0x15, 0xdb,
-	0xeb, 0x80, 0xd8, 0xec, 0x3c, 0x64, 0xfc, 0x9f, 0xc0, 0x51, 0x02, 0xc2, 0x4a, 0x55, 0x58, 0x5b,
-	0xae, 0x8a, 0xf9, 0xf5, 0x0a, 0x13, 0xa1, 0xd0, 0xd2, 0xad, 0xb5, 0xe5, 0xa5, 0x22, 0xfd, 0x01,
-	0xcc, 0xce, 0xc3, 0xd1, 0xbe, 0x8f, 0xf2, 0x28, 0x0e, 0x63, 0x4b, 0x1b, 0xd5, 0x12, 0x13, 0x41,
-	0xc3, 0xf0, 0xf4, 0xbd, 0xab, 0x62, 0x69, 0xbd, 0xf8, 0x2e, 0x03, 0xe8, 0xc3, 0x35, 0xe7, 0x21,
-	0x3a, 0xfb, 0x0e, 0x1c, 0x0f, 0x92, 0x59, 0xc2, 0xbe, 0x5e, 0x12, 0x57, 0x96, 0x8a, 0x45, 0x7e,
-	0x69, 0xf9, 0x0e, 0x13, 0x41, 0x0c, 0x1c, 0x59, 0x5a, 0x7f, 0x57, 0x2c, 0xac, 0xe7, 0xcb, 0xa5,
-	0xb5, 0x75, 0xf2, 0x5a, 0x08, 0x26, 0xf2, 0x85, 0x95, 0xa5, 0x8d, 0x62, 0x55, 0xac, 0x6c, 0xf0,
-	0x95, 0x42, 0x95, 0x89, 0xce, 0x6e, 0xc0, 0x73, 0x21, 0xd2, 0x42, 0x18, 0xf3, 0x6b, 0xe4, 0x0d,
-	0xf8, 0x8d, 0x6a, 0x21, 0xcf, 0x44, 0xc8, 0x0b, 0x15, 0x4b, 0x64, 0xf9, 0xee, 0xba, 0xce, 0xc0,
-	0xa4, 0xf3, 0x5c, 0x16, 0x0a, 0x2b, 0x05, 0x41, 0x28, 0xe4, 0x99, 0x28, 0xdd, 0x8f, 0x28, 0xff,
-	0x09, 0x78, 0xf4, 0x5d, 0x2a, 0xf2, 0xf8, 0xbb, 0x54, 0xe4, 0x87, 0xef, 0x52, 0xe0, 0x41, 0x37,
-	0x05, 0xfe, 0xd0, 0x4d, 0x81, 0xaf, 0xba, 0x29, 0xf0, 0xa8, 0x9b, 0x02, 0x8f, 0xbb, 0x29, 0xf0,
-	0x6d, 0x37, 0x05, 0xbe, 0xef, 0xa6, 0x22, 0x3f, 0x74, 0x53, 0xe0, 0xb7, 0x4f, 0x52, 0x91, 0xbd,
-	0x27, 0x29, 0xf0, 0xe8, 0x49, 0x2a, 0xf2, 0xf8, 0x49, 0x2a, 0xf2, 0xde, 0x9d, 0x86, 0x6e, 0x6c,
-	0x35, 0x32, 0xdb, 0xba, 0x6a, 0x63, 0xd3, 0x94, 0x32, 0x6d, 0x6b, 0x8e, 0xfe, 0x41, 0x2e, 0xca,
-	0xcb, 0x86, 0xa9, 0x6f, 0x2b, 0x75, 0x6c, 0x5e, 0xf6, 0xc2, 0x73, 0x46, 0xad, 0xa1, 0xcf, 0xe1,
-	0x1d, 0xdb, 0xfd, 0xbf, 0x9a, 0xfd, 0xff, 0x23, 0xb5, 0x76, 0x8a, 0x4e, 0xcc, 0xfc, 0xbf, 0x03,
-	0x00, 0x00, 0xff, 0xff, 0xe3, 0x1b, 0x67, 0x3d, 0xb1, 0x2a, 0x00, 0x00,
+	// 2969 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5b, 0xcf, 0x6f, 0xdb, 0x56,
+	0xb6, 0xd6, 0x95, 0xe8, 0x44, 0xb9, 0xb2, 0x25, 0xea, 0xc6, 0x4e, 0x68, 0xc7, 0x51, 0x14, 0x37,
+	0x69, 0x13, 0x57, 0x91, 0x23, 0x39, 0xce, 0x2f, 0xe0, 0x35, 0x35, 0x2d, 0x39, 0xb6, 0x23, 0x5b,
+	0x0e, 0x2d, 0x07, 0xaf, 0x7d, 0x79, 0x65, 0x29, 0xea, 0x5a, 0x62, 0x43, 0x91, 0x2c, 0x49, 0x39,
+	0x36, 0x1e, 0x0a, 0x04, 0x59, 0xbd, 0x0e, 0x30, 0xc0, 0xa0, 0xcb, 0x02, 0xb3, 0x99, 0xd5, 0xa0,
+	0x7f, 0xc2, 0x28, 0x0b, 0xa3, 0x83, 0x02, 0x9d, 0x6e, 0xc6, 0xb3, 0x9a, 0xa0, 0xab, 0xd6, 0xd9,
+	0x74, 0x36, 0x83, 0x60, 0x56, 0x83, 0xac, 0x06, 0xf7, 0x92, 0xb4, 0x25, 0x59, 0x74, 0xe2, 0xc6,
+	0x03, 0x34, 0x03, 0xef, 0x4c, 0x9d, 0x73, 0xbe, 0x73, 0x78, 0xef, 0xb9, 0xf7, 0x7c, 0x9f, 0x2d,
+	0xc3, 0xb3, 0xab, 0xd8, 0x4a, 0x2b, 0xfa, 0x98, 0x25, 0xd7, 0x70, 0x5d, 0x1a, 0x93, 0xd5, 0x86,
+	0x65, 0x63, 0x73, 0xcc, 0x5e, 0x37, 0xb0, 0x95, 0x36, 0x4c, 0xdd, 0xd6, 0xd1, 0x80, 0xe3, 0x92,
+	0x76, 0x5c, 0xd2, 0xae, 0xcb, 0xd0, 0xa5, 0xaa, 0x62, 0xd7, 0x1a, 0xe5, 0xb4, 0xac, 0xd7, 0xc7,
+	0xaa, 0x7a, 0x55, 0x1f, 0xa3, 0xde, 0xe5, 0xc6, 0x0a, 0x7d, 0xa2, 0x0f, 0xf4, 0x27, 0x07, 0x65,
+	0xe8, 0x4c, 0x7b, 0xa2, 0xb2, 0x52, 0x55, 0x0c, 0xb1, 0x25, 0xcd, 0x50, 0xa2, 0xa3, 0x12, 0x6c,
+	0xda, 0x6d, 0xf6, 0x53, 0xed, 0x76, 0xdd, 0xb0, 0x15, 0x5d, 0xf3, 0x8c, 0x83, 0xed, 0xc6, 0xd6,
+	0xb8, 0xe1, 0x76, 0xd3, 0xaa, 0xa4, 0x2a, 0x15, 0xc9, 0xc6, 0xae, 0x35, 0xd9, 0x61, 0x55, 0xf0,
+	0x43, 0xb1, 0x0d, 0x7a, 0xe4, 0xfb, 0x20, 0xec, 0x2f, 0x36, 0x6c, 0x55, 0xc1, 0x66, 0x0e, 0xdb,
+	0x58, 0x26, 0xb6, 0xd2, 0xba, 0x81, 0xd1, 0x35, 0x18, 0x93, 0x75, 0xcd, 0xc2, 0x72, 0xc3, 0x56,
+	0x56, 0xb1, 0x38, 0xb1, 0xb6, 0xc6, 0x81, 0x24, 0xb8, 0xd0, 0xc7, 0x47, 0xff, 0xd9, 0x04, 0x81,
+	0x3f, 0xfc, 0x6d, 0x23, 0xd4, 0x33, 0x1a, 0xe2, 0x1e, 0x85, 0x85, 0x68, 0x8b, 0xdb, 0xc4, 0xda,
+	0x1a, 0x7a, 0x17, 0x86, 0x15, 0xcd, 0xc6, 0xe6, 0xaa, 0xa4, 0x72, 0x41, 0x1a, 0x11, 0xf3, 0x22,
+	0x8e, 0x8c, 0x32, 0xdc, 0xc6, 0x9f, 0xcf, 0x09, 0xdb, 0x0e, 0xe8, 0xbf, 0x20, 0x2a, 0x4b, 0x16,
+	0x16, 0xf1, 0x27, 0x4e, 0x6a, 0xd1, 0x56, 0xea, 0x98, 0x0b, 0x75, 0x09, 0xfb, 0x7b, 0x5d, 0x60,
+	0x89, 0x6b, 0xde, 0xf5, 0x2c, 0x29, 0x75, 0x8c, 0x6e, 0xc1, 0xfe, 0xba, 0xb4, 0xb6, 0x13, 0x6d,
+	0x60, 0x53, 0xc6, 0x9a, 0xcd, 0x31, 0x14, 0xa0, 0xcf, 0x03, 0x60, 0x46, 0x83, 0x5c, 0x45, 0x40,
+	0x75, 0x69, 0xcd, 0x8b, 0x5e, 0x74, 0x1c, 0xd1, 0x02, 0x3c, 0xd5, 0xfa, 0x96, 0x55, 0xc9, 0xc6,
+	0x0f, 0xa5, 0x75, 0x71, 0x45, 0x52, 0xd4, 0x86, 0x89, 0xb9, 0x9e, 0xae, 0x6f, 0x3c, 0xd8, 0x12,
+	0x72, 0xdb, 0x89, 0x98, 0x76, 0x02, 0x6e, 0xf6, 0xfe, 0xe3, 0xbd, 0x63, 0x99, 0x54, 0x36, 0x35,
+	0x9e, 0xba, 0x92, 0x9a, 0x18, 0xf9, 0x1c, 0xc0, 0xa1, 0xbc, 0x56, 0x31, 0x74, 0x45, 0xb3, 0x97,
+	0x1a, 0x65, 0x0b, 0xdb, 0x4b, 0x58, 0xc5, 0xb2, 0xad, 0x9b, 0x74, 0x89, 0x33, 0x90, 0x79, 0x80,
+	0xd7, 0x2d, 0x0e, 0x24, 0x43, 0x17, 0x8e, 0xf1, 0xa7, 0xbd, 0x2c, 0xf0, 0x0b, 0x70, 0x74, 0xa4,
+	0xc7, 0x0c, 0x3d, 0x05, 0x80, 0x26, 0xfd, 0x02, 0x04, 0x59, 0x56, 0xa0, 0xae, 0x37, 0xaf, 0x7f,
+	0xdd, 0x04, 0x09, 0x38, 0x0c, 0x4f, 0x16, 0x14, 0xcb, 0x4e, 0xea, 0x2b, 0x49, 0xf2, 0x69, 0x72,
+	0x45, 0x37, 0x93, 0x0e, 0x3e, 0x02, 0x99, 0xef, 0x9a, 0x00, 0x41, 0x16, 0x32, 0x77, 0xf0, 0xba,
+	0xc5, 0x87, 0x9d, 0x14, 0x6c, 0xcf, 0xc8, 0x5f, 0x83, 0x30, 0x3a, 0xa5, 0x98, 0x72, 0x43, 0xb1,
+	0x79, 0x13, 0x4b, 0x0f, 0xb0, 0x89, 0xde, 0x87, 0x61, 0xc3, 0x54, 0x74, 0x53, 0xb1, 0xd7, 0xe9,
+	0xde, 0x46, 0xb3, 0x89, 0x74, 0xfb, 0x69, 0x10, 0xf4, 0x86, 0xad, 0x68, 0xd5, 0x45, 0xd7, 0x8b,
+	0x67, 0x48, 0x8d, 0xc2, 0x76, 0x14, 0xe2, 0x21, 0x2b, 0xeb, 0x9a, 0xe6, 0xae, 0xbe, 0xaa, 0xd4,
+	0x15, 0xdb, 0xdd, 0xf3, 0x93, 0xdf, 0x37, 0x01, 0x93, 0xb9, 0x9c, 0xbd, 0xd2, 0xba, 0x89, 0x8f,
+	0x1e, 0x05, 0x85, 0xd8, 0x4e, 0x40, 0x81, 0xf8, 0x13, 0x0c, 0x03, 0x6b, 0x15, 0x45, 0xab, 0x8a,
+	0x26, 0xfe, 0xb4, 0x81, 0x2d, 0xdb, 0x72, 0x1b, 0xc0, 0x1f, 0xc3, 0x0d, 0x10, 0x5c, 0x7f, 0x94,
+	0x81, 0x47, 0x4d, 0x6c, 0x9b, 0x0a, 0xb6, 0xdc, 0xad, 0xf7, 0x0d, 0xf5, 0xfc, 0xd0, 0x4d, 0xd8,
+	0x4b, 0x5a, 0x67, 0x3b, 0x65, 0xcf, 0xde, 0x71, 0x91, 0xba, 0xb4, 0xe6, 0xa5, 0xeb, 0xd8, 0xe5,
+	0x9b, 0xb0, 0x7f, 0xc6, 0xb6, 0x8d, 0xec, 0x22, 0x39, 0x50, 0xb2, 0xae, 0x16, 0x9d, 0x03, 0x86,
+	0x46, 0xe0, 0x51, 0xac, 0x49, 0x65, 0x15, 0x57, 0xe8, 0xea, 0x86, 0xf9, 0x30, 0x01, 0xb7, 0xcd,
+	0x06, 0x16, 0x3c, 0xc3, 0x88, 0xed, 0xc4, 0x66, 0x3a, 0x63, 0xef, 0xc3, 0x81, 0x1a, 0x96, 0x2a,
+	0xd8, 0x14, 0x6d, 0x53, 0xd2, 0xac, 0x15, 0xdd, 0xac, 0x4b, 0xc4, 0x42, 0x91, 0x22, 0xd9, 0x77,
+	0x3a, 0xf6, 0x69, 0x86, 0xfa, 0x96, 0xda, 0x5c, 0x49, 0x8b, 0x09, 0xfd, 0xb5, 0x2e, 0x96, 0x91,
+	0xbf, 0x0c, 0xc2, 0xe8, 0x6d, 0x55, 0x2f, 0x4b, 0xea, 0x92, 0x81, 0x65, 0xda, 0x8b, 0x77, 0xe1,
+	0x31, 0xec, 0x76, 0xaa, 0xd3, 0x90, 0x91, 0xec, 0x70, 0x47, 0x92, 0x62, 0x99, 0x1c, 0x1e, 0x01,
+	0xaf, 0x90, 0x00, 0x7e, 0xe0, 0xab, 0xcf, 0xc2, 0x5e, 0xc4, 0x76, 0x9b, 0x26, 0x85, 0x1d, 0x14,
+	0xf4, 0x3f, 0xb0, 0xaf, 0x86, 0x25, 0xd5, 0xae, 0x89, 0x72, 0x0d, 0xcb, 0x0f, 0x2c, 0x2e, 0xf8,
+	0x0a, 0xb0, 0xdc, 0x57, 0x9f, 0x45, 0x9c, 0x28, 0x1a, 0xb4, 0x8d, 0xcc, 0x08, 0xbd, 0xce, 0xc7,
+	0x53, 0x14, 0x0b, 0x29, 0xf0, 0x84, 0xaa, 0x4b, 0x95, 0xb2, 0xa4, 0x4a, 0x9a, 0x8c, 0x4d, 0x51,
+	0x52, 0xab, 0xa4, 0x25, 0x6b, 0x75, 0xda, 0x3b, 0xd1, 0x6c, 0x2a, 0xdd, 0xf5, 0x5e, 0x4f, 0x17,
+	0x5a, 0x82, 0x26, 0xbd, 0x18, 0xb7, 0xaf, 0x07, 0xd4, 0x6e, 0x46, 0x54, 0x82, 0x31, 0xd9, 0x39,
+	0x38, 0x62, 0xd9, 0x39, 0x39, 0xb4, 0xc9, 0x22, 0xd9, 0xf3, 0x3e, 0x39, 0xda, 0x8f, 0x19, 0xcf,
+	0x6c, 0x34, 0x01, 0x10, 0xa2, 0x72, 0xfb, 0xe1, 0xfb, 0x3f, 0xc8, 0x7a, 0x4b, 0x25, 0x5a, 0xf4,
+	0xec, 0x92, 0x1e, 0x24, 0x0b, 0x94, 0xf1, 0x81, 0xf5, 0xbf, 0x49, 0xf8, 0xd3, 0x24, 0xc5, 0x66,
+	0xb3, 0xe5, 0xc2, 0x48, 0x6e, 0xfd, 0xf0, 0x4d, 0xe8, 0xc8, 0x17, 0x4f, 0x40, 0x90, 0x05, 0x42,
+	0x0c, 0xb7, 0x85, 0x5a, 0xe8, 0x31, 0x80, 0xd1, 0x0a, 0x5e, 0x91, 0x1a, 0xaa, 0x97, 0x9c, 0x3b,
+	0x42, 0x73, 0x5f, 0xf7, 0xc9, 0xdd, 0xde, 0x2d, 0xe9, 0x9c, 0x13, 0xeb, 0xc0, 0xe5, 0x35, 0xdb,
+	0x5c, 0xe7, 0xcf, 0x92, 0x12, 0xbe, 0x7c, 0x02, 0x18, 0x18, 0x0c, 0x38, 0x65, 0x7c, 0xb9, 0x5d,
+	0xc6, 0xaf, 0x9e, 0x80, 0x60, 0x38, 0x20, 0xf4, 0x55, 0x5a, 0xc3, 0x50, 0x19, 0xc6, 0x56, 0x24,
+	0x55, 0x2d, 0x4b, 0xf2, 0x03, 0xd1, 0xd0, 0x55, 0x45, 0x5e, 0xe7, 0x8e, 0xd2, 0xbd, 0x7b, 0xd7,
+	0xa7, 0x08, 0x27, 0x6e, 0xda, 0x8d, 0x59, 0xa4, 0x21, 0x7c, 0xaf, 0xf7, 0xea, 0x74, 0x0b, 0xa3,
+	0x2b, 0x6d, 0x56, 0x74, 0x17, 0x46, 0x6d, 0xd5, 0x12, 0x0d, 0xc9, 0x94, 0xea, 0xd8, 0xc6, 0xa6,
+	0xc5, 0x85, 0xe9, 0xd6, 0x9d, 0xeb, 0x48, 0xb1, 0x6c, 0x58, 0xb6, 0x89, 0xa5, 0x7a, 0x49, 0xb5,
+	0x16, 0x89, 0xaf, 0x45, 0x97, 0x95, 0x21, 0xb8, 0x42, 0x9f, 0xed, 0x7e, 0x48, 0x01, 0x10, 0x0f,
+	0x51, 0xcb, 0x9d, 0x47, 0xe6, 0x95, 0xde, 0xb0, 0xb9, 0x63, 0xf4, 0xfa, 0x38, 0xbe, 0xe1, 0x16,
+	0xd2, 0x3a, 0xed, 0xe2, 0x3b, 0xee, 0x25, 0xc7, 0x1b, 0xdd, 0x82, 0xf1, 0x9a, 0x6d, 0x1b, 0xa2,
+	0x52, 0x51, 0xf1, 0x36, 0x04, 0xf4, 0x87, 0x88, 0x11, 0xef, 0xd9, 0x8a, 0x8a, 0x3d, 0x80, 0x8f,
+	0x60, 0x5c, 0x77, 0xa6, 0xb6, 0x58, 0xf1, 0xc6, 0x36, 0xd7, 0x4b, 0x5f, 0xcd, 0x6f, 0xf5, 0xba,
+	0x4d, 0x79, 0xb7, 0x37, 0x59, 0xbd, 0xc3, 0x86, 0x64, 0x88, 0x76, 0xba, 0x93, 0x76, 0x1a, 0x49,
+	0xd0, 0x47, 0xb7, 0x27, 0xfd, 0xb2, 0xfe, 0xf4, 0xfc, 0xdd, 0x1d, 0x72, 0x0e, 0x57, 0x1c, 0x77,
+	0x9a, 0xd1, 0x87, 0x30, 0x5e, 0xd1, 0x2c, 0x51, 0xd5, 0xf5, 0x07, 0x0d, 0x43, 0x5c, 0x91, 0xea,
+	0x8a, 0xba, 0xce, 0x45, 0x69, 0x8e, 0x73, 0x3e, 0x39, 0x72, 0x9a, 0x55, 0xa0, 0xee, 0xb4, 0xfa,
+	0xb0, 0xb7, 0x56, 0x42, 0xac, 0xe2, 0x19, 0xa6, 0x29, 0x0c, 0x12, 0x21, 0x22, 0xd8, 0x15, 0xc5,
+	0x92, 0xf5, 0x55, 0x6c, 0xae, 0x53, 0xb2, 0xc5, 0xc5, 0x28, 0xf8, 0x3b, 0xfe, 0xe0, 0x39, 0xcf,
+	0xbf, 0x03, 0x9f, 0xad, 0x74, 0xd8, 0xd0, 0x3d, 0xd8, 0x4b, 0x36, 0x25, 0x23, 0xca, 0xba, 0xb6,
+	0xa2, 0x54, 0xb9, 0x13, 0x7b, 0x2e, 0x7e, 0xb7, 0x4b, 0xde, 0x59, 0xfc, 0x99, 0x80, 0x10, 0xa1,
+	0x40, 0x53, 0x14, 0x07, 0x7d, 0x0c, 0xfb, 0xc8, 0x63, 0xd6, 0xe3, 0x69, 0x1c, 0xfb, 0x52, 0xe0,
+	0xce, 0xc9, 0xe3, 0x9c, 0x89, 0xe7, 0x6e, 0xed, 0x33, 0x01, 0x81, 0x56, 0x9a, 0xf5, 0x66, 0xcb,
+	0x34, 0x64, 0xa5, 0x86, 0xad, 0x8b, 0xb4, 0x03, 0xdd, 0xea, 0x4f, 0xd2, 0x24, 0xfd, 0x1d, 0x49,
+	0xf2, 0x75, 0x83, 0x0c, 0x7d, 0xb7, 0xcc, 0x28, 0x89, 0x22, 0xf9, 0xdc, 0x4a, 0xe7, 0x20, 0xd2,
+	0x74, 0xd1, 0x90, 0x34, 0x45, 0x16, 0xed, 0x9a, 0x89, 0xad, 0x9a, 0xae, 0x56, 0x38, 0xf4, 0x52,
+	0x24, 0x20, 0xb0, 0x9a, 0xbe, 0x48, 0xc2, 0x4a, 0x5e, 0x14, 0xba, 0x0e, 0x63, 0x9d, 0x40, 0xc7,
+	0x1d, 0x0e, 0xb7, 0xe1, 0xde, 0x6a, 0x94, 0xc3, 0xcd, 0x00, 0x21, 0x6a, 0xb4, 0x47, 0xae, 0xc1,
+	0xa1, 0xae, 0x93, 0xd2, 0xd9, 0xf0, 0xfe, 0x7d, 0x8d, 0x4b, 0x3e, 0xfe, 0xf4, 0x33, 0x40, 0x12,
+	0xfe, 0xe4, 0xae, 0x1f, 0x07, 0x04, 0xae, 0xe6, 0xe3, 0x8c, 0xee, 0xc3, 0x33, 0xce, 0x18, 0x17,
+	0xd5, 0xb2, 0x68, 0xe9, 0x0d, 0x53, 0xc6, 0xa2, 0x62, 0x10, 0x0e, 0x6a, 0x29, 0x96, 0x4d, 0x86,
+	0x08, 0x37, 0xe8, 0xbf, 0x18, 0x33, 0x41, 0xe1, 0x94, 0x13, 0x5e, 0x28, 0x2f, 0xd1, 0xe0, 0x59,
+	0x63, 0x71, 0x27, 0x14, 0x7d, 0x04, 0x93, 0x15, 0xc5, 0xda, 0x1b, 0x7e, 0x68, 0x4f, 0xf8, 0x61,
+	0x37, 0xbe, 0x3b, 0xbe, 0x00, 0x4f, 0x78, 0xf8, 0x86, 0xa9, 0xaf, 0xad, 0x8b, 0x86, 0xdb, 0x44,
+	0xdc, 0xf0, 0x4b, 0x77, 0x30, 0x24, 0xf4, 0xbb, 0xb1, 0x8b, 0x24, 0xd4, 0x6b, 0x3f, 0x34, 0x03,
+	0xe3, 0xed, 0x58, 0xe2, 0x6a, 0x86, 0x3b, 0xfd, 0x0a, 0x70, 0x31, 0xa3, 0x15, 0xe7, 0x5e, 0xa6,
+	0x1b, 0x52, 0x96, 0x4b, 0xec, 0x1f, 0x29, 0x8b, 0x0c, 0x78, 0xba, 0xe1, 0x5e, 0xee, 0xa4, 0xd9,
+	0x35, 0xd1, 0xd0, 0x75, 0x55, 0x34, 0x71, 0xc3, 0xc2, 0x4e, 0x8b, 0x9c, 0xa1, 0xa8, 0x17, 0x7c,
+	0x06, 0xc2, 0x94, 0xae, 0x69, 0x8b, 0xba, 0xae, 0x0a, 0x24, 0xc0, 0xb9, 0x32, 0x49, 0x63, 0x08,
+	0x83, 0x0d, 0x3f, 0x07, 0x74, 0x0b, 0xc6, 0xbc, 0xd9, 0xea, 0x9e, 0x52, 0xee, 0xec, 0x1e, 0x1b,
+	0xc5, 0x08, 0xde, 0x28, 0x9e, 0x72, 0xbc, 0xd1, 0x02, 0x64, 0xed, 0x7a, 0xdd, 0x29, 0xd4, 0x43,
+	0x18, 0xa1, 0x08, 0x23, 0x3e, 0xb7, 0x40, 0x69, 0x7e, 0x9e, 0xd4, 0x40, 0xd2, 0x13, 0x3c, 0xbb,
+	0x5e, 0x27, 0x8f, 0x1e, 0xde, 0x7d, 0x78, 0x46, 0xd3, 0x3d, 0xa6, 0xeb, 0xb0, 0x74, 0xd2, 0x46,
+	0xe2, 0xce, 0x5c, 0xe2, 0xce, 0xef, 0x51, 0x60, 0x8f, 0x70, 0x4a, 0xd3, 0x5d, 0xee, 0x4b, 0x29,
+	0xfb, 0x22, 0x36, 0xa7, 0xb6, 0x43, 0xd1, 0x3d, 0x78, 0xaa, 0x95, 0x48, 0x77, 0x22, 0xbf, 0x45,
+	0x8f, 0xf1, 0x80, 0xc3, 0xab, 0x2f, 0x5f, 0x6e, 0x91, 0x64, 0x17, 0xc0, 0x4c, 0x8f, 0xc0, 0xb5,
+	0xf0, 0xea, 0x36, 0xdc, 0xa1, 0xf7, 0x21, 0xda, 0x4d, 0x33, 0x10, 0x0b, 0x43, 0x0f, 0xb0, 0x23,
+	0x57, 0x8e, 0x09, 0xe4, 0x47, 0xd4, 0x0f, 0x7b, 0x56, 0x25, 0xb5, 0x81, 0xa9, 0xf0, 0x38, 0x26,
+	0x38, 0x0f, 0x37, 0x83, 0xd7, 0xc1, 0xcd, 0xdf, 0x81, 0xaf, 0x9b, 0xe0, 0xb7, 0x00, 0x26, 0xe0,
+	0x60, 0xd1, 0x54, 0xaa, 0x8a, 0x96, 0x5c, 0xc2, 0xe6, 0x2a, 0x36, 0xad, 0x0b, 0xde, 0xa8, 0xb2,
+	0x2e, 0x22, 0x90, 0x81, 0xd3, 0x30, 0xe9, 0xda, 0xc9, 0xaa, 0x5d, 0x70, 0x17, 0xf5, 0x62, 0x72,
+	0x67, 0xe8, 0x27, 0xd1, 0xc8, 0x38, 0xe1, 0xfb, 0x99, 0x54, 0x66, 0x3c, 0x75, 0x3d, 0x75, 0x23,
+	0x95, 0xb9, 0x9c, 0xca, 0x5c, 0x49, 0x65, 0x26, 0x52, 0xe3, 0x57, 0x53, 0xd9, 0x4c, 0x2a, 0x73,
+	0x2d, 0x95, 0xbd, 0x06, 0x39, 0xc8, 0xba, 0xd4, 0x2f, 0xe9, 0xb2, 0x3c, 0x0b, 0x31, 0x57, 0x52,
+	0x99, 0x2c, 0x1c, 0x84, 0xac, 0x97, 0x32, 0xe9, 0x71, 0xb0, 0x9e, 0x89, 0xd4, 0xd5, 0xd4, 0x35,
+	0x3e, 0x0d, 0x11, 0xbd, 0x88, 0xb7, 0x1b, 0x9d, 0x34, 0x25, 0xe2, 0x36, 0x9a, 0xe0, 0xe4, 0xb7,
+	0x0e, 0xb3, 0x19, 0xd8, 0x6a, 0x82, 0x70, 0x76, 0x3c, 0x95, 0xb9, 0x9a, 0xca, 0x66, 0xf9, 0x4b,
+	0xb0, 0xbf, 0xe3, 0xa6, 0x74, 0x22, 0x06, 0x36, 0x9a, 0x00, 0xb9, 0x11, 0xf1, 0xad, 0x26, 0xe8,
+	0xc9, 0x5c, 0x4f, 0x65, 0x6e, 0xf0, 0x13, 0xf0, 0x8c, 0xdf, 0xf5, 0x21, 0xca, 0x35, 0x5d, 0x91,
+	0x31, 0x42, 0x1b, 0x4d, 0x30, 0xb4, 0xd9, 0x04, 0xdc, 0x56, 0x13, 0x1c, 0xc9, 0x4e, 0xa4, 0x92,
+	0xd9, 0xab, 0xfc, 0x18, 0x3c, 0xde, 0x71, 0xfe, 0xb6, 0xcb, 0x1a, 0x76, 0x93, 0x9c, 0xa2, 0x65,
+	0x5d, 0x4f, 0x65, 0x6f, 0xa4, 0xc6, 0x2f, 0xf3, 0xc3, 0xb0, 0xd7, 0x5d, 0x37, 0xc7, 0x93, 0x8c,
+	0xa0, 0xb3, 0x9b, 0x4d, 0x90, 0x24, 0xa7, 0x85, 0xbf, 0x06, 0x47, 0xf6, 0xe8, 0x11, 0xaf, 0x90,
+	0xf8, 0x46, 0x13, 0x9c, 0xdf, 0x6c, 0x82, 0x73, 0xa4, 0xfc, 0xf1, 0x6b, 0xa9, 0xf1, 0x89, 0x39,
+	0x26, 0x1c, 0x61, 0x7b, 0xe7, 0x98, 0xf0, 0x00, 0x7b, 0x62, 0x8e, 0x09, 0xc7, 0x59, 0x34, 0xc7,
+	0x84, 0x39, 0x76, 0x70, 0x8e, 0x09, 0x9f, 0x62, 0x87, 0xe7, 0x98, 0x70, 0x92, 0x3d, 0x3b, 0xc7,
+	0x84, 0xcf, 0xb1, 0xe7, 0x47, 0x7e, 0xcd, 0xc0, 0x48, 0xcb, 0x31, 0x40, 0x3c, 0xec, 0x23, 0x87,
+	0x48, 0x2d, 0x8b, 0x75, 0x6c, 0xd7, 0xf4, 0x8a, 0x8f, 0xc2, 0x2d, 0xcd, 0xcf, 0x17, 0xf8, 0x79,
+	0xea, 0x41, 0x05, 0x53, 0xc4, 0xae, 0xd7, 0x0b, 0x65, 0xe7, 0x03, 0xf4, 0x21, 0x8c, 0x7a, 0x52,
+	0x57, 0xac, 0x9a, 0x7a, 0xc3, 0xa0, 0x3d, 0x16, 0xc9, 0x5e, 0xda, 0x0d, 0xe2, 0x49, 0xe4, 0xdb,
+	0xc4, 0x6d, 0x52, 0xb6, 0x95, 0xd5, 0x9d, 0xa9, 0xe2, 0xdc, 0x18, 0x7d, 0x46, 0xab, 0x0b, 0xaa,
+	0xc0, 0x13, 0x92, 0xf3, 0xf6, 0xba, 0x26, 0x5a, 0xd8, 0x5c, 0x55, 0x64, 0x2c, 0x56, 0xf4, 0x87,
+	0x1a, 0x15, 0x30, 0x91, 0xec, 0xc5, 0xdd, 0x39, 0x26, 0xa9, 0x7f, 0x51, 0x5b, 0x72, 0xbc, 0x73,
+	0xfa, 0xc3, 0x56, 0xfc, 0xe3, 0xd2, 0x6e, 0x33, 0x92, 0x61, 0xbf, 0x77, 0xee, 0x3f, 0x6d, 0xe0,
+	0x06, 0xf6, 0xe6, 0x3d, 0xd3, 0x95, 0x54, 0x94, 0xe6, 0xe7, 0xdd, 0xb3, 0x78, 0xb7, 0x81, 0x1b,
+	0x8a, 0x56, 0x75, 0x29, 0x43, 0x4b, 0x16, 0x64, 0xee, 0x38, 0x60, 0x97, 0x08, 0xbc, 0x07, 0xa3,
+	0x96, 0xaa, 0x3f, 0x14, 0x4d, 0xa9, 0x6e, 0x38, 0xbf, 0xc0, 0x71, 0xc4, 0x34, 0xf7, 0x7d, 0x13,
+	0x04, 0x33, 0xf4, 0xc8, 0xff, 0xff, 0x13, 0x57, 0x9b, 0x8c, 0x86, 0xb8, 0xe7, 0x69, 0xa1, 0x97,
+	0xf8, 0x0b, 0x52, 0xdd, 0xa0, 0xbf, 0xc5, 0x59, 0x82, 0x71, 0x57, 0x28, 0xd6, 0x75, 0x4d, 0xb1,
+	0x75, 0x53, 0xd1, 0xaa, 0xdc, 0x11, 0x5a, 0xe1, 0xdb, 0xbb, 0x2b, 0x9c, 0xa1, 0xae, 0xf3, 0xdb,
+	0x9e, 0x74, 0xdb, 0xd8, 0x5a, 0xc7, 0xa7, 0x23, 0x7f, 0x8c, 0xc3, 0xe8, 0x94, 0x89, 0x25, 0x1b,
+	0x6f, 0x6b, 0xdc, 0xdb, 0xfb, 0xd5, 0xb8, 0x91, 0x16, 0x8d, 0xdb, 0xaa, 0x6c, 0xef, 0xfe, 0x1c,
+	0x65, 0x1b, 0x6d, 0x57, 0xb6, 0x1d, 0x7a, 0x56, 0x3e, 0x48, 0x3d, 0xeb, 0xa7, 0x64, 0x17, 0x5e,
+	0x4f, 0xc9, 0xee, 0xd2, 0xb0, 0xf7, 0x0f, 0x50, 0xc3, 0xee, 0x16, 0xa9, 0xe2, 0x3e, 0x35, 0x6a,
+	0xfb, 0x6e, 0x77, 0xd1, 0xa8, 0x9d, 0x02, 0xb4, 0x74, 0x10, 0x02, 0x74, 0x97, 0xe4, 0xbc, 0xf3,
+	0x3a, 0x92, 0xb3, 0x53, 0x6c, 0x5e, 0xf2, 0x17, 0x9b, 0xdd, 0x74, 0xe5, 0xa8, 0xaf, 0xae, 0xdc,
+	0x2d, 0x21, 0xff, 0xfb, 0x60, 0x24, 0x64, 0x17, 0xf1, 0xf8, 0xbf, 0x07, 0x27, 0x1e, 0xbb, 0xc9,
+	0xc6, 0xc5, 0xd7, 0x56, 0x5e, 0x9d, 0x9a, 0x4b, 0x78, 0x7d, 0xcd, 0xb5, 0x4b, 0x65, 0xbd, 0xbf,
+	0x3f, 0x95, 0xd5, 0x45, 0x5f, 0xe5, 0xf6, 0xab, 0xaf, 0xba, 0x2a, 0xab, 0x8b, 0x3e, 0xca, 0xaa,
+	0x8b, 0x94, 0xc2, 0x07, 0x28, 0xa5, 0xf6, 0xd0, 0x4d, 0x85, 0x9f, 0xa3, 0x3c, 0x66, 0x82, 0x3e,
+	0x9a, 0x83, 0xdf, 0xa7, 0xe6, 0x98, 0x09, 0xee, 0x56, 0x1b, 0xfc, 0x3e, 0xd5, 0xc6, 0x6e, 0x8c,
+	0x2c, 0xfa, 0xe4, 0x80, 0x75, 0xc6, 0x5e, 0x0a, 0xe3, 0x35, 0x09, 0x7d, 0x68, 0x6f, 0x42, 0x7f,
+	0xeb, 0x15, 0x08, 0xfd, 0x4c, 0xe8, 0xdf, 0xca, 0xdc, 0xe3, 0xdf, 0xbd, 0xd7, 0xf1, 0x0b, 0x6a,
+	0x3e, 0xd5, 0x95, 0x27, 0x9f, 0x78, 0xfc, 0x02, 0x74, 0xf9, 0x9c, 0xbf, 0xec, 0xc3, 0x92, 0xb9,
+	0xc7, 0x2f, 0x40, 0x57, 0x0b, 0x9f, 0xee, 0xce, 0x78, 0x4f, 0x3e, 0x7e, 0x01, 0xba, 0x19, 0xf8,
+	0xc2, 0x2b, 0x51, 0xda, 0xb7, 0x1f, 0xbf, 0x00, 0xaf, 0xe0, 0xd7, 0xc1, 0x70, 0x1d, 0x6e, 0x4b,
+	0x58, 0xed, 0x37, 0x71, 0x18, 0x13, 0xb0, 0xa1, 0x4a, 0xf2, 0x21, 0x8d, 0x79, 0x43, 0x69, 0xcc,
+	0xc7, 0x3e, 0x34, 0xe6, 0x86, 0x0f, 0x76, 0xc7, 0x76, 0x1f, 0xf2, 0x98, 0x43, 0x1e, 0x73, 0xc8,
+	0x63, 0x0e, 0x79, 0xcc, 0x21, 0x8f, 0x39, 0xe4, 0x31, 0x6f, 0x2e, 0x8f, 0xf9, 0xd3, 0x71, 0x18,
+	0xb9, 0x8d, 0xed, 0x43, 0x0e, 0xf3, 0x66, 0x72, 0x98, 0xfb, 0x3e, 0x1c, 0x66, 0xc2, 0xef, 0xeb,
+	0x02, 0x3b, 0x5b, 0x7d, 0xc8, 0x5f, 0x0e, 0xf9, 0xcb, 0x21, 0x7f, 0xf9, 0x25, 0xf2, 0x97, 0x37,
+	0xfb, 0xef, 0xd7, 0x3f, 0x8f, 0x7d, 0x85, 0x0e, 0x8a, 0x7d, 0x85, 0x0e, 0x80, 0x7d, 0x85, 0xde,
+	0x68, 0xf6, 0xc5, 0x1c, 0x00, 0xfb, 0x62, 0xfe, 0xd3, 0xd8, 0xd7, 0xf4, 0xcb, 0xff, 0xdc, 0xfa,
+	0xd6, 0xe3, 0x17, 0xe0, 0x65, 0x4e, 0xbf, 0x28, 0x16, 0xd7, 0xfa, 0xf7, 0xd6, 0x73, 0xec, 0xf9,
+	0xd1, 0x3a, 0x1c, 0xe8, 0x4a, 0x75, 0x50, 0x0c, 0x46, 0x84, 0xe2, 0xf2, 0x42, 0x4e, 0x14, 0x8a,
+	0xfc, 0xec, 0x02, 0x1b, 0x40, 0x71, 0xd8, 0x57, 0xc8, 0x4f, 0x2e, 0x95, 0x44, 0x21, 0x7f, 0x77,
+	0x39, 0xbf, 0x54, 0x62, 0x01, 0xea, 0x83, 0xc7, 0x84, 0xd9, 0x85, 0xdb, 0xe2, 0xcc, 0xe4, 0xd2,
+	0x0c, 0x1b, 0x44, 0x10, 0x1e, 0x11, 0x26, 0x17, 0x72, 0xc5, 0x79, 0x36, 0x44, 0xc2, 0x0b, 0xbc,
+	0x58, 0xbc, 0x97, 0x17, 0x84, 0xd9, 0x5c, 0x9e, 0x65, 0x86, 0x98, 0x8d, 0x26, 0x60, 0x46, 0xc7,
+	0x21, 0xdb, 0xf9, 0xc5, 0x2c, 0x14, 0x85, 0x70, 0xa9, 0x24, 0xcc, 0x4e, 0x95, 0xc4, 0xdc, 0xc2,
+	0x12, 0x1b, 0xa0, 0xa1, 0xc5, 0xdb, 0xb3, 0x53, 0x93, 0x05, 0xfa, 0x01, 0x18, 0x1d, 0x87, 0x7d,
+	0x6d, 0x5f, 0x15, 0x43, 0x61, 0xc8, 0x4c, 0x2e, 0x97, 0x8a, 0x6c, 0x00, 0x45, 0xe0, 0xd1, 0x7b,
+	0x57, 0xc4, 0xe2, 0x42, 0xe1, 0x03, 0x16, 0xd0, 0x87, 0xab, 0xce, 0x43, 0x70, 0x74, 0x1e, 0xf6,
+	0x77, 0x63, 0x16, 0x04, 0x7d, 0xa1, 0x28, 0x4e, 0x4f, 0x16, 0x0a, 0xfc, 0xe4, 0xd4, 0x1d, 0x36,
+	0x80, 0x58, 0xd8, 0x3b, 0xb9, 0xf0, 0x81, 0x98, 0x5f, 0xc8, 0x2d, 0x16, 0x67, 0x17, 0xc8, 0x6b,
+	0x21, 0x18, 0xcd, 0xe5, 0xa7, 0x27, 0x97, 0x0b, 0x25, 0x71, 0x69, 0x99, 0x5f, 0xca, 0x97, 0xd8,
+	0xe0, 0xe8, 0x32, 0x3c, 0xe9, 0x33, 0x4d, 0x09, 0x62, 0x6e, 0x96, 0xbc, 0x01, 0xbf, 0x5c, 0xca,
+	0xe7, 0xd8, 0x00, 0x79, 0xa1, 0x42, 0x91, 0x94, 0xef, 0xd6, 0x75, 0x1c, 0xc6, 0x9c, 0xe7, 0x45,
+	0x21, 0x3f, 0x9d, 0x17, 0x84, 0x7c, 0x8e, 0x0d, 0xd2, 0xf5, 0x08, 0xf2, 0x9f, 0x83, 0xcd, 0x1f,
+	0x13, 0x81, 0xa7, 0x3f, 0x26, 0x02, 0xcf, 0x7f, 0x4c, 0x80, 0x47, 0x5b, 0x09, 0xf0, 0xfb, 0xad,
+	0x04, 0xf8, 0x76, 0x2b, 0x01, 0x36, 0xb7, 0x12, 0xe0, 0xe9, 0x56, 0x02, 0xfc, 0xb0, 0x95, 0x00,
+	0x3f, 0x6d, 0x25, 0x02, 0xcf, 0xb7, 0x12, 0xe0, 0x37, 0xcf, 0x12, 0x81, 0x8d, 0x67, 0x09, 0xb0,
+	0xf9, 0x2c, 0x11, 0x78, 0xfa, 0x2c, 0x11, 0xf8, 0xf0, 0x4e, 0x55, 0x37, 0x1e, 0x54, 0xd3, 0xab,
+	0xba, 0x6a, 0x63, 0xd3, 0x94, 0xd2, 0x0d, 0x6b, 0x8c, 0xfe, 0x40, 0x66, 0xc3, 0x25, 0xc3, 0xd4,
+	0x57, 0x95, 0x0a, 0x36, 0x2f, 0x79, 0xe6, 0x31, 0xa3, 0x5c, 0xd5, 0xc7, 0xf0, 0x9a, 0xed, 0xfe,
+	0x07, 0x41, 0xfb, 0x3f, 0x52, 0x94, 0x8f, 0xd0, 0x2e, 0x1c, 0xff, 0x57, 0x00, 0x00, 0x00, 0xff,
+	0xff, 0x38, 0x08, 0xe8, 0x07, 0x68, 0x31, 0x00, 0x00,
 }
 
 func (x LoadbalancerAlgorithm) String() string {
@@ -2636,6 +2992,24 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.UpstreamConnPoolReuseType.Equal(that1.UpstreamConnPoolReuseType) {
 		return false
 	}
+	if that1.ClusterType == nil {
+		if this.ClusterType != nil {
+			return false
+		}
+	} else if this.ClusterType == nil {
+		return false
+	} else if !this.ClusterType.Equal(that1.ClusterType) {
+		return false
+	}
+	if that1.MaxRequestsPerConnectionChoice == nil {
+		if this.MaxRequestsPerConnectionChoice != nil {
+			return false
+		}
+	} else if this.MaxRequestsPerConnectionChoice == nil {
+		return false
+	} else if !this.MaxRequestsPerConnectionChoice.Equal(that1.MaxRequestsPerConnectionChoice) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType_Http1Config) Equal(that interface{}) bool {
@@ -2878,6 +3252,141 @@ func (this *GlobalSpecType_ProxyProtocolV2) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_DefaultCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DefaultCluster)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DefaultCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultCluster.Equal(that1.DefaultCluster) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_TmmPoolCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_TmmPoolCluster)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_TmmPoolCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TmmPoolCluster.Equal(that1.TmmPoolCluster) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_NoRequestLimitPerConnection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_NoRequestLimitPerConnection)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_NoRequestLimitPerConnection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoRequestLimitPerConnection.Equal(that1.NoRequestLimitPerConnection) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_MaxRequestsPerConnection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_MaxRequestsPerConnection)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_MaxRequestsPerConnection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaxRequestsPerConnection != that1.MaxRequestsPerConnection {
+		return false
+	}
+	return true
+}
+func (this *TMMPoolType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TMMPoolType)
+	if !ok {
+		that2, ok := that.(TMMPoolType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.TmmLbMethod != that1.TmmLbMethod {
+		return false
+	}
+	if !this.PriorityGroup.Equal(that1.PriorityGroup) {
+		return false
+	}
+	if !this.ActionOnServiceDown.Equal(that1.ActionOnServiceDown) {
+		return false
+	}
+	if !this.RequestQueueConfig.Equal(that1.RequestQueueConfig) {
+		return false
+	}
+	if this.SlowRampTime != that1.SlowRampTime {
+		return false
+	}
+	if !this.HealthMonitoring.Equal(that1.HealthMonitoring) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2984,6 +3493,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.UpstreamConnPoolReuseType.Equal(that1.UpstreamConnPoolReuseType) {
+		return false
+	}
+	if that1.MaxRequestsPerConnectionChoice == nil {
+		if this.MaxRequestsPerConnectionChoice != nil {
+			return false
+		}
+	} else if this.MaxRequestsPerConnectionChoice == nil {
+		return false
+	} else if !this.MaxRequestsPerConnectionChoice.Equal(that1.MaxRequestsPerConnectionChoice) {
 		return false
 	}
 	return true
@@ -3180,6 +3698,54 @@ func (this *CreateSpecType_ProxyProtocolV2) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_NoRequestLimitPerConnection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_NoRequestLimitPerConnection)
+	if !ok {
+		that2, ok := that.(CreateSpecType_NoRequestLimitPerConnection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoRequestLimitPerConnection.Equal(that1.NoRequestLimitPerConnection) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_MaxRequestsPerConnection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_MaxRequestsPerConnection)
+	if !ok {
+		that2, ok := that.(CreateSpecType_MaxRequestsPerConnection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaxRequestsPerConnection != that1.MaxRequestsPerConnection {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3286,6 +3852,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.UpstreamConnPoolReuseType.Equal(that1.UpstreamConnPoolReuseType) {
+		return false
+	}
+	if that1.MaxRequestsPerConnectionChoice == nil {
+		if this.MaxRequestsPerConnectionChoice != nil {
+			return false
+		}
+	} else if this.MaxRequestsPerConnectionChoice == nil {
+		return false
+	} else if !this.MaxRequestsPerConnectionChoice.Equal(that1.MaxRequestsPerConnectionChoice) {
 		return false
 	}
 	return true
@@ -3482,6 +4057,54 @@ func (this *ReplaceSpecType_ProxyProtocolV2) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_NoRequestLimitPerConnection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_NoRequestLimitPerConnection)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_NoRequestLimitPerConnection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoRequestLimitPerConnection.Equal(that1.NoRequestLimitPerConnection) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_MaxRequestsPerConnection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_MaxRequestsPerConnection)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_MaxRequestsPerConnection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaxRequestsPerConnection != that1.MaxRequestsPerConnection {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3597,6 +4220,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.UpstreamConnPoolReuseType.Equal(that1.UpstreamConnPoolReuseType) {
+		return false
+	}
+	if that1.MaxRequestsPerConnectionChoice == nil {
+		if this.MaxRequestsPerConnectionChoice != nil {
+			return false
+		}
+	} else if this.MaxRequestsPerConnectionChoice == nil {
+		return false
+	} else if !this.MaxRequestsPerConnectionChoice.Equal(that1.MaxRequestsPerConnectionChoice) {
 		return false
 	}
 	return true
@@ -3841,6 +4473,54 @@ func (this *GetSpecType_ProxyProtocolV2) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_NoRequestLimitPerConnection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_NoRequestLimitPerConnection)
+	if !ok {
+		that2, ok := that.(GetSpecType_NoRequestLimitPerConnection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoRequestLimitPerConnection.Equal(that1.NoRequestLimitPerConnection) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_MaxRequestsPerConnection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_MaxRequestsPerConnection)
+	if !ok {
+		that2, ok := that.(GetSpecType_MaxRequestsPerConnection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaxRequestsPerConnection != that1.MaxRequestsPerConnection {
+		return false
+	}
+	return true
+}
 func (this *OutlierDetectionType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -3905,7 +4585,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 30)
+	s := make([]string, 0, 34)
 	s = append(s, "&cluster.GlobalSpecType{")
 	if this.Endpoints != nil {
 		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
@@ -3962,6 +4642,12 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.UpstreamConnPoolReuseType != nil {
 		s = append(s, "UpstreamConnPoolReuseType: "+fmt.Sprintf("%#v", this.UpstreamConnPoolReuseType)+",\n")
+	}
+	if this.ClusterType != nil {
+		s = append(s, "ClusterType: "+fmt.Sprintf("%#v", this.ClusterType)+",\n")
+	}
+	if this.MaxRequestsPerConnectionChoice != nil {
+		s = append(s, "MaxRequestsPerConnectionChoice: "+fmt.Sprintf("%#v", this.MaxRequestsPerConnectionChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -4046,11 +4732,66 @@ func (this *GlobalSpecType_ProxyProtocolV2) GoString() string {
 		`ProxyProtocolV2:` + fmt.Sprintf("%#v", this.ProxyProtocolV2) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_DefaultCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GlobalSpecType_DefaultCluster{` +
+		`DefaultCluster:` + fmt.Sprintf("%#v", this.DefaultCluster) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_TmmPoolCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GlobalSpecType_TmmPoolCluster{` +
+		`TmmPoolCluster:` + fmt.Sprintf("%#v", this.TmmPoolCluster) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_NoRequestLimitPerConnection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GlobalSpecType_NoRequestLimitPerConnection{` +
+		`NoRequestLimitPerConnection:` + fmt.Sprintf("%#v", this.NoRequestLimitPerConnection) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_MaxRequestsPerConnection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GlobalSpecType_MaxRequestsPerConnection{` +
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%#v", this.MaxRequestsPerConnection) + `}`}, ", ")
+	return s
+}
+func (this *TMMPoolType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&cluster.TMMPoolType{")
+	s = append(s, "TmmLbMethod: "+fmt.Sprintf("%#v", this.TmmLbMethod)+",\n")
+	if this.PriorityGroup != nil {
+		s = append(s, "PriorityGroup: "+fmt.Sprintf("%#v", this.PriorityGroup)+",\n")
+	}
+	if this.ActionOnServiceDown != nil {
+		s = append(s, "ActionOnServiceDown: "+fmt.Sprintf("%#v", this.ActionOnServiceDown)+",\n")
+	}
+	if this.RequestQueueConfig != nil {
+		s = append(s, "RequestQueueConfig: "+fmt.Sprintf("%#v", this.RequestQueueConfig)+",\n")
+	}
+	s = append(s, "SlowRampTime: "+fmt.Sprintf("%#v", this.SlowRampTime)+",\n")
+	if this.HealthMonitoring != nil {
+		s = append(s, "HealthMonitoring: "+fmt.Sprintf("%#v", this.HealthMonitoring)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 26)
+	s := make([]string, 0, 28)
 	s = append(s, "&cluster.CreateSpecType{")
 	if this.Endpoints != nil {
 		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
@@ -4102,6 +4843,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.UpstreamConnPoolReuseType != nil {
 		s = append(s, "UpstreamConnPoolReuseType: "+fmt.Sprintf("%#v", this.UpstreamConnPoolReuseType)+",\n")
+	}
+	if this.MaxRequestsPerConnectionChoice != nil {
+		s = append(s, "MaxRequestsPerConnectionChoice: "+fmt.Sprintf("%#v", this.MaxRequestsPerConnectionChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -4170,11 +4914,27 @@ func (this *CreateSpecType_ProxyProtocolV2) GoString() string {
 		`ProxyProtocolV2:` + fmt.Sprintf("%#v", this.ProxyProtocolV2) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_NoRequestLimitPerConnection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.CreateSpecType_NoRequestLimitPerConnection{` +
+		`NoRequestLimitPerConnection:` + fmt.Sprintf("%#v", this.NoRequestLimitPerConnection) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_MaxRequestsPerConnection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.CreateSpecType_MaxRequestsPerConnection{` +
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%#v", this.MaxRequestsPerConnection) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 26)
+	s := make([]string, 0, 28)
 	s = append(s, "&cluster.ReplaceSpecType{")
 	if this.Endpoints != nil {
 		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
@@ -4226,6 +4986,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.UpstreamConnPoolReuseType != nil {
 		s = append(s, "UpstreamConnPoolReuseType: "+fmt.Sprintf("%#v", this.UpstreamConnPoolReuseType)+",\n")
+	}
+	if this.MaxRequestsPerConnectionChoice != nil {
+		s = append(s, "MaxRequestsPerConnectionChoice: "+fmt.Sprintf("%#v", this.MaxRequestsPerConnectionChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -4294,11 +5057,27 @@ func (this *ReplaceSpecType_ProxyProtocolV2) GoString() string {
 		`ProxyProtocolV2:` + fmt.Sprintf("%#v", this.ProxyProtocolV2) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_NoRequestLimitPerConnection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.ReplaceSpecType_NoRequestLimitPerConnection{` +
+		`NoRequestLimitPerConnection:` + fmt.Sprintf("%#v", this.NoRequestLimitPerConnection) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_MaxRequestsPerConnection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.ReplaceSpecType_MaxRequestsPerConnection{` +
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%#v", this.MaxRequestsPerConnection) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 28)
+	s := make([]string, 0, 30)
 	s = append(s, "&cluster.GetSpecType{")
 	if this.Endpoints != nil {
 		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
@@ -4353,6 +5132,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.UpstreamConnPoolReuseType != nil {
 		s = append(s, "UpstreamConnPoolReuseType: "+fmt.Sprintf("%#v", this.UpstreamConnPoolReuseType)+",\n")
+	}
+	if this.MaxRequestsPerConnectionChoice != nil {
+		s = append(s, "MaxRequestsPerConnectionChoice: "+fmt.Sprintf("%#v", this.MaxRequestsPerConnectionChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -4435,6 +5217,22 @@ func (this *GetSpecType_ProxyProtocolV2) GoString() string {
 	}
 	s := strings.Join([]string{`&cluster.GetSpecType_ProxyProtocolV2{` +
 		`ProxyProtocolV2:` + fmt.Sprintf("%#v", this.ProxyProtocolV2) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_NoRequestLimitPerConnection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GetSpecType_NoRequestLimitPerConnection{` +
+		`NoRequestLimitPerConnection:` + fmt.Sprintf("%#v", this.NoRequestLimitPerConnection) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_MaxRequestsPerConnection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GetSpecType_MaxRequestsPerConnection{` +
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%#v", this.MaxRequestsPerConnection) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -4661,6 +5459,24 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.MaxRequestsPerConnectionChoice != nil {
+		{
+			size := m.MaxRequestsPerConnectionChoice.Size()
+			i -= size
+			if _, err := m.MaxRequestsPerConnectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ClusterType != nil {
+		{
+			size := m.ClusterType.Size()
+			i -= size
+			if _, err := m.ClusterType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.UpstreamConnPoolReuseType != nil {
 		{
 			size, err := m.UpstreamConnPoolReuseType.MarshalToSizedBuffer(dAtA[:i])
@@ -5086,6 +5902,170 @@ func (m *GlobalSpecType_ProxyProtocolV2) MarshalToSizedBuffer(dAtA []byte) (int,
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_DefaultCluster) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DefaultCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultCluster != nil {
+		{
+			size, err := m.DefaultCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_TmmPoolCluster) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_TmmPoolCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TmmPoolCluster != nil {
+		{
+			size, err := m.TmmPoolCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_MaxRequestsPerConnection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_MaxRequestsPerConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.MaxRequestsPerConnection))
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_NoRequestLimitPerConnection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoRequestLimitPerConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoRequestLimitPerConnection != nil {
+		{
+			size, err := m.NoRequestLimitPerConnection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TMMPoolType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TMMPoolType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TMMPoolType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.HealthMonitoring != nil {
+		{
+			size, err := m.HealthMonitoring.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.SlowRampTime != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.SlowRampTime))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.RequestQueueConfig != nil {
+		{
+			size, err := m.RequestQueueConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ActionOnServiceDown != nil {
+		{
+			size, err := m.ActionOnServiceDown.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.PriorityGroup != nil {
+		{
+			size, err := m.PriorityGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.TmmLbMethod != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TmmLbMethod))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5106,6 +6086,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.MaxRequestsPerConnectionChoice != nil {
+		{
+			size := m.MaxRequestsPerConnectionChoice.Size()
+			i -= size
+			if _, err := m.MaxRequestsPerConnectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.UpstreamConnPoolReuseType != nil {
 		{
 			size, err := m.UpstreamConnPoolReuseType.MarshalToSizedBuffer(dAtA[:i])
@@ -5466,6 +6455,43 @@ func (m *CreateSpecType_ProxyProtocolV2) MarshalToSizedBuffer(dAtA []byte) (int,
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_MaxRequestsPerConnection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_MaxRequestsPerConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.MaxRequestsPerConnection))
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_NoRequestLimitPerConnection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoRequestLimitPerConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoRequestLimitPerConnection != nil {
+		{
+			size, err := m.NoRequestLimitPerConnection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5486,6 +6512,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.MaxRequestsPerConnectionChoice != nil {
+		{
+			size := m.MaxRequestsPerConnectionChoice.Size()
+			i -= size
+			if _, err := m.MaxRequestsPerConnectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.UpstreamConnPoolReuseType != nil {
 		{
 			size, err := m.UpstreamConnPoolReuseType.MarshalToSizedBuffer(dAtA[:i])
@@ -5846,6 +6881,43 @@ func (m *ReplaceSpecType_ProxyProtocolV2) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_MaxRequestsPerConnection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_MaxRequestsPerConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.MaxRequestsPerConnection))
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_NoRequestLimitPerConnection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoRequestLimitPerConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoRequestLimitPerConnection != nil {
+		{
+			size, err := m.NoRequestLimitPerConnection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5866,6 +6938,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.MaxRequestsPerConnectionChoice != nil {
+		{
+			size := m.MaxRequestsPerConnectionChoice.Size()
+			i -= size
+			if _, err := m.MaxRequestsPerConnectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.UpstreamConnPoolReuseType != nil {
 		{
 			size, err := m.UpstreamConnPoolReuseType.MarshalToSizedBuffer(dAtA[:i])
@@ -6281,6 +7362,43 @@ func (m *GetSpecType_ProxyProtocolV2) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_MaxRequestsPerConnection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_MaxRequestsPerConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.MaxRequestsPerConnection))
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_NoRequestLimitPerConnection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoRequestLimitPerConnection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoRequestLimitPerConnection != nil {
+		{
+			size, err := m.NoRequestLimitPerConnection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -6465,6 +7583,12 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.UpstreamConnPoolReuseType.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
+	if m.ClusterType != nil {
+		n += m.ClusterType.Size()
+	}
+	if m.MaxRequestsPerConnectionChoice != nil {
+		n += m.MaxRequestsPerConnectionChoice.Size()
+	}
 	return n
 }
 
@@ -6585,6 +7709,82 @@ func (m *GlobalSpecType_ProxyProtocolV2) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_DefaultCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultCluster != nil {
+		l = m.DefaultCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_TmmPoolCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TmmPoolCluster != nil {
+		l = m.TmmPoolCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_MaxRequestsPerConnection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2 + sovTypes(uint64(m.MaxRequestsPerConnection))
+	return n
+}
+func (m *GlobalSpecType_NoRequestLimitPerConnection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoRequestLimitPerConnection != nil {
+		l = m.NoRequestLimitPerConnection.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TMMPoolType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TmmLbMethod != 0 {
+		n += 1 + sovTypes(uint64(m.TmmLbMethod))
+	}
+	if m.PriorityGroup != nil {
+		l = m.PriorityGroup.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ActionOnServiceDown != nil {
+		l = m.ActionOnServiceDown.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.RequestQueueConfig != nil {
+		l = m.RequestQueueConfig.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SlowRampTime != 0 {
+		n += 1 + sovTypes(uint64(m.SlowRampTime))
+	}
+	if m.HealthMonitoring != nil {
+		l = m.HealthMonitoring.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6660,6 +7860,9 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.UpstreamConnPoolReuseType != nil {
 		l = m.UpstreamConnPoolReuseType.Size()
 		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.MaxRequestsPerConnectionChoice != nil {
+		n += m.MaxRequestsPerConnectionChoice.Size()
 	}
 	return n
 }
@@ -6757,6 +7960,27 @@ func (m *CreateSpecType_ProxyProtocolV2) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_MaxRequestsPerConnection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2 + sovTypes(uint64(m.MaxRequestsPerConnection))
+	return n
+}
+func (m *CreateSpecType_NoRequestLimitPerConnection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoRequestLimitPerConnection != nil {
+		l = m.NoRequestLimitPerConnection.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6832,6 +8056,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.UpstreamConnPoolReuseType != nil {
 		l = m.UpstreamConnPoolReuseType.Size()
 		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.MaxRequestsPerConnectionChoice != nil {
+		n += m.MaxRequestsPerConnectionChoice.Size()
 	}
 	return n
 }
@@ -6929,6 +8156,27 @@ func (m *ReplaceSpecType_ProxyProtocolV2) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_MaxRequestsPerConnection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2 + sovTypes(uint64(m.MaxRequestsPerConnection))
+	return n
+}
+func (m *ReplaceSpecType_NoRequestLimitPerConnection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoRequestLimitPerConnection != nil {
+		l = m.NoRequestLimitPerConnection.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -7007,6 +8255,9 @@ func (m *GetSpecType) Size() (n int) {
 	if m.UpstreamConnPoolReuseType != nil {
 		l = m.UpstreamConnPoolReuseType.Size()
 		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.MaxRequestsPerConnectionChoice != nil {
+		n += m.MaxRequestsPerConnectionChoice.Size()
 	}
 	return n
 }
@@ -7128,6 +8379,27 @@ func (m *GetSpecType_ProxyProtocolV2) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_MaxRequestsPerConnection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2 + sovTypes(uint64(m.MaxRequestsPerConnection))
+	return n
+}
+func (m *GetSpecType_NoRequestLimitPerConnection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoRequestLimitPerConnection != nil {
+		l = m.NoRequestLimitPerConnection.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -7243,6 +8515,8 @@ func (this *GlobalSpecType) String() string {
 		`LbSourceIpPersistanceChoice:` + fmt.Sprintf("%v", this.LbSourceIpPersistanceChoice) + `,`,
 		`ProxyProtocolType:` + fmt.Sprintf("%v", this.ProxyProtocolType) + `,`,
 		`UpstreamConnPoolReuseType:` + strings.Replace(fmt.Sprintf("%v", this.UpstreamConnPoolReuseType), "UpstreamConnPoolReuseType", "schema.UpstreamConnPoolReuseType", 1) + `,`,
+		`ClusterType:` + fmt.Sprintf("%v", this.ClusterType) + `,`,
+		`MaxRequestsPerConnectionChoice:` + fmt.Sprintf("%v", this.MaxRequestsPerConnectionChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7347,6 +8621,61 @@ func (this *GlobalSpecType_ProxyProtocolV2) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_DefaultCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DefaultCluster{`,
+		`DefaultCluster:` + strings.Replace(fmt.Sprintf("%v", this.DefaultCluster), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_TmmPoolCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_TmmPoolCluster{`,
+		`TmmPoolCluster:` + strings.Replace(fmt.Sprintf("%v", this.TmmPoolCluster), "TMMPoolType", "TMMPoolType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_MaxRequestsPerConnection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_MaxRequestsPerConnection{`,
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%v", this.MaxRequestsPerConnection) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_NoRequestLimitPerConnection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_NoRequestLimitPerConnection{`,
+		`NoRequestLimitPerConnection:` + strings.Replace(fmt.Sprintf("%v", this.NoRequestLimitPerConnection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TMMPoolType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TMMPoolType{`,
+		`TmmLbMethod:` + fmt.Sprintf("%v", this.TmmLbMethod) + `,`,
+		`PriorityGroup:` + strings.Replace(fmt.Sprintf("%v", this.PriorityGroup), "TMMPriorityGroupActivationType", "schema.TMMPriorityGroupActivationType", 1) + `,`,
+		`ActionOnServiceDown:` + strings.Replace(fmt.Sprintf("%v", this.ActionOnServiceDown), "TMMActionOnServiceDownType", "schema.TMMActionOnServiceDownType", 1) + `,`,
+		`RequestQueueConfig:` + strings.Replace(fmt.Sprintf("%v", this.RequestQueueConfig), "TMMRequestQueuingOptionsType", "schema.TMMRequestQueuingOptionsType", 1) + `,`,
+		`SlowRampTime:` + fmt.Sprintf("%v", this.SlowRampTime) + `,`,
+		`HealthMonitoring:` + strings.Replace(fmt.Sprintf("%v", this.HealthMonitoring), "TMMHealthMonitoringType", "schema.TMMHealthMonitoringType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -7394,6 +8723,7 @@ func (this *CreateSpecType) String() string {
 		`HeaderTransformationType:` + strings.Replace(fmt.Sprintf("%v", this.HeaderTransformationType), "HeaderTransformationType", "schema.HeaderTransformationType", 1) + `,`,
 		`ProxyProtocolType:` + fmt.Sprintf("%v", this.ProxyProtocolType) + `,`,
 		`UpstreamConnPoolReuseType:` + strings.Replace(fmt.Sprintf("%v", this.UpstreamConnPoolReuseType), "UpstreamConnPoolReuseType", "schema.UpstreamConnPoolReuseType", 1) + `,`,
+		`MaxRequestsPerConnectionChoice:` + fmt.Sprintf("%v", this.MaxRequestsPerConnectionChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7478,6 +8808,26 @@ func (this *CreateSpecType_ProxyProtocolV2) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_MaxRequestsPerConnection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_MaxRequestsPerConnection{`,
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%v", this.MaxRequestsPerConnection) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_NoRequestLimitPerConnection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_NoRequestLimitPerConnection{`,
+		`NoRequestLimitPerConnection:` + strings.Replace(fmt.Sprintf("%v", this.NoRequestLimitPerConnection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -7525,6 +8875,7 @@ func (this *ReplaceSpecType) String() string {
 		`HeaderTransformationType:` + strings.Replace(fmt.Sprintf("%v", this.HeaderTransformationType), "HeaderTransformationType", "schema.HeaderTransformationType", 1) + `,`,
 		`ProxyProtocolType:` + fmt.Sprintf("%v", this.ProxyProtocolType) + `,`,
 		`UpstreamConnPoolReuseType:` + strings.Replace(fmt.Sprintf("%v", this.UpstreamConnPoolReuseType), "UpstreamConnPoolReuseType", "schema.UpstreamConnPoolReuseType", 1) + `,`,
+		`MaxRequestsPerConnectionChoice:` + fmt.Sprintf("%v", this.MaxRequestsPerConnectionChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7609,6 +8960,26 @@ func (this *ReplaceSpecType_ProxyProtocolV2) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_MaxRequestsPerConnection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_MaxRequestsPerConnection{`,
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%v", this.MaxRequestsPerConnection) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_NoRequestLimitPerConnection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_NoRequestLimitPerConnection{`,
+		`NoRequestLimitPerConnection:` + strings.Replace(fmt.Sprintf("%v", this.NoRequestLimitPerConnection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -7657,6 +9028,7 @@ func (this *GetSpecType) String() string {
 		`LbSourceIpPersistanceChoice:` + fmt.Sprintf("%v", this.LbSourceIpPersistanceChoice) + `,`,
 		`ProxyProtocolType:` + fmt.Sprintf("%v", this.ProxyProtocolType) + `,`,
 		`UpstreamConnPoolReuseType:` + strings.Replace(fmt.Sprintf("%v", this.UpstreamConnPoolReuseType), "UpstreamConnPoolReuseType", "schema.UpstreamConnPoolReuseType", 1) + `,`,
+		`MaxRequestsPerConnectionChoice:` + fmt.Sprintf("%v", this.MaxRequestsPerConnectionChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7757,6 +9129,26 @@ func (this *GetSpecType_ProxyProtocolV2) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_ProxyProtocolV2{`,
 		`ProxyProtocolV2:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV2), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_MaxRequestsPerConnection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_MaxRequestsPerConnection{`,
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%v", this.MaxRequestsPerConnection) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_NoRequestLimitPerConnection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_NoRequestLimitPerConnection{`,
+		`NoRequestLimitPerConnection:` + strings.Replace(fmt.Sprintf("%v", this.NoRequestLimitPerConnection), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9218,6 +10610,366 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 33:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterType = &GlobalSpecType_DefaultCluster{v}
+			iNdEx = postIndex
+		case 34:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TmmPoolCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TMMPoolType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterType = &GlobalSpecType_TmmPoolCluster{v}
+			iNdEx = postIndex
+		case 35:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxRequestsPerConnection", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.MaxRequestsPerConnectionChoice = &GlobalSpecType_MaxRequestsPerConnection{v}
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoRequestLimitPerConnection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaxRequestsPerConnectionChoice = &GlobalSpecType_NoRequestLimitPerConnection{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TMMPoolType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TMMPoolType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TMMPoolType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TmmLbMethod", wireType)
+			}
+			m.TmmLbMethod = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TmmLbMethod |= schema.TMMLBMethodType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PriorityGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PriorityGroup == nil {
+				m.PriorityGroup = &schema.TMMPriorityGroupActivationType{}
+			}
+			if err := m.PriorityGroup.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActionOnServiceDown", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ActionOnServiceDown == nil {
+				m.ActionOnServiceDown = &schema.TMMActionOnServiceDownType{}
+			}
+			if err := m.ActionOnServiceDown.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestQueueConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.RequestQueueConfig == nil {
+				m.RequestQueueConfig = &schema.TMMRequestQueuingOptionsType{}
+			}
+			if err := m.RequestQueueConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SlowRampTime", wireType)
+			}
+			m.SlowRampTime = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SlowRampTime |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HealthMonitoring", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HealthMonitoring == nil {
+				m.HealthMonitoring = &schema.TMMHealthMonitoringType{}
+			}
+			if err := m.HealthMonitoring.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -10040,6 +11792,61 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 35:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxRequestsPerConnection", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.MaxRequestsPerConnectionChoice = &CreateSpecType_MaxRequestsPerConnection{v}
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoRequestLimitPerConnection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaxRequestsPerConnectionChoice = &CreateSpecType_NoRequestLimitPerConnection{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -10861,6 +12668,61 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.UpstreamConnPoolReuseType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 35:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxRequestsPerConnection", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.MaxRequestsPerConnectionChoice = &ReplaceSpecType_MaxRequestsPerConnection{v}
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoRequestLimitPerConnection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaxRequestsPerConnectionChoice = &ReplaceSpecType_NoRequestLimitPerConnection{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -11753,6 +13615,61 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.UpstreamConnPoolReuseType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 35:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxRequestsPerConnection", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.MaxRequestsPerConnectionChoice = &GetSpecType_MaxRequestsPerConnection{v}
+		case 37:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoRequestLimitPerConnection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaxRequestsPerConnectionChoice = &GetSpecType_NoRequestLimitPerConnection{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

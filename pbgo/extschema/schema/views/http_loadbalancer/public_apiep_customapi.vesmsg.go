@@ -78,9 +78,7 @@ func (v *ValidateAPIGroupsApiep) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["category"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("category"))
 		for idx, item := range m.GetCategory() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -88,38 +86,26 @@ func (v *ValidateAPIGroupsApiep) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["risk_score"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("risk_score"))
 		if err := fv(ctx, m.GetRiskScore(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sensitive_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sensitive_data"))
 		for idx, item := range m.GetSensitiveData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -127,11 +113,8 @@ func (v *ValidateAPIGroupsApiep) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sensitive_data_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sensitive_data_types"))
 		for idx, item := range m.GetSensitiveDataTypes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -139,9 +122,7 @@ func (v *ValidateAPIGroupsApiep) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -210,25 +191,18 @@ func (v *ValidateGetAPIEndpointsForGroupsReq) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -297,9 +271,7 @@ func (v *ValidateGetAPIEndpointsForGroupsRsp) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_endpoints"))
 		for idx, item := range m.GetApiEndpoints() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -307,18 +279,13 @@ func (v *ValidateGetAPIEndpointsForGroupsRsp) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apieps_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apieps_timestamp"))
 		if err := fv(ctx, m.GetApiepsTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -375,7 +342,6 @@ type ValidateGetAPIEndpointsSchemaUpdatesReq struct {
 }
 
 func (v *ValidateGetAPIEndpointsSchemaUpdatesReq) ApiEndpointsFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -435,49 +401,36 @@ func (v *ValidateGetAPIEndpointsSchemaUpdatesReq) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoints_filter"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_endpoints_filter"))
 		if err := fv(ctx, m.GetApiEndpointsFilter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query_type"))
 		if err := fv(ctx, m.GetQueryType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetAPIEndpointsSchemaUpdatesReqValidator = func() *ValidateGetAPIEndpointsSchemaUpdatesReq {
 	v := &ValidateGetAPIEndpointsSchemaUpdatesReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -558,9 +511,7 @@ func (v *ValidateGetAPIEndpointsSchemaUpdatesResp) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoints_current_schemas"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_endpoints_current_schemas"))
 		for idx, item := range m.GetApiEndpointsCurrentSchemas() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -568,11 +519,8 @@ func (v *ValidateGetAPIEndpointsSchemaUpdatesResp) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_endpoints_updated_schemas"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_endpoints_updated_schemas"))
 		for idx, item := range m.GetApiEndpointsUpdatedSchemas() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -580,18 +528,14 @@ func (v *ValidateGetAPIEndpointsSchemaUpdatesResp) Validate(ctx context.Context,
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetAPIEndpointsSchemaUpdatesRespValidator = func() *ValidateGetAPIEndpointsSchemaUpdatesResp {
 	v := &ValidateGetAPIEndpointsSchemaUpdatesResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["api_endpoints_current_schemas"] = ves_io_schema_views.ApiEndpointWithSchemaValidator().Validate
-
 	v.FldValidators["api_endpoints_updated_schemas"] = ves_io_schema_views.ApiEndpointWithSchemaValidator().Validate
 
 	return v
@@ -655,25 +599,18 @@ func (v *ValidateSwaggerSpecReq) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -742,16 +679,12 @@ func (v *ValidateSwaggerSpecRsp) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["swagger_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("swagger_spec"))
 		if err := fv(ctx, m.GetSwaggerSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -808,7 +741,6 @@ type ValidateUpdateAPIEndpointsSchemasReq struct {
 }
 
 func (v *ValidateUpdateAPIEndpointsSchemasReq) ApiEndpointsSchemaUpdatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -868,40 +800,30 @@ func (v *ValidateUpdateAPIEndpointsSchemasReq) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_endpoints_schema_updates"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_endpoints_schema_updates"))
 		if err := fv(ctx, m.GetApiEndpointsSchemaUpdates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateAPIEndpointsSchemasReqValidator = func() *ValidateUpdateAPIEndpointsSchemasReq {
 	v := &ValidateUpdateAPIEndpointsSchemasReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -984,9 +906,7 @@ func (v *ValidateUpdateAPIEndpointsSchemasResp) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["updated_api_endpoints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_api_endpoints"))
 		for idx, item := range m.GetUpdatedApiEndpoints() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -994,16 +914,13 @@ func (v *ValidateUpdateAPIEndpointsSchemasResp) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateAPIEndpointsSchemasRespValidator = func() *ValidateUpdateAPIEndpointsSchemasResp {
 	v := &ValidateUpdateAPIEndpointsSchemasResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["updated_api_endpoints"] = ves_io_schema_views.ApiOperationValidator().Validate
 
 	return v

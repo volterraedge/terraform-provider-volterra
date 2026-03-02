@@ -1476,6 +1476,473 @@ func (m *ReplaceAWSREType) GetVpcAttachments() *AWSVPCAttachmentListType {
 	return nil
 }
 
+// Cloud Connect with AWS
+//
+// x-displayName: "AWS"
+// Cloud Connect with AWS
+type AWSProviderType struct {
+	// Site Type
+	//
+	// x-displayName: "Site Type"
+	// x-required
+	//
+	// Types that are valid to be assigned to SiteType:
+	//	*AWSProviderType_AwsTgwSite
+	//	*AWSProviderType_SecuremeshSiteV2
+	SiteType isAWSProviderType_SiteType `protobuf_oneof:"site_type"`
+}
+
+func (m *AWSProviderType) Reset()      { *m = AWSProviderType{} }
+func (*AWSProviderType) ProtoMessage() {}
+func (*AWSProviderType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{17}
+}
+func (m *AWSProviderType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSProviderType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSProviderType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSProviderType.Merge(m, src)
+}
+func (m *AWSProviderType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSProviderType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSProviderType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSProviderType proto.InternalMessageInfo
+
+type isAWSProviderType_SiteType interface {
+	isAWSProviderType_SiteType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AWSProviderType_AwsTgwSite struct {
+	AwsTgwSite *AWSTGWSiteType `protobuf:"bytes,2,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
+}
+type AWSProviderType_SecuremeshSiteV2 struct {
+	SecuremeshSiteV2 *AWSSecureMeshSiteType `protobuf:"bytes,3,opt,name=securemesh_site_v2,json=securemeshSiteV2,proto3,oneof" json:"securemesh_site_v2,omitempty"`
+}
+
+func (*AWSProviderType_AwsTgwSite) isAWSProviderType_SiteType()       {}
+func (*AWSProviderType_SecuremeshSiteV2) isAWSProviderType_SiteType() {}
+
+func (m *AWSProviderType) GetSiteType() isAWSProviderType_SiteType {
+	if m != nil {
+		return m.SiteType
+	}
+	return nil
+}
+
+func (m *AWSProviderType) GetAwsTgwSite() *AWSTGWSiteType {
+	if x, ok := m.GetSiteType().(*AWSProviderType_AwsTgwSite); ok {
+		return x.AwsTgwSite
+	}
+	return nil
+}
+
+func (m *AWSProviderType) GetSecuremeshSiteV2() *AWSSecureMeshSiteType {
+	if x, ok := m.GetSiteType().(*AWSProviderType_SecuremeshSiteV2); ok {
+		return x.SecuremeshSiteV2
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AWSProviderType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AWSProviderType_AwsTgwSite)(nil),
+		(*AWSProviderType_SecuremeshSiteV2)(nil),
+	}
+}
+
+// Cloud Connect with AWS
+//
+// x-displayName: "AWS"
+// Cloud Connect with AWS
+type CreateAWSProviderType struct {
+	// Types that are valid to be assigned to SiteType:
+	//	*CreateAWSProviderType_AwsTgwSite
+	//	*CreateAWSProviderType_SecuremeshSiteV2
+	SiteType isCreateAWSProviderType_SiteType `protobuf_oneof:"site_type"`
+}
+
+func (m *CreateAWSProviderType) Reset()      { *m = CreateAWSProviderType{} }
+func (*CreateAWSProviderType) ProtoMessage() {}
+func (*CreateAWSProviderType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{18}
+}
+func (m *CreateAWSProviderType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateAWSProviderType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateAWSProviderType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateAWSProviderType.Merge(m, src)
+}
+func (m *CreateAWSProviderType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateAWSProviderType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateAWSProviderType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateAWSProviderType proto.InternalMessageInfo
+
+type isCreateAWSProviderType_SiteType interface {
+	isCreateAWSProviderType_SiteType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateAWSProviderType_AwsTgwSite struct {
+	AwsTgwSite *CreateAWSTGWSiteType `protobuf:"bytes,2,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
+}
+type CreateAWSProviderType_SecuremeshSiteV2 struct {
+	SecuremeshSiteV2 *CreateAWSSecureMeshSiteType `protobuf:"bytes,3,opt,name=securemesh_site_v2,json=securemeshSiteV2,proto3,oneof" json:"securemesh_site_v2,omitempty"`
+}
+
+func (*CreateAWSProviderType_AwsTgwSite) isCreateAWSProviderType_SiteType()       {}
+func (*CreateAWSProviderType_SecuremeshSiteV2) isCreateAWSProviderType_SiteType() {}
+
+func (m *CreateAWSProviderType) GetSiteType() isCreateAWSProviderType_SiteType {
+	if m != nil {
+		return m.SiteType
+	}
+	return nil
+}
+
+func (m *CreateAWSProviderType) GetAwsTgwSite() *CreateAWSTGWSiteType {
+	if x, ok := m.GetSiteType().(*CreateAWSProviderType_AwsTgwSite); ok {
+		return x.AwsTgwSite
+	}
+	return nil
+}
+
+func (m *CreateAWSProviderType) GetSecuremeshSiteV2() *CreateAWSSecureMeshSiteType {
+	if x, ok := m.GetSiteType().(*CreateAWSProviderType_SecuremeshSiteV2); ok {
+		return x.SecuremeshSiteV2
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateAWSProviderType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateAWSProviderType_AwsTgwSite)(nil),
+		(*CreateAWSProviderType_SecuremeshSiteV2)(nil),
+	}
+}
+
+// Cloud Connect with AWS
+//
+// x-displayName: "AWS"
+// Cloud Connect with AWS
+type ReplaceAWSProviderType struct {
+	// Types that are valid to be assigned to SiteType:
+	//	*ReplaceAWSProviderType_AwsTgwSite
+	//	*ReplaceAWSProviderType_SecuremeshSiteV2
+	SiteType isReplaceAWSProviderType_SiteType `protobuf_oneof:"site_type"`
+}
+
+func (m *ReplaceAWSProviderType) Reset()      { *m = ReplaceAWSProviderType{} }
+func (*ReplaceAWSProviderType) ProtoMessage() {}
+func (*ReplaceAWSProviderType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{19}
+}
+func (m *ReplaceAWSProviderType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceAWSProviderType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceAWSProviderType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceAWSProviderType.Merge(m, src)
+}
+func (m *ReplaceAWSProviderType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceAWSProviderType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceAWSProviderType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceAWSProviderType proto.InternalMessageInfo
+
+type isReplaceAWSProviderType_SiteType interface {
+	isReplaceAWSProviderType_SiteType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReplaceAWSProviderType_AwsTgwSite struct {
+	AwsTgwSite *ReplaceAWSTGWSiteType `protobuf:"bytes,2,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
+}
+type ReplaceAWSProviderType_SecuremeshSiteV2 struct {
+	SecuremeshSiteV2 *ReplaceAWSSecureMeshSiteType `protobuf:"bytes,3,opt,name=securemesh_site_v2,json=securemeshSiteV2,proto3,oneof" json:"securemesh_site_v2,omitempty"`
+}
+
+func (*ReplaceAWSProviderType_AwsTgwSite) isReplaceAWSProviderType_SiteType()       {}
+func (*ReplaceAWSProviderType_SecuremeshSiteV2) isReplaceAWSProviderType_SiteType() {}
+
+func (m *ReplaceAWSProviderType) GetSiteType() isReplaceAWSProviderType_SiteType {
+	if m != nil {
+		return m.SiteType
+	}
+	return nil
+}
+
+func (m *ReplaceAWSProviderType) GetAwsTgwSite() *ReplaceAWSTGWSiteType {
+	if x, ok := m.GetSiteType().(*ReplaceAWSProviderType_AwsTgwSite); ok {
+		return x.AwsTgwSite
+	}
+	return nil
+}
+
+func (m *ReplaceAWSProviderType) GetSecuremeshSiteV2() *ReplaceAWSSecureMeshSiteType {
+	if x, ok := m.GetSiteType().(*ReplaceAWSProviderType_SecuremeshSiteV2); ok {
+		return x.SecuremeshSiteV2
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceAWSProviderType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ReplaceAWSProviderType_AwsTgwSite)(nil),
+		(*ReplaceAWSProviderType_SecuremeshSiteV2)(nil),
+	}
+}
+
+// Cloud Connect AWS Secure Mesh Site Type
+//
+// x-displayName: "AWS Secure Mesh Site Type"
+// Cloud Connect AWS Secure Mesh Site Type
+type AWSSecureMeshSiteType struct {
+	// Site
+	//
+	// x-displayName: "Site"
+	// Site
+	// x-required
+	Site *views.ObjectRefType `protobuf:"bytes,1,opt,name=site,proto3" json:"site,omitempty"`
+	// Cloud User Account
+	//
+	// x-displayName: "Cloud User Account Reference"
+	// Reference to cloud user account to deploy resources
+	// x-required
+	CloudUserAccountRef *views.ObjectRefType `protobuf:"bytes,2,opt,name=cloud_user_account_ref,json=cloudUserAccountRef,proto3" json:"cloud_user_account_ref,omitempty"`
+	// Spoke VPCs
+	//
+	// x-displayName: "Spoke VPCs"
+	// Spoke VPCs to be attached to the AWS SecureMesh Site
+	// x-required
+	VpcAttachments *AWSVPCAttachmentListType `protobuf:"bytes,3,opt,name=vpc_attachments,json=vpcAttachments,proto3" json:"vpc_attachments,omitempty"`
+	// Peers
+	//
+	// x-displayName: "Peers"
+	// Peers
+	Peers []*PeerType `protobuf:"bytes,4,rep,name=peers,proto3" json:"peers,omitempty"`
+}
+
+func (m *AWSSecureMeshSiteType) Reset()      { *m = AWSSecureMeshSiteType{} }
+func (*AWSSecureMeshSiteType) ProtoMessage() {}
+func (*AWSSecureMeshSiteType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{20}
+}
+func (m *AWSSecureMeshSiteType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSSecureMeshSiteType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSSecureMeshSiteType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSSecureMeshSiteType.Merge(m, src)
+}
+func (m *AWSSecureMeshSiteType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSSecureMeshSiteType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSSecureMeshSiteType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSSecureMeshSiteType proto.InternalMessageInfo
+
+func (m *AWSSecureMeshSiteType) GetSite() *views.ObjectRefType {
+	if m != nil {
+		return m.Site
+	}
+	return nil
+}
+
+func (m *AWSSecureMeshSiteType) GetCloudUserAccountRef() *views.ObjectRefType {
+	if m != nil {
+		return m.CloudUserAccountRef
+	}
+	return nil
+}
+
+func (m *AWSSecureMeshSiteType) GetVpcAttachments() *AWSVPCAttachmentListType {
+	if m != nil {
+		return m.VpcAttachments
+	}
+	return nil
+}
+
+func (m *AWSSecureMeshSiteType) GetPeers() []*PeerType {
+	if m != nil {
+		return m.Peers
+	}
+	return nil
+}
+
+// Cloud Connect AWS Secure Mesh Site Type
+//
+// x-displayName: "AWS Secure Mesh Site Type"
+// Cloud Connect AWS Secure Mesh Site Type
+type CreateAWSSecureMeshSiteType struct {
+	// Site Reference
+	//
+	// x-displayName: "Site Reference"
+	// Site Reference
+	// x-required
+	Site *views.ObjectRefType `protobuf:"bytes,1,opt,name=site,proto3" json:"site,omitempty"`
+	// Cloud User Account
+	//
+	// x-displayName: "Cloud User Account Reference"
+	// Reference to cloud user account to deploy resources
+	// x-required
+	CloudUserAccountRef *views.ObjectRefType `protobuf:"bytes,2,opt,name=cloud_user_account_ref,json=cloudUserAccountRef,proto3" json:"cloud_user_account_ref,omitempty"`
+	// Spoke VPCs
+	//
+	// x-displayName: "Spoke VPCs"
+	// Spoke VPCs to be attached to the AWS SecureMesh Site
+	// x-required
+	VpcAttachments *AWSVPCAttachmentListType `protobuf:"bytes,3,opt,name=vpc_attachments,json=vpcAttachments,proto3" json:"vpc_attachments,omitempty"`
+}
+
+func (m *CreateAWSSecureMeshSiteType) Reset()      { *m = CreateAWSSecureMeshSiteType{} }
+func (*CreateAWSSecureMeshSiteType) ProtoMessage() {}
+func (*CreateAWSSecureMeshSiteType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{21}
+}
+func (m *CreateAWSSecureMeshSiteType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateAWSSecureMeshSiteType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateAWSSecureMeshSiteType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateAWSSecureMeshSiteType.Merge(m, src)
+}
+func (m *CreateAWSSecureMeshSiteType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateAWSSecureMeshSiteType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateAWSSecureMeshSiteType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateAWSSecureMeshSiteType proto.InternalMessageInfo
+
+func (m *CreateAWSSecureMeshSiteType) GetSite() *views.ObjectRefType {
+	if m != nil {
+		return m.Site
+	}
+	return nil
+}
+
+func (m *CreateAWSSecureMeshSiteType) GetCloudUserAccountRef() *views.ObjectRefType {
+	if m != nil {
+		return m.CloudUserAccountRef
+	}
+	return nil
+}
+
+func (m *CreateAWSSecureMeshSiteType) GetVpcAttachments() *AWSVPCAttachmentListType {
+	if m != nil {
+		return m.VpcAttachments
+	}
+	return nil
+}
+
+// Cloud Connect AWS Secure Mesh Site Type
+//
+// x-displayName: "AWS Secure Mesh Site Type"
+// Cloud Connect AWS Secure Mesh Site Type
+type ReplaceAWSSecureMeshSiteType struct {
+	// Spoke VPCs
+	//
+	// x-displayName: "Spoke VPCs"
+	// Spoke VPCs to be attached to the AWS TGW Site
+	VpcAttachments *AWSVPCAttachmentListType `protobuf:"bytes,3,opt,name=vpc_attachments,json=vpcAttachments,proto3" json:"vpc_attachments,omitempty"`
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) Reset()      { *m = ReplaceAWSSecureMeshSiteType{} }
+func (*ReplaceAWSSecureMeshSiteType) ProtoMessage() {}
+func (*ReplaceAWSSecureMeshSiteType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{22}
+}
+func (m *ReplaceAWSSecureMeshSiteType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceAWSSecureMeshSiteType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceAWSSecureMeshSiteType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceAWSSecureMeshSiteType.Merge(m, src)
+}
+func (m *ReplaceAWSSecureMeshSiteType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceAWSSecureMeshSiteType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceAWSSecureMeshSiteType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceAWSSecureMeshSiteType proto.InternalMessageInfo
+
+func (m *ReplaceAWSSecureMeshSiteType) GetVpcAttachments() *AWSVPCAttachmentListType {
+	if m != nil {
+		return m.VpcAttachments
+	}
+	return nil
+}
+
 // Cloud Connect AWS TGW Site Type
 //
 // x-displayName: "AWS TGW Site Type"
@@ -1509,7 +1976,7 @@ type AWSTGWSiteType struct {
 func (m *AWSTGWSiteType) Reset()      { *m = AWSTGWSiteType{} }
 func (*AWSTGWSiteType) ProtoMessage() {}
 func (*AWSTGWSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{17}
+	return fileDescriptor_245b6fb3a531fd11, []int{23}
 }
 func (m *AWSTGWSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1577,7 +2044,7 @@ type ReplaceAWSTGWSiteType struct {
 func (m *ReplaceAWSTGWSiteType) Reset()      { *m = ReplaceAWSTGWSiteType{} }
 func (*ReplaceAWSTGWSiteType) ProtoMessage() {}
 func (*ReplaceAWSTGWSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{18}
+	return fileDescriptor_245b6fb3a531fd11, []int{24}
 }
 func (m *ReplaceAWSTGWSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1609,7 +2076,7 @@ func (m *ReplaceAWSTGWSiteType) GetVpcAttachments() *AWSVPCAttachmentListType {
 	return nil
 }
 
-// Replace Cloud Connect AWS TGW Site Type
+// Create Cloud Connect AWS TGW Site Type
 //
 // x-displayName: "AWS TGW Site Type"
 // Cloud Connect AWS TGW Site Type
@@ -1631,7 +2098,7 @@ type CreateAWSTGWSiteType struct {
 func (m *CreateAWSTGWSiteType) Reset()      { *m = CreateAWSTGWSiteType{} }
 func (*CreateAWSTGWSiteType) ProtoMessage() {}
 func (*CreateAWSTGWSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{19}
+	return fileDescriptor_245b6fb3a531fd11, []int{25}
 }
 func (m *CreateAWSTGWSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1704,7 +2171,7 @@ type AzureVNETSiteType struct {
 func (m *AzureVNETSiteType) Reset()      { *m = AzureVNETSiteType{} }
 func (*AzureVNETSiteType) ProtoMessage() {}
 func (*AzureVNETSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{20}
+	return fileDescriptor_245b6fb3a531fd11, []int{26}
 }
 func (m *AzureVNETSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1765,7 +2232,7 @@ type ReplaceAzureVNETSiteType struct {
 func (m *ReplaceAzureVNETSiteType) Reset()      { *m = ReplaceAzureVNETSiteType{} }
 func (*ReplaceAzureVNETSiteType) ProtoMessage() {}
 func (*ReplaceAzureVNETSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{21}
+	return fileDescriptor_245b6fb3a531fd11, []int{27}
 }
 func (m *ReplaceAzureVNETSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1830,7 +2297,7 @@ type AWSCloudTransitGatewayType struct {
 func (m *AWSCloudTransitGatewayType) Reset()      { *m = AWSCloudTransitGatewayType{} }
 func (*AWSCloudTransitGatewayType) ProtoMessage() {}
 func (*AWSCloudTransitGatewayType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{22}
+	return fileDescriptor_245b6fb3a531fd11, []int{28}
 }
 func (m *AWSCloudTransitGatewayType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1905,7 +2372,7 @@ type CreateAWSCloudTransitGatewayType struct {
 func (m *CreateAWSCloudTransitGatewayType) Reset()      { *m = CreateAWSCloudTransitGatewayType{} }
 func (*CreateAWSCloudTransitGatewayType) ProtoMessage() {}
 func (*CreateAWSCloudTransitGatewayType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{23}
+	return fileDescriptor_245b6fb3a531fd11, []int{29}
 }
 func (m *CreateAWSCloudTransitGatewayType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1966,7 +2433,7 @@ type ReplaceAWSCloudTransitGatewayType struct {
 func (m *ReplaceAWSCloudTransitGatewayType) Reset()      { *m = ReplaceAWSCloudTransitGatewayType{} }
 func (*ReplaceAWSCloudTransitGatewayType) ProtoMessage() {}
 func (*ReplaceAWSCloudTransitGatewayType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{24}
+	return fileDescriptor_245b6fb3a531fd11, []int{30}
 }
 func (m *ReplaceAWSCloudTransitGatewayType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2011,13 +2478,14 @@ type CloudConnectStatusType struct {
 	// Types that are valid to be assigned to CloudConnectDeployment:
 	//	*CloudConnectStatusType_CloudConnectAwsSite
 	//	*CloudConnectStatusType_CloudConnectAzureSite
+	//	*CloudConnectStatusType_CloudConnectAwsSecuremeshSite
 	CloudConnectDeployment isCloudConnectStatusType_CloudConnectDeployment `protobuf_oneof:"cloud_connect_deployment"`
 }
 
 func (m *CloudConnectStatusType) Reset()      { *m = CloudConnectStatusType{} }
 func (*CloudConnectStatusType) ProtoMessage() {}
 func (*CloudConnectStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{25}
+	return fileDescriptor_245b6fb3a531fd11, []int{31}
 }
 func (m *CloudConnectStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2055,10 +2523,15 @@ type CloudConnectStatusType_CloudConnectAwsSite struct {
 type CloudConnectStatusType_CloudConnectAzureSite struct {
 	CloudConnectAzureSite *AzureAttachmentsListStatusType `protobuf:"bytes,3,opt,name=cloud_connect_azure_site,json=cloudConnectAzureSite,proto3,oneof" json:"cloud_connect_azure_site,omitempty"`
 }
+type CloudConnectStatusType_CloudConnectAwsSecuremeshSite struct {
+	CloudConnectAwsSecuremeshSite *AWSSecureMeshSiteStatusType `protobuf:"bytes,4,opt,name=cloud_connect_aws_securemesh_site,json=cloudConnectAwsSecuremeshSite,proto3,oneof" json:"cloud_connect_aws_securemesh_site,omitempty"`
+}
 
 func (*CloudConnectStatusType_CloudConnectAwsSite) isCloudConnectStatusType_CloudConnectDeployment() {
 }
 func (*CloudConnectStatusType_CloudConnectAzureSite) isCloudConnectStatusType_CloudConnectDeployment() {
+}
+func (*CloudConnectStatusType_CloudConnectAwsSecuremeshSite) isCloudConnectStatusType_CloudConnectDeployment() {
 }
 
 func (m *CloudConnectStatusType) GetCloudConnectDeployment() isCloudConnectStatusType_CloudConnectDeployment {
@@ -2082,11 +2555,19 @@ func (m *CloudConnectStatusType) GetCloudConnectAzureSite() *AzureAttachmentsLis
 	return nil
 }
 
+func (m *CloudConnectStatusType) GetCloudConnectAwsSecuremeshSite() *AWSSecureMeshSiteStatusType {
+	if x, ok := m.GetCloudConnectDeployment().(*CloudConnectStatusType_CloudConnectAwsSecuremeshSite); ok {
+		return x.CloudConnectAwsSecuremeshSite
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CloudConnectStatusType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CloudConnectStatusType_CloudConnectAwsSite)(nil),
 		(*CloudConnectStatusType_CloudConnectAzureSite)(nil),
+		(*CloudConnectStatusType_CloudConnectAwsSecuremeshSite)(nil),
 	}
 }
 
@@ -2105,7 +2586,7 @@ type VerStatusType struct {
 func (m *VerStatusType) Reset()      { *m = VerStatusType{} }
 func (*VerStatusType) ProtoMessage() {}
 func (*VerStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{26}
+	return fileDescriptor_245b6fb3a531fd11, []int{32}
 }
 func (m *VerStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2157,7 +2638,7 @@ type CIDRConflictStatusType struct {
 func (m *CIDRConflictStatusType) Reset()      { *m = CIDRConflictStatusType{} }
 func (*CIDRConflictStatusType) ProtoMessage() {}
 func (*CIDRConflictStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{27}
+	return fileDescriptor_245b6fb3a531fd11, []int{33}
 }
 func (m *CIDRConflictStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2221,7 +2702,7 @@ type CIDRConflictListType struct {
 func (m *CIDRConflictListType) Reset()      { *m = CIDRConflictListType{} }
 func (*CIDRConflictListType) ProtoMessage() {}
 func (*CIDRConflictListType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{28}
+	return fileDescriptor_245b6fb3a531fd11, []int{34}
 }
 func (m *CIDRConflictListType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2287,12 +2768,22 @@ type AWSAttachmentsListStatusType struct {
 	// x-displayName: "AWS Transit Gateway Route Table Status"
 	// AWS Transit Gateway Route Table Status Type
 	TgwRouteTableStatus []*AWSTGWRouteTableStatusType `protobuf:"bytes,3,rep,name=tgw_route_table_status,json=tgwRouteTableStatus,proto3" json:"tgw_route_table_status,omitempty"`
+	// AWS Transit Gateway Resource Share Status Type
+	//
+	// x-displayName: "AWS Transit Gateway Resource Share Status"
+	// AWS Transit Gateway Resource Share Status
+	TransitGatewayResourceShareStatus *AWSTGWResourceShareType `protobuf:"bytes,4,opt,name=transit_gateway_resource_share_status,json=transitGatewayResourceShareStatus,proto3" json:"transit_gateway_resource_share_status,omitempty"`
+	// AWS Transit Gateway Status Type
+	//
+	// x-displayName: "AWS TGW Status"
+	// AWS Transit Gateway Status Type
+	TgwStatus *AWSTGWStatusType `protobuf:"bytes,5,opt,name=tgw_status,json=tgwStatus,proto3" json:"tgw_status,omitempty"`
 }
 
 func (m *AWSAttachmentsListStatusType) Reset()      { *m = AWSAttachmentsListStatusType{} }
 func (*AWSAttachmentsListStatusType) ProtoMessage() {}
 func (*AWSAttachmentsListStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{29}
+	return fileDescriptor_245b6fb3a531fd11, []int{35}
 }
 func (m *AWSAttachmentsListStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2334,6 +2825,20 @@ func (m *AWSAttachmentsListStatusType) GetConnectAttachmentStatus() []*AWSConnec
 func (m *AWSAttachmentsListStatusType) GetTgwRouteTableStatus() []*AWSTGWRouteTableStatusType {
 	if m != nil {
 		return m.TgwRouteTableStatus
+	}
+	return nil
+}
+
+func (m *AWSAttachmentsListStatusType) GetTransitGatewayResourceShareStatus() *AWSTGWResourceShareType {
+	if m != nil {
+		return m.TransitGatewayResourceShareStatus
+	}
+	return nil
+}
+
+func (m *AWSAttachmentsListStatusType) GetTgwStatus() *AWSTGWStatusType {
+	if m != nil {
+		return m.TgwStatus
 	}
 	return nil
 }
@@ -2418,7 +2923,7 @@ type AWSAttachmentsStatusType struct {
 func (m *AWSAttachmentsStatusType) Reset()      { *m = AWSAttachmentsStatusType{} }
 func (*AWSAttachmentsStatusType) ProtoMessage() {}
 func (*AWSAttachmentsStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{30}
+	return fileDescriptor_245b6fb3a531fd11, []int{36}
 }
 func (m *AWSAttachmentsStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2611,7 +3116,7 @@ type AWSConnectAttachmentStatusType struct {
 func (m *AWSConnectAttachmentStatusType) Reset()      { *m = AWSConnectAttachmentStatusType{} }
 func (*AWSConnectAttachmentStatusType) ProtoMessage() {}
 func (*AWSConnectAttachmentStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{31}
+	return fileDescriptor_245b6fb3a531fd11, []int{37}
 }
 func (m *AWSConnectAttachmentStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2755,12 +3260,20 @@ type AWSConnectPeerStatusType struct {
 	// x-displayName: "Connect Peer Tags"
 	// Connect Peer Tags
 	Tags map[string]string `protobuf:"bytes,15,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Transit Gateway GRE Address
+	//
+	// x-displayName: "Transit Gateway GRE Address"
+	TransitGatewayGreAddress string `protobuf:"bytes,16,opt,name=transit_gateway_gre_address,json=transitGatewayGreAddress,proto3" json:"transit_gateway_gre_address,omitempty"`
+	// Peer GRE Address
+	//
+	// x-displayName: "Peer GRE Address"
+	PeerGreAddress string `protobuf:"bytes,17,opt,name=peer_gre_address,json=peerGreAddress,proto3" json:"peer_gre_address,omitempty"`
 }
 
 func (m *AWSConnectPeerStatusType) Reset()      { *m = AWSConnectPeerStatusType{} }
 func (*AWSConnectPeerStatusType) ProtoMessage() {}
 func (*AWSConnectPeerStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{32}
+	return fileDescriptor_245b6fb3a531fd11, []int{38}
 }
 func (m *AWSConnectPeerStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2827,6 +3340,20 @@ func (m *AWSConnectPeerStatusType) GetTags() map[string]string {
 	return nil
 }
 
+func (m *AWSConnectPeerStatusType) GetTransitGatewayGreAddress() string {
+	if m != nil {
+		return m.TransitGatewayGreAddress
+	}
+	return ""
+}
+
+func (m *AWSConnectPeerStatusType) GetPeerGreAddress() string {
+	if m != nil {
+		return m.PeerGreAddress
+	}
+	return ""
+}
+
 // AWS Transit Gateway Route Table Status Type
 //
 // x-displayName: "AWS Transit Gateway Route Table Status Type"
@@ -2877,7 +3404,7 @@ type AWSTGWRouteTableStatusType struct {
 func (m *AWSTGWRouteTableStatusType) Reset()      { *m = AWSTGWRouteTableStatusType{} }
 func (*AWSTGWRouteTableStatusType) ProtoMessage() {}
 func (*AWSTGWRouteTableStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{33}
+	return fileDescriptor_245b6fb3a531fd11, []int{39}
 }
 func (m *AWSTGWRouteTableStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2993,7 +3520,7 @@ type AWSTGWResourceReference struct {
 func (m *AWSTGWResourceReference) Reset()      { *m = AWSTGWResourceReference{} }
 func (*AWSTGWResourceReference) ProtoMessage() {}
 func (*AWSTGWResourceReference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{34}
+	return fileDescriptor_245b6fb3a531fd11, []int{40}
 }
 func (m *AWSTGWResourceReference) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3093,7 +3620,7 @@ type SubnetStatusType struct {
 func (m *SubnetStatusType) Reset()      { *m = SubnetStatusType{} }
 func (*SubnetStatusType) ProtoMessage() {}
 func (*SubnetStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{35}
+	return fileDescriptor_245b6fb3a531fd11, []int{41}
 }
 func (m *SubnetStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3160,6 +3687,292 @@ func (m *SubnetStatusType) GetStatus() string {
 	return ""
 }
 
+// AWS Resource Share Status Type
+//
+// x-displayName: "AWS Resource Share Status"
+// AWS Resource Share Status Type
+type AWSTGWResourceShareType struct {
+	// Resource Share Name
+	//
+	// x-displayName: "Resource Share Name"
+	// Resource Share Name
+	ResourceShareName string `protobuf:"bytes,1,opt,name=resource_share_name,json=resourceShareName,proto3" json:"resource_share_name,omitempty"`
+	// Resource Share ARN
+	//
+	// x-displayName: "Resource Share ARN"
+	// Resource Share ARN
+	ResourceShareArn string `protobuf:"bytes,2,opt,name=resource_share_arn,json=resourceShareArn,proto3" json:"resource_share_arn,omitempty"`
+	// Transit Gateway ID
+	//
+	// x-displayName: "Transit Gateway ID"
+	// Transit Gateway ID
+	TransitGatewayId string `protobuf:"bytes,3,opt,name=transit_gateway_id,json=transitGatewayId,proto3" json:"transit_gateway_id,omitempty"`
+	// Resource Share Owner Account ID
+	//
+	// x-displayName: "Resource Share Owner Account ID"
+	// Resource Share Owner Account ID
+	OwnerAccountId string `protobuf:"bytes,4,opt,name=owner_account_id,json=ownerAccountId,proto3" json:"owner_account_id,omitempty"`
+	// Resource Share Acceptor Account ID
+	//
+	// x-displayName: "Resource Share Acceptor Account ID"
+	// Resource Share Acceptor Account ID
+	ReceiverAccountId []string `protobuf:"bytes,5,rep,name=receiver_account_id,json=receiverAccountId,proto3" json:"receiver_account_id,omitempty"`
+	// Allow External Principles
+	//
+	// x-displayName: "Allow External Principles"
+	// Manage Sharing Outside AWS Organization
+	AllowExternalPrinciples bool `protobuf:"varint,6,opt,name=allow_external_principles,json=allowExternalPrinciples,proto3" json:"allow_external_principles,omitempty"`
+	// Resource Share State
+	//
+	// x-displayName: "Resource Share State"
+	// Resource Share State
+	Status string `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`
+	// Attachment Deployment Status
+	//
+	// x-displayName: "Attachment Deployment Status"
+	// Attachment Deployment Status
+	DeploymentStatus string `protobuf:"bytes,8,opt,name=deployment_status,json=deploymentStatus,proto3" json:"deployment_status,omitempty"`
+	// Resource Share Tags
+	//
+	// x-displayName: "Resource Share Tags"
+	// Resource Share Tags
+	Tags map[string]string `protobuf:"bytes,9,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (m *AWSTGWResourceShareType) Reset()      { *m = AWSTGWResourceShareType{} }
+func (*AWSTGWResourceShareType) ProtoMessage() {}
+func (*AWSTGWResourceShareType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{42}
+}
+func (m *AWSTGWResourceShareType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSTGWResourceShareType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSTGWResourceShareType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSTGWResourceShareType.Merge(m, src)
+}
+func (m *AWSTGWResourceShareType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSTGWResourceShareType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSTGWResourceShareType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSTGWResourceShareType proto.InternalMessageInfo
+
+func (m *AWSTGWResourceShareType) GetResourceShareName() string {
+	if m != nil {
+		return m.ResourceShareName
+	}
+	return ""
+}
+
+func (m *AWSTGWResourceShareType) GetResourceShareArn() string {
+	if m != nil {
+		return m.ResourceShareArn
+	}
+	return ""
+}
+
+func (m *AWSTGWResourceShareType) GetTransitGatewayId() string {
+	if m != nil {
+		return m.TransitGatewayId
+	}
+	return ""
+}
+
+func (m *AWSTGWResourceShareType) GetOwnerAccountId() string {
+	if m != nil {
+		return m.OwnerAccountId
+	}
+	return ""
+}
+
+func (m *AWSTGWResourceShareType) GetReceiverAccountId() []string {
+	if m != nil {
+		return m.ReceiverAccountId
+	}
+	return nil
+}
+
+func (m *AWSTGWResourceShareType) GetAllowExternalPrinciples() bool {
+	if m != nil {
+		return m.AllowExternalPrinciples
+	}
+	return false
+}
+
+func (m *AWSTGWResourceShareType) GetStatus() string {
+	if m != nil {
+		return m.Status
+	}
+	return ""
+}
+
+func (m *AWSTGWResourceShareType) GetDeploymentStatus() string {
+	if m != nil {
+		return m.DeploymentStatus
+	}
+	return ""
+}
+
+func (m *AWSTGWResourceShareType) GetTags() map[string]string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+// AWS Transit Gateway Status Type
+//
+// x-displayName: "AWS Transit Gateway Status"
+// AWS Transit Gateway Status Type
+type AWSTGWStatusType struct {
+	// TGW ID
+	//
+	// x-displayName: "ID"
+	// TGW ID
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// TGW ARN
+	//
+	// x-displayName: "ARN"
+	// TGW ARN
+	Arn string `protobuf:"bytes,2,opt,name=arn,proto3" json:"arn,omitempty"`
+	// TGW Owner
+	//
+	// x-displayName: "Owner Account"
+	// TGW Owner Account
+	OwnerAccount string `protobuf:"bytes,3,opt,name=owner_account,json=ownerAccount,proto3" json:"owner_account,omitempty"`
+	// AWS Side ASN of TGW
+	//
+	// x-displayName: "AWS Side ASN"
+	// AWS Side ASN of TGW
+	AmazonAsn int64 `protobuf:"varint,4,opt,name=amazon_asn,json=amazonAsn,proto3" json:"amazon_asn,omitempty"`
+	// TGW Region
+	//
+	// x-displayName: "Region"
+	// TGW Region
+	Region string `protobuf:"bytes,5,opt,name=region,proto3" json:"region,omitempty"`
+	// TGW State
+	//
+	// x-displayName: "State"
+	// TGW State
+	State string `protobuf:"bytes,6,opt,name=state,proto3" json:"state,omitempty"`
+	// TGW Tags
+	//
+	// x-displayName: "Tags"
+	// TGW Tags
+	Tags map[string]string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// TGW Deployment Status
+	//
+	// x-displayName "Deployment Status"
+	// TGW Deployment Status
+	StatusMsg string `protobuf:"bytes,8,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
+	// TGW CIDRs
+	//
+	// x-displayName "CIDRs"
+	// TGW CIDRs
+	Cidrs []string `protobuf:"bytes,9,rep,name=cidrs,proto3" json:"cidrs,omitempty"`
+}
+
+func (m *AWSTGWStatusType) Reset()      { *m = AWSTGWStatusType{} }
+func (*AWSTGWStatusType) ProtoMessage() {}
+func (*AWSTGWStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{43}
+}
+func (m *AWSTGWStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSTGWStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSTGWStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSTGWStatusType.Merge(m, src)
+}
+func (m *AWSTGWStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSTGWStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSTGWStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSTGWStatusType proto.InternalMessageInfo
+
+func (m *AWSTGWStatusType) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *AWSTGWStatusType) GetArn() string {
+	if m != nil {
+		return m.Arn
+	}
+	return ""
+}
+
+func (m *AWSTGWStatusType) GetOwnerAccount() string {
+	if m != nil {
+		return m.OwnerAccount
+	}
+	return ""
+}
+
+func (m *AWSTGWStatusType) GetAmazonAsn() int64 {
+	if m != nil {
+		return m.AmazonAsn
+	}
+	return 0
+}
+
+func (m *AWSTGWStatusType) GetRegion() string {
+	if m != nil {
+		return m.Region
+	}
+	return ""
+}
+
+func (m *AWSTGWStatusType) GetState() string {
+	if m != nil {
+		return m.State
+	}
+	return ""
+}
+
+func (m *AWSTGWStatusType) GetTags() map[string]string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+func (m *AWSTGWStatusType) GetStatusMsg() string {
+	if m != nil {
+		return m.StatusMsg
+	}
+	return ""
+}
+
+func (m *AWSTGWStatusType) GetCidrs() []string {
+	if m != nil {
+		return m.Cidrs
+	}
+	return nil
+}
+
 // Azure spoke Attachment List Status Type
 //
 // x-displayName: "Azure spoke Attachment List Status Type"
@@ -3175,7 +3988,7 @@ type AzureAttachmentsListStatusType struct {
 func (m *AzureAttachmentsListStatusType) Reset()      { *m = AzureAttachmentsListStatusType{} }
 func (*AzureAttachmentsListStatusType) ProtoMessage() {}
 func (*AzureAttachmentsListStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{36}
+	return fileDescriptor_245b6fb3a531fd11, []int{44}
 }
 func (m *AzureAttachmentsListStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3285,7 +4098,7 @@ type AzureAttachmentsStatusType struct {
 func (m *AzureAttachmentsStatusType) Reset()      { *m = AzureAttachmentsStatusType{} }
 func (*AzureAttachmentsStatusType) ProtoMessage() {}
 func (*AzureAttachmentsStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{37}
+	return fileDescriptor_245b6fb3a531fd11, []int{45}
 }
 func (m *AzureAttachmentsStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3421,6 +4234,7 @@ type GlobalSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*GlobalSpecType_AwsRe
 	//	*GlobalSpecType_AwsTgwSite
+	//	*GlobalSpecType_AwsProvider
 	//	*GlobalSpecType_AzureVnetSite
 	//	*GlobalSpecType_AwsCloudTransitGateway
 	Cloud isGlobalSpecType_Cloud `protobuf_oneof:"cloud"`
@@ -3471,7 +4285,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{38}
+	return fileDescriptor_245b6fb3a531fd11, []int{46}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3515,6 +4329,9 @@ type GlobalSpecType_AwsRe struct {
 type GlobalSpecType_AwsTgwSite struct {
 	AwsTgwSite *AWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
+type GlobalSpecType_AwsProvider struct {
+	AwsProvider *AWSProviderType `protobuf:"bytes,22,opt,name=aws_provider,json=awsProvider,proto3,oneof" json:"aws_provider,omitempty"`
+}
 type GlobalSpecType_AzureVnetSite struct {
 	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,19,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
 }
@@ -3527,6 +4344,7 @@ type GlobalSpecType_Bandwidth_500Mbs struct {
 
 func (*GlobalSpecType_AwsRe) isGlobalSpecType_Cloud()                      {}
 func (*GlobalSpecType_AwsTgwSite) isGlobalSpecType_Cloud()                 {}
+func (*GlobalSpecType_AwsProvider) isGlobalSpecType_Cloud()                {}
 func (*GlobalSpecType_AzureVnetSite) isGlobalSpecType_Cloud()              {}
 func (*GlobalSpecType_AwsCloudTransitGateway) isGlobalSpecType_Cloud()     {}
 func (*GlobalSpecType_Bandwidth_500Mbs) isGlobalSpecType_BandwidthOption() {}
@@ -3551,9 +4369,17 @@ func (m *GlobalSpecType) GetAwsRe() *AWSREType {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *GlobalSpecType) GetAwsTgwSite() *AWSTGWSiteType {
 	if x, ok := m.GetCloud().(*GlobalSpecType_AwsTgwSite); ok {
 		return x.AwsTgwSite
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAwsProvider() *AWSProviderType {
+	if x, ok := m.GetCloud().(*GlobalSpecType_AwsProvider); ok {
+		return x.AwsProvider
 	}
 	return nil
 }
@@ -3634,6 +4460,7 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_AwsRe)(nil),
 		(*GlobalSpecType_AwsTgwSite)(nil),
+		(*GlobalSpecType_AwsProvider)(nil),
 		(*GlobalSpecType_AzureVnetSite)(nil),
 		(*GlobalSpecType_AwsCloudTransitGateway)(nil),
 		(*GlobalSpecType_Bandwidth_500Mbs)(nil),
@@ -3648,6 +4475,7 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*CreateSpecType_AwsRe
 	//	*CreateSpecType_AwsTgwSite
+	//	*CreateSpecType_AwsProvider
 	//	*CreateSpecType_AzureVnetSite
 	//	*CreateSpecType_AwsCloudTransitGateway
 	Cloud   isCreateSpecType_Cloud `protobuf_oneof:"cloud"`
@@ -3657,7 +4485,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{39}
+	return fileDescriptor_245b6fb3a531fd11, []int{47}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3695,6 +4523,9 @@ type CreateSpecType_AwsRe struct {
 type CreateSpecType_AwsTgwSite struct {
 	AwsTgwSite *CreateAWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
+type CreateSpecType_AwsProvider struct {
+	AwsProvider *CreateAWSProviderType `protobuf:"bytes,22,opt,name=aws_provider,json=awsProvider,proto3,oneof" json:"aws_provider,omitempty"`
+}
 type CreateSpecType_AzureVnetSite struct {
 	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,19,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
 }
@@ -3704,6 +4535,7 @@ type CreateSpecType_AwsCloudTransitGateway struct {
 
 func (*CreateSpecType_AwsRe) isCreateSpecType_Cloud()                  {}
 func (*CreateSpecType_AwsTgwSite) isCreateSpecType_Cloud()             {}
+func (*CreateSpecType_AwsProvider) isCreateSpecType_Cloud()            {}
 func (*CreateSpecType_AzureVnetSite) isCreateSpecType_Cloud()          {}
 func (*CreateSpecType_AwsCloudTransitGateway) isCreateSpecType_Cloud() {}
 
@@ -3724,6 +4556,13 @@ func (m *CreateSpecType) GetAwsRe() *AWSREType {
 func (m *CreateSpecType) GetAwsTgwSite() *CreateAWSTGWSiteType {
 	if x, ok := m.GetCloud().(*CreateSpecType_AwsTgwSite); ok {
 		return x.AwsTgwSite
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAwsProvider() *CreateAWSProviderType {
+	if x, ok := m.GetCloud().(*CreateSpecType_AwsProvider); ok {
+		return x.AwsProvider
 	}
 	return nil
 }
@@ -3754,6 +4593,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_AwsRe)(nil),
 		(*CreateSpecType_AwsTgwSite)(nil),
+		(*CreateSpecType_AwsProvider)(nil),
 		(*CreateSpecType_AzureVnetSite)(nil),
 		(*CreateSpecType_AwsCloudTransitGateway)(nil),
 	}
@@ -3767,6 +4607,7 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*ReplaceSpecType_AwsRe
 	//	*ReplaceSpecType_AwsTgwSite
+	//	*ReplaceSpecType_AwsProvider
 	//	*ReplaceSpecType_AzureVnetSite
 	//	*ReplaceSpecType_AwsCloudTransitGateway
 	Cloud isReplaceSpecType_Cloud `protobuf_oneof:"cloud"`
@@ -3775,7 +4616,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{40}
+	return fileDescriptor_245b6fb3a531fd11, []int{48}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3813,6 +4654,9 @@ type ReplaceSpecType_AwsRe struct {
 type ReplaceSpecType_AwsTgwSite struct {
 	AwsTgwSite *ReplaceAWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
+type ReplaceSpecType_AwsProvider struct {
+	AwsProvider *ReplaceAWSProviderType `protobuf:"bytes,22,opt,name=aws_provider,json=awsProvider,proto3,oneof" json:"aws_provider,omitempty"`
+}
 type ReplaceSpecType_AzureVnetSite struct {
 	AzureVnetSite *ReplaceAzureVNETSiteType `protobuf:"bytes,19,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
 }
@@ -3822,6 +4666,7 @@ type ReplaceSpecType_AwsCloudTransitGateway struct {
 
 func (*ReplaceSpecType_AwsRe) isReplaceSpecType_Cloud()                  {}
 func (*ReplaceSpecType_AwsTgwSite) isReplaceSpecType_Cloud()             {}
+func (*ReplaceSpecType_AwsProvider) isReplaceSpecType_Cloud()            {}
 func (*ReplaceSpecType_AzureVnetSite) isReplaceSpecType_Cloud()          {}
 func (*ReplaceSpecType_AwsCloudTransitGateway) isReplaceSpecType_Cloud() {}
 
@@ -3846,6 +4691,13 @@ func (m *ReplaceSpecType) GetAwsTgwSite() *ReplaceAWSTGWSiteType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetAwsProvider() *ReplaceAWSProviderType {
+	if x, ok := m.GetCloud().(*ReplaceSpecType_AwsProvider); ok {
+		return x.AwsProvider
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetAzureVnetSite() *ReplaceAzureVNETSiteType {
 	if x, ok := m.GetCloud().(*ReplaceSpecType_AzureVnetSite); ok {
 		return x.AzureVnetSite
@@ -3865,6 +4717,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_AwsRe)(nil),
 		(*ReplaceSpecType_AwsTgwSite)(nil),
+		(*ReplaceSpecType_AwsProvider)(nil),
 		(*ReplaceSpecType_AzureVnetSite)(nil),
 		(*ReplaceSpecType_AwsCloudTransitGateway)(nil),
 	}
@@ -3878,6 +4731,7 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*GetSpecType_AwsRe
 	//	*GetSpecType_AwsTgwSite
+	//	*GetSpecType_AwsProvider
 	//	*GetSpecType_AzureVnetSite
 	//	*GetSpecType_AwsCloudTransitGateway
 	Cloud        isGetSpecType_Cloud  `protobuf_oneof:"cloud"`
@@ -3890,7 +4744,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{41}
+	return fileDescriptor_245b6fb3a531fd11, []int{49}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3928,6 +4782,9 @@ type GetSpecType_AwsRe struct {
 type GetSpecType_AwsTgwSite struct {
 	AwsTgwSite *AWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
+type GetSpecType_AwsProvider struct {
+	AwsProvider *AWSProviderType `protobuf:"bytes,22,opt,name=aws_provider,json=awsProvider,proto3,oneof" json:"aws_provider,omitempty"`
+}
 type GetSpecType_AzureVnetSite struct {
 	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,19,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
 }
@@ -3937,6 +4794,7 @@ type GetSpecType_AwsCloudTransitGateway struct {
 
 func (*GetSpecType_AwsRe) isGetSpecType_Cloud()                  {}
 func (*GetSpecType_AwsTgwSite) isGetSpecType_Cloud()             {}
+func (*GetSpecType_AwsProvider) isGetSpecType_Cloud()            {}
 func (*GetSpecType_AzureVnetSite) isGetSpecType_Cloud()          {}
 func (*GetSpecType_AwsCloudTransitGateway) isGetSpecType_Cloud() {}
 
@@ -3957,6 +4815,13 @@ func (m *GetSpecType) GetAwsRe() *AWSREType {
 func (m *GetSpecType) GetAwsTgwSite() *AWSTGWSiteType {
 	if x, ok := m.GetCloud().(*GetSpecType_AwsTgwSite); ok {
 		return x.AwsTgwSite
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetAwsProvider() *AWSProviderType {
+	if x, ok := m.GetCloud().(*GetSpecType_AwsProvider); ok {
+		return x.AwsProvider
 	}
 	return nil
 }
@@ -4008,6 +4873,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_AwsRe)(nil),
 		(*GetSpecType_AwsTgwSite)(nil),
+		(*GetSpecType_AwsProvider)(nil),
 		(*GetSpecType_AzureVnetSite)(nil),
 		(*GetSpecType_AwsCloudTransitGateway)(nil),
 	}
@@ -4041,7 +4907,7 @@ type LabelFilter struct {
 func (m *LabelFilter) Reset()      { *m = LabelFilter{} }
 func (*LabelFilter) ProtoMessage() {}
 func (*LabelFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{42}
+	return fileDescriptor_245b6fb3a531fd11, []int{50}
 }
 func (m *LabelFilter) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4103,7 +4969,7 @@ type CustomerEdge struct {
 func (m *CustomerEdge) Reset()      { *m = CustomerEdge{} }
 func (*CustomerEdge) ProtoMessage() {}
 func (*CustomerEdge) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{43}
+	return fileDescriptor_245b6fb3a531fd11, []int{51}
 }
 func (m *CustomerEdge) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4160,7 +5026,7 @@ type MetricData struct {
 func (m *MetricData) Reset()      { *m = MetricData{} }
 func (*MetricData) ProtoMessage() {}
 func (*MetricData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{44}
+	return fileDescriptor_245b6fb3a531fd11, []int{52}
 }
 func (m *MetricData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4226,7 +5092,7 @@ type SegmentationData struct {
 func (m *SegmentationData) Reset()      { *m = SegmentationData{} }
 func (*SegmentationData) ProtoMessage() {}
 func (*SegmentationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{45}
+	return fileDescriptor_245b6fb3a531fd11, []int{53}
 }
 func (m *SegmentationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4285,7 +5151,7 @@ type EdgeData struct {
 func (m *EdgeData) Reset()      { *m = EdgeData{} }
 func (*EdgeData) ProtoMessage() {}
 func (*EdgeData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{46}
+	return fileDescriptor_245b6fb3a531fd11, []int{54}
 }
 func (m *EdgeData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4345,7 +5211,7 @@ type CloudConnectData struct {
 func (m *CloudConnectData) Reset()      { *m = CloudConnectData{} }
 func (*CloudConnectData) ProtoMessage() {}
 func (*CloudConnectData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{47}
+	return fileDescriptor_245b6fb3a531fd11, []int{55}
 }
 func (m *CloudConnectData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4380,6 +5246,95 @@ func (m *CloudConnectData) GetLabels() map[string]string {
 func (m *CloudConnectData) GetData() []*MetricData {
 	if m != nil {
 		return m.Data
+	}
+	return nil
+}
+
+// Cloud Connect Attached to AWS SecureMesh Site v2
+//
+// x-displayName: "Cloud Connect to AWS Secure Mesh Site v2"
+type AWSSecureMeshSiteStatusType struct {
+	// VPC Attachment Status Type
+	//
+	// x-displayName: "VPC Attachment Status"
+	AttachmentStatus []*AWSAttachmentsStatusType `protobuf:"bytes,1,rep,name=attachment_status,json=attachmentStatus,proto3" json:"attachment_status,omitempty"`
+	// Connect Attachment Status Type
+	//
+	// x-displayName: "Connect Attachment Status"
+	ConnectAttachmentStatus []*AWSConnectAttachmentStatusType `protobuf:"bytes,2,rep,name=connect_attachment_status,json=connectAttachmentStatus,proto3" json:"connect_attachment_status,omitempty"`
+	// Transit Gateway Route Table Status Type
+	//
+	// x-displayName: "Transit Gateway Route Table Status"
+	TgwRouteTableStatus []*AWSTGWRouteTableStatusType `protobuf:"bytes,3,rep,name=tgw_route_table_status,json=tgwRouteTableStatus,proto3" json:"tgw_route_table_status,omitempty"`
+	// Transit Gateway Resource Share Status Type
+	//
+	// x-displayName: "Transit Gateway Resource Share Status"
+	TransitGatewayResourceShareStatus *AWSTGWResourceShareType `protobuf:"bytes,4,opt,name=transit_gateway_resource_share_status,json=transitGatewayResourceShareStatus,proto3" json:"transit_gateway_resource_share_status,omitempty"`
+	// Transit Gateway Status Type
+	//
+	// x-displayName: "Transit Gateway Status"
+	TgwStatus *AWSTGWStatusType `protobuf:"bytes,5,opt,name=tgw_status,json=tgwStatus,proto3" json:"tgw_status,omitempty"`
+}
+
+func (m *AWSSecureMeshSiteStatusType) Reset()      { *m = AWSSecureMeshSiteStatusType{} }
+func (*AWSSecureMeshSiteStatusType) ProtoMessage() {}
+func (*AWSSecureMeshSiteStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{56}
+}
+func (m *AWSSecureMeshSiteStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSSecureMeshSiteStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSSecureMeshSiteStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSSecureMeshSiteStatusType.Merge(m, src)
+}
+func (m *AWSSecureMeshSiteStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSSecureMeshSiteStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSSecureMeshSiteStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSSecureMeshSiteStatusType proto.InternalMessageInfo
+
+func (m *AWSSecureMeshSiteStatusType) GetAttachmentStatus() []*AWSAttachmentsStatusType {
+	if m != nil {
+		return m.AttachmentStatus
+	}
+	return nil
+}
+
+func (m *AWSSecureMeshSiteStatusType) GetConnectAttachmentStatus() []*AWSConnectAttachmentStatusType {
+	if m != nil {
+		return m.ConnectAttachmentStatus
+	}
+	return nil
+}
+
+func (m *AWSSecureMeshSiteStatusType) GetTgwRouteTableStatus() []*AWSTGWRouteTableStatusType {
+	if m != nil {
+		return m.TgwRouteTableStatus
+	}
+	return nil
+}
+
+func (m *AWSSecureMeshSiteStatusType) GetTransitGatewayResourceShareStatus() *AWSTGWResourceShareType {
+	if m != nil {
+		return m.TransitGatewayResourceShareStatus
+	}
+	return nil
+}
+
+func (m *AWSSecureMeshSiteStatusType) GetTgwStatus() *AWSTGWStatusType {
+	if m != nil {
+		return m.TgwStatus
 	}
 	return nil
 }
@@ -4435,6 +5390,18 @@ func init() {
 	golang_proto.RegisterType((*AWSRouteTableType)(nil), "ves.io.schema.cloud_connect.AWSRouteTableType")
 	proto.RegisterType((*ReplaceAWSREType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSREType")
 	golang_proto.RegisterType((*ReplaceAWSREType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSREType")
+	proto.RegisterType((*AWSProviderType)(nil), "ves.io.schema.cloud_connect.AWSProviderType")
+	golang_proto.RegisterType((*AWSProviderType)(nil), "ves.io.schema.cloud_connect.AWSProviderType")
+	proto.RegisterType((*CreateAWSProviderType)(nil), "ves.io.schema.cloud_connect.CreateAWSProviderType")
+	golang_proto.RegisterType((*CreateAWSProviderType)(nil), "ves.io.schema.cloud_connect.CreateAWSProviderType")
+	proto.RegisterType((*ReplaceAWSProviderType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSProviderType")
+	golang_proto.RegisterType((*ReplaceAWSProviderType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSProviderType")
+	proto.RegisterType((*AWSSecureMeshSiteType)(nil), "ves.io.schema.cloud_connect.AWSSecureMeshSiteType")
+	golang_proto.RegisterType((*AWSSecureMeshSiteType)(nil), "ves.io.schema.cloud_connect.AWSSecureMeshSiteType")
+	proto.RegisterType((*CreateAWSSecureMeshSiteType)(nil), "ves.io.schema.cloud_connect.CreateAWSSecureMeshSiteType")
+	golang_proto.RegisterType((*CreateAWSSecureMeshSiteType)(nil), "ves.io.schema.cloud_connect.CreateAWSSecureMeshSiteType")
+	proto.RegisterType((*ReplaceAWSSecureMeshSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSSecureMeshSiteType")
+	golang_proto.RegisterType((*ReplaceAWSSecureMeshSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSSecureMeshSiteType")
 	proto.RegisterType((*AWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.AWSTGWSiteType")
 	golang_proto.RegisterType((*AWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.AWSTGWSiteType")
 	proto.RegisterType((*ReplaceAWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType")
@@ -4481,6 +5448,14 @@ func init() {
 	golang_proto.RegisterType((*AWSTGWResourceReference)(nil), "ves.io.schema.cloud_connect.AWSTGWResourceReference")
 	proto.RegisterType((*SubnetStatusType)(nil), "ves.io.schema.cloud_connect.SubnetStatusType")
 	golang_proto.RegisterType((*SubnetStatusType)(nil), "ves.io.schema.cloud_connect.SubnetStatusType")
+	proto.RegisterType((*AWSTGWResourceShareType)(nil), "ves.io.schema.cloud_connect.AWSTGWResourceShareType")
+	golang_proto.RegisterType((*AWSTGWResourceShareType)(nil), "ves.io.schema.cloud_connect.AWSTGWResourceShareType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSTGWResourceShareType.TagsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSTGWResourceShareType.TagsEntry")
+	proto.RegisterType((*AWSTGWStatusType)(nil), "ves.io.schema.cloud_connect.AWSTGWStatusType")
+	golang_proto.RegisterType((*AWSTGWStatusType)(nil), "ves.io.schema.cloud_connect.AWSTGWStatusType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSTGWStatusType.TagsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSTGWStatusType.TagsEntry")
 	proto.RegisterType((*AzureAttachmentsListStatusType)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsListStatusType")
 	golang_proto.RegisterType((*AzureAttachmentsListStatusType)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsListStatusType")
 	proto.RegisterType((*AzureAttachmentsStatusType)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsStatusType")
@@ -4509,6 +5484,8 @@ func init() {
 	golang_proto.RegisterType((*CloudConnectData)(nil), "ves.io.schema.cloud_connect.CloudConnectData")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.CloudConnectData.LabelsEntry")
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.CloudConnectData.LabelsEntry")
+	proto.RegisterType((*AWSSecureMeshSiteStatusType)(nil), "ves.io.schema.cloud_connect.AWSSecureMeshSiteStatusType")
+	golang_proto.RegisterType((*AWSSecureMeshSiteStatusType)(nil), "ves.io.schema.cloud_connect.AWSSecureMeshSiteStatusType")
 }
 
 func init() {
@@ -4519,339 +5496,384 @@ func init() {
 }
 
 var fileDescriptor_245b6fb3a531fd11 = []byte{
-	// 5297 bytes of a gzipped FileDescriptorProto
+	// 6030 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x5d, 0x6c, 0x1b, 0xd9,
-	0x75, 0xd6, 0xe5, 0x9f, 0xc8, 0x43, 0x91, 0x1a, 0x5d, 0xeb, 0x87, 0xa6, 0x1d, 0x99, 0x3b, 0xb1,
-	0x77, 0x65, 0x59, 0xa2, 0x6d, 0xad, 0xf7, 0xc7, 0xda, 0xac, 0x13, 0x4a, 0xa2, 0x65, 0xaa, 0x5a,
-	0xc9, 0x19, 0xd1, 0xb6, 0xb2, 0xd9, 0x5d, 0x66, 0x34, 0x1c, 0xd3, 0x13, 0x53, 0x1c, 0x62, 0x66,
-	0x48, 0xc5, 0x9b, 0xa8, 0xd9, 0xa6, 0x6d, 0x82, 0x26, 0x0d, 0xba, 0x58, 0x14, 0x05, 0xba, 0xcd,
-	0x43, 0x1f, 0xfa, 0x10, 0x18, 0x48, 0x9e, 0xda, 0xa2, 0x59, 0x1a, 0x85, 0x91, 0xfe, 0x20, 0x71,
-	0x1b, 0xc0, 0x40, 0x5e, 0x16, 0x45, 0x0b, 0x64, 0xb5, 0x2f, 0xdb, 0x87, 0x02, 0x41, 0x81, 0x02,
-	0x41, 0x5f, 0x5a, 0xdc, 0x7b, 0x67, 0x86, 0x33, 0xc3, 0x21, 0x45, 0x59, 0x4a, 0xd0, 0x2d, 0xf6,
-	0x8d, 0x33, 0xf7, 0x9c, 0x73, 0xcf, 0x3d, 0xf7, 0x9c, 0xef, 0x9e, 0x7b, 0xee, 0x1d, 0xc2, 0x33,
-	0x4d, 0x59, 0xcf, 0x2a, 0xea, 0x79, 0x5d, 0xba, 0x23, 0x6f, 0x8b, 0xe7, 0xa5, 0xaa, 0xda, 0x28,
-	0x97, 0x24, 0xb5, 0x56, 0x93, 0x25, 0xe3, 0xbc, 0x71, 0xaf, 0x2e, 0xeb, 0xd9, 0xba, 0xa6, 0x1a,
-	0x2a, 0x3e, 0xc1, 0x08, 0xb3, 0x8c, 0x30, 0xeb, 0x22, 0x4c, 0xcf, 0x56, 0x14, 0xe3, 0x4e, 0x63,
-	0x2b, 0x2b, 0xa9, 0xdb, 0xe7, 0x2b, 0x6a, 0x45, 0x3d, 0x4f, 0x79, 0xb6, 0x1a, 0xb7, 0xe9, 0x13,
-	0x7d, 0xa0, 0xbf, 0x98, 0xac, 0xf4, 0xa9, 0x8a, 0xaa, 0x56, 0xaa, 0x72, 0x9b, 0xca, 0x50, 0xb6,
-	0x65, 0xdd, 0x10, 0xb7, 0xeb, 0x26, 0xc1, 0x59, 0x3f, 0xad, 0x34, 0xb9, 0xa4, 0xc9, 0x15, 0x45,
-	0xad, 0x39, 0xf5, 0x4a, 0x9f, 0x70, 0x93, 0xaa, 0x75, 0x43, 0x51, 0x6b, 0x56, 0xe3, 0xa4, 0xbb,
-	0x51, 0x57, 0x0c, 0xd9, 0xc5, 0x7c, 0xdc, 0xdd, 0xee, 0x6c, 0x3a, 0xe9, 0x6e, 0x6a, 0x8a, 0x55,
-	0xa5, 0x2c, 0x1a, 0xb2, 0xd9, 0x9a, 0xf1, 0xb4, 0x2a, 0xf2, 0x4e, 0xc9, 0xdd, 0xf5, 0xa9, 0x4e,
-	0x0a, 0xdd, 0xd9, 0x01, 0xff, 0xed, 0x10, 0xc4, 0x72, 0xb7, 0x36, 0x84, 0x7c, 0xf1, 0x5e, 0x5d,
-	0xc6, 0x22, 0x44, 0xd8, 0xe0, 0x52, 0x28, 0x83, 0xa6, 0xe2, 0x73, 0x7c, 0xd6, 0x6d, 0x6f, 0xca,
-	0x9f, 0x5d, 0xdf, 0xfa, 0xb2, 0x2c, 0x19, 0x82, 0x7c, 0x9b, 0xf0, 0x2c, 0x9c, 0xb9, 0xbf, 0x3b,
-	0x64, 0x99, 0x86, 0xb0, 0xbe, 0xf5, 0x00, 0xa1, 0xf7, 0x1e, 0xa0, 0x64, 0x14, 0x4d, 0xa1, 0x0b,
-	0x68, 0x3e, 0x22, 0xa9, 0xb5, 0xdb, 0x4a, 0x45, 0x30, 0x05, 0xe3, 0x37, 0x20, 0x24, 0x69, 0x72,
-	0x39, 0x15, 0xe8, 0xbb, 0x83, 0xa7, 0xef, 0xef, 0x8e, 0x98, 0x13, 0xad, 0xc9, 0x65, 0xb9, 0x66,
-	0x28, 0x62, 0x55, 0xf7, 0xe9, 0x81, 0xca, 0xc5, 0x65, 0x18, 0x6e, 0xd6, 0xa5, 0x92, 0x68, 0x18,
-	0xa2, 0x74, 0x67, 0x5b, 0xae, 0x19, 0x7a, 0x2a, 0x48, 0xbb, 0x7a, 0x2e, 0xdb, 0xc3, 0x77, 0xb2,
-	0xb9, 0x5b, 0x1b, 0x37, 0xaf, 0x2f, 0xe6, 0x6c, 0xae, 0x55, 0x45, 0x37, 0x68, 0xef, 0xa1, 0x5f,
-	0xb6, 0x10, 0x12, 0x92, 0xcd, 0xba, 0xd4, 0x6e, 0xd4, 0xf1, 0x0d, 0x88, 0x33, 0xfe, 0xaa, 0x52,
-	0xbb, 0xab, 0xa7, 0x42, 0xb4, 0x87, 0x6c, 0xcf, 0x1e, 0x16, 0xc9, 0xd3, 0xaa, 0x52, 0xbb, 0xeb,
-	0x11, 0x0d, 0x92, 0xd5, 0xa0, 0xe3, 0xe3, 0x10, 0x34, 0x2a, 0x3b, 0xa9, 0x70, 0x06, 0x4d, 0xc5,
-	0x16, 0x06, 0xdf, 0xdf, 0x45, 0x1f, 0x11, 0x0a, 0xf2, 0x0e, 0x2f, 0x41, 0xb8, 0x2e, 0xcb, 0x9a,
-	0x9e, 0x8a, 0x65, 0x82, 0x53, 0xf1, 0xb9, 0x33, 0x3d, 0xfb, 0xba, 0x2e, 0xcb, 0x1a, 0xed, 0xc2,
-	0x96, 0xc1, 0x98, 0xe7, 0xe1, 0x3f, 0xaf, 0x0c, 0x5e, 0x9c, 0x99, 0x9b, 0x79, 0x76, 0xe6, 0xd2,
-	0x4a, 0x28, 0x1a, 0xe1, 0x06, 0x57, 0x42, 0xd1, 0x41, 0x2e, 0xba, 0x12, 0x8a, 0x46, 0xb9, 0x18,
-	0xff, 0x4f, 0x01, 0x88, 0x5a, 0xac, 0xf8, 0x14, 0xc4, 0x8d, 0xca, 0x4e, 0x49, 0x2c, 0x97, 0x35,
-	0x59, 0xd7, 0xa9, 0x43, 0xc4, 0x04, 0x30, 0x2a, 0x3b, 0x39, 0xf6, 0x06, 0x1f, 0x87, 0x28, 0x11,
-	0x5a, 0x12, 0xf5, 0x1a, 0x9d, 0xcd, 0xa0, 0x30, 0x48, 0x9e, 0x73, 0x7a, 0x0d, 0xbf, 0x04, 0xa1,
-	0x9a, 0x5a, 0x96, 0x4d, 0xcb, 0x3f, 0xe3, 0xab, 0xab, 0x1d, 0x48, 0xd9, 0x35, 0xb5, 0x2c, 0x93,
-	0x2e, 0x05, 0xca, 0x84, 0xa7, 0x61, 0x44, 0xa9, 0xe9, 0x4a, 0x59, 0x2e, 0x55, 0x34, 0xb9, 0xa4,
-	0x37, 0xb6, 0x6a, 0xb2, 0x41, 0x2d, 0x1c, 0x13, 0x86, 0x59, 0xc3, 0xb2, 0x26, 0x6f, 0xd0, 0xd7,
-	0xf3, 0x7f, 0x8a, 0x1e, 0xb5, 0xd0, 0x1f, 0x23, 0x98, 0x84, 0x78, 0x71, 0xf9, 0x56, 0xc6, 0x54,
-	0x2d, 0x9d, 0x70, 0xe9, 0xbe, 0x89, 0x60, 0x1a, 0x46, 0x0a, 0x94, 0x35, 0xb3, 0x2c, 0xe4, 0x33,
-	0x8c, 0x39, 0x7d, 0xcc, 0xa7, 0xa3, 0x4d, 0x04, 0x69, 0x88, 0x11, 0x8d, 0x32, 0x6b, 0xe2, 0xb6,
-	0x9c, 0x8e, 0x43, 0x8c, 0x28, 0x95, 0xad, 0x89, 0xdb, 0x32, 0x95, 0x33, 0x44, 0x0c, 0x64, 0x77,
-	0x94, 0x82, 0x71, 0xda, 0x6c, 0xf6, 0x94, 0x55, 0xea, 0xcd, 0x4b, 0xf4, 0x61, 0x13, 0xf1, 0xbf,
-	0x83, 0x60, 0xa4, 0x63, 0xd2, 0x71, 0x15, 0xa0, 0xed, 0x39, 0x29, 0x44, 0x27, 0xb3, 0x9f, 0x28,
-	0x38, 0x7b, 0x7f, 0xd7, 0xc1, 0xd8, 0xe9, 0xfe, 0xef, 0xfd, 0xfb, 0xc3, 0x60, 0xf8, 0x1d, 0x14,
-	0xe0, 0x90, 0x10, 0xb3, 0x3d, 0x8a, 0x6f, 0x40, 0xaa, 0x9b, 0x67, 0xe3, 0x2f, 0x40, 0x94, 0x44,
-	0x4a, 0x55, 0xd1, 0x0d, 0x53, 0x8f, 0x8b, 0x07, 0x0a, 0x11, 0xaa, 0x56, 0x9c, 0xf4, 0x1b, 0x79,
-	0x07, 0x05, 0xb9, 0xb7, 0x90, 0x30, 0xd8, 0xac, 0x4b, 0x44, 0x3c, 0xff, 0xd3, 0x41, 0x18, 0xf5,
-	0x23, 0xc7, 0x12, 0x44, 0x48, 0x9f, 0x4a, 0x99, 0xf9, 0xd3, 0xc2, 0xea, 0xaf, 0x5a, 0x68, 0xe0,
-	0xbd, 0x07, 0x88, 0x8b, 0x92, 0xa1, 0xb0, 0x01, 0xce, 0x96, 0x45, 0x43, 0x24, 0x62, 0x43, 0x5a,
-	0x20, 0xf5, 0x39, 0xf2, 0xe3, 0x69, 0xed, 0xf4, 0x1c, 0xff, 0xc6, 0x54, 0xb3, 0x2e, 0xcd, 0x9e,
-	0x9d, 0xfa, 0xa2, 0x38, 0xfb, 0xe6, 0x85, 0xd9, 0xcb, 0xaf, 0x7f, 0xf5, 0xc5, 0xdd, 0xaf, 0xd9,
-	0xbf, 0x2f, 0xbe, 0xb0, 0x7b, 0xf6, 0xb4, 0x10, 0x6e, 0xd6, 0xa5, 0x42, 0x19, 0xbf, 0x0c, 0xc9,
-	0x6d, 0xb1, 0xd6, 0x10, 0xab, 0x25, 0x4d, 0x6d, 0x18, 0x4a, 0xad, 0x92, 0x8a, 0x50, 0x3f, 0x1c,
-	0xf5, 0x0c, 0x2f, 0xbf, 0x5d, 0x37, 0xee, 0x5d, 0x1b, 0x10, 0x12, 0x8c, 0x5a, 0x60, 0xc4, 0xf8,
-	0x3a, 0x24, 0xca, 0xf2, 0x6d, 0xb1, 0x51, 0x35, 0x28, 0xbf, 0x9c, 0x8a, 0x51, 0xee, 0xb3, 0x3d,
-	0x8d, 0xb3, 0xc4, 0x38, 0x88, 0x0c, 0xf9, 0xda, 0x80, 0x30, 0x54, 0x76, 0x3c, 0xe3, 0x2f, 0x42,
-	0x52, 0x6a, 0xe8, 0x86, 0xba, 0x6d, 0x2b, 0x04, 0x54, 0xe4, 0xdc, 0x7e, 0xf6, 0xa6, 0xec, 0x45,
-	0x71, 0xab, 0x2a, 0x5b, 0xb3, 0x46, 0xd4, 0x65, 0xb2, 0x2c, 0x75, 0xbf, 0x0c, 0x91, 0xaa, 0xb8,
-	0x25, 0x57, 0xf5, 0x54, 0x9c, 0x4e, 0xe2, 0xcb, 0x07, 0x9e, 0xc4, 0xec, 0x2a, 0xe5, 0xcf, 0xd7,
-	0x0c, 0xed, 0xde, 0xc2, 0xb1, 0x77, 0x1f, 0xa0, 0x10, 0x04, 0xd0, 0xc0, 0xde, 0x2f, 0xfe, 0x21,
-	0x18, 0xf9, 0xf6, 0x03, 0x14, 0x88, 0x0e, 0x08, 0x66, 0x0f, 0xe9, 0xcb, 0x10, 0x77, 0xd0, 0x62,
-	0x0e, 0x82, 0x77, 0xe5, 0x7b, 0x26, 0x34, 0x90, 0x9f, 0x78, 0x14, 0xc2, 0x4d, 0xb1, 0xda, 0x90,
-	0x29, 0x20, 0xc4, 0x04, 0xf6, 0x30, 0x1f, 0x78, 0x11, 0xcd, 0x7f, 0x14, 0x78, 0xd4, 0x42, 0x1f,
-	0x06, 0x00, 0x43, 0xe4, 0xe6, 0xf5, 0xc5, 0x4c, 0x61, 0x29, 0x1d, 0xb5, 0x7c, 0x01, 0xfe, 0x39,
-	0x00, 0x49, 0x73, 0x38, 0x99, 0xc5, 0x3b, 0xaa, 0x22, 0xc9, 0xd3, 0x3f, 0x0a, 0xc0, 0x5f, 0x07,
-	0x60, 0xd6, 0x3b, 0x93, 0x73, 0x27, 0xd6, 0xd4, 0x0c, 0x9d, 0x15, 0x3d, 0xb3, 0xa3, 0x54, 0xab,
-	0x99, 0x2d, 0x39, 0xa3, 0xd4, 0x74, 0x43, 0xac, 0x56, 0xe5, 0x32, 0xac, 0xc2, 0xa4, 0x6b, 0xe6,
-	0xb2, 0x62, 0x95, 0x71, 0xca, 0x25, 0x83, 0x18, 0x51, 0x9f, 0x9b, 0x5e, 0x6f, 0xca, 0x9a, 0x46,
-	0x70, 0xc0, 0x9c, 0xb0, 0x0c, 0x35, 0x71, 0xe6, 0xb6, 0xaa, 0x65, 0xc4, 0x6a, 0x35, 0xd3, 0x36,
-	0xb8, 0x0e, 0x77, 0xe1, 0x59, 0xb7, 0x34, 0x5d, 0xae, 0xca, 0x92, 0xa1, 0x34, 0x65, 0x97, 0xcc,
-	0xac, 0xe3, 0xa1, 0xa4, 0x94, 0xf9, 0x4b, 0x5c, 0x78, 0xfa, 0x42, 0x8f, 0x6e, 0x36, 0x2c, 0x29,
-	0xae, 0xce, 0x56, 0xe0, 0x84, 0xdb, 0x45, 0x9c, 0x62, 0x75, 0xfe, 0x1c, 0x17, 0xe6, 0x93, 0xee,
-	0x8e, 0xa6, 0x27, 0x16, 0x29, 0x43, 0x66, 0xb1, 0xb0, 0x24, 0xe8, 0x0e, 0x61, 0x0b, 0x53, 0x90,
-	0x34, 0x85, 0x94, 0x24, 0x6a, 0x4d, 0x3c, 0xfe, 0xb0, 0x85, 0x22, 0x8f, 0x5b, 0x28, 0xbc, 0xd7,
-	0x42, 0x91, 0xe7, 0x67, 0x2e, 0xcf, 0x5c, 0xbc, 0xf0, 0xe7, 0x0f, 0x10, 0x5a, 0x09, 0x45, 0x03,
-	0x5c, 0x70, 0x25, 0x14, 0x0d, 0x72, 0xa1, 0x95, 0x50, 0x34, 0xc4, 0x85, 0x57, 0x42, 0xd1, 0x30,
-	0x17, 0x71, 0x2d, 0x0a, 0xbb, 0x70, 0x22, 0xf7, 0x66, 0x43, 0x93, 0x6f, 0xd6, 0x64, 0xc3, 0x07,
-	0x45, 0xde, 0x80, 0x58, 0xb3, 0x26, 0x1b, 0x4e, 0x18, 0xb9, 0xd4, 0xdb, 0x03, 0xa9, 0xb0, 0xb5,
-	0x7c, 0xb1, 0x17, 0x92, 0x44, 0x89, 0x4c, 0x0a, 0x25, 0x7f, 0x12, 0x85, 0x89, 0x2e, 0x2c, 0x78,
-	0x05, 0x86, 0xf5, 0xc6, 0x96, 0x2e, 0x69, 0x0a, 0x4d, 0x7a, 0xda, 0xb0, 0xf2, 0xd4, 0xbe, 0xb0,
-	0x22, 0x24, 0x9d, 0x9c, 0x85, 0x32, 0x7e, 0x09, 0x06, 0xe9, 0x38, 0x14, 0x96, 0x9a, 0xc4, 0x16,
-	0xf8, 0x5e, 0x32, 0xc2, 0x5a, 0x30, 0xf5, 0x56, 0x40, 0x88, 0x10, 0x16, 0x5f, 0xc4, 0x09, 0x1d,
-	0x04, 0x71, 0x6e, 0xf8, 0x23, 0x4e, 0x76, 0x7f, 0x3b, 0xf6, 0x84, 0x9d, 0x6a, 0x07, 0xec, 0x30,
-	0x1c, 0x5c, 0xdc, 0x5f, 0x6e, 0xdb, 0x9b, 0x6e, 0x29, 0xc6, 0x9d, 0x0d, 0x43, 0x34, 0x14, 0x89,
-	0xbe, 0xeb, 0x8e, 0x43, 0xdb, 0x36, 0x0e, 0x01, 0xf5, 0x82, 0xcf, 0x3d, 0x89, 0x17, 0xfc, 0x46,
-	0xa0, 0xe8, 0xed, 0xe0, 0xa3, 0x16, 0xfa, 0x4e, 0x10, 0x4e, 0xc3, 0xf0, 0x86, 0xc3, 0x09, 0x08,
-	0x26, 0x8d, 0x74, 0x78, 0x14, 0x8c, 0xc2, 0x20, 0xd1, 0x93, 0xb4, 0xc6, 0x6c, 0x1f, 0xf9, 0x04,
-	0xb2, 0x8e, 0x16, 0xb2, 0xce, 0x74, 0x40, 0xd6, 0xb1, 0x87, 0x2d, 0x14, 0x7a, 0xdc, 0x42, 0xc1,
-	0xbd, 0x16, 0x0a, 0x5e, 0x9a, 0x79, 0xde, 0xc4, 0x2b, 0x86, 0x54, 0x61, 0x2e, 0xc2, 0xff, 0x17,
-	0x82, 0x91, 0x8e, 0x18, 0xc0, 0x9f, 0x03, 0xce, 0x6b, 0x41, 0x73, 0x2f, 0xd3, 0x2d, 0x16, 0x93,
-	0x62, 0xb5, 0xea, 0x18, 0x16, 0x96, 0x61, 0xdc, 0xdf, 0x6a, 0x66, 0x4c, 0xcf, 0x1e, 0x24, 0x7a,
-	0xf4, 0x6b, 0x03, 0xc2, 0xa8, 0x2d, 0xce, 0xf1, 0x7e, 0xe1, 0x1c, 0x8c, 0xba, 0xa6, 0xca, 0x39,
-	0x6e, 0x64, 0x8d, 0xfb, 0xe2, 0xcc, 0xa5, 0x8e, 0x71, 0xbf, 0x15, 0x80, 0xa1, 0x23, 0x1e, 0xb2,
-	0xba, 0xcf, 0x90, 0x5f, 0xd8, 0x2f, 0xa5, 0x70, 0xea, 0xa3, 0xb7, 0x25, 0x1f, 0xd5, 0xe0, 0x9d,
-	0x8b, 0x14, 0x31, 0xc1, 0x5f, 0x21, 0x38, 0x96, 0xbb, 0xb5, 0xc1, 0xd2, 0xf8, 0xc2, 0x92, 0xbd,
-	0x16, 0x7d, 0x13, 0x01, 0xb0, 0x34, 0xbe, 0xa4, 0x94, 0x75, 0xba, 0x1a, 0xc5, 0x16, 0x2a, 0xef,
-	0x3d, 0x40, 0xd8, 0xcc, 0x95, 0x3d, 0x28, 0x9e, 0x7d, 0x07, 0x9d, 0xe3, 0xcf, 0x6a, 0xcf, 0xcc,
-	0x9d, 0x79, 0x63, 0x8a, 0xf1, 0xf5, 0xcc, 0x2f, 0xed, 0x14, 0x3b, 0x64, 0xfd, 0x8a, 0x22, 0xeb,
-	0x57, 0x0a, 0x09, 0x31, 0x26, 0xa2, 0x50, 0xd6, 0xe7, 0xc7, 0x7e, 0xdc, 0x42, 0x23, 0x30, 0x0c,
-	0xc0, 0x54, 0xcc, 0x14, 0x96, 0x74, 0x8c, 0x2e, 0xf2, 0xdf, 0x47, 0x30, 0xe6, 0x9b, 0xd5, 0x61,
-	0x0d, 0x86, 0x3c, 0xf3, 0x17, 0xdc, 0x7f, 0x01, 0x70, 0x4a, 0xa2, 0x4b, 0xe8, 0x29, 0x7b, 0x09,
-	0xfd, 0x09, 0xf2, 0x55, 0x31, 0xae, 0xb5, 0x27, 0x61, 0xfe, 0xc4, 0x8f, 0x5b, 0x68, 0x02, 0xc6,
-	0xda, 0x38, 0x66, 0x7a, 0x03, 0xba, 0x38, 0x85, 0xf8, 0xef, 0x21, 0x48, 0x77, 0x9f, 0x58, 0xfc,
-	0xdb, 0xe0, 0x09, 0x6d, 0xd3, 0xd8, 0x9b, 0xe6, 0xa2, 0xd9, 0xc5, 0xe0, 0x4c, 0x0d, 0xbf, 0xdc,
-	0x5e, 0x33, 0xb6, 0x7a, 0xe7, 0xf6, 0x43, 0x6d, 0xd5, 0x0b, 0x65, 0xfe, 0x0e, 0x70, 0xde, 0x48,
-	0xc3, 0xc5, 0x2e, 0x3a, 0x65, 0xfb, 0xd5, 0xc9, 0x5c, 0xd4, 0xdd, 0x3d, 0xfd, 0x23, 0x82, 0xa7,
-	0xfb, 0x5b, 0x12, 0xf1, 0xd7, 0x7d, 0x27, 0xf1, 0xa5, 0x43, 0xac, 0xb6, 0x47, 0x39, 0xa3, 0x3f,
-	0x0f, 0xc0, 0x64, 0xef, 0xde, 0xf0, 0x1f, 0x22, 0x1f, 0x13, 0x92, 0x5c, 0xe8, 0xf6, 0x3e, 0x26,
-	0xa4, 0x86, 0x23, 0xbf, 0x5e, 0xd6, 0x5e, 0x9a, 0xbb, 0xfc, 0xc6, 0x6b, 0xe7, 0xbf, 0x38, 0xfb,
-	0xda, 0xce, 0x6b, 0xd9, 0xd2, 0x6b, 0x53, 0xaf, 0x9d, 0x7d, 0xfd, 0xdc, 0x6b, 0xe7, 0xc9, 0x5c,
-	0xe6, 0x66, 0x5f, 0x25, 0xd3, 0xd9, 0xfe, 0x39, 0x9b, 0x2d, 0xbd, 0x7e, 0xae, 0xfd, 0x58, 0x7a,
-	0xdd, 0x33, 0xc9, 0x58, 0x80, 0x84, 0x4e, 0xb5, 0x63, 0x20, 0xa1, 0xa7, 0xaa, 0x74, 0x3e, 0x67,
-	0x49, 0x47, 0xf0, 0x0e, 0x1a, 0xe4, 0xc3, 0x5a, 0xf0, 0x57, 0xc8, 0xb6, 0x06, 0x37, 0xe7, 0x6b,
-	0xa1, 0x21, 0xbd, 0x3d, 0x42, 0x7d, 0x7e, 0xed, 0x51, 0x0b, 0xad, 0xc0, 0x69, 0xe0, 0x5c, 0x26,
-	0x22, 0x8b, 0x3b, 0xe7, 0x1d, 0x3b, 0xf0, 0x90, 0x60, 0xd6, 0x61, 0x2b, 0x95, 0xbe, 0x30, 0xe2,
-	0x51, 0x88, 0x03, 0xfe, 0x07, 0x01, 0x18, 0xe9, 0x08, 0x44, 0x6c, 0x74, 0xb1, 0xe3, 0x5a, 0x6f,
-	0x3b, 0x1e, 0x2e, 0x28, 0x3e, 0x16, 0xf6, 0x7a, 0x0b, 0x01, 0x27, 0xc8, 0xf5, 0xaa, 0x28, 0xc9,
-	0xed, 0xb2, 0xe3, 0x1b, 0x47, 0x5b, 0xb3, 0xf3, 0x56, 0xeb, 0xe6, 0x87, 0x1e, 0x5d, 0x69, 0x17,
-	0x39, 0xf9, 0x5f, 0x05, 0x20, 0x99, 0xbb, 0xb5, 0x51, 0x5c, 0xbe, 0xb5, 0xa1, 0x18, 0x6c, 0xbe,
-	0x5e, 0x87, 0x90, 0xae, 0x18, 0xf2, 0x01, 0xab, 0x9e, 0xe2, 0x8e, 0x5e, 0x32, 0x2a, 0x3b, 0x25,
-	0xc2, 0xda, 0xa5, 0xea, 0x49, 0xc5, 0xfe, 0x3f, 0xa9, 0x79, 0xbe, 0x64, 0x55, 0x20, 0xc3, 0x07,
-	0xa8, 0x40, 0x9a, 0x85, 0x47, 0xb6, 0xbb, 0xe4, 0xdf, 0x46, 0x30, 0xd6, 0x9e, 0x7d, 0xe7, 0x0c,
-	0x1c, 0xf9, 0x10, 0x1e, 0xfb, 0x0c, 0x61, 0x7e, 0xe4, 0xd1, 0x15, 0xcf, 0xd4, 0xf3, 0xff, 0x12,
-	0x80, 0xd1, 0x45, 0x4d, 0x16, 0x0d, 0xf9, 0x13, 0x9f, 0x38, 0x0a, 0x83, 0x3a, 0xeb, 0x08, 0x7c,
-	0x2b, 0x60, 0xe6, 0xe8, 0x64, 0x07, 0x65, 0x5b, 0xf6, 0x4b, 0x07, 0xb6, 0xec, 0xd4, 0xfd, 0xdd,
-	0x61, 0x91, 0xc8, 0x29, 0xd1, 0xfd, 0xd7, 0xbe, 0xc6, 0xdd, 0x38, 0xb0, 0x71, 0x4f, 0xf8, 0x19,
-	0xd7, 0x2a, 0x9e, 0x33, 0x8b, 0x2a, 0xc0, 0xd1, 0xde, 0x9d, 0x26, 0x0d, 0xd3, 0x0e, 0x5e, 0xec,
-	0x63, 0xab, 0xeb, 0x5b, 0x3d, 0x31, 0x23, 0x6d, 0xb8, 0xe9, 0x6a, 0xb5, 0xa2, 0xe5, 0xcf, 0x10,
-	0xa4, 0xac, 0x68, 0xe9, 0x30, 0xa2, 0x9f, 0x36, 0xc1, 0xc3, 0x6a, 0xf3, 0xd8, 0x4f, 0x9b, 0xf9,
-	0xd1, 0x47, 0x57, 0x3a, 0x67, 0x91, 0xff, 0x61, 0x90, 0x66, 0x88, 0xb4, 0xc2, 0x5d, 0xd4, 0xc4,
-	0x9a, 0xae, 0x18, 0xcb, 0xa2, 0x21, 0xef, 0x88, 0xf7, 0xac, 0x5c, 0x7c, 0x8c, 0xf5, 0x6c, 0xb0,
-	0xc6, 0x52, 0x85, 0xb5, 0x1e, 0x60, 0xda, 0xb3, 0xf7, 0x77, 0xfd, 0x65, 0x74, 0x99, 0xfc, 0x63,
-	0x52, 0xa7, 0x32, 0x9f, 0x80, 0xaf, 0xe5, 0x4e, 0xdf, 0x0b, 0x42, 0xc6, 0x46, 0xba, 0x4f, 0xa6,
-	0xed, 0x37, 0x82, 0x8f, 0x9f, 0x7a, 0x74, 0xa5, 0x47, 0x90, 0xb8, 0xb0, 0xf2, 0xfb, 0x08, 0x9e,
-	0x6a, 0xaf, 0x8d, 0xdd, 0xe6, 0xe7, 0xff, 0x82, 0xda, 0xfc, 0x0f, 0x03, 0x30, 0x4e, 0xdb, 0x16,
-	0x99, 0x78, 0x92, 0xf5, 0x35, 0x74, 0xaa, 0x5f, 0x1d, 0xc6, 0x5d, 0x3d, 0x97, 0xc8, 0x82, 0x48,
-	0xd1, 0x9e, 0x4d, 0xe4, 0xe5, 0xfd, 0xd4, 0x74, 0xa8, 0x41, 0x94, 0x6c, 0x8b, 0xbe, 0x36, 0x60,
-	0x3a, 0x8a, 0xd9, 0x69, 0x6e, 0x47, 0x27, 0x58, 0x84, 0x9b, 0x90, 0xf2, 0xf4, 0x48, 0x17, 0x0a,
-	0xda, 0x27, 0x33, 0x4d, 0x1f, 0x3b, 0xb0, 0x5e, 0xbd, 0x8e, 0xb9, 0x7a, 0x25, 0xd4, 0xa4, 0xdf,
-	0x85, 0xd3, 0xde, 0x7e, 0xcb, 0x72, 0xbd, 0xaa, 0xde, 0x23, 0x32, 0x70, 0x94, 0x58, 0xd5, 0x2c,
-	0x5e, 0x20, 0x2e, 0xc0, 0xcb, 0x90, 0xb8, 0x29, 0x6b, 0x0e, 0x33, 0x15, 0x21, 0x2e, 0x29, 0x65,
-	0xad, 0xa4, 0xd3, 0x57, 0xe6, 0x4e, 0xf1, 0xd9, 0xde, 0xe7, 0xc7, 0x85, 0x25, 0x61, 0x51, 0xad,
-	0xdd, 0xae, 0x2a, 0x4e, 0x83, 0x0b, 0x40, 0xe4, 0xb0, 0x67, 0xfe, 0x3e, 0x82, 0x71, 0x7f, 0x32,
-	0x8c, 0x21, 0x44, 0x08, 0xcd, 0x02, 0x29, 0xfd, 0x8d, 0x6f, 0x42, 0x42, 0x32, 0x29, 0x59, 0xf9,
-	0x3e, 0xd0, 0xc7, 0x29, 0xa0, 0x53, 0xbe, 0x9d, 0x70, 0x0f, 0x49, 0x8e, 0x37, 0xf3, 0xa7, 0x7f,
-	0xdc, 0x42, 0x19, 0x98, 0x84, 0x89, 0xf5, 0xa6, 0xac, 0x55, 0xc5, 0x7a, 0x9d, 0x16, 0x49, 0x0b,
-	0x4b, 0x42, 0x86, 0x29, 0x84, 0x83, 0x17, 0x67, 0xe6, 0xf8, 0xdf, 0x27, 0x89, 0x97, 0x8f, 0x30,
-	0x7c, 0x02, 0x62, 0x64, 0xf2, 0x4a, 0x35, 0x71, 0x5b, 0x36, 0xf5, 0x8d, 0x92, 0x17, 0x6b, 0xe2,
-	0xb6, 0x8c, 0x67, 0x00, 0xbb, 0xad, 0x4e, 0xa9, 0x58, 0x89, 0x97, 0x73, 0x4e, 0x14, 0xa5, 0x3e,
-	0x0b, 0x9c, 0xda, 0xd6, 0xa1, 0x44, 0x2d, 0x10, 0x64, 0x27, 0xc9, 0x8e, 0xf7, 0x8b, 0x4a, 0x59,
-	0x9b, 0xdf, 0x79, 0xd4, 0x42, 0x3a, 0xa4, 0x20, 0x46, 0x26, 0x37, 0x43, 0x94, 0x49, 0xc7, 0x1d,
-	0x8a, 0xc0, 0x34, 0x60, 0xea, 0xf2, 0x19, 0x53, 0x3e, 0x23, 0x19, 0xf5, 0x53, 0x07, 0xce, 0xc1,
-	0x58, 0xc7, 0xd0, 0x29, 0x39, 0xee, 0xd4, 0x87, 0xff, 0x46, 0x10, 0x4e, 0xf6, 0xf2, 0x7b, 0xbc,
-	0x05, 0x23, 0xed, 0x70, 0x77, 0x7b, 0xcc, 0x73, 0x07, 0x88, 0x26, 0x87, 0xcf, 0x70, 0x6d, 0x79,
-	0xe6, 0x8c, 0xfc, 0x2e, 0x82, 0xe3, 0x76, 0xfc, 0x74, 0x74, 0x16, 0xe8, 0xa7, 0x90, 0x71, 0x6b,
-	0xc3, 0x0a, 0x11, 0x8f, 0x70, 0x8a, 0x33, 0xe0, 0x38, 0x9f, 0x9e, 0x90, 0xfc, 0x09, 0xf1, 0x57,
-	0x60, 0x9c, 0xe4, 0xce, 0xce, 0x6d, 0xa5, 0xa9, 0x41, 0x90, 0x6a, 0xb0, 0x6f, 0x1d, 0xb2, 0xb8,
-	0x7c, 0xab, 0xbd, 0x13, 0xf7, 0xed, 0x3d, 0x20, 0x1c, 0x33, 0x2a, 0x3b, 0x5e, 0x22, 0xfe, 0x3f,
-	0xa2, 0xf4, 0xa0, 0xdc, 0xd7, 0x5c, 0x78, 0x1a, 0x46, 0xe8, 0x6d, 0x82, 0xb6, 0x5d, 0xac, 0x43,
-	0x22, 0x61, 0xd8, 0xa8, 0xec, 0xb4, 0x99, 0x0a, 0x65, 0x9c, 0x85, 0x63, 0x1e, 0x5a, 0xea, 0xa0,
-	0x1c, 0xa5, 0x1e, 0x71, 0x51, 0x53, 0x0f, 0xfd, 0x2c, 0x24, 0x24, 0xb2, 0x26, 0x2b, 0x6a, 0xad,
-	0x64, 0x28, 0xdb, 0x56, 0x52, 0x9c, 0xce, 0xb2, 0xcb, 0x49, 0x59, 0xeb, 0x72, 0x52, 0xb6, 0x68,
-	0x5d, 0x4e, 0x12, 0x86, 0x2c, 0x06, 0xf2, 0x0a, 0x8f, 0xd9, 0x27, 0xea, 0x21, 0xf3, 0x9c, 0x83,
-	0x9e, 0x81, 0x1f, 0x67, 0x87, 0xfb, 0xb4, 0xf3, 0x61, 0xda, 0x30, 0xd8, 0xac, 0x4b, 0xb4, 0xcb,
-	0x0c, 0x0c, 0x91, 0x26, 0x75, 0xa7, 0x26, 0x6b, 0x84, 0x2f, 0xcc, 0x6e, 0x76, 0x34, 0xeb, 0xd2,
-	0x3a, 0x79, 0xd5, 0x66, 0xa6, 0xe1, 0x32, 0x64, 0x33, 0x93, 0x30, 0xc1, 0x15, 0x18, 0x25, 0x4d,
-	0x6d, 0xac, 0xa3, 0x33, 0x24, 0xa7, 0xe2, 0x19, 0x34, 0x95, 0xdc, 0xc7, 0x1f, 0x9d, 0x4b, 0xc6,
-	0xcd, 0xeb, 0x8b, 0xc4, 0xc2, 0xec, 0xde, 0x07, 0x6e, 0xd6, 0xa5, 0x25, 0x5b, 0x22, 0x7d, 0x8f,
-	0xcf, 0xc1, 0x88, 0xa7, 0x93, 0x86, 0x9e, 0x1a, 0x64, 0x71, 0x5e, 0x76, 0xd1, 0x36, 0x48, 0x76,
-	0x94, 0x16, 0x75, 0x5d, 0x95, 0x14, 0x66, 0x48, 0x4f, 0xed, 0x25, 0x41, 0xb9, 0x26, 0x1c, 0x14,
-	0x82, 0xb3, 0x6c, 0x72, 0x0e, 0x46, 0x9c, 0xcc, 0x6c, 0x3c, 0x49, 0xd6, 0x93, 0xa3, 0x81, 0xa9,
-	0xf5, 0x2d, 0x04, 0x21, 0x43, 0xac, 0xe8, 0xa9, 0x28, 0xf5, 0xc8, 0xcf, 0x3e, 0x51, 0x00, 0x66,
-	0x8b, 0x62, 0xc5, 0x3c, 0xe3, 0xa2, 0x35, 0x98, 0xd8, 0xbb, 0x28, 0xc2, 0x87, 0xb4, 0x40, 0xea,
-	0xeb, 0xd4, 0x4f, 0xdf, 0x45, 0x01, 0x6e, 0x94, 0x16, 0x6d, 0xde, 0x45, 0x83, 0xd3, 0x61, 0x2d,
-	0x98, 0xfa, 0x1f, 0xe4, 0x3c, 0x02, 0xa3, 0x0a, 0xe0, 0x65, 0x18, 0x64, 0x05, 0x67, 0xeb, 0xc0,
-	0xad, 0xf7, 0xc1, 0x04, 0xab, 0x44, 0x3b, 0x40, 0xc0, 0xe2, 0xc6, 0xaf, 0x03, 0x67, 0x9f, 0x47,
-	0x59, 0x95, 0xa3, 0xd8, 0x93, 0xde, 0x4f, 0xa0, 0x57, 0x74, 0x98, 0x2c, 0x56, 0x04, 0x4a, 0xbf,
-	0x00, 0x31, 0x7b, 0xb8, 0x07, 0x3a, 0xa6, 0xfb, 0x19, 0x7a, 0xd4, 0x42, 0x3f, 0x41, 0x30, 0xda,
-	0x79, 0x63, 0x60, 0x13, 0xc1, 0xd3, 0x90, 0x68, 0xdb, 0x96, 0x34, 0x1e, 0xf3, 0x89, 0xd2, 0x4d,
-	0xc2, 0x1d, 0x22, 0xf8, 0x9b, 0x86, 0xb6, 0x4f, 0x6f, 0x22, 0x38, 0x03, 0x23, 0x44, 0x26, 0x75,
-	0xf8, 0x4c, 0x4e, 0x92, 0xd4, 0x46, 0xcd, 0x48, 0x27, 0xdd, 0x81, 0xb1, 0x89, 0xe0, 0x29, 0x08,
-	0xd3, 0x69, 0x4f, 0xa7, 0xfc, 0xdd, 0x3e, 0x83, 0x60, 0x0a, 0x46, 0xda, 0xae, 0x6b, 0x2e, 0x70,
-	0x44, 0x97, 0x0e, 0xe7, 0xb5, 0x4f, 0x30, 0x22, 0xdc, 0x20, 0xff, 0x20, 0x06, 0x93, 0xbd, 0x11,
-	0x13, 0xe7, 0xe0, 0x53, 0x9e, 0xf4, 0xd9, 0x83, 0x40, 0xcc, 0x88, 0x69, 0xc3, 0x95, 0x9f, 0xb9,
-	0xc0, 0x28, 0x0f, 0xa7, 0x7a, 0x88, 0xa0, 0xd8, 0x10, 0xa7, 0x42, 0x4e, 0x76, 0x13, 0x62, 0xad,
-	0xb9, 0x5e, 0x31, 0x36, 0x00, 0x72, 0x6e, 0x4e, 0x13, 0x01, 0xbd, 0x9d, 0xea, 0x35, 0x73, 0xd9,
-	0x1d, 0xf1, 0x74, 0xa4, 0xd7, 0x70, 0x1a, 0xa2, 0x14, 0xe4, 0x24, 0xb5, 0x6a, 0x42, 0x98, 0xfd,
-	0x8c, 0x55, 0x48, 0x75, 0x66, 0x57, 0x66, 0x84, 0x0e, 0x1d, 0x06, 0x71, 0xc6, 0x4d, 0x8a, 0xbe,
-	0x50, 0x27, 0xd1, 0x05, 0x75, 0x9e, 0x87, 0x09, 0x3a, 0x9c, 0xba, 0xaa, 0x19, 0x9e, 0xb9, 0x89,
-	0x50, 0x96, 0x31, 0xbb, 0xd9, 0x35, 0x2d, 0xbd, 0xd1, 0x6a, 0xf0, 0x09, 0xd0, 0x2a, 0xda, 0x05,
-	0xad, 0xbe, 0x6b, 0xa1, 0x15, 0xbb, 0x34, 0x98, 0x3f, 0xc4, 0x0a, 0x7e, 0x24, 0x98, 0xf5, 0x5b,
-	0xd6, 0x2e, 0x16, 0xfa, 0x4b, 0x5f, 0x4c, 0x7d, 0xc8, 0x7e, 0xd6, 0x81, 0x5c, 0x4c, 0xc6, 0x93,
-	0x03, 0xcb, 0x8f, 0x02, 0x8f, 0x5a, 0xe8, 0x2f, 0x03, 0x30, 0xe7, 0x85, 0x90, 0x53, 0xfb, 0x84,
-	0xdc, 0x26, 0x82, 0xe7, 0x61, 0xa2, 0x68, 0x4d, 0x6a, 0x46, 0x74, 0x71, 0x1f, 0xef, 0xea, 0x0e,
-	0x9b, 0x08, 0x66, 0x00, 0x9b, 0x1b, 0xa9, 0x8c, 0xe9, 0xfb, 0x84, 0x65, 0xd4, 0x2f, 0xb2, 0x36,
-	0x11, 0x7c, 0x06, 0xd2, 0xb9, 0xf6, 0x5c, 0xb2, 0xdb, 0x03, 0x19, 0xc3, 0xaa, 0xbc, 0x9f, 0xec,
-	0xe5, 0x3f, 0x9b, 0x08, 0x2e, 0x00, 0xe7, 0x18, 0x17, 0x03, 0xb0, 0x93, 0xdd, 0x23, 0xe9, 0x80,
-	0x20, 0x46, 0xf6, 0xaa, 0x7f, 0x11, 0xa2, 0xe9, 0x92, 0xef, 0xf4, 0x90, 0xad, 0x86, 0x23, 0x75,
-	0xa7, 0xbf, 0xf1, 0xd3, 0x30, 0x6c, 0x75, 0x4f, 0xef, 0x8c, 0xda, 0xf8, 0x91, 0x90, 0xda, 0x32,
-	0x0a, 0x65, 0x3c, 0x07, 0x63, 0x3e, 0x69, 0xa8, 0x52, 0x36, 0xe1, 0xe3, 0x58, 0x47, 0xe6, 0x58,
-	0x28, 0xe3, 0xaf, 0xc0, 0xa7, 0x5c, 0xb2, 0x3b, 0x90, 0x22, 0x71, 0x18, 0xa4, 0x48, 0x3b, 0x14,
-	0xec, 0x0b, 0x2d, 0x92, 0x5d, 0xd0, 0xc2, 0xce, 0x1c, 0x86, 0xfb, 0xcb, 0x1c, 0x7c, 0x8d, 0x7b,
-	0x14, 0x51, 0xf8, 0xc4, 0x81, 0xe3, 0xb9, 0x22, 0xe6, 0xb9, 0x3d, 0xbc, 0x12, 0x8a, 0xc6, 0x38,
-	0x58, 0x09, 0x45, 0x81, 0x8b, 0xaf, 0x84, 0xa2, 0x71, 0x6e, 0x88, 0x7f, 0x30, 0x48, 0x4b, 0x84,
-	0x5d, 0xb2, 0x72, 0xbc, 0x00, 0x93, 0x5e, 0xef, 0xf7, 0x3b, 0x35, 0xf3, 0x2e, 0x71, 0x2e, 0x38,
-	0xbc, 0x0a, 0x99, 0x5e, 0x32, 0xa8, 0x23, 0x0e, 0xfa, 0xad, 0x71, 0x6d, 0x29, 0x4f, 0xb0, 0xc6,
-	0x55, 0x61, 0x82, 0x6e, 0x54, 0x7c, 0x96, 0xa5, 0xe8, 0x61, 0x9c, 0x6d, 0x94, 0xec, 0x4d, 0xfa,
-	0x5b, 0x94, 0x62, 0x5d, 0xdc, 0xec, 0x0f, 0x2c, 0x37, 0x0b, 0x51, 0x37, 0xcb, 0x3d, 0xe1, 0x96,
-	0xe9, 0x48, 0xe0, 0x7e, 0x13, 0x86, 0x1c, 0x40, 0x65, 0xd5, 0x2e, 0x2f, 0xf5, 0xa3, 0x92, 0xac,
-	0xab, 0x0d, 0x4d, 0x92, 0x05, 0xf9, 0xb6, 0xac, 0xc9, 0x35, 0x49, 0x16, 0x5c, 0x92, 0x88, 0xe4,
-	0xba, 0xa6, 0xd6, 0xc5, 0x8a, 0x29, 0x39, 0x72, 0x18, 0xc9, 0x4e, 0x49, 0x4f, 0xbe, 0xaa, 0xfc,
-	0x94, 0xa4, 0xab, 0x7f, 0x8f, 0x60, 0x09, 0x26, 0x2d, 0xa4, 0x37, 0x3d, 0xc9, 0x8b, 0xdf, 0x99,
-	0xfd, 0xfc, 0xfe, 0xc0, 0xeb, 0xc5, 0x69, 0x2b, 0x4f, 0x3d, 0xd1, 0xd5, 0x31, 0x0f, 0x9e, 0xaa,
-	0xf2, 0xbf, 0x17, 0x80, 0x89, 0x2e, 0x46, 0xc3, 0x9f, 0x86, 0x84, 0x5f, 0x36, 0x3a, 0x24, 0x3a,
-	0x91, 0xf9, 0xd3, 0x90, 0xd0, 0x4c, 0xce, 0x92, 0x71, 0xaf, 0x6e, 0x19, 0x6d, 0xc8, 0x7a, 0x69,
-	0x7d, 0x67, 0x60, 0x13, 0xd9, 0x40, 0x0f, 0xd6, 0xab, 0x42, 0x99, 0x24, 0x0d, 0x2c, 0xb4, 0xc2,
-	0x87, 0x09, 0x2d, 0x26, 0xc3, 0x3f, 0x96, 0x22, 0xfe, 0xb1, 0x64, 0xd6, 0xcd, 0x3f, 0x0c, 0x02,
-	0xe7, 0xdd, 0x3d, 0xe1, 0x0b, 0x30, 0x5a, 0x93, 0x8d, 0x1d, 0x55, 0xbb, 0x5b, 0x52, 0x6a, 0x86,
-	0xac, 0xdd, 0x16, 0x25, 0x07, 0x62, 0x61, 0xb3, 0xad, 0x60, 0x35, 0x15, 0xca, 0xf8, 0x0c, 0x24,
-	0xdb, 0x94, 0x0e, 0x6b, 0x24, 0xec, 0xb7, 0x96, 0xe0, 0xba, 0xa6, 0x34, 0x45, 0x43, 0x2e, 0x29,
-	0xf5, 0xe6, 0x25, 0xfb, 0xfb, 0x0b, 0x66, 0x17, 0x6c, 0xb6, 0x15, 0xea, 0xcd, 0x4b, 0xd6, 0x77,
-	0x18, 0x24, 0x23, 0x6c, 0x8a, 0x4a, 0x55, 0xdc, 0x52, 0xaa, 0x8a, 0x71, 0xaf, 0xf4, 0xa6, 0x5a,
-	0x93, 0xcd, 0x4c, 0x9a, 0x73, 0x36, 0xbc, 0xaa, 0xd6, 0x58, 0x71, 0xcd, 0xba, 0x21, 0x65, 0xee,
-	0xfc, 0xa3, 0xd6, 0xbd, 0x25, 0x3c, 0x0e, 0x11, 0x97, 0x45, 0xcc, 0xa7, 0xf9, 0x0f, 0x88, 0x6b,
-	0xff, 0x2b, 0x82, 0x2c, 0x8c, 0xae, 0xb1, 0x81, 0x65, 0xec, 0x91, 0x11, 0xb7, 0x1c, 0xf7, 0x37,
-	0x06, 0xf0, 0x90, 0x6c, 0xd3, 0x91, 0xd1, 0xa5, 0x39, 0xaf, 0x11, 0x88, 0xcc, 0xeb, 0x6c, 0x4c,
-	0x99, 0xc2, 0xf5, 0x9b, 0x97, 0xec, 0x2f, 0x2b, 0xc6, 0xfd, 0xed, 0x40, 0x9c, 0x38, 0xe7, 0x18,
-	0x54, 0x86, 0x8c, 0x8a, 0x38, 0x71, 0x87, 0x09, 0x68, 0x2d, 0xcf, 0xba, 0x7e, 0x45, 0x6b, 0x79,
-	0xd6, 0xb8, 0x01, 0x43, 0xc4, 0xf4, 0xfe, 0xa8, 0x35, 0x62, 0xfe, 0x9b, 0xc8, 0xbc, 0x1e, 0xd3,
-	0xbd, 0x10, 0x57, 0xee, 0x5e, 0x88, 0x7b, 0xe1, 0x40, 0x25, 0xe6, 0x5e, 0xa5, 0x38, 0xfe, 0x67,
-	0x00, 0xe9, 0xee, 0x0c, 0x64, 0xa1, 0xf2, 0x9c, 0xfb, 0x39, 0x16, 0x2a, 0xf7, 0xc9, 0x1d, 0xcb,
-	0xa7, 0xf4, 0xba, 0x7a, 0x97, 0x7e, 0xdd, 0xe2, 0xba, 0x27, 0xcd, 0x6a, 0x42, 0xc7, 0x68, 0xe3,
-	0x86, 0xfb, 0x26, 0x34, 0x0f, 0x09, 0xc6, 0x63, 0xdd, 0x87, 0x66, 0xae, 0x17, 0xa7, 0x2f, 0x6f,
-	0x32, 0x4f, 0xe1, 0x21, 0x71, 0xa7, 0xb1, 0xc5, 0x28, 0xe8, 0x1a, 0xcb, 0xfc, 0x2d, 0x7e, 0xa7,
-	0xb1, 0x45, 0x28, 0xe8, 0x92, 0xfa, 0x1c, 0x4c, 0xd8, 0x34, 0x76, 0x84, 0x57, 0x34, 0xb5, 0x51,
-	0x37, 0xcb, 0x61, 0xa3, 0x26, 0xb5, 0x85, 0x2e, 0xcb, 0xa4, 0x0d, 0xbf, 0x08, 0x29, 0xc2, 0xc6,
-	0x76, 0xe1, 0x4e, 0xb5, 0x6d, 0x87, 0x1d, 0xbf, 0xd3, 0xd8, 0xa2, 0x3b, 0xf7, 0x0d, 0x57, 0x2b,
-	0x81, 0x1b, 0x92, 0x00, 0x2a, 0xb5, 0x8a, 0xb9, 0x16, 0x33, 0x2f, 0x1e, 0x32, 0x5f, 0xb2, 0xc5,
-	0x74, 0x16, 0x70, 0x5d, 0x53, 0x9b, 0x8a, 0x4e, 0x78, 0x6c, 0x4a, 0x96, 0x22, 0x8c, 0x38, 0x5b,
-	0x7a, 0xac, 0xbd, 0xd1, 0x2e, 0x6b, 0xef, 0x0c, 0x60, 0x5b, 0x81, 0x7b, 0x35, 0xa9, 0x54, 0x95,
-	0x9b, 0x72, 0xd5, 0x5a, 0xa9, 0x2d, 0x2d, 0xee, 0xd5, 0xa4, 0x55, 0xf2, 0xbe, 0xbd, 0x52, 0x43,
-	0x3f, 0x2b, 0x75, 0x57, 0x8f, 0x38, 0xea, 0x62, 0x52, 0xfc, 0x50, 0xc5, 0xa4, 0x9a, 0x4f, 0x31,
-	0x69, 0xe8, 0xc8, 0x6e, 0x9d, 0x77, 0x54, 0x97, 0x08, 0x9e, 0x51, 0x07, 0xa3, 0xb5, 0x4a, 0x96,
-	0x7a, 0xd3, 0x6f, 0x07, 0x16, 0x95, 0xb2, 0xf6, 0xe4, 0x6b, 0xf9, 0xdf, 0x05, 0x1f, 0xb5, 0xd0,
-	0xdf, 0x06, 0x21, 0x03, 0x89, 0x0d, 0xe2, 0xf5, 0x19, 0xeb, 0x06, 0xf8, 0xb0, 0x27, 0x36, 0x60,
-	0x16, 0x30, 0xa3, 0x70, 0xfa, 0x62, 0x7a, 0xa2, 0x4b, 0xd8, 0x11, 0x81, 0xd7, 0x1a, 0x5b, 0x4c,
-	0x1c, 0xfd, 0xbe, 0x6c, 0xd8, 0x13, 0x48, 0x70, 0x09, 0x26, 0x6c, 0x0a, 0x2b, 0x30, 0x32, 0x34,
-	0x32, 0xc8, 0x06, 0xb3, 0x4b, 0x40, 0xc1, 0xb3, 0x30, 0x66, 0x73, 0xb9, 0x34, 0x49, 0x77, 0x8f,
-	0x26, 0x38, 0xe3, 0xdd, 0xff, 0x8e, 0xfa, 0x61, 0x0b, 0xd1, 0xf9, 0x3a, 0xf3, 0x5d, 0x73, 0x2f,
-	0x39, 0xec, 0x89, 0x33, 0x98, 0x06, 0x7c, 0xdd, 0x11, 0x39, 0x26, 0xd9, 0xa8, 0x5f, 0xa4, 0x51,
-	0x5a, 0x4b, 0xda, 0xbd, 0x9a, 0x94, 0xa1, 0xb1, 0x40, 0x69, 0x3b, 0x22, 0xa7, 0xff, 0x84, 0x05,
-	0x8e, 0x99, 0x55, 0xbe, 0xb8, 0xc3, 0x1d, 0xcc, 0xb3, 0xb7, 0x9f, 0x47, 0x21, 0xb9, 0x5c, 0x55,
-	0xb7, 0xc4, 0xea, 0x46, 0x5d, 0x96, 0x28, 0x86, 0xe6, 0x21, 0x22, 0xee, 0xe8, 0x25, 0xcd, 0x3a,
-	0x94, 0x7c, 0x7a, 0xdf, 0x3a, 0x67, 0x9e, 0x1d, 0x96, 0x7e, 0xd4, 0x42, 0xe8, 0xda, 0x80, 0x10,
-	0x16, 0x77, 0x74, 0x41, 0xc6, 0xeb, 0xe0, 0xba, 0xee, 0x43, 0x41, 0x24, 0x3e, 0x77, 0xae, 0x8f,
-	0x24, 0xd4, 0xba, 0x44, 0x71, 0x6d, 0x40, 0x00, 0x71, 0x47, 0x2f, 0x56, 0x76, 0xe8, 0x51, 0xe6,
-	0x26, 0x78, 0x6f, 0xb9, 0xa4, 0x8e, 0xf5, 0xfb, 0x25, 0x88, 0xf3, 0x6e, 0xc6, 0xb5, 0x01, 0x21,
-	0x21, 0x5a, 0xf7, 0x3c, 0xa8, 0xe4, 0xaf, 0xc1, 0x71, 0xa2, 0xaa, 0xff, 0xc9, 0xfe, 0x58, 0x7f,
-	0x97, 0xbc, 0xbb, 0x9c, 0x06, 0x2f, 0x44, 0x88, 0x55, 0x52, 0xc4, 0x2e, 0xe3, 0xe2, 0x8e, 0xee,
-	0x43, 0x85, 0x5f, 0x85, 0x41, 0x5d, 0xae, 0x90, 0xf9, 0xa2, 0x7b, 0xf1, 0xfe, 0x8e, 0xf3, 0x4f,
-	0xde, 0xdf, 0xb5, 0xb8, 0x7c, 0x0e, 0xf1, 0xad, 0x26, 0x9c, 0x03, 0x6e, 0x4b, 0xac, 0x95, 0x77,
-	0x94, 0xb2, 0x71, 0xa7, 0xf4, 0xdc, 0x85, 0x0b, 0xdb, 0x5b, 0x56, 0xf5, 0xda, 0xff, 0xf6, 0x3b,
-	0x12, 0x86, 0x6d, 0x7a, 0x46, 0x8e, 0x17, 0x20, 0x4c, 0x6c, 0x4d, 0x80, 0x8a, 0x40, 0xdf, 0x49,
-	0x0f, 0x9f, 0x5b, 0xad, 0xe4, 0xfd, 0x5d, 0x7a, 0xc7, 0xc8, 0xfe, 0xb0, 0x96, 0xb2, 0xe2, 0x2f,
-	0xc1, 0x70, 0x53, 0xd1, 0x8c, 0x86, 0x58, 0x2d, 0x99, 0xa9, 0x50, 0x2a, 0xd9, 0x87, 0xb4, 0xe3,
-	0xf7, 0x77, 0xbd, 0x7c, 0x96, 0xe0, 0xa4, 0xf9, 0xde, 0xcc, 0xb8, 0xf0, 0x92, 0x95, 0x06, 0x0f,
-	0xd3, 0x34, 0x38, 0xdb, 0x77, 0x1a, 0x4c, 0xa3, 0xd1, 0xca, 0x7f, 0xcf, 0x42, 0x42, 0xad, 0x6d,
-	0xa9, 0xa2, 0x56, 0x96, 0xcb, 0xa5, 0x66, 0x5d, 0x4a, 0x8d, 0x64, 0xd0, 0x54, 0x82, 0x79, 0xb6,
-	0x30, 0x64, 0x37, 0xdd, 0xac, 0x4b, 0x78, 0x19, 0xe2, 0x92, 0xaa, 0x6a, 0x65, 0xa5, 0x26, 0x12,
-	0xe3, 0x60, 0x6a, 0xd4, 0x53, 0x9e, 0x6e, 0xc9, 0xe8, 0xb3, 0x8b, 0x6d, 0x32, 0x53, 0x92, 0x93,
-	0x13, 0x8b, 0x90, 0xa0, 0x9f, 0xa6, 0xd3, 0xcc, 0xaf, 0x26, 0x56, 0x53, 0x1f, 0x0d, 0xf6, 0xed,
-	0x05, 0x13, 0xf7, 0x77, 0xdd, 0xcc, 0x96, 0x79, 0x86, 0xc8, 0xdb, 0x82, 0xf9, 0x72, 0x81, 0x87,
-	0x30, 0x35, 0x00, 0x3e, 0xfe, 0xb0, 0x85, 0x02, 0x8f, 0x5b, 0x08, 0xed, 0xb5, 0x50, 0x6c, 0x6e,
-	0xe6, 0x85, 0x99, 0x8b, 0x97, 0x67, 0xe6, 0x2e, 0x12, 0x8e, 0x85, 0xa7, 0x9c, 0x9e, 0xc2, 0x3e,
-	0x93, 0xc7, 0x89, 0x87, 0x2d, 0x14, 0x7b, 0xdc, 0x42, 0xd1, 0xbd, 0x16, 0x42, 0x97, 0x19, 0x62,
-	0xd8, 0x85, 0x7a, 0x8e, 0x1b, 0xf1, 0x2d, 0x79, 0x44, 0xb9, 0x18, 0xff, 0xad, 0x10, 0x24, 0xd9,
-	0x65, 0x1a, 0x1b, 0x55, 0x3e, 0xfb, 0x64, 0xa8, 0xd2, 0xc6, 0x93, 0x1b, 0xbe, 0x78, 0xb2, 0xcf,
-	0x71, 0xbc, 0xcf, 0xd5, 0xc5, 0xdf, 0x18, 0xaa, 0xbc, 0xb9, 0x3f, 0xaa, 0xbc, 0xdc, 0x9f, 0xf6,
-	0x5d, 0xb0, 0xa5, 0x07, 0xa6, 0x7c, 0xe6, 0x09, 0x30, 0xc5, 0x46, 0x0d, 0x7a, 0x6f, 0xd1, 0xbd,
-	0x28, 0x2c, 0x60, 0xcb, 0x85, 0x62, 0xdf, 0xf8, 0x6f, 0xc4, 0x7e, 0xf6, 0xe3, 0x0f, 0xfc, 0x2f,
-	0x82, 0x30, 0x6c, 0xde, 0xdb, 0xb1, 0x5d, 0xe1, 0xaa, 0xc7, 0x15, 0x7a, 0x67, 0x53, 0xde, 0xfb,
-	0xd0, 0x6d, 0x8f, 0xb8, 0xe9, 0xeb, 0x11, 0x73, 0x7d, 0x4a, 0xeb, 0xee, 0x12, 0xa5, 0x6e, 0x2e,
-	0xf1, 0x5c, 0x5f, 0xa2, 0xf7, 0xf7, 0x8c, 0xaf, 0xee, 0xef, 0x19, 0x57, 0xfa, 0x1c, 0xc5, 0x81,
-	0x5d, 0xe3, 0x08, 0x27, 0x77, 0x25, 0x14, 0x4d, 0x70, 0x49, 0xfe, 0x6f, 0xc2, 0x10, 0x5f, 0x96,
-	0x8d, 0xa3, 0x8b, 0xf4, 0x8f, 0x51, 0xe6, 0x60, 0xfc, 0xfa, 0x32, 0x87, 0x5f, 0x57, 0x74, 0x7f,
-	0x7c, 0x97, 0xca, 0xc3, 0xb8, 0xee, 0x28, 0x37, 0xe6, 0x83, 0x4e, 0xdf, 0x41, 0xe6, 0x77, 0xb2,
-	0x57, 0x95, 0xaa, 0x21, 0x6b, 0xf8, 0x45, 0x08, 0xd3, 0x0f, 0x68, 0xe9, 0x3e, 0x28, 0xd9, 0x61,
-	0x56, 0xb7, 0x69, 0x28, 0xa3, 0xc0, 0x18, 0xf0, 0x0c, 0x04, 0xd4, 0x3a, 0x75, 0xf8, 0x64, 0x47,
-	0x52, 0xf3, 0x8a, 0x6c, 0x68, 0x8a, 0x44, 0xc9, 0xd7, 0xeb, 0x42, 0x40, 0xad, 0xb7, 0xf7, 0x56,
-	0x41, 0xc7, 0xde, 0x8a, 0xe7, 0x61, 0x88, 0x7d, 0x01, 0x2a, 0x6b, 0xf9, 0x72, 0xc5, 0xf7, 0xa8,
-	0x88, 0xff, 0x01, 0x02, 0x60, 0xf2, 0x96, 0x44, 0x43, 0xc4, 0x57, 0x20, 0x44, 0x8b, 0x65, 0x4c,
-	0xdf, 0xe9, 0x9e, 0xfa, 0x5e, 0x55, 0xe4, 0x6a, 0x99, 0x7d, 0xac, 0xaa, 0x6a, 0x02, 0xe5, 0xc3,
-	0xe7, 0x20, 0xd4, 0xa8, 0x29, 0x86, 0xa9, 0xf8, 0x84, 0x87, 0xff, 0x46, 0x4d, 0x61, 0x1b, 0x4b,
-	0x4a, 0x84, 0xe7, 0x20, 0x42, 0x15, 0xb5, 0x2e, 0x1c, 0xa5, 0x7d, 0xc7, 0x79, 0x93, 0x90, 0x08,
-	0x26, 0x25, 0xff, 0x5d, 0x04, 0xdc, 0x06, 0x73, 0x3c, 0x5a, 0x42, 0xa6, 0x5a, 0x7f, 0xc6, 0xa5,
-	0xf5, 0x54, 0x4f, 0xad, 0x8b, 0x9a, 0x78, 0xfb, 0xb6, 0x22, 0x31, 0x35, 0xa8, 0xce, 0x2f, 0x41,
-	0xa8, 0x2c, 0x1a, 0xa2, 0x79, 0xef, 0xea, 0x99, 0x9e, 0xdc, 0x6d, 0x53, 0x09, 0x94, 0x89, 0x7f,
-	0x1b, 0x41, 0x94, 0x18, 0x97, 0xea, 0x71, 0x19, 0x02, 0x92, 0x75, 0xa7, 0xa8, 0xf7, 0x1f, 0x58,
-	0x38, 0xe7, 0x45, 0x08, 0x48, 0x32, 0x2e, 0x40, 0xd4, 0x8c, 0x27, 0xeb, 0x02, 0xd8, 0x3e, 0x35,
-	0x01, 0x8f, 0x0d, 0x04, 0x9b, 0x9d, 0xff, 0x37, 0x04, 0x9c, 0x33, 0xcc, 0xa8, 0x6a, 0x9f, 0xb7,
-	0xbf, 0x17, 0x67, 0x25, 0xb4, 0xcb, 0x7d, 0x47, 0x29, 0x61, 0x77, 0x7e, 0x28, 0x6e, 0x7d, 0x13,
-	0x7e, 0x28, 0xbb, 0x1d, 0xe2, 0x83, 0xf2, 0xe9, 0x67, 0xcd, 0x3f, 0x7a, 0x71, 0xa2, 0x08, 0x8e,
-	0x42, 0x68, 0x69, 0xfd, 0xd6, 0x1a, 0x37, 0x80, 0x87, 0x20, 0xba, 0x94, 0x5f, 0x16, 0x72, 0x4b,
-	0xf9, 0x25, 0x0e, 0xe1, 0x08, 0x04, 0x6e, 0x5c, 0xe7, 0x02, 0xd3, 0x1a, 0xa4, 0xba, 0x15, 0xab,
-	0x71, 0x02, 0x62, 0xb9, 0x9b, 0xb9, 0xc2, 0x6a, 0x6e, 0x61, 0x35, 0xcf, 0x0d, 0xe0, 0x38, 0x0c,
-	0x5e, 0xcf, 0xaf, 0x2d, 0x15, 0xd6, 0x96, 0x39, 0x84, 0x01, 0x22, 0x57, 0x73, 0x85, 0xd5, 0xfc,
-	0x12, 0x17, 0x20, 0x0d, 0x4b, 0xf9, 0xd5, 0x7c, 0x31, 0xbf, 0xc4, 0x05, 0x59, 0x37, 0xab, 0xf9,
-	0x22, 0x21, 0x0b, 0x11, 0x11, 0x85, 0xb5, 0x42, 0xb1, 0x90, 0x23, 0x8d, 0xe1, 0x74, 0xe8, 0x61,
-	0x0b, 0x85, 0xa7, 0x5f, 0x70, 0xf7, 0x49, 0x37, 0xed, 0x65, 0xf3, 0xff, 0x7e, 0x06, 0x21, 0x98,
-	0xbb, 0xb5, 0xc1, 0x0d, 0xe0, 0x18, 0x84, 0x73, 0xaf, 0xde, 0x10, 0xf2, 0x1c, 0x22, 0xef, 0x96,
-	0x17, 0x89, 0xb2, 0x05, 0x08, 0x53, 0xe3, 0xe0, 0x24, 0xc0, 0x6a, 0x6e, 0x21, 0xbf, 0x5a, 0x5a,
-	0x5b, 0x5f, 0x23, 0xaa, 0x4d, 0xc0, 0x31, 0xf6, 0xbc, 0x78, 0x63, 0xa3, 0xb8, 0xfe, 0x4a, 0x5e,
-	0x28, 0xe5, 0x97, 0x96, 0x09, 0x6b, 0xbb, 0x61, 0x75, 0xfd, 0xc6, 0x52, 0x69, 0x71, 0x7d, 0x6d,
-	0x2d, 0xbf, 0x58, 0xe4, 0x02, 0xd3, 0x5f, 0x87, 0xb8, 0xc3, 0xe3, 0xf1, 0x18, 0x8c, 0x14, 0x85,
-	0xdc, 0xd5, 0xab, 0x85, 0xc5, 0x52, 0xf1, 0x0b, 0xd7, 0xf3, 0x96, 0xdc, 0x49, 0x48, 0xbb, 0x5e,
-	0x17, 0xd6, 0x8a, 0x79, 0xa1, 0xb4, 0x91, 0x5f, 0x7e, 0x25, 0xbf, 0x56, 0xe4, 0x90, 0x5f, 0xbb,
-	0x90, 0xb3, 0xdb, 0x03, 0xf8, 0x38, 0x8c, 0x75, 0xf2, 0xaf, 0xe5, 0x8b, 0x5c, 0x70, 0x7a, 0x07,
-	0x12, 0x2e, 0xa0, 0xc0, 0xa3, 0xc0, 0xbd, 0x92, 0x2f, 0x0a, 0x1e, 0x0d, 0x52, 0x30, 0xea, 0x7c,
-	0x5b, 0x58, 0x2b, 0x2d, 0x7c, 0xa1, 0x98, 0xdf, 0xe0, 0x10, 0x91, 0xed, 0x6c, 0x59, 0xbf, 0x51,
-	0x34, 0x9b, 0x02, 0xf8, 0x04, 0x4c, 0x38, 0x9b, 0x8a, 0xeb, 0xc5, 0xdc, 0xaa, 0xd9, 0x18, 0x5c,
-	0xf8, 0x23, 0xf4, 0xf8, 0x83, 0xc9, 0x81, 0xf7, 0x3f, 0x98, 0x1c, 0xf8, 0xe5, 0x07, 0x93, 0xe8,
-	0xad, 0xbd, 0x49, 0xf4, 0xfd, 0xbd, 0x49, 0xf4, 0x93, 0xbd, 0x49, 0xf4, 0x78, 0x6f, 0x12, 0xbd,
-	0xbf, 0x37, 0x89, 0x7e, 0xb1, 0x37, 0x89, 0x3e, 0xda, 0x9b, 0x1c, 0xf8, 0xe5, 0xde, 0x24, 0x7a,
-	0xfb, 0xc3, 0xc9, 0x81, 0x87, 0x1f, 0x4e, 0xa2, 0xc7, 0x1f, 0x4e, 0x0e, 0xbc, 0xff, 0xe1, 0xe4,
-	0xc0, 0xab, 0x9f, 0xaf, 0xa8, 0xf5, 0xbb, 0x95, 0x6c, 0x53, 0x25, 0x40, 0xae, 0x89, 0xd9, 0x86,
-	0x7e, 0x9e, 0xfe, 0xb8, 0xad, 0x6a, 0xdb, 0xb3, 0x75, 0x73, 0x2a, 0x67, 0xad, 0xe6, 0xf3, 0xf5,
-	0xad, 0x8a, 0x7a, 0x5e, 0xfe, 0x8a, 0x61, 0xfd, 0xeb, 0x98, 0xcf, 0x5f, 0xab, 0x6d, 0x45, 0xe8,
-	0x4d, 0x9b, 0x67, 0xff, 0x37, 0x00, 0x00, 0xff, 0xff, 0x0d, 0x9f, 0x1f, 0x8b, 0x80, 0x4d, 0x00,
-	0x00,
+	0x75, 0xd6, 0xe5, 0x9f, 0xc8, 0x23, 0x91, 0x1a, 0x5d, 0xeb, 0x87, 0xa6, 0xbd, 0x5a, 0x2e, 0x63,
+	0xef, 0xca, 0xb2, 0x44, 0xdb, 0xb2, 0xf7, 0xc7, 0xda, 0xac, 0x13, 0x4a, 0xa2, 0x65, 0x2a, 0x5a,
+	0x49, 0x19, 0xd1, 0xb2, 0xb2, 0x7f, 0xcc, 0x68, 0x38, 0xa2, 0x27, 0xa6, 0x38, 0xec, 0xcc, 0x88,
+	0x5c, 0x6f, 0xa2, 0x66, 0x93, 0xa6, 0x29, 0x92, 0x74, 0xd1, 0xc5, 0xf6, 0x07, 0xe8, 0x36, 0x28,
+	0xfa, 0xd2, 0x62, 0x61, 0x20, 0x7d, 0x6a, 0x0b, 0x64, 0x69, 0xb4, 0x46, 0x9a, 0x16, 0x89, 0xda,
+	0x00, 0x06, 0xfa, 0xb2, 0x28, 0x5a, 0x20, 0xeb, 0x7d, 0xd9, 0x16, 0x28, 0x10, 0x14, 0x28, 0x1a,
+	0xe4, 0xa5, 0xc5, 0xbd, 0x77, 0x66, 0x38, 0x33, 0x1c, 0x52, 0x94, 0xe4, 0xdd, 0x34, 0xc5, 0xbe,
+	0x91, 0xf7, 0x9e, 0x73, 0xee, 0xb9, 0xe7, 0x9e, 0xf3, 0xdd, 0xbf, 0x73, 0x07, 0x9e, 0xa8, 0x49,
+	0x5a, 0x5a, 0x56, 0xce, 0x69, 0xe2, 0x4d, 0x69, 0x5b, 0x38, 0x27, 0x96, 0x95, 0x9d, 0x62, 0x41,
+	0x54, 0x2a, 0x15, 0x49, 0xd4, 0xcf, 0xe9, 0xb7, 0xab, 0x92, 0x96, 0xae, 0xaa, 0x8a, 0xae, 0xe0,
+	0x13, 0x8c, 0x30, 0xcd, 0x08, 0xd3, 0x0e, 0xc2, 0xc4, 0x54, 0x49, 0xd6, 0x6f, 0xee, 0x6c, 0xa6,
+	0x45, 0x65, 0xfb, 0x5c, 0x49, 0x29, 0x29, 0xe7, 0x28, 0xcf, 0xe6, 0xce, 0x16, 0xfd, 0x47, 0xff,
+	0xd0, 0x5f, 0x4c, 0x56, 0xe2, 0xd1, 0x92, 0xa2, 0x94, 0xca, 0x52, 0x93, 0x4a, 0x97, 0xb7, 0x25,
+	0x4d, 0x17, 0xb6, 0xab, 0x06, 0xc1, 0x19, 0x2f, 0xad, 0x54, 0xa9, 0xa0, 0x4a, 0x25, 0x59, 0xa9,
+	0xd8, 0xf5, 0x4a, 0x9c, 0x70, 0x92, 0x2a, 0x55, 0x5d, 0x56, 0x2a, 0x66, 0xe5, 0x98, 0xb3, 0x52,
+	0x93, 0x75, 0xc9, 0xc1, 0x7c, 0xdc, 0x59, 0x6f, 0xaf, 0x3a, 0xe9, 0xac, 0xaa, 0x09, 0x65, 0xb9,
+	0x28, 0xe8, 0x92, 0x51, 0x9b, 0x74, 0xd5, 0xca, 0x52, 0xbd, 0xe0, 0x6c, 0xfa, 0xd1, 0x56, 0x0a,
+	0xcd, 0xde, 0x40, 0xea, 0xdb, 0x01, 0x88, 0x64, 0x6e, 0xac, 0xf1, 0xd9, 0xfc, 0xed, 0xaa, 0x84,
+	0x05, 0x08, 0xb1, 0xce, 0xc5, 0x51, 0x12, 0x8d, 0xf7, 0x4d, 0xa7, 0xd2, 0x4e, 0x7b, 0x53, 0xfe,
+	0xf4, 0xca, 0xe6, 0x97, 0x24, 0x51, 0xe7, 0xa5, 0x2d, 0xc2, 0x33, 0x7b, 0xfa, 0xce, 0x6e, 0xbf,
+	0x69, 0x1a, 0xc2, 0xfa, 0xfa, 0x5d, 0x84, 0xde, 0xbd, 0x8b, 0x62, 0x61, 0x34, 0x8e, 0xce, 0xa3,
+	0x99, 0x90, 0xa8, 0x54, 0xb6, 0xe4, 0x12, 0x6f, 0x08, 0xc6, 0xaf, 0x40, 0x40, 0x54, 0xa5, 0x62,
+	0xdc, 0xd7, 0x75, 0x03, 0x8f, 0xdf, 0xd9, 0x1d, 0x34, 0x06, 0x5a, 0x95, 0x8a, 0x52, 0x45, 0x97,
+	0x85, 0xb2, 0xe6, 0xd1, 0x02, 0x95, 0x8b, 0x8b, 0x30, 0x50, 0xab, 0x8a, 0x05, 0x41, 0xd7, 0x05,
+	0xf1, 0xe6, 0xb6, 0x54, 0xd1, 0xb5, 0xb8, 0x9f, 0x36, 0xf5, 0x64, 0xba, 0x83, 0xef, 0xa4, 0x33,
+	0x37, 0xd6, 0xd6, 0x57, 0xe7, 0x32, 0x16, 0xd7, 0x92, 0xac, 0xe9, 0xb4, 0xf5, 0xc0, 0xcf, 0x1a,
+	0x08, 0xf1, 0xb1, 0x5a, 0x55, 0x6c, 0x56, 0x6a, 0xf8, 0x3a, 0xf4, 0x31, 0xfe, 0xb2, 0x5c, 0xb9,
+	0xa5, 0xc5, 0x03, 0xb4, 0x85, 0x74, 0xc7, 0x16, 0xe6, 0xc8, 0xbf, 0x25, 0xb9, 0x72, 0xcb, 0x25,
+	0x1a, 0x44, 0xb3, 0x42, 0xc3, 0xc7, 0xc1, 0xaf, 0x97, 0xea, 0xf1, 0x60, 0x12, 0x8d, 0x47, 0x66,
+	0x7b, 0xdf, 0xdb, 0x45, 0x1f, 0x12, 0x0a, 0x52, 0x86, 0xe7, 0x21, 0x58, 0x95, 0x24, 0x55, 0x8b,
+	0x47, 0x92, 0xfe, 0xf1, 0xbe, 0xe9, 0xd3, 0x1d, 0xdb, 0x5a, 0x95, 0x24, 0x95, 0x36, 0x61, 0xc9,
+	0x60, 0xcc, 0x33, 0xf0, 0x9f, 0x57, 0x7a, 0x2f, 0x4c, 0x4e, 0x4f, 0x5e, 0x9c, 0xbc, 0xb4, 0x18,
+	0x08, 0x87, 0xb8, 0xde, 0xc5, 0x40, 0xb8, 0x97, 0x0b, 0x2f, 0x06, 0xc2, 0x61, 0x2e, 0x92, 0xfa,
+	0x07, 0x1f, 0x84, 0x4d, 0x56, 0xfc, 0x28, 0xf4, 0xe9, 0xa5, 0x7a, 0x41, 0x28, 0x16, 0x55, 0x49,
+	0xd3, 0xa8, 0x43, 0x44, 0x78, 0xd0, 0x4b, 0xf5, 0x0c, 0x2b, 0xc1, 0xc7, 0x21, 0x4c, 0x84, 0x16,
+	0x04, 0xad, 0x42, 0x47, 0xd3, 0xcf, 0xf7, 0x92, 0xff, 0x19, 0xad, 0x82, 0x9f, 0x85, 0x40, 0x45,
+	0x29, 0x4a, 0x86, 0xe5, 0x9f, 0xf0, 0xd4, 0xd5, 0x0a, 0xa4, 0xf4, 0xb2, 0x52, 0x94, 0x48, 0x93,
+	0x3c, 0x65, 0xc2, 0x13, 0x30, 0x28, 0x57, 0x34, 0xb9, 0x28, 0x15, 0x4a, 0xaa, 0x54, 0xd0, 0x76,
+	0x36, 0x2b, 0x92, 0x4e, 0x2d, 0x1c, 0xe1, 0x07, 0x58, 0xc5, 0x82, 0x2a, 0xad, 0xd1, 0xe2, 0x99,
+	0x3f, 0x44, 0x7b, 0x0d, 0xf4, 0x7b, 0x08, 0xc6, 0xa0, 0x2f, 0xbf, 0x70, 0x23, 0x69, 0xa8, 0x96,
+	0x88, 0x3a, 0x74, 0xdf, 0x40, 0x30, 0x01, 0x83, 0x39, 0xca, 0x9a, 0x5c, 0xe0, 0xb3, 0x49, 0xc6,
+	0x9c, 0x38, 0xe6, 0xd1, 0xd0, 0x06, 0x82, 0x04, 0x44, 0x88, 0x46, 0xc9, 0x65, 0x61, 0x5b, 0x4a,
+	0xf4, 0x41, 0x84, 0x28, 0x95, 0xae, 0x08, 0xdb, 0x12, 0x95, 0xd3, 0x4f, 0x0c, 0x64, 0x35, 0x14,
+	0x87, 0x11, 0x5a, 0x6d, 0xb4, 0x94, 0x96, 0xab, 0xb5, 0x4b, 0xf4, 0xcf, 0x06, 0x4a, 0x7d, 0x0d,
+	0xc1, 0x60, 0xcb, 0xa0, 0xe3, 0x32, 0x40, 0xd3, 0x73, 0xe2, 0x88, 0x0e, 0x66, 0x37, 0x51, 0x70,
+	0xe6, 0xce, 0xae, 0x8d, 0xb1, 0xd5, 0xfd, 0xdf, 0xfd, 0xb7, 0x7b, 0xfe, 0xe0, 0x5b, 0xc8, 0xc7,
+	0x21, 0x3e, 0x62, 0x79, 0x54, 0x6a, 0x07, 0xe2, 0xed, 0x3c, 0x1b, 0x7f, 0x01, 0xc2, 0x24, 0x52,
+	0xca, 0xb2, 0xa6, 0x1b, 0x7a, 0x5c, 0x38, 0x50, 0x88, 0x50, 0xb5, 0xfa, 0x48, 0xbb, 0xa1, 0xb7,
+	0x90, 0x9f, 0x7b, 0x1d, 0xf1, 0xbd, 0xb5, 0xaa, 0x48, 0xc4, 0xa7, 0x7e, 0xdc, 0x0b, 0x43, 0x5e,
+	0xe4, 0x58, 0x84, 0x10, 0x69, 0x53, 0x2e, 0x32, 0x7f, 0x9a, 0x5d, 0xfa, 0x79, 0x03, 0xf5, 0xbc,
+	0x7b, 0x17, 0x71, 0x61, 0xd2, 0x15, 0xd6, 0xc1, 0xa9, 0xa2, 0xa0, 0x0b, 0x44, 0x6c, 0x40, 0xf5,
+	0xc5, 0x3f, 0x4b, 0x7e, 0x3c, 0xae, 0x9e, 0x9a, 0x4e, 0xbd, 0x32, 0x5e, 0xab, 0x8a, 0x53, 0x67,
+	0xc6, 0x5f, 0x14, 0xa6, 0x5e, 0x3b, 0x3f, 0x75, 0xf9, 0xe5, 0x2f, 0x3f, 0xb3, 0xfb, 0x15, 0xeb,
+	0xf7, 0x85, 0xa7, 0x77, 0xcf, 0x9c, 0xe2, 0x83, 0xb5, 0xaa, 0x98, 0x2b, 0xe2, 0xe7, 0x20, 0xb6,
+	0x2d, 0x54, 0x76, 0x84, 0x72, 0x41, 0x55, 0x76, 0x74, 0xb9, 0x52, 0x8a, 0x87, 0xa8, 0x1f, 0x0e,
+	0xb9, 0xba, 0x97, 0xdd, 0xae, 0xea, 0xb7, 0xaf, 0xf5, 0xf0, 0x51, 0x46, 0xcd, 0x33, 0x62, 0xbc,
+	0x0a, 0xd1, 0xa2, 0xb4, 0x25, 0xec, 0x94, 0x75, 0xca, 0x2f, 0xc5, 0x23, 0x94, 0xfb, 0x4c, 0x47,
+	0xe3, 0xcc, 0x33, 0x0e, 0x22, 0x43, 0xba, 0xd6, 0xc3, 0xf7, 0x17, 0x6d, 0xff, 0xf1, 0x8b, 0x10,
+	0x13, 0x77, 0x34, 0x5d, 0xd9, 0xb6, 0x14, 0x02, 0x2a, 0x72, 0x7a, 0x3f, 0x7b, 0x53, 0xf6, 0xbc,
+	0xb0, 0x59, 0x96, 0xcc, 0x51, 0x23, 0xea, 0x32, 0x59, 0xa6, 0xba, 0x5f, 0x82, 0x50, 0x59, 0xd8,
+	0x94, 0xca, 0x5a, 0xbc, 0x8f, 0x0e, 0xe2, 0x73, 0x07, 0x1e, 0xc4, 0xf4, 0x12, 0xe5, 0xcf, 0x56,
+	0x74, 0xf5, 0xf6, 0xec, 0xb1, 0xb7, 0xef, 0xa2, 0x00, 0xf8, 0x50, 0xcf, 0x83, 0x9f, 0xfe, 0x9d,
+	0x3f, 0xf4, 0xed, 0xbb, 0xc8, 0x17, 0xee, 0xe1, 0x8d, 0x16, 0x12, 0x97, 0xa1, 0xcf, 0x46, 0x8b,
+	0x39, 0xf0, 0xdf, 0x92, 0x6e, 0x1b, 0xd0, 0x40, 0x7e, 0xe2, 0x21, 0x08, 0xd6, 0x84, 0xf2, 0x8e,
+	0x44, 0x01, 0x21, 0xc2, 0xb3, 0x3f, 0x33, 0xbe, 0x67, 0xd0, 0xcc, 0x87, 0xbe, 0xbd, 0x06, 0xfa,
+	0xc0, 0x07, 0x18, 0x42, 0xeb, 0xab, 0x73, 0xc9, 0xdc, 0x7c, 0x22, 0x6c, 0xfa, 0x02, 0xfc, 0xa3,
+	0x0f, 0x62, 0x46, 0x77, 0x92, 0x73, 0x37, 0x15, 0x59, 0x94, 0x26, 0xbe, 0xef, 0x83, 0xbf, 0xf2,
+	0xc1, 0x94, 0x7b, 0x24, 0xa7, 0x4f, 0x2c, 0x2b, 0x49, 0x3a, 0x2a, 0x5a, 0xb2, 0x2e, 0x97, 0xcb,
+	0xc9, 0x4d, 0x29, 0x29, 0x57, 0x34, 0x5d, 0x28, 0x97, 0xa5, 0x22, 0x2c, 0xc1, 0x98, 0x63, 0xe4,
+	0xd2, 0x42, 0x99, 0x71, 0x4a, 0x05, 0x9d, 0x18, 0x51, 0x9b, 0x9e, 0x58, 0xa9, 0x49, 0xaa, 0x4a,
+	0x70, 0xc0, 0x18, 0xb0, 0x24, 0x35, 0x71, 0x72, 0x4b, 0x51, 0x93, 0x42, 0xb9, 0x9c, 0x6c, 0x1a,
+	0x5c, 0x83, 0x5b, 0x70, 0xd1, 0x29, 0x4d, 0x93, 0xca, 0x92, 0xa8, 0xcb, 0x35, 0xc9, 0x21, 0x33,
+	0x6d, 0xfb, 0x53, 0x90, 0x8b, 0xa9, 0x4b, 0x5c, 0x70, 0xe2, 0x7c, 0x87, 0x66, 0xd6, 0x4c, 0x29,
+	0x8e, 0xc6, 0x16, 0xe1, 0x84, 0xd3, 0x45, 0xec, 0x62, 0xb5, 0xd4, 0x59, 0x2e, 0x98, 0x8a, 0x39,
+	0x1b, 0x9a, 0x18, 0x9d, 0xa3, 0x0c, 0xc9, 0xb9, 0xdc, 0x3c, 0xaf, 0xd9, 0x84, 0xcd, 0x8e, 0x43,
+	0xcc, 0x10, 0x52, 0x10, 0xa9, 0x35, 0xf1, 0xc8, 0xbd, 0x06, 0x0a, 0xdd, 0x6f, 0xa0, 0xe0, 0x83,
+	0x06, 0x0a, 0x3d, 0x35, 0x79, 0x79, 0xf2, 0xc2, 0xf9, 0x3f, 0xb9, 0x8b, 0xd0, 0x62, 0x20, 0xec,
+	0xe3, 0xfc, 0x8b, 0x81, 0xb0, 0x9f, 0x0b, 0x2c, 0x06, 0xc2, 0x01, 0x2e, 0xb8, 0x18, 0x08, 0x07,
+	0xb9, 0x90, 0x63, 0x52, 0xd8, 0x85, 0x13, 0x99, 0xd7, 0x76, 0x54, 0x69, 0xbd, 0x22, 0xe9, 0x1e,
+	0x28, 0xf2, 0x0a, 0x44, 0x6a, 0x15, 0x49, 0xb7, 0xc3, 0xc8, 0xa5, 0xce, 0x1e, 0x48, 0x85, 0x2d,
+	0x67, 0xf3, 0x9d, 0x90, 0x24, 0x4c, 0x64, 0x52, 0x28, 0xf9, 0x83, 0x30, 0x8c, 0xb6, 0x61, 0xc1,
+	0x8b, 0x30, 0xa0, 0xed, 0x6c, 0x6a, 0xa2, 0x2a, 0xd3, 0x45, 0x4f, 0x13, 0x56, 0x1e, 0xdb, 0x17,
+	0x56, 0xf8, 0x98, 0x9d, 0x33, 0x57, 0xc4, 0xcf, 0x42, 0x2f, 0xed, 0x87, 0xcc, 0x96, 0x26, 0x91,
+	0xd9, 0x54, 0x27, 0x19, 0x41, 0xd5, 0x1f, 0x7f, 0xdd, 0xc7, 0x87, 0x08, 0x8b, 0x27, 0xe2, 0x04,
+	0x0e, 0x82, 0x38, 0xd7, 0xbd, 0x11, 0x27, 0xbd, 0xbf, 0x1d, 0x3b, 0xc2, 0x4e, 0xb9, 0x05, 0x76,
+	0x18, 0x0e, 0xce, 0xed, 0x2f, 0xb7, 0xe9, 0x4d, 0x37, 0x64, 0xfd, 0xe6, 0x9a, 0x2e, 0xe8, 0xb2,
+	0x48, 0xcb, 0xda, 0xe3, 0xd0, 0xb6, 0x85, 0x43, 0x40, 0xbd, 0xe0, 0xb3, 0x87, 0xf1, 0x82, 0x8f,
+	0x05, 0x8a, 0xde, 0xf4, 0xef, 0x35, 0xd0, 0x77, 0xfc, 0x70, 0x0a, 0x06, 0xd6, 0x6c, 0x4e, 0x40,
+	0x30, 0x69, 0xb0, 0xc5, 0xa3, 0x60, 0x08, 0x7a, 0x89, 0x9e, 0xa4, 0x36, 0x62, 0xf9, 0xc8, 0x27,
+	0x90, 0xf5, 0x70, 0x21, 0xeb, 0x74, 0x0b, 0x64, 0x1d, 0xbb, 0xd7, 0x40, 0x81, 0xfb, 0x0d, 0xe4,
+	0x7f, 0xd0, 0x40, 0xfe, 0x4b, 0x93, 0x4f, 0x19, 0x78, 0xc5, 0x90, 0x2a, 0xc8, 0x85, 0x52, 0xff,
+	0x85, 0x60, 0xb0, 0x25, 0x06, 0xf0, 0x67, 0x81, 0x73, 0x5b, 0xd0, 0xd8, 0xcb, 0xb4, 0x8b, 0xc5,
+	0x98, 0x50, 0x2e, 0xdb, 0xba, 0x85, 0x25, 0x18, 0xf1, 0xb6, 0x9a, 0x11, 0xd3, 0x53, 0x07, 0x89,
+	0x1e, 0xed, 0x5a, 0x0f, 0x3f, 0x64, 0x89, 0xb3, 0x95, 0xcf, 0x9e, 0x85, 0x21, 0xc7, 0x50, 0xd9,
+	0xfb, 0x8d, 0xcc, 0x7e, 0x5f, 0x98, 0xbc, 0xd4, 0xd2, 0xef, 0xd7, 0x7d, 0xd0, 0xff, 0x90, 0xbb,
+	0xac, 0xec, 0xd3, 0xe5, 0xa7, 0xf7, 0x5b, 0x52, 0xd8, 0xf5, 0xd1, 0x9a, 0x92, 0x1f, 0x56, 0xe7,
+	0xed, 0x93, 0x14, 0x31, 0xc1, 0x5f, 0x22, 0x38, 0x96, 0xb9, 0xb1, 0xc6, 0x96, 0xf1, 0xb9, 0x79,
+	0x6b, 0x2e, 0xfa, 0x26, 0x02, 0x60, 0xcb, 0xf8, 0x82, 0x5c, 0xd4, 0xe8, 0x6c, 0x14, 0x99, 0x2d,
+	0xbd, 0x7b, 0x17, 0x61, 0x63, 0xad, 0xec, 0x42, 0xf1, 0xf4, 0x5b, 0xe8, 0x6c, 0xea, 0x8c, 0xfa,
+	0xc4, 0xf4, 0xe9, 0x57, 0xc6, 0x19, 0x5f, 0xc7, 0xf5, 0xa5, 0xb5, 0xc4, 0x0e, 0x98, 0xbf, 0xc2,
+	0xc8, 0xfc, 0x15, 0x47, 0x7c, 0x84, 0x89, 0xc8, 0x15, 0xb5, 0x99, 0xe1, 0x1f, 0x34, 0xd0, 0x20,
+	0x0c, 0x00, 0x30, 0x15, 0x93, 0xb9, 0x79, 0x0d, 0xa3, 0x0b, 0xa9, 0x77, 0x10, 0x0c, 0x7b, 0xae,
+	0xea, 0xb0, 0x0a, 0xfd, 0xae, 0xf1, 0xf3, 0xef, 0x3f, 0x01, 0xd8, 0x25, 0xd1, 0x29, 0xf4, 0x51,
+	0x6b, 0x0a, 0xfd, 0x11, 0xf2, 0x54, 0xb1, 0x4f, 0x6d, 0x0e, 0xc2, 0xcc, 0x89, 0x1f, 0x34, 0xd0,
+	0x28, 0x0c, 0x37, 0x71, 0xcc, 0xf0, 0x06, 0x74, 0x61, 0x1c, 0xa5, 0xbe, 0x8b, 0x20, 0xd1, 0x7e,
+	0x60, 0xf1, 0xaf, 0x83, 0x2b, 0xb4, 0x0d, 0x63, 0x6f, 0x18, 0x93, 0x66, 0x1b, 0x83, 0x33, 0x35,
+	0xbc, 0xd6, 0xf6, 0xaa, 0xbe, 0xd9, 0x79, 0x6d, 0xdf, 0xdf, 0x54, 0x3d, 0x57, 0x4c, 0xdd, 0x04,
+	0xce, 0x1d, 0x69, 0x38, 0xdf, 0x46, 0xa7, 0x74, 0xb7, 0x3a, 0x19, 0x93, 0xba, 0xb3, 0xa5, 0xbf,
+	0x47, 0xf0, 0x78, 0x77, 0x53, 0x22, 0xfe, 0xaa, 0xe7, 0x20, 0x3e, 0x7b, 0x84, 0xd9, 0xf6, 0x61,
+	0x8e, 0xe8, 0x3f, 0xf9, 0x60, 0xac, 0x73, 0x6b, 0xf8, 0xb7, 0x91, 0x87, 0x09, 0xc9, 0x5a, 0x68,
+	0x6b, 0x1f, 0x13, 0x52, 0xc3, 0x91, 0x5f, 0xcf, 0xa9, 0xcf, 0x4e, 0x5f, 0x7e, 0xe5, 0xa5, 0x73,
+	0x2f, 0x4e, 0xbd, 0x54, 0x7f, 0x29, 0x5d, 0x78, 0x69, 0xfc, 0xa5, 0x33, 0x2f, 0x9f, 0x7d, 0xe9,
+	0x1c, 0x19, 0xcb, 0xcc, 0xd4, 0x0b, 0x64, 0x38, 0x9b, 0x3f, 0xa7, 0xd2, 0x85, 0x97, 0xcf, 0x36,
+	0xff, 0x16, 0x5e, 0x76, 0x0d, 0x32, 0xe6, 0x21, 0xaa, 0x51, 0xed, 0x18, 0x48, 0x68, 0xf1, 0x32,
+	0x1d, 0xcf, 0x29, 0xd2, 0x10, 0xbc, 0x85, 0x7a, 0x53, 0x41, 0xd5, 0xff, 0x73, 0x64, 0x59, 0x83,
+	0x9b, 0xf6, 0xb4, 0x50, 0xbf, 0xd6, 0xec, 0xa1, 0x36, 0xb3, 0xbc, 0xd7, 0x40, 0x8b, 0x70, 0x0a,
+	0x38, 0x87, 0x89, 0xc8, 0xe4, 0xce, 0xb9, 0xfb, 0x0e, 0x29, 0x88, 0x32, 0xeb, 0xb0, 0x99, 0x4a,
+	0x9b, 0x1d, 0x74, 0x29, 0xc4, 0x41, 0xea, 0x7b, 0x3e, 0x18, 0x6c, 0x09, 0x44, 0xac, 0xb7, 0xb1,
+	0xe3, 0x72, 0x67, 0x3b, 0x1e, 0x2d, 0x28, 0x7e, 0x25, 0xec, 0xf5, 0x3a, 0x02, 0x8e, 0x97, 0xaa,
+	0x65, 0x41, 0x94, 0x9a, 0xc7, 0x8e, 0xaf, 0x3c, 0xdc, 0x33, 0x3b, 0xf7, 0x69, 0xdd, 0x4c, 0xff,
+	0xde, 0x95, 0xe6, 0x21, 0x67, 0xea, 0x6b, 0x3e, 0x18, 0xc8, 0xdc, 0x58, 0x5b, 0x55, 0x95, 0x9a,
+	0x5c, 0x34, 0x0e, 0xbb, 0x56, 0xa0, 0x5f, 0xa8, 0x6b, 0x05, 0xbd, 0x54, 0x2f, 0x68, 0xb2, 0x2e,
+	0x19, 0xa7, 0x93, 0x67, 0xf7, 0x6b, 0x3e, 0xbf, 0x70, 0x63, 0x4d, 0xd6, 0x25, 0x63, 0x41, 0x0c,
+	0x42, 0x5d, 0xcb, 0x97, 0xea, 0xa4, 0x04, 0xff, 0x1a, 0x60, 0x4d, 0x12, 0x77, 0x54, 0x69, 0x5b,
+	0xd2, 0x6e, 0x52, 0x99, 0x85, 0xda, 0xb4, 0xd1, 0xab, 0x7d, 0xb7, 0xfd, 0x6b, 0x94, 0xf3, 0x79,
+	0x49, 0xbb, 0x69, 0x4a, 0x9f, 0x8d, 0xfe, 0xfb, 0x2e, 0x14, 0xa5, 0x6d, 0xe5, 0xc2, 0xa4, 0x2e,
+	0x69, 0xfa, 0xb5, 0x1e, 0x9e, 0x6b, 0x8a, 0x27, 0x44, 0xeb, 0xd3, 0xb3, 0xa7, 0x20, 0x42, 0xdb,
+	0xd1, 0x49, 0x87, 0x46, 0xef, 0x35, 0x90, 0xef, 0x7e, 0x03, 0x21, 0x32, 0x93, 0x4e, 0x4f, 0x5e,
+	0xfc, 0xb0, 0x81, 0x90, 0x31, 0x9b, 0x22, 0xce, 0x97, 0xfa, 0x53, 0x1f, 0x0c, 0xcf, 0xa9, 0x92,
+	0xa0, 0x4b, 0x6e, 0x4b, 0x5c, 0xf7, 0xb4, 0x44, 0xe7, 0x93, 0x21, 0x4b, 0x52, 0x7b, 0x7b, 0xd4,
+	0x3b, 0xd8, 0xe3, 0x99, 0xee, 0x84, 0x1f, 0xca, 0x2a, 0x33, 0x78, 0xef, 0x8a, 0x7b, 0xb4, 0x67,
+	0x53, 0x76, 0x4b, 0x0d, 0xdf, 0x37, 0x4c, 0xf3, 0xf5, 0x5f, 0xa0, 0x66, 0xb1, 0x61, 0xa7, 0x77,
+	0x7c, 0x30, 0xd2, 0x74, 0x57, 0x87, 0xa1, 0xd6, 0x3d, 0x0d, 0xd5, 0x79, 0x6c, 0x9b, 0xa2, 0xda,
+	0x5b, 0xea, 0xd5, 0x0e, 0x96, 0xba, 0xdc, 0xa5, 0xf4, 0x5f, 0x86, 0xa9, 0xfe, 0xcc, 0x4f, 0x17,
+	0x37, 0xad, 0x4d, 0x63, 0x11, 0x02, 0xd4, 0x42, 0xdd, 0xdf, 0x29, 0x9c, 0xbd, 0xb3, 0xeb, 0x61,
+	0x84, 0x36, 0x37, 0x0b, 0x54, 0x38, 0xfe, 0x06, 0x82, 0x11, 0x66, 0x8e, 0x1d, 0x4d, 0x52, 0x0b,
+	0x82, 0x28, 0x2a, 0x3b, 0x15, 0xbd, 0xa0, 0x4a, 0x5b, 0x07, 0xb8, 0x6a, 0x20, 0xed, 0xb6, 0x0a,
+	0xf1, 0x06, 0x6c, 0xfe, 0x18, 0xfd, 0x7d, 0x5d, 0x93, 0xd4, 0x0c, 0xa3, 0xe3, 0xa5, 0xad, 0x8f,
+	0xe9, 0xfa, 0xe1, 0x59, 0xf3, 0x32, 0x20, 0x70, 0x80, 0xcb, 0x00, 0xe3, 0x0e, 0x20, 0xf5, 0x2d,
+	0x3f, 0x9c, 0xe8, 0x10, 0x54, 0x9f, 0x0c, 0xd7, 0x51, 0x86, 0xeb, 0xbe, 0xc7, 0x70, 0xcd, 0xc4,
+	0xf7, 0xae, 0x78, 0x87, 0x46, 0xea, 0x8f, 0x11, 0x9c, 0xec, 0x14, 0xb6, 0xbf, 0x74, 0x05, 0x7f,
+	0xee, 0x83, 0x98, 0x13, 0xae, 0xf0, 0xcb, 0x07, 0xf6, 0x8f, 0xd3, 0x77, 0x76, 0x1d, 0x58, 0xd9,
+	0xd1, 0x33, 0xfe, 0x7f, 0x5c, 0x10, 0x5a, 0x11, 0x1a, 0x3c, 0x78, 0x84, 0xb2, 0xa3, 0xd8, 0xd4,
+	0x9b, 0x08, 0x86, 0x3d, 0x27, 0x8c, 0x8f, 0xc9, 0x29, 0x06, 0xf7, 0xae, 0xb8, 0x86, 0x3e, 0xf5,
+	0xcf, 0x3e, 0x18, 0xf2, 0x9a, 0xec, 0x3f, 0xf1, 0x89, 0xc3, 0x19, 0xd4, 0x7e, 0xe8, 0x9e, 0x6a,
+	0xf8, 0x8c, 0x03, 0xad, 0xf5, 0xe5, 0x6c, 0xde, 0xb2, 0xec, 0x17, 0x0f, 0x6c, 0xd9, 0xf1, 0x3b,
+	0xbb, 0x03, 0x02, 0x91, 0x53, 0xa0, 0x87, 0x95, 0xfb, 0x1a, 0x77, 0xed, 0xc0, 0xc6, 0x3d, 0xe1,
+	0x65, 0x5c, 0xf3, 0xa6, 0x99, 0x59, 0x54, 0x06, 0x8e, 0xb6, 0x6e, 0x37, 0x69, 0xb0, 0x8b, 0xd5,
+	0x5e, 0x87, 0xab, 0x06, 0x23, 0xd2, 0x06, 0x6a, 0x8e, 0x5a, 0x33, 0x5a, 0xfe, 0x08, 0x41, 0xdc,
+	0x8c, 0x96, 0x16, 0x23, 0x7a, 0x69, 0xe3, 0x3f, 0xaa, 0x36, 0xf7, 0xbd, 0xb4, 0x99, 0x19, 0xda,
+	0xbb, 0xd2, 0x3a, 0x8a, 0xa9, 0x3f, 0xf7, 0xd3, 0xe3, 0x14, 0x7a, 0x1d, 0x9c, 0x57, 0x85, 0x8a,
+	0x26, 0xeb, 0x0b, 0x82, 0x2e, 0xd5, 0x85, 0xdb, 0xe6, 0xc1, 0xd5, 0x30, 0x6b, 0x59, 0x67, 0x95,
+	0x85, 0x12, 0xab, 0x3d, 0xc0, 0xb0, 0xa7, 0xef, 0xec, 0x7a, 0xcb, 0x68, 0x33, 0xf8, 0x6c, 0x3e,
+	0x74, 0x2a, 0xf3, 0x09, 0xf8, 0x9a, 0xee, 0xf4, 0x5d, 0x3f, 0x24, 0x2d, 0xa4, 0xfb, 0x64, 0xd8,
+	0x3e, 0x16, 0x7c, 0x7c, 0x64, 0xef, 0x4a, 0x87, 0x20, 0x71, 0x60, 0xe5, 0x3b, 0x08, 0x1e, 0x6b,
+	0xce, 0x8d, 0xed, 0xc6, 0xe7, 0xff, 0x82, 0xda, 0xa9, 0x1f, 0xfa, 0x61, 0x84, 0xd6, 0xcd, 0x31,
+	0xf1, 0x6b, 0xba, 0xa0, 0xef, 0x68, 0x54, 0xbf, 0xaa, 0xb9, 0x06, 0x36, 0x5a, 0x2e, 0x90, 0x09,
+	0xd1, 0xb6, 0x99, 0xbc, 0xbc, 0x9f, 0x9a, 0x36, 0x35, 0x88, 0x92, 0x4d, 0xd1, 0xd7, 0x7a, 0x0c,
+	0x47, 0x31, 0x1a, 0xcd, 0xd4, 0x35, 0xba, 0xb9, 0xac, 0x41, 0xdc, 0xd5, 0x22, 0x9d, 0x28, 0x68,
+	0x9b, 0xcc, 0x34, 0x5d, 0x1c, 0x57, 0x76, 0x6a, 0x75, 0xd8, 0xd1, 0x2a, 0xa1, 0xa6, 0xed, 0xfe,
+	0x2e, 0x82, 0xc7, 0x3c, 0xba, 0xea, 0xdc, 0x33, 0x18, 0xb7, 0x0d, 0xcf, 0x1c, 0xec, 0x78, 0xa4,
+	0xd9, 0x7c, 0xeb, 0x1e, 0xf7, 0x11, 0xb7, 0x0d, 0x1c, 0x5b, 0xde, 0xd9, 0x53, 0x6e, 0x6b, 0x14,
+	0xa5, 0x6a, 0x59, 0xb9, 0x4d, 0x7a, 0x86, 0xc3, 0xf7, 0x9d, 0x27, 0x26, 0x12, 0x44, 0xd7, 0x25,
+	0xd5, 0x36, 0x78, 0x79, 0xe8, 0x13, 0xe5, 0xa2, 0x5a, 0xd0, 0x68, 0x91, 0x71, 0xd8, 0x7b, 0xb1,
+	0xf3, 0x51, 0x46, 0x6e, 0x9e, 0x9f, 0x53, 0x2a, 0x5b, 0x65, 0xd9, 0xee, 0x06, 0x3c, 0x10, 0x39,
+	0xec, 0x7f, 0xea, 0x0e, 0x82, 0x11, 0x6f, 0x32, 0x8c, 0x21, 0x40, 0x08, 0x8d, 0x3b, 0x4e, 0xfa,
+	0x1b, 0xaf, 0x43, 0x54, 0x34, 0x28, 0xd9, 0x0d, 0xbc, 0xaf, 0x8b, 0x44, 0x1e, 0xbb, 0x7c, 0xeb,
+	0xcc, 0xac, 0x5f, 0xb4, 0x95, 0xcc, 0x9c, 0xfa, 0x41, 0x03, 0x25, 0x61, 0x0c, 0x46, 0x57, 0x6a,
+	0x92, 0x5a, 0x16, 0xaa, 0x55, 0x7a, 0xcf, 0x99, 0x9b, 0xe7, 0x93, 0x4c, 0x21, 0xec, 0xbf, 0x30,
+	0x39, 0x9d, 0xfa, 0x4d, 0xb2, 0x1c, 0xf4, 0x10, 0x86, 0x4f, 0x18, 0xa7, 0x06, 0x15, 0x61, 0x5b,
+	0x32, 0xf4, 0x0d, 0x93, 0x82, 0x65, 0x61, 0x5b, 0xc2, 0x93, 0x80, 0x9d, 0x56, 0xa7, 0x54, 0xec,
+	0x96, 0x96, 0xb3, 0x0f, 0x18, 0xa5, 0x3e, 0x03, 0x9c, 0xd2, 0xd4, 0xa1, 0x40, 0x2d, 0xe0, 0x67,
+	0xc9, 0x60, 0xb6, 0xf2, 0x39, 0xb9, 0xa8, 0xce, 0xd4, 0xf7, 0x1a, 0x48, 0x83, 0x38, 0x44, 0xc8,
+	0xe0, 0x26, 0x89, 0x32, 0x89, 0x3e, 0x9b, 0x22, 0x30, 0x01, 0x98, 0x06, 0x62, 0xd2, 0x90, 0xcf,
+	0x48, 0x86, 0xbc, 0xd4, 0x81, 0xb3, 0x30, 0xdc, 0xd2, 0x75, 0x4a, 0x8e, 0x5b, 0xf5, 0x49, 0xfd,
+	0x77, 0x00, 0x4e, 0x76, 0x8a, 0x46, 0xbc, 0x09, 0x83, 0x4d, 0x10, 0x72, 0x7a, 0xcc, 0x93, 0x07,
+	0x88, 0x71, 0x9b, 0xcf, 0x70, 0x4d, 0x79, 0xc6, 0x88, 0xfc, 0x06, 0x82, 0xe3, 0x56, 0x70, 0xb5,
+	0x34, 0xe6, 0xeb, 0xe6, 0x2e, 0xe2, 0xc6, 0x9a, 0x19, 0x2a, 0x2e, 0xe1, 0x34, 0xba, 0xc0, 0x96,
+	0x62, 0x36, 0x2a, 0x7a, 0x13, 0xe2, 0x57, 0x61, 0x84, 0xac, 0xe8, 0xed, 0x27, 0xc3, 0x86, 0x06,
+	0x7e, 0xaa, 0xc1, 0xd3, 0x5d, 0x1c, 0xa9, 0x36, 0x0f, 0xd3, 0x3d, 0x5b, 0xf7, 0xf1, 0xc7, 0xf4,
+	0x52, 0xdd, 0x4d, 0x84, 0x7f, 0x1f, 0xc1, 0x69, 0xd7, 0x14, 0x5a, 0x50, 0x25, 0x4d, 0xd9, 0x51,
+	0x45, 0xa9, 0xa0, 0xdd, 0x14, 0x54, 0x4b, 0x13, 0x06, 0x33, 0x97, 0xba, 0xd1, 0xc4, 0xe0, 0x5f,
+	0x23, 0xec, 0x1e, 0x10, 0xc3, 0x3f, 0xa6, 0x3b, 0x00, 0xdf, 0x41, 0x6f, 0xe8, 0xf5, 0x22, 0x00,
+	0xdd, 0xe3, 0xb0, 0xb6, 0x83, 0xdd, 0xdc, 0x21, 0xb3, 0x3d, 0x42, 0x3b, 0x5c, 0xe3, 0x23, 0x7a,
+	0xa9, 0x6e, 0xc0, 0xc5, 0x7f, 0x84, 0x69, 0x82, 0x9f, 0xa7, 0x8f, 0xe0, 0x09, 0x18, 0xa4, 0x59,
+	0x90, 0x4d, 0x67, 0x30, 0x93, 0x5b, 0xf8, 0x01, 0xbd, 0x54, 0x6f, 0x32, 0xe5, 0x8a, 0x38, 0x0d,
+	0xc7, 0x5c, 0xb4, 0x34, 0x2a, 0x39, 0x4a, 0x3d, 0xe8, 0xa0, 0xa6, 0x61, 0xf9, 0x19, 0x88, 0x8a,
+	0x64, 0x79, 0x24, 0x2b, 0x95, 0x82, 0x2e, 0x6f, 0x9b, 0xfb, 0x93, 0x44, 0x9a, 0x25, 0x55, 0xa7,
+	0xcd, 0xa4, 0xea, 0x74, 0xde, 0x4c, 0xaa, 0xe6, 0xfb, 0x4d, 0x06, 0x52, 0x84, 0x87, 0xad, 0x4c,
+	0xc0, 0x80, 0x91, 0x9f, 0x41, 0x73, 0xf7, 0x8e, 0xb3, 0xa4, 0x44, 0xda, 0xf8, 0x00, 0xad, 0xe8,
+	0xad, 0x55, 0x45, 0xda, 0x64, 0x12, 0xfa, 0x49, 0x95, 0x52, 0xaf, 0x48, 0x2a, 0xe1, 0x0b, 0xb2,
+	0x8c, 0xd4, 0x5a, 0x55, 0x5c, 0x21, 0x45, 0x4d, 0x66, 0x8a, 0x11, 0xfd, 0x16, 0x33, 0xc1, 0x06,
+	0x5c, 0x82, 0x21, 0x52, 0xd5, 0x04, 0x78, 0x3a, 0x20, 0x52, 0xbc, 0x2f, 0x89, 0xc6, 0x63, 0xfb,
+	0x04, 0xa1, 0x7d, 0xf6, 0x5e, 0x5f, 0x9d, 0x23, 0x16, 0x66, 0xf9, 0xaa, 0xb8, 0x56, 0x15, 0xe7,
+	0x2d, 0x89, 0xb4, 0x1c, 0x9f, 0x85, 0x41, 0x57, 0x23, 0x3b, 0x5a, 0xbc, 0x97, 0x81, 0x5b, 0xd1,
+	0x41, 0xbb, 0x43, 0x16, 0xaa, 0x09, 0x41, 0xd3, 0x14, 0x51, 0x66, 0x86, 0x74, 0xdd, 0x19, 0x45,
+	0x29, 0xd7, 0xa8, 0x8d, 0x82, 0xb7, 0x5f, 0xf7, 0x9c, 0x85, 0x41, 0x3b, 0x33, 0xeb, 0x4f, 0x8c,
+	0xb5, 0x64, 0xab, 0x60, 0x6a, 0xfd, 0x16, 0x82, 0x80, 0x2e, 0x94, 0xb4, 0x78, 0x98, 0x86, 0xe1,
+	0x67, 0x0e, 0x85, 0x3a, 0xe9, 0xbc, 0x50, 0x32, 0x72, 0x73, 0xe8, 0xdd, 0x51, 0xe4, 0x6d, 0x14,
+	0x4a, 0x05, 0x54, 0x5f, 0xfc, 0xab, 0x34, 0x38, 0xdf, 0x46, 0x3e, 0x6e, 0x88, 0x5e, 0x36, 0xbd,
+	0x8d, 0x7a, 0x27, 0x82, 0xaa, 0x3f, 0xfe, 0x3f, 0xc8, 0x9e, 0xba, 0x43, 0x15, 0xc0, 0x0b, 0xd0,
+	0xcb, 0x2e, 0xca, 0xcd, 0x44, 0xa1, 0xce, 0xc1, 0xc0, 0x6e, 0xd0, 0x6d, 0xc8, 0x67, 0x72, 0xe3,
+	0x97, 0x81, 0xb3, 0xf2, 0x68, 0xcc, 0x1b, 0xaf, 0xc8, 0x61, 0xf3, 0x2a, 0x69, 0x6a, 0x31, 0x93,
+	0xc5, 0x2e, 0xaf, 0x12, 0x4f, 0x43, 0xc4, 0xea, 0xee, 0x81, 0xd2, 0x8b, 0x7e, 0x82, 0xf6, 0x1a,
+	0xe8, 0x47, 0x08, 0x86, 0x5a, 0x33, 0x1d, 0x37, 0x10, 0x3c, 0x0e, 0xd1, 0xa6, 0x6d, 0x49, 0xe5,
+	0x31, 0x8f, 0x28, 0xdd, 0x20, 0xdc, 0x01, 0x32, 0xe9, 0x24, 0xa0, 0xe9, 0xd3, 0x1b, 0x08, 0x4e,
+	0xc3, 0x20, 0x91, 0x49, 0x1d, 0x3e, 0x69, 0x9c, 0x63, 0x26, 0x62, 0xce, 0xc0, 0xd8, 0x40, 0xf0,
+	0x18, 0x04, 0xe9, 0xb0, 0x27, 0xe2, 0xde, 0x6e, 0x9f, 0x44, 0x30, 0x0e, 0x83, 0x4d, 0xd7, 0x35,
+	0x66, 0x75, 0xa2, 0x4b, 0x8b, 0xf3, 0x5a, 0x99, 0x17, 0x21, 0xae, 0x37, 0x75, 0x37, 0x02, 0x63,
+	0x9d, 0xa7, 0x09, 0x9c, 0x81, 0x47, 0xdc, 0x30, 0xec, 0x44, 0x20, 0x66, 0xc4, 0x84, 0x13, 0x39,
+	0x1d, 0x60, 0x94, 0x85, 0x47, 0x3b, 0x88, 0xa0, 0xd8, 0xd0, 0x47, 0x85, 0x9c, 0x6c, 0x27, 0xc4,
+	0x5c, 0x68, 0xb8, 0xc5, 0x58, 0x00, 0xc8, 0x39, 0x39, 0x0d, 0x04, 0x74, 0x37, 0xaa, 0x55, 0x8c,
+	0xb5, 0xc6, 0xa0, 0xab, 0x21, 0xad, 0x82, 0x13, 0x10, 0xa6, 0x20, 0x27, 0x2a, 0x65, 0x03, 0xc2,
+	0xac, 0xff, 0x58, 0x81, 0x78, 0xeb, 0x92, 0xd2, 0x88, 0xd0, 0xfe, 0xa3, 0x20, 0xce, 0x88, 0x41,
+	0xd1, 0x15, 0xea, 0x44, 0xdb, 0xa0, 0xce, 0x53, 0x30, 0x4a, 0xbb, 0x53, 0x55, 0x54, 0xdd, 0x35,
+	0x36, 0x21, 0xca, 0x32, 0x6c, 0x55, 0x3b, 0x86, 0xa5, 0x33, 0x5a, 0xf5, 0x1e, 0x02, 0xad, 0xc2,
+	0x6d, 0xd0, 0xea, 0x0d, 0x13, 0xad, 0xd8, 0x63, 0x87, 0xec, 0x11, 0x96, 0x2d, 0x0f, 0x05, 0xb3,
+	0x3e, 0x67, 0x1e, 0x28, 0x40, 0x77, 0x6b, 0x36, 0x43, 0x9f, 0x55, 0xc9, 0xbe, 0x63, 0x30, 0x0e,
+	0x18, 0x0e, 0x0f, 0x2c, 0xdf, 0xf7, 0xed, 0x35, 0xd0, 0x5f, 0xf8, 0x60, 0xda, 0x0d, 0x21, 0x8f,
+	0xee, 0x13, 0x72, 0x1b, 0x08, 0x9e, 0x82, 0xd1, 0xbc, 0x39, 0xa8, 0x49, 0xc1, 0xc1, 0x7d, 0xbc,
+	0xad, 0x3b, 0x6c, 0x20, 0x98, 0x04, 0x6c, 0xec, 0x69, 0x93, 0x86, 0xef, 0x13, 0x96, 0x21, 0xaf,
+	0xc8, 0xda, 0x40, 0xf0, 0x69, 0x48, 0x64, 0x9a, 0x63, 0xc9, 0xb2, 0x1e, 0x93, 0xba, 0x99, 0x31,
+	0x70, 0xb2, 0x93, 0xff, 0x6c, 0x20, 0x38, 0x0f, 0x9c, 0xad, 0x5f, 0x0c, 0xc0, 0x4e, 0xb6, 0x8f,
+	0xa4, 0x03, 0x82, 0x58, 0x90, 0x0b, 0xa5, 0xde, 0x08, 0xd2, 0xe5, 0x92, 0xe7, 0xf0, 0x90, 0xfd,
+	0x95, 0x6d, 0xbf, 0x42, 0x7f, 0xe3, 0xc7, 0x61, 0xc0, 0x6c, 0x9e, 0xbe, 0x75, 0xb1, 0xf0, 0x23,
+	0x2a, 0x36, 0x65, 0xe4, 0x8a, 0x78, 0x1a, 0x86, 0x3d, 0xd6, 0xde, 0x72, 0xd1, 0x80, 0x8f, 0x63,
+	0x2d, 0xcb, 0xe5, 0x5c, 0x11, 0xbf, 0x0a, 0x8f, 0x38, 0x64, 0xb7, 0x20, 0x45, 0xf4, 0x28, 0x48,
+	0x91, 0xb0, 0x29, 0xd8, 0x15, 0x5a, 0xc4, 0xda, 0xa0, 0x85, 0xb5, 0x72, 0x18, 0xe8, 0x6e, 0xe5,
+	0xe0, 0x69, 0xdc, 0x87, 0x12, 0x85, 0xcf, 0xc1, 0x09, 0xb7, 0xd7, 0x95, 0x54, 0xc9, 0x7a, 0xa1,
+	0xc4, 0xd6, 0xaa, 0x71, 0x27, 0x52, 0x2f, 0xa8, 0x92, 0xf9, 0x5e, 0x69, 0x1c, 0x38, 0x6a, 0x67,
+	0x3b, 0xcf, 0x20, 0xe5, 0x89, 0x91, 0xf2, 0x26, 0xe5, 0xa1, 0x23, 0xd4, 0x95, 0x43, 0xef, 0x7a,
+	0x5e, 0xb5, 0x18, 0x08, 0x47, 0x38, 0x58, 0x0c, 0x84, 0x81, 0xeb, 0x5b, 0x0c, 0x84, 0xfb, 0xb8,
+	0xfe, 0xd4, 0xdd, 0x5e, 0x7a, 0x2c, 0xdc, 0x66, 0xcf, 0x83, 0x67, 0x61, 0xac, 0x65, 0x47, 0xe3,
+	0x91, 0x56, 0xe4, 0x9e, 0x4b, 0x1d, 0xb8, 0x7b, 0x15, 0x92, 0x9d, 0x64, 0x50, 0x8f, 0xef, 0xf5,
+	0x9a, 0x4c, 0x9b, 0x52, 0x0e, 0x31, 0x99, 0x96, 0x61, 0x94, 0x6e, 0x03, 0x3d, 0xe6, 0xbf, 0xf0,
+	0x51, 0xbc, 0x7a, 0x88, 0xec, 0xfc, 0xba, 0x9b, 0xfd, 0x22, 0x6d, 0xfc, 0xf9, 0x5b, 0xa6, 0x3f,
+	0xb3, 0xbb, 0xf3, 0xcc, 0x21, 0x37, 0xa4, 0x0f, 0xc5, 0xa3, 0x37, 0xa0, 0xdf, 0x86, 0x88, 0xe6,
+	0x79, 0xf5, 0x41, 0x76, 0xa6, 0xbc, 0xb4, 0x25, 0xa9, 0x52, 0x45, 0x94, 0x78, 0x87, 0x24, 0x22,
+	0xb9, 0xaa, 0x2a, 0x55, 0xa1, 0x64, 0x48, 0x0e, 0x1d, 0x45, 0xb2, 0x5d, 0xd2, 0xe1, 0xa7, 0xaf,
+	0x1f, 0x93, 0x75, 0xf1, 0x0f, 0x11, 0xcc, 0xc3, 0x98, 0x39, 0xa5, 0x18, 0x9e, 0xe4, 0x9e, 0x28,
+	0x92, 0xfb, 0xf9, 0xfd, 0x81, 0x27, 0xa6, 0x53, 0xe6, 0x82, 0xf8, 0x44, 0x5b, 0xc7, 0x3c, 0xf8,
+	0x9a, 0x38, 0xf5, 0x0d, 0x1f, 0x8c, 0xb6, 0x31, 0x1a, 0xfe, 0x14, 0x44, 0xbd, 0x96, 0xbd, 0xfd,
+	0x82, 0x7d, 0x0a, 0xf8, 0x14, 0x44, 0xad, 0x23, 0x0a, 0xfd, 0x76, 0xd5, 0x34, 0x5a, 0xbf, 0x59,
+	0x68, 0x3e, 0xc4, 0xb4, 0x88, 0xac, 0x19, 0x05, 0xcc, 0xa2, 0x5c, 0x91, 0xac, 0x4e, 0x58, 0x68,
+	0x05, 0x8f, 0x12, 0x5a, 0x4c, 0x86, 0x77, 0x2c, 0x85, 0xbc, 0x63, 0xc9, 0xb8, 0x2b, 0xf9, 0xc0,
+	0x0f, 0x9c, 0x7b, 0x9b, 0x86, 0xcf, 0xc3, 0x50, 0x45, 0xd2, 0xeb, 0x8a, 0x7a, 0xab, 0x20, 0x57,
+	0x74, 0x49, 0xdd, 0x12, 0x44, 0x1b, 0x62, 0x61, 0xa3, 0x2e, 0x67, 0x56, 0xe5, 0x8a, 0xf8, 0x34,
+	0xc4, 0x9a, 0x94, 0x36, 0x6b, 0x44, 0xad, 0x52, 0x53, 0x70, 0x55, 0x95, 0x6b, 0x82, 0x2e, 0x15,
+	0xe4, 0x6a, 0xed, 0x92, 0x05, 0xe5, 0xcc, 0x2e, 0xd8, 0xa8, 0xcb, 0x55, 0x6b, 0x97, 0x4c, 0xe0,
+	0x27, 0x4b, 0xcf, 0x9a, 0x20, 0x97, 0x85, 0x4d, 0xb9, 0x2c, 0xeb, 0xb7, 0x0b, 0xaf, 0x29, 0x15,
+	0xc9, 0x58, 0xb2, 0x73, 0xf6, 0x8a, 0x17, 0x94, 0x0a, 0x3b, 0xba, 0x34, 0x53, 0xc8, 0x8d, 0x23,
+	0x86, 0xb0, 0x99, 0xd8, 0x8d, 0x47, 0x20, 0xe4, 0xb0, 0x88, 0xf1, 0x6f, 0xe6, 0x7d, 0xe2, 0xda,
+	0xff, 0x82, 0x20, 0x0d, 0x43, 0xcb, 0xac, 0x63, 0x49, 0xab, 0x67, 0xc4, 0x2d, 0x47, 0xbc, 0x8d,
+	0x01, 0x29, 0x88, 0x35, 0xe9, 0x48, 0xef, 0x12, 0x9c, 0xdb, 0x08, 0x44, 0xe6, 0x2a, 0xeb, 0x53,
+	0x32, 0xb7, 0xba, 0x7e, 0xc9, 0x7a, 0x7a, 0x3a, 0xe2, 0x6d, 0x07, 0xe2, 0xc4, 0x19, 0x5b, 0xa7,
+	0x92, 0xa4, 0x57, 0xc4, 0x89, 0x5b, 0x4c, 0x40, 0x4f, 0x4a, 0xcd, 0xfc, 0x74, 0x7a, 0x52, 0x6a,
+	0xf6, 0x1b, 0x30, 0x84, 0x0c, 0xef, 0x0f, 0x9b, 0x3d, 0x4e, 0xbd, 0x11, 0x70, 0x3b, 0xbb, 0x75,
+	0x2a, 0x46, 0xf6, 0x4e, 0xae, 0xa3, 0x36, 0xdb, 0x4a, 0x6a, 0x50, 0xb5, 0xd3, 0x9b, 0x93, 0x89,
+	0x8b, 0x5e, 0x50, 0x2b, 0xe6, 0x64, 0xe2, 0x20, 0xcf, 0xa8, 0x95, 0x36, 0x53, 0x8f, 0xbf, 0xcd,
+	0xd4, 0x33, 0x0e, 0x1c, 0xdb, 0x09, 0x9b, 0x39, 0x45, 0xd6, 0x11, 0x53, 0x8c, 0x96, 0x1b, 0xbb,
+	0x66, 0xb6, 0xe3, 0x53, 0x25, 0x51, 0x92, 0x6b, 0x4e, 0x62, 0x02, 0xc2, 0x54, 0x6b, 0x56, 0xd5,
+	0xa4, 0x9f, 0x81, 0xe3, 0x42, 0xb9, 0xac, 0xd4, 0x0b, 0xd2, 0xab, 0xba, 0xa4, 0x56, 0x84, 0x72,
+	0xa1, 0xaa, 0xca, 0x15, 0x51, 0xae, 0x96, 0x25, 0xe6, 0x10, 0x61, 0x7e, 0x94, 0x12, 0x64, 0x8d,
+	0xfa, 0x55, 0xab, 0xda, 0xe6, 0x39, 0xbd, 0x76, 0xcf, 0xf1, 0x0e, 0xb7, 0x70, 0x9b, 0xa9, 0x8b,
+	0x77, 0xec, 0x8a, 0xae, 0x1c, 0xe6, 0x00, 0xb3, 0x39, 0x6d, 0xb1, 0x29, 0xe8, 0xd0, 0x70, 0x9e,
+	0x7a, 0xdf, 0x07, 0x9c, 0xfb, 0xa4, 0x12, 0xc7, 0xc0, 0x67, 0xc5, 0xb8, 0x4f, 0x2e, 0x12, 0x81,
+	0xcd, 0x91, 0x25, 0x3f, 0x09, 0xe4, 0x39, 0x86, 0xc7, 0x18, 0xc7, 0x7e, 0xfb, 0xd8, 0xe0, 0x47,
+	0x00, 0x84, 0x6d, 0xe1, 0x35, 0xa5, 0x42, 0xb7, 0xe0, 0x01, 0xfa, 0xb8, 0x3c, 0xc2, 0x4a, 0xc8,
+	0xd6, 0x7b, 0xc4, 0xfa, 0x4c, 0x01, 0x0b, 0x50, 0xf3, 0xdb, 0x02, 0x43, 0x26, 0x10, 0xb2, 0xe8,
+	0x34, 0x10, 0xed, 0x73, 0x86, 0xd5, 0x7a, 0xbb, 0x3e, 0x80, 0xf6, 0x9a, 0xe5, 0x8d, 0x19, 0xfb,
+	0x11, 0x00, 0x36, 0x48, 0x85, 0x6d, 0xad, 0x64, 0x0c, 0x54, 0x84, 0x95, 0x3c, 0xaf, 0x95, 0x88,
+	0x06, 0xa2, 0x5c, 0x34, 0x5e, 0xe9, 0x47, 0x78, 0xf6, 0xe7, 0xf0, 0x36, 0xfe, 0x26, 0x32, 0x72,
+	0xf6, 0xdb, 0x5f, 0x2d, 0x14, 0xdb, 0x5f, 0x2d, 0x3c, 0x7d, 0xa0, 0xab, 0xbc, 0x4e, 0x97, 0x0b,
+	0xa9, 0x9f, 0x00, 0x24, 0xda, 0x33, 0x90, 0x08, 0x75, 0xe5, 0x57, 0xd8, 0x16, 0x87, 0xce, 0x0c,
+	0x09, 0xb6, 0x59, 0xd2, 0xaa, 0xca, 0x2d, 0xfa, 0xe4, 0xde, 0xf1, 0x78, 0x93, 0x1d, 0xf8, 0x1e,
+	0xa3, 0x95, 0x6b, 0xce, 0xe7, 0x99, 0x29, 0x88, 0x32, 0x1e, 0xf3, 0x91, 0x26, 0x73, 0x9b, 0x3e,
+	0x5a, 0xb8, 0xce, 0xd0, 0x39, 0x05, 0xd1, 0x9b, 0x3b, 0x9b, 0x8c, 0x82, 0xe2, 0x0f, 0x0b, 0xfb,
+	0xbe, 0x9b, 0x3b, 0x9b, 0x84, 0x82, 0x22, 0xcf, 0x93, 0x30, 0x6a, 0xd1, 0x58, 0x10, 0x54, 0x52,
+	0x95, 0x9d, 0xaa, 0xb1, 0x7f, 0x18, 0x32, 0xa8, 0xcd, 0xc8, 0x59, 0x20, 0x75, 0xf8, 0x19, 0x88,
+	0x13, 0x36, 0xe6, 0xb9, 0x76, 0xb5, 0xad, 0x49, 0x62, 0xe4, 0xe6, 0xce, 0x26, 0x3d, 0x96, 0x5b,
+	0x73, 0xd4, 0x12, 0x7f, 0x27, 0xbb, 0x0b, 0xb9, 0x52, 0x2a, 0xd8, 0x7d, 0xb3, 0xdf, 0x28, 0x64,
+	0x0b, 0xd8, 0x29, 0xc0, 0x55, 0x55, 0xa9, 0xc9, 0x1a, 0xe1, 0xb1, 0x28, 0x19, 0x52, 0x0c, 0xda,
+	0x6b, 0x3a, 0xac, 0x77, 0xdb, 0x81, 0xc6, 0x24, 0x60, 0x4b, 0x81, 0xdb, 0x15, 0xb1, 0x50, 0x96,
+	0x6a, 0x52, 0xd9, 0x5c, 0x1d, 0x9b, 0x5a, 0xdc, 0xae, 0x88, 0x4b, 0xa4, 0xbc, 0xb9, 0x3a, 0x86,
+	0x6e, 0x56, 0xc7, 0x6d, 0x3d, 0xe2, 0x61, 0x9f, 0x14, 0xf7, 0x1d, 0xe9, 0xa4, 0xb8, 0xe2, 0x71,
+	0x52, 0xdc, 0xff, 0xd0, 0x9e, 0xc2, 0xb6, 0x1c, 0x1d, 0x93, 0x35, 0x04, 0x75, 0x30, 0x7a, 0x11,
+	0xc1, 0xf6, 0xd5, 0xf4, 0x41, 0xf3, 0x9c, 0x5c, 0x54, 0x0f, 0xbf, 0x7e, 0xfe, 0x5b, 0xff, 0x5e,
+	0x03, 0xfd, 0xb5, 0x1f, 0x92, 0x10, 0x5d, 0x23, 0x5e, 0x9f, 0x34, 0x9f, 0xa5, 0x0e, 0xb8, 0x62,
+	0x03, 0xa6, 0x00, 0x33, 0x0a, 0xbb, 0x2f, 0x26, 0x46, 0xdb, 0x84, 0x1d, 0x11, 0x78, 0x6d, 0x67,
+	0x93, 0x89, 0xa3, 0x1f, 0xbd, 0x18, 0x70, 0x05, 0x12, 0x5c, 0x82, 0x51, 0x8b, 0xc2, 0x0c, 0x8c,
+	0x24, 0x8d, 0x8c, 0xc4, 0xf1, 0xb6, 0x01, 0x05, 0x17, 0x61, 0xd8, 0xe2, 0x72, 0x68, 0x92, 0x68,
+	0x1f, 0x4d, 0x70, 0xda, 0x7d, 0xb8, 0x35, 0xe4, 0x85, 0x2d, 0x44, 0xe7, 0x55, 0xe6, 0xbb, 0xc6,
+	0x41, 0xd1, 0x80, 0x2b, 0xce, 0x60, 0x02, 0xf0, 0xaa, 0x2d, 0x72, 0x0c, 0xb2, 0x21, 0xaf, 0x48,
+	0xa3, 0xb4, 0xa6, 0xb4, 0xdb, 0x15, 0x31, 0x49, 0x63, 0x81, 0xd2, 0xb6, 0x44, 0x4e, 0xf7, 0x9b,
+	0x04, 0x38, 0x66, 0x1c, 0xe1, 0xf7, 0xd9, 0xdc, 0xc1, 0xc8, 0x26, 0xd8, 0x8b, 0x40, 0x6c, 0xa1,
+	0xac, 0x6c, 0x0a, 0xe5, 0xb5, 0xaa, 0x24, 0x52, 0x0c, 0xcd, 0x42, 0x48, 0xa8, 0x6b, 0x05, 0xd5,
+	0x4c, 0xfe, 0x78, 0x7c, 0xdf, 0x4b, 0x8c, 0x2c, 0x4b, 0x4a, 0xf9, 0xb0, 0x81, 0xd0, 0xb5, 0x1e,
+	0x3e, 0x28, 0xd4, 0x35, 0x9e, 0xbe, 0x24, 0x74, 0x3c, 0x4b, 0xe8, 0x3d, 0xf0, 0x4b, 0x96, 0xd9,
+	0xc7, 0x1e, 0xec, 0x9a, 0xa9, 0x74, 0xc5, 0xe4, 0xe6, 0xed, 0x24, 0x91, 0x57, 0x35, 0x1e, 0x05,
+	0x90, 0xc6, 0xe2, 0xc8, 0xf5, 0x64, 0xe1, 0xf3, 0xac, 0x4d, 0x93, 0x26, 0x3e, 0x42, 0xdb, 0x9c,
+	0xdc, 0xaf, 0x4d, 0xfb, 0x43, 0x83, 0x6b, 0x3d, 0x7c, 0x9f, 0x50, 0xd7, 0xcc, 0x22, 0xbc, 0x01,
+	0xee, 0x1c, 0xc6, 0xf8, 0xb1, 0x6e, 0x1f, 0xc5, 0xdb, 0x33, 0xef, 0xae, 0xf5, 0xf0, 0x51, 0xc1,
+	0xcc, 0xe2, 0xa3, 0xca, 0x7e, 0x05, 0x8e, 0x13, 0x65, 0xbd, 0xf3, 0xb6, 0x86, 0xbb, 0x7b, 0xef,
+	0xda, 0x26, 0xd7, 0x67, 0x36, 0x64, 0x99, 0x67, 0x44, 0xa8, 0x6b, 0x1e, 0x54, 0xf8, 0x05, 0xe8,
+	0xd5, 0xa4, 0x12, 0xf1, 0x12, 0x7a, 0xbc, 0xd7, 0x5d, 0xb2, 0xd6, 0xc9, 0x3b, 0xbb, 0x26, 0x97,
+	0x47, 0x8a, 0x96, 0x59, 0x85, 0x33, 0xc0, 0x6d, 0x0a, 0x95, 0x62, 0x5d, 0x2e, 0xea, 0x37, 0x0b,
+	0x4f, 0x9e, 0x3f, 0xbf, 0xbd, 0x69, 0x5e, 0x88, 0x79, 0x3f, 0x04, 0x46, 0xfc, 0x80, 0x45, 0xcf,
+	0xc8, 0xf1, 0x2c, 0x04, 0x89, 0xad, 0x09, 0x3c, 0x12, 0xc0, 0x3d, 0xe9, 0xe2, 0x73, 0xaa, 0x15,
+	0xbb, 0xb3, 0x4b, 0x33, 0x48, 0xad, 0x6f, 0x0c, 0x51, 0x56, 0xfc, 0x45, 0x18, 0xa8, 0xc9, 0xaa,
+	0xbe, 0x23, 0x94, 0x0b, 0xc6, 0xa6, 0x27, 0x1e, 0xeb, 0x42, 0xda, 0xf1, 0x3b, 0xbb, 0x6e, 0x3e,
+	0x53, 0x70, 0xcc, 0x28, 0x37, 0xf6, 0x56, 0x78, 0xde, 0x5c, 0xe7, 0x0d, 0xd0, 0x0d, 0x6f, 0xba,
+	0xeb, 0x0d, 0x2f, 0xc5, 0x00, 0x73, 0x5d, 0x78, 0x06, 0xa2, 0x4a, 0x65, 0x53, 0x11, 0xd4, 0xa2,
+	0x54, 0x2c, 0xd4, 0xaa, 0x22, 0x3d, 0x0c, 0x8c, 0xb2, 0x78, 0xe2, 0xfb, 0xad, 0xaa, 0xf5, 0xaa,
+	0x88, 0x17, 0xa0, 0x4f, 0x54, 0x14, 0xb5, 0x28, 0x57, 0x04, 0x62, 0x1c, 0x4c, 0x8d, 0xfa, 0xa8,
+	0xab, 0x59, 0xd2, 0xfb, 0xf4, 0x5c, 0x93, 0xcc, 0x90, 0x64, 0xe7, 0xc4, 0x02, 0x44, 0xe9, 0x57,
+	0xba, 0xe8, 0x1e, 0xaf, 0x22, 0x94, 0xe3, 0x1f, 0xf6, 0x76, 0xed, 0x05, 0xa3, 0x77, 0x76, 0x9d,
+	0xcc, 0xa6, 0x79, 0xfa, 0x49, 0x69, 0xce, 0x28, 0x9c, 0xfd, 0x14, 0x04, 0xa9, 0x01, 0x70, 0xc2,
+	0xf6, 0x04, 0x0c, 0xa6, 0x27, 0xa7, 0xa7, 0x27, 0x2f, 0x5c, 0x9e, 0x9c, 0xbe, 0x40, 0x58, 0x66,
+	0x1f, 0xb3, 0xbb, 0x0a, 0xfb, 0x64, 0x18, 0x8e, 0xde, 0x6b, 0xa0, 0xc8, 0xfd, 0x06, 0x0a, 0x3f,
+	0x68, 0x20, 0x74, 0x99, 0x01, 0x95, 0x75, 0xf9, 0xc7, 0x71, 0x83, 0x9e, 0xa7, 0x9b, 0x61, 0x2e,
+	0x92, 0xfa, 0x69, 0x00, 0x62, 0x2c, 0x57, 0xd2, 0x02, 0xb3, 0xcf, 0x1c, 0x0e, 0xcc, 0x9a, 0x30,
+	0x76, 0xdd, 0x13, 0xc6, 0x8e, 0xfc, 0x0c, 0xed, 0x86, 0x27, 0x52, 0x4d, 0x77, 0x27, 0xf6, 0x97,
+	0x83, 0x57, 0xaf, 0xed, 0x8f, 0x57, 0xcf, 0x75, 0xa7, 0x7f, 0x1b, 0xd4, 0xea, 0x80, 0x56, 0x9f,
+	0x3e, 0x04, 0x5a, 0x59, 0x78, 0x44, 0xf3, 0xdd, 0x9d, 0x93, 0xdc, 0x2c, 0x36, 0x9d, 0x33, 0xf2,
+	0xf5, 0x5f, 0x20, 0xf6, 0xb3, 0x1b, 0x47, 0x4b, 0xbd, 0x1b, 0x80, 0x01, 0x63, 0x4a, 0xb2, 0x7c,
+	0xec, 0xaa, 0xcb, 0xc7, 0xa6, 0xba, 0x7c, 0x1c, 0xe7, 0x76, 0xb5, 0x75, 0x4f, 0x57, 0x3b, 0xfa,
+	0x43, 0xbe, 0x0d, 0x4f, 0x5f, 0xbb, 0xd8, 0xa5, 0xdc, 0x4e, 0xce, 0x56, 0x68, 0xe7, 0x6c, 0x4f,
+	0x76, 0x25, 0x7c, 0x7f, 0x9f, 0xfb, 0xf2, 0xfe, 0x3e, 0x77, 0xa5, 0xcb, 0x7e, 0x1c, 0xd8, 0xe9,
+	0x1e, 0xa2, 0xdb, 0x2c, 0x06, 0xc2, 0x51, 0x2e, 0x96, 0xfa, 0x4e, 0x08, 0xfa, 0x16, 0x24, 0xfd,
+	0xe1, 0x81, 0xd3, 0xca, 0x91, 0xd7, 0x58, 0xbf, 0xca, 0x0b, 0x28, 0xfd, 0xa3, 0x5b, 0x40, 0x7d,
+	0x54, 0x50, 0xf4, 0xab, 0xbb, 0x62, 0x38, 0x4a, 0x34, 0x0c, 0x71, 0xc3, 0x1e, 0x50, 0xfa, 0x1d,
+	0x64, 0x7c, 0x39, 0xe9, 0xaa, 0x5c, 0xd6, 0x25, 0x15, 0x3f, 0x03, 0x41, 0xfa, 0x49, 0x25, 0xba,
+	0x09, 0x8d, 0xb5, 0x98, 0xd5, 0x69, 0x1a, 0xca, 0xc8, 0x33, 0x06, 0x3c, 0x09, 0x3e, 0xa5, 0x4a,
+	0x63, 0x28, 0xd6, 0xb2, 0xb6, 0x7b, 0x5e, 0xd2, 0x55, 0x59, 0xa4, 0xe4, 0x2b, 0x55, 0xde, 0xa7,
+	0x54, 0x9b, 0x1b, 0x5b, 0xbf, 0x6d, 0x63, 0x9b, 0x4a, 0x41, 0x3f, 0xfb, 0x26, 0x90, 0xa4, 0x66,
+	0x8b, 0x25, 0xcf, 0x4b, 0xf8, 0xd4, 0xf7, 0x10, 0x00, 0x93, 0x37, 0x2f, 0xe8, 0x02, 0xbe, 0x02,
+	0x01, 0x7a, 0x3b, 0xc0, 0xf4, 0x9d, 0xe8, 0xa8, 0xef, 0x55, 0x59, 0x2a, 0x17, 0xd9, 0xe7, 0x8b,
+	0x14, 0x95, 0xa7, 0x7c, 0xf8, 0x2c, 0x04, 0x76, 0x2a, 0xb2, 0x6e, 0x28, 0x3e, 0xea, 0xe2, 0xbf,
+	0x5e, 0x91, 0xd9, 0xae, 0x9e, 0x12, 0xe1, 0x69, 0x08, 0x51, 0x45, 0xcd, 0xfc, 0xd5, 0x84, 0x67,
+	0x3f, 0xd7, 0x09, 0x09, 0x6f, 0x50, 0xa6, 0xde, 0x40, 0xc0, 0xad, 0x31, 0xc7, 0xa3, 0x77, 0x66,
+	0x54, 0xeb, 0x4f, 0x3b, 0xb4, 0x1e, 0xef, 0xa8, 0x75, 0x5e, 0x15, 0xb6, 0xb6, 0x64, 0x91, 0xa9,
+	0x41, 0x75, 0x7e, 0x16, 0x02, 0x45, 0x41, 0x17, 0x8c, 0x34, 0xde, 0x27, 0x3a, 0x72, 0x37, 0x4d,
+	0xc5, 0x53, 0xa6, 0xd4, 0x9b, 0x08, 0xc2, 0xc4, 0xb8, 0x54, 0x8f, 0xcb, 0xe0, 0x13, 0xcd, 0x6c,
+	0xcd, 0xce, 0x9f, 0x34, 0xb4, 0x8f, 0x0b, 0xef, 0x13, 0x25, 0x9c, 0x83, 0xb0, 0x11, 0x4f, 0x66,
+	0x3e, 0xf1, 0x3e, 0x07, 0x32, 0x2e, 0x1b, 0xf0, 0x16, 0x7b, 0xea, 0x5f, 0x11, 0x70, 0xf6, 0x30,
+	0xa3, 0xaa, 0x7d, 0xde, 0xfa, 0x82, 0x18, 0x3b, 0xbf, 0xbc, 0xdc, 0x75, 0x94, 0x12, 0x76, 0xfb,
+	0xa7, 0xc3, 0xcc, 0xaf, 0x84, 0x1d, 0xc9, 0x6e, 0x47, 0xf8, 0xc4, 0x58, 0xea, 0x6f, 0x02, 0x70,
+	0xa2, 0xc3, 0x4b, 0x85, 0x8f, 0x25, 0x21, 0xbc, 0xfe, 0xd1, 0xe6, 0x83, 0xb7, 0xcf, 0x01, 0x2f,
+	0x7f, 0x44, 0x39, 0xe0, 0xde, 0x79, 0xdf, 0xdf, 0xfc, 0x38, 0xf2, 0xbe, 0xbb, 0x49, 0xf4, 0x5e,
+	0x3a, 0x72, 0xa2, 0xb7, 0x2d, 0xb3, 0x7b, 0xe2, 0xa2, 0xf1, 0xf1, 0x58, 0xfb, 0x3c, 0x84, 0xc3,
+	0x10, 0x98, 0x5f, 0xb9, 0xb1, 0xcc, 0xf5, 0xe0, 0x7e, 0x08, 0xcf, 0x67, 0x17, 0xf8, 0xcc, 0x7c,
+	0x76, 0x9e, 0x43, 0x38, 0x04, 0xbe, 0xeb, 0xab, 0x9c, 0x6f, 0x42, 0x85, 0x78, 0xbb, 0xfb, 0x5d,
+	0x1c, 0x85, 0x48, 0x66, 0x3d, 0x93, 0x5b, 0xca, 0xcc, 0x2e, 0x65, 0xb9, 0x1e, 0xdc, 0x07, 0xbd,
+	0xab, 0xd9, 0xe5, 0xf9, 0xdc, 0xf2, 0x02, 0x87, 0x30, 0x40, 0xe8, 0x6a, 0x26, 0xb7, 0x94, 0x9d,
+	0xe7, 0x7c, 0xa4, 0x62, 0x3e, 0xbb, 0x94, 0xcd, 0x67, 0xe7, 0x39, 0x3f, 0x6b, 0x66, 0x29, 0x9b,
+	0x27, 0x64, 0x01, 0x22, 0x22, 0xb7, 0x9c, 0xcb, 0xe7, 0x32, 0xa4, 0x32, 0x98, 0x08, 0xdc, 0x6b,
+	0xa0, 0xe0, 0xc4, 0xd3, 0xce, 0x36, 0x1d, 0xdf, 0xc8, 0xe8, 0x05, 0x7f, 0xe6, 0xc6, 0x1a, 0xd7,
+	0x83, 0x23, 0x10, 0xcc, 0xbc, 0x70, 0x9d, 0xcf, 0x72, 0x88, 0x94, 0x2d, 0xcc, 0x11, 0x65, 0x73,
+	0x10, 0xa4, 0xe1, 0x85, 0x63, 0x00, 0x4b, 0x99, 0xd9, 0xec, 0x52, 0x61, 0x79, 0x65, 0x99, 0xa8,
+	0x36, 0x0a, 0xc7, 0xd8, 0xff, 0xb9, 0xeb, 0x6b, 0xf9, 0x95, 0xe7, 0xb3, 0x7c, 0x21, 0x3b, 0xbf,
+	0x40, 0x58, 0x9b, 0x15, 0x4b, 0x2b, 0xd7, 0xe7, 0x0b, 0x73, 0x2b, 0xcb, 0xcb, 0xd9, 0xb9, 0x3c,
+	0xe7, 0x9b, 0xf8, 0x2a, 0xf4, 0xd9, 0x30, 0x13, 0x0f, 0xc3, 0x60, 0x9e, 0xcf, 0x5c, 0xbd, 0x9a,
+	0x9b, 0x2b, 0xe4, 0xbf, 0xb0, 0x9a, 0x35, 0xe5, 0x8e, 0x41, 0xc2, 0x51, 0x9c, 0x5b, 0xce, 0x67,
+	0xf9, 0xc2, 0x5a, 0x76, 0xe1, 0xf9, 0xec, 0x72, 0x9e, 0x43, 0x5e, 0xf5, 0x7c, 0xc6, 0xaa, 0xf7,
+	0xe1, 0xe3, 0x30, 0xdc, 0xca, 0xbf, 0x9c, 0xcd, 0x73, 0xfe, 0x89, 0x3a, 0x44, 0x1d, 0x53, 0x0d,
+	0x1e, 0x02, 0xee, 0xf9, 0x6c, 0x9e, 0x77, 0x69, 0x10, 0x87, 0x21, 0x7b, 0x69, 0x6e, 0xb9, 0x30,
+	0xfb, 0x85, 0x7c, 0x76, 0x8d, 0x43, 0x44, 0xb6, 0xbd, 0x66, 0xe5, 0x7a, 0xde, 0xa8, 0xf2, 0xe1,
+	0x13, 0x30, 0x6a, 0xaf, 0xca, 0xaf, 0xe4, 0x33, 0x4b, 0x46, 0xa5, 0x7f, 0xf6, 0x77, 0xd0, 0xfd,
+	0xf7, 0xc7, 0x7a, 0xde, 0x7b, 0x7f, 0xac, 0xe7, 0x67, 0xef, 0x8f, 0xa1, 0xd7, 0x1f, 0x8c, 0xa1,
+	0x77, 0x1e, 0x8c, 0xa1, 0x1f, 0x3d, 0x18, 0x43, 0xf7, 0x1f, 0x8c, 0xa1, 0xf7, 0x1e, 0x8c, 0xa1,
+	0x9f, 0x3e, 0x18, 0x43, 0x1f, 0x3e, 0x18, 0xeb, 0xf9, 0xd9, 0x83, 0x31, 0xf4, 0xe6, 0x07, 0x63,
+	0x3d, 0xf7, 0x3e, 0x18, 0x43, 0xf7, 0x3f, 0x18, 0xeb, 0x79, 0xef, 0x83, 0xb1, 0x9e, 0x17, 0x3e,
+	0x5f, 0x52, 0xaa, 0xb7, 0x4a, 0xe9, 0x9a, 0x42, 0x96, 0x02, 0xaa, 0x90, 0xde, 0xd1, 0xce, 0xd1,
+	0x1f, 0x5b, 0x8a, 0xba, 0x3d, 0x65, 0x2e, 0x47, 0xa7, 0xcc, 0xea, 0x73, 0xd5, 0xcd, 0x92, 0x72,
+	0x4e, 0x7a, 0x55, 0x37, 0xbf, 0x64, 0xee, 0xf1, 0xb9, 0xf6, 0xcd, 0x10, 0xcd, 0x82, 0xbd, 0xf8,
+	0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xfe, 0xa5, 0xf8, 0xcc, 0xd4, 0x5d, 0x00, 0x00,
 }
 
 func (x CloudConnectState) String() string {
@@ -5678,6 +6700,332 @@ func (this *ReplaceAWSREType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AWSProviderType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSProviderType)
+	if !ok {
+		that2, ok := that.(AWSProviderType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.SiteType == nil {
+		if this.SiteType != nil {
+			return false
+		}
+	} else if this.SiteType == nil {
+		return false
+	} else if !this.SiteType.Equal(that1.SiteType) {
+		return false
+	}
+	return true
+}
+func (this *AWSProviderType_AwsTgwSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSProviderType_AwsTgwSite)
+	if !ok {
+		that2, ok := that.(AWSProviderType_AwsTgwSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsTgwSite.Equal(that1.AwsTgwSite) {
+		return false
+	}
+	return true
+}
+func (this *AWSProviderType_SecuremeshSiteV2) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSProviderType_SecuremeshSiteV2)
+	if !ok {
+		that2, ok := that.(AWSProviderType_SecuremeshSiteV2)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SecuremeshSiteV2.Equal(that1.SecuremeshSiteV2) {
+		return false
+	}
+	return true
+}
+func (this *CreateAWSProviderType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateAWSProviderType)
+	if !ok {
+		that2, ok := that.(CreateAWSProviderType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.SiteType == nil {
+		if this.SiteType != nil {
+			return false
+		}
+	} else if this.SiteType == nil {
+		return false
+	} else if !this.SiteType.Equal(that1.SiteType) {
+		return false
+	}
+	return true
+}
+func (this *CreateAWSProviderType_AwsTgwSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateAWSProviderType_AwsTgwSite)
+	if !ok {
+		that2, ok := that.(CreateAWSProviderType_AwsTgwSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsTgwSite.Equal(that1.AwsTgwSite) {
+		return false
+	}
+	return true
+}
+func (this *CreateAWSProviderType_SecuremeshSiteV2) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateAWSProviderType_SecuremeshSiteV2)
+	if !ok {
+		that2, ok := that.(CreateAWSProviderType_SecuremeshSiteV2)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SecuremeshSiteV2.Equal(that1.SecuremeshSiteV2) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceAWSProviderType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceAWSProviderType)
+	if !ok {
+		that2, ok := that.(ReplaceAWSProviderType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.SiteType == nil {
+		if this.SiteType != nil {
+			return false
+		}
+	} else if this.SiteType == nil {
+		return false
+	} else if !this.SiteType.Equal(that1.SiteType) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceAWSProviderType_AwsTgwSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceAWSProviderType_AwsTgwSite)
+	if !ok {
+		that2, ok := that.(ReplaceAWSProviderType_AwsTgwSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsTgwSite.Equal(that1.AwsTgwSite) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceAWSProviderType_SecuremeshSiteV2) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceAWSProviderType_SecuremeshSiteV2)
+	if !ok {
+		that2, ok := that.(ReplaceAWSProviderType_SecuremeshSiteV2)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SecuremeshSiteV2.Equal(that1.SecuremeshSiteV2) {
+		return false
+	}
+	return true
+}
+func (this *AWSSecureMeshSiteType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSSecureMeshSiteType)
+	if !ok {
+		that2, ok := that.(AWSSecureMeshSiteType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Site.Equal(that1.Site) {
+		return false
+	}
+	if !this.CloudUserAccountRef.Equal(that1.CloudUserAccountRef) {
+		return false
+	}
+	if !this.VpcAttachments.Equal(that1.VpcAttachments) {
+		return false
+	}
+	if len(this.Peers) != len(that1.Peers) {
+		return false
+	}
+	for i := range this.Peers {
+		if !this.Peers[i].Equal(that1.Peers[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CreateAWSSecureMeshSiteType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateAWSSecureMeshSiteType)
+	if !ok {
+		that2, ok := that.(CreateAWSSecureMeshSiteType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Site.Equal(that1.Site) {
+		return false
+	}
+	if !this.CloudUserAccountRef.Equal(that1.CloudUserAccountRef) {
+		return false
+	}
+	if !this.VpcAttachments.Equal(that1.VpcAttachments) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceAWSSecureMeshSiteType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceAWSSecureMeshSiteType)
+	if !ok {
+		that2, ok := that.(ReplaceAWSSecureMeshSiteType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.VpcAttachments.Equal(that1.VpcAttachments) {
+		return false
+	}
+	return true
+}
 func (this *AWSTGWSiteType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5994,6 +7342,30 @@ func (this *CloudConnectStatusType_CloudConnectAzureSite) Equal(that interface{}
 	}
 	return true
 }
+func (this *CloudConnectStatusType_CloudConnectAwsSecuremeshSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CloudConnectStatusType_CloudConnectAwsSecuremeshSite)
+	if !ok {
+		that2, ok := that.(CloudConnectStatusType_CloudConnectAwsSecuremeshSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CloudConnectAwsSecuremeshSite.Equal(that1.CloudConnectAwsSecuremeshSite) {
+		return false
+	}
+	return true
+}
 func (this *VerStatusType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6127,6 +7499,12 @@ func (this *AWSAttachmentsListStatusType) Equal(that interface{}) bool {
 		if !this.TgwRouteTableStatus[i].Equal(that1.TgwRouteTableStatus[i]) {
 			return false
 		}
+	}
+	if !this.TransitGatewayResourceShareStatus.Equal(that1.TransitGatewayResourceShareStatus) {
+		return false
+	}
+	if !this.TgwStatus.Equal(that1.TgwStatus) {
+		return false
 	}
 	return true
 }
@@ -6312,6 +7690,12 @@ func (this *AWSConnectPeerStatusType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if this.TransitGatewayGreAddress != that1.TransitGatewayGreAddress {
+		return false
+	}
+	if this.PeerGreAddress != that1.PeerGreAddress {
+		return false
+	}
 	return true
 }
 func (this *AWSTGWRouteTableStatusType) Equal(that interface{}) bool {
@@ -6446,6 +7830,122 @@ func (this *SubnetStatusType) Equal(that interface{}) bool {
 	}
 	if this.Status != that1.Status {
 		return false
+	}
+	return true
+}
+func (this *AWSTGWResourceShareType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSTGWResourceShareType)
+	if !ok {
+		that2, ok := that.(AWSTGWResourceShareType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ResourceShareName != that1.ResourceShareName {
+		return false
+	}
+	if this.ResourceShareArn != that1.ResourceShareArn {
+		return false
+	}
+	if this.TransitGatewayId != that1.TransitGatewayId {
+		return false
+	}
+	if this.OwnerAccountId != that1.OwnerAccountId {
+		return false
+	}
+	if len(this.ReceiverAccountId) != len(that1.ReceiverAccountId) {
+		return false
+	}
+	for i := range this.ReceiverAccountId {
+		if this.ReceiverAccountId[i] != that1.ReceiverAccountId[i] {
+			return false
+		}
+	}
+	if this.AllowExternalPrinciples != that1.AllowExternalPrinciples {
+		return false
+	}
+	if this.Status != that1.Status {
+		return false
+	}
+	if this.DeploymentStatus != that1.DeploymentStatus {
+		return false
+	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if this.Tags[i] != that1.Tags[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *AWSTGWStatusType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSTGWStatusType)
+	if !ok {
+		that2, ok := that.(AWSTGWStatusType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Id != that1.Id {
+		return false
+	}
+	if this.Arn != that1.Arn {
+		return false
+	}
+	if this.OwnerAccount != that1.OwnerAccount {
+		return false
+	}
+	if this.AmazonAsn != that1.AmazonAsn {
+		return false
+	}
+	if this.Region != that1.Region {
+		return false
+	}
+	if this.State != that1.State {
+		return false
+	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if this.Tags[i] != that1.Tags[i] {
+			return false
+		}
+	}
+	if this.StatusMsg != that1.StatusMsg {
+		return false
+	}
+	if len(this.Cidrs) != len(that1.Cidrs) {
+		return false
+	}
+	for i := range this.Cidrs {
+		if this.Cidrs[i] != that1.Cidrs[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -6669,6 +8169,30 @@ func (this *GlobalSpecType_AwsTgwSite) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_AwsProvider) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AwsProvider)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AwsProvider)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsProvider.Equal(that1.AwsProvider) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType_AzureVnetSite) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6822,6 +8346,30 @@ func (this *CreateSpecType_AwsTgwSite) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_AwsProvider) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AwsProvider)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AwsProvider)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsProvider.Equal(that1.AwsProvider) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType_AzureVnetSite) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6944,6 +8492,30 @@ func (this *ReplaceSpecType_AwsTgwSite) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AwsTgwSite.Equal(that1.AwsTgwSite) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_AwsProvider) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AwsProvider)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AwsProvider)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsProvider.Equal(that1.AwsProvider) {
 		return false
 	}
 	return true
@@ -7082,6 +8654,30 @@ func (this *GetSpecType_AwsTgwSite) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AwsTgwSite.Equal(that1.AwsTgwSite) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_AwsProvider) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AwsProvider)
+	if !ok {
+		that2, ok := that.(GetSpecType_AwsProvider)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsProvider.Equal(that1.AwsProvider) {
 		return false
 	}
 	return true
@@ -7321,6 +8917,57 @@ func (this *CloudConnectData) Equal(that interface{}) bool {
 		if !this.Data[i].Equal(that1.Data[i]) {
 			return false
 		}
+	}
+	return true
+}
+func (this *AWSSecureMeshSiteStatusType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSSecureMeshSiteStatusType)
+	if !ok {
+		that2, ok := that.(AWSSecureMeshSiteStatusType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.AttachmentStatus) != len(that1.AttachmentStatus) {
+		return false
+	}
+	for i := range this.AttachmentStatus {
+		if !this.AttachmentStatus[i].Equal(that1.AttachmentStatus[i]) {
+			return false
+		}
+	}
+	if len(this.ConnectAttachmentStatus) != len(that1.ConnectAttachmentStatus) {
+		return false
+	}
+	for i := range this.ConnectAttachmentStatus {
+		if !this.ConnectAttachmentStatus[i].Equal(that1.ConnectAttachmentStatus[i]) {
+			return false
+		}
+	}
+	if len(this.TgwRouteTableStatus) != len(that1.TgwRouteTableStatus) {
+		return false
+	}
+	for i := range this.TgwRouteTableStatus {
+		if !this.TgwRouteTableStatus[i].Equal(that1.TgwRouteTableStatus[i]) {
+			return false
+		}
+	}
+	if !this.TransitGatewayResourceShareStatus.Equal(that1.TransitGatewayResourceShareStatus) {
+		return false
+	}
+	if !this.TgwStatus.Equal(that1.TgwStatus) {
+		return false
 	}
 	return true
 }
@@ -7645,6 +9292,141 @@ func (this *ReplaceAWSREType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *AWSProviderType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_connect.AWSProviderType{")
+	if this.SiteType != nil {
+		s = append(s, "SiteType: "+fmt.Sprintf("%#v", this.SiteType)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSProviderType_AwsTgwSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.AWSProviderType_AwsTgwSite{` +
+		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
+	return s
+}
+func (this *AWSProviderType_SecuremeshSiteV2) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.AWSProviderType_SecuremeshSiteV2{` +
+		`SecuremeshSiteV2:` + fmt.Sprintf("%#v", this.SecuremeshSiteV2) + `}`}, ", ")
+	return s
+}
+func (this *CreateAWSProviderType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_connect.CreateAWSProviderType{")
+	if this.SiteType != nil {
+		s = append(s, "SiteType: "+fmt.Sprintf("%#v", this.SiteType)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CreateAWSProviderType_AwsTgwSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.CreateAWSProviderType_AwsTgwSite{` +
+		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
+	return s
+}
+func (this *CreateAWSProviderType_SecuremeshSiteV2) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.CreateAWSProviderType_SecuremeshSiteV2{` +
+		`SecuremeshSiteV2:` + fmt.Sprintf("%#v", this.SecuremeshSiteV2) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceAWSProviderType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_connect.ReplaceAWSProviderType{")
+	if this.SiteType != nil {
+		s = append(s, "SiteType: "+fmt.Sprintf("%#v", this.SiteType)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ReplaceAWSProviderType_AwsTgwSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.ReplaceAWSProviderType_AwsTgwSite{` +
+		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceAWSProviderType_SecuremeshSiteV2) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.ReplaceAWSProviderType_SecuremeshSiteV2{` +
+		`SecuremeshSiteV2:` + fmt.Sprintf("%#v", this.SecuremeshSiteV2) + `}`}, ", ")
+	return s
+}
+func (this *AWSSecureMeshSiteType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&cloud_connect.AWSSecureMeshSiteType{")
+	if this.Site != nil {
+		s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	}
+	if this.CloudUserAccountRef != nil {
+		s = append(s, "CloudUserAccountRef: "+fmt.Sprintf("%#v", this.CloudUserAccountRef)+",\n")
+	}
+	if this.VpcAttachments != nil {
+		s = append(s, "VpcAttachments: "+fmt.Sprintf("%#v", this.VpcAttachments)+",\n")
+	}
+	if this.Peers != nil {
+		s = append(s, "Peers: "+fmt.Sprintf("%#v", this.Peers)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CreateAWSSecureMeshSiteType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&cloud_connect.CreateAWSSecureMeshSiteType{")
+	if this.Site != nil {
+		s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	}
+	if this.CloudUserAccountRef != nil {
+		s = append(s, "CloudUserAccountRef: "+fmt.Sprintf("%#v", this.CloudUserAccountRef)+",\n")
+	}
+	if this.VpcAttachments != nil {
+		s = append(s, "VpcAttachments: "+fmt.Sprintf("%#v", this.VpcAttachments)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ReplaceAWSSecureMeshSiteType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.ReplaceAWSSecureMeshSiteType{")
+	if this.VpcAttachments != nil {
+		s = append(s, "VpcAttachments: "+fmt.Sprintf("%#v", this.VpcAttachments)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *AWSTGWSiteType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -7781,7 +9563,7 @@ func (this *CloudConnectStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 7)
 	s = append(s, "&cloud_connect.CloudConnectStatusType{")
 	if this.CloudConnectDeployment != nil {
 		s = append(s, "CloudConnectDeployment: "+fmt.Sprintf("%#v", this.CloudConnectDeployment)+",\n")
@@ -7803,6 +9585,14 @@ func (this *CloudConnectStatusType_CloudConnectAzureSite) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_connect.CloudConnectStatusType_CloudConnectAzureSite{` +
 		`CloudConnectAzureSite:` + fmt.Sprintf("%#v", this.CloudConnectAzureSite) + `}`}, ", ")
+	return s
+}
+func (this *CloudConnectStatusType_CloudConnectAwsSecuremeshSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.CloudConnectStatusType_CloudConnectAwsSecuremeshSite{` +
+		`CloudConnectAwsSecuremeshSite:` + fmt.Sprintf("%#v", this.CloudConnectAwsSecuremeshSite) + `}`}, ", ")
 	return s
 }
 func (this *VerStatusType) GoString() string {
@@ -7846,7 +9636,7 @@ func (this *AWSAttachmentsListStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_connect.AWSAttachmentsListStatusType{")
 	if this.AttachmentStatus != nil {
 		s = append(s, "AttachmentStatus: "+fmt.Sprintf("%#v", this.AttachmentStatus)+",\n")
@@ -7856,6 +9646,12 @@ func (this *AWSAttachmentsListStatusType) GoString() string {
 	}
 	if this.TgwRouteTableStatus != nil {
 		s = append(s, "TgwRouteTableStatus: "+fmt.Sprintf("%#v", this.TgwRouteTableStatus)+",\n")
+	}
+	if this.TransitGatewayResourceShareStatus != nil {
+		s = append(s, "TransitGatewayResourceShareStatus: "+fmt.Sprintf("%#v", this.TransitGatewayResourceShareStatus)+",\n")
+	}
+	if this.TgwStatus != nil {
+		s = append(s, "TgwStatus: "+fmt.Sprintf("%#v", this.TgwStatus)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -7940,7 +9736,7 @@ func (this *AWSConnectPeerStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 12)
 	s = append(s, "&cloud_connect.AWSConnectPeerStatusType{")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	s = append(s, "ConnectPeerId: "+fmt.Sprintf("%#v", this.ConnectPeerId)+",\n")
@@ -7960,6 +9756,8 @@ func (this *AWSConnectPeerStatusType) GoString() string {
 	if this.Tags != nil {
 		s = append(s, "Tags: "+mapStringForTags+",\n")
 	}
+	s = append(s, "TransitGatewayGreAddress: "+fmt.Sprintf("%#v", this.TransitGatewayGreAddress)+",\n")
+	s = append(s, "PeerGreAddress: "+fmt.Sprintf("%#v", this.PeerGreAddress)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -8025,6 +9823,66 @@ func (this *SubnetStatusType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *AWSTGWResourceShareType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&cloud_connect.AWSTGWResourceShareType{")
+	s = append(s, "ResourceShareName: "+fmt.Sprintf("%#v", this.ResourceShareName)+",\n")
+	s = append(s, "ResourceShareArn: "+fmt.Sprintf("%#v", this.ResourceShareArn)+",\n")
+	s = append(s, "TransitGatewayId: "+fmt.Sprintf("%#v", this.TransitGatewayId)+",\n")
+	s = append(s, "OwnerAccountId: "+fmt.Sprintf("%#v", this.OwnerAccountId)+",\n")
+	s = append(s, "ReceiverAccountId: "+fmt.Sprintf("%#v", this.ReceiverAccountId)+",\n")
+	s = append(s, "AllowExternalPrinciples: "+fmt.Sprintf("%#v", this.AllowExternalPrinciples)+",\n")
+	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
+	s = append(s, "DeploymentStatus: "+fmt.Sprintf("%#v", this.DeploymentStatus)+",\n")
+	keysForTags := make([]string, 0, len(this.Tags))
+	for k, _ := range this.Tags {
+		keysForTags = append(keysForTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+	mapStringForTags := "map[string]string{"
+	for _, k := range keysForTags {
+		mapStringForTags += fmt.Sprintf("%#v: %#v,", k, this.Tags[k])
+	}
+	mapStringForTags += "}"
+	if this.Tags != nil {
+		s = append(s, "Tags: "+mapStringForTags+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSTGWStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&cloud_connect.AWSTGWStatusType{")
+	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	s = append(s, "Arn: "+fmt.Sprintf("%#v", this.Arn)+",\n")
+	s = append(s, "OwnerAccount: "+fmt.Sprintf("%#v", this.OwnerAccount)+",\n")
+	s = append(s, "AmazonAsn: "+fmt.Sprintf("%#v", this.AmazonAsn)+",\n")
+	s = append(s, "Region: "+fmt.Sprintf("%#v", this.Region)+",\n")
+	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	keysForTags := make([]string, 0, len(this.Tags))
+	for k, _ := range this.Tags {
+		keysForTags = append(keysForTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+	mapStringForTags := "map[string]string{"
+	for _, k := range keysForTags {
+		mapStringForTags += fmt.Sprintf("%#v: %#v,", k, this.Tags[k])
+	}
+	mapStringForTags += "}"
+	if this.Tags != nil {
+		s = append(s, "Tags: "+mapStringForTags+",\n")
+	}
+	s = append(s, "StatusMsg: "+fmt.Sprintf("%#v", this.StatusMsg)+",\n")
+	s = append(s, "Cidrs: "+fmt.Sprintf("%#v", this.Cidrs)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *AzureAttachmentsListStatusType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -8080,7 +9938,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 17)
 	s = append(s, "&cloud_connect.GlobalSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -8124,6 +9982,14 @@ func (this *GlobalSpecType_AwsTgwSite) GoString() string {
 		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_AwsProvider) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.GlobalSpecType_AwsProvider{` +
+		`AwsProvider:` + fmt.Sprintf("%#v", this.AwsProvider) + `}`}, ", ")
+	return s
+}
 func (this *GlobalSpecType_AzureVnetSite) GoString() string {
 	if this == nil {
 		return "nil"
@@ -8152,7 +10018,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&cloud_connect.CreateSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -8179,6 +10045,14 @@ func (this *CreateSpecType_AwsTgwSite) GoString() string {
 		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_AwsProvider) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.CreateSpecType_AwsProvider{` +
+		`AwsProvider:` + fmt.Sprintf("%#v", this.AwsProvider) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType_AzureVnetSite) GoString() string {
 	if this == nil {
 		return "nil"
@@ -8199,7 +10073,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_connect.ReplaceSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -8223,6 +10097,14 @@ func (this *ReplaceSpecType_AwsTgwSite) GoString() string {
 		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_AwsProvider) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.ReplaceSpecType_AwsProvider{` +
+		`AwsProvider:` + fmt.Sprintf("%#v", this.AwsProvider) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType_AzureVnetSite) GoString() string {
 	if this == nil {
 		return "nil"
@@ -8243,7 +10125,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 13)
 	s = append(s, "&cloud_connect.GetSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -8273,6 +10155,14 @@ func (this *GetSpecType_AwsTgwSite) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_connect.GetSpecType_AwsTgwSite{` +
 		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_AwsProvider) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.GetSpecType_AwsProvider{` +
+		`AwsProvider:` + fmt.Sprintf("%#v", this.AwsProvider) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_AzureVnetSite) GoString() string {
@@ -8376,6 +10266,30 @@ func (this *CloudConnectData) GoString() string {
 	}
 	if this.Data != nil {
 		s = append(s, "Data: "+fmt.Sprintf("%#v", this.Data)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSSecureMeshSiteStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&cloud_connect.AWSSecureMeshSiteStatusType{")
+	if this.AttachmentStatus != nil {
+		s = append(s, "AttachmentStatus: "+fmt.Sprintf("%#v", this.AttachmentStatus)+",\n")
+	}
+	if this.ConnectAttachmentStatus != nil {
+		s = append(s, "ConnectAttachmentStatus: "+fmt.Sprintf("%#v", this.ConnectAttachmentStatus)+",\n")
+	}
+	if this.TgwRouteTableStatus != nil {
+		s = append(s, "TgwRouteTableStatus: "+fmt.Sprintf("%#v", this.TgwRouteTableStatus)+",\n")
+	}
+	if this.TransitGatewayResourceShareStatus != nil {
+		s = append(s, "TransitGatewayResourceShareStatus: "+fmt.Sprintf("%#v", this.TransitGatewayResourceShareStatus)+",\n")
+	}
+	if this.TgwStatus != nil {
+		s = append(s, "TgwStatus: "+fmt.Sprintf("%#v", this.TgwStatus)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -9339,6 +11253,395 @@ func (m *ReplaceAWSREType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AWSProviderType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSProviderType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSProviderType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.SiteType != nil {
+		{
+			size := m.SiteType.Size()
+			i -= size
+			if _, err := m.SiteType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSProviderType_AwsTgwSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSProviderType_AwsTgwSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsTgwSite != nil {
+		{
+			size, err := m.AwsTgwSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSProviderType_SecuremeshSiteV2) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSProviderType_SecuremeshSiteV2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SecuremeshSiteV2 != nil {
+		{
+			size, err := m.SecuremeshSiteV2.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateAWSProviderType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateAWSProviderType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateAWSProviderType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.SiteType != nil {
+		{
+			size := m.SiteType.Size()
+			i -= size
+			if _, err := m.SiteType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CreateAWSProviderType_AwsTgwSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateAWSProviderType_AwsTgwSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsTgwSite != nil {
+		{
+			size, err := m.AwsTgwSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateAWSProviderType_SecuremeshSiteV2) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateAWSProviderType_SecuremeshSiteV2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SecuremeshSiteV2 != nil {
+		{
+			size, err := m.SecuremeshSiteV2.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceAWSProviderType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReplaceAWSProviderType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceAWSProviderType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.SiteType != nil {
+		{
+			size := m.SiteType.Size()
+			i -= size
+			if _, err := m.SiteType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReplaceAWSProviderType_AwsTgwSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceAWSProviderType_AwsTgwSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsTgwSite != nil {
+		{
+			size, err := m.AwsTgwSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceAWSProviderType_SecuremeshSiteV2) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceAWSProviderType_SecuremeshSiteV2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SecuremeshSiteV2 != nil {
+		{
+			size, err := m.SecuremeshSiteV2.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSSecureMeshSiteType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSSecureMeshSiteType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSSecureMeshSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Peers) > 0 {
+		for iNdEx := len(m.Peers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Peers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if m.VpcAttachments != nil {
+		{
+			size, err := m.VpcAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.CloudUserAccountRef != nil {
+		{
+			size, err := m.CloudUserAccountRef.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Site != nil {
+		{
+			size, err := m.Site.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CreateAWSSecureMeshSiteType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateAWSSecureMeshSiteType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateAWSSecureMeshSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VpcAttachments != nil {
+		{
+			size, err := m.VpcAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.CloudUserAccountRef != nil {
+		{
+			size, err := m.CloudUserAccountRef.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Site != nil {
+		{
+			size, err := m.Site.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VpcAttachments != nil {
+		{
+			size, err := m.VpcAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AWSTGWSiteType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -9841,6 +12144,27 @@ func (m *CloudConnectStatusType_CloudConnectAzureSite) MarshalToSizedBuffer(dAtA
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CloudConnectStatusType_CloudConnectAwsSecuremeshSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CloudConnectStatusType_CloudConnectAwsSecuremeshSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CloudConnectAwsSecuremeshSite != nil {
+		{
+			size, err := m.CloudConnectAwsSecuremeshSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
 func (m *VerStatusType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -9986,6 +12310,30 @@ func (m *AWSAttachmentsListStatusType) MarshalToSizedBuffer(dAtA []byte) (int, e
 	_ = i
 	var l int
 	_ = l
+	if m.TgwStatus != nil {
+		{
+			size, err := m.TgwStatus.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.TransitGatewayResourceShareStatus != nil {
+		{
+			size, err := m.TransitGatewayResourceShareStatus.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if len(m.TgwRouteTableStatus) > 0 {
 		for iNdEx := len(m.TgwRouteTableStatus) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -10335,6 +12683,24 @@ func (m *AWSConnectPeerStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if len(m.PeerGreAddress) > 0 {
+		i -= len(m.PeerGreAddress)
+		copy(dAtA[i:], m.PeerGreAddress)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PeerGreAddress)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	if len(m.TransitGatewayGreAddress) > 0 {
+		i -= len(m.TransitGatewayGreAddress)
+		copy(dAtA[i:], m.TransitGatewayGreAddress)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.TransitGatewayGreAddress)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
 	if len(m.Tags) > 0 {
 		keysForTags := make([]string, 0, len(m.Tags))
 		for k := range m.Tags {
@@ -10618,6 +12984,217 @@ func (m *SubnetStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.NetworkInterfaceId)
 		copy(dAtA[i:], m.NetworkInterfaceId)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.NetworkInterfaceId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSTGWResourceShareType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSTGWResourceShareType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSTGWResourceShareType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Tags) > 0 {
+		keysForTags := make([]string, 0, len(m.Tags))
+		for k := range m.Tags {
+			keysForTags = append(keysForTags, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+		for iNdEx := len(keysForTags) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Tags[string(keysForTags[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForTags[iNdEx])
+			copy(dAtA[i:], keysForTags[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForTags[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.DeploymentStatus) > 0 {
+		i -= len(m.DeploymentStatus)
+		copy(dAtA[i:], m.DeploymentStatus)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DeploymentStatus)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.Status) > 0 {
+		i -= len(m.Status)
+		copy(dAtA[i:], m.Status)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Status)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.AllowExternalPrinciples {
+		i--
+		if m.AllowExternalPrinciples {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x30
+	}
+	if len(m.ReceiverAccountId) > 0 {
+		for iNdEx := len(m.ReceiverAccountId) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ReceiverAccountId[iNdEx])
+			copy(dAtA[i:], m.ReceiverAccountId[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ReceiverAccountId[iNdEx])))
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.OwnerAccountId) > 0 {
+		i -= len(m.OwnerAccountId)
+		copy(dAtA[i:], m.OwnerAccountId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OwnerAccountId)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.TransitGatewayId) > 0 {
+		i -= len(m.TransitGatewayId)
+		copy(dAtA[i:], m.TransitGatewayId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.TransitGatewayId)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.ResourceShareArn) > 0 {
+		i -= len(m.ResourceShareArn)
+		copy(dAtA[i:], m.ResourceShareArn)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ResourceShareArn)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ResourceShareName) > 0 {
+		i -= len(m.ResourceShareName)
+		copy(dAtA[i:], m.ResourceShareName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ResourceShareName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSTGWStatusType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSTGWStatusType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSTGWStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Cidrs) > 0 {
+		for iNdEx := len(m.Cidrs) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Cidrs[iNdEx])
+			copy(dAtA[i:], m.Cidrs[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Cidrs[iNdEx])))
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.StatusMsg) > 0 {
+		i -= len(m.StatusMsg)
+		copy(dAtA[i:], m.StatusMsg)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StatusMsg)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.Tags) > 0 {
+		keysForTags := make([]string, 0, len(m.Tags))
+		for k := range m.Tags {
+			keysForTags = append(keysForTags, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+		for iNdEx := len(keysForTags) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Tags[string(keysForTags[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForTags[iNdEx])
+			copy(dAtA[i:], keysForTags[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForTags[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.State) > 0 {
+		i -= len(m.State)
+		copy(dAtA[i:], m.State)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.State)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Region) > 0 {
+		i -= len(m.Region)
+		copy(dAtA[i:], m.Region)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Region)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.AmazonAsn != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.AmazonAsn))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.OwnerAccount) > 0 {
+		i -= len(m.OwnerAccount)
+		copy(dAtA[i:], m.OwnerAccount)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OwnerAccount)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Arn) > 0 {
+		i -= len(m.Arn)
+		copy(dAtA[i:], m.Arn)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Arn)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Id) > 0 {
+		i -= len(m.Id)
+		copy(dAtA[i:], m.Id)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Id)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -11043,6 +13620,29 @@ func (m *GlobalSpecType_AwsCloudTransitGateway) MarshalToSizedBuffer(dAtA []byte
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_AwsProvider) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AwsProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsProvider != nil {
+		{
+			size, err := m.AwsProvider.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -11175,6 +13775,29 @@ func (m *CreateSpecType_AwsCloudTransitGateway) MarshalToSizedBuffer(dAtA []byte
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_AwsProvider) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AwsProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsProvider != nil {
+		{
+			size, err := m.AwsProvider.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -11292,6 +13915,29 @@ func (m *ReplaceSpecType_AwsCloudTransitGateway) MarshalToSizedBuffer(dAtA []byt
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_AwsProvider) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AwsProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsProvider != nil {
+		{
+			size, err := m.AwsProvider.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
 	return len(dAtA) - i, nil
 }
@@ -11450,6 +14096,29 @@ func (m *GetSpecType_AwsCloudTransitGateway) MarshalToSizedBuffer(dAtA []byte) (
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_AwsProvider) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AwsProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsProvider != nil {
+		{
+			size, err := m.AwsProvider.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
 	return len(dAtA) - i, nil
 }
@@ -11715,6 +14384,95 @@ func (m *CloudConnectData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0xa
 			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSSecureMeshSiteStatusType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSSecureMeshSiteStatusType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSSecureMeshSiteStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TgwStatus != nil {
+		{
+			size, err := m.TgwStatus.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.TransitGatewayResourceShareStatus != nil {
+		{
+			size, err := m.TransitGatewayResourceShareStatus.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.TgwRouteTableStatus) > 0 {
+		for iNdEx := len(m.TgwRouteTableStatus) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TgwRouteTableStatus[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.ConnectAttachmentStatus) > 0 {
+		for iNdEx := len(m.ConnectAttachmentStatus) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ConnectAttachmentStatus[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.AttachmentStatus) > 0 {
+		for iNdEx := len(m.AttachmentStatus) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AttachmentStatus[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
 			i--
 			dAtA[i] = 0xa
 		}
@@ -12159,6 +14917,175 @@ func (m *ReplaceAWSREType) Size() (n int) {
 	return n
 }
 
+func (m *AWSProviderType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SiteType != nil {
+		n += m.SiteType.Size()
+	}
+	return n
+}
+
+func (m *AWSProviderType_AwsTgwSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsTgwSite != nil {
+		l = m.AwsTgwSite.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AWSProviderType_SecuremeshSiteV2) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SecuremeshSiteV2 != nil {
+		l = m.SecuremeshSiteV2.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateAWSProviderType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SiteType != nil {
+		n += m.SiteType.Size()
+	}
+	return n
+}
+
+func (m *CreateAWSProviderType_AwsTgwSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsTgwSite != nil {
+		l = m.AwsTgwSite.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateAWSProviderType_SecuremeshSiteV2) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SecuremeshSiteV2 != nil {
+		l = m.SecuremeshSiteV2.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceAWSProviderType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SiteType != nil {
+		n += m.SiteType.Size()
+	}
+	return n
+}
+
+func (m *ReplaceAWSProviderType_AwsTgwSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsTgwSite != nil {
+		l = m.AwsTgwSite.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceAWSProviderType_SecuremeshSiteV2) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SecuremeshSiteV2 != nil {
+		l = m.SecuremeshSiteV2.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AWSSecureMeshSiteType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Site != nil {
+		l = m.Site.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.CloudUserAccountRef != nil {
+		l = m.CloudUserAccountRef.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcAttachments != nil {
+		l = m.VpcAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Peers) > 0 {
+		for _, e := range m.Peers {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CreateAWSSecureMeshSiteType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Site != nil {
+		l = m.Site.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.CloudUserAccountRef != nil {
+		l = m.CloudUserAccountRef.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcAttachments != nil {
+		l = m.VpcAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ReplaceAWSSecureMeshSiteType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.VpcAttachments != nil {
+		l = m.VpcAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *AWSTGWSiteType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -12351,6 +15278,18 @@ func (m *CloudConnectStatusType_CloudConnectAzureSite) Size() (n int) {
 	}
 	return n
 }
+func (m *CloudConnectStatusType_CloudConnectAwsSecuremeshSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CloudConnectAwsSecuremeshSite != nil {
+		l = m.CloudConnectAwsSecuremeshSite.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *VerStatusType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -12429,6 +15368,14 @@ func (m *AWSAttachmentsListStatusType) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.TransitGatewayResourceShareStatus != nil {
+		l = m.TransitGatewayResourceShareStatus.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TgwStatus != nil {
+		l = m.TgwStatus.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -12598,6 +15545,14 @@ func (m *AWSConnectPeerStatusType) Size() (n int) {
 			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
 		}
 	}
+	l = len(m.TransitGatewayGreAddress)
+	if l > 0 {
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	l = len(m.PeerGreAddress)
+	if l > 0 {
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -12706,6 +15661,106 @@ func (m *SubnetStatusType) Size() (n int) {
 	l = len(m.Status)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AWSTGWResourceShareType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ResourceShareName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ResourceShareArn)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.TransitGatewayId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.OwnerAccountId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.ReceiverAccountId) > 0 {
+		for _, s := range m.ReceiverAccountId {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.AllowExternalPrinciples {
+		n += 2
+	}
+	l = len(m.Status)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.DeploymentStatus)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Tags) > 0 {
+		for k, v := range m.Tags {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
+			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *AWSTGWStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Arn)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.OwnerAccount)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AmazonAsn != 0 {
+		n += 1 + sovTypes(uint64(m.AmazonAsn))
+	}
+	l = len(m.Region)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.State)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Tags) > 0 {
+		for k, v := range m.Tags {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
+			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
+		}
+	}
+	l = len(m.StatusMsg)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Cidrs) > 0 {
+		for _, s := range m.Cidrs {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -12901,6 +15956,18 @@ func (m *GlobalSpecType_AwsCloudTransitGateway) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_AwsProvider) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsProvider != nil {
+		l = m.AwsProvider.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -12965,6 +16032,18 @@ func (m *CreateSpecType_AwsCloudTransitGateway) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_AwsProvider) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsProvider != nil {
+		l = m.AwsProvider.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -13021,6 +16100,18 @@ func (m *ReplaceSpecType_AwsCloudTransitGateway) Size() (n int) {
 	_ = l
 	if m.AwsCloudTransitGateway != nil {
 		l = m.AwsCloudTransitGateway.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_AwsProvider) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsProvider != nil {
+		l = m.AwsProvider.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -13095,6 +16186,18 @@ func (m *GetSpecType_AwsCloudTransitGateway) Size() (n int) {
 	_ = l
 	if m.AwsCloudTransitGateway != nil {
 		l = m.AwsCloudTransitGateway.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_AwsProvider) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsProvider != nil {
+		l = m.AwsProvider.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -13208,6 +16311,41 @@ func (m *CloudConnectData) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
+	}
+	return n
+}
+
+func (m *AWSSecureMeshSiteStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AttachmentStatus) > 0 {
+		for _, e := range m.AttachmentStatus {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ConnectAttachmentStatus) > 0 {
+		for _, e := range m.ConnectAttachmentStatus {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.TgwRouteTableStatus) > 0 {
+		for _, e := range m.TgwRouteTableStatus {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.TransitGatewayResourceShareStatus != nil {
+		l = m.TransitGatewayResourceShareStatus.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TgwStatus != nil {
+		l = m.TgwStatus.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -13553,6 +16691,136 @@ func (this *ReplaceAWSREType) String() string {
 	}, "")
 	return s
 }
+func (this *AWSProviderType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSProviderType{`,
+		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSProviderType_AwsTgwSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSProviderType_AwsTgwSite{`,
+		`AwsTgwSite:` + strings.Replace(fmt.Sprintf("%v", this.AwsTgwSite), "AWSTGWSiteType", "AWSTGWSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSProviderType_SecuremeshSiteV2) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSProviderType_SecuremeshSiteV2{`,
+		`SecuremeshSiteV2:` + strings.Replace(fmt.Sprintf("%v", this.SecuremeshSiteV2), "AWSSecureMeshSiteType", "AWSSecureMeshSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateAWSProviderType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateAWSProviderType{`,
+		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateAWSProviderType_AwsTgwSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateAWSProviderType_AwsTgwSite{`,
+		`AwsTgwSite:` + strings.Replace(fmt.Sprintf("%v", this.AwsTgwSite), "CreateAWSTGWSiteType", "CreateAWSTGWSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateAWSProviderType_SecuremeshSiteV2) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateAWSProviderType_SecuremeshSiteV2{`,
+		`SecuremeshSiteV2:` + strings.Replace(fmt.Sprintf("%v", this.SecuremeshSiteV2), "CreateAWSSecureMeshSiteType", "CreateAWSSecureMeshSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceAWSProviderType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceAWSProviderType{`,
+		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceAWSProviderType_AwsTgwSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceAWSProviderType_AwsTgwSite{`,
+		`AwsTgwSite:` + strings.Replace(fmt.Sprintf("%v", this.AwsTgwSite), "ReplaceAWSTGWSiteType", "ReplaceAWSTGWSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceAWSProviderType_SecuremeshSiteV2) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceAWSProviderType_SecuremeshSiteV2{`,
+		`SecuremeshSiteV2:` + strings.Replace(fmt.Sprintf("%v", this.SecuremeshSiteV2), "ReplaceAWSSecureMeshSiteType", "ReplaceAWSSecureMeshSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSSecureMeshSiteType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForPeers := "[]*PeerType{"
+	for _, f := range this.Peers {
+		repeatedStringForPeers += strings.Replace(f.String(), "PeerType", "PeerType", 1) + ","
+	}
+	repeatedStringForPeers += "}"
+	s := strings.Join([]string{`&AWSSecureMeshSiteType{`,
+		`Site:` + strings.Replace(fmt.Sprintf("%v", this.Site), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`CloudUserAccountRef:` + strings.Replace(fmt.Sprintf("%v", this.CloudUserAccountRef), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`VpcAttachments:` + strings.Replace(this.VpcAttachments.String(), "AWSVPCAttachmentListType", "AWSVPCAttachmentListType", 1) + `,`,
+		`Peers:` + repeatedStringForPeers + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateAWSSecureMeshSiteType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateAWSSecureMeshSiteType{`,
+		`Site:` + strings.Replace(fmt.Sprintf("%v", this.Site), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`CloudUserAccountRef:` + strings.Replace(fmt.Sprintf("%v", this.CloudUserAccountRef), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`VpcAttachments:` + strings.Replace(this.VpcAttachments.String(), "AWSVPCAttachmentListType", "AWSVPCAttachmentListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceAWSSecureMeshSiteType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceAWSSecureMeshSiteType{`,
+		`VpcAttachments:` + strings.Replace(this.VpcAttachments.String(), "AWSVPCAttachmentListType", "AWSVPCAttachmentListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AWSTGWSiteType) String() string {
 	if this == nil {
 		return "nil"
@@ -13685,6 +16953,16 @@ func (this *CloudConnectStatusType_CloudConnectAzureSite) String() string {
 	}, "")
 	return s
 }
+func (this *CloudConnectStatusType_CloudConnectAwsSecuremeshSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CloudConnectStatusType_CloudConnectAwsSecuremeshSite{`,
+		`CloudConnectAwsSecuremeshSite:` + strings.Replace(fmt.Sprintf("%v", this.CloudConnectAwsSecuremeshSite), "AWSSecureMeshSiteStatusType", "AWSSecureMeshSiteStatusType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *VerStatusType) String() string {
 	if this == nil {
 		return "nil"
@@ -13751,6 +17029,8 @@ func (this *AWSAttachmentsListStatusType) String() string {
 		`AttachmentStatus:` + repeatedStringForAttachmentStatus + `,`,
 		`ConnectAttachmentStatus:` + repeatedStringForConnectAttachmentStatus + `,`,
 		`TgwRouteTableStatus:` + repeatedStringForTgwRouteTableStatus + `,`,
+		`TransitGatewayResourceShareStatus:` + strings.Replace(this.TransitGatewayResourceShareStatus.String(), "AWSTGWResourceShareType", "AWSTGWResourceShareType", 1) + `,`,
+		`TgwStatus:` + strings.Replace(this.TgwStatus.String(), "AWSTGWStatusType", "AWSTGWStatusType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -13850,6 +17130,8 @@ func (this *AWSConnectPeerStatusType) String() string {
 		`ConnectPeerDeploymentState:` + fmt.Sprintf("%v", this.ConnectPeerDeploymentState) + `,`,
 		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
 		`Tags:` + mapStringForTags + `,`,
+		`TransitGatewayGreAddress:` + fmt.Sprintf("%v", this.TransitGatewayGreAddress) + `,`,
+		`PeerGreAddress:` + fmt.Sprintf("%v", this.PeerGreAddress) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -13916,6 +17198,62 @@ func (this *SubnetStatusType) String() string {
 		`AvailabilityZone:` + fmt.Sprintf("%v", this.AvailabilityZone) + `,`,
 		`SubnetId:` + fmt.Sprintf("%v", this.SubnetId) + `,`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSTGWResourceShareType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForTags := make([]string, 0, len(this.Tags))
+	for k, _ := range this.Tags {
+		keysForTags = append(keysForTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+	mapStringForTags := "map[string]string{"
+	for _, k := range keysForTags {
+		mapStringForTags += fmt.Sprintf("%v: %v,", k, this.Tags[k])
+	}
+	mapStringForTags += "}"
+	s := strings.Join([]string{`&AWSTGWResourceShareType{`,
+		`ResourceShareName:` + fmt.Sprintf("%v", this.ResourceShareName) + `,`,
+		`ResourceShareArn:` + fmt.Sprintf("%v", this.ResourceShareArn) + `,`,
+		`TransitGatewayId:` + fmt.Sprintf("%v", this.TransitGatewayId) + `,`,
+		`OwnerAccountId:` + fmt.Sprintf("%v", this.OwnerAccountId) + `,`,
+		`ReceiverAccountId:` + fmt.Sprintf("%v", this.ReceiverAccountId) + `,`,
+		`AllowExternalPrinciples:` + fmt.Sprintf("%v", this.AllowExternalPrinciples) + `,`,
+		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
+		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
+		`Tags:` + mapStringForTags + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSTGWStatusType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForTags := make([]string, 0, len(this.Tags))
+	for k, _ := range this.Tags {
+		keysForTags = append(keysForTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+	mapStringForTags := "map[string]string{"
+	for _, k := range keysForTags {
+		mapStringForTags += fmt.Sprintf("%v: %v,", k, this.Tags[k])
+	}
+	mapStringForTags += "}"
+	s := strings.Join([]string{`&AWSTGWStatusType{`,
+		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
+		`Arn:` + fmt.Sprintf("%v", this.Arn) + `,`,
+		`OwnerAccount:` + fmt.Sprintf("%v", this.OwnerAccount) + `,`,
+		`AmazonAsn:` + fmt.Sprintf("%v", this.AmazonAsn) + `,`,
+		`Region:` + fmt.Sprintf("%v", this.Region) + `,`,
+		`State:` + fmt.Sprintf("%v", this.State) + `,`,
+		`Tags:` + mapStringForTags + `,`,
+		`StatusMsg:` + fmt.Sprintf("%v", this.StatusMsg) + `,`,
+		`Cidrs:` + fmt.Sprintf("%v", this.Cidrs) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14051,6 +17389,16 @@ func (this *GlobalSpecType_AwsCloudTransitGateway) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_AwsProvider) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AwsProvider{`,
+		`AwsProvider:` + strings.Replace(fmt.Sprintf("%v", this.AwsProvider), "AWSProviderType", "AWSProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -14098,6 +17446,16 @@ func (this *CreateSpecType_AwsCloudTransitGateway) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_AwsCloudTransitGateway{`,
 		`AwsCloudTransitGateway:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudTransitGateway), "CreateAWSCloudTransitGatewayType", "CreateAWSCloudTransitGatewayType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_AwsProvider) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AwsProvider{`,
+		`AwsProvider:` + strings.Replace(fmt.Sprintf("%v", this.AwsProvider), "CreateAWSProviderType", "CreateAWSProviderType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14152,6 +17510,16 @@ func (this *ReplaceSpecType_AwsCloudTransitGateway) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_AwsProvider) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AwsProvider{`,
+		`AwsProvider:` + strings.Replace(fmt.Sprintf("%v", this.AwsProvider), "ReplaceAWSProviderType", "ReplaceAWSProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -14202,6 +17570,16 @@ func (this *GetSpecType_AwsCloudTransitGateway) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_AwsCloudTransitGateway{`,
 		`AwsCloudTransitGateway:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudTransitGateway), "AWSCloudTransitGatewayType", "AWSCloudTransitGatewayType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AwsProvider) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AwsProvider{`,
+		`AwsProvider:` + strings.Replace(fmt.Sprintf("%v", this.AwsProvider), "AWSProviderType", "AWSProviderType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14299,6 +17677,35 @@ func (this *CloudConnectData) String() string {
 	s := strings.Join([]string{`&CloudConnectData{`,
 		`Labels:` + mapStringForLabels + `,`,
 		`Data:` + repeatedStringForData + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSSecureMeshSiteStatusType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForAttachmentStatus := "[]*AWSAttachmentsStatusType{"
+	for _, f := range this.AttachmentStatus {
+		repeatedStringForAttachmentStatus += strings.Replace(f.String(), "AWSAttachmentsStatusType", "AWSAttachmentsStatusType", 1) + ","
+	}
+	repeatedStringForAttachmentStatus += "}"
+	repeatedStringForConnectAttachmentStatus := "[]*AWSConnectAttachmentStatusType{"
+	for _, f := range this.ConnectAttachmentStatus {
+		repeatedStringForConnectAttachmentStatus += strings.Replace(f.String(), "AWSConnectAttachmentStatusType", "AWSConnectAttachmentStatusType", 1) + ","
+	}
+	repeatedStringForConnectAttachmentStatus += "}"
+	repeatedStringForTgwRouteTableStatus := "[]*AWSTGWRouteTableStatusType{"
+	for _, f := range this.TgwRouteTableStatus {
+		repeatedStringForTgwRouteTableStatus += strings.Replace(f.String(), "AWSTGWRouteTableStatusType", "AWSTGWRouteTableStatusType", 1) + ","
+	}
+	repeatedStringForTgwRouteTableStatus += "}"
+	s := strings.Join([]string{`&AWSSecureMeshSiteStatusType{`,
+		`AttachmentStatus:` + repeatedStringForAttachmentStatus + `,`,
+		`ConnectAttachmentStatus:` + repeatedStringForConnectAttachmentStatus + `,`,
+		`TgwRouteTableStatus:` + repeatedStringForTgwRouteTableStatus + `,`,
+		`TransitGatewayResourceShareStatus:` + strings.Replace(this.TransitGatewayResourceShareStatus.String(), "AWSTGWResourceShareType", "AWSTGWResourceShareType", 1) + `,`,
+		`TgwStatus:` + strings.Replace(this.TgwStatus.String(), "AWSTGWStatusType", "AWSTGWStatusType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -16671,6 +20078,820 @@ func (m *ReplaceAWSREType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *AWSProviderType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSProviderType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSProviderType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsTgwSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSTGWSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteType = &AWSProviderType_AwsTgwSite{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecuremeshSiteV2", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSSecureMeshSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteType = &AWSProviderType_SecuremeshSiteV2{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CreateAWSProviderType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CreateAWSProviderType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CreateAWSProviderType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsTgwSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CreateAWSTGWSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteType = &CreateAWSProviderType_AwsTgwSite{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecuremeshSiteV2", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CreateAWSSecureMeshSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteType = &CreateAWSProviderType_SecuremeshSiteV2{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReplaceAWSProviderType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReplaceAWSProviderType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReplaceAWSProviderType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsTgwSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ReplaceAWSTGWSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteType = &ReplaceAWSProviderType_AwsTgwSite{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecuremeshSiteV2", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ReplaceAWSSecureMeshSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SiteType = &ReplaceAWSProviderType_SecuremeshSiteV2{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSSecureMeshSiteType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSSecureMeshSiteType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSSecureMeshSiteType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Site == nil {
+				m.Site = &views.ObjectRefType{}
+			}
+			if err := m.Site.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudUserAccountRef", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CloudUserAccountRef == nil {
+				m.CloudUserAccountRef = &views.ObjectRefType{}
+			}
+			if err := m.CloudUserAccountRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VpcAttachments == nil {
+				m.VpcAttachments = &AWSVPCAttachmentListType{}
+			}
+			if err := m.VpcAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Peers = append(m.Peers, &PeerType{})
+			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CreateAWSSecureMeshSiteType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CreateAWSSecureMeshSiteType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CreateAWSSecureMeshSiteType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Site == nil {
+				m.Site = &views.ObjectRefType{}
+			}
+			if err := m.Site.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudUserAccountRef", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CloudUserAccountRef == nil {
+				m.CloudUserAccountRef = &views.ObjectRefType{}
+			}
+			if err := m.CloudUserAccountRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VpcAttachments == nil {
+				m.VpcAttachments = &AWSVPCAttachmentListType{}
+			}
+			if err := m.VpcAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReplaceAWSSecureMeshSiteType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReplaceAWSSecureMeshSiteType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReplaceAWSSecureMeshSiteType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VpcAttachments == nil {
+				m.VpcAttachments = &AWSVPCAttachmentListType{}
+			}
+			if err := m.VpcAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *AWSTGWSiteType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -17910,6 +22131,41 @@ func (m *CloudConnectStatusType) Unmarshal(dAtA []byte) error {
 			}
 			m.CloudConnectDeployment = &CloudConnectStatusType_CloudConnectAzureSite{v}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudConnectAwsSecuremeshSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSSecureMeshSiteStatusType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CloudConnectDeployment = &CloudConnectStatusType_CloudConnectAwsSecuremeshSite{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -18417,6 +22673,78 @@ func (m *AWSAttachmentsListStatusType) Unmarshal(dAtA []byte) error {
 			}
 			m.TgwRouteTableStatus = append(m.TgwRouteTableStatus, &AWSTGWRouteTableStatusType{})
 			if err := m.TgwRouteTableStatus[len(m.TgwRouteTableStatus)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TransitGatewayResourceShareStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TransitGatewayResourceShareStatus == nil {
+				m.TransitGatewayResourceShareStatus = &AWSTGWResourceShareType{}
+			}
+			if err := m.TransitGatewayResourceShareStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TgwStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TgwStatus == nil {
+				m.TgwStatus = &AWSTGWStatusType{}
+			}
+			if err := m.TgwStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -19861,6 +24189,70 @@ func (m *AWSConnectPeerStatusType) Unmarshal(dAtA []byte) error {
 			}
 			m.Tags[mapkey] = mapvalue
 			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TransitGatewayGreAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TransitGatewayGreAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PeerGreAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PeerGreAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -20700,6 +25092,853 @@ func (m *SubnetStatusType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Status = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSTGWResourceShareType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSTGWResourceShareType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSTGWResourceShareType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResourceShareName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResourceShareName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResourceShareArn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResourceShareArn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TransitGatewayId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TransitGatewayId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OwnerAccountId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OwnerAccountId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReceiverAccountId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReceiverAccountId = append(m.ReceiverAccountId, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AllowExternalPrinciples", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AllowExternalPrinciples = bool(v != 0)
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Status = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeploymentStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeploymentStatus = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Tags == nil {
+				m.Tags = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipTypes(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSTGWStatusType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSTGWStatusType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSTGWStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Arn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Arn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OwnerAccount", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OwnerAccount = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AmazonAsn", wireType)
+			}
+			m.AmazonAsn = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AmazonAsn |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Region", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Region = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.State = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Tags == nil {
+				m.Tags = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipTypes(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatusMsg", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StatusMsg = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cidrs", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Cidrs = append(m.Cidrs, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -21796,6 +27035,41 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Cloud = &GlobalSpecType_AwsCloudTransitGateway{v}
 			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsProvider", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &GlobalSpecType_AwsProvider{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -22061,6 +27335,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Cloud = &CreateSpecType_AwsCloudTransitGateway{v}
 			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsProvider", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CreateAWSProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &CreateSpecType_AwsProvider{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -22253,6 +27562,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Cloud = &ReplaceSpecType_AwsCloudTransitGateway{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsProvider", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ReplaceAWSProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &ReplaceSpecType_AwsProvider{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -22556,6 +27900,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Cloud = &GetSpecType_AwsCloudTransitGateway{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsProvider", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &GetSpecType_AwsProvider{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -23330,6 +28709,233 @@ func (m *CloudConnectData) Unmarshal(dAtA []byte) error {
 			}
 			m.Data = append(m.Data, &MetricData{})
 			if err := m.Data[len(m.Data)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSSecureMeshSiteStatusType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSSecureMeshSiteStatusType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSSecureMeshSiteStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttachmentStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AttachmentStatus = append(m.AttachmentStatus, &AWSAttachmentsStatusType{})
+			if err := m.AttachmentStatus[len(m.AttachmentStatus)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConnectAttachmentStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ConnectAttachmentStatus = append(m.ConnectAttachmentStatus, &AWSConnectAttachmentStatusType{})
+			if err := m.ConnectAttachmentStatus[len(m.ConnectAttachmentStatus)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TgwRouteTableStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TgwRouteTableStatus = append(m.TgwRouteTableStatus, &AWSTGWRouteTableStatusType{})
+			if err := m.TgwRouteTableStatus[len(m.TgwRouteTableStatus)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TransitGatewayResourceShareStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TransitGatewayResourceShareStatus == nil {
+				m.TransitGatewayResourceShareStatus = &AWSTGWResourceShareType{}
+			}
+			if err := m.TransitGatewayResourceShareStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TgwStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TgwStatus == nil {
+				m.TgwStatus = &AWSTGWStatusType{}
+			}
+			if err := m.TgwStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

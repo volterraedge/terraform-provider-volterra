@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCUpdateASNPrefixIRROverride(ctx context.Contex
 	rsp, err := c.grpcClient.UpdateASNPrefixIRROverride(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUpdateASNPrefixReviewStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateASNPrefixReviewStatusRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["UpdateASNPrefixIRROverride"] = ccl.doRPCUpdateASNPrefixIRROverride
-
 	rpcFns["UpdateASNPrefixReviewStatus"] = ccl.doRPCUpdateASNPrefixReviewStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -175,7 +171,6 @@ func (c *CustomAPIRestClient) doRPCUpdateASNPrefixIRROverride(ctx context.Contex
 	pbRsp := &UpdateASNPrefixIRROverrideResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixIRROverrideResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -183,7 +178,6 @@ func (c *CustomAPIRestClient) doRPCUpdateASNPrefixIRROverride(ctx context.Contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUpdateASNPrefixReviewStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -260,7 +254,6 @@ func (c *CustomAPIRestClient) doRPCUpdateASNPrefixReviewStatus(ctx context.Conte
 	pbRsp := &UpdateASNPrefixReviewStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixReviewStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -294,11 +287,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["UpdateASNPrefixIRROverride"] = ccl.doRPCUpdateASNPrefixIRROverride
-
 	rpcFns["UpdateASNPrefixReviewStatus"] = ccl.doRPCUpdateASNPrefixReviewStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -383,7 +373,6 @@ func (s *customAPISrv) UpdateASNPrefixIRROverride(ctx context.Context, in *Updat
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixIRROverrideResponse", rsp)...)
 
 	return rsp, nil
@@ -432,7 +421,6 @@ func (s *customAPISrv) UpdateASNPrefixReviewStatus(ctx context.Context, in *Upda
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixReviewStatusResponse", rsp)...)
 
 	return rsp, nil

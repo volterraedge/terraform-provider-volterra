@@ -68,11 +68,9 @@ func (m *AWSCloudwatchConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAwsCredDRefInfo()
-
 }
 
 func (m *AWSCloudwatchConfig) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil
@@ -88,7 +86,6 @@ func (m *AWSCloudwatchConfig) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAwsCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -98,7 +95,6 @@ func (m *AWSCloudwatchConfig) GetAwsCredDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil
@@ -116,7 +112,6 @@ func (m *AWSCloudwatchConfig) GetAwsCredDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -125,7 +120,6 @@ type ValidateAWSCloudwatchConfig struct {
 }
 
 func (v *ValidateAWSCloudwatchConfig) GroupNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for group_name")
@@ -133,9 +127,7 @@ func (v *ValidateAWSCloudwatchConfig) GroupNameValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSCloudwatchConfig) StreamNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for stream_name")
@@ -143,9 +135,7 @@ func (v *ValidateAWSCloudwatchConfig) StreamNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSCloudwatchConfig) AwsCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_cred")
@@ -154,19 +144,15 @@ func (v *ValidateAWSCloudwatchConfig) AwsCredValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSCloudwatchConfig) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_region")
@@ -188,68 +174,48 @@ func (v *ValidateAWSCloudwatchConfig) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_cred"))
 		if err := fv(ctx, m.GetAwsCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_name"))
 		if err := fv(ctx, m.GetGroupName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["stream_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("stream_name"))
 		if err := fv(ctx, m.GetStreamName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSCloudwatchConfigValidator = func() *ValidateAWSCloudwatchConfig {
 	v := &ValidateAWSCloudwatchConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -308,9 +274,7 @@ var DefaultAWSCloudwatchConfigValidator = func() *ValidateAWSCloudwatchConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["aws_region"] = vFn
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -336,7 +300,6 @@ func (m *AuthToken) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AuthToken.token")
 	}
@@ -388,23 +351,18 @@ func (v *ValidateAuthToken) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("token"))
 		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAuthTokenValidator = func() *ValidateAuthToken {
 	v := &ValidateAuthToken{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["token"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -430,7 +388,6 @@ func (m *AzureBlobConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetConnectionString().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzureBlobConfig.connection_string")
 	}
@@ -470,7 +427,6 @@ type ValidateAzureBlobConfig struct {
 }
 
 func (v *ValidateAzureBlobConfig) ConnectionStringValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for connection_string")
@@ -479,19 +435,15 @@ func (v *ValidateAzureBlobConfig) ConnectionStringValidationRuleHandler(rules ma
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureBlobConfig) ContainerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for container_name")
@@ -513,59 +465,42 @@ func (v *ValidateAzureBlobConfig) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_string"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_string"))
 		if err := fv(ctx, m.GetConnectionString(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["container_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("container_name"))
 		if err := fv(ctx, m.GetContainerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filename_options"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filename_options"))
 		if err := fv(ctx, m.GetFilenameOptions(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureBlobConfigValidator = func() *ValidateAzureBlobConfig {
 	v := &ValidateAzureBlobConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -598,11 +533,8 @@ var DefaultAzureBlobConfigValidator = func() *ValidateAzureBlobConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["container_name"] = vFn
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
-
 	v.FldValidators["filename_options"] = FilenameOptionsTypeValidator().Validate
 
 	return v
@@ -628,7 +560,6 @@ func (m *AzureEventHubsConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetConnectionString().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzureEventHubsConfig.connection_string")
 	}
@@ -668,7 +599,6 @@ type ValidateAzureEventHubsConfig struct {
 }
 
 func (v *ValidateAzureEventHubsConfig) ConnectionStringValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for connection_string")
@@ -677,19 +607,15 @@ func (v *ValidateAzureEventHubsConfig) ConnectionStringValidationRuleHandler(rul
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureEventHubsConfig) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -697,9 +623,7 @@ func (v *ValidateAzureEventHubsConfig) NamespaceValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureEventHubsConfig) InstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for instance")
@@ -721,41 +645,30 @@ func (v *ValidateAzureEventHubsConfig) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["connection_string"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_string"))
 		if err := fv(ctx, m.GetConnectionString(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance"))
 		if err := fv(ctx, m.GetInstance(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureEventHubsConfigValidator = func() *ValidateAzureEventHubsConfig {
 	v := &ValidateAzureEventHubsConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -912,7 +825,6 @@ func (v *ValidateBatchOptionType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetBatchEvents().(type) {
@@ -938,7 +850,6 @@ func (v *ValidateBatchOptionType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetBatchTimeout().(type) {
@@ -964,16 +875,13 @@ func (v *ValidateBatchOptionType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBatchOptionTypeValidator = func() *ValidateBatchOptionType {
 	v := &ValidateBatchOptionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -981,7 +889,6 @@ var DefaultBatchOptionTypeValidator = func() *ValidateBatchOptionType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBatchBytesMaxBytes := v.BatchBytesMaxBytesValidationRuleHandler
 	rulesBatchBytesMaxBytes := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "4096",
@@ -992,9 +899,7 @@ var DefaultBatchOptionTypeValidator = func() *ValidateBatchOptionType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BatchOptionType.batch_bytes_max_bytes: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["batch_bytes.max_bytes"] = vFnMap["batch_bytes.max_bytes"]
-
 	vrhBatchEventsMaxEvents := v.BatchEventsMaxEventsValidationRuleHandler
 	rulesBatchEventsMaxEvents := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "32",
@@ -1005,9 +910,7 @@ var DefaultBatchOptionTypeValidator = func() *ValidateBatchOptionType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BatchOptionType.batch_events_max_events: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["batch_events.max_events"] = vFnMap["batch_events.max_events"]
-
 	vrhBatchTimeoutTimeoutSeconds := v.BatchTimeoutTimeoutSecondsValidationRuleHandler
 	rulesBatchTimeoutTimeoutSeconds := map[string]string{
 		"ves.io.schema.rules.uint64.gte": "300",
@@ -1018,7 +921,6 @@ var DefaultBatchOptionTypeValidator = func() *ValidateBatchOptionType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BatchOptionType.batch_timeout_timeout_seconds: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["batch_timeout.timeout_seconds"] = vFnMap["batch_timeout.timeout_seconds"]
 
 	return v
@@ -1135,16 +1037,13 @@ func (v *ValidateCompressionType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCompressionTypeValidator = func() *ValidateCompressionType {
 	v := &ValidateCompressionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1152,7 +1051,6 @@ var DefaultCompressionTypeValidator = func() *ValidateCompressionType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCompressionChoice := v.CompressionChoiceValidationRuleHandler
 	rulesCompressionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1187,43 +1085,33 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.http_receiver")
 	}
-
 	if err := m.GetDatadogReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.datadog_receiver")
 	}
-
 	if err := m.GetSplunkReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.splunk_receiver")
 	}
-
 	if err := m.GetElasticReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.elastic_receiver")
 	}
-
 	if err := m.GetAzureReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.azure_receiver")
 	}
-
 	if err := m.GetAzureEventHubsReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.azure_event_hubs_receiver")
 	}
-
 	if err := m.GetKafkaReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.kafka_receiver")
 	}
-
 	if err := m.GetNewRelicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.new_relic_receiver")
 	}
-
 	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.sumo_logic_receiver")
 	}
-
 	if err := m.GetQradarReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.qradar_receiver")
 	}
@@ -1264,7 +1152,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReceiverDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1274,7 +1161,6 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetReceiver().(type) {
 	case *CreateSpecType_S3Receiver:
-
 		drInfos, err := m.GetS3Receiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfo() FAILED")
@@ -1284,21 +1170,13 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "s3_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_HttpReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_DatadogReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_SplunkReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_ElasticReceiver:
-
 		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
@@ -1308,17 +1186,11 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "elastic_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_AzureReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_AzureEventHubsReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_AwsCloudWatchReceiver:
-
 		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfo() FAILED")
@@ -1328,25 +1200,15 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_cloud_watch_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_KafkaReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_NewRelicReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_SumoLogicReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_QradarReceiver:
-
 		return nil, nil
-
 	case *CreateSpecType_GcpBucketReceiver:
-
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
@@ -1356,11 +1218,9 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp_bucket_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -1374,7 +1234,6 @@ func (v *ValidateCreateSpecType) FilterChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) LogTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1382,7 +1241,6 @@ func (v *ValidateCreateSpecType) LogTypeValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ReceiverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1460,7 +1318,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["log_type"]; exists {
@@ -1518,7 +1375,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["receiver"]; exists {
@@ -1675,16 +1531,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1692,7 +1545,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFilterChoice := v.FilterChoiceValidationRuleHandler
 	rulesFilterChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1703,7 +1555,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["filter_choice"] = vFn
-
 	vrhLogType := v.LogTypeValidationRuleHandler
 	rulesLogType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1714,7 +1565,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["log_type"] = vFn
-
 	vrhReceiver := v.ReceiverValidationRuleHandler
 	rulesReceiver := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1725,9 +1575,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["receiver"] = vFn
-
 	v.FldValidators["filter_choice.ns_list"] = NSListValidator().Validate
-
 	v.FldValidators["receiver.s3_receiver"] = S3ConfigValidator().Validate
 	v.FldValidators["receiver.http_receiver"] = HTTPConfigValidator().Validate
 	v.FldValidators["receiver.datadog_receiver"] = DatadogConfigValidator().Validate
@@ -1765,11 +1613,9 @@ func (m *DatadogConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetDatadogApiKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DatadogConfig.datadog_api_key")
 	}
-
 	if err := m.GetUseTls().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DatadogConfig.use_tls")
 	}
@@ -1823,7 +1669,6 @@ func (v *ValidateDatadogConfig) EndpointChoiceSiteValidationRuleHandler(rules ma
 	}
 	return oValidatorFn_Site, nil
 }
-
 func (v *ValidateDatadogConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1831,9 +1676,7 @@ func (v *ValidateDatadogConfig) TlsChoiceValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDatadogConfig) DatadogApiKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for datadog_api_key")
@@ -1842,11 +1685,9 @@ func (v *ValidateDatadogConfig) DatadogApiKeyValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1866,32 +1707,23 @@ func (v *ValidateDatadogConfig) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["datadog_api_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("datadog_api_key"))
 		if err := fv(ctx, m.GetDatadogApiKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["endpoint_choice"]; exists {
@@ -1927,7 +1759,6 @@ func (v *ValidateDatadogConfig) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_choice"]; exists {
@@ -1963,16 +1794,13 @@ func (v *ValidateDatadogConfig) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDatadogConfigValidator = func() *ValidateDatadogConfig {
 	v := &ValidateDatadogConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1980,7 +1808,6 @@ var DefaultDatadogConfigValidator = func() *ValidateDatadogConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEndpointChoice := v.EndpointChoiceValidationRuleHandler
 	rulesEndpointChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1991,7 +1818,6 @@ var DefaultDatadogConfigValidator = func() *ValidateDatadogConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["endpoint_choice"] = vFn
-
 	vrhEndpointChoiceSite := v.EndpointChoiceSiteValidationRuleHandler
 	rulesEndpointChoiceSite := map[string]string{
 		"ves.io.schema.rules.string.hostname_or_ip": "true",
@@ -2001,9 +1827,7 @@ var DefaultDatadogConfigValidator = func() *ValidateDatadogConfig {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DatadogConfig.endpoint_choice_site: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["endpoint_choice.site"] = vFnMap["endpoint_choice.site"]
-
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2025,11 +1849,8 @@ var DefaultDatadogConfigValidator = func() *ValidateDatadogConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["datadog_api_key"] = vFn
-
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -2055,11 +1876,9 @@ func (m *ElasticConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAuthBasic().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ElasticConfig.auth_basic")
 	}
-
 	if err := m.GetUseTls().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ElasticConfig.use_tls")
 	}
@@ -2100,21 +1919,15 @@ func (m *ElasticConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAuthChoiceDRefInfo()
-
 }
 
 func (m *ElasticConfig) GetAuthChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetAuthChoice().(type) {
 	case *ElasticConfig_AuthNone:
-
 		return nil, nil
-
 	case *ElasticConfig_AuthBasic:
-
 		return nil, nil
-
 	case *ElasticConfig_AuthAws:
-
 		vref := m.GetAuthAws()
 		if vref == nil {
 			return nil, nil
@@ -2130,7 +1943,6 @@ func (m *ElasticConfig) GetAuthChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -2142,15 +1954,12 @@ func (m *ElasticConfig) GetAuthChoiceDBEntries(ctx context.Context, d db.Interfa
 
 	switch m.GetAuthChoice().(type) {
 	case *ElasticConfig_AuthNone:
-
 	case *ElasticConfig_AuthBasic:
-
 	case *ElasticConfig_AuthAws:
 		refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 		}
-
 		vref := m.GetAuthAws()
 		if vref == nil {
 			return nil, nil
@@ -2168,7 +1977,6 @@ func (m *ElasticConfig) GetAuthChoiceDBEntries(ctx context.Context, d db.Interfa
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -2185,7 +1993,6 @@ func (v *ValidateElasticConfig) AuthChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateElasticConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2193,9 +2000,7 @@ func (v *ValidateElasticConfig) TlsChoiceValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateElasticConfig) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for endpoint")
@@ -2262,34 +2067,24 @@ func (v *ValidateElasticConfig) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint"))
 		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_choice"]; exists {
@@ -2325,16 +2120,13 @@ func (v *ValidateElasticConfig) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultElasticConfigValidator = func() *ValidateElasticConfig {
 	v := &ValidateElasticConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2342,7 +2134,6 @@ var DefaultElasticConfigValidator = func() *ValidateElasticConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAuthChoice := v.AuthChoiceValidationRuleHandler
 	rulesAuthChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2353,7 +2144,6 @@ var DefaultElasticConfigValidator = func() *ValidateElasticConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["auth_choice"] = vFn
-
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2375,14 +2165,10 @@ var DefaultElasticConfigValidator = func() *ValidateElasticConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["endpoint"] = vFn
-
 	v.FldValidators["auth_choice.auth_basic"] = HttpAuthBasicValidator().Validate
 	v.FldValidators["auth_choice.auth_aws"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -2489,16 +2275,13 @@ func (v *ValidateFilenameOptionsType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFilenameOptionsTypeValidator = func() *ValidateFilenameOptionsType {
 	v := &ValidateFilenameOptionsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2506,7 +2289,6 @@ var DefaultFilenameOptionsTypeValidator = func() *ValidateFilenameOptionsType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFolderCustomFolder := v.FolderCustomFolderValidationRuleHandler
 	rulesFolderCustomFolder := map[string]string{
 		"ves.io.schema.rules.string.pattern": "^[A-Za-z_][A-Za-z0-9\\-\\._]*$",
@@ -2516,7 +2298,6 @@ var DefaultFilenameOptionsTypeValidator = func() *ValidateFilenameOptionsType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field FilenameOptionsType.folder_custom_folder: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["folder.custom_folder"] = vFnMap["folder.custom_folder"]
 
 	return v
@@ -2569,11 +2350,9 @@ func (m *GCPBucketConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGcpCredDRefInfo()
-
 }
 
 func (m *GCPBucketConfig) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -2589,7 +2368,6 @@ func (m *GCPBucketConfig) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetGcpCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2599,7 +2377,6 @@ func (m *GCPBucketConfig) GetGcpCredDBEntries(ctx context.Context, d db.Interfac
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -2617,7 +2394,6 @@ func (m *GCPBucketConfig) GetGcpCredDBEntries(ctx context.Context, d db.Interfac
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2626,7 +2402,6 @@ type ValidateGCPBucketConfig struct {
 }
 
 func (v *ValidateGCPBucketConfig) BucketValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bucket")
@@ -2634,9 +2409,7 @@ func (v *ValidateGCPBucketConfig) BucketValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPBucketConfig) GcpCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for gcp_cred")
@@ -2645,11 +2418,9 @@ func (v *ValidateGCPBucketConfig) GcpCredValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -2669,59 +2440,42 @@ func (v *ValidateGCPBucketConfig) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bucket"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bucket"))
 		if err := fv(ctx, m.GetBucket(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filename_options"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filename_options"))
 		if err := fv(ctx, m.GetFilenameOptions(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_cred"))
 		if err := fv(ctx, m.GetGcpCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPBucketConfigValidator = func() *ValidateGCPBucketConfig {
 	v := &ValidateGCPBucketConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2754,11 +2508,8 @@ var DefaultGCPBucketConfigValidator = func() *ValidateGCPBucketConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["gcp_cred"] = vFn
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
-
 	v.FldValidators["filename_options"] = FilenameOptionsTypeValidator().Validate
 
 	return v
@@ -2784,43 +2535,33 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.http_receiver")
 	}
-
 	if err := m.GetDatadogReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.datadog_receiver")
 	}
-
 	if err := m.GetSplunkReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.splunk_receiver")
 	}
-
 	if err := m.GetElasticReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.elastic_receiver")
 	}
-
 	if err := m.GetAzureReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.azure_receiver")
 	}
-
 	if err := m.GetAzureEventHubsReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.azure_event_hubs_receiver")
 	}
-
 	if err := m.GetKafkaReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.kafka_receiver")
 	}
-
 	if err := m.GetNewRelicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.new_relic_receiver")
 	}
-
 	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.sumo_logic_receiver")
 	}
-
 	if err := m.GetQradarReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.qradar_receiver")
 	}
@@ -2861,7 +2602,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReceiverDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2871,7 +2611,6 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetReceiver().(type) {
 	case *GetSpecType_S3Receiver:
-
 		drInfos, err := m.GetS3Receiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfo() FAILED")
@@ -2881,21 +2620,13 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "s3_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_HttpReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_DatadogReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_SplunkReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_ElasticReceiver:
-
 		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
@@ -2905,17 +2636,11 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "elastic_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_AzureReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_AzureEventHubsReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_AwsCloudWatchReceiver:
-
 		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfo() FAILED")
@@ -2925,25 +2650,15 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_cloud_watch_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_KafkaReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_NewRelicReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_SumoLogicReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_QradarReceiver:
-
 		return nil, nil
-
 	case *GetSpecType_GcpBucketReceiver:
-
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
@@ -2953,11 +2668,9 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp_bucket_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -2971,7 +2684,6 @@ func (v *ValidateGetSpecType) FilterChoiceValidationRuleHandler(rules map[string
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) LogTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2979,7 +2691,6 @@ func (v *ValidateGetSpecType) LogTypeValidationRuleHandler(rules map[string]stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ReceiverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3057,7 +2768,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["log_type"]; exists {
@@ -3115,7 +2825,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["receiver"]; exists {
@@ -3272,16 +2981,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3289,7 +2995,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFilterChoice := v.FilterChoiceValidationRuleHandler
 	rulesFilterChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3300,7 +3005,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["filter_choice"] = vFn
-
 	vrhLogType := v.LogTypeValidationRuleHandler
 	rulesLogType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3311,7 +3015,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["log_type"] = vFn
-
 	vrhReceiver := v.ReceiverValidationRuleHandler
 	rulesReceiver := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3322,9 +3025,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["receiver"] = vFn
-
 	v.FldValidators["filter_choice.ns_list"] = NSListValidator().Validate
-
 	v.FldValidators["receiver.s3_receiver"] = S3ConfigValidator().Validate
 	v.FldValidators["receiver.http_receiver"] = HTTPConfigValidator().Validate
 	v.FldValidators["receiver.datadog_receiver"] = DatadogConfigValidator().Validate
@@ -3362,43 +3063,33 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.http_receiver")
 	}
-
 	if err := m.GetDatadogReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.datadog_receiver")
 	}
-
 	if err := m.GetSplunkReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.splunk_receiver")
 	}
-
 	if err := m.GetElasticReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.elastic_receiver")
 	}
-
 	if err := m.GetAzureReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.azure_receiver")
 	}
-
 	if err := m.GetAzureEventHubsReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.azure_event_hubs_receiver")
 	}
-
 	if err := m.GetKafkaReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.kafka_receiver")
 	}
-
 	if err := m.GetNewRelicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.new_relic_receiver")
 	}
-
 	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.sumo_logic_receiver")
 	}
-
 	if err := m.GetQradarReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.qradar_receiver")
 	}
@@ -3444,15 +3135,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3462,7 +3150,6 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetReceiver().(type) {
 	case *GlobalSpecType_S3Receiver:
-
 		drInfos, err := m.GetS3Receiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfo() FAILED")
@@ -3472,21 +3159,13 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "s3_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_HttpReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_DatadogReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_SplunkReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_ElasticReceiver:
-
 		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
@@ -3496,17 +3175,11 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "elastic_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_AzureReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_AzureEventHubsReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_AwsCloudWatchReceiver:
-
 		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfo() FAILED")
@@ -3516,25 +3189,15 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_cloud_watch_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_KafkaReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_NewRelicReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_SumoLogicReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_QradarReceiver:
-
 		return nil, nil
-
 	case *GlobalSpecType_GcpBucketReceiver:
-
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
@@ -3544,15 +3207,12 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp_bucket_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3568,7 +3228,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3578,7 +3237,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3596,7 +3254,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -3611,7 +3268,6 @@ func (v *ValidateGlobalSpecType) FilterChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) LogTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3619,7 +3275,6 @@ func (v *ValidateGlobalSpecType) LogTypeValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ReceiverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3697,7 +3352,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["log_type"]; exists {
@@ -3755,7 +3409,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["receiver"]; exists {
@@ -3912,25 +3565,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3938,7 +3585,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFilterChoice := v.FilterChoiceValidationRuleHandler
 	rulesFilterChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3949,7 +3595,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["filter_choice"] = vFn
-
 	vrhLogType := v.LogTypeValidationRuleHandler
 	rulesLogType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3960,7 +3605,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["log_type"] = vFn
-
 	vrhReceiver := v.ReceiverValidationRuleHandler
 	rulesReceiver := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3971,9 +3615,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["receiver"] = vFn
-
 	v.FldValidators["filter_choice.ns_list"] = NSListValidator().Validate
-
 	v.FldValidators["receiver.s3_receiver"] = S3ConfigValidator().Validate
 	v.FldValidators["receiver.http_receiver"] = HTTPConfigValidator().Validate
 	v.FldValidators["receiver.datadog_receiver"] = DatadogConfigValidator().Validate
@@ -3987,7 +3629,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
 	v.FldValidators["receiver.gcp_bucket_receiver"] = GCPBucketConfigValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -4013,15 +3654,12 @@ func (m *HTTPConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAuthBasic().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HTTPConfig.auth_basic")
 	}
-
 	if err := m.GetAuthToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HTTPConfig.auth_token")
 	}
-
 	if err := m.GetUseTls().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HTTPConfig.use_tls")
 	}
@@ -4067,7 +3705,6 @@ func (v *ValidateHTTPConfig) AuthChoiceValidationRuleHandler(rules map[string]st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateHTTPConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4075,9 +3712,7 @@ func (v *ValidateHTTPConfig) TlsChoiceValidationRuleHandler(rules map[string]str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateHTTPConfig) UriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for uri")
@@ -4144,25 +3779,18 @@ func (v *ValidateHTTPConfig) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_choice"]; exists {
@@ -4198,25 +3826,19 @@ func (v *ValidateHTTPConfig) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uri"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uri"))
 		if err := fv(ctx, m.GetUri(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHTTPConfigValidator = func() *ValidateHTTPConfig {
 	v := &ValidateHTTPConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4224,7 +3846,6 @@ var DefaultHTTPConfigValidator = func() *ValidateHTTPConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAuthChoice := v.AuthChoiceValidationRuleHandler
 	rulesAuthChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4235,7 +3856,6 @@ var DefaultHTTPConfigValidator = func() *ValidateHTTPConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["auth_choice"] = vFn
-
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4258,14 +3878,10 @@ var DefaultHTTPConfigValidator = func() *ValidateHTTPConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["uri"] = vFn
-
 	v.FldValidators["auth_choice.auth_basic"] = HttpAuthBasicValidator().Validate
 	v.FldValidators["auth_choice.auth_token"] = AuthTokenValidator().Validate
-
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -4291,7 +3907,6 @@ func (m *HttpAuthBasic) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HttpAuthBasic.password")
 	}
@@ -4331,7 +3946,6 @@ type ValidateHttpAuthBasic struct {
 }
 
 func (v *ValidateHttpAuthBasic) UserNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for user_name")
@@ -4353,32 +3967,24 @@ func (v *ValidateHttpAuthBasic) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_name"))
 		if err := fv(ctx, m.GetUserName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHttpAuthBasicValidator = func() *ValidateHttpAuthBasic {
 	v := &ValidateHttpAuthBasic{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4397,7 +4003,6 @@ var DefaultHttpAuthBasicValidator = func() *ValidateHttpAuthBasic {
 		panic(errMsg)
 	}
 	v.FldValidators["user_name"] = vFn
-
 	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -4423,7 +4028,6 @@ func (m *KafkaConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetUseTls().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting KafkaConfig.use_tls")
 	}
@@ -4469,9 +4073,7 @@ func (v *ValidateKafkaConfig) TlsChoiceValidationRuleHandler(rules map[string]st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateKafkaConfig) BootstrapServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4511,9 +4113,7 @@ func (v *ValidateKafkaConfig) BootstrapServersValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateKafkaConfig) KafkaTopicValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for kafka_topic")
@@ -4535,40 +4135,29 @@ func (v *ValidateKafkaConfig) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bootstrap_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("bootstrap_servers"))
 		if err := fv(ctx, m.GetBootstrapServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["kafka_topic"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kafka_topic"))
 		if err := fv(ctx, m.GetKafkaTopic(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_choice"]; exists {
@@ -4604,16 +4193,13 @@ func (v *ValidateKafkaConfig) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultKafkaConfigValidator = func() *ValidateKafkaConfig {
 	v := &ValidateKafkaConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4621,7 +4207,6 @@ var DefaultKafkaConfigValidator = func() *ValidateKafkaConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4662,11 +4247,8 @@ var DefaultKafkaConfigValidator = func() *ValidateKafkaConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["kafka_topic"] = vFn
-
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -4718,7 +4300,6 @@ type ValidateNSList struct {
 }
 
 func (v *ValidateNSList) NamespacesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4772,22 +4353,18 @@ func (v *ValidateNSList) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespaces"]; exists {
 		vOpts := append(opts, db.WithValidateField("namespaces"))
 		if err := fv(ctx, m.GetNamespaces(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNSListValidator = func() *ValidateNSList {
 	v := &ValidateNSList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4831,7 +4408,6 @@ func (m *NewRelicConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetApiKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting NewRelicConfig.api_key")
 	}
@@ -4877,9 +4453,7 @@ func (v *ValidateNewRelicConfig) EndpointChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateNewRelicConfig) ApiKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_key")
@@ -4888,11 +4462,9 @@ func (v *ValidateNewRelicConfig) ApiKeyValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -4912,14 +4484,11 @@ func (v *ValidateNewRelicConfig) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_key"))
 		if err := fv(ctx, m.GetApiKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["endpoint_choice"]; exists {
@@ -4955,16 +4524,13 @@ func (v *ValidateNewRelicConfig) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNewRelicConfigValidator = func() *ValidateNewRelicConfig {
 	v := &ValidateNewRelicConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4972,7 +4538,6 @@ var DefaultNewRelicConfigValidator = func() *ValidateNewRelicConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEndpointChoice := v.EndpointChoiceValidationRuleHandler
 	rulesEndpointChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5018,7 +4583,6 @@ func (m *QRadarConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetUseTls().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting QRadarConfig.use_tls")
 	}
@@ -5064,9 +4628,7 @@ func (v *ValidateQRadarConfig) TlsChoiceValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateQRadarConfig) UriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for uri")
@@ -5088,23 +4650,17 @@ func (v *ValidateQRadarConfig) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_choice"]; exists {
@@ -5140,25 +4696,19 @@ func (v *ValidateQRadarConfig) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uri"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uri"))
 		if err := fv(ctx, m.GetUri(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultQRadarConfigValidator = func() *ValidateQRadarConfig {
 	v := &ValidateQRadarConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5166,7 +4716,6 @@ var DefaultQRadarConfigValidator = func() *ValidateQRadarConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5189,11 +4738,8 @@ var DefaultQRadarConfigValidator = func() *ValidateQRadarConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["uri"] = vFn
-
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -5219,43 +4765,33 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetHttpReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.http_receiver")
 	}
-
 	if err := m.GetDatadogReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.datadog_receiver")
 	}
-
 	if err := m.GetSplunkReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.splunk_receiver")
 	}
-
 	if err := m.GetElasticReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.elastic_receiver")
 	}
-
 	if err := m.GetAzureReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.azure_receiver")
 	}
-
 	if err := m.GetAzureEventHubsReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.azure_event_hubs_receiver")
 	}
-
 	if err := m.GetKafkaReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.kafka_receiver")
 	}
-
 	if err := m.GetNewRelicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.new_relic_receiver")
 	}
-
 	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.sumo_logic_receiver")
 	}
-
 	if err := m.GetQradarReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.qradar_receiver")
 	}
@@ -5296,7 +4832,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReceiverDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -5306,7 +4841,6 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetReceiver().(type) {
 	case *ReplaceSpecType_S3Receiver:
-
 		drInfos, err := m.GetS3Receiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfo() FAILED")
@@ -5316,21 +4850,13 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "s3_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_HttpReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DatadogReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_SplunkReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ElasticReceiver:
-
 		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
@@ -5340,17 +4866,11 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "elastic_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_AzureReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_AzureEventHubsReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_AwsCloudWatchReceiver:
-
 		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfo() FAILED")
@@ -5360,25 +4880,15 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws_cloud_watch_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_KafkaReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_NewRelicReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_SumoLogicReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_QradarReceiver:
-
 		return nil, nil
-
 	case *ReplaceSpecType_GcpBucketReceiver:
-
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
@@ -5388,11 +4898,9 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp_bucket_receiver." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -5406,7 +4914,6 @@ func (v *ValidateReplaceSpecType) FilterChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) LogTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5414,7 +4921,6 @@ func (v *ValidateReplaceSpecType) LogTypeValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ReceiverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5492,7 +4998,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["log_type"]; exists {
@@ -5550,7 +5055,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["receiver"]; exists {
@@ -5707,16 +5211,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5724,7 +5225,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFilterChoice := v.FilterChoiceValidationRuleHandler
 	rulesFilterChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5735,7 +5235,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["filter_choice"] = vFn
-
 	vrhLogType := v.LogTypeValidationRuleHandler
 	rulesLogType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5746,7 +5245,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["log_type"] = vFn
-
 	vrhReceiver := v.ReceiverValidationRuleHandler
 	rulesReceiver := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5757,9 +5255,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["receiver"] = vFn
-
 	v.FldValidators["filter_choice.ns_list"] = NSListValidator().Validate
-
 	v.FldValidators["receiver.s3_receiver"] = S3ConfigValidator().Validate
 	v.FldValidators["receiver.http_receiver"] = HTTPConfigValidator().Validate
 	v.FldValidators["receiver.datadog_receiver"] = DatadogConfigValidator().Validate
@@ -5824,11 +5320,9 @@ func (m *S3Config) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAwsCredDRefInfo()
-
 }
 
 func (m *S3Config) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil
@@ -5844,7 +5338,6 @@ func (m *S3Config) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAwsCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5854,7 +5347,6 @@ func (m *S3Config) GetAwsCredDBEntries(ctx context.Context, d db.Interface) ([]d
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil
@@ -5872,7 +5364,6 @@ func (m *S3Config) GetAwsCredDBEntries(ctx context.Context, d db.Interface) ([]d
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -5881,7 +5372,6 @@ type ValidateS3Config struct {
 }
 
 func (v *ValidateS3Config) BucketValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bucket")
@@ -5889,9 +5379,7 @@ func (v *ValidateS3Config) BucketValidationRuleHandler(rules map[string]string) 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateS3Config) AwsCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_cred")
@@ -5900,19 +5388,15 @@ func (v *ValidateS3Config) AwsCredValidationRuleHandler(rules map[string]string)
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateS3Config) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_region")
@@ -5934,68 +5418,48 @@ func (v *ValidateS3Config) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_cred"))
 		if err := fv(ctx, m.GetAwsCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["bucket"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bucket"))
 		if err := fv(ctx, m.GetBucket(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filename_options"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filename_options"))
 		if err := fv(ctx, m.GetFilenameOptions(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultS3ConfigValidator = func() *ValidateS3Config {
 	v := &ValidateS3Config{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6040,11 +5504,8 @@ var DefaultS3ConfigValidator = func() *ValidateS3Config {
 		panic(errMsg)
 	}
 	v.FldValidators["aws_region"] = vFn
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
-
 	v.FldValidators["filename_options"] = FilenameOptionsTypeValidator().Validate
 
 	return v
@@ -6070,11 +5531,9 @@ func (m *SplunkConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSplunkHecToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SplunkConfig.splunk_hec_token")
 	}
-
 	if err := m.GetUseTls().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SplunkConfig.use_tls")
 	}
@@ -6120,9 +5579,7 @@ func (v *ValidateSplunkConfig) TlsChoiceValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSplunkConfig) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for endpoint")
@@ -6130,9 +5587,7 @@ func (v *ValidateSplunkConfig) EndpointValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSplunkConfig) SplunkHecTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for splunk_hec_token")
@@ -6141,11 +5596,9 @@ func (v *ValidateSplunkConfig) SplunkHecTokenValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -6165,41 +5618,29 @@ func (v *ValidateSplunkConfig) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["batch"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("batch"))
 		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["compression"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compression"))
 		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("endpoint"))
 		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["splunk_hec_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("splunk_hec_token"))
 		if err := fv(ctx, m.GetSplunkHecToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_choice"]; exists {
@@ -6235,16 +5676,13 @@ func (v *ValidateSplunkConfig) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSplunkConfigValidator = func() *ValidateSplunkConfig {
 	v := &ValidateSplunkConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6252,7 +5690,6 @@ var DefaultSplunkConfigValidator = func() *ValidateSplunkConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6286,11 +5723,8 @@ var DefaultSplunkConfigValidator = func() *ValidateSplunkConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["splunk_hec_token"] = vFn
-
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
-
 	v.FldValidators["compression"] = CompressionTypeValidator().Validate
-
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -6316,7 +5750,6 @@ func (m *SumoLogicConfig) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetUrl().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting SumoLogicConfig.url")
 	}
@@ -6356,7 +5789,6 @@ type ValidateSumoLogicConfig struct {
 }
 
 func (v *ValidateSumoLogicConfig) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for url")
@@ -6365,11 +5797,9 @@ func (v *ValidateSumoLogicConfig) UrlValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -6389,23 +5819,18 @@ func (v *ValidateSumoLogicConfig) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSumoLogicConfigValidator = func() *ValidateSumoLogicConfig {
 	v := &ValidateSumoLogicConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6449,7 +5874,6 @@ func (m *TLSClientConfigType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetKeyUrl().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TLSClientConfigType.key_url")
 	}
@@ -6489,7 +5913,6 @@ type ValidateTLSClientConfigType struct {
 }
 
 func (v *ValidateTLSClientConfigType) CertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate")
@@ -6511,32 +5934,24 @@ func (v *ValidateTLSClientConfigType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate"))
 		if err := fv(ctx, m.GetCertificate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key_url"))
 		if err := fv(ctx, m.GetKeyUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTLSClientConfigTypeValidator = func() *ValidateTLSClientConfigType {
 	v := &ValidateTLSClientConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6556,7 +5971,6 @@ var DefaultTLSClientConfigTypeValidator = func() *ValidateTLSClientConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["certificate"] = vFn
-
 	v.FldValidators["key_url"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -6582,7 +5996,6 @@ func (m *TLSConfigType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetMtlsEnable().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting TLSConfigType.mtls_enable")
 	}
@@ -6636,7 +6049,6 @@ func (v *ValidateTLSConfigType) CaChoiceTrustedCaUrlValidationRuleHandler(rules 
 	}
 	return oValidatorFn_TrustedCaUrl, nil
 }
-
 func (v *ValidateTLSConfigType) MtlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6692,7 +6104,6 @@ func (v *ValidateTLSConfigType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["mtls_choice"]; exists {
@@ -6728,7 +6139,6 @@ func (v *ValidateTLSConfigType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetVerifyCertificate().(type) {
@@ -6754,7 +6164,6 @@ func (v *ValidateTLSConfigType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetVerifyHostname().(type) {
@@ -6780,16 +6189,13 @@ func (v *ValidateTLSConfigType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 	v := &ValidateTLSConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6797,7 +6203,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCaChoice := v.CaChoiceValidationRuleHandler
 	rulesCaChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6808,7 +6213,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["ca_choice"] = vFn
-
 	vrhCaChoiceTrustedCaUrl := v.CaChoiceTrustedCaUrlValidationRuleHandler
 	rulesCaChoiceTrustedCaUrl := map[string]string{
 		"ves.io.schema.rules.string.max_bytes":      "131072",
@@ -6820,9 +6224,7 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field TLSConfigType.ca_choice_trusted_ca_url: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["ca_choice.trusted_ca_url"] = vFnMap["ca_choice.trusted_ca_url"]
-
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6833,7 +6235,6 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["mtls_choice"] = vFn
-
 	v.FldValidators["mtls_choice.mtls_enable"] = TLSClientConfigTypeValidator().Validate
 
 	return v

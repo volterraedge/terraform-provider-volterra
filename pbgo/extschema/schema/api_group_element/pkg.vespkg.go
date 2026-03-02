@@ -13,21 +13,17 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_group_element.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.api_group_element.Object"] = ObjectValidator()
 	vr["ves.io.schema.api_group_element.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.api_group_element.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.api_group_element.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.api_group_element.ListRequest"] = ListRequestValidator()
 	vr["ves.io.schema.api_group_element.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.api_group_element.ListResponseItem"] = ListResponseItemValidator()
-
 	vr["ves.io.schema.api_group_element.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.api_group_element.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.api_group_element.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.api_group_element.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -39,20 +35,16 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.api_group_element.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.api_group_element.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.api_group_element.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.api_group_element.API"] = "web"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -61,9 +53,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.api_group_element.Object"] = APISwaggerJSON
@@ -77,22 +67,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.api_group_element.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.api_group_element.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.api_group_element.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

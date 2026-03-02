@@ -14,9 +14,7 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ticket_management.ticket.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.ticket_management.ticket.Object"] = ObjectValidator()
-
 	vr["ves.io.schema.ticket_management.ticket.CreateJiraIssueRequest"] = CreateJiraIssueRequestValidator()
 	vr["ves.io.schema.ticket_management.ticket.PrivateCreateTicketRequest"] = PrivateCreateTicketRequestValidator()
 	vr["ves.io.schema.ticket_management.ticket.PrivateCreateTicketResponse"] = PrivateCreateTicketResponseValidator()
@@ -27,9 +25,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ticket_management.ticket.TicketResponseSpec"] = TicketResponseSpecValidator()
 	vr["ves.io.schema.ticket_management.ticket.UnlinkTicketsRequest"] = UnlinkTicketsRequestValidator()
 	vr["ves.io.schema.ticket_management.ticket.UnlinkTicketsResponse"] = UnlinkTicketsResponseValidator()
-
 	vr["ves.io.schema.ticket_management.ticket.GlobalSpecType"] = GlobalSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -37,19 +33,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.ticket_management.ticket.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.ticket_management.ticket.Object"] = reflect.TypeOf(&DBObject{})
 	mdr.EntryIndexers["ves.io.schema.ticket_management.ticket.Object"] = GetObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -58,14 +50,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.ticket_management.ticket.Object"] = CustomPrivateAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.ticket_management.ticket.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.ticket_management.ticket.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
 		if isExternal {
@@ -76,22 +64,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.ticket_management.ticket.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

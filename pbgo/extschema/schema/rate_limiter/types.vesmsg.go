@@ -67,7 +67,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUserIdentificationDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *CreateSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) 
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUserIdentificationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *CreateSpecType) GetUserIdentificationDBEntries(ctx context.Context, d d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) LimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -166,9 +162,7 @@ func (v *ValidateCreateSpecType) LimitsValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) UserIdentificationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -228,30 +222,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("limits"))
 		if err := fv(ctx, m.GetLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_identification"]; exists {
 		vOpts := append(opts, db.WithValidateField("user_identification"))
 		if err := fv(ctx, m.GetUserIdentification(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -333,7 +321,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUserIdentificationDRefInfo()
-
 }
 
 func (m *GetSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
@@ -358,7 +345,6 @@ func (m *GetSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUserIdentificationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -377,7 +363,6 @@ func (m *GetSpecType) GetUserIdentificationDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -386,7 +371,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) LimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -432,9 +416,7 @@ func (v *ValidateGetSpecType) LimitsValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) UserIdentificationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -494,30 +476,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("limits"))
 		if err := fv(ctx, m.GetLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_identification"]; exists {
 		vOpts := append(opts, db.WithValidateField("user_identification"))
 		if err := fv(ctx, m.GetUserIdentification(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -599,7 +575,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUserIdentificationDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
@@ -624,7 +599,6 @@ func (m *GlobalSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) 
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUserIdentificationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -643,7 +617,6 @@ func (m *GlobalSpecType) GetUserIdentificationDBEntries(ctx context.Context, d d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -652,7 +625,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) LimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -698,9 +670,7 @@ func (v *ValidateGlobalSpecType) LimitsValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) UserIdentificationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -760,39 +730,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("limits"))
 		if err := fv(ctx, m.GetLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mode"))
 		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_identification"]; exists {
 		vOpts := append(opts, db.WithValidateField("user_identification"))
 		if err := fv(ctx, m.GetUserIdentification(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -873,7 +834,6 @@ type ValidateInputHours struct {
 }
 
 func (v *ValidateInputHours) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
@@ -895,23 +855,18 @@ func (v *ValidateInputHours) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["duration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("duration"))
 		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInputHoursValidator = func() *ValidateInputHours {
 	v := &ValidateInputHours{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -981,7 +936,6 @@ type ValidateInputMinutes struct {
 }
 
 func (v *ValidateInputMinutes) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
@@ -1003,23 +957,18 @@ func (v *ValidateInputMinutes) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["duration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("duration"))
 		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInputMinutesValidator = func() *ValidateInputMinutes {
 	v := &ValidateInputMinutes{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1089,7 +1038,6 @@ type ValidateInputSeconds struct {
 }
 
 func (v *ValidateInputSeconds) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
@@ -1111,23 +1059,18 @@ func (v *ValidateInputSeconds) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["duration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("duration"))
 		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInputSecondsValidator = func() *ValidateInputSeconds {
 	v := &ValidateInputSeconds{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1209,7 +1152,6 @@ func (v *ValidateLeakyBucketRateLimiter) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -1313,16 +1255,13 @@ func (v *ValidateRateLimitBlockAction) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRateLimitBlockActionValidator = func() *ValidateRateLimitBlockAction {
 	v := &ValidateRateLimitBlockAction{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["block_duration_choice.seconds"] = InputSecondsValidator().Validate
 	v.FldValidators["block_duration_choice.minutes"] = InputMinutesValidator().Validate
 	v.FldValidators["block_duration_choice.hours"] = InputHoursValidator().Validate
@@ -1376,7 +1315,6 @@ type ValidateRateLimitValue struct {
 }
 
 func (v *ValidateRateLimitValue) UnitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(RateLimitPeriodUnit)
@@ -1390,9 +1328,7 @@ func (v *ValidateRateLimitValue) UnitValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRateLimitValue) TotalNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for total_number")
@@ -1400,9 +1336,7 @@ func (v *ValidateRateLimitValue) TotalNumberValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRateLimitValue) BurstMultiplierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for burst_multiplier")
@@ -1410,9 +1344,7 @@ func (v *ValidateRateLimitValue) BurstMultiplierValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRateLimitValue) PeriodMultiplierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for period_multiplier")
@@ -1458,7 +1390,6 @@ func (v *ValidateRateLimitValue) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetAlgorithm().(type) {
@@ -1484,52 +1415,37 @@ func (v *ValidateRateLimitValue) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["burst_multiplier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("burst_multiplier"))
 		if err := fv(ctx, m.GetBurstMultiplier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["period_multiplier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("period_multiplier"))
 		if err := fv(ctx, m.GetPeriodMultiplier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_number"))
 		if err := fv(ctx, m.GetTotalNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit"))
 		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRateLimitValueValidator = func() *ValidateRateLimitValue {
 	v := &ValidateRateLimitValue{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1584,7 +1500,6 @@ var DefaultRateLimitValueValidator = func() *ValidateRateLimitValue {
 		panic(errMsg)
 	}
 	v.FldValidators["period_multiplier"] = vFn
-
 	v.FldValidators["action_choice.action_block"] = RateLimitBlockActionValidator().Validate
 
 	return v
@@ -1637,7 +1552,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUserIdentificationDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
@@ -1662,7 +1576,6 @@ func (m *ReplaceSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUserIdentificationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1681,7 +1594,6 @@ func (m *ReplaceSpecType) GetUserIdentificationDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1690,7 +1602,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) LimitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1736,9 +1647,7 @@ func (v *ValidateReplaceSpecType) LimitsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) UserIdentificationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1798,30 +1707,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["limits"]; exists {
 		vOpts := append(opts, db.WithValidateField("limits"))
 		if err := fv(ctx, m.GetLimits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_identification"]; exists {
 		vOpts := append(opts, db.WithValidateField("user_identification"))
 		if err := fv(ctx, m.GetUserIdentification(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1914,7 +1817,6 @@ func (v *ValidateTokenBucketRateLimiter) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

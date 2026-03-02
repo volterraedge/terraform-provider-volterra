@@ -3800,7 +3800,7 @@ type CustomAPIClient interface {
 	//
 	// x-displayName: "Disable visibility in all workspaces"
 	// Disable Visibility of the service in all workspaces. This will remove the discovered service
-	// from being visible in other wokspaces like WAAP.
+	// from being visible in other workspaces like WAAP.
 	DisableVisibility(ctx context.Context, in *DisableVisibilityRequest, opts ...grpc.CallOption) (*DisableVisibilityResponse, error)
 	// Create HTTP or HTTPS Load Balancer
 	//
@@ -3899,7 +3899,7 @@ type CustomAPIServer interface {
 	//
 	// x-displayName: "Disable visibility in all workspaces"
 	// Disable Visibility of the service in all workspaces. This will remove the discovered service
-	// from being visible in other wokspaces like WAAP.
+	// from being visible in other workspaces like WAAP.
 	DisableVisibility(context.Context, *DisableVisibilityRequest) (*DisableVisibilityResponse, error)
 	// Create HTTP or HTTPS Load Balancer
 	//

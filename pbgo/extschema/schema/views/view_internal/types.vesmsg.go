@@ -76,9 +76,7 @@ func (v *ValidateAllocatedNumbers) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allocatedNumbers"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allocatedNumbers"))
 		for key, value := range m.GetAllocatedNumbers() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -86,9 +84,7 @@ func (v *ValidateAllocatedNumbers) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -157,9 +153,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allocationMap"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allocationMap"))
 		for key, value := range m.GetAllocationMap() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -167,11 +161,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["child_objects"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("child_objects"))
 		for idx, item := range m.GetChildObjects() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -179,18 +170,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view"))
 		if err := fv(ctx, m.GetView(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

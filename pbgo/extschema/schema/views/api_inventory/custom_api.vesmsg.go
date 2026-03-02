@@ -67,7 +67,6 @@ type ValidateGetPathSuggestionsReq struct {
 }
 
 func (v *ValidateGetPathSuggestionsReq) MatchValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for match_value")
@@ -89,41 +88,30 @@ func (v *ValidateGetPathSuggestionsReq) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["match_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("match_value"))
 		if err := fv(ctx, m.GetMatchValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetPathSuggestionsReqValidator = func() *ValidateGetPathSuggestionsReq {
 	v := &ValidateGetPathSuggestionsReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -193,11 +181,9 @@ func (m *UpdateApiDefinitionRefReq) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetApiDefinitionDRefInfo()
-
 }
 
 func (m *UpdateApiDefinitionRefReq) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil
@@ -213,7 +199,6 @@ func (m *UpdateApiDefinitionRefReq) GetApiDefinitionDRefInfo() ([]db.DRefInfo, e
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetApiDefinitionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -223,7 +208,6 @@ func (m *UpdateApiDefinitionRefReq) GetApiDefinitionDBEntries(ctx context.Contex
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: api_definition")
 	}
-
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil
@@ -241,7 +225,6 @@ func (m *UpdateApiDefinitionRefReq) GetApiDefinitionDBEntries(ctx context.Contex
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -262,41 +245,30 @@ func (v *ValidateUpdateApiDefinitionRefReq) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_definition"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_definition"))
 		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateApiDefinitionRefReqValidator = func() *ValidateUpdateApiDefinitionRefReq {
 	v := &ValidateUpdateApiDefinitionRefReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["api_definition"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -360,7 +332,6 @@ func (v *ValidateUpdateApiDefinitionRefResp) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -417,7 +388,6 @@ type ValidateUpdateApiInventoryListsReq struct {
 }
 
 func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryInclusionListDeltaAddedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -463,9 +433,7 @@ func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryInclusionListDeltaAdded
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryInclusionListDeltaRemovedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -511,9 +479,7 @@ func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryInclusionListDeltaRemov
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryExclusionListDeltaAddedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -559,9 +525,7 @@ func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryExclusionListDeltaAdded
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryExclusionListDeltaRemovedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -607,9 +571,7 @@ func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryExclusionListDeltaRemov
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateApiInventoryListsReq) NonApiEndpointsDeltaAddedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -655,9 +617,7 @@ func (v *ValidateUpdateApiInventoryListsReq) NonApiEndpointsDeltaAddedValidation
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateApiInventoryListsReq) NonApiEndpointsDeltaRemovedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -717,116 +677,84 @@ func (v *ValidateUpdateApiInventoryListsReq) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_exclusion_list_delta_added"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_exclusion_list_delta_added"))
 		if err := fv(ctx, m.GetApiInventoryExclusionListDeltaAdded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_exclusion_list_delta_removed"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_exclusion_list_delta_removed"))
 		if err := fv(ctx, m.GetApiInventoryExclusionListDeltaRemoved(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_inclusion_list_delta_added"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_inclusion_list_delta_added"))
 		if err := fv(ctx, m.GetApiInventoryInclusionListDeltaAdded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_inclusion_list_delta_removed"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_inclusion_list_delta_removed"))
 		if err := fv(ctx, m.GetApiInventoryInclusionListDeltaRemoved(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["new_api_definition_hash"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("new_api_definition_hash"))
 		if err := fv(ctx, m.GetNewApiDefinitionHash(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["new_api_definition_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("new_api_definition_timestamp"))
 		if err := fv(ctx, m.GetNewApiDefinitionTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["non_api_endpoints_delta_added"]; exists {
 		vOpts := append(opts, db.WithValidateField("non_api_endpoints_delta_added"))
 		if err := fv(ctx, m.GetNonApiEndpointsDeltaAdded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["non_api_endpoints_delta_removed"]; exists {
 		vOpts := append(opts, db.WithValidateField("non_api_endpoints_delta_removed"))
 		if err := fv(ctx, m.GetNonApiEndpointsDeltaRemoved(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["old_api_definition_hash"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("old_api_definition_hash"))
 		if err := fv(ctx, m.GetOldApiDefinitionHash(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["old_api_definition_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("old_api_definition_timestamp"))
 		if err := fv(ctx, m.GetOldApiDefinitionTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInventoryListsReq {
 	v := &ValidateUpdateApiInventoryListsReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -837,7 +765,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhApiInventoryInclusionListDeltaAdded := v.ApiInventoryInclusionListDeltaAddedValidationRuleHandler
 	rulesApiInventoryInclusionListDeltaAdded := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionListDeltaAdded(rulesApiInventoryInclusionListDeltaAdded)
@@ -849,7 +777,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhApiInventoryInclusionListDeltaRemoved := v.ApiInventoryInclusionListDeltaRemovedValidationRuleHandler
 	rulesApiInventoryInclusionListDeltaRemoved := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionListDeltaRemoved(rulesApiInventoryInclusionListDeltaRemoved)
@@ -861,7 +789,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhApiInventoryExclusionListDeltaAdded := v.ApiInventoryExclusionListDeltaAddedValidationRuleHandler
 	rulesApiInventoryExclusionListDeltaAdded := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionListDeltaAdded(rulesApiInventoryExclusionListDeltaAdded)
@@ -873,7 +801,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhApiInventoryExclusionListDeltaRemoved := v.ApiInventoryExclusionListDeltaRemovedValidationRuleHandler
 	rulesApiInventoryExclusionListDeltaRemoved := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionListDeltaRemoved(rulesApiInventoryExclusionListDeltaRemoved)
@@ -885,7 +813,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhNonApiEndpointsDeltaAdded := v.NonApiEndpointsDeltaAddedValidationRuleHandler
 	rulesNonApiEndpointsDeltaAdded := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpointsDeltaAdded(rulesNonApiEndpointsDeltaAdded)
@@ -897,7 +825,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhNonApiEndpointsDeltaRemoved := v.NonApiEndpointsDeltaRemovedValidationRuleHandler
 	rulesNonApiEndpointsDeltaRemoved := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpointsDeltaRemoved(rulesNonApiEndpointsDeltaRemoved)
@@ -968,7 +896,6 @@ func (v *ValidateUpdateApiInventoryListsResp) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

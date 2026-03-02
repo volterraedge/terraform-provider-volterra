@@ -44,7 +44,6 @@ func (c *CustomAPIGrpcClient) doRPCGetCurrentPlan(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.GetCurrentPlan(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListUsagePlans(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListUsagePlansReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -85,11 +84,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetCurrentPlan"] = ccl.doRPCGetCurrentPlan
-
 	rpcFns["ListUsagePlans"] = ccl.doRPCListUsagePlans
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -174,7 +170,6 @@ func (c *CustomAPIRestClient) doRPCGetCurrentPlan(ctx context.Context, callOpts 
 	pbRsp := &LocalizedPlan{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.usage.plan.LocalizedPlan", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -182,7 +177,6 @@ func (c *CustomAPIRestClient) doRPCGetCurrentPlan(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListUsagePlans(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -256,7 +250,6 @@ func (c *CustomAPIRestClient) doRPCListUsagePlans(ctx context.Context, callOpts 
 	pbRsp := &ListUsagePlansRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.usage.plan.ListUsagePlansRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -290,11 +283,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetCurrentPlan"] = ccl.doRPCGetCurrentPlan
-
 	rpcFns["ListUsagePlans"] = ccl.doRPCListUsagePlans
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -379,7 +369,6 @@ func (s *customAPISrv) GetCurrentPlan(ctx context.Context, in *ves_io_schema.Emp
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.usage.plan.LocalizedPlan", rsp)...)
 
 	return rsp, nil
@@ -428,7 +417,6 @@ func (s *customAPISrv) ListUsagePlans(ctx context.Context, in *ListUsagePlansReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.usage.plan.ListUsagePlansRsp", rsp)...)
 
 	return rsp, nil

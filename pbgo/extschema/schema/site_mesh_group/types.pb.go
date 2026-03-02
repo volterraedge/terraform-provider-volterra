@@ -413,6 +413,17 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_EnableReFallback
 	//	*GlobalSpecType_DisableReFallback
 	ReFallback isGlobalSpecType_ReFallback `protobuf_oneof:"re_fallback"`
+	// BFD Choice
+	//
+	// x-displayName: "BFD"
+	// Options for enabling or disabling BFD for the Site Mesh Group.
+	// BFD is used for fast failure detection.
+	// x-required
+	//
+	// Types that are valid to be assigned to BfdChoice:
+	//	*GlobalSpecType_BfdDisabled
+	//	*GlobalSpecType_BfdEnabled
+	BfdChoice isGlobalSpecType_BfdChoice `protobuf_oneof:"bfd_choice"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -455,6 +466,12 @@ type isGlobalSpecType_ReFallback interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_BfdChoice interface {
+	isGlobalSpecType_BfdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_HubMesh struct {
 	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
@@ -471,12 +488,20 @@ type GlobalSpecType_EnableReFallback struct {
 type GlobalSpecType_DisableReFallback struct {
 	DisableReFallback *schema.Empty `protobuf:"bytes,11,opt,name=disable_re_fallback,json=disableReFallback,proto3,oneof" json:"disable_re_fallback,omitempty"`
 }
+type GlobalSpecType_BfdDisabled struct {
+	BfdDisabled *schema.Empty `protobuf:"bytes,13,opt,name=bfd_disabled,json=bfdDisabled,proto3,oneof" json:"bfd_disabled,omitempty"`
+}
+type GlobalSpecType_BfdEnabled struct {
+	BfdEnabled *BFD `protobuf:"bytes,14,opt,name=bfd_enabled,json=bfdEnabled,proto3,oneof" json:"bfd_enabled,omitempty"`
+}
 
 func (*GlobalSpecType_HubMesh) isGlobalSpecType_MeshChoice()           {}
 func (*GlobalSpecType_SpokeMesh) isGlobalSpecType_MeshChoice()         {}
 func (*GlobalSpecType_FullMesh) isGlobalSpecType_MeshChoice()          {}
 func (*GlobalSpecType_EnableReFallback) isGlobalSpecType_ReFallback()  {}
 func (*GlobalSpecType_DisableReFallback) isGlobalSpecType_ReFallback() {}
+func (*GlobalSpecType_BfdDisabled) isGlobalSpecType_BfdChoice()        {}
+func (*GlobalSpecType_BfdEnabled) isGlobalSpecType_BfdChoice()         {}
 
 func (m *GlobalSpecType) GetMeshChoice() isGlobalSpecType_MeshChoice {
 	if m != nil {
@@ -487,6 +512,12 @@ func (m *GlobalSpecType) GetMeshChoice() isGlobalSpecType_MeshChoice {
 func (m *GlobalSpecType) GetReFallback() isGlobalSpecType_ReFallback {
 	if m != nil {
 		return m.ReFallback
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetBfdChoice() isGlobalSpecType_BfdChoice {
+	if m != nil {
+		return m.BfdChoice
 	}
 	return nil
 }
@@ -555,6 +586,20 @@ func (m *GlobalSpecType) GetDisableReFallback() *schema.Empty {
 	return nil
 }
 
+func (m *GlobalSpecType) GetBfdDisabled() *schema.Empty {
+	if x, ok := m.GetBfdChoice().(*GlobalSpecType_BfdDisabled); ok {
+		return x.BfdDisabled
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetBfdEnabled() *BFD {
+	if x, ok := m.GetBfdChoice().(*GlobalSpecType_BfdEnabled); ok {
+		return x.BfdEnabled
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -563,6 +608,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_FullMesh)(nil),
 		(*GlobalSpecType_EnableReFallback)(nil),
 		(*GlobalSpecType_DisableReFallback)(nil),
+		(*GlobalSpecType_BfdDisabled)(nil),
+		(*GlobalSpecType_BfdEnabled)(nil),
 	}
 }
 
@@ -583,6 +630,10 @@ type CreateSpecType struct {
 	//	*CreateSpecType_EnableReFallback
 	//	*CreateSpecType_DisableReFallback
 	ReFallback isCreateSpecType_ReFallback `protobuf_oneof:"re_fallback"`
+	// Types that are valid to be assigned to BfdChoice:
+	//	*CreateSpecType_BfdDisabled
+	//	*CreateSpecType_BfdEnabled
+	BfdChoice isCreateSpecType_BfdChoice `protobuf_oneof:"bfd_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -625,6 +676,12 @@ type isCreateSpecType_ReFallback interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_BfdChoice interface {
+	isCreateSpecType_BfdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_HubMesh struct {
 	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
@@ -641,12 +698,20 @@ type CreateSpecType_EnableReFallback struct {
 type CreateSpecType_DisableReFallback struct {
 	DisableReFallback *schema.Empty `protobuf:"bytes,11,opt,name=disable_re_fallback,json=disableReFallback,proto3,oneof" json:"disable_re_fallback,omitempty"`
 }
+type CreateSpecType_BfdDisabled struct {
+	BfdDisabled *schema.Empty `protobuf:"bytes,13,opt,name=bfd_disabled,json=bfdDisabled,proto3,oneof" json:"bfd_disabled,omitempty"`
+}
+type CreateSpecType_BfdEnabled struct {
+	BfdEnabled *BFD `protobuf:"bytes,14,opt,name=bfd_enabled,json=bfdEnabled,proto3,oneof" json:"bfd_enabled,omitempty"`
+}
 
 func (*CreateSpecType_HubMesh) isCreateSpecType_MeshChoice()           {}
 func (*CreateSpecType_SpokeMesh) isCreateSpecType_MeshChoice()         {}
 func (*CreateSpecType_FullMesh) isCreateSpecType_MeshChoice()          {}
 func (*CreateSpecType_EnableReFallback) isCreateSpecType_ReFallback()  {}
 func (*CreateSpecType_DisableReFallback) isCreateSpecType_ReFallback() {}
+func (*CreateSpecType_BfdDisabled) isCreateSpecType_BfdChoice()        {}
+func (*CreateSpecType_BfdEnabled) isCreateSpecType_BfdChoice()         {}
 
 func (m *CreateSpecType) GetMeshChoice() isCreateSpecType_MeshChoice {
 	if m != nil {
@@ -657,6 +722,12 @@ func (m *CreateSpecType) GetMeshChoice() isCreateSpecType_MeshChoice {
 func (m *CreateSpecType) GetReFallback() isCreateSpecType_ReFallback {
 	if m != nil {
 		return m.ReFallback
+	}
+	return nil
+}
+func (m *CreateSpecType) GetBfdChoice() isCreateSpecType_BfdChoice {
+	if m != nil {
+		return m.BfdChoice
 	}
 	return nil
 }
@@ -717,6 +788,20 @@ func (m *CreateSpecType) GetDisableReFallback() *schema.Empty {
 	return nil
 }
 
+func (m *CreateSpecType) GetBfdDisabled() *schema.Empty {
+	if x, ok := m.GetBfdChoice().(*CreateSpecType_BfdDisabled); ok {
+		return x.BfdDisabled
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetBfdEnabled() *BFD {
+	if x, ok := m.GetBfdChoice().(*CreateSpecType_BfdEnabled); ok {
+		return x.BfdEnabled
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -725,6 +810,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_FullMesh)(nil),
 		(*CreateSpecType_EnableReFallback)(nil),
 		(*CreateSpecType_DisableReFallback)(nil),
+		(*CreateSpecType_BfdDisabled)(nil),
+		(*CreateSpecType_BfdEnabled)(nil),
 	}
 }
 
@@ -745,6 +832,10 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_EnableReFallback
 	//	*ReplaceSpecType_DisableReFallback
 	ReFallback isReplaceSpecType_ReFallback `protobuf_oneof:"re_fallback"`
+	// Types that are valid to be assigned to BfdChoice:
+	//	*ReplaceSpecType_BfdDisabled
+	//	*ReplaceSpecType_BfdEnabled
+	BfdChoice isReplaceSpecType_BfdChoice `protobuf_oneof:"bfd_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -787,6 +878,12 @@ type isReplaceSpecType_ReFallback interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_BfdChoice interface {
+	isReplaceSpecType_BfdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_HubMesh struct {
 	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
@@ -803,12 +900,20 @@ type ReplaceSpecType_EnableReFallback struct {
 type ReplaceSpecType_DisableReFallback struct {
 	DisableReFallback *schema.Empty `protobuf:"bytes,11,opt,name=disable_re_fallback,json=disableReFallback,proto3,oneof" json:"disable_re_fallback,omitempty"`
 }
+type ReplaceSpecType_BfdDisabled struct {
+	BfdDisabled *schema.Empty `protobuf:"bytes,13,opt,name=bfd_disabled,json=bfdDisabled,proto3,oneof" json:"bfd_disabled,omitempty"`
+}
+type ReplaceSpecType_BfdEnabled struct {
+	BfdEnabled *BFD `protobuf:"bytes,14,opt,name=bfd_enabled,json=bfdEnabled,proto3,oneof" json:"bfd_enabled,omitempty"`
+}
 
 func (*ReplaceSpecType_HubMesh) isReplaceSpecType_MeshChoice()           {}
 func (*ReplaceSpecType_SpokeMesh) isReplaceSpecType_MeshChoice()         {}
 func (*ReplaceSpecType_FullMesh) isReplaceSpecType_MeshChoice()          {}
 func (*ReplaceSpecType_EnableReFallback) isReplaceSpecType_ReFallback()  {}
 func (*ReplaceSpecType_DisableReFallback) isReplaceSpecType_ReFallback() {}
+func (*ReplaceSpecType_BfdDisabled) isReplaceSpecType_BfdChoice()        {}
+func (*ReplaceSpecType_BfdEnabled) isReplaceSpecType_BfdChoice()         {}
 
 func (m *ReplaceSpecType) GetMeshChoice() isReplaceSpecType_MeshChoice {
 	if m != nil {
@@ -819,6 +924,12 @@ func (m *ReplaceSpecType) GetMeshChoice() isReplaceSpecType_MeshChoice {
 func (m *ReplaceSpecType) GetReFallback() isReplaceSpecType_ReFallback {
 	if m != nil {
 		return m.ReFallback
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetBfdChoice() isReplaceSpecType_BfdChoice {
+	if m != nil {
+		return m.BfdChoice
 	}
 	return nil
 }
@@ -879,6 +990,20 @@ func (m *ReplaceSpecType) GetDisableReFallback() *schema.Empty {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetBfdDisabled() *schema.Empty {
+	if x, ok := m.GetBfdChoice().(*ReplaceSpecType_BfdDisabled); ok {
+		return x.BfdDisabled
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetBfdEnabled() *BFD {
+	if x, ok := m.GetBfdChoice().(*ReplaceSpecType_BfdEnabled); ok {
+		return x.BfdEnabled
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -887,6 +1012,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_FullMesh)(nil),
 		(*ReplaceSpecType_EnableReFallback)(nil),
 		(*ReplaceSpecType_DisableReFallback)(nil),
+		(*ReplaceSpecType_BfdDisabled)(nil),
+		(*ReplaceSpecType_BfdEnabled)(nil),
 	}
 }
 
@@ -908,6 +1035,10 @@ type GetSpecType struct {
 	//	*GetSpecType_EnableReFallback
 	//	*GetSpecType_DisableReFallback
 	ReFallback isGetSpecType_ReFallback `protobuf_oneof:"re_fallback"`
+	// Types that are valid to be assigned to BfdChoice:
+	//	*GetSpecType_BfdDisabled
+	//	*GetSpecType_BfdEnabled
+	BfdChoice isGetSpecType_BfdChoice `protobuf_oneof:"bfd_choice"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -950,6 +1081,12 @@ type isGetSpecType_ReFallback interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_BfdChoice interface {
+	isGetSpecType_BfdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_HubMesh struct {
 	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
@@ -966,12 +1103,20 @@ type GetSpecType_EnableReFallback struct {
 type GetSpecType_DisableReFallback struct {
 	DisableReFallback *schema.Empty `protobuf:"bytes,11,opt,name=disable_re_fallback,json=disableReFallback,proto3,oneof" json:"disable_re_fallback,omitempty"`
 }
+type GetSpecType_BfdDisabled struct {
+	BfdDisabled *schema.Empty `protobuf:"bytes,13,opt,name=bfd_disabled,json=bfdDisabled,proto3,oneof" json:"bfd_disabled,omitempty"`
+}
+type GetSpecType_BfdEnabled struct {
+	BfdEnabled *BFD `protobuf:"bytes,14,opt,name=bfd_enabled,json=bfdEnabled,proto3,oneof" json:"bfd_enabled,omitempty"`
+}
 
 func (*GetSpecType_HubMesh) isGetSpecType_MeshChoice()           {}
 func (*GetSpecType_SpokeMesh) isGetSpecType_MeshChoice()         {}
 func (*GetSpecType_FullMesh) isGetSpecType_MeshChoice()          {}
 func (*GetSpecType_EnableReFallback) isGetSpecType_ReFallback()  {}
 func (*GetSpecType_DisableReFallback) isGetSpecType_ReFallback() {}
+func (*GetSpecType_BfdDisabled) isGetSpecType_BfdChoice()        {}
+func (*GetSpecType_BfdEnabled) isGetSpecType_BfdChoice()         {}
 
 func (m *GetSpecType) GetMeshChoice() isGetSpecType_MeshChoice {
 	if m != nil {
@@ -982,6 +1127,12 @@ func (m *GetSpecType) GetMeshChoice() isGetSpecType_MeshChoice {
 func (m *GetSpecType) GetReFallback() isGetSpecType_ReFallback {
 	if m != nil {
 		return m.ReFallback
+	}
+	return nil
+}
+func (m *GetSpecType) GetBfdChoice() isGetSpecType_BfdChoice {
+	if m != nil {
+		return m.BfdChoice
 	}
 	return nil
 }
@@ -1049,6 +1200,20 @@ func (m *GetSpecType) GetDisableReFallback() *schema.Empty {
 	return nil
 }
 
+func (m *GetSpecType) GetBfdDisabled() *schema.Empty {
+	if x, ok := m.GetBfdChoice().(*GetSpecType_BfdDisabled); ok {
+		return x.BfdDisabled
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetBfdEnabled() *BFD {
+	if x, ok := m.GetBfdChoice().(*GetSpecType_BfdEnabled); ok {
+		return x.BfdEnabled
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1057,7 +1222,86 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_FullMesh)(nil),
 		(*GetSpecType_EnableReFallback)(nil),
 		(*GetSpecType_DisableReFallback)(nil),
+		(*GetSpecType_BfdDisabled)(nil),
+		(*GetSpecType_BfdEnabled)(nil),
 	}
+}
+
+// BFD
+//
+// x-displayName: "BFD"
+// BFD parameters.
+type BFD struct {
+	// Transmit Interval in milliseconds
+	//
+	// x-displayName: "Transmit Interval"
+	// x-example: "3000"
+	// x-required
+	// BFD transmit interval timer, in milliseconds
+	TransmitIntervalMilliseconds uint32 `protobuf:"varint,1,opt,name=transmit_interval_milliseconds,json=transmitIntervalMilliseconds,proto3" json:"transmit_interval_milliseconds,omitempty"`
+	// Receive Interval in milliseconds
+	//
+	// x-displayName: "Minimum Receive Interval"
+	// x-example: "3000"
+	// x-required
+	// BFD receive interval timer, in milliseconds
+	ReceiveIntervalMilliseconds uint32 `protobuf:"varint,2,opt,name=receive_interval_milliseconds,json=receiveIntervalMilliseconds,proto3" json:"receive_interval_milliseconds,omitempty"`
+	// Multiplier
+	//
+	// x-displayName: "Multiplier"
+	// x-example: "3"
+	// x-required
+	// Specify Number of missed packets to bring session down"
+	Multiplier uint32 `protobuf:"varint,3,opt,name=multiplier,proto3" json:"multiplier,omitempty"`
+}
+
+func (m *BFD) Reset()      { *m = BFD{} }
+func (*BFD) ProtoMessage() {}
+func (*BFD) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e184213e79779d5e, []int{7}
+}
+func (m *BFD) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BFD) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BFD) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BFD.Merge(m, src)
+}
+func (m *BFD) XXX_Size() int {
+	return m.Size()
+}
+func (m *BFD) XXX_DiscardUnknown() {
+	xxx_messageInfo_BFD.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BFD proto.InternalMessageInfo
+
+func (m *BFD) GetTransmitIntervalMilliseconds() uint32 {
+	if m != nil {
+		return m.TransmitIntervalMilliseconds
+	}
+	return 0
+}
+
+func (m *BFD) GetReceiveIntervalMilliseconds() uint32 {
+	if m != nil {
+		return m.ReceiveIntervalMilliseconds
+	}
+	return 0
+}
+
+func (m *BFD) GetMultiplier() uint32 {
+	if m != nil {
+		return m.Multiplier
+	}
+	return 0
 }
 
 func init() {
@@ -1077,6 +1321,8 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.site_mesh_group.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.site_mesh_group.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.site_mesh_group.GetSpecType")
+	proto.RegisterType((*BFD)(nil), "ves.io.schema.site_mesh_group.BFD")
+	golang_proto.RegisterType((*BFD)(nil), "ves.io.schema.site_mesh_group.BFD")
 }
 
 func init() {
@@ -1087,82 +1333,93 @@ func init() {
 }
 
 var fileDescriptor_e184213e79779d5e = []byte{
-	// 1190 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xc1, 0x6f, 0x22, 0x55,
-	0x18, 0xe7, 0x31, 0x40, 0xe9, 0xa3, 0x02, 0x1d, 0x6b, 0x96, 0xd2, 0x76, 0xb6, 0xa1, 0xab, 0x59,
-	0x91, 0xc2, 0x42, 0x37, 0x6a, 0x3c, 0x34, 0x59, 0xb6, 0xb4, 0xb4, 0x76, 0x5b, 0x32, 0xd0, 0x35,
-	0x6e, 0x8c, 0x93, 0x99, 0xe1, 0x01, 0xb3, 0x1d, 0x78, 0x93, 0x99, 0x37, 0x68, 0x0f, 0x4d, 0x9a,
-	0x3d, 0xf6, 0xa4, 0x5e, 0xfc, 0x0f, 0x8c, 0xd9, 0x3f, 0x41, 0xf6, 0xd0, 0xa3, 0xf1, 0xc4, 0xc1,
-	0x43, 0xf5, 0x64, 0xe9, 0xc1, 0xf5, 0xb6, 0x31, 0xf1, 0xb2, 0x27, 0x33, 0x8f, 0x69, 0xcb, 0x00,
-	0xb6, 0x6b, 0xed, 0x41, 0x4d, 0x2f, 0x2d, 0xbc, 0xdf, 0xf7, 0xfd, 0xde, 0xf7, 0x7d, 0xef, 0xf7,
-	0x7b, 0x4c, 0x06, 0xbe, 0xdd, 0x44, 0x46, 0x52, 0xc1, 0x29, 0x43, 0xae, 0xa1, 0xba, 0x98, 0x32,
-	0x14, 0x82, 0x84, 0x3a, 0x32, 0x6a, 0x42, 0x55, 0xc7, 0xa6, 0x96, 0x22, 0x3b, 0x1a, 0x32, 0x92,
-	0x9a, 0x8e, 0x09, 0x66, 0x67, 0xba, 0xa1, 0xc9, 0x6e, 0x68, 0xb2, 0x2f, 0x34, 0x3a, 0x5f, 0x55,
-	0x48, 0xcd, 0x94, 0x92, 0x32, 0xae, 0xa7, 0xaa, 0xb8, 0x8a, 0x53, 0x34, 0x4b, 0x32, 0x2b, 0xf4,
-	0x1b, 0xfd, 0x42, 0x3f, 0x75, 0xd9, 0xa2, 0x37, 0xab, 0x18, 0x57, 0x55, 0x74, 0x16, 0x45, 0x94,
-	0x3a, 0x32, 0x88, 0x58, 0xd7, 0xec, 0x80, 0x1b, 0xce, 0xca, 0x1a, 0x88, 0xd8, 0xc0, 0x94, 0x13,
-	0xc0, 0x1a, 0x51, 0x70, 0xc3, 0x2e, 0x32, 0x3a, 0xe3, 0x04, 0xb5, 0x26, 0x11, 0x7a, 0x7a, 0x88,
-	0x72, 0x83, 0xed, 0xf6, 0xf6, 0x18, 0x9d, 0x74, 0xe2, 0xbd, 0xd0, 0xb4, 0x13, 0x6a, 0x8a, 0xaa,
-	0x52, 0x16, 0x09, 0xb2, 0xd1, 0xd9, 0x3e, 0x54, 0x41, 0x9f, 0x09, 0xce, 0xca, 0x6e, 0x0e, 0x46,
-	0x18, 0xbd, 0x1b, 0xc4, 0xf6, 0xdd, 0x70, 0x22, 0x6f, 0x4a, 0xcb, 0xa6, 0xaa, 0x3e, 0x40, 0x46,
-	0x6d, 0xc5, 0x9a, 0x6a, 0x69, 0x47, 0x43, 0xec, 0x22, 0x0c, 0x95, 0x45, 0x22, 0x0a, 0x9a, 0x2a,
-	0x36, 0xba, 0x23, 0x8f, 0xb8, 0x67, 0xc1, 0xed, 0x40, 0x66, 0x22, 0xe9, 0x3c, 0x92, 0x5c, 0x5d,
-	0x23, 0x3b, 0x79, 0x17, 0xff, 0x9a, 0x15, 0x5e, 0xb0, 0xa2, 0x2d, 0x22, 0xb6, 0x04, 0xa7, 0x64,
-	0xdc, 0x20, 0x3a, 0x56, 0x05, 0xb1, 0x51, 0x16, 0xfa, 0xb9, 0x98, 0x73, 0xb9, 0x6e, 0xd8, 0xa9,
-	0xf7, 0x1a, 0xe5, 0xa5, 0x5e, 0xd6, 0xec, 0x43, 0x38, 0x51, 0x33, 0x25, 0xa1, 0x62, 0xaa, 0x6a,
-	0x57, 0x06, 0x72, 0x0d, 0x2b, 0x32, 0x62, 0x17, 0x0f, 0x5a, 0xc0, 0xdd, 0x6e, 0x01, 0xd0, 0x69,
-	0x01, 0x26, 0x93, 0x58, 0xd8, 0x7f, 0x06, 0xde, 0x89, 0x33, 0xb2, 0x4e, 0xe2, 0x23, 0x06, 0x11,
-	0xab, 0x4a, 0xa3, 0x1a, 0xf7, 0x68, 0x3a, 0x2e, 0xc7, 0xc7, 0x0c, 0x5c, 0x21, 0x92, 0xd8, 0xd8,
-	0x16, 0xea, 0x48, 0x8e, 0x8f, 0x54, 0x50, 0x59, 0x17, 0xeb, 0xda, 0x9a, 0xc7, 0x0f, 0xc2, 0xee,
-	0xd8, 0x8f, 0x00, 0x8e, 0xff, 0x57, 0x26, 0x31, 0x07, 0xc3, 0x03, 0x53, 0x08, 0xf5, 0x4d, 0xc1,
-	0x6e, 0xeb, 0x57, 0x37, 0x64, 0x8b, 0x1a, 0xde, 0x46, 0xce, 0xbe, 0x3e, 0x81, 0x41, 0x6b, 0x96,
-	0x67, 0x6e, 0x8a, 0x00, 0x5a, 0x4a, 0xac, 0xaf, 0x14, 0x2a, 0x9a, 0xe4, 0xa6, 0xf4, 0x18, 0xc9,
-	0x84, 0x47, 0x15, 0x2b, 0x37, 0xcb, 0x3e, 0xdd, 0x0d, 0xf5, 0x79, 0x91, 0x1f, 0xab, 0x99, 0xd2,
-	0xe9, 0x0e, 0xc3, 0xa6, 0xc6, 0x5c, 0xe1, 0xd4, 0x3c, 0x97, 0x9b, 0xda, 0x47, 0xf0, 0x0d, 0xc3,
-	0x9a, 0x84, 0x70, 0xda, 0x79, 0x8f, 0x80, 0x98, 0x76, 0x0b, 0xb8, 0xad, 0xd1, 0x2d, 0x24, 0xee,
-	0xfe, 0x7d, 0x01, 0xb9, 0xc3, 0x4c, 0xec, 0x0f, 0x1f, 0x0c, 0xae, 0xa8, 0x58, 0x12, 0xd5, 0xa2,
-	0x86, 0x64, 0x3a, 0xe5, 0x47, 0xd0, 0x63, 0xf9, 0x8d, 0xce, 0x36, 0x98, 0xb9, 0x93, 0x3c, 0xf7,
-	0x3e, 0x4b, 0x16, 0x15, 0xe2, 0x3c, 0xa5, 0xec, 0xc4, 0xf3, 0x16, 0x00, 0xdf, 0xfd, 0x76, 0xc0,
-	0x8c, 0x3e, 0x01, 0xbe, 0xa8, 0xc7, 0x05, 0xdc, 0x4c, 0x04, 0xf0, 0x94, 0x93, 0x7d, 0x0c, 0x03,
-	0xc4, 0x6c, 0x34, 0x90, 0x4a, 0xaf, 0x1b, 0xaa, 0xca, 0x60, 0x66, 0xae, 0x6f, 0x0b, 0x8b, 0xb2,
-	0x84, 0xe9, 0x5f, 0x1a, 0x4b, 0x59, 0x6f, 0x1d, 0xee, 0x82, 0x9f, 0x5b, 0x60, 0xb2, 0xb8, 0x5a,
-	0xca, 0x09, 0xa5, 0x4d, 0xa1, 0xfb, 0x7f, 0x6b, 0x63, 0x23, 0xb7, 0x2e, 0xac, 0x16, 0x8a, 0xb9,
-	0xfb, 0xd6, 0xae, 0x3c, 0x24, 0xa7, 0x19, 0xec, 0xa7, 0x70, 0xac, 0xa9, 0xe8, 0xc4, 0x14, 0x55,
-	0xc1, 0x2a, 0x3a, 0xc2, 0xcc, 0x32, 0xb7, 0x03, 0x99, 0xe9, 0xbe, 0xcd, 0x9c, 0x2a, 0x99, 0x79,
-	0xba, 0xeb, 0x48, 0xda, 0x7b, 0xd6, 0x6d, 0xc5, 0xfb, 0x15, 0x70, 0x87, 0x01, 0x1f, 0xb0, 0x31,
-	0xab, 0x36, 0xb6, 0x04, 0x99, 0x9a, 0x29, 0x45, 0x3c, 0xaf, 0x40, 0x7b, 0x6b, 0x50, 0x7c, 0x56,
-	0xb9, 0x7d, 0xec, 0x16, 0x1d, 0x5b, 0x80, 0xfe, 0x93, 0x93, 0x8e, 0xf8, 0xa8, 0x64, 0x16, 0x2e,
-	0x38, 0x81, 0x61, 0x97, 0x61, 0xde, 0xc5, 0x8f, 0xd8, 0xe2, 0x66, 0x79, 0x08, 0xbb, 0x0a, 0xa2,
-	0x9c, 0x23, 0x94, 0x33, 0x7d, 0xd1, 0xa9, 0x0e, 0x98, 0x2f, 0xef, 0xe2, 0x47, 0x8d, 0x93, 0x55,
-	0x76, 0x13, 0x8e, 0x9e, 0x7a, 0x39, 0xe2, 0xa7, 0x94, 0x17, 0x09, 0x65, 0x58, 0x8d, 0xfe, 0x8a,
-	0xbd, 0xc8, 0x2e, 0x41, 0x16, 0x35, 0x44, 0x49, 0x45, 0x82, 0x8e, 0x84, 0x8a, 0xa8, 0xaa, 0x92,
-	0x28, 0x6f, 0x47, 0xe0, 0x39, 0x9e, 0x01, 0x7c, 0xb8, 0x9b, 0xc1, 0xa3, 0x65, 0x3b, 0x9e, 0x5d,
-	0x86, 0xaf, 0x97, 0x15, 0x63, 0x80, 0x26, 0x70, 0x2e, 0xcd, 0xb8, 0x9d, 0x72, 0xc6, 0x93, 0x9d,
-	0x85, 0x81, 0x5e, 0xab, 0x8d, 0x1f, 0xb4, 0x80, 0xbf, 0xdd, 0x02, 0xde, 0x4e, 0x0b, 0x78, 0xdf,
-	0x4f, 0xbc, 0x9b, 0x78, 0x2f, 0x9b, 0x81, 0x81, 0x9e, 0x1d, 0xd8, 0xb9, 0x83, 0x16, 0x80, 0xed,
-	0x16, 0x18, 0xb5, 0x22, 0xd2, 0x77, 0x12, 0xe9, 0xf4, 0xfe, 0x4b, 0x10, 0x2c, 0xa3, 0x3a, 0x4e,
-	0x27, 0x64, 0x9d, 0x24, 0x08, 0x32, 0xc8, 0x9a, 0xc7, 0xef, 0x0d, 0xfb, 0xd6, 0x3c, 0xfe, 0xd1,
-	0x30, 0x8c, 0x1d, 0x7a, 0x61, 0xf0, 0xbe, 0x8e, 0x44, 0x82, 0x4e, 0x7d, 0xb7, 0xf4, 0xcf, 0x7c,
-	0x67, 0x3b, 0xac, 0x70, 0x09, 0xd5, 0x87, 0xfa, 0x54, 0xef, 0xd4, 0x79, 0xf6, 0xd5, 0x75, 0x3e,
-	0xec, 0x92, 0xbd, 0x56, 0xf5, 0xbf, 0x44, 0xd5, 0x1f, 0x4c, 0xfe, 0xb0, 0xd8, 0x77, 0xd7, 0xff,
-	0xbe, 0xe8, 0x4d, 0x27, 0x16, 0x12, 0x77, 0xb3, 0x9c, 0x53, 0xf0, 0xa1, 0x27, 0x2f, 0x41, 0xef,
-	0x82, 0x85, 0xf7, 0xca, 0x9d, 0xe2, 0x3d, 0x0b, 0xdd, 0x1f, 0x93, 0xae, 0xc0, 0x63, 0x3f, 0x79,
-	0x61, 0x88, 0x47, 0x9a, 0x2a, 0xca, 0xd7, 0xda, 0xbe, 0xd6, 0xf6, 0xff, 0x4b, 0xdb, 0x5f, 0xfb,
-	0x60, 0x60, 0x05, 0x91, 0x2b, 0xd6, 0xf5, 0xd2, 0x65, 0x9f, 0x8a, 0x1c, 0xcf, 0x3b, 0xd7, 0xee,
-	0xb8, 0x76, 0xc7, 0x5f, 0xb8, 0x63, 0x6a, 0x88, 0x3b, 0x46, 0xa8, 0x3b, 0x12, 0x99, 0x2b, 0xf0,
-	0x87, 0x37, 0xec, 0x8b, 0x7f, 0x03, 0xe0, 0xf8, 0x80, 0xbe, 0xd9, 0x37, 0xe1, 0x34, 0x7d, 0x50,
-	0x7f, 0x90, 0x2b, 0xe6, 0x85, 0x15, 0x7e, 0x73, 0xab, 0x20, 0x94, 0x3e, 0x2e, 0xe4, 0x84, 0xd5,
-	0x8d, 0x87, 0xf7, 0xd6, 0x57, 0x97, 0xc2, 0xae, 0x28, 0xb3, 0xb7, 0x0b, 0xd8, 0xb7, 0x60, 0x6c,
-	0x68, 0x58, 0x7e, 0x2b, 0x2b, 0x2c, 0x6f, 0xad, 0xaf, 0x53, 0x20, 0x0c, 0x58, 0x0e, 0x46, 0x87,
-	0xc6, 0x15, 0x0b, 0x9b, 0x1f, 0xe6, 0xc2, 0x6e, 0x36, 0x06, 0xb9, 0xa1, 0xf8, 0x19, 0x07, 0x93,
-	0xfd, 0x12, 0xb4, 0x8f, 0x38, 0xd7, 0xe1, 0x11, 0xe7, 0x7a, 0x71, 0xc4, 0x81, 0xbd, 0x0e, 0x07,
-	0xbe, 0xed, 0x70, 0xe0, 0xfb, 0x0e, 0x07, 0xda, 0x1d, 0x0e, 0x1c, 0x76, 0x38, 0xf0, 0x4b, 0x87,
-	0x03, 0xcf, 0x3b, 0x9c, 0xeb, 0x45, 0x87, 0x03, 0x5f, 0x1c, 0x73, 0xae, 0x83, 0x63, 0x0e, 0xb4,
-	0x8f, 0x39, 0xd7, 0xe1, 0x31, 0xe7, 0x7a, 0x54, 0xac, 0x62, 0x6d, 0xbb, 0x9a, 0x6c, 0x62, 0x95,
-	0x20, 0x5d, 0x17, 0x93, 0xa6, 0x91, 0xa2, 0x1f, 0x2a, 0x58, 0xaf, 0xcf, 0x6b, 0x3a, 0x6e, 0x2a,
-	0x65, 0xa4, 0xcf, 0x9f, 0xc0, 0x29, 0x4d, 0xaa, 0xe2, 0x14, 0xfa, 0x9c, 0x9c, 0xbc, 0x49, 0x19,
-	0xfa, 0xfe, 0x48, 0xf2, 0xd1, 0x57, 0x1b, 0x0b, 0x7f, 0x06, 0x00, 0x00, 0xff, 0xff, 0x7b, 0xc7,
-	0xc7, 0x63, 0x67, 0x12, 0x00, 0x00,
+	// 1369 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6f, 0x1a, 0x47,
+	0x14, 0x66, 0x76, 0xb1, 0xc1, 0x83, 0x8d, 0xf1, 0xd6, 0x6d, 0x08, 0xb6, 0x37, 0x16, 0x49, 0x2b,
+	0x97, 0x12, 0x08, 0x26, 0xea, 0xaf, 0x83, 0xa5, 0x6c, 0xc0, 0xc6, 0xa9, 0x13, 0xa3, 0x05, 0xa7,
+	0x6a, 0x14, 0x75, 0xb5, 0xcb, 0x0e, 0xb0, 0xf1, 0xb2, 0xbb, 0xda, 0x1d, 0x68, 0x73, 0xb0, 0x14,
+	0xe5, 0x18, 0xf5, 0xd0, 0xf6, 0x8f, 0xa8, 0xaa, 0xa8, 0xf7, 0x4a, 0x25, 0x07, 0x1f, 0xab, 0x9e,
+	0x38, 0xe4, 0x60, 0xe5, 0x94, 0xe0, 0x43, 0xd3, 0x5b, 0x94, 0x53, 0x9b, 0x4b, 0xab, 0x1d, 0xd6,
+	0xce, 0x2e, 0x50, 0x27, 0x75, 0xd3, 0xaa, 0x95, 0xb8, 0xd8, 0xec, 0xbc, 0xef, 0x7d, 0xf3, 0xde,
+	0x9b, 0xf7, 0x3d, 0xd8, 0x81, 0x6f, 0xb7, 0x90, 0x95, 0x52, 0xf4, 0xb4, 0x55, 0xa9, 0xa3, 0x86,
+	0x98, 0xb6, 0x14, 0x8c, 0x84, 0x06, 0xb2, 0xea, 0x42, 0xcd, 0xd4, 0x9b, 0x46, 0x1a, 0xdf, 0x34,
+	0x90, 0x95, 0x32, 0x4c, 0x1d, 0xeb, 0xcc, 0x42, 0x0f, 0x9a, 0xea, 0x41, 0x53, 0x7d, 0xd0, 0xd8,
+	0xd9, 0x9a, 0x82, 0xeb, 0x4d, 0x29, 0x55, 0xd1, 0x1b, 0xe9, 0x9a, 0x5e, 0xd3, 0xd3, 0xc4, 0x4b,
+	0x6a, 0x56, 0xc9, 0x13, 0x79, 0x20, 0x9f, 0x7a, 0x6c, 0xb1, 0x53, 0x35, 0x5d, 0xaf, 0xa9, 0xe8,
+	0x39, 0x0a, 0x2b, 0x0d, 0x64, 0x61, 0xb1, 0x61, 0x38, 0x80, 0x13, 0xde, 0xc8, 0x34, 0x84, 0x1d,
+	0xc3, 0x9c, 0xd7, 0xa0, 0x1b, 0x58, 0xd1, 0x35, 0x27, 0xc8, 0xd8, 0x82, 0xd7, 0x68, 0xb4, 0xb0,
+	0xe0, 0xca, 0x21, 0xc6, 0x0e, 0xa6, 0xeb, 0xce, 0x31, 0x76, 0xd2, 0x6b, 0x77, 0x9b, 0xe6, 0xbd,
+	0xa6, 0x96, 0xa8, 0x2a, 0xb2, 0x88, 0x91, 0x63, 0x5d, 0xec, 0xb3, 0x2a, 0xe8, 0x33, 0xc1, 0x1b,
+	0xd9, 0xa9, 0x41, 0x84, 0xe5, 0xde, 0x20, 0x7e, 0x87, 0x82, 0xb3, 0x85, 0xa6, 0xb4, 0xda, 0x54,
+	0xd5, 0xcb, 0xc8, 0xaa, 0xaf, 0xd9, 0x55, 0x2d, 0xdf, 0x34, 0x10, 0xb3, 0x02, 0xa7, 0x65, 0x11,
+	0x8b, 0x82, 0xa1, 0x8a, 0x5a, 0xaf, 0xe4, 0x51, 0x6a, 0x11, 0x2c, 0x85, 0x96, 0x67, 0x53, 0xde,
+	0x23, 0xc9, 0x37, 0x0c, 0x7c, 0xb3, 0xe0, 0xe3, 0xa7, 0x6c, 0x78, 0xd1, 0x46, 0xdb, 0x44, 0x4c,
+	0x19, 0xce, 0x55, 0x74, 0x0d, 0x9b, 0xba, 0x2a, 0x88, 0x9a, 0x2c, 0xf4, 0x73, 0xd1, 0x47, 0x72,
+	0x9d, 0x70, 0x5c, 0x2f, 0x68, 0x72, 0xce, 0xcd, 0xca, 0x5d, 0x85, 0xb3, 0xf5, 0xa6, 0x24, 0x54,
+	0x9b, 0xaa, 0xda, 0x6b, 0x83, 0x4a, 0x5d, 0x57, 0x2a, 0x88, 0x59, 0xd9, 0x6d, 0x03, 0xaa, 0xd3,
+	0x06, 0xa0, 0xdb, 0x06, 0xf4, 0x72, 0x32, 0x7b, 0xe7, 0x1e, 0x78, 0x27, 0x41, 0x57, 0x4c, 0x9c,
+	0x08, 0x58, 0x58, 0xac, 0x29, 0x5a, 0x2d, 0xe1, 0x37, 0x4c, 0x5d, 0x4e, 0x4c, 0x5a, 0x7a, 0x15,
+	0x4b, 0xa2, 0xb6, 0x2d, 0x34, 0x50, 0x25, 0x11, 0xa8, 0x22, 0xd9, 0x14, 0x1b, 0xc6, 0x25, 0x7f,
+	0x10, 0x44, 0xa8, 0xf8, 0x7d, 0x00, 0x67, 0xfe, 0x2f, 0x95, 0x38, 0x0d, 0x23, 0x03, 0x55, 0x98,
+	0xee, 0xab, 0x82, 0x93, 0xd6, 0xcf, 0x14, 0x64, 0x4a, 0x86, 0xbe, 0x8d, 0xbc, 0x79, 0x5d, 0x87,
+	0x61, 0xbb, 0x96, 0xcf, 0xd5, 0x14, 0x05, 0x24, 0x94, 0x78, 0x5f, 0x28, 0xa4, 0x69, 0x52, 0x9b,
+	0xd2, 0x0d, 0x54, 0xc1, 0x3c, 0xaa, 0xda, 0xbe, 0x1c, 0x73, 0x77, 0x67, 0xba, 0x4f, 0x8b, 0xfc,
+	0x64, 0xbd, 0x29, 0x1d, 0xee, 0x30, 0xac, 0x6a, 0xf4, 0x2b, 0xac, 0x9a, 0xff, 0x78, 0x55, 0xfb,
+	0x18, 0xbe, 0x6e, 0xd9, 0x95, 0x10, 0x0e, 0x33, 0x77, 0x35, 0x10, 0xdd, 0x69, 0x03, 0xca, 0x2e,
+	0x5d, 0x36, 0x79, 0xfe, 0xaf, 0x37, 0x10, 0x15, 0xa1, 0xe3, 0x5f, 0x04, 0x61, 0x78, 0x4d, 0xd5,
+	0x25, 0x51, 0x2d, 0x19, 0xa8, 0x42, 0xaa, 0x7c, 0x0d, 0xfa, 0x6d, 0xbd, 0x91, 0xda, 0x86, 0x97,
+	0xcf, 0xa5, 0x8e, 0x9c, 0x67, 0xa9, 0x92, 0x82, 0xbd, 0xa7, 0xc4, 0xcd, 0x3e, 0x6e, 0x03, 0xf0,
+	0xc3, 0x2f, 0xbb, 0xf4, 0xc4, 0x6d, 0x30, 0x1e, 0xf3, 0xfb, 0x00, 0x45, 0x47, 0x01, 0x4f, 0x38,
+	0x99, 0x1b, 0x30, 0x84, 0x9b, 0x9a, 0x86, 0x54, 0x32, 0x6e, 0x48, 0x57, 0x86, 0x97, 0x4f, 0xf7,
+	0x6d, 0x61, 0x53, 0x96, 0x75, 0xf2, 0x97, 0x60, 0x09, 0xeb, 0x99, 0xbd, 0x1d, 0xf0, 0xa0, 0x0d,
+	0x4e, 0x96, 0xd6, 0xcb, 0x79, 0xa1, 0xbc, 0x29, 0xf4, 0xfe, 0x6f, 0x5d, 0xb9, 0x92, 0xdf, 0x10,
+	0xd6, 0x8b, 0xa5, 0xfc, 0x45, 0x7b, 0x57, 0x1e, 0xe2, 0x43, 0x0f, 0xe6, 0x53, 0x38, 0xd9, 0x52,
+	0x4c, 0xdc, 0x14, 0x55, 0xc1, 0x0e, 0x3a, 0x4a, 0x2f, 0xd2, 0x4b, 0xa1, 0xe5, 0xf9, 0xbe, 0xcd,
+	0xbc, 0x5d, 0xb2, 0x70, 0x77, 0xc7, 0xe3, 0x74, 0xeb, 0x5e, 0x2f, 0x95, 0xb1, 0xaf, 0x01, 0x15,
+	0x01, 0x7c, 0xc8, 0xb1, 0xd9, 0xb1, 0x31, 0x65, 0x48, 0xd7, 0x9b, 0x52, 0xd4, 0xff, 0x12, 0xb4,
+	0x67, 0x06, 0x9b, 0xcf, 0x0e, 0xb7, 0x8f, 0xdd, 0xa6, 0x63, 0x8a, 0x30, 0x78, 0x70, 0xd2, 0xd1,
+	0x71, 0xd2, 0x32, 0xd9, 0x17, 0x9c, 0xc0, 0xb0, 0x61, 0x58, 0xf0, 0xf1, 0x01, 0xa7, 0xb9, 0x19,
+	0x1e, 0xc2, 0x5e, 0x07, 0x11, 0xce, 0x00, 0xe1, 0xcc, 0xbc, 0xe8, 0x54, 0x07, 0xc4, 0x57, 0xf0,
+	0xf1, 0x13, 0xd6, 0xc1, 0x2a, 0xb3, 0x09, 0x27, 0x0e, 0xb5, 0x1c, 0x0d, 0x12, 0xca, 0x17, 0x35,
+	0xca, 0xb0, 0x18, 0x83, 0x55, 0x67, 0x91, 0xc9, 0x41, 0x06, 0x69, 0xa2, 0xa4, 0x22, 0xc1, 0x44,
+	0x42, 0x55, 0x54, 0x55, 0x49, 0xac, 0x6c, 0x47, 0xe1, 0x11, 0x9a, 0x01, 0x7c, 0xa4, 0xe7, 0xc1,
+	0xa3, 0x55, 0x07, 0xcf, 0xac, 0xc2, 0xd7, 0x64, 0xc5, 0x1a, 0xa0, 0x09, 0x1d, 0x49, 0x33, 0xe3,
+	0xb8, 0xb8, 0x78, 0x3e, 0x80, 0x93, 0x52, 0x55, 0x16, 0x1c, 0x83, 0x1c, 0x9d, 0x3a, 0x82, 0x80,
+	0xe2, 0x43, 0x52, 0x55, 0xce, 0x39, 0x50, 0x26, 0x0f, 0xed, 0x47, 0xa1, 0x17, 0x9a, 0x1c, 0x0d,
+	0x0f, 0x1d, 0x50, 0xfd, 0xb5, 0xe1, 0x56, 0x73, 0x05, 0x8a, 0x87, 0x52, 0x55, 0xce, 0xf7, 0xfc,
+	0xb8, 0x45, 0x18, 0x72, 0x8b, 0x7d, 0x66, 0xb7, 0x0d, 0x82, 0x9d, 0x36, 0x18, 0xeb, 0xb6, 0xc1,
+	0xd8, 0xfb, 0xc9, 0x77, 0x93, 0xef, 0xd9, 0x08, 0x57, 0x8e, 0x04, 0x01, 0x3b, 0x6d, 0x30, 0x61,
+	0x23, 0x32, 0xe7, 0x92, 0x99, 0x0c, 0x77, 0x0a, 0xda, 0x8c, 0x6e, 0x8a, 0x70, 0xa7, 0x0d, 0x26,
+	0x09, 0xe0, 0x7c, 0x32, 0x63, 0x0f, 0xdb, 0xb1, 0xc8, 0xf8, 0x25, 0x7f, 0x70, 0x22, 0x02, 0x2f,
+	0xf9, 0x83, 0x93, 0x91, 0xa9, 0xf8, 0xaf, 0xe3, 0x30, 0x7c, 0xd1, 0x44, 0x22, 0x46, 0x87, 0xe3,
+	0x20, 0xf7, 0xf7, 0xc6, 0x81, 0x23, 0xfc, 0xe2, 0x31, 0xc4, 0x38, 0xdd, 0x27, 0x46, 0xaf, 0xfc,
+	0xb8, 0x97, 0x97, 0xdf, 0xb0, 0xd9, 0x3f, 0x12, 0xdb, 0x48, 0x6c, 0x8e, 0xd8, 0x3e, 0x3c, 0xf9,
+	0xd3, 0x4a, 0xdf, 0x97, 0xe0, 0xd3, 0x95, 0xb1, 0x4c, 0x32, 0x9b, 0x3c, 0xcf, 0xb1, 0x5e, 0x1d,
+	0x4e, 0xdf, 0x7e, 0x06, 0xdc, 0x0b, 0xb6, 0xdd, 0xad, 0x42, 0x62, 0x77, 0x2d, 0x70, 0xf3, 0x1e,
+	0x0d, 0x86, 0x6f, 0x3f, 0x03, 0xae, 0xe7, 0xde, 0x77, 0x70, 0x4f, 0x86, 0xf1, 0xdf, 0xc6, 0xe1,
+	0x34, 0x8f, 0x0c, 0x55, 0xac, 0x8c, 0xb4, 0x37, 0xd2, 0xde, 0x48, 0x7b, 0xff, 0xa6, 0xf6, 0xbe,
+	0x0f, 0xc0, 0xd0, 0x1a, 0xc2, 0xaf, 0x58, 0x77, 0xb9, 0xe3, 0xfe, 0xd8, 0xf5, 0xfc, 0x8c, 0x1d,
+	0xa9, 0x77, 0xa4, 0xde, 0xff, 0xac, 0x7a, 0xe7, 0x86, 0xa8, 0x37, 0x40, 0xd4, 0x9b, 0x5c, 0xfe,
+	0xc7, 0xf5, 0x6b, 0x2b, 0xf7, 0x29, 0x80, 0x34, 0xb7, 0x9a, 0x63, 0xae, 0x43, 0x16, 0x9b, 0xa2,
+	0x66, 0x35, 0x14, 0x2c, 0x28, 0x1a, 0x46, 0x66, 0x4b, 0x54, 0x85, 0x86, 0xa2, 0xaa, 0x8a, 0x85,
+	0x2a, 0xba, 0x26, 0x5b, 0x44, 0xcb, 0x53, 0xdc, 0x1b, 0x0f, 0xda, 0xc0, 0x9f, 0xcd, 0x66, 0xb3,
+	0xe4, 0x05, 0x35, 0x11, 0x88, 0x3e, 0xbc, 0x4f, 0x2f, 0x7d, 0x47, 0xf1, 0xf3, 0x07, 0xde, 0xeb,
+	0x8e, 0xf3, 0x65, 0x97, 0x2f, 0x73, 0x0d, 0x2e, 0x98, 0xa8, 0x82, 0x94, 0x16, 0xfa, 0x13, 0x72,
+	0xea, 0x48, 0xf2, 0x39, 0xc7, 0x79, 0x28, 0x77, 0x06, 0xc2, 0x46, 0x53, 0xc5, 0x8a, 0xa1, 0x2a,
+	0xc8, 0x24, 0x37, 0x0e, 0x53, 0xdc, 0xcc, 0x83, 0x36, 0x00, 0x84, 0x25, 0x90, 0x18, 0x8b, 0xfe,
+	0x0e, 0x96, 0x28, 0xde, 0x05, 0x4a, 0x7c, 0x03, 0xe0, 0xcc, 0xc0, 0xd0, 0x61, 0xde, 0x84, 0xf3,
+	0xe4, 0xa5, 0xf8, 0x72, 0xbe, 0x54, 0x10, 0xd6, 0xf8, 0xcd, 0xad, 0xa2, 0x50, 0xfe, 0xa4, 0x98,
+	0x17, 0xd6, 0xaf, 0x5c, 0xbd, 0xb0, 0xb1, 0x9e, 0x8b, 0xf8, 0x62, 0xf4, 0xad, 0x1d, 0xc0, 0xbc,
+	0x05, 0xe3, 0x43, 0x61, 0x85, 0x2d, 0x4e, 0x58, 0xdd, 0xda, 0xd8, 0x20, 0x86, 0x08, 0x60, 0x58,
+	0x18, 0x1b, 0x8a, 0x2b, 0x15, 0x37, 0x3f, 0xca, 0x47, 0x28, 0x26, 0x0e, 0xd9, 0xa1, 0xf6, 0xe7,
+	0x1c, 0x34, 0xf7, 0x15, 0xe8, 0x3c, 0x62, 0x7d, 0x7b, 0x8f, 0x58, 0xdf, 0x93, 0x47, 0x2c, 0xb8,
+	0xd5, 0x65, 0xc1, 0xb7, 0x5d, 0x16, 0xfc, 0xd8, 0x65, 0x41, 0xa7, 0xcb, 0x82, 0xbd, 0x2e, 0x0b,
+	0x1e, 0x76, 0x59, 0xf0, 0xb8, 0xcb, 0xfa, 0x9e, 0x74, 0x59, 0xf0, 0xe5, 0x3e, 0xeb, 0xdb, 0xdd,
+	0x67, 0x41, 0x67, 0x9f, 0xf5, 0xed, 0xed, 0xb3, 0xbe, 0x6b, 0xa5, 0x9a, 0x6e, 0x6c, 0xd7, 0x52,
+	0x2d, 0x5d, 0xc5, 0xc8, 0x34, 0xc5, 0x54, 0xd3, 0x4a, 0x93, 0x0f, 0x55, 0xdd, 0x6c, 0x9c, 0x35,
+	0x4c, 0xbd, 0xa5, 0xc8, 0xc8, 0x3c, 0x7b, 0x60, 0x4e, 0x1b, 0x52, 0x4d, 0x4f, 0xa3, 0xcf, 0xf1,
+	0xc1, 0xad, 0xe5, 0xd0, 0xbb, 0x5a, 0x69, 0x9c, 0x5c, 0x23, 0x66, 0xff, 0x08, 0x00, 0x00, 0xff,
+	0xff, 0x98, 0xa1, 0x5b, 0xdb, 0xd3, 0x15, 0x00, 0x00,
 }
 
 func (x SiteMeshGroupType) String() string {
@@ -1468,6 +1725,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.ReFallback.Equal(that1.ReFallback) {
 		return false
 	}
+	if that1.BfdChoice == nil {
+		if this.BfdChoice != nil {
+			return false
+		}
+	} else if this.BfdChoice == nil {
+		return false
+	} else if !this.BfdChoice.Equal(that1.BfdChoice) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType_HubMesh) Equal(that interface{}) bool {
@@ -1590,6 +1856,54 @@ func (this *GlobalSpecType_DisableReFallback) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_BfdDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_BfdDisabled)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_BfdDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BfdDisabled.Equal(that1.BfdDisabled) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_BfdEnabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_BfdEnabled)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_BfdEnabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BfdEnabled.Equal(that1.BfdEnabled) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1644,6 +1958,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.ReFallback == nil {
 		return false
 	} else if !this.ReFallback.Equal(that1.ReFallback) {
+		return false
+	}
+	if that1.BfdChoice == nil {
+		if this.BfdChoice != nil {
+			return false
+		}
+	} else if this.BfdChoice == nil {
+		return false
+	} else if !this.BfdChoice.Equal(that1.BfdChoice) {
 		return false
 	}
 	return true
@@ -1768,6 +2091,54 @@ func (this *CreateSpecType_DisableReFallback) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_BfdDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_BfdDisabled)
+	if !ok {
+		that2, ok := that.(CreateSpecType_BfdDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BfdDisabled.Equal(that1.BfdDisabled) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_BfdEnabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_BfdEnabled)
+	if !ok {
+		that2, ok := that.(CreateSpecType_BfdEnabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BfdEnabled.Equal(that1.BfdEnabled) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1822,6 +2193,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.ReFallback == nil {
 		return false
 	} else if !this.ReFallback.Equal(that1.ReFallback) {
+		return false
+	}
+	if that1.BfdChoice == nil {
+		if this.BfdChoice != nil {
+			return false
+		}
+	} else if this.BfdChoice == nil {
+		return false
+	} else if !this.BfdChoice.Equal(that1.BfdChoice) {
 		return false
 	}
 	return true
@@ -1946,6 +2326,54 @@ func (this *ReplaceSpecType_DisableReFallback) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_BfdDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_BfdDisabled)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_BfdDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BfdDisabled.Equal(that1.BfdDisabled) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_BfdEnabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_BfdEnabled)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_BfdEnabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BfdEnabled.Equal(that1.BfdEnabled) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2003,6 +2431,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.ReFallback == nil {
 		return false
 	} else if !this.ReFallback.Equal(that1.ReFallback) {
+		return false
+	}
+	if that1.BfdChoice == nil {
+		if this.BfdChoice != nil {
+			return false
+		}
+	} else if this.BfdChoice == nil {
+		return false
+	} else if !this.BfdChoice.Equal(that1.BfdChoice) {
 		return false
 	}
 	return true
@@ -2127,6 +2564,84 @@ func (this *GetSpecType_DisableReFallback) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_BfdDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_BfdDisabled)
+	if !ok {
+		that2, ok := that.(GetSpecType_BfdDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BfdDisabled.Equal(that1.BfdDisabled) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_BfdEnabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_BfdEnabled)
+	if !ok {
+		that2, ok := that.(GetSpecType_BfdEnabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BfdEnabled.Equal(that1.BfdEnabled) {
+		return false
+	}
+	return true
+}
+func (this *BFD) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BFD)
+	if !ok {
+		that2, ok := that.(BFD)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.TransmitIntervalMilliseconds != that1.TransmitIntervalMilliseconds {
+		return false
+	}
+	if this.ReceiveIntervalMilliseconds != that1.ReceiveIntervalMilliseconds {
+		return false
+	}
+	if this.Multiplier != that1.Multiplier {
+		return false
+	}
+	return true
+}
 func (this *HubFullMeshGroupType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2218,7 +2733,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 15)
 	s = append(s, "&site_mesh_group.GlobalSpecType{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	s = append(s, "TunnelType: "+fmt.Sprintf("%#v", this.TunnelType)+",\n")
@@ -2233,6 +2748,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.ReFallback != nil {
 		s = append(s, "ReFallback: "+fmt.Sprintf("%#v", this.ReFallback)+",\n")
+	}
+	if this.BfdChoice != nil {
+		s = append(s, "BfdChoice: "+fmt.Sprintf("%#v", this.BfdChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -2277,11 +2795,27 @@ func (this *GlobalSpecType_DisableReFallback) GoString() string {
 		`DisableReFallback:` + fmt.Sprintf("%#v", this.DisableReFallback) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_BfdDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.GlobalSpecType_BfdDisabled{` +
+		`BfdDisabled:` + fmt.Sprintf("%#v", this.BfdDisabled) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_BfdEnabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.GlobalSpecType_BfdEnabled{` +
+		`BfdEnabled:` + fmt.Sprintf("%#v", this.BfdEnabled) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 14)
 	s = append(s, "&site_mesh_group.CreateSpecType{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	if this.VirtualSite != nil {
@@ -2295,6 +2829,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.ReFallback != nil {
 		s = append(s, "ReFallback: "+fmt.Sprintf("%#v", this.ReFallback)+",\n")
+	}
+	if this.BfdChoice != nil {
+		s = append(s, "BfdChoice: "+fmt.Sprintf("%#v", this.BfdChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -2339,11 +2876,27 @@ func (this *CreateSpecType_DisableReFallback) GoString() string {
 		`DisableReFallback:` + fmt.Sprintf("%#v", this.DisableReFallback) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_BfdDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.CreateSpecType_BfdDisabled{` +
+		`BfdDisabled:` + fmt.Sprintf("%#v", this.BfdDisabled) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_BfdEnabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.CreateSpecType_BfdEnabled{` +
+		`BfdEnabled:` + fmt.Sprintf("%#v", this.BfdEnabled) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 14)
 	s = append(s, "&site_mesh_group.ReplaceSpecType{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	if this.VirtualSite != nil {
@@ -2357,6 +2910,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.ReFallback != nil {
 		s = append(s, "ReFallback: "+fmt.Sprintf("%#v", this.ReFallback)+",\n")
+	}
+	if this.BfdChoice != nil {
+		s = append(s, "BfdChoice: "+fmt.Sprintf("%#v", this.BfdChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -2401,11 +2957,27 @@ func (this *ReplaceSpecType_DisableReFallback) GoString() string {
 		`DisableReFallback:` + fmt.Sprintf("%#v", this.DisableReFallback) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_BfdDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.ReplaceSpecType_BfdDisabled{` +
+		`BfdDisabled:` + fmt.Sprintf("%#v", this.BfdDisabled) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_BfdEnabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.ReplaceSpecType_BfdEnabled{` +
+		`BfdEnabled:` + fmt.Sprintf("%#v", this.BfdEnabled) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 15)
 	s = append(s, "&site_mesh_group.GetSpecType{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	s = append(s, "TunnelType: "+fmt.Sprintf("%#v", this.TunnelType)+",\n")
@@ -2420,6 +2992,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.ReFallback != nil {
 		s = append(s, "ReFallback: "+fmt.Sprintf("%#v", this.ReFallback)+",\n")
+	}
+	if this.BfdChoice != nil {
+		s = append(s, "BfdChoice: "+fmt.Sprintf("%#v", this.BfdChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -2463,6 +3038,34 @@ func (this *GetSpecType_DisableReFallback) GoString() string {
 	s := strings.Join([]string{`&site_mesh_group.GetSpecType_DisableReFallback{` +
 		`DisableReFallback:` + fmt.Sprintf("%#v", this.DisableReFallback) + `}`}, ", ")
 	return s
+}
+func (this *GetSpecType_BfdDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.GetSpecType_BfdDisabled{` +
+		`BfdDisabled:` + fmt.Sprintf("%#v", this.BfdDisabled) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_BfdEnabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.GetSpecType_BfdEnabled{` +
+		`BfdEnabled:` + fmt.Sprintf("%#v", this.BfdEnabled) + `}`}, ", ")
+	return s
+}
+func (this *BFD) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&site_mesh_group.BFD{")
+	s = append(s, "TransmitIntervalMilliseconds: "+fmt.Sprintf("%#v", this.TransmitIntervalMilliseconds)+",\n")
+	s = append(s, "ReceiveIntervalMilliseconds: "+fmt.Sprintf("%#v", this.ReceiveIntervalMilliseconds)+",\n")
+	s = append(s, "Multiplier: "+fmt.Sprintf("%#v", this.Multiplier)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
@@ -2726,6 +3329,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.BfdChoice != nil {
+		{
+			size := m.BfdChoice.Size()
+			i -= size
+			if _, err := m.BfdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ReFallback != nil {
 		{
 			size := m.ReFallback.Size()
@@ -2890,6 +3502,48 @@ func (m *GlobalSpecType_DisableReFallback) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_BfdDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_BfdDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BfdDisabled != nil {
+		{
+			size, err := m.BfdDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_BfdEnabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_BfdEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BfdEnabled != nil {
+		{
+			size, err := m.BfdEnabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2910,6 +3564,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.BfdChoice != nil {
+		{
+			size := m.BfdChoice.Size()
+			i -= size
+			if _, err := m.BfdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ReFallback != nil {
 		{
 			size := m.ReFallback.Size()
@@ -3069,6 +3732,48 @@ func (m *CreateSpecType_DisableReFallback) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_BfdDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_BfdDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BfdDisabled != nil {
+		{
+			size, err := m.BfdDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_BfdEnabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_BfdEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BfdEnabled != nil {
+		{
+			size, err := m.BfdEnabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3089,6 +3794,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.BfdChoice != nil {
+		{
+			size := m.BfdChoice.Size()
+			i -= size
+			if _, err := m.BfdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ReFallback != nil {
 		{
 			size := m.ReFallback.Size()
@@ -3248,6 +3962,48 @@ func (m *ReplaceSpecType_DisableReFallback) MarshalToSizedBuffer(dAtA []byte) (i
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_BfdDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_BfdDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BfdDisabled != nil {
+		{
+			size, err := m.BfdDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_BfdEnabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_BfdEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BfdEnabled != nil {
+		{
+			size, err := m.BfdEnabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3268,6 +4024,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.BfdChoice != nil {
+		{
+			size := m.BfdChoice.Size()
+			i -= size
+			if _, err := m.BfdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ReFallback != nil {
 		{
 			size := m.ReFallback.Size()
@@ -3432,6 +4197,86 @@ func (m *GetSpecType_DisableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_BfdDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_BfdDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BfdDisabled != nil {
+		{
+			size, err := m.BfdDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_BfdEnabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_BfdEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BfdEnabled != nil {
+		{
+			size, err := m.BfdEnabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
+func (m *BFD) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *BFD) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFD) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Multiplier != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Multiplier))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ReceiveIntervalMilliseconds != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ReceiveIntervalMilliseconds))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.TransmitIntervalMilliseconds != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TransmitIntervalMilliseconds))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -3585,6 +4430,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.ReFallback != nil {
 		n += m.ReFallback.Size()
 	}
+	if m.BfdChoice != nil {
+		n += m.BfdChoice.Size()
+	}
 	return n
 }
 
@@ -3648,6 +4496,30 @@ func (m *GlobalSpecType_DisableReFallback) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_BfdDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BfdDisabled != nil {
+		l = m.BfdDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_BfdEnabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BfdEnabled != nil {
+		l = m.BfdEnabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3674,6 +4546,9 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.ReFallback != nil {
 		n += m.ReFallback.Size()
+	}
+	if m.BfdChoice != nil {
+		n += m.BfdChoice.Size()
 	}
 	return n
 }
@@ -3738,6 +4613,30 @@ func (m *CreateSpecType_DisableReFallback) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_BfdDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BfdDisabled != nil {
+		l = m.BfdDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_BfdEnabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BfdEnabled != nil {
+		l = m.BfdEnabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3764,6 +4663,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.ReFallback != nil {
 		n += m.ReFallback.Size()
+	}
+	if m.BfdChoice != nil {
+		n += m.BfdChoice.Size()
 	}
 	return n
 }
@@ -3828,6 +4730,30 @@ func (m *ReplaceSpecType_DisableReFallback) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_BfdDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BfdDisabled != nil {
+		l = m.BfdDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_BfdEnabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BfdEnabled != nil {
+		l = m.BfdEnabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3857,6 +4783,9 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.ReFallback != nil {
 		n += m.ReFallback.Size()
+	}
+	if m.BfdChoice != nil {
+		n += m.BfdChoice.Size()
 	}
 	return n
 }
@@ -3918,6 +4847,47 @@ func (m *GetSpecType_DisableReFallback) Size() (n int) {
 	if m.DisableReFallback != nil {
 		l = m.DisableReFallback.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_BfdDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BfdDisabled != nil {
+		l = m.BfdDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_BfdEnabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BfdEnabled != nil {
+		l = m.BfdEnabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *BFD) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TransmitIntervalMilliseconds != 0 {
+		n += 1 + sovTypes(uint64(m.TransmitIntervalMilliseconds))
+	}
+	if m.ReceiveIntervalMilliseconds != 0 {
+		n += 1 + sovTypes(uint64(m.ReceiveIntervalMilliseconds))
+	}
+	if m.Multiplier != 0 {
+		n += 1 + sovTypes(uint64(m.Multiplier))
 	}
 	return n
 }
@@ -4040,6 +5010,7 @@ func (this *GlobalSpecType) String() string {
 		`Hub:` + repeatedStringForHub + `,`,
 		`MeshChoice:` + fmt.Sprintf("%v", this.MeshChoice) + `,`,
 		`ReFallback:` + fmt.Sprintf("%v", this.ReFallback) + `,`,
+		`BfdChoice:` + fmt.Sprintf("%v", this.BfdChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4094,6 +5065,26 @@ func (this *GlobalSpecType_DisableReFallback) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_BfdDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_BfdDisabled{`,
+		`BfdDisabled:` + strings.Replace(fmt.Sprintf("%v", this.BfdDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_BfdEnabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_BfdEnabled{`,
+		`BfdEnabled:` + strings.Replace(fmt.Sprintf("%v", this.BfdEnabled), "BFD", "BFD", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4114,6 +5105,7 @@ func (this *CreateSpecType) String() string {
 		`Hub:` + repeatedStringForHub + `,`,
 		`MeshChoice:` + fmt.Sprintf("%v", this.MeshChoice) + `,`,
 		`ReFallback:` + fmt.Sprintf("%v", this.ReFallback) + `,`,
+		`BfdChoice:` + fmt.Sprintf("%v", this.BfdChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4168,6 +5160,26 @@ func (this *CreateSpecType_DisableReFallback) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_BfdDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_BfdDisabled{`,
+		`BfdDisabled:` + strings.Replace(fmt.Sprintf("%v", this.BfdDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_BfdEnabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_BfdEnabled{`,
+		`BfdEnabled:` + strings.Replace(fmt.Sprintf("%v", this.BfdEnabled), "BFD", "BFD", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4188,6 +5200,7 @@ func (this *ReplaceSpecType) String() string {
 		`Hub:` + repeatedStringForHub + `,`,
 		`MeshChoice:` + fmt.Sprintf("%v", this.MeshChoice) + `,`,
 		`ReFallback:` + fmt.Sprintf("%v", this.ReFallback) + `,`,
+		`BfdChoice:` + fmt.Sprintf("%v", this.BfdChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4242,6 +5255,26 @@ func (this *ReplaceSpecType_DisableReFallback) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_BfdDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_BfdDisabled{`,
+		`BfdDisabled:` + strings.Replace(fmt.Sprintf("%v", this.BfdDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_BfdEnabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_BfdEnabled{`,
+		`BfdEnabled:` + strings.Replace(fmt.Sprintf("%v", this.BfdEnabled), "BFD", "BFD", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4263,6 +5296,7 @@ func (this *GetSpecType) String() string {
 		`Hub:` + repeatedStringForHub + `,`,
 		`MeshChoice:` + fmt.Sprintf("%v", this.MeshChoice) + `,`,
 		`ReFallback:` + fmt.Sprintf("%v", this.ReFallback) + `,`,
+		`BfdChoice:` + fmt.Sprintf("%v", this.BfdChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4313,6 +5347,38 @@ func (this *GetSpecType_DisableReFallback) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_DisableReFallback{`,
 		`DisableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.DisableReFallback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_BfdDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_BfdDisabled{`,
+		`BfdDisabled:` + strings.Replace(fmt.Sprintf("%v", this.BfdDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_BfdEnabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_BfdEnabled{`,
+		`BfdEnabled:` + strings.Replace(fmt.Sprintf("%v", this.BfdEnabled), "BFD", "BFD", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BFD) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BFD{`,
+		`TransmitIntervalMilliseconds:` + fmt.Sprintf("%v", this.TransmitIntervalMilliseconds) + `,`,
+		`ReceiveIntervalMilliseconds:` + fmt.Sprintf("%v", this.ReceiveIntervalMilliseconds) + `,`,
+		`Multiplier:` + fmt.Sprintf("%v", this.Multiplier) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5040,6 +6106,76 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ReFallback = &GlobalSpecType_DisableReFallback{v}
 			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BfdDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BfdChoice = &GlobalSpecType_BfdDisabled{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BfdEnabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &BFD{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BfdChoice = &GlobalSpecType_BfdEnabled{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -5355,6 +6491,76 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ReFallback = &CreateSpecType_DisableReFallback{v}
 			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BfdDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BfdChoice = &CreateSpecType_BfdDisabled{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BfdEnabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &BFD{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BfdChoice = &CreateSpecType_BfdEnabled{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -5669,6 +6875,76 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ReFallback = &ReplaceSpecType_DisableReFallback{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BfdDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BfdChoice = &ReplaceSpecType_BfdDisabled{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BfdEnabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &BFD{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BfdChoice = &ReplaceSpecType_BfdEnabled{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6004,6 +7280,186 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ReFallback = &GetSpecType_DisableReFallback{v}
 			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BfdDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BfdChoice = &GetSpecType_BfdDisabled{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BfdEnabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &BFD{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BfdChoice = &GetSpecType_BfdEnabled{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *BFD) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BFD: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BFD: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TransmitIntervalMilliseconds", wireType)
+			}
+			m.TransmitIntervalMilliseconds = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TransmitIntervalMilliseconds |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReceiveIntervalMilliseconds", wireType)
+			}
+			m.ReceiveIntervalMilliseconds = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ReceiveIntervalMilliseconds |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Multiplier", wireType)
+			}
+			m.Multiplier = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Multiplier |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

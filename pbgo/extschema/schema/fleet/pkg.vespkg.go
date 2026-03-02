@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.fleet.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.fleet.Object"] = ObjectValidator()
 	vr["ves.io.schema.fleet.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.fleet.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.fleet.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.fleet.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.fleet.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.fleet.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.fleet.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.fleet.BGPConfiguration"] = BGPConfigurationValidator()
 	vr["ves.io.schema.fleet.BlockedServices"] = BlockedServicesValidator()
 	vr["ves.io.schema.fleet.BlockedServicesListType"] = BlockedServicesListTypeValidator()
@@ -78,7 +75,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.fleet.StorageDevicePureStorageServiceOrchestratorType"] = StorageDevicePureStorageServiceOrchestratorTypeValidator()
 	vr["ves.io.schema.fleet.VGPUConfiguration"] = VGPUConfigurationValidator()
 	vr["ves.io.schema.fleet.VMConfiguration"] = VMConfigurationValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -90,18 +86,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.fleet.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.fleet.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.fleet.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.fleet.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.fleet.CreateRequest.spec.storage_device_choice.storage_device_list.storage_devices.device_choice.netapp_trident.backend_choice.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.fleet.API.Create"] = []string{
 		"spec.storage_device_list.storage_devices.#.hpe_storage.iscsi_chap_password.blindfold_secret_info_internal",
 		"spec.storage_device_list.storage_devices.#.hpe_storage.iscsi_chap_password.secret_encoding_type",
@@ -144,23 +137,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.storage_device_list.storage_devices.#.pure_service_orchestrator.arrays.flash_blade.flash_blades.#.api_token.vault_secret_info",
 		"spec.storage_device_list.storage_devices.#.pure_service_orchestrator.arrays.flash_blade.flash_blades.#.api_token.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.fleet.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fleet.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.fleet.API.Create"] = "ves.io.schema.fleet.CreateRequest"
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fleet.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
@@ -175,21 +164,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fleet.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.fleet.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.fleet.ReplaceRequest.spec.storage_device_choice.storage_device_list.storage_devices.device_choice.netapp_trident.backend_choice.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.fleet.API.Replace"] = []string{
 		"spec.storage_device_list.storage_devices.#.hpe_storage.iscsi_chap_password.blindfold_secret_info_internal",
 		"spec.storage_device_list.storage_devices.#.hpe_storage.iscsi_chap_password.secret_encoding_type",
@@ -232,30 +218,24 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.storage_device_list.storage_devices.#.pure_service_orchestrator.arrays.flash_blade.flash_blades.#.api_token.vault_secret_info",
 		"spec.storage_device_list.storage_devices.#.pure_service_orchestrator.arrays.flash_blade.flash_blades.#.api_token.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.fleet.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.fleet.API.Replace"] = "ves.io.schema.fleet.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.fleet.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -264,9 +244,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.fleet.Object"] = APISwaggerJSON
@@ -280,22 +258,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.fleet.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.fleet.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.fleet.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

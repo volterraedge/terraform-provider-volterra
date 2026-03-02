@@ -76,9 +76,7 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["added_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signatures"))
 		for idx, item := range m.GetAddedSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -86,11 +84,8 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["added_signatures_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signatures_data"))
 		for idx, item := range m.GetAddedSignaturesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -98,20 +93,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["release_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_date"))
 		if err := fv(ctx, m.GetReleaseDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signatures"))
 		for idx, item := range m.GetUpdatedSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -119,11 +108,8 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signatures_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signatures_data"))
 		for idx, item := range m.GetUpdatedSignaturesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -131,18 +117,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["added_signatures_data"] = SignatureValidator().Validate
-
 	v.FldValidators["updated_signatures_data"] = SignatureValidator().Validate
 
 	return v
@@ -206,9 +188,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["added_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signatures"))
 		for idx, item := range m.GetAddedSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -216,11 +196,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["added_signatures_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signatures_data"))
 		for idx, item := range m.GetAddedSignaturesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -228,20 +205,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["release_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_date"))
 		if err := fv(ctx, m.GetReleaseDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signatures"))
 		for idx, item := range m.GetUpdatedSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -249,11 +220,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signatures_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signatures_data"))
 		for idx, item := range m.GetUpdatedSignaturesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -261,18 +229,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["added_signatures_data"] = SignatureValidator().Validate
-
 	v.FldValidators["updated_signatures_data"] = SignatureValidator().Validate
 
 	return v
@@ -336,9 +300,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["added_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signatures"))
 		for idx, item := range m.GetAddedSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -346,11 +308,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["added_signatures_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signatures_data"))
 		for idx, item := range m.GetAddedSignaturesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -358,20 +317,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["release_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_date"))
 		if err := fv(ctx, m.GetReleaseDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signatures"))
 		for idx, item := range m.GetUpdatedSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -379,11 +332,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signatures_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signatures_data"))
 		for idx, item := range m.GetUpdatedSignaturesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -391,18 +341,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["added_signatures_data"] = SignatureValidator().Validate
-
 	v.FldValidators["updated_signatures_data"] = SignatureValidator().Validate
 
 	return v
@@ -466,9 +412,7 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["added_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signatures"))
 		for idx, item := range m.GetAddedSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -476,11 +420,8 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["added_signatures_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("added_signatures_data"))
 		for idx, item := range m.GetAddedSignaturesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -488,20 +429,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["release_date"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("release_date"))
 		if err := fv(ctx, m.GetReleaseDate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signatures"))
 		for idx, item := range m.GetUpdatedSignatures() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -509,11 +444,8 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_signatures_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_signatures_data"))
 		for idx, item := range m.GetUpdatedSignaturesData() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -521,18 +453,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["added_signatures_data"] = SignatureValidator().Validate
-
 	v.FldValidators["updated_signatures_data"] = SignatureValidator().Validate
 
 	return v
@@ -584,7 +512,6 @@ type ValidateSignature struct {
 }
 
 func (v *ValidateSignature) LastUpdateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for last_update")
@@ -606,72 +533,49 @@ func (v *ValidateSignature) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["accuracy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("accuracy"))
 		if err := fv(ctx, m.GetAccuracy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["applies_to"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("applies_to"))
 		if err := fv(ctx, m.GetAppliesTo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["attack_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attack_type"))
 		if err := fv(ctx, m.GetAttackType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_update"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_update"))
 		if err := fv(ctx, m.GetLastUpdate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["references"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("references"))
 		for idx, item := range m.GetReferences() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -679,20 +583,14 @@ func (v *ValidateSignature) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["risk"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("risk"))
 		if err := fv(ctx, m.GetRisk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["systems"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("systems"))
 		for idx, item := range m.GetSystems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -700,16 +598,13 @@ func (v *ValidateSignature) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSignatureValidator = func() *ValidateSignature {
 	v := &ValidateSignature{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

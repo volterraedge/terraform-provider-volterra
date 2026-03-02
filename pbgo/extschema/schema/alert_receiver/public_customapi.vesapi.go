@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCConfirmAlertReceiver(ctx context.Context, yam
 	rsp, err := c.grpcClient.ConfirmAlertReceiver(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCTestAlertReceiver(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &TestAlertReceiverRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCTestAlertReceiver(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.TestAlertReceiver(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCVerifyAlertReceiver(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VerifyAlertReceiverRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ConfirmAlertReceiver"] = ccl.doRPCConfirmAlertReceiver
-
 	rpcFns["TestAlertReceiver"] = ccl.doRPCTestAlertReceiver
-
 	rpcFns["VerifyAlertReceiver"] = ccl.doRPCVerifyAlertReceiver
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -186,7 +180,6 @@ func (c *CustomAPIRestClient) doRPCConfirmAlertReceiver(ctx context.Context, cal
 	pbRsp := &ConfirmAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -194,7 +187,6 @@ func (c *CustomAPIRestClient) doRPCConfirmAlertReceiver(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCTestAlertReceiver(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -270,7 +262,6 @@ func (c *CustomAPIRestClient) doRPCTestAlertReceiver(ctx context.Context, callOp
 	pbRsp := &TestAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.alert_receiver.TestAlertReceiverResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -278,7 +269,6 @@ func (c *CustomAPIRestClient) doRPCTestAlertReceiver(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCVerifyAlertReceiver(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -354,7 +344,6 @@ func (c *CustomAPIRestClient) doRPCVerifyAlertReceiver(ctx context.Context, call
 	pbRsp := &VerifyAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.alert_receiver.VerifyAlertReceiverResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -388,13 +377,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ConfirmAlertReceiver"] = ccl.doRPCConfirmAlertReceiver
-
 	rpcFns["TestAlertReceiver"] = ccl.doRPCTestAlertReceiver
-
 	rpcFns["VerifyAlertReceiver"] = ccl.doRPCVerifyAlertReceiver
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -483,7 +468,6 @@ func (s *customAPISrv) ConfirmAlertReceiver(ctx context.Context, in *ConfirmAler
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", rsp)...)
 
 	return rsp, nil
@@ -532,7 +516,6 @@ func (s *customAPISrv) TestAlertReceiver(ctx context.Context, in *TestAlertRecei
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.TestAlertReceiverResponse", rsp)...)
 
 	return rsp, nil
@@ -581,7 +564,6 @@ func (s *customAPISrv) VerifyAlertReceiver(ctx context.Context, in *VerifyAlertR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.VerifyAlertReceiverResponse", rsp)...)
 
 	return rsp, nil

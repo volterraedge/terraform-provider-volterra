@@ -83,7 +83,6 @@ resource "volterra_uztna_flow" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -312,4 +311,4 @@ Do not encrypt assertions.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_flow.
+-   `id` - This is the id of the configured uztna_flow.

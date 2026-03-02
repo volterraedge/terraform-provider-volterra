@@ -20,7 +20,6 @@ resource "volterra_ztna" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -42,13 +41,13 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`connectivity` - (Optional) List of Connectivity Policy Type . See [Connectivity ](#connectivity) below for details.
+`connectivity` - (Optional) List of Connectivity Policy Type. See [Connectivity ](#connectivity) below for details.
 
 `per_session` - (Optional) List of configuration for per session policy type.. See [Per Session ](#per-session) below for details.
 
 ### Connectivity
 
-List of Connectivity Policy Type .
+List of Connectivity Policy Type.
 
 `connectivities` - (Optional) Connectivity policy configuration. Select connectivity policy as PPP/DTLS (`String`).
 
@@ -58,7 +57,7 @@ List of Connectivity Policy Type .
 
 List of configuration for per session policy type..
 
-`external_server` - (Optional) List of configuration of external server . See [Per Session External Server ](#per-session-external-server) below for details.
+`external_server` - (Optional) List of configuration of external server. See [Per Session External Server ](#per-session-external-server) below for details.
 
 `lease_pool_member` - (Optional) List of Lease pool member for Session Policy. See [Per Session Lease Pool Member ](#per-session-lease-pool-member) below for details.
 
@@ -66,7 +65,7 @@ List of configuration for per session policy type..
 
 `resources` - (Optional) List of the Policy of session type.. See [Per Session Resources ](#per-session-resources) below for details.
 
-`sequence_action` - (Optional) Active Directory Query/Resource Assign . See [Per Session Sequence Action ](#per-session-sequence-action) below for details.
+`sequence_action` - (Optional) Active Directory Query/Resource Assign. See [Per Session Sequence Action ](#per-session-sequence-action) below for details.
 
 ### Acl Entries
 
@@ -76,7 +75,7 @@ Entries Config for Acl Resource.
 
 `destination_end_port` - (Optional) Destination End Port for acl resource type. (`Int`).
 
-`destination_ip` - (Optional) Destination IP address for the acl resource type. . See [Entries Destination Ip ](#entries-destination-ip) below for details.
+`destination_ip` - (Optional) Destination IP address for the acl resource type.. See [Entries Destination Ip ](#entries-destination-ip) below for details.
 
 `destination_start_port` - (Optional) Destination start port for acl resource type. (`Int`).
 
@@ -88,13 +87,13 @@ Send active directory query configuration on success of allow directory auth..
 
 `filter` - (Optional) Filter setting for filtering out the assigned resources (`String`).
 
-`resource_assign` - (Optional) List of all assigned resources list . See [Active Directory Query Resource Assign ](#active-directory-query-resource-assign) below for details.
+`resource_assign` - (Optional) List of all assigned resources list. See [Active Directory Query Resource Assign ](#active-directory-query-resource-assign) below for details.
 
 `server` - (Optional) Name of the server which gets assigned. (`String`).
 
 ### Active Directory Query Resource Assign
 
-List of all assigned resources list .
+List of all assigned resources list.
 
 `allow` - (Optional) This sends resource assign configuration. See [Resource Assign Allow ](#resource-assign-allow) below for details.
 
@@ -110,7 +109,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Allow Rules Resource Assign
 
-Rules for assigning the resources .
+Rules for assigning the resources.
 
 `acls` - (Optional) Put the list of all acls resource type name. (`String`).
 
@@ -138,7 +137,7 @@ This field contains the secret password for log on..
 
 ### Entries Destination Ip
 
-Destination IP address for the acl resource type. .
+Destination IP address for the acl resource type..
 
 ###### One of the arguments from this list "ipv4, ipv6" can be set
 
@@ -184,13 +183,13 @@ Action type is active Directory query..
 
 `filter` - (Optional) Filter setting for filtering out the assigned resources (`String`).
 
-`resource_assign` - (Optional) List of all assigned resources list . See [Active Directory Query Resource Assign ](#active-directory-query-resource-assign) below for details.
+`resource_assign` - (Optional) List of all assigned resources list. See [Active Directory Query Resource Assign ](#active-directory-query-resource-assign) below for details.
 
 `server` - (Optional) Name of the server which gets assigned. (`String`).
 
 ### Item Type Log On
 
-Action type is logon .
+Action type is logon.
 
 `active_directory_auth` - (Optional) After logon next item is to verify the group and directory.. See [Log On Active Directory Auth ](#log-on-active-directory-auth) below for details.
 
@@ -254,7 +253,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Per Session External Server
 
-List of configuration of external server .
+List of configuration of external server.
 
 `admin_password` - (Optional) Secret password credential used for external server. See [External Server Admin Password ](#external-server-admin-password) below for details.
 
@@ -286,11 +285,11 @@ List of the Policy of session type..
 
 ### Per Session Sequence Action
 
-Active Directory Query/Resource Assign .
+Active Directory Query/Resource Assign.
 
 `connectivity_access_policy_name` - (Optional) Name of connectivity policy (`String`).
 
-`next_action` - (Optional) Active Directory Query/Resource Assign . See [Sequence Action Next Action ](#sequence-action-next-action) below for details.
+`next_action` - (Optional) Active Directory Query/Resource Assign. See [Sequence Action Next Action ](#sequence-action-next-action) below for details.
 
 ### Resource Assign Allow
 
@@ -300,7 +299,7 @@ This sends resource assign configuration.
 
 `deny_name` - (Optional) Send deny as next item in case of failure (`String`).
 
-`rules_resource_assign` - (Optional) Rules for assigning the resources . See [Allow Rules Resource Assign ](#allow-rules-resource-assign) below for details.
+`rules_resource_assign` - (Optional) Rules for assigning the resources. See [Allow Rules Resource Assign ](#allow-rules-resource-assign) below for details.
 
 `server` - (Optional) Server name for assigning the resources (`String`).
 
@@ -358,7 +357,7 @@ Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 ### Sequence Action Next Action
 
-Active Directory Query/Resource Assign .
+Active Directory Query/Resource Assign.
 
 ###### One of the arguments from this list "active_directory_auth, active_directory_query, log_on, resource_assign" can be set
 
@@ -366,7 +365,7 @@ Active Directory Query/Resource Assign .
 
 `active_directory_query` - (Optional) Action type is active Directory query.. See [Item Type Active Directory Query ](#item-type-active-directory-query) below for details.
 
-`log_on` - (Optional) Action type is logon . See [Item Type Log On ](#item-type-log-on) below for details.
+`log_on` - (Optional) Action type is logon. See [Item Type Log On ](#item-type-log-on) below for details.
 
 `resource_assign` - (Optional) Action type is resource assign.. See [Item Type Resource Assign ](#item-type-resource-assign) below for details.
 
@@ -385,4 +384,4 @@ IPv6 Address.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured ztna.
+*   `id` - This is the id of the configured ztna.

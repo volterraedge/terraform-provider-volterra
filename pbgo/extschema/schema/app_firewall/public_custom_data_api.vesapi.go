@@ -42,7 +42,6 @@ func (c *CustomDataAPIGrpcClient) doRPCMetrics(ctx context.Context, yamlReq stri
 	rsp, err := c.grpcClient.Metrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomDataAPIGrpcClient) doRPCMetricsAllNamespaces(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &MetricsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Metrics"] = ccl.doRPCMetrics
-
 	rpcFns["MetricsAllNamespaces"] = ccl.doRPCMetricsAllNamespaces
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -185,7 +181,6 @@ func (c *CustomDataAPIRestClient) doRPCMetrics(ctx context.Context, callOpts *se
 	pbRsp := &MetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_firewall.MetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -193,7 +188,6 @@ func (c *CustomDataAPIRestClient) doRPCMetrics(ctx context.Context, callOpts *se
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomDataAPIRestClient) doRPCMetricsAllNamespaces(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -280,7 +274,6 @@ func (c *CustomDataAPIRestClient) doRPCMetricsAllNamespaces(ctx context.Context,
 	pbRsp := &MetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_firewall.MetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -314,11 +307,8 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Metrics"] = ccl.doRPCMetrics
-
 	rpcFns["MetricsAllNamespaces"] = ccl.doRPCMetricsAllNamespaces
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -403,7 +393,6 @@ func (s *customDataAPISrv) Metrics(ctx context.Context, in *MetricsRequest) (*Me
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_firewall.MetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -452,7 +441,6 @@ func (s *customDataAPISrv) MetricsAllNamespaces(ctx context.Context, in *Metrics
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_firewall.MetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -668,7 +656,7 @@ var CustomDataAPISwaggerJSON string = `{
             "properties": {
                 "data": {
                     "type": "array",
-                    "description": " List of metric data ",
+                    "description": " List of metric data",
                     "title": "Data",
                     "items": {
                         "$ref": "#/definitions/schemaapp_firewallMetricTypeData"
@@ -739,7 +727,7 @@ var CustomDataAPISwaggerJSON string = `{
                 },
                 "filter": {
                     "type": "string",
-                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n     =  : equal to\n     != : not equal to\n     =~ : regex match\n     !~ : not regex match\n\n Optional: If not specified, metric will be aggregated based on the group_by labels. \n\nExample: - \"{NAMESPACE=\\\"book-info\\\"}\"-",
+                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n     =  : equal to\n     != : not equal to\n     =~ : regex match\n     !~ : not regex match\n\n Optional: If not specified, metric will be aggregated based on the group_by labels.\n\nExample: - \"{NAMESPACE=\\\"book-info\\\"}\"-",
                     "title": "Label Filter",
                     "x-displayname": "Filter",
                     "x-ves-example": "{NAMESPACE=\\\"book-info\\\"}"

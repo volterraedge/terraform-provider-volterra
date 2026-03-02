@@ -67,7 +67,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetUsersDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetUsersDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *GlobalSpecType) GetUsersDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetUsersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *GlobalSpecType) GetUsersDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) UsersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -166,9 +162,7 @@ func (v *ValidateGlobalSpecType) UsersValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CertificateSerialNumValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_serial_num")
@@ -190,103 +184,72 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["active"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active"))
 		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificate_serial_num"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_serial_num"))
 		if err := fv(ctx, m.GetCertificateSerialNum(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["created_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("created_timestamp"))
 		if err := fv(ctx, m.GetCreatedTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["digest"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("digest"))
 		if err := fv(ctx, m.GetDigest(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["users"]; exists {
 		vOpts := append(opts, db.WithValidateField("users"))
 		if err := fv(ctx, m.GetUsers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_k8s_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_k8s_name"))
 		if err := fv(ctx, m.GetVirtualK8SName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_k8s_namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_k8s_namespace"))
 		if err := fv(ctx, m.GetVirtualK8SNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

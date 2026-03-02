@@ -14,9 +14,7 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.Object"] = ObjectValidator()
-
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.DeleteRequest"] = DeleteRequestValidator()
@@ -27,15 +25,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.MobileBaseConfigurationFileRequest"] = MobileBaseConfigurationFileRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.MobileBaseConfigurationFileResponse"] = MobileBaseConfigurationFileResponseValidator()
-
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.mobile_base_config.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -43,21 +38,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.shape.bot_defense.mobile_base_config.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.shape.bot_defense.mobile_base_config.Object"] = reflect.TypeOf(&DBObject{})
 	mdr.EntryIndexers["ves.io.schema.shape.bot_defense.mobile_base_config.Object"] = GetObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.shape.bot_defense.mobile_base_config.API"] = "mobile/security"
 	sm["ves.io.schema.shape.bot_defense.mobile_base_config.CustomAPI"] = "mobile/security"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -66,9 +57,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.shape.bot_defense.mobile_base_config.Object"] = APISwaggerJSON
@@ -82,15 +71,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.shape.bot_defense.mobile_base_config.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.shape.bot_defense.mobile_base_config.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.shape.bot_defense.mobile_base_config.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.shape.bot_defense.mobile_base_config.CustomAPI"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.shape.bot_defense.mobile_base_config.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.shape.bot_defense.mobile_base_config.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -101,22 +86,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.shape.bot_defense.mobile_base_config.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

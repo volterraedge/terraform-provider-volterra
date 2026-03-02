@@ -76,25 +76,18 @@ func (v *ValidateDeactivateTenantRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["feedback"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("feedback"))
 		if err := fv(ctx, m.GetFeedback(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reason"))
 		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -163,16 +156,12 @@ func (v *ValidateDeactivateTenantResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["job_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("job_id"))
 		if err := fv(ctx, m.GetJobId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

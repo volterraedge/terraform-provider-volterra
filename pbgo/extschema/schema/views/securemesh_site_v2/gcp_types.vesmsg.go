@@ -73,9 +73,7 @@ func (v *ValidateGCPCloudSubnetParamType) NameChoiceNameValidationRuleHandler(ru
 	}
 	return oValidatorFn_Name, nil
 }
-
 func (v *ValidateGCPCloudSubnetParamType) Ipv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4")
@@ -97,14 +95,11 @@ func (v *ValidateGCPCloudSubnetParamType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv4"))
 		if err := fv(ctx, m.GetIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNameChoice().(type) {
@@ -130,16 +125,13 @@ func (v *ValidateGCPCloudSubnetParamType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPCloudSubnetParamTypeValidator = func() *ValidateGCPCloudSubnetParamType {
 	v := &ValidateGCPCloudSubnetParamType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -147,7 +139,6 @@ var DefaultGCPCloudSubnetParamTypeValidator = func() *ValidateGCPCloudSubnetPara
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNameChoiceName := v.NameChoiceNameValidationRuleHandler
 	rulesNameChoiceName := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -157,7 +148,6 @@ var DefaultGCPCloudSubnetParamTypeValidator = func() *ValidateGCPCloudSubnetPara
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GCPCloudSubnetParamType.name_choice_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["name_choice.name"] = vFnMap["name_choice.name"]
 
 	vrhIpv4 := v.Ipv4ValidationRuleHandler
@@ -285,16 +275,13 @@ func (v *ValidateGCPCloudVPCParamsType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPCloudVPCParamsTypeValidator = func() *ValidateGCPCloudVPCParamsType {
 	v := &ValidateGCPCloudVPCParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -302,7 +289,6 @@ var DefaultGCPCloudVPCParamsTypeValidator = func() *ValidateGCPCloudVPCParamsTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNameChoice := v.NameChoiceValidationRuleHandler
 	rulesNameChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -313,7 +299,6 @@ var DefaultGCPCloudVPCParamsTypeValidator = func() *ValidateGCPCloudVPCParamsTyp
 		panic(errMsg)
 	}
 	v.FldValidators["name_choice"] = vFn
-
 	vrhNameChoiceNameTag := v.NameChoiceNameTagValidationRuleHandler
 	rulesNameChoiceNameTag := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -324,7 +309,6 @@ var DefaultGCPCloudVPCParamsTypeValidator = func() *ValidateGCPCloudVPCParamsTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GCPCloudVPCParamsType.name_choice_name_tag: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["name_choice.name_tag"] = vFnMap["name_choice.name_tag"]
 
 	return v
@@ -382,25 +366,20 @@ func (m *GCPManagedMode) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GCPManagedMode) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -416,7 +395,6 @@ func (m *GCPManagedMode) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetGcpCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -426,7 +404,6 @@ func (m *GCPManagedMode) GetGcpCredDBEntries(ctx context.Context, d db.Interface
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
 	}
-
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -444,7 +421,6 @@ func (m *GCPManagedMode) GetGcpCredDBEntries(ctx context.Context, d db.Interface
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -455,11 +431,8 @@ func (m *GCPManagedMode) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 	switch m.GetPrivateConnectivityChoice().(type) {
 	case *GCPManagedMode_PrivateConnectivityDisabled:
-
 		return nil, nil
-
 	case *GCPManagedMode_PrivateConnectivity:
-
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -469,11 +442,9 @@ func (m *GCPManagedMode) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, 
 			dri.DRField = "private_connectivity." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -483,7 +454,6 @@ func (m *GCPManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteType().(type) {
 	case *GCPManagedMode_SingleInterface:
-
 		drInfos, err := m.GetSingleInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSingleInterface().GetDRefInfo() FAILED")
@@ -493,9 +463,7 @@ func (m *GCPManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "single_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GCPManagedMode_MultipleInterface:
-
 		drInfos, err := m.GetMultipleInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetMultipleInterface().GetDRefInfo() FAILED")
@@ -505,11 +473,9 @@ func (m *GCPManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "multiple_interface." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGCPManagedMode struct {
@@ -523,9 +489,7 @@ func (v *ValidateGCPManagedMode) SiteTypeValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPManagedMode) GcpRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for gcp_region")
@@ -533,9 +497,7 @@ func (v *ValidateGCPManagedMode) GcpRegionValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPManagedMode) GcpCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for gcp_cred")
@@ -544,19 +506,15 @@ func (v *ValidateGCPManagedMode) GcpCredValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPManagedMode) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -599,9 +557,7 @@ func (v *ValidateGCPManagedMode) TagsValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPManagedMode) InstanceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for instance_type")
@@ -609,9 +565,7 @@ func (v *ValidateGCPManagedMode) InstanceTypeValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPManagedMode) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
@@ -633,41 +587,29 @@ func (v *ValidateGCPManagedMode) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_cred"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_cred"))
 		if err := fv(ctx, m.GetGcpCred(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gcp_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_region"))
 		if err := fv(ctx, m.GetGcpRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_type"))
 		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetPrivateConnectivityChoice().(type) {
@@ -693,7 +635,6 @@ func (v *ValidateGCPManagedMode) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_type"]; exists {
@@ -729,24 +670,19 @@ func (v *ValidateGCPManagedMode) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPManagedModeValidator = func() *ValidateGCPManagedMode {
 	v := &ValidateGCPManagedMode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -754,7 +690,6 @@ var DefaultGCPManagedModeValidator = func() *ValidateGCPManagedMode {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -823,9 +758,7 @@ var DefaultGCPManagedModeValidator = func() *ValidateGCPManagedMode {
 		panic(errMsg)
 	}
 	v.FldValidators["disk_size"] = vFn
-
 	v.FldValidators["private_connectivity_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
-
 	v.FldValidators["site_type.single_interface"] = GCPSingleInterfaceValidator().Validate
 	v.FldValidators["site_type.multiple_interface"] = GCPMultipleInterfaceValidator().Validate
 
@@ -879,7 +812,6 @@ func (m *GCPManagedNode) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -887,7 +819,6 @@ func (m *GCPManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInterfaceList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetInterfaceList() {
 		driSet, err := e.GetDRefInfo()
@@ -901,7 +832,6 @@ func (m *GCPManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGCPManagedNode struct {
@@ -909,7 +839,6 @@ type ValidateGCPManagedNode struct {
 }
 
 func (v *ValidateGCPManagedNode) HostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
@@ -917,9 +846,7 @@ func (v *ValidateGCPManagedNode) HostnameValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPManagedNode) GcpAzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for gcp_az_name")
@@ -927,9 +854,7 @@ func (v *ValidateGCPManagedNode) GcpAzNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPManagedNode) InterfaceListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -989,40 +914,30 @@ func (v *ValidateGCPManagedNode) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gcp_az_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gcp_az_name"))
 		if err := fv(ctx, m.GetGcpAzName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hostname"))
 		if err := fv(ctx, m.GetHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_list"))
 		if err := fv(ctx, m.GetInterfaceList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPManagedNodeValidator = func() *ValidateGCPManagedNode {
 	v := &ValidateGCPManagedNode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1117,7 +1032,6 @@ func (m *GCPManagedNodeList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1125,7 +1039,6 @@ func (m *GCPManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetNodeList() {
 		driSet, err := e.GetDRefInfo()
@@ -1139,7 +1052,6 @@ func (m *GCPManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGCPManagedNodeList struct {
@@ -1147,7 +1059,6 @@ type ValidateGCPManagedNodeList struct {
 }
 
 func (v *ValidateGCPManagedNodeList) NodeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1207,22 +1118,18 @@ func (v *ValidateGCPManagedNodeList) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("node_list"))
 		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPManagedNodeListValidator = func() *ValidateGCPManagedNodeList {
 	v := &ValidateGCPManagedNodeList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1294,7 +1201,6 @@ func (m *GCPMultipleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1302,7 +1208,6 @@ func (m *GCPMultipleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNodeList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
@@ -1312,7 +1217,6 @@ func (m *GCPMultipleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "node_list." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGCPMultipleInterface struct {
@@ -1332,23 +1236,18 @@ func (v *ValidateGCPMultipleInterface) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_list"))
 		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPMultipleInterfaceValidator = func() *ValidateGCPMultipleInterface {
 	v := &ValidateGCPMultipleInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["node_list"] = GCPManagedNodeListValidator().Validate
 
 	return v
@@ -1401,7 +1300,6 @@ func (m *GCPOrchestratedInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkOptionDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1409,7 +1307,6 @@ func (m *GCPOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, er
 	if m.GetNetworkOption() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
@@ -1419,7 +1316,6 @@ func (m *GCPOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, er
 		dri.DRField = "network_option." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGCPOrchestratedInterface struct {
@@ -1427,7 +1323,6 @@ type ValidateGCPOrchestratedInterface struct {
 }
 
 func (v *ValidateGCPOrchestratedInterface) NetworkOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for network_option")
@@ -1436,15 +1331,12 @@ func (v *ValidateGCPOrchestratedInterface) NetworkOptionValidationRuleHandler(ru
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPOrchestratedInterface) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -1466,23 +1358,17 @@ func (v *ValidateGCPOrchestratedInterface) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_option"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_option"))
 		if err := fv(ctx, m.GetNetworkOption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSiteToSiteConnectivityInterfaceChoice().(type) {
@@ -1508,34 +1394,25 @@ func (v *ValidateGCPOrchestratedInterface) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet"))
 		if err := fv(ctx, m.GetSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vpc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vpc"))
 		if err := fv(ctx, m.GetVpc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPOrchestratedInterfaceValidator = func() *ValidateGCPOrchestratedInterface {
 	v := &ValidateGCPOrchestratedInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1565,9 +1442,7 @@ var DefaultGCPOrchestratedInterfaceValidator = func() *ValidateGCPOrchestratedIn
 		panic(errMsg)
 	}
 	v.FldValidators["mtu"] = vFn
-
 	v.FldValidators["vpc"] = GCPVPCChoiceTypeValidator().Validate
-
 	v.FldValidators["subnet"] = GCPSubnetChoiceTypeValidator().Validate
 
 	return v
@@ -1620,7 +1495,6 @@ func (m *GCPSingleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1628,7 +1502,6 @@ func (m *GCPSingleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNodeList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
@@ -1638,7 +1511,6 @@ func (m *GCPSingleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "node_list." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGCPSingleInterface struct {
@@ -1658,23 +1530,18 @@ func (v *ValidateGCPSingleInterface) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_list"))
 		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPSingleInterfaceValidator = func() *ValidateGCPSingleInterface {
 	v := &ValidateGCPSingleInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["node_list"] = GCPManagedNodeListValidator().Validate
 
 	return v
@@ -1788,16 +1655,13 @@ func (v *ValidateGCPSubnetChoiceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPSubnetChoiceTypeValidator = func() *ValidateGCPSubnetChoiceType {
 	v := &ValidateGCPSubnetChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1805,7 +1669,6 @@ var DefaultGCPSubnetChoiceTypeValidator = func() *ValidateGCPSubnetChoiceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1816,7 +1679,6 @@ var DefaultGCPSubnetChoiceTypeValidator = func() *ValidateGCPSubnetChoiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceExistingSubnetId := v.ChoiceExistingSubnetIdValidationRuleHandler
 	rulesChoiceExistingSubnetId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -1827,9 +1689,7 @@ var DefaultGCPSubnetChoiceTypeValidator = func() *ValidateGCPSubnetChoiceType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GCPSubnetChoiceType.choice_existing_subnet_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.existing_subnet_id"] = vFnMap["choice.existing_subnet_id"]
-
 	v.FldValidators["choice.subnet_param"] = GCPCloudSubnetParamTypeValidator().Validate
 
 	return v
@@ -1943,16 +1803,13 @@ func (v *ValidateGCPVPCChoiceType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPVPCChoiceTypeValidator = func() *ValidateGCPVPCChoiceType {
 	v := &ValidateGCPVPCChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1960,7 +1817,6 @@ var DefaultGCPVPCChoiceTypeValidator = func() *ValidateGCPVPCChoiceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhServiceVpcChoice := v.ServiceVpcChoiceValidationRuleHandler
 	rulesServiceVpcChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1971,7 +1827,6 @@ var DefaultGCPVPCChoiceTypeValidator = func() *ValidateGCPVPCChoiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_vpc_choice"] = vFn
-
 	vrhServiceVpcChoiceExistingVpcId := v.ServiceVpcChoiceExistingVpcIdValidationRuleHandler
 	rulesServiceVpcChoiceExistingVpcId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -1982,9 +1837,7 @@ var DefaultGCPVPCChoiceTypeValidator = func() *ValidateGCPVPCChoiceType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GCPVPCChoiceType.service_vpc_choice_existing_vpc_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["service_vpc_choice.existing_vpc_id"] = vFnMap["service_vpc_choice.existing_vpc_id"]
-
 	v.FldValidators["service_vpc_choice.new_vpc"] = GCPCloudVPCParamsTypeValidator().Validate
 
 	return v

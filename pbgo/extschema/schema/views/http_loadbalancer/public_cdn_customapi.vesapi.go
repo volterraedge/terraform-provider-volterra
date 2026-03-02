@@ -44,7 +44,6 @@ func (c *CDNCustomAPIGrpcClient) doRPCCDNCachePurgeHTTPLBCacheEnabled(ctx contex
 	rsp, err := c.grpcClient.CDNCachePurgeHTTPLBCacheEnabled(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CDNCustomAPIGrpcClient) doRPCGetServiceOperationHTTPLBCacheEnabled(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_common_cdn.GetServiceOperationReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *CDNCustomAPIGrpcClient) doRPCGetServiceOperationHTTPLBCacheEnabled(ctx 
 	rsp, err := c.grpcClient.GetServiceOperationHTTPLBCacheEnabled(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CDNCustomAPIGrpcClient) doRPCListServiceOperationsHTTPLBCacheEnabled(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_common_cdn.ListServiceOperationsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -94,13 +92,9 @@ func NewCDNCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CDNCachePurgeHTTPLBCacheEnabled"] = ccl.doRPCCDNCachePurgeHTTPLBCacheEnabled
-
 	rpcFns["GetServiceOperationHTTPLBCacheEnabled"] = ccl.doRPCGetServiceOperationHTTPLBCacheEnabled
-
 	rpcFns["ListServiceOperationsHTTPLBCacheEnabled"] = ccl.doRPCListServiceOperationsHTTPLBCacheEnabled
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -190,7 +184,6 @@ func (c *CDNCustomAPIRestClient) doRPCCDNCachePurgeHTTPLBCacheEnabled(ctx contex
 	pbRsp := &ves_io_schema_views_common_cdn.LilacCDNCachePurgeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.LilacCDNCachePurgeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -198,7 +191,6 @@ func (c *CDNCustomAPIRestClient) doRPCCDNCachePurgeHTTPLBCacheEnabled(ctx contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CDNCustomAPIRestClient) doRPCGetServiceOperationHTTPLBCacheEnabled(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -275,7 +267,6 @@ func (c *CDNCustomAPIRestClient) doRPCGetServiceOperationHTTPLBCacheEnabled(ctx 
 	pbRsp := &ves_io_schema_views_common_cdn.GetServiceOperationRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.GetServiceOperationRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -283,7 +274,6 @@ func (c *CDNCustomAPIRestClient) doRPCGetServiceOperationHTTPLBCacheEnabled(ctx 
 	}
 	return pbRsp, nil
 }
-
 func (c *CDNCustomAPIRestClient) doRPCListServiceOperationsHTTPLBCacheEnabled(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -360,7 +350,6 @@ func (c *CDNCustomAPIRestClient) doRPCListServiceOperationsHTTPLBCacheEnabled(ct
 	pbRsp := &ves_io_schema_views_common_cdn.ListServiceOperationsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.ListServiceOperationsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -394,13 +383,9 @@ func NewCDNCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClie
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CDNCachePurgeHTTPLBCacheEnabled"] = ccl.doRPCCDNCachePurgeHTTPLBCacheEnabled
-
 	rpcFns["GetServiceOperationHTTPLBCacheEnabled"] = ccl.doRPCGetServiceOperationHTTPLBCacheEnabled
-
 	rpcFns["ListServiceOperationsHTTPLBCacheEnabled"] = ccl.doRPCListServiceOperationsHTTPLBCacheEnabled
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -489,7 +474,6 @@ func (s *cDNCustomAPISrv) CDNCachePurgeHTTPLBCacheEnabled(ctx context.Context, i
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.LilacCDNCachePurgeResponse", rsp)...)
 
 	return rsp, nil
@@ -538,7 +522,6 @@ func (s *cDNCustomAPISrv) GetServiceOperationHTTPLBCacheEnabled(ctx context.Cont
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.GetServiceOperationRsp", rsp)...)
 
 	return rsp, nil
@@ -587,7 +570,6 @@ func (s *cDNCustomAPISrv) ListServiceOperationsHTTPLBCacheEnabled(ctx context.Co
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.ListServiceOperationsRsp", rsp)...)
 
 	return rsp, nil
@@ -803,7 +785,7 @@ var CDNCustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancer/{name}/cache-purge": {
             "post": {
                 "summary": "Purge the LB Cache",
-                "description": "Initiate Purge on the LB Cache",
+                "description": "Initiate Purge on the LB Cache\nDEPRECATED. use CDN Purge Command",
                 "operationId": "ves.io.schema.views.http_loadbalancer.CDNCustomAPI.CDNCachePurgeHTTPLBCacheEnabled",
                 "responses": {
                     "200": {
@@ -894,6 +876,7 @@ var CDNCustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-cdncustomapi-cdncachepurgehttplbcacheenabled"
                 },
+                "x-ves-deprecated": "Use CDN Purge Command",
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CDNCustomAPI.CDNCachePurgeHTTPLBCacheEnabled"
             },
             "x-displayname": "CDN Custom API when HTTPLB Cache Enabled",
@@ -953,7 +936,7 @@ var CDNCustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.common_cdn.GetServiceOperationRsp",
             "properties": {
                 "error": {
-                    "description": " Errors(if any) while listing items from collection ",
+                    "description": " Errors(if any) while listing items from collection",
                     "title": "error",
                     "$ref": "#/definitions/schemaErrorType",
                     "x-displayname": "Errors"
@@ -996,7 +979,7 @@ var CDNCustomAPISwaggerJSON string = `{
                 },
                 "pattern": {
                     "type": "string",
-                    "description": "Exclusive with [hostname purge_all url]\n Purge cached content using PCRE 1 compliant regular expression.\n\nExample: - \".*\\.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pcre_regex: true\n",
+                    "description": "Exclusive with [hostname purge_all url]\n Purge cached content using PCRE 1 compliant regular expression.\n\nExample: - \".*\\.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Regex Pattern to match",
                     "minLength": 1,
                     "maxLength": 256,
@@ -1004,8 +987,7 @@ var CDNCustomAPISwaggerJSON string = `{
                     "x-ves-example": ".*\\.ts",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.pcre_regex": "true"
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "purge_all": {

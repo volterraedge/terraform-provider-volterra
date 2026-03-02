@@ -27,15 +27,15 @@ var (
 
 // augmented methods on protoc/std generated struct
 
-func (m *AWSCloudSubnetParamType) ToJSON() (string, error) {
+func (m *AWSCloudLinkConfigType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *AWSCloudSubnetParamType) ToYAML() (string, error) {
+func (m *AWSCloudLinkConfigType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *AWSCloudSubnetParamType) DeepCopy() *AWSCloudSubnetParamType {
+func (m *AWSCloudLinkConfigType) DeepCopy() *AWSCloudLinkConfigType {
 	if m == nil {
 		return nil
 	}
@@ -43,7 +43,7 @@ func (m *AWSCloudSubnetParamType) DeepCopy() *AWSCloudSubnetParamType {
 	if err != nil {
 		return nil
 	}
-	c := &AWSCloudSubnetParamType{}
+	c := &AWSCloudLinkConfigType{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -51,114 +51,156 @@ func (m *AWSCloudSubnetParamType) DeepCopy() *AWSCloudSubnetParamType {
 	return c
 }
 
-func (m *AWSCloudSubnetParamType) DeepCopyProto() proto.Message {
+func (m *AWSCloudLinkConfigType) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *AWSCloudSubnetParamType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return AWSCloudSubnetParamTypeValidator().Validate(ctx, m, opts...)
+func (m *AWSCloudLinkConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSCloudLinkConfigTypeValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateAWSCloudSubnetParamType struct {
+func (m *AWSCloudLinkConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudLinkDRefInfo()
+}
+
+func (m *AWSCloudLinkConfigType) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCloudLink()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_link.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_link.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_link",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetCloudLinkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AWSCloudLinkConfigType) GetCloudLinkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_link.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_link")
+	}
+	vref := m.GetCloudLink()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cloud_link.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+type ValidateAWSCloudLinkConfigType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAWSCloudSubnetParamType) NameChoiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_Name, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
-	}
-	return oValidatorFn_Name, nil
-}
-
-func (v *ValidateAWSCloudSubnetParamType) Ipv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
+func (v *ValidateAWSCloudLinkConfigType) VgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vgw_id")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSCloudLinkConfigType) CloudLinkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cloud_link")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
 	}
 
 	return validatorFn, nil
 }
 
-func (v *ValidateAWSCloudSubnetParamType) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSCloudSubnetParamType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*AWSCloudSubnetParamType)
+func (v *ValidateAWSCloudLinkConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSCloudLinkConfigType)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *AWSCloudSubnetParamType got type %s", t)
+			return fmt.Errorf("Expected type *AWSCloudLinkConfigType got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
-
-	if fv, exists := v.FldValidators["ipv4"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ipv4"))
-		if err := fv(ctx, m.GetIpv4(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["cloud_link"]; exists {
+		vOpts := append(opts, db.WithValidateField("cloud_link"))
+		if err := fv(ctx, m.GetCloudLink(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
-	if fv, exists := v.FldValidators["ipv6"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ipv6"))
-		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	switch m.GetNameChoice().(type) {
-	case *AWSCloudSubnetParamType_Name:
-		if fv, exists := v.FldValidators["name_choice.name"]; exists {
-			val := m.GetNameChoice().(*AWSCloudSubnetParamType_Name).Name
+	switch m.GetNetworkOptions().(type) {
+	case *AWSCloudLinkConfigType_Outside:
+		if fv, exists := v.FldValidators["network_options.outside"]; exists {
+			val := m.GetNetworkOptions().(*AWSCloudLinkConfigType_Outside).Outside
 			vOpts := append(opts,
-				db.WithValidateField("name_choice"),
-				db.WithValidateField("name"),
+				db.WithValidateField("network_options"),
+				db.WithValidateField("outside"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *AWSCloudSubnetParamType_Autogenerate:
-		if fv, exists := v.FldValidators["name_choice.autogenerate"]; exists {
-			val := m.GetNameChoice().(*AWSCloudSubnetParamType_Autogenerate).Autogenerate
+	case *AWSCloudLinkConfigType_Inside:
+		if fv, exists := v.FldValidators["network_options.inside"]; exists {
+			val := m.GetNetworkOptions().(*AWSCloudLinkConfigType_Inside).Inside
 			vOpts := append(opts,
-				db.WithValidateField("name_choice"),
-				db.WithValidateField("autogenerate"),
+				db.WithValidateField("network_options"),
+				db.WithValidateField("inside"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["vgw_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("vgw_id"))
+		if err := fv(ctx, m.GetVgwId(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
-var DefaultAWSCloudSubnetParamTypeValidator = func() *ValidateAWSCloudSubnetParamType {
-	v := &ValidateAWSCloudSubnetParamType{FldValidators: map[string]db.ValidatorFunc{}}
-
+var DefaultAWSCloudLinkConfigTypeValidator = func() *ValidateAWSCloudLinkConfigType {
+	v := &ValidateAWSCloudLinkConfigType{FldValidators: map[string]db.ValidatorFunc{}}
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -167,49 +209,238 @@ var DefaultAWSCloudSubnetParamTypeValidator = func() *ValidateAWSCloudSubnetPara
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNameChoiceName := v.NameChoiceNameValidationRuleHandler
-	rulesNameChoiceName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.min_len": "1",
-		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	vrhVgwId := v.VgwIdValidationRuleHandler
+	rulesVgwId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$",
 	}
-	vFnMap["name_choice.name"], err = vrhNameChoiceName(rulesNameChoiceName)
+	vFn, err = vrhVgwId(rulesVgwId)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSCloudSubnetParamType.name_choice_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSCloudLinkConfigType.vgw_id: %s", err)
 		panic(errMsg)
 	}
+	v.FldValidators["vgw_id"] = vFn
 
-	v.FldValidators["name_choice.name"] = vFnMap["name_choice.name"]
-
-	vrhIpv4 := v.Ipv4ValidationRuleHandler
-	rulesIpv4 := map[string]string{
-		"ves.io.schema.rules.message.required":            "true",
-		"ves.io.schema.rules.string.ipv4_prefix":          "true",
-		"ves.io.schema.rules.string.max_ip_prefix_length": "28",
+	vrhCloudLink := v.CloudLinkValidationRuleHandler
+	rulesCloudLink := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhIpv4(rulesIpv4)
+	vFn, err = vrhCloudLink(rulesCloudLink)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSCloudSubnetParamType.ipv4: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSCloudLinkConfigType.cloud_link: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ipv4"] = vFn
-
-	vrhIpv6 := v.Ipv6ValidationRuleHandler
-	rulesIpv6 := map[string]string{
-		"ves.io.schema.rules.string.ipv6_prefix": "true",
-	}
-	vFn, err = vrhIpv6(rulesIpv6)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSCloudSubnetParamType.ipv6: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ipv6"] = vFn
+	v.FldValidators["cloud_link"] = vFn
 
 	return v
 }()
 
-func AWSCloudSubnetParamTypeValidator() db.Validator {
-	return DefaultAWSCloudSubnetParamTypeValidator
+func AWSCloudLinkConfigTypeValidator() db.Validator {
+	return DefaultAWSCloudLinkConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSDiskEncryptionKeyType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSDiskEncryptionKeyType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSDiskEncryptionKeyType) DeepCopy() *AWSDiskEncryptionKeyType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSDiskEncryptionKeyType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSDiskEncryptionKeyType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSDiskEncryptionKeyType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSDiskEncryptionKeyTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSDiskEncryptionKeyType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSDiskEncryptionKeyType) KeyIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for key_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSDiskEncryptionKeyType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSDiskEncryptionKeyType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSDiskEncryptionKeyType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["key_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("key_id"))
+		if err := fv(ctx, m.GetKeyId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSDiskEncryptionKeyTypeValidator = func() *ValidateAWSDiskEncryptionKeyType {
+	v := &ValidateAWSDiskEncryptionKeyType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKeyId := v.KeyIdValidationRuleHandler
+	rulesKeyId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhKeyId(rulesKeyId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSDiskEncryptionKeyType.key_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["key_id"] = vFn
+
+	return v
+}()
+
+func AWSDiskEncryptionKeyTypeValidator() db.Validator {
+	return DefaultAWSDiskEncryptionKeyTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSIGWGatewayType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSIGWGatewayType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSIGWGatewayType) DeepCopy() *AWSIGWGatewayType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSIGWGatewayType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSIGWGatewayType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSIGWGatewayType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSIGWGatewayTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSIGWGatewayType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSIGWGatewayType) IgwGwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for igw_gw_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSIGWGatewayType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSIGWGatewayType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSIGWGatewayType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["igw_gw_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("igw_gw_id"))
+		if err := fv(ctx, m.GetIgwGwId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSIGWGatewayTypeValidator = func() *ValidateAWSIGWGatewayType {
+	v := &ValidateAWSIGWGatewayType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIgwGwId := v.IgwGwIdValidationRuleHandler
+	rulesIgwGwId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "21",
+		"ves.io.schema.rules.string.pattern":   "^(igw-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhIgwGwId(rulesIgwGwId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSIGWGatewayType.igw_gw_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["igw_gw_id"] = vFn
+
+	return v
+}()
+
+func AWSIGWGatewayTypeValidator() db.Validator {
+	return DefaultAWSIGWGatewayTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -255,62 +486,65 @@ func (m *AWSManagedMode) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAwsCredDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetAwsCredDRefInfo() FAILED")
+	if fdrInfos, err := m.GetAwsCloudUserAccountDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAwsCloudUserAccountDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
+	if fdrInfos, err := m.GetAwsResourceMappingListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAwsResourceMappingListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNodeListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetNodeListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
-	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
+	if fdrInfos, err := m.GetPrivateWorkloadRoutingChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPrivateWorkloadRoutingChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
-func (m *AWSManagedMode) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
-
-	vref := m.GetAwsCred()
+func (m *AWSManagedMode) GetAwsCloudUserAccountDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAwsCloudUserAccount()
 	if vref == nil {
 		return nil, nil
 	}
 	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("cloud_credentials.Object")
+	vdRef.SetKind("cloud_user_account.Object")
 	dri := db.DRefInfo{
-		RefdType:   "cloud_credentials.Object",
+		RefdType:   "cloud_user_account.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
-		DRField:    "aws_cred",
+		DRField:    "aws_cloud_user_account",
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
-// GetAwsCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *AWSManagedMode) GetAwsCredDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetAwsCloudUserAccountDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AWSManagedMode) GetAwsCloudUserAccountDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
+	refdType, err := d.TypeForEntryKind("", "", "cloud_user_account.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_user_account")
 	}
-
-	vref := m.GetAwsCred()
+	vref := m.GetAwsCloudUserAccount()
 	if vref == nil {
 		return nil, nil
 	}
 	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "cloud_credentials.Object",
+		Kind:      "cloud_user_account.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -322,8 +556,39 @@ func (m *AWSManagedMode) GetAwsCredDBEntries(ctx context.Context, d db.Interface
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSManagedMode) GetAwsResourceMappingListDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAwsResourceMappingList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAwsResourceMappingList().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAwsResourceMappingList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "aws_resource_mapping_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSManagedMode) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNodeList().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "node_list." + dri.DRField
+	}
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -333,101 +598,50 @@ func (m *AWSManagedMode) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 	switch m.GetPrivateConnectivityChoice().(type) {
 	case *AWSManagedMode_PrivateConnectivityDisabled:
-
 		return nil, nil
-
-	case *AWSManagedMode_PrivateConnectivity:
-
-		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+	case *AWSManagedMode_CloudLinkConfig:
+		drInfos, err := m.GetCloudLinkConfig().GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetCloudLinkConfig().GetDRefInfo() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
-			dri.DRField = "private_connectivity." + dri.DRField
+			dri.DRField = "cloud_link_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
-func (m *AWSManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSiteType() == nil {
+func (m *AWSManagedMode) GetPrivateWorkloadRoutingChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPrivateWorkloadRoutingChoice() == nil {
 		return nil, nil
 	}
-	switch m.GetSiteType().(type) {
-	case *AWSManagedMode_SingleInterface:
-
-		drInfos, err := m.GetSingleInterface().GetDRefInfo()
+	switch m.GetPrivateWorkloadRoutingChoice().(type) {
+	case *AWSManagedMode_DisablePrivateWorkloadRoutingToCe:
+		return nil, nil
+	case *AWSManagedMode_EnablePrivateWorkloadRoutingList:
+		drInfos, err := m.GetEnablePrivateWorkloadRoutingList().GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "GetSingleInterface().GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetEnablePrivateWorkloadRoutingList().GetDRefInfo() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
-			dri.DRField = "single_interface." + dri.DRField
+			dri.DRField = "enable_private_workload_routing_list." + dri.DRField
 		}
 		return drInfos, err
-
-	case *AWSManagedMode_MultipleInterface:
-
-		drInfos, err := m.GetMultipleInterface().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetMultipleInterface().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "multiple_interface." + dri.DRField
-		}
-		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateAWSManagedMode struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAWSManagedMode) CloudConnectAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for cloud_connect_attachments")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSManagedMode) ServiceVpcChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_vpc_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSManagedMode) ServiceVpcChoiceVpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_VpcId, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
-	}
-	return oValidatorFn_VpcId, nil
-}
-
-func (v *ValidateAWSManagedMode) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_type")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateAWSManagedMode) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_region")
@@ -435,30 +649,15 @@ func (v *ValidateAWSManagedMode) AwsRegionValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
-func (v *ValidateAWSManagedMode) AwsCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+func (v *ValidateAWSManagedMode) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_cred")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSManagedMode) TagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -501,9 +700,7 @@ func (v *ValidateAWSManagedMode) TagsValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSManagedMode) InstanceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for instance_type")
@@ -511,12 +708,44 @@ func (v *ValidateAWSManagedMode) InstanceTypeValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSManagedMode) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSManagedMode) NodeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for node_list")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := AWSManagedNodeListValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSManagedMode) AwsCloudUserAccountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_cloud_user_account")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -535,77 +764,99 @@ func (v *ValidateAWSManagedMode) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
-	if fv, exists := v.FldValidators["aws_cred"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("aws_cred"))
-		if err := fv(ctx, m.GetAwsCred(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["aws_cloud_user_account"]; exists {
+		vOpts := append(opts, db.WithValidateField("aws_cloud_user_account"))
+		if err := fv(ctx, m.GetAwsCloudUserAccount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["aws_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
-	if fv, exists := v.FldValidators["cloud_connect_attachments"]; exists {
-		val := m.GetCloudConnectAttachments()
-		vOpts := append(opts,
-			db.WithValidateField("cloud_connect_attachments"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
+	if fv, exists := v.FldValidators["aws_resource_mapping_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("aws_resource_mapping_list"))
+		if err := fv(ctx, m.GetAwsResourceMappingList(), vOpts...); err != nil {
 			return err
 		}
 	}
 
-	switch m.GetCloudConnectAttachments().(type) {
-	case *AWSManagedMode_Disabled:
-		if fv, exists := v.FldValidators["cloud_connect_attachments.disabled"]; exists {
-			val := m.GetCloudConnectAttachments().(*AWSManagedMode_Disabled).Disabled
+	switch m.GetCloudConnectChoice().(type) {
+	case *AWSManagedMode_DisableCloudConnect:
+		if fv, exists := v.FldValidators["cloud_connect_choice.disable_cloud_connect"]; exists {
+			val := m.GetCloudConnectChoice().(*AWSManagedMode_DisableCloudConnect).DisableCloudConnect
 			vOpts := append(opts,
-				db.WithValidateField("cloud_connect_attachments"),
-				db.WithValidateField("disabled"),
+				db.WithValidateField("cloud_connect_choice"),
+				db.WithValidateField("disable_cloud_connect"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *AWSManagedMode_Tgw:
-		if fv, exists := v.FldValidators["cloud_connect_attachments.tgw"]; exists {
-			val := m.GetCloudConnectAttachments().(*AWSManagedMode_Tgw).Tgw
+	case *AWSManagedMode_EnableCloudConnect:
+		if fv, exists := v.FldValidators["cloud_connect_choice.enable_cloud_connect"]; exists {
+			val := m.GetCloudConnectChoice().(*AWSManagedMode_EnableCloudConnect).EnableCloudConnect
 			vOpts := append(opts,
-				db.WithValidateField("cloud_connect_attachments"),
-				db.WithValidateField("tgw"),
+				db.WithValidateField("cloud_connect_choice"),
+				db.WithValidateField("enable_cloud_connect"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-
 	}
 
+	switch m.GetDiskEncryptionChoice().(type) {
+	case *AWSManagedMode_DisableDiskEncryption:
+		if fv, exists := v.FldValidators["disk_encryption_choice.disable_disk_encryption"]; exists {
+			val := m.GetDiskEncryptionChoice().(*AWSManagedMode_DisableDiskEncryption).DisableDiskEncryption
+			vOpts := append(opts,
+				db.WithValidateField("disk_encryption_choice"),
+				db.WithValidateField("disable_disk_encryption"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSManagedMode_DiskEncryptionKey:
+		if fv, exists := v.FldValidators["disk_encryption_choice.disk_encryption_key"]; exists {
+			val := m.GetDiskEncryptionChoice().(*AWSManagedMode_DiskEncryptionKey).DiskEncryptionKey
+			vOpts := append(opts,
+				db.WithValidateField("disk_encryption_choice"),
+				db.WithValidateField("disk_encryption_key"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetEgressGatewayChoice().(type) {
-	case *AWSManagedMode_EgressGatewayDefault:
-		if fv, exists := v.FldValidators["egress_gateway_choice.egress_gateway_default"]; exists {
-			val := m.GetEgressGatewayChoice().(*AWSManagedMode_EgressGatewayDefault).EgressGatewayDefault
+	case *AWSManagedMode_EgressIgwGw:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_igw_gw"]; exists {
+			val := m.GetEgressGatewayChoice().(*AWSManagedMode_EgressIgwGw).EgressIgwGw
 			vOpts := append(opts,
 				db.WithValidateField("egress_gateway_choice"),
-				db.WithValidateField("egress_gateway_default"),
+				db.WithValidateField("egress_igw_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSManagedMode_NoEgress:
+		if fv, exists := v.FldValidators["egress_gateway_choice.no_egress"]; exists {
+			val := m.GetEgressGatewayChoice().(*AWSManagedMode_NoEgress).NoEgress
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("no_egress"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -622,27 +873,29 @@ func (v *ValidateAWSManagedMode) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *AWSManagedMode_EgressVirtualPrivateGateway:
-		if fv, exists := v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"]; exists {
-			val := m.GetEgressGatewayChoice().(*AWSManagedMode_EgressVirtualPrivateGateway).EgressVirtualPrivateGateway
+	case *AWSManagedMode_PrivateAdn:
+		if fv, exists := v.FldValidators["egress_gateway_choice.private_adn"]; exists {
+			val := m.GetEgressGatewayChoice().(*AWSManagedMode_PrivateAdn).PrivateAdn
 			vOpts := append(opts,
 				db.WithValidateField("egress_gateway_choice"),
-				db.WithValidateField("egress_virtual_private_gateway"),
+				db.WithValidateField("private_adn"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["instance_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("instance_type"))
 		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
 			return err
 		}
-
+	}
+	if fv, exists := v.FldValidators["node_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("node_list"))
+		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetPrivateConnectivityChoice().(type) {
@@ -657,133 +910,61 @@ func (v *ValidateAWSManagedMode) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *AWSManagedMode_PrivateConnectivity:
-		if fv, exists := v.FldValidators["private_connectivity_choice.private_connectivity"]; exists {
-			val := m.GetPrivateConnectivityChoice().(*AWSManagedMode_PrivateConnectivity).PrivateConnectivity
+	case *AWSManagedMode_CloudLinkConfig:
+		if fv, exists := v.FldValidators["private_connectivity_choice.cloud_link_config"]; exists {
+			val := m.GetPrivateConnectivityChoice().(*AWSManagedMode_CloudLinkConfig).CloudLinkConfig
 			vOpts := append(opts,
 				db.WithValidateField("private_connectivity_choice"),
-				db.WithValidateField("private_connectivity"),
+				db.WithValidateField("cloud_link_config"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	switch m.GetSecurityGroupChoice().(type) {
-	case *AWSManagedMode_F5XcSecurityGroup:
-		if fv, exists := v.FldValidators["security_group_choice.f5xc_security_group"]; exists {
-			val := m.GetSecurityGroupChoice().(*AWSManagedMode_F5XcSecurityGroup).F5XcSecurityGroup
-			vOpts := append(opts,
-				db.WithValidateField("security_group_choice"),
-				db.WithValidateField("f5xc_security_group"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AWSManagedMode_CustomSecurityGroup:
-		if fv, exists := v.FldValidators["security_group_choice.custom_security_group"]; exists {
-			val := m.GetSecurityGroupChoice().(*AWSManagedMode_CustomSecurityGroup).CustomSecurityGroup
-			vOpts := append(opts,
-				db.WithValidateField("security_group_choice"),
-				db.WithValidateField("custom_security_group"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["service_vpc_choice"]; exists {
-		val := m.GetServiceVpcChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_vpc_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
 		}
 	}
 
-	switch m.GetServiceVpcChoice().(type) {
-	case *AWSManagedMode_NewVpc:
-		if fv, exists := v.FldValidators["service_vpc_choice.new_vpc"]; exists {
-			val := m.GetServiceVpcChoice().(*AWSManagedMode_NewVpc).NewVpc
+	switch m.GetPrivateWorkloadRoutingChoice().(type) {
+	case *AWSManagedMode_DisablePrivateWorkloadRoutingToCe:
+		if fv, exists := v.FldValidators["private_workload_routing_choice.disable_private_workload_routing_to_ce"]; exists {
+			val := m.GetPrivateWorkloadRoutingChoice().(*AWSManagedMode_DisablePrivateWorkloadRoutingToCe).DisablePrivateWorkloadRoutingToCe
 			vOpts := append(opts,
-				db.WithValidateField("service_vpc_choice"),
-				db.WithValidateField("new_vpc"),
+				db.WithValidateField("private_workload_routing_choice"),
+				db.WithValidateField("disable_private_workload_routing_to_ce"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *AWSManagedMode_VpcId:
-		if fv, exists := v.FldValidators["service_vpc_choice.vpc_id"]; exists {
-			val := m.GetServiceVpcChoice().(*AWSManagedMode_VpcId).VpcId
+	case *AWSManagedMode_EnablePrivateWorkloadRoutingList:
+		if fv, exists := v.FldValidators["private_workload_routing_choice.enable_private_workload_routing_list"]; exists {
+			val := m.GetPrivateWorkloadRoutingChoice().(*AWSManagedMode_EnablePrivateWorkloadRoutingList).EnablePrivateWorkloadRoutingList
 			vOpts := append(opts,
-				db.WithValidateField("service_vpc_choice"),
-				db.WithValidateField("vpc_id"),
+				db.WithValidateField("private_workload_routing_choice"),
+				db.WithValidateField("enable_private_workload_routing_list"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["site_type"]; exists {
-		val := m.GetSiteType()
-		vOpts := append(opts,
-			db.WithValidateField("site_type"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
 		}
 	}
-
-	switch m.GetSiteType().(type) {
-	case *AWSManagedMode_SingleInterface:
-		if fv, exists := v.FldValidators["site_type.single_interface"]; exists {
-			val := m.GetSiteType().(*AWSManagedMode_SingleInterface).SingleInterface
-			vOpts := append(opts,
-				db.WithValidateField("site_type"),
-				db.WithValidateField("single_interface"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AWSManagedMode_MultipleInterface:
-		if fv, exists := v.FldValidators["site_type.multiple_interface"]; exists {
-			val := m.GetSiteType().(*AWSManagedMode_MultipleInterface).MultipleInterface
-			vOpts := append(opts,
-				db.WithValidateField("site_type"),
-				db.WithValidateField("multiple_interface"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["vpc_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("vpc_id"))
+		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 	v := &ValidateAWSManagedMode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -791,52 +972,6 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhCloudConnectAttachments := v.CloudConnectAttachmentsValidationRuleHandler
-	rulesCloudConnectAttachments := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhCloudConnectAttachments(rulesCloudConnectAttachments)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.cloud_connect_attachments: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["cloud_connect_attachments"] = vFn
-
-	vrhServiceVpcChoice := v.ServiceVpcChoiceValidationRuleHandler
-	rulesServiceVpcChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhServiceVpcChoice(rulesServiceVpcChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.service_vpc_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_vpc_choice"] = vFn
-
-	vrhServiceVpcChoiceVpcId := v.ServiceVpcChoiceVpcIdValidationRuleHandler
-	rulesServiceVpcChoiceVpcId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$",
-	}
-	vFnMap["service_vpc_choice.vpc_id"], err = vrhServiceVpcChoiceVpcId(rulesServiceVpcChoiceVpcId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSManagedMode.service_vpc_choice_vpc_id: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["service_vpc_choice.vpc_id"] = vFnMap["service_vpc_choice.vpc_id"]
-
-	vrhSiteType := v.SiteTypeValidationRuleHandler
-	rulesSiteType := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhSiteType(rulesSiteType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.site_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_type"] = vFn
 
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
@@ -849,16 +984,18 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 	}
 	v.FldValidators["aws_region"] = vFn
 
-	vrhAwsCred := v.AwsCredValidationRuleHandler
-	rulesAwsCred := map[string]string{
+	vrhVpcId := v.VpcIdValidationRuleHandler
+	rulesVpcId := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.pattern":   "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$",
 	}
-	vFn, err = vrhAwsCred(rulesAwsCred)
+	vFn, err = vrhVpcId(rulesVpcId)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.aws_cred: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.vpc_id: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["aws_cred"] = vFn
+	v.FldValidators["vpc_id"] = vFn
 
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
@@ -887,7 +1024,9 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "64000",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "80",
+		"ves.io.schema.rules.uint32.lte":       "64000",
 	}
 	vFn, err = vrhDiskSize(rulesDiskSize)
 	if err != nil {
@@ -896,19 +1035,34 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 	}
 	v.FldValidators["disk_size"] = vFn
 
-	v.FldValidators["cloud_connect_attachments.tgw"] = TGWTypeValidator().Validate
+	vrhNodeList := v.NodeListValidationRuleHandler
+	rulesNodeList := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNodeList(rulesNodeList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.node_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_list"] = vFn
 
-	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
-	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
-
-	v.FldValidators["private_connectivity_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
-
-	v.FldValidators["security_group_choice.custom_security_group"] = ves_io_schema_views.SecurityGroupTypeValidator().Validate
-
-	v.FldValidators["service_vpc_choice.new_vpc"] = ves_io_schema_views.AWSVPCParamsTypeValidator().Validate
-
-	v.FldValidators["site_type.single_interface"] = SingleInterfaceValidator().Validate
-	v.FldValidators["site_type.multiple_interface"] = MultipleInterfaceValidator().Validate
+	vrhAwsCloudUserAccount := v.AwsCloudUserAccountValidationRuleHandler
+	rulesAwsCloudUserAccount := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAwsCloudUserAccount(rulesAwsCloudUserAccount)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.aws_cloud_user_account: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aws_cloud_user_account"] = vFn
+	v.FldValidators["cloud_connect_choice.enable_cloud_connect"] = AWSTGWTypeValidator().Validate
+	v.FldValidators["disk_encryption_choice.disk_encryption_key"] = AWSDiskEncryptionKeyTypeValidator().Validate
+	v.FldValidators["egress_gateway_choice.egress_igw_gw"] = AWSIGWGatewayTypeValidator().Validate
+	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = AWSNATGatewayTypeValidator().Validate
+	v.FldValidators["private_connectivity_choice.cloud_link_config"] = AWSCloudLinkConfigTypeValidator().Validate
+	v.FldValidators["private_workload_routing_choice.enable_private_workload_routing_list"] = EnablePrivateWorkloadRoutingListTypeValidator().Validate
+	v.FldValidators["aws_resource_mapping_list"] = AWSResourceMappingListTypeValidator().Validate
 
 	return v
 }()
@@ -960,7 +1114,6 @@ func (m *AWSManagedNode) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -968,7 +1121,6 @@ func (m *AWSManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInterfaceList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetInterfaceList() {
 		driSet, err := e.GetDRefInfo()
@@ -982,7 +1134,6 @@ func (m *AWSManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateAWSManagedNode struct {
@@ -990,7 +1141,6 @@ type ValidateAWSManagedNode struct {
 }
 
 func (v *ValidateAWSManagedNode) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
@@ -998,9 +1148,7 @@ func (v *ValidateAWSManagedNode) TypeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSManagedNode) HostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
@@ -1008,9 +1156,7 @@ func (v *ValidateAWSManagedNode) HostnameValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSManagedNode) AwsAzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_az_name")
@@ -1018,9 +1164,7 @@ func (v *ValidateAWSManagedNode) AwsAzNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSManagedNode) InterfaceListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1080,49 +1224,36 @@ func (v *ValidateAWSManagedNode) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_az_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_az_name"))
 		if err := fv(ctx, m.GetAwsAzName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hostname"))
 		if err := fv(ctx, m.GetHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_list"))
 		if err := fv(ctx, m.GetInterfaceList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSManagedNodeValidator = func() *ValidateAWSManagedNode {
 	v := &ValidateAWSManagedNode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1134,7 +1265,7 @@ var DefaultAWSManagedNodeValidator = func() *ValidateAWSManagedNode {
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"Control\"]",
+		"ves.io.schema.rules.string.in":        "[\"Control\",\"Worker\"]",
 	}
 	vFn, err = vrhType(rulesType)
 	if err != nil {
@@ -1145,7 +1276,8 @@ var DefaultAWSManagedNodeValidator = func() *ValidateAWSManagedNode {
 
 	vrhHostname := v.HostnameValidationRuleHandler
 	rulesHostname := map[string]string{
-		"ves.io.schema.rules.string.max_len": "512",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "512",
 	}
 	vFn, err = vrhHostname(rulesHostname)
 	if err != nil {
@@ -1157,6 +1289,7 @@ var DefaultAWSManagedNodeValidator = func() *ValidateAWSManagedNode {
 	vrhAwsAzName := v.AwsAzNameValidationRuleHandler
 	rulesAwsAzName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
 	}
 	vFn, err = vrhAwsAzName(rulesAwsAzName)
 	if err != nil {
@@ -1168,7 +1301,6 @@ var DefaultAWSManagedNodeValidator = func() *ValidateAWSManagedNode {
 	vrhInterfaceList := v.InterfaceListValidationRuleHandler
 	rulesInterfaceList := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "2",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -1229,7 +1361,6 @@ func (m *AWSManagedNodeList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1237,7 +1368,6 @@ func (m *AWSManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetNodeList() {
 		driSet, err := e.GetDRefInfo()
@@ -1251,7 +1381,6 @@ func (m *AWSManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateAWSManagedNodeList struct {
@@ -1259,7 +1388,6 @@ type ValidateAWSManagedNodeList struct {
 }
 
 func (v *ValidateAWSManagedNodeList) NodeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1319,22 +1447,18 @@ func (v *ValidateAWSManagedNodeList) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("node_list"))
 		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSManagedNodeListValidator = func() *ValidateAWSManagedNodeList {
 	v := &ValidateAWSManagedNodeList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1347,6 +1471,7 @@ var DefaultAWSManagedNodeListValidator = func() *ValidateAWSManagedNodeList {
 	rulesNodeList := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNodeList(rulesNodeList)
@@ -1361,6 +1486,237 @@ var DefaultAWSManagedNodeListValidator = func() *ValidateAWSManagedNodeList {
 
 func AWSManagedNodeListValidator() db.Validator {
 	return DefaultAWSManagedNodeListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSNATGatewayType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSNATGatewayType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSNATGatewayType) DeepCopy() *AWSNATGatewayType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSNATGatewayType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSNATGatewayType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSNATGatewayType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSNATGatewayTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSNATGatewayType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSNATGatewayType) NatGwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for nat_gw_id")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for nat_gw_id")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated nat_gw_id")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items nat_gw_id")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSNATGatewayType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSNATGatewayType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSNATGatewayType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["nat_gw_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("nat_gw_id"))
+		if err := fv(ctx, m.GetNatGwId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSNATGatewayTypeValidator = func() *ValidateAWSNATGatewayType {
+	v := &ValidateAWSNATGatewayType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNatGwId := v.NatGwIdValidationRuleHandler
+	rulesNatGwId := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.repeated.items.string.pattern": "^(nat-)([a-z0-9]{8}|[a-z0-9]{17})$",
+		"ves.io.schema.rules.repeated.max_items":            "3",
+		"ves.io.schema.rules.repeated.min_items":            "1",
+		"ves.io.schema.rules.repeated.unique":               "true",
+	}
+	vFn, err = vrhNatGwId(rulesNatGwId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSNATGatewayType.nat_gw_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nat_gw_id"] = vFn
+
+	return v
+}()
+
+func AWSNATGatewayTypeValidator() db.Validator {
+	return DefaultAWSNATGatewayTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSNodeInterfaceConfigurationType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSNodeInterfaceConfigurationType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSNodeInterfaceConfigurationType) DeepCopy() *AWSNodeInterfaceConfigurationType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSNodeInterfaceConfigurationType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSNodeInterfaceConfigurationType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSNodeInterfaceConfigurationType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSNodeInterfaceConfigurationTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSNodeInterfaceConfigurationType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSNodeInterfaceConfigurationType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSNodeInterfaceConfigurationType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSNodeInterfaceConfigurationType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetAwsNodeInterfaceConfigurationChoice().(type) {
+	case *AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration:
+		if fv, exists := v.FldValidators["aws_node_interface_configuration_choice.inherit_aws_node_interface_configuration"]; exists {
+			val := m.GetAwsNodeInterfaceConfigurationChoice().(*AWSNodeInterfaceConfigurationType_InheritAwsNodeInterfaceConfiguration).InheritAwsNodeInterfaceConfiguration
+			vOpts := append(opts,
+				db.WithValidateField("aws_node_interface_configuration_choice"),
+				db.WithValidateField("inherit_aws_node_interface_configuration"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration:
+		if fv, exists := v.FldValidators["aws_node_interface_configuration_choice.override_aws_node_interface_configuration"]; exists {
+			val := m.GetAwsNodeInterfaceConfigurationChoice().(*AWSNodeInterfaceConfigurationType_OverrideAwsNodeInterfaceConfiguration).OverrideAwsNodeInterfaceConfiguration
+			vOpts := append(opts,
+				db.WithValidateField("aws_node_interface_configuration_choice"),
+				db.WithValidateField("override_aws_node_interface_configuration"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSNodeInterfaceConfigurationTypeValidator = func() *ValidateAWSNodeInterfaceConfigurationType {
+	v := &ValidateAWSNodeInterfaceConfigurationType{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["aws_node_interface_configuration_choice.override_aws_node_interface_configuration"] = AWSOverrideNodeInterfaceConfigurationTypeValidator().Validate
+
+	return v
+}()
+
+func AWSNodeInterfaceConfigurationTypeValidator() db.Validator {
+	return DefaultAWSNodeInterfaceConfigurationTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1406,7 +1762,6 @@ func (m *AWSOrchestratedInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNetworkOptionDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1414,7 +1769,6 @@ func (m *AWSOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, er
 	if m.GetNetworkOption() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
@@ -1424,7 +1778,6 @@ func (m *AWSOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, er
 		dri.DRField = "network_option." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateAWSOrchestratedInterface struct {
@@ -1432,7 +1785,6 @@ type ValidateAWSOrchestratedInterface struct {
 }
 
 func (v *ValidateAWSOrchestratedInterface) NetworkOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for network_option")
@@ -1441,18 +1793,29 @@ func (v *ValidateAWSOrchestratedInterface) NetworkOptionValidationRuleHandler(ru
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSOrchestratedInterface) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSOrchestratedInterface) AwsNodeInterfaceConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_node_interface_configuration")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -1471,23 +1834,23 @@ func (v *ValidateAWSOrchestratedInterface) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
+	if fv, exists := v.FldValidators["aws_node_interface_configuration"]; exists {
+		vOpts := append(opts, db.WithValidateField("aws_node_interface_configuration"))
+		if err := fv(ctx, m.GetAwsNodeInterfaceConfiguration(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_option"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_option"))
 		if err := fv(ctx, m.GetNetworkOption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSiteToSiteConnectivityInterfaceChoice().(type) {
@@ -1513,25 +1876,13 @@ func (v *ValidateAWSOrchestratedInterface) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
-	if fv, exists := v.FldValidators["subnet"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("subnet"))
-		if err := fv(ctx, m.GetSubnet(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSOrchestratedInterfaceValidator = func() *ValidateAWSOrchestratedInterface {
 	v := &ValidateAWSOrchestratedInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1562,7 +1913,16 @@ var DefaultAWSOrchestratedInterfaceValidator = func() *ValidateAWSOrchestratedIn
 	}
 	v.FldValidators["mtu"] = vFn
 
-	v.FldValidators["subnet"] = AWSSubnetChoiceTypeValidator().Validate
+	vrhAwsNodeInterfaceConfiguration := v.AwsNodeInterfaceConfigurationValidationRuleHandler
+	rulesAwsNodeInterfaceConfiguration := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAwsNodeInterfaceConfiguration(rulesAwsNodeInterfaceConfiguration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSOrchestratedInterface.aws_node_interface_configuration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aws_node_interface_configuration"] = vFn
 
 	return v
 }()
@@ -1573,15 +1933,15 @@ func AWSOrchestratedInterfaceValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *AWSSubnetChoiceType) ToJSON() (string, error) {
+func (m *AWSOverrideNodeInterfaceConfigurationType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *AWSSubnetChoiceType) ToYAML() (string, error) {
+func (m *AWSOverrideNodeInterfaceConfigurationType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *AWSSubnetChoiceType) DeepCopy() *AWSSubnetChoiceType {
+func (m *AWSOverrideNodeInterfaceConfigurationType) DeepCopy() *AWSOverrideNodeInterfaceConfigurationType {
 	if m == nil {
 		return nil
 	}
@@ -1589,7 +1949,7 @@ func (m *AWSSubnetChoiceType) DeepCopy() *AWSSubnetChoiceType {
 	if err != nil {
 		return nil
 	}
-	c := &AWSSubnetChoiceType{}
+	c := &AWSOverrideNodeInterfaceConfigurationType{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -1597,94 +1957,69 @@ func (m *AWSSubnetChoiceType) DeepCopy() *AWSSubnetChoiceType {
 	return c
 }
 
-func (m *AWSSubnetChoiceType) DeepCopyProto() proto.Message {
+func (m *AWSOverrideNodeInterfaceConfigurationType) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *AWSSubnetChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return AWSSubnetChoiceTypeValidator().Validate(ctx, m, opts...)
+func (m *AWSOverrideNodeInterfaceConfigurationType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSOverrideNodeInterfaceConfigurationTypeValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateAWSSubnetChoiceType struct {
+type ValidateAWSOverrideNodeInterfaceConfigurationType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAWSSubnetChoiceType) ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+func (v *ValidateAWSOverrideNodeInterfaceConfigurationType) SubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_id")
 	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSOverrideNodeInterfaceConfigurationType) SecurityGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for security_group")
+	}
+
 	return validatorFn, nil
 }
 
-func (v *ValidateAWSSubnetChoiceType) ChoiceExistingSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_ExistingSubnetId, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for existing_subnet_id")
-	}
-	return oValidatorFn_ExistingSubnetId, nil
-}
-
-func (v *ValidateAWSSubnetChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*AWSSubnetChoiceType)
+func (v *ValidateAWSOverrideNodeInterfaceConfigurationType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSOverrideNodeInterfaceConfigurationType)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *AWSSubnetChoiceType got type %s", t)
+			return fmt.Errorf("Expected type *AWSOverrideNodeInterfaceConfigurationType got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
-
-	if fv, exists := v.FldValidators["choice"]; exists {
-		val := m.GetChoice()
-		vOpts := append(opts,
-			db.WithValidateField("choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
+	if fv, exists := v.FldValidators["security_group"]; exists {
+		vOpts := append(opts, db.WithValidateField("security_group"))
+		if err := fv(ctx, m.GetSecurityGroup(), vOpts...); err != nil {
 			return err
 		}
 	}
-
-	switch m.GetChoice().(type) {
-	case *AWSSubnetChoiceType_SubnetParam:
-		if fv, exists := v.FldValidators["choice.subnet_param"]; exists {
-			val := m.GetChoice().(*AWSSubnetChoiceType_SubnetParam).SubnetParam
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("subnet_param"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+	if fv, exists := v.FldValidators["subnet_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("subnet_id"))
+		if err := fv(ctx, m.GetSubnetId(), vOpts...); err != nil {
+			return err
 		}
-	case *AWSSubnetChoiceType_ExistingSubnetId:
-		if fv, exists := v.FldValidators["choice.existing_subnet_id"]; exists {
-			val := m.GetChoice().(*AWSSubnetChoiceType_ExistingSubnetId).ExistingSubnetId
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("existing_subnet_id"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
-var DefaultAWSSubnetChoiceTypeValidator = func() *ValidateAWSSubnetChoiceType {
-	v := &ValidateAWSSubnetChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
+var DefaultAWSOverrideNodeInterfaceConfigurationTypeValidator = func() *ValidateAWSOverrideNodeInterfaceConfigurationType {
+	v := &ValidateAWSOverrideNodeInterfaceConfigurationType{FldValidators: map[string]db.ValidatorFunc{}}
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1693,50 +2028,51 @@ var DefaultAWSSubnetChoiceTypeValidator = func() *ValidateAWSSubnetChoiceType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhChoice := v.ChoiceValidationRuleHandler
-	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
+	vrhSubnetId := v.SubnetIdValidationRuleHandler
+	rulesSubnetId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+		"ves.io.schema.rules.string.pattern":   "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
 	}
-	vFn, err = vrhChoice(rulesChoice)
+	vFn, err = vrhSubnetId(rulesSubnetId)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetChoiceType.choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSOverrideNodeInterfaceConfigurationType.subnet_id: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["choice"] = vFn
+	v.FldValidators["subnet_id"] = vFn
 
-	vrhChoiceExistingSubnetId := v.ChoiceExistingSubnetIdValidationRuleHandler
-	rulesChoiceExistingSubnetId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	vrhSecurityGroup := v.SecurityGroupValidationRuleHandler
+	rulesSecurityGroup := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "20",
+		"ves.io.schema.rules.string.pattern":   "^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$",
 	}
-	vFnMap["choice.existing_subnet_id"], err = vrhChoiceExistingSubnetId(rulesChoiceExistingSubnetId)
+	vFn, err = vrhSecurityGroup(rulesSecurityGroup)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSSubnetChoiceType.choice_existing_subnet_id: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSOverrideNodeInterfaceConfigurationType.security_group: %s", err)
 		panic(errMsg)
 	}
-
-	v.FldValidators["choice.existing_subnet_id"] = vFnMap["choice.existing_subnet_id"]
-
-	v.FldValidators["choice.subnet_param"] = AWSCloudSubnetParamTypeValidator().Validate
+	v.FldValidators["security_group"] = vFn
 
 	return v
 }()
 
-func AWSSubnetChoiceTypeValidator() db.Validator {
-	return DefaultAWSSubnetChoiceTypeValidator
+func AWSOverrideNodeInterfaceConfigurationTypeValidator() db.Validator {
+	return DefaultAWSOverrideNodeInterfaceConfigurationTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *MultipleInterface) ToJSON() (string, error) {
+func (m *AWSResourceMappingListType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *MultipleInterface) ToYAML() (string, error) {
+func (m *AWSResourceMappingListType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *MultipleInterface) DeepCopy() *MultipleInterface {
+func (m *AWSResourceMappingListType) DeepCopy() *AWSResourceMappingListType {
 	if m == nil {
 		return nil
 	}
@@ -1744,7 +2080,7 @@ func (m *MultipleInterface) DeepCopy() *MultipleInterface {
 	if err != nil {
 		return nil
 	}
-	c := &MultipleInterface{}
+	c := &AWSResourceMappingListType{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -1752,344 +2088,121 @@ func (m *MultipleInterface) DeepCopy() *MultipleInterface {
 	return c
 }
 
-func (m *MultipleInterface) DeepCopyProto() proto.Message {
+func (m *AWSResourceMappingListType) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *MultipleInterface) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return MultipleInterfaceValidator().Validate(ctx, m, opts...)
+func (m *AWSResourceMappingListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSResourceMappingListTypeValidator().Validate(ctx, m, opts...)
 }
 
-func (m *MultipleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *AWSResourceMappingListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
 
-	return m.GetNodeListDRefInfo()
-
+	return m.GetAwsResourceMappingsDRefInfo()
 }
 
 // GetDRefInfo for the field's type
-func (m *MultipleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetNodeList() == nil {
+func (m *AWSResourceMappingListType) GetAwsResourceMappingsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAwsResourceMappings() == nil {
 		return nil, nil
 	}
-
-	drInfos, err := m.GetNodeList().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetAwsResourceMappings() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsResourceMappings() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("aws_resource_mappings[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
 	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "node_list." + dri.DRField
-	}
-	return drInfos, err
-
+	return drInfos, nil
 }
 
-type ValidateMultipleInterface struct {
+type ValidateAWSResourceMappingListType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateMultipleInterface) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*MultipleInterface)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *MultipleInterface got type %s", t)
+func (v *ValidateAWSResourceMappingListType) AwsResourceMappingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for aws_resource_mappings")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*AWSResourceMappingType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := AWSResourceMappingTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 		}
-	}
-	if m == nil {
 		return nil
 	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for aws_resource_mappings")
+	}
 
-	if fv, exists := v.FldValidators["node_list"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("node_list"))
-		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
-			return err
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AWSResourceMappingType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AWSResourceMappingType, got %T", val)
 		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultMultipleInterfaceValidator = func() *ValidateMultipleInterface {
-	v := &ValidateMultipleInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["node_list"] = AWSManagedNodeListValidator().Validate
-
-	return v
-}()
-
-func MultipleInterfaceValidator() db.Validator {
-	return DefaultMultipleInterfaceValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *SingleInterface) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *SingleInterface) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *SingleInterface) DeepCopy() *SingleInterface {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &SingleInterface{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *SingleInterface) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *SingleInterface) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SingleInterfaceValidator().Validate(ctx, m, opts...)
-}
-
-func (m *SingleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetNodeListDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *SingleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetNodeList() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetNodeList().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "node_list." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
-type ValidateSingleInterface struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateSingleInterface) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SingleInterface)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *SingleInterface got type %s", t)
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
 		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["node_list"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("node_list"))
-		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
-			return err
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated aws_resource_mappings")
 		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultSingleInterfaceValidator = func() *ValidateSingleInterface {
-	v := &ValidateSingleInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["node_list"] = AWSManagedNodeListValidator().Validate
-
-	return v
-}()
-
-func SingleInterfaceValidator() db.Validator {
-	return DefaultSingleInterfaceValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *TGWType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *TGWType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *TGWType) DeepCopy() *TGWType {
-	if m == nil {
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items aws_resource_mappings")
+		}
 		return nil
 	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &TGWType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
 
-func (m *TGWType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *TGWType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return TGWTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateTGWType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateTGWType) TgwChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_choice")
-	}
 	return validatorFn, nil
 }
 
-func (v *ValidateTGWType) TgwCidrChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_cidr_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateTGWType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*TGWType)
+func (v *ValidateAWSResourceMappingListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSResourceMappingListType)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *TGWType got type %s", t)
+			return fmt.Errorf("Expected type *AWSResourceMappingListType got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
-
-	if fv, exists := v.FldValidators["tgw_choice"]; exists {
-		val := m.GetTgwChoice()
-		vOpts := append(opts,
-			db.WithValidateField("tgw_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
+	if fv, exists := v.FldValidators["aws_resource_mappings"]; exists {
+		vOpts := append(opts, db.WithValidateField("aws_resource_mappings"))
+		if err := fv(ctx, m.GetAwsResourceMappings(), vOpts...); err != nil {
 			return err
 		}
 	}
-
-	switch m.GetTgwChoice().(type) {
-	case *TGWType_NewTgw:
-		if fv, exists := v.FldValidators["tgw_choice.new_tgw"]; exists {
-			val := m.GetTgwChoice().(*TGWType_NewTgw).NewTgw
-			vOpts := append(opts,
-				db.WithValidateField("tgw_choice"),
-				db.WithValidateField("new_tgw"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *TGWType_ExistingTgw:
-		if fv, exists := v.FldValidators["tgw_choice.existing_tgw"]; exists {
-			val := m.GetTgwChoice().(*TGWType_ExistingTgw).ExistingTgw
-			vOpts := append(opts,
-				db.WithValidateField("tgw_choice"),
-				db.WithValidateField("existing_tgw"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["tgw_cidr_choice"]; exists {
-		val := m.GetTgwCidrChoice()
-		vOpts := append(opts,
-			db.WithValidateField("tgw_cidr_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetTgwCidrChoice().(type) {
-	case *TGWType_ReservedTgwCidr:
-		if fv, exists := v.FldValidators["tgw_cidr_choice.reserved_tgw_cidr"]; exists {
-			val := m.GetTgwCidrChoice().(*TGWType_ReservedTgwCidr).ReservedTgwCidr
-			vOpts := append(opts,
-				db.WithValidateField("tgw_cidr_choice"),
-				db.WithValidateField("reserved_tgw_cidr"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *TGWType_TgwCidr:
-		if fv, exists := v.FldValidators["tgw_cidr_choice.tgw_cidr"]; exists {
-			val := m.GetTgwCidrChoice().(*TGWType_TgwCidr).TgwCidr
-			vOpts := append(opts,
-				db.WithValidateField("tgw_cidr_choice"),
-				db.WithValidateField("tgw_cidr"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
-var DefaultTGWTypeValidator = func() *ValidateTGWType {
-	v := &ValidateTGWType{FldValidators: map[string]db.ValidatorFunc{}}
-
+var DefaultAWSResourceMappingListTypeValidator = func() *ValidateAWSResourceMappingListType {
+	v := &ValidateAWSResourceMappingListType{FldValidators: map[string]db.ValidatorFunc{}}
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2098,36 +2211,833 @@ var DefaultTGWTypeValidator = func() *ValidateTGWType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhTgwChoice := v.TgwChoiceValidationRuleHandler
-	rulesTgwChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
+	vrhAwsResourceMappings := v.AwsResourceMappingsValidationRuleHandler
+	rulesAwsResourceMappings := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
-	vFn, err = vrhTgwChoice(rulesTgwChoice)
+	vFn, err = vrhAwsResourceMappings(rulesAwsResourceMappings)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWType.tgw_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSResourceMappingListType.aws_resource_mappings: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["tgw_choice"] = vFn
-
-	vrhTgwCidrChoice := v.TgwCidrChoiceValidationRuleHandler
-	rulesTgwCidrChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhTgwCidrChoice(rulesTgwCidrChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWType.tgw_cidr_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tgw_cidr_choice"] = vFn
-
-	v.FldValidators["tgw_choice.new_tgw"] = ves_io_schema_views.TGWParamsTypeValidator().Validate
-	v.FldValidators["tgw_choice.existing_tgw"] = ves_io_schema_views.ExistingTGWTypeValidator().Validate
-
-	v.FldValidators["tgw_cidr_choice.tgw_cidr"] = ves_io_schema_views.CloudSubnetParamTypeValidator().Validate
+	v.FldValidators["aws_resource_mappings"] = vFn
 
 	return v
 }()
 
-func TGWTypeValidator() db.Validator {
-	return DefaultTGWTypeValidator
+func AWSResourceMappingListTypeValidator() db.Validator {
+	return DefaultAWSResourceMappingListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSResourceMappingType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSResourceMappingType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSResourceMappingType) DeepCopy() *AWSResourceMappingType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSResourceMappingType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSResourceMappingType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSResourceMappingType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSResourceMappingTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AWSResourceMappingType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkOptionDRefInfo()
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSResourceMappingType) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNetworkOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNetworkOption().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "network_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+type ValidateAWSResourceMappingType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSResourceMappingType) NetworkOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for network_option")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSResourceMappingType) AwsResourcesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for aws_resources")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*AWSResources, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := AWSResourcesValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for aws_resources")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AWSResources)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AWSResources, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated aws_resources")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items aws_resources")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSResourceMappingType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSResourceMappingType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSResourceMappingType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["aws_resources"]; exists {
+		vOpts := append(opts, db.WithValidateField("aws_resources"))
+		if err := fv(ctx, m.GetAwsResources(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["network_option"]; exists {
+		vOpts := append(opts, db.WithValidateField("network_option"))
+		if err := fv(ctx, m.GetNetworkOption(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSResourceMappingTypeValidator = func() *ValidateAWSResourceMappingType {
+	v := &ValidateAWSResourceMappingType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNetworkOption := v.NetworkOptionValidationRuleHandler
+	rulesNetworkOption := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNetworkOption(rulesNetworkOption)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSResourceMappingType.network_option: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_option"] = vFn
+
+	vrhAwsResources := v.AwsResourcesValidationRuleHandler
+	rulesAwsResources := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhAwsResources(rulesAwsResources)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSResourceMappingType.aws_resources: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aws_resources"] = vFn
+
+	return v
+}()
+
+func AWSResourceMappingTypeValidator() db.Validator {
+	return DefaultAWSResourceMappingTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSResources) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSResources) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSResources) DeepCopy() *AWSResources {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSResources{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSResources) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSResources) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSResourcesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSResources struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSResources) AvailabilityZoneValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for availability_zone")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSResources) SubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_id")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSResources) SecurityGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for security_group")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSResources) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSResources)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSResources got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["availability_zone"]; exists {
+		vOpts := append(opts, db.WithValidateField("availability_zone"))
+		if err := fv(ctx, m.GetAvailabilityZone(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["security_group"]; exists {
+		vOpts := append(opts, db.WithValidateField("security_group"))
+		if err := fv(ctx, m.GetSecurityGroup(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["subnet_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("subnet_id"))
+		if err := fv(ctx, m.GetSubnetId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSResourcesValidator = func() *ValidateAWSResources {
+	v := &ValidateAWSResources{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAvailabilityZone := v.AvailabilityZoneValidationRuleHandler
+	rulesAvailabilityZone := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+	}
+	vFn, err = vrhAvailabilityZone(rulesAvailabilityZone)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSResources.availability_zone: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["availability_zone"] = vFn
+
+	vrhSubnetId := v.SubnetIdValidationRuleHandler
+	rulesSubnetId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.pattern":   "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhSubnetId(rulesSubnetId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSResources.subnet_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subnet_id"] = vFn
+
+	vrhSecurityGroup := v.SecurityGroupValidationRuleHandler
+	rulesSecurityGroup := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "20",
+		"ves.io.schema.rules.string.pattern":   "^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$",
+	}
+	vFn, err = vrhSecurityGroup(rulesSecurityGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSResources.security_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["security_group"] = vFn
+
+	return v
+}()
+
+func AWSResourcesValidator() db.Validator {
+	return DefaultAWSResourcesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSTGWType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSTGWType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSTGWType) DeepCopy() *AWSTGWType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSTGWType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSTGWType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSTGWType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSTGWTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSTGWType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSTGWType) TgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_id")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAWSTGWType) VolterraSiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_site_asn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSTGWType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSTGWType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["tgw_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("tgw_id"))
+		if err := fv(ctx, m.GetTgwId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
+		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))
+		if err := fv(ctx, m.GetVolterraSiteAsn(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSTGWTypeValidator = func() *ValidateAWSTGWType {
+	v := &ValidateAWSTGWType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTgwId := v.TgwIdValidationRuleHandler
+	rulesTgwId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.pattern":   "^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhTgwId(rulesTgwId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWType.tgw_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_id"] = vFn
+
+	vrhVolterraSiteAsn := v.VolterraSiteAsnValidationRuleHandler
+	rulesVolterraSiteAsn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gt":        "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhVolterraSiteAsn(rulesVolterraSiteAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWType.volterra_site_asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["volterra_site_asn"] = vFn
+
+	return v
+}()
+
+func AWSTGWTypeValidator() db.Validator {
+	return DefaultAWSTGWTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *EnablePrivateWorkloadRoutingListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EnablePrivateWorkloadRoutingListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EnablePrivateWorkloadRoutingListType) DeepCopy() *EnablePrivateWorkloadRoutingListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EnablePrivateWorkloadRoutingListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EnablePrivateWorkloadRoutingListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EnablePrivateWorkloadRoutingListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EnablePrivateWorkloadRoutingListTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *EnablePrivateWorkloadRoutingListType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEnablePrivateWorkloadRoutingToCeDRefInfo()
+}
+
+// GetDRefInfo for the field's type
+func (m *EnablePrivateWorkloadRoutingListType) GetEnablePrivateWorkloadRoutingToCeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetEnablePrivateWorkloadRoutingToCe() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetEnablePrivateWorkloadRoutingToCe() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnablePrivateWorkloadRoutingToCe() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("enable_private_workload_routing_to_ce[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+type ValidateEnablePrivateWorkloadRoutingListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEnablePrivateWorkloadRoutingListType) EnablePrivateWorkloadRoutingToCeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for enable_private_workload_routing_to_ce")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*EnablePrivateWorkloadRoutingType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := EnablePrivateWorkloadRoutingTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for enable_private_workload_routing_to_ce")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*EnablePrivateWorkloadRoutingType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*EnablePrivateWorkloadRoutingType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated enable_private_workload_routing_to_ce")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items enable_private_workload_routing_to_ce")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateEnablePrivateWorkloadRoutingListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EnablePrivateWorkloadRoutingListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EnablePrivateWorkloadRoutingListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["enable_private_workload_routing_to_ce"]; exists {
+		vOpts := append(opts, db.WithValidateField("enable_private_workload_routing_to_ce"))
+		if err := fv(ctx, m.GetEnablePrivateWorkloadRoutingToCe(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEnablePrivateWorkloadRoutingListTypeValidator = func() *ValidateEnablePrivateWorkloadRoutingListType {
+	v := &ValidateEnablePrivateWorkloadRoutingListType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnablePrivateWorkloadRoutingToCe := v.EnablePrivateWorkloadRoutingToCeValidationRuleHandler
+	rulesEnablePrivateWorkloadRoutingToCe := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhEnablePrivateWorkloadRoutingToCe(rulesEnablePrivateWorkloadRoutingToCe)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EnablePrivateWorkloadRoutingListType.enable_private_workload_routing_to_ce: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable_private_workload_routing_to_ce"] = vFn
+
+	return v
+}()
+
+func EnablePrivateWorkloadRoutingListTypeValidator() db.Validator {
+	return DefaultEnablePrivateWorkloadRoutingListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *EnablePrivateWorkloadRoutingType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EnablePrivateWorkloadRoutingType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EnablePrivateWorkloadRoutingType) DeepCopy() *EnablePrivateWorkloadRoutingType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EnablePrivateWorkloadRoutingType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EnablePrivateWorkloadRoutingType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EnablePrivateWorkloadRoutingType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EnablePrivateWorkloadRoutingTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *EnablePrivateWorkloadRoutingType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkOptionDRefInfo()
+}
+
+// GetDRefInfo for the field's type
+func (m *EnablePrivateWorkloadRoutingType) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNetworkOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNetworkOption().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "network_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+type ValidateEnablePrivateWorkloadRoutingType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEnablePrivateWorkloadRoutingType) NetworkOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for network_option")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateEnablePrivateWorkloadRoutingType) SubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateEnablePrivateWorkloadRoutingType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EnablePrivateWorkloadRoutingType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EnablePrivateWorkloadRoutingType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["network_option"]; exists {
+		vOpts := append(opts, db.WithValidateField("network_option"))
+		if err := fv(ctx, m.GetNetworkOption(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["subnet_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("subnet_id"))
+		if err := fv(ctx, m.GetSubnetId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEnablePrivateWorkloadRoutingTypeValidator = func() *ValidateEnablePrivateWorkloadRoutingType {
+	v := &ValidateEnablePrivateWorkloadRoutingType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNetworkOption := v.NetworkOptionValidationRuleHandler
+	rulesNetworkOption := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNetworkOption(rulesNetworkOption)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EnablePrivateWorkloadRoutingType.network_option: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_option"] = vFn
+
+	vrhSubnetId := v.SubnetIdValidationRuleHandler
+	rulesSubnetId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+		"ves.io.schema.rules.string.pattern":   "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhSubnetId(rulesSubnetId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EnablePrivateWorkloadRoutingType.subnet_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subnet_id"] = vFn
+
+	return v
+}()
+
+func EnablePrivateWorkloadRoutingTypeValidator() db.Validator {
+	return DefaultEnablePrivateWorkloadRoutingTypeValidator
 }

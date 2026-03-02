@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCGetActivationStatus(ctx context.Context, yaml
 	rsp, err := c.grpcClient.GetActivationStatus(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetAddonServiceDetails(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetAddonServiceDetailsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCGetAddonServiceDetails(ctx context.Context, y
 	rsp, err := c.grpcClient.GetAddonServiceDetails(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetAllServiceTiersActivationStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetAllServiceTiersActivationStatusReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetActivationStatus"] = ccl.doRPCGetActivationStatus
-
 	rpcFns["GetAddonServiceDetails"] = ccl.doRPCGetAddonServiceDetails
-
 	rpcFns["GetAllServiceTiersActivationStatus"] = ccl.doRPCGetAllServiceTiersActivationStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -184,7 +178,6 @@ func (c *CustomAPIRestClient) doRPCGetActivationStatus(ctx context.Context, call
 	pbRsp := &GetActivationStatusResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.pbac.addon_service.GetActivationStatusResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -192,7 +185,6 @@ func (c *CustomAPIRestClient) doRPCGetActivationStatus(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetAddonServiceDetails(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -267,7 +259,6 @@ func (c *CustomAPIRestClient) doRPCGetAddonServiceDetails(ctx context.Context, c
 	pbRsp := &GetAddonServiceDetailsResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.pbac.addon_service.GetAddonServiceDetailsResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -275,7 +266,6 @@ func (c *CustomAPIRestClient) doRPCGetAddonServiceDetails(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetAllServiceTiersActivationStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -350,7 +340,6 @@ func (c *CustomAPIRestClient) doRPCGetAllServiceTiersActivationStatus(ctx contex
 	pbRsp := &GetAllServiceTiersActivationStatusResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.pbac.addon_service.GetAllServiceTiersActivationStatusResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -384,13 +373,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetActivationStatus"] = ccl.doRPCGetActivationStatus
-
 	rpcFns["GetAddonServiceDetails"] = ccl.doRPCGetAddonServiceDetails
-
 	rpcFns["GetAllServiceTiersActivationStatus"] = ccl.doRPCGetAllServiceTiersActivationStatus
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -479,7 +464,6 @@ func (s *customAPISrv) GetActivationStatus(ctx context.Context, in *GetActivatio
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.pbac.addon_service.GetActivationStatusResp", rsp)...)
 
 	return rsp, nil
@@ -528,7 +512,6 @@ func (s *customAPISrv) GetAddonServiceDetails(ctx context.Context, in *GetAddonS
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.pbac.addon_service.GetAddonServiceDetailsResp", rsp)...)
 
 	return rsp, nil
@@ -577,7 +560,6 @@ func (s *customAPISrv) GetAllServiceTiersActivationStatus(ctx context.Context, i
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.pbac.addon_service.GetAllServiceTiersActivationStatusResp", rsp)...)
 
 	return rsp, nil
@@ -1001,7 +983,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "display_name": {
                     "type": "string",
-                    "description": " Display Name of the addon service \n\nExample: - \"addon service 1\"-",
+                    "description": " Display Name of the addon service\n\nExample: - \"addon service 1\"-",
                     "title": "display_name",
                     "x-displayname": "Display Name",
                     "x-ves-example": "addon service 1"

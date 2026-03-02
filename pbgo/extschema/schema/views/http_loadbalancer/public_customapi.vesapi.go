@@ -44,7 +44,6 @@ func (c *CustomAPIGrpcClient) doRPCAssignAPIDefinition(ctx context.Context, yaml
 	rsp, err := c.grpcClient.AssignAPIDefinition(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *CustomAPIGrpcClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Conte
 	rsp, err := c.grpcClient.DeleteDoSAutoMitigationRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetDnsInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetDnsInfoRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -62,7 +60,6 @@ func (c *CustomAPIGrpcClient) doRPCGetDnsInfo(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.GetDnsInfo(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetDoSAutoMitigationRules(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ves_io_schema_views_common_security.GetDoSAutoMitigationRulesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -71,7 +68,6 @@ func (c *CustomAPIGrpcClient) doRPCGetDoSAutoMitigationRules(ctx context.Context
 	rsp, err := c.grpcClient.GetDoSAutoMitigationRules(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetSecurityConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSecurityConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -80,7 +76,6 @@ func (c *CustomAPIGrpcClient) doRPCGetSecurityConfig(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.GetSecurityConfig(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListAvailableAPIDefinitions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListAvailableAPIDefinitionsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -89,7 +84,6 @@ func (c *CustomAPIGrpcClient) doRPCListAvailableAPIDefinitions(ctx context.Conte
 	rsp, err := c.grpcClient.ListAvailableAPIDefinitions(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSetL7DDoSRPSThreshold(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetL7DDoSRPSThresholdReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -130,21 +124,13 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AssignAPIDefinition"] = ccl.doRPCAssignAPIDefinition
-
 	rpcFns["DeleteDoSAutoMitigationRule"] = ccl.doRPCDeleteDoSAutoMitigationRule
-
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
-
 	rpcFns["GetDoSAutoMitigationRules"] = ccl.doRPCGetDoSAutoMitigationRules
-
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
-
 	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
-
 	rpcFns["SetL7DDoSRPSThreshold"] = ccl.doRPCSetL7DDoSRPSThreshold
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -233,7 +219,6 @@ func (c *CustomAPIRestClient) doRPCAssignAPIDefinition(ctx context.Context, call
 	pbRsp := &AssignAPIDefinitionResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -241,7 +226,6 @@ func (c *CustomAPIRestClient) doRPCAssignAPIDefinition(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -318,7 +302,6 @@ func (c *CustomAPIRestClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Conte
 	pbRsp := &ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -326,7 +309,6 @@ func (c *CustomAPIRestClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -402,7 +384,6 @@ func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *ser
 	pbRsp := &GetDnsInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -410,7 +391,6 @@ func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetDoSAutoMitigationRules(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -486,7 +466,6 @@ func (c *CustomAPIRestClient) doRPCGetDoSAutoMitigationRules(ctx context.Context
 	pbRsp := &ves_io_schema_views_common_security.GetDoSAutoMitigationRulesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.GetDoSAutoMitigationRulesRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -494,7 +473,6 @@ func (c *CustomAPIRestClient) doRPCGetDoSAutoMitigationRules(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetSecurityConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -570,7 +548,6 @@ func (c *CustomAPIRestClient) doRPCGetSecurityConfig(ctx context.Context, callOp
 	pbRsp := &ves_io_schema_views_common_security.GetSecurityConfigRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.GetSecurityConfigRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -578,7 +555,6 @@ func (c *CustomAPIRestClient) doRPCGetSecurityConfig(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -654,7 +630,6 @@ func (c *CustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx context.Conte
 	pbRsp := &ListAvailableAPIDefinitionsResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -662,7 +637,6 @@ func (c *CustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx context.Conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSetL7DDoSRPSThreshold(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -739,7 +713,6 @@ func (c *CustomAPIRestClient) doRPCSetL7DDoSRPSThreshold(ctx context.Context, ca
 	pbRsp := &SetL7DDoSRPSThresholdRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -773,21 +746,13 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AssignAPIDefinition"] = ccl.doRPCAssignAPIDefinition
-
 	rpcFns["DeleteDoSAutoMitigationRule"] = ccl.doRPCDeleteDoSAutoMitigationRule
-
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
-
 	rpcFns["GetDoSAutoMitigationRules"] = ccl.doRPCGetDoSAutoMitigationRules
-
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
-
 	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
-
 	rpcFns["SetL7DDoSRPSThreshold"] = ccl.doRPCSetL7DDoSRPSThreshold
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -895,7 +860,6 @@ func (s *customAPISrv) AssignAPIDefinition(ctx context.Context, in *AssignAPIDef
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp", rsp)...)
 
 	return rsp, nil
@@ -944,7 +908,6 @@ func (s *customAPISrv) DeleteDoSAutoMitigationRule(ctx context.Context, in *ves_
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -993,7 +956,6 @@ func (s *customAPISrv) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse", rsp)...)
 
 	return rsp, nil
@@ -1042,7 +1004,6 @@ func (s *customAPISrv) GetDoSAutoMitigationRules(ctx context.Context, in *ves_io
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.GetDoSAutoMitigationRulesRsp", rsp)...)
 
 	return rsp, nil
@@ -1091,7 +1052,6 @@ func (s *customAPISrv) GetSecurityConfig(ctx context.Context, in *GetSecurityCon
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.GetSecurityConfigRsp", rsp)...)
 
 	return rsp, nil
@@ -1140,7 +1100,6 @@ func (s *customAPISrv) ListAvailableAPIDefinitions(ctx context.Context, in *List
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp", rsp)...)
 
 	return rsp, nil
@@ -1189,7 +1148,6 @@ func (s *customAPISrv) SetL7DDoSRPSThreshold(ctx context.Context, in *SetL7DDoSR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdRsp", rsp)...)
 
 	return rsp, nil

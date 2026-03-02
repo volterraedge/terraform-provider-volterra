@@ -60,7 +60,6 @@ resource "volterra_k8s_cluster" "example" {
 
   vk8s_namespace_access_deny = true
 }
-
 ```
 
 Argument Reference
@@ -321,4 +320,4 @@ Secret is given as bootstrap secret in F5XC Security Sidecar.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured k8s_cluster.
+*   `id` - This is the id of the configured k8s_cluster.

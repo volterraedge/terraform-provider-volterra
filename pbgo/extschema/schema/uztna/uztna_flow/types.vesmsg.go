@@ -65,7 +65,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFlowTypeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -73,7 +72,6 @@ func (m *CreateSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetFlowType() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetFlowType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfo() FAILED")
@@ -83,7 +81,6 @@ func (m *CreateSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "flow_type." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -91,7 +88,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) FlowTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for flow_type")
@@ -100,11 +96,9 @@ func (v *ValidateCreateSpecType) FlowTypeValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := FlowTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -124,23 +118,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["flow_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flow_type"))
 		if err := fv(ctx, m.GetFlowType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -210,7 +199,6 @@ func (m *FlowType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFlowTypeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -220,7 +208,6 @@ func (m *FlowType) GetFlowTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetFlowTypeChoice().(type) {
 	case *FlowType_SamlMessage:
-
 		drInfos, err := m.GetSamlMessage().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSamlMessage().GetDRefInfo() FAILED")
@@ -230,15 +217,11 @@ func (m *FlowType) GetFlowTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "saml_message." + dri.DRField
 		}
 		return drInfos, err
-
 	case *FlowType_GeoMatch:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateFlowType struct {
@@ -300,16 +283,13 @@ func (v *ValidateFlowType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFlowTypeValidator = func() *ValidateFlowType {
 	v := &ValidateFlowType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -317,7 +297,6 @@ var DefaultFlowTypeValidator = func() *ValidateFlowType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhFlowTypeChoice := v.FlowTypeChoiceValidationRuleHandler
 	rulesFlowTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -328,7 +307,6 @@ var DefaultFlowTypeValidator = func() *ValidateFlowType {
 		panic(errMsg)
 	}
 	v.FldValidators["flow_type_choice"] = vFn
-
 	v.FldValidators["flow_type_choice.saml_message"] = SAMLMessageValidator().Validate
 	v.FldValidators["flow_type_choice.geo_match"] = GeoMatchValidator().Validate
 
@@ -382,7 +360,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFlowTypeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -390,7 +367,6 @@ func (m *GetSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetFlowType() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetFlowType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfo() FAILED")
@@ -400,7 +376,6 @@ func (m *GetSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "flow_type." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -408,7 +383,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) FlowTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for flow_type")
@@ -417,11 +391,9 @@ func (v *ValidateGetSpecType) FlowTypeValidationRuleHandler(rules map[string]str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := FlowTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -441,23 +413,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["flow_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flow_type"))
 		if err := fv(ctx, m.GetFlowType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -527,7 +494,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFlowTypeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -535,7 +501,6 @@ func (m *GlobalSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetFlowType() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetFlowType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfo() FAILED")
@@ -545,7 +510,6 @@ func (m *GlobalSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "flow_type." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -553,7 +517,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) FlowTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for flow_type")
@@ -562,11 +525,9 @@ func (v *ValidateGlobalSpecType) FlowTypeValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := FlowTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -586,23 +547,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["flow_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flow_type"))
 		if err := fv(ctx, m.GetFlowType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -672,7 +628,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetFlowTypeDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -680,7 +635,6 @@ func (m *ReplaceSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetFlowType() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetFlowType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfo() FAILED")
@@ -690,7 +644,6 @@ func (m *ReplaceSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "flow_type." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -698,7 +651,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) FlowTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for flow_type")
@@ -707,11 +659,9 @@ func (v *ValidateReplaceSpecType) FlowTypeValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := FlowTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -731,23 +681,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["flow_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flow_type"))
 		if err := fv(ctx, m.GetFlowType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

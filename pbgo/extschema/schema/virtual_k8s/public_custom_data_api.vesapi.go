@@ -74,9 +74,7 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["PVCMetrics"] = ccl.doRPCPVCMetrics
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -173,7 +171,6 @@ func (c *CustomDataAPIRestClient) doRPCPVCMetrics(ctx context.Context, callOpts 
 	pbRsp := &PVCMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_k8s.PVCMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -207,9 +204,7 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["PVCMetrics"] = ccl.doRPCPVCMetrics
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -290,7 +285,6 @@ func (s *customDataAPISrv) PVCMetrics(ctx context.Context, in *PVCMetricsRequest
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_k8s.PVCMetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -540,7 +534,7 @@ var CustomDataAPISwaggerJSON string = `{
             "properties": {
                 "data": {
                     "type": "array",
-                    "description": " List of metric data ",
+                    "description": " List of metric data",
                     "title": "Data",
                     "items": {
                         "$ref": "#/definitions/virtual_k8sPVCMetricTypeData"
@@ -647,7 +641,7 @@ var CustomDataAPISwaggerJSON string = `{
                 },
                 "filter": {
                     "type": "string",
-                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in MetricLabel {PVC, SITE} can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n     =  : equal to\n     != : not equal to\n     =~ : regex match\n     !~ : not regex match\n\n Optional: If not specified, metric will be aggregated based on the group_by labels. \n\nExample: - \"{PVC=\\\"pvc-1\\\"}\"-",
+                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in MetricLabel {PVC, SITE} can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n     =  : equal to\n     != : not equal to\n     =~ : regex match\n     !~ : not regex match\n\n Optional: If not specified, metric will be aggregated based on the group_by labels.\n\nExample: - \"{PVC=\\\"pvc-1\\\"}\"-",
                     "title": "Label Filter",
                     "x-displayname": "Filter",
                     "x-ves-example": "{PVC=\\\"pvc-1\\\"}"

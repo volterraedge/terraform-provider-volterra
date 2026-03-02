@@ -64,7 +64,6 @@ type ValidateBasicConfiguration struct {
 }
 
 func (v *ValidateBasicConfiguration) DisplayNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for display_name")
@@ -86,23 +85,18 @@ func (v *ValidateBasicConfiguration) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBasicConfigurationValidator = func() *ValidateBasicConfiguration {
 	v := &ValidateBasicConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -113,8 +107,9 @@ var DefaultBasicConfigurationValidator = func() *ValidateBasicConfiguration {
 
 	vrhDisplayName := v.DisplayNameValidationRuleHandler
 	rulesDisplayName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "255",
-		"ves.io.schema.rules.string.pattern": "^[^<>&\"]+$",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "255",
+		"ves.io.schema.rules.string.pattern":   "^[^<>&\"]+$",
 	}
 	vFn, err = vrhDisplayName(rulesDisplayName)
 	if err != nil {
@@ -172,7 +167,6 @@ type ValidateBruteForceDetectionSettings struct {
 }
 
 func (v *ValidateBruteForceDetectionSettings) MaxLoginFailuresValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for max_login_failures")
@@ -194,23 +188,18 @@ func (v *ValidateBruteForceDetectionSettings) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["max_login_failures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_login_failures"))
 		if err := fv(ctx, m.GetMaxLoginFailures(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBruteForceDetectionSettingsValidator = func() *ValidateBruteForceDetectionSettings {
 	v := &ValidateBruteForceDetectionSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -235,6 +224,212 @@ var DefaultBruteForceDetectionSettingsValidator = func() *ValidateBruteForceDete
 
 func BruteForceDetectionSettingsValidator() db.Validator {
 	return DefaultBruteForceDetectionSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CookieHoursDuration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CookieHoursDuration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CookieHoursDuration) DeepCopy() *CookieHoursDuration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CookieHoursDuration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CookieHoursDuration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CookieHoursDuration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CookieHoursDurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCookieHoursDuration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCookieHoursDuration) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCookieHoursDuration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CookieHoursDuration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CookieHoursDuration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["duration"]; exists {
+		vOpts := append(opts, db.WithValidateField("duration"))
+		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCookieHoursDurationValidator = func() *ValidateCookieHoursDuration {
+	v := &ValidateCookieHoursDuration{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDuration := v.DurationValidationRuleHandler
+	rulesDuration := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "720",
+	}
+	vFn, err = vrhDuration(rulesDuration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CookieHoursDuration.duration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["duration"] = vFn
+
+	return v
+}()
+
+func CookieHoursDurationValidator() db.Validator {
+	return DefaultCookieHoursDurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CookieMinutesDuration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CookieMinutesDuration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CookieMinutesDuration) DeepCopy() *CookieMinutesDuration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CookieMinutesDuration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CookieMinutesDuration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CookieMinutesDuration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CookieMinutesDurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCookieMinutesDuration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCookieMinutesDuration) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCookieMinutesDuration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CookieMinutesDuration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CookieMinutesDuration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["duration"]; exists {
+		vOpts := append(opts, db.WithValidateField("duration"))
+		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCookieMinutesDurationValidator = func() *ValidateCookieMinutesDuration {
+	v := &ValidateCookieMinutesDuration{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDuration := v.DurationValidationRuleHandler
+	rulesDuration := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "5",
+		"ves.io.schema.rules.uint32.lte":       "43200",
+	}
+	vFn, err = vrhDuration(rulesDuration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CookieMinutesDuration.duration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["duration"] = vFn
+
+	return v
+}()
+
+func CookieMinutesDurationValidator() db.Validator {
+	return DefaultCookieMinutesDurationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -291,52 +486,250 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["basic_configuration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("basic_configuration"))
 		if err := fv(ctx, m.GetBasicConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["brute_force_detection"]; exists {
+		vOpts := append(opts, db.WithValidateField("brute_force_detection"))
+		if err := fv(ctx, m.GetBruteForceDetection(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["brute_force_detection_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("brute_force_detection_settings"))
 		if err := fv(ctx, m.GetBruteForceDetectionSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password_policy"))
 		if err := fv(ctx, m.GetPasswordPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["tenant_details"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant_details"))
+		if err := fv(ctx, m.GetTenantDetails(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["user_session_expiration"]; exists {
+		vOpts := append(opts, db.WithValidateField("user_session_expiration"))
+		if err := fv(ctx, m.GetUserSessionExpiration(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["basic_configuration"] = BasicConfigurationValidator().Validate
-
 	v.FldValidators["brute_force_detection_settings"] = BruteForceDetectionSettingsValidator().Validate
-
 	v.FldValidators["password_policy"] = PasswordPolicyValidator().Validate
+	v.FldValidators["user_session_expiration"] = UserSessionExpirationValidator().Validate
+	v.FldValidators["brute_force_detection"] = BruteForceDetectionSettingsValidator().Validate
+	v.FldValidators["tenant_details"] = BasicConfigurationValidator().Validate
 
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DurationByUnitCookie) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DurationByUnitCookie) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DurationByUnitCookie) DeepCopy() *DurationByUnitCookie {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DurationByUnitCookie{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DurationByUnitCookie) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DurationByUnitCookie) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DurationByUnitCookieValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDurationByUnitCookie struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDurationByUnitCookie) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DurationByUnitCookie)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DurationByUnitCookie got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetUnitOfTime().(type) {
+	case *DurationByUnitCookie_Minutes:
+		if fv, exists := v.FldValidators["unit_of_time.minutes"]; exists {
+			val := m.GetUnitOfTime().(*DurationByUnitCookie_Minutes).Minutes
+			vOpts := append(opts,
+				db.WithValidateField("unit_of_time"),
+				db.WithValidateField("minutes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DurationByUnitCookie_Hours:
+		if fv, exists := v.FldValidators["unit_of_time.hours"]; exists {
+			val := m.GetUnitOfTime().(*DurationByUnitCookie_Hours).Hours
+			vOpts := append(opts,
+				db.WithValidateField("unit_of_time"),
+				db.WithValidateField("hours"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDurationByUnitCookieValidator = func() *ValidateDurationByUnitCookie {
+	v := &ValidateDurationByUnitCookie{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["unit_of_time.minutes"] = CookieMinutesDurationValidator().Validate
+	v.FldValidators["unit_of_time.hours"] = CookieHoursDurationValidator().Validate
+
+	return v
+}()
+
+func DurationByUnitCookieValidator() db.Validator {
+	return DefaultDurationByUnitCookieValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DurationByUnitSession) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DurationByUnitSession) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DurationByUnitSession) DeepCopy() *DurationByUnitSession {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DurationByUnitSession{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DurationByUnitSession) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DurationByUnitSession) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DurationByUnitSessionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDurationByUnitSession struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDurationByUnitSession) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DurationByUnitSession)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DurationByUnitSession got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetUnitOfTime().(type) {
+	case *DurationByUnitSession_Minutes:
+		if fv, exists := v.FldValidators["unit_of_time.minutes"]; exists {
+			val := m.GetUnitOfTime().(*DurationByUnitSession_Minutes).Minutes
+			vOpts := append(opts,
+				db.WithValidateField("unit_of_time"),
+				db.WithValidateField("minutes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DurationByUnitSession_Hours:
+		if fv, exists := v.FldValidators["unit_of_time.hours"]; exists {
+			val := m.GetUnitOfTime().(*DurationByUnitSession_Hours).Hours
+			vOpts := append(opts,
+				db.WithValidateField("unit_of_time"),
+				db.WithValidateField("hours"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDurationByUnitSessionValidator = func() *ValidateDurationByUnitSession {
+	v := &ValidateDurationByUnitSession{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["unit_of_time.minutes"] = SessionMinutesDurationValidator().Validate
+	v.FldValidators["unit_of_time.hours"] = SessionHoursDurationValidator().Validate
+
+	return v
+}()
+
+func DurationByUnitSessionValidator() db.Validator {
+	return DefaultDurationByUnitSessionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -393,46 +786,54 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["basic_configuration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("basic_configuration"))
 		if err := fv(ctx, m.GetBasicConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["brute_force_detection"]; exists {
+		vOpts := append(opts, db.WithValidateField("brute_force_detection"))
+		if err := fv(ctx, m.GetBruteForceDetection(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["brute_force_detection_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("brute_force_detection_settings"))
 		if err := fv(ctx, m.GetBruteForceDetectionSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password_policy"))
 		if err := fv(ctx, m.GetPasswordPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["tenant_details"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant_details"))
+		if err := fv(ctx, m.GetTenantDetails(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["user_session_expiration"]; exists {
+		vOpts := append(opts, db.WithValidateField("user_session_expiration"))
+		if err := fv(ctx, m.GetUserSessionExpiration(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["basic_configuration"] = BasicConfigurationValidator().Validate
-
 	v.FldValidators["brute_force_detection_settings"] = BruteForceDetectionSettingsValidator().Validate
-
 	v.FldValidators["password_policy"] = PasswordPolicyValidator().Validate
+	v.FldValidators["user_session_expiration"] = UserSessionExpirationValidator().Validate
+	v.FldValidators["brute_force_detection"] = BruteForceDetectionSettingsValidator().Validate
+	v.FldValidators["tenant_details"] = BasicConfigurationValidator().Validate
 
 	return v
 }()
@@ -495,57 +896,54 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["basic_configuration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("basic_configuration"))
 		if err := fv(ctx, m.GetBasicConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["brute_force_detection"]; exists {
+		vOpts := append(opts, db.WithValidateField("brute_force_detection"))
+		if err := fv(ctx, m.GetBruteForceDetection(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["brute_force_detection_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("brute_force_detection_settings"))
 		if err := fv(ctx, m.GetBruteForceDetectionSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password_policy"))
 		if err := fv(ctx, m.GetPasswordPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
-	if fv, exists := v.FldValidators["session_management"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("session_management"))
-		if err := fv(ctx, m.GetSessionManagement(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["tenant_details"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant_details"))
+		if err := fv(ctx, m.GetTenantDetails(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["user_session_expiration"]; exists {
+		vOpts := append(opts, db.WithValidateField("user_session_expiration"))
+		if err := fv(ctx, m.GetUserSessionExpiration(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["basic_configuration"] = BasicConfigurationValidator().Validate
-
 	v.FldValidators["brute_force_detection_settings"] = BruteForceDetectionSettingsValidator().Validate
-
 	v.FldValidators["password_policy"] = PasswordPolicyValidator().Validate
-
-	v.FldValidators["session_management"] = SessionManagementValidator().Validate
+	v.FldValidators["user_session_expiration"] = UserSessionExpirationValidator().Validate
+	v.FldValidators["brute_force_detection"] = BruteForceDetectionSettingsValidator().Validate
+	v.FldValidators["tenant_details"] = BasicConfigurationValidator().Validate
 
 	return v
 }()
@@ -596,7 +994,6 @@ type ValidatePasswordPolicy struct {
 }
 
 func (v *ValidatePasswordPolicy) DigitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for digits")
@@ -604,9 +1001,7 @@ func (v *ValidatePasswordPolicy) DigitsValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePasswordPolicy) LowercaseCharactersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for lowercase_characters")
@@ -614,9 +1009,7 @@ func (v *ValidatePasswordPolicy) LowercaseCharactersValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePasswordPolicy) UppercaseCharactersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for uppercase_characters")
@@ -624,9 +1017,7 @@ func (v *ValidatePasswordPolicy) UppercaseCharactersValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePasswordPolicy) SpecialCharactersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for special_characters")
@@ -634,9 +1025,7 @@ func (v *ValidatePasswordPolicy) SpecialCharactersValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePasswordPolicy) ExpirePasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for expire_password")
@@ -644,9 +1033,7 @@ func (v *ValidatePasswordPolicy) ExpirePasswordValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidatePasswordPolicy) MinimumLengthValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for minimum_length")
@@ -668,86 +1055,60 @@ func (v *ValidatePasswordPolicy) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["digits"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("digits"))
 		if err := fv(ctx, m.GetDigits(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expire_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expire_password"))
 		if err := fv(ctx, m.GetExpirePassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["lowercase_characters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("lowercase_characters"))
 		if err := fv(ctx, m.GetLowercaseCharacters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["minimum_length"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("minimum_length"))
 		if err := fv(ctx, m.GetMinimumLength(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_recently_used"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_recently_used"))
 		if err := fv(ctx, m.GetNotRecentlyUsed(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_username"))
 		if err := fv(ctx, m.GetNotUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["special_characters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("special_characters"))
 		if err := fv(ctx, m.GetSpecialCharacters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uppercase_characters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uppercase_characters"))
 		if err := fv(ctx, m.GetUppercaseCharacters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPasswordPolicyValidator = func() *ValidatePasswordPolicy {
 	v := &ValidatePasswordPolicy{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -884,46 +1245,54 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["basic_configuration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("basic_configuration"))
 		if err := fv(ctx, m.GetBasicConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["brute_force_detection"]; exists {
+		vOpts := append(opts, db.WithValidateField("brute_force_detection"))
+		if err := fv(ctx, m.GetBruteForceDetection(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["brute_force_detection_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("brute_force_detection_settings"))
 		if err := fv(ctx, m.GetBruteForceDetectionSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password_policy"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password_policy"))
 		if err := fv(ctx, m.GetPasswordPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["tenant_details"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant_details"))
+		if err := fv(ctx, m.GetTenantDetails(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["user_session_expiration"]; exists {
+		vOpts := append(opts, db.WithValidateField("user_session_expiration"))
+		if err := fv(ctx, m.GetUserSessionExpiration(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["basic_configuration"] = BasicConfigurationValidator().Validate
-
 	v.FldValidators["brute_force_detection_settings"] = BruteForceDetectionSettingsValidator().Validate
-
 	v.FldValidators["password_policy"] = PasswordPolicyValidator().Validate
+	v.FldValidators["user_session_expiration"] = UserSessionExpirationValidator().Validate
+	v.FldValidators["brute_force_detection"] = BruteForceDetectionSettingsValidator().Validate
+	v.FldValidators["tenant_details"] = BasicConfigurationValidator().Validate
 
 	return v
 }()
@@ -934,15 +1303,15 @@ func ReplaceSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *SessionManagement) ToJSON() (string, error) {
+func (m *SessionHoursDuration) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *SessionManagement) ToYAML() (string, error) {
+func (m *SessionHoursDuration) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *SessionManagement) DeepCopy() *SessionManagement {
+func (m *SessionHoursDuration) DeepCopy() *SessionHoursDuration {
 	if m == nil {
 		return nil
 	}
@@ -950,7 +1319,7 @@ func (m *SessionManagement) DeepCopy() *SessionManagement {
 	if err != nil {
 		return nil
 	}
-	c := &SessionManagement{}
+	c := &SessionHoursDuration{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -958,89 +1327,55 @@ func (m *SessionManagement) DeepCopy() *SessionManagement {
 	return c
 }
 
-func (m *SessionManagement) DeepCopyProto() proto.Message {
+func (m *SessionHoursDuration) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *SessionManagement) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SessionManagementValidator().Validate(ctx, m, opts...)
+func (m *SessionHoursDuration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SessionHoursDurationValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateSessionManagement struct {
+type ValidateSessionHoursDuration struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSessionManagement) CookieExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
+func (v *ValidateSessionHoursDuration) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for cookie_expiry")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
 	}
 
 	return validatorFn, nil
 }
 
-func (v *ValidateSessionManagement) SessionExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for session_expiry")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSessionManagement) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SessionManagement)
+func (v *ValidateSessionHoursDuration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SessionHoursDuration)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *SessionManagement got type %s", t)
+			return fmt.Errorf("Expected type *SessionHoursDuration got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
-
-	if fv, exists := v.FldValidators["cookie_expiry"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("cookie_expiry"))
-		if err := fv(ctx, m.GetCookieExpiry(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["duration"]; exists {
+		vOpts := append(opts, db.WithValidateField("duration"))
+		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
-	if fv, exists := v.FldValidators["cookie_refresh_interval"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("cookie_refresh_interval"))
-		if err := fv(ctx, m.GetCookieRefreshInterval(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["session_expiry"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("session_expiry"))
-		if err := fv(ctx, m.GetSessionExpiry(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
-var DefaultSessionManagementValidator = func() *ValidateSessionManagement {
-	v := &ValidateSessionManagement{FldValidators: map[string]db.ValidatorFunc{}}
-
+var DefaultSessionHoursDurationValidator = func() *ValidateSessionHoursDuration {
+	v := &ValidateSessionHoursDuration{FldValidators: map[string]db.ValidatorFunc{}}
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1049,37 +1384,265 @@ var DefaultSessionManagementValidator = func() *ValidateSessionManagement {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhCookieExpiry := v.CookieExpiryValidationRuleHandler
-	rulesCookieExpiry := map[string]string{
+	vrhDuration := v.DurationValidationRuleHandler
+	rulesDuration := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "60",
-		"ves.io.schema.rules.uint32.lte":       "86400",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "720",
 	}
-	vFn, err = vrhCookieExpiry(rulesCookieExpiry)
+	vFn, err = vrhDuration(rulesDuration)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SessionManagement.cookie_expiry: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SessionHoursDuration.duration: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["cookie_expiry"] = vFn
-
-	vrhSessionExpiry := v.SessionExpiryValidationRuleHandler
-	rulesSessionExpiry := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "60",
-		"ves.io.schema.rules.uint32.lte":       "86400",
-	}
-	vFn, err = vrhSessionExpiry(rulesSessionExpiry)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SessionManagement.session_expiry: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["session_expiry"] = vFn
+	v.FldValidators["duration"] = vFn
 
 	return v
 }()
 
-func SessionManagementValidator() db.Validator {
-	return DefaultSessionManagementValidator
+func SessionHoursDurationValidator() db.Validator {
+	return DefaultSessionHoursDurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SessionMinutesDuration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SessionMinutesDuration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SessionMinutesDuration) DeepCopy() *SessionMinutesDuration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SessionMinutesDuration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SessionMinutesDuration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SessionMinutesDuration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SessionMinutesDurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSessionMinutesDuration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSessionMinutesDuration) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSessionMinutesDuration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SessionMinutesDuration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SessionMinutesDuration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["duration"]; exists {
+		vOpts := append(opts, db.WithValidateField("duration"))
+		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSessionMinutesDurationValidator = func() *ValidateSessionMinutesDuration {
+	v := &ValidateSessionMinutesDuration{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDuration := v.DurationValidationRuleHandler
+	rulesDuration := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "5",
+		"ves.io.schema.rules.uint32.lte":       "43200",
+	}
+	vFn, err = vrhDuration(rulesDuration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SessionMinutesDuration.duration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["duration"] = vFn
+
+	return v
+}()
+
+func SessionMinutesDurationValidator() db.Validator {
+	return DefaultSessionMinutesDurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UserSessionExpiration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UserSessionExpiration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UserSessionExpiration) DeepCopy() *UserSessionExpiration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UserSessionExpiration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UserSessionExpiration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UserSessionExpiration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UserSessionExpirationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUserSessionExpiration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUserSessionExpiration) AbsoluteTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for absolute_timeout")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateUserSessionExpiration) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for idle_timeout")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUserSessionExpiration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UserSessionExpiration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UserSessionExpiration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["absolute_timeout"]; exists {
+		vOpts := append(opts, db.WithValidateField("absolute_timeout"))
+		if err := fv(ctx, m.GetAbsoluteTimeout(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["idle_timeout"]; exists {
+		vOpts := append(opts, db.WithValidateField("idle_timeout"))
+		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUserSessionExpirationValidator = func() *ValidateUserSessionExpiration {
+	v := &ValidateUserSessionExpiration{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAbsoluteTimeout := v.AbsoluteTimeoutValidationRuleHandler
+	rulesAbsoluteTimeout := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAbsoluteTimeout(rulesAbsoluteTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UserSessionExpiration.absolute_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["absolute_timeout"] = vFn
+
+	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
+	rulesIdleTimeout := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UserSessionExpiration.idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["idle_timeout"] = vFn
+
+	return v
+}()
+
+func UserSessionExpirationValidator() db.Validator {
+	return DefaultUserSessionExpirationValidator
 }
 
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
@@ -1087,8 +1650,11 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 		return
 	}
 	m.BasicConfiguration = f.GetBasicConfiguration()
+	m.BruteForceDetection = f.GetBruteForceDetection()
 	m.BruteForceDetectionSettings = f.GetBruteForceDetectionSettings()
 	m.PasswordPolicy = f.GetPasswordPolicy()
+	m.TenantDetails = f.GetTenantDetails()
+	m.UserSessionExpiration = f.GetUserSessionExpiration()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1107,8 +1673,11 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.BasicConfiguration = m1.BasicConfiguration
+	f.BruteForceDetection = m1.BruteForceDetection
 	f.BruteForceDetectionSettings = m1.BruteForceDetectionSettings
 	f.PasswordPolicy = m1.PasswordPolicy
+	f.TenantDetails = m1.TenantDetails
+	f.UserSessionExpiration = m1.UserSessionExpiration
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1124,8 +1693,11 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.BasicConfiguration = f.GetBasicConfiguration()
+	m.BruteForceDetection = f.GetBruteForceDetection()
 	m.BruteForceDetectionSettings = f.GetBruteForceDetectionSettings()
 	m.PasswordPolicy = f.GetPasswordPolicy()
+	m.TenantDetails = f.GetTenantDetails()
+	m.UserSessionExpiration = f.GetUserSessionExpiration()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1144,8 +1716,11 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.BasicConfiguration = m1.BasicConfiguration
+	f.BruteForceDetection = m1.BruteForceDetection
 	f.BruteForceDetectionSettings = m1.BruteForceDetectionSettings
 	f.PasswordPolicy = m1.PasswordPolicy
+	f.TenantDetails = m1.TenantDetails
+	f.UserSessionExpiration = m1.UserSessionExpiration
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1161,8 +1736,11 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 		return
 	}
 	m.BasicConfiguration = f.GetBasicConfiguration()
+	m.BruteForceDetection = f.GetBruteForceDetection()
 	m.BruteForceDetectionSettings = f.GetBruteForceDetectionSettings()
 	m.PasswordPolicy = f.GetPasswordPolicy()
+	m.TenantDetails = f.GetTenantDetails()
+	m.UserSessionExpiration = f.GetUserSessionExpiration()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1181,8 +1759,11 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.BasicConfiguration = m1.BasicConfiguration
+	f.BruteForceDetection = m1.BruteForceDetection
 	f.BruteForceDetectionSettings = m1.BruteForceDetectionSettings
 	f.PasswordPolicy = m1.PasswordPolicy
+	f.TenantDetails = m1.TenantDetails
+	f.UserSessionExpiration = m1.UserSessionExpiration
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

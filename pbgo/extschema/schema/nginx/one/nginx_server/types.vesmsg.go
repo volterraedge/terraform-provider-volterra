@@ -69,13 +69,11 @@ func (m *DataplaneReference) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDataplaneRefDRefInfo()
-
 }
 
 func (m *DataplaneReference) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetDataplaneRef().(type) {
 	case *DataplaneReference_NginxInstance:
-
 		vref := m.GetNginxInstance()
 		if vref == nil {
 			return nil, nil
@@ -91,9 +89,7 @@ func (m *DataplaneReference) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *DataplaneReference_NginxCsg:
-
 		vref := m.GetNginxCsg()
 		if vref == nil {
 			return nil, nil
@@ -109,7 +105,6 @@ func (m *DataplaneReference) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -125,7 +120,6 @@ func (m *DataplaneReference) GetDataplaneRefDBEntries(ctx context.Context, d db.
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: nginx_instance")
 		}
-
 		vref := m.GetNginxInstance()
 		if vref == nil {
 			return nil, nil
@@ -143,13 +137,11 @@ func (m *DataplaneReference) GetDataplaneRefDBEntries(ctx context.Context, d db.
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *DataplaneReference_NginxCsg:
 		refdType, err := d.TypeForEntryKind("", "", "nginx_csg.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: nginx_csg")
 		}
-
 		vref := m.GetNginxCsg()
 		if vref == nil {
 			return nil, nil
@@ -167,7 +159,6 @@ func (m *DataplaneReference) GetDataplaneRefDBEntries(ctx context.Context, d db.
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -232,16 +223,13 @@ func (v *ValidateDataplaneReference) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDataplaneReferenceValidator = func() *ValidateDataplaneReference {
 	v := &ValidateDataplaneReference{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -249,7 +237,6 @@ var DefaultDataplaneReferenceValidator = func() *ValidateDataplaneReference {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDataplaneRef := v.DataplaneRefValidationRuleHandler
 	rulesDataplaneRef := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -260,7 +247,6 @@ var DefaultDataplaneReferenceValidator = func() *ValidateDataplaneReference {
 		panic(errMsg)
 	}
 	v.FldValidators["dataplane_ref"] = vFn
-
 	v.FldValidators["dataplane_ref.nginx_instance"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["dataplane_ref.nginx_csg"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -314,7 +300,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDataplaneRefDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -322,7 +307,6 @@ func (m *GetSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDataplaneRef() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDataplaneRef().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfo() FAILED")
@@ -332,7 +316,6 @@ func (m *GetSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "dataplane_ref." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -340,7 +323,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ServerSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for server_spec")
@@ -349,19 +331,15 @@ func (v *ValidateGetSpecType) ServerSpecValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ServerValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DataplaneRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for dataplane_ref")
@@ -370,11 +348,9 @@ func (v *ValidateGetSpecType) DataplaneRefValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := DataplaneReferenceValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -394,32 +370,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dataplane_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dataplane_ref"))
 		if err := fv(ctx, m.GetDataplaneRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_spec"))
 		if err := fv(ctx, m.GetServerSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -505,15 +473,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -521,7 +486,6 @@ func (m *GlobalSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDataplaneRef() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDataplaneRef().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfo() FAILED")
@@ -531,11 +495,9 @@ func (m *GlobalSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "dataplane_ref." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -551,7 +513,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -561,7 +522,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -579,7 +539,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -588,7 +547,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ServerSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for server_spec")
@@ -597,19 +555,15 @@ func (v *ValidateGlobalSpecType) ServerSpecValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ServerValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DataplaneRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for dataplane_ref")
@@ -618,11 +572,9 @@ func (v *ValidateGlobalSpecType) DataplaneRefValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := DataplaneReferenceValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -642,41 +594,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dataplane_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dataplane_ref"))
 		if err := fv(ctx, m.GetDataplaneRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_spec"))
 		if err := fv(ctx, m.GetServerSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -706,7 +647,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["dataplane_ref"] = vFn
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -758,7 +698,6 @@ type ValidateLocation struct {
 }
 
 func (v *ValidateLocation) DefinitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for definition")
@@ -766,9 +705,7 @@ func (v *ValidateLocation) DefinitionValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateLocation) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -790,50 +727,36 @@ func (v *ValidateLocation) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_spec"))
 		if err := fv(ctx, m.GetApiDiscoverySpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["definition"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("definition"))
 		if err := fv(ctx, m.GetDefinition(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_spec"))
 		if err := fv(ctx, m.GetWafSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLocationValidator = func() *ValidateLocation {
 	v := &ValidateLocation{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -863,9 +786,7 @@ var DefaultLocationValidator = func() *ValidateLocation {
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
-
 	v.FldValidators["waf_spec"] = ves_io_schema_nginx_one_nginx_instance.WAFSpecValidator().Validate
-
 	v.FldValidators["api_discovery_spec"] = ves_io_schema_nginx_one_nginx_instance.APIDiscoverySpecValidator().Validate
 
 	return v
@@ -917,7 +838,6 @@ type ValidateServer struct {
 }
 
 func (v *ValidateServer) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -957,9 +877,7 @@ func (v *ValidateServer) DomainsValidationRuleHandler(rules map[string]string) (
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServer) LocationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1005,9 +923,7 @@ func (v *ValidateServer) LocationsValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateServer) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -1029,93 +945,66 @@ func (v *ValidateServer) Validate(ctx context.Context, pm interface{}, opts ...d
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_spec"))
 		if err := fv(ctx, m.GetApiDiscoverySpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["locations"]; exists {
 		vOpts := append(opts, db.WithValidateField("locations"))
 		if err := fv(ctx, m.GetLocations(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
 		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
 		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_name"))
 		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_routes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_routes"))
 		if err := fv(ctx, m.GetTotalRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_spec"))
 		if err := fv(ctx, m.GetWafSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServerValidator = func() *ValidateServer {
 	v := &ValidateServer{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1157,9 +1046,7 @@ var DefaultServerValidator = func() *ValidateServer {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["waf_spec"] = ves_io_schema_nginx_one_nginx_instance.WAFSpecValidator().Validate
-
 	v.FldValidators["api_discovery_spec"] = ves_io_schema_nginx_one_nginx_instance.APIDiscoverySpecValidator().Validate
 
 	return v

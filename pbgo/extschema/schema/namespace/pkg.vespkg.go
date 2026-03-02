@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.namespace.Object"] = ObjectValidator()
 	vr["ves.io.schema.namespace.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.namespace.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.namespace.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.namespace.GetRequest"] = GetRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.namespace.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.namespace.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.namespace.APIItemListReq"] = APIItemListReqValidator()
 	vr["ves.io.schema.namespace.APIItemListResp"] = APIItemListRespValidator()
 	vr["ves.io.schema.namespace.APIItemReq"] = APIItemReqValidator()
@@ -41,7 +38,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.LookupUserRolesResp"] = LookupUserRolesRespValidator()
 	vr["ves.io.schema.namespace.NamespaceAPIListReq"] = NamespaceAPIListReqValidator()
 	vr["ves.io.schema.namespace.NamespaceAPIListResp"] = NamespaceAPIListRespValidator()
-
 	vr["ves.io.schema.namespace.AllApplicationInventoryRequest"] = AllApplicationInventoryRequestValidator()
 	vr["ves.io.schema.namespace.AllApplicationInventoryWafFilterRequest"] = AllApplicationInventoryWafFilterRequestValidator()
 	vr["ves.io.schema.namespace.AllApplicationInventoryWafFilterResponse"] = AllApplicationInventoryWafFilterResponseValidator()
@@ -89,15 +85,18 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.ValidateRulesReq"] = ValidateRulesReqValidator()
 	vr["ves.io.schema.namespace.ValidateRulesResponse"] = ValidateRulesResponseValidator()
 	vr["ves.io.schema.namespace.ValidationResult"] = ValidationResultValidator()
-
+	vr["ves.io.schema.namespace.VirtualServerInventoryResultType"] = VirtualServerInventoryResultTypeValidator()
+	vr["ves.io.schema.namespace.VirtualServerResultType"] = VirtualServerResultTypeValidator()
+	vr["ves.io.schema.namespace.VirtualServiceInventoryFilterType"] = VirtualServiceInventoryFilterTypeValidator()
 	vr["ves.io.schema.namespace.ApiEndpointsStatsAllNSReq"] = ApiEndpointsStatsAllNSReqValidator()
 	vr["ves.io.schema.namespace.ApiEndpointsStatsNSReq"] = ApiEndpointsStatsNSReqValidator()
 	vr["ves.io.schema.namespace.ApiEndpointsStatsNSRsp"] = ApiEndpointsStatsNSRspValidator()
-
 	vr["ves.io.schema.namespace.CascadeDeleteItemType"] = CascadeDeleteItemTypeValidator()
 	vr["ves.io.schema.namespace.CascadeDeleteRequest"] = CascadeDeleteRequestValidator()
 	vr["ves.io.schema.namespace.CascadeDeleteResponse"] = CascadeDeleteResponseValidator()
 	vr["ves.io.schema.namespace.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.namespace.DynamicDataReq"] = DynamicDataReqValidator()
+	vr["ves.io.schema.namespace.DynamicDataResp"] = DynamicDataRespValidator()
 	vr["ves.io.schema.namespace.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.namespace.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.namespace.ReplaceSpecType"] = ReplaceSpecTypeValidator()
@@ -105,7 +104,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.SuggestValuesReq"] = SuggestValuesReqValidator()
 	vr["ves.io.schema.namespace.SuggestValuesResp"] = SuggestValuesRespValidator()
 	vr["ves.io.schema.namespace.SuggestedItem"] = SuggestedItemValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -117,11 +115,33 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.namespace.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.namespace.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.namespace.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "virtual_service_filter",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "virtual_servers",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "virtual_service_filter",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "virtual_servers",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
@@ -130,16 +150,13 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.namespace.NamespaceCustomAPI"] = "config"
 	sm["ves.io.schema.namespace.NamespaceMLCustomAPI"] = "ml/data"
 	sm["ves.io.schema.namespace.NamespaceCloudDataCustomAPI"] = "cloud-data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -148,9 +165,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.namespace.Object"] = APISwaggerJSON
@@ -164,16 +179,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.namespace.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.namespace.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.namespace.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.namespace.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.namespace.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.namespace.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -184,16 +194,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.namespace.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.namespace.Object"] = NamespaceCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.namespace.NamespaceCustomAPI"] = NewNamespaceCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.namespace.NamespaceCustomAPI"] = NewNamespaceCustomAPIRestClient
 		if isExternal {
@@ -204,16 +209,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.namespace.NamespaceCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewNamespaceCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.namespace.Object"] = NamespaceMLCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.namespace.NamespaceMLCustomAPI"] = NewNamespaceMLCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.namespace.NamespaceMLCustomAPI"] = NewNamespaceMLCustomAPIRestClient
 		if isExternal {
@@ -224,15 +224,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.namespace.NamespaceMLCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewNamespaceMLCustomAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.namespace.NamespaceCloudDataCustomAPI"] = NamespaceCloudDataCustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.namespace.NamespaceCloudDataCustomAPI"] = NewNamespaceCloudDataCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.namespace.NamespaceCloudDataCustomAPI"] = NewNamespaceCloudDataCustomAPIRestClient
 		if isExternal {
@@ -243,22 +239,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.namespace.NamespaceCloudDataCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewNamespaceCloudDataCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ztna_application.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.ztna_application.Object"] = ObjectValidator()
 	vr["ves.io.schema.ztna_application.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.ztna_application.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.ztna_application.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.ztna_application.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ztna_application.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.ztna_application.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.ztna_application.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.ztna_application.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.ztna_application.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.ztna_application.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -36,7 +33,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ztna_application.ServiceDetails"] = ServiceDetailsValidator()
 	vr["ves.io.schema.ztna_application.TileAccess"] = TileAccessValidator()
 	vr["ves.io.schema.ztna_application.ZTNApolicies"] = ZTNApoliciesValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -48,11 +44,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.ztna_application.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.ztna_application.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.ztna_application.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.ztna_application.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.ztna_application.CreateRequest.spec.proxy_advertisement.advertise_choice.advertise_custom.advertise_where.choice.cloud_edge_segment.ipv6",
@@ -75,7 +69,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ztna_application.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -102,7 +95,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ztna_application.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -129,7 +121,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ztna_application.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.proxy_advertisement.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -204,7 +195,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ztna_application.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.proxy_advertisement.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -231,7 +221,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.ztna_application.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.ztna_application.ReplaceRequest.spec.proxy_advertisement.advertise_choice.advertise_custom.advertise_where.choice.cloud_edge_segment.ipv6",
@@ -254,7 +243,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ztna_application.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -281,21 +269,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.ztna_application.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -304,9 +288,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.ztna_application.Object"] = APISwaggerJSON
@@ -320,22 +302,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.ztna_application.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.ztna_application.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.ztna_application.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

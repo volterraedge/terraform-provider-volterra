@@ -165,16 +165,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -182,7 +179,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHealthCheck := v.HealthCheckValidationRuleHandler
 	rulesHealthCheck := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -193,7 +189,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["health_check"] = vFn
-
 	v.FldValidators["health_check.http_health_check"] = HttpHealthCheckValidator().Validate
 	v.FldValidators["health_check.tcp_health_check"] = TcpHealthCheckValidator().Validate
 	v.FldValidators["health_check.udp_health_check"] = UdpHealthCheckValidator().Validate
@@ -250,7 +245,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDnsLbPoolsDRefInfo()
-
 }
 
 func (m *GetSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
@@ -276,7 +270,6 @@ func (m *GetSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDnsLbPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -304,7 +297,6 @@ func (m *GetSpecType) GetDnsLbPoolsDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -333,9 +325,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pools"))
 		for idx, item := range m.GetDnsLbPools() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -343,7 +333,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["health_check"]; exists {
@@ -423,16 +412,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -440,7 +426,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHealthCheck := v.HealthCheckValidationRuleHandler
 	rulesHealthCheck := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -451,13 +436,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["health_check"] = vFn
-
 	v.FldValidators["health_check.http_health_check"] = HttpHealthCheckValidator().Validate
 	v.FldValidators["health_check.tcp_health_check"] = TcpHealthCheckValidator().Validate
 	v.FldValidators["health_check.udp_health_check"] = UdpHealthCheckValidator().Validate
 	v.FldValidators["health_check.https_health_check"] = HttpHealthCheckValidator().Validate
 	v.FldValidators["health_check.tcp_hex_health_check"] = TcpHexHealthCheckValidator().Validate
-
 	v.FldValidators["dns_lb_pools"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -510,7 +493,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDnsLbPoolsDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
@@ -536,7 +518,6 @@ func (m *GlobalSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDnsLbPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -564,7 +545,6 @@ func (m *GlobalSpecType) GetDnsLbPoolsDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -579,9 +559,7 @@ func (v *ValidateGlobalSpecType) HealthCheckValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for timeout")
@@ -589,9 +567,7 @@ func (v *ValidateGlobalSpecType) TimeoutValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for interval")
@@ -613,9 +589,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_lb_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_lb_pools"))
 		for idx, item := range m.GetDnsLbPools() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -623,7 +597,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["health_check"]; exists {
@@ -703,34 +676,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interval"))
 		if err := fv(ctx, m.GetInterval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timeout"))
 		if err := fv(ctx, m.GetTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -738,7 +702,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHealthCheck := v.HealthCheckValidationRuleHandler
 	rulesHealthCheck := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -773,13 +736,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interval"] = vFn
-
 	v.FldValidators["health_check.http_health_check"] = HttpHealthCheckValidator().Validate
 	v.FldValidators["health_check.tcp_health_check"] = TcpHealthCheckValidator().Validate
 	v.FldValidators["health_check.udp_health_check"] = UdpHealthCheckValidator().Validate
 	v.FldValidators["health_check.https_health_check"] = HttpHealthCheckValidator().Validate
 	v.FldValidators["health_check.tcp_hex_health_check"] = TcpHexHealthCheckValidator().Validate
-
 	v.FldValidators["dns_lb_pools"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -830,8 +791,22 @@ type ValidateHttpHealthCheck struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateHttpHealthCheck) SendValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateHttpHealthCheck) VirtualHostChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_host_choice")
+	}
+	return validatorFn, nil
+}
 
+func (v *ValidateHttpHealthCheck) VirtualHostChoiceVirtualHostValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_VirtualHost, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_host")
+	}
+	return oValidatorFn_VirtualHost, nil
+}
+func (v *ValidateHttpHealthCheck) SendValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for send")
@@ -839,9 +814,7 @@ func (v *ValidateHttpHealthCheck) SendValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHttpHealthCheck) ReceiveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for receive")
@@ -849,9 +822,7 @@ func (v *ValidateHttpHealthCheck) ReceiveValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHttpHealthCheck) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
@@ -859,9 +830,7 @@ func (v *ValidateHttpHealthCheck) HealthCheckPortValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHttpHealthCheck) HealthCheckSecondaryPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_secondary_port")
@@ -883,50 +852,71 @@ func (v *ValidateHttpHealthCheck) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["health_check_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_port"))
 		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_check_secondary_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_secondary_port"))
 		if err := fv(ctx, m.GetHealthCheckSecondaryPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("receive"))
 		if err := fv(ctx, m.GetReceive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["send"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("send"))
 		if err := fv(ctx, m.GetSend(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
+	if fv, exists := v.FldValidators["virtual_host_choice"]; exists {
+		val := m.GetVirtualHostChoice()
+		vOpts := append(opts,
+			db.WithValidateField("virtual_host_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVirtualHostChoice().(type) {
+	case *HttpHealthCheck_DisableVirtualHost:
+		if fv, exists := v.FldValidators["virtual_host_choice.disable_virtual_host"]; exists {
+			val := m.GetVirtualHostChoice().(*HttpHealthCheck_DisableVirtualHost).DisableVirtualHost
+			vOpts := append(opts,
+				db.WithValidateField("virtual_host_choice"),
+				db.WithValidateField("disable_virtual_host"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HttpHealthCheck_VirtualHost:
+		if fv, exists := v.FldValidators["virtual_host_choice.virtual_host"]; exists {
+			val := m.GetVirtualHostChoice().(*HttpHealthCheck_VirtualHost).VirtualHost
+			vOpts := append(opts,
+				db.WithValidateField("virtual_host_choice"),
+				db.WithValidateField("virtual_host"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHttpHealthCheckValidator = func() *ValidateHttpHealthCheck {
 	v := &ValidateHttpHealthCheck{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -934,6 +924,26 @@ var DefaultHttpHealthCheckValidator = func() *ValidateHttpHealthCheck {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhVirtualHostChoice := v.VirtualHostChoiceValidationRuleHandler
+	rulesVirtualHostChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVirtualHostChoice(rulesVirtualHostChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpHealthCheck.virtual_host_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_host_choice"] = vFn
+	vrhVirtualHostChoiceVirtualHost := v.VirtualHostChoiceVirtualHostValidationRuleHandler
+	rulesVirtualHostChoiceVirtualHost := map[string]string{
+		"ves.io.schema.rules.string.max_len": "2048",
+	}
+	vFnMap["virtual_host_choice.virtual_host"], err = vrhVirtualHostChoiceVirtualHost(rulesVirtualHostChoiceVirtualHost)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field HttpHealthCheck.virtual_host_choice_virtual_host: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_host_choice.virtual_host"] = vFnMap["virtual_host_choice.virtual_host"]
 
 	vrhSend := v.SendValidationRuleHandler
 	rulesSend := map[string]string{
@@ -1130,16 +1140,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1147,7 +1154,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHealthCheck := v.HealthCheckValidationRuleHandler
 	rulesHealthCheck := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1158,7 +1164,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["health_check"] = vFn
-
 	v.FldValidators["health_check.http_health_check"] = HttpHealthCheckValidator().Validate
 	v.FldValidators["health_check.tcp_health_check"] = TcpHealthCheckValidator().Validate
 	v.FldValidators["health_check.udp_health_check"] = UdpHealthCheckValidator().Validate
@@ -1214,7 +1219,6 @@ type ValidateTcpHealthCheck struct {
 }
 
 func (v *ValidateTcpHealthCheck) SendValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for send")
@@ -1222,9 +1226,7 @@ func (v *ValidateTcpHealthCheck) SendValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTcpHealthCheck) ReceiveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for receive")
@@ -1232,9 +1234,7 @@ func (v *ValidateTcpHealthCheck) ReceiveValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTcpHealthCheck) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
@@ -1242,9 +1242,7 @@ func (v *ValidateTcpHealthCheck) HealthCheckPortValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTcpHealthCheck) HealthCheckSecondaryPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_secondary_port")
@@ -1266,50 +1264,36 @@ func (v *ValidateTcpHealthCheck) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["health_check_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_port"))
 		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_check_secondary_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_secondary_port"))
 		if err := fv(ctx, m.GetHealthCheckSecondaryPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("receive"))
 		if err := fv(ctx, m.GetReceive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["send"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("send"))
 		if err := fv(ctx, m.GetSend(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTcpHealthCheckValidator = func() *ValidateTcpHealthCheck {
 	v := &ValidateTcpHealthCheck{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1415,7 +1399,6 @@ type ValidateTcpHexHealthCheck struct {
 }
 
 func (v *ValidateTcpHexHealthCheck) SendValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for send")
@@ -1423,9 +1406,7 @@ func (v *ValidateTcpHexHealthCheck) SendValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTcpHexHealthCheck) ReceiveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for receive")
@@ -1433,9 +1414,7 @@ func (v *ValidateTcpHexHealthCheck) ReceiveValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTcpHexHealthCheck) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
@@ -1443,9 +1422,7 @@ func (v *ValidateTcpHexHealthCheck) HealthCheckPortValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateTcpHexHealthCheck) HealthCheckSecondaryPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_secondary_port")
@@ -1467,50 +1444,36 @@ func (v *ValidateTcpHexHealthCheck) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["health_check_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_port"))
 		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_check_secondary_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_secondary_port"))
 		if err := fv(ctx, m.GetHealthCheckSecondaryPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("receive"))
 		if err := fv(ctx, m.GetReceive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["send"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("send"))
 		if err := fv(ctx, m.GetSend(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTcpHexHealthCheckValidator = func() *ValidateTcpHexHealthCheck {
 	v := &ValidateTcpHexHealthCheck{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1617,7 +1580,6 @@ type ValidateUdpHealthCheck struct {
 }
 
 func (v *ValidateUdpHealthCheck) SendValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for send")
@@ -1625,9 +1587,7 @@ func (v *ValidateUdpHealthCheck) SendValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUdpHealthCheck) ReceiveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for receive")
@@ -1635,9 +1595,7 @@ func (v *ValidateUdpHealthCheck) ReceiveValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUdpHealthCheck) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
@@ -1645,9 +1603,7 @@ func (v *ValidateUdpHealthCheck) HealthCheckPortValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUdpHealthCheck) HealthCheckSecondaryPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_secondary_port")
@@ -1669,50 +1625,36 @@ func (v *ValidateUdpHealthCheck) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["health_check_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_port"))
 		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["health_check_secondary_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_check_secondary_port"))
 		if err := fv(ctx, m.GetHealthCheckSecondaryPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("receive"))
 		if err := fv(ctx, m.GetReceive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["send"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("send"))
 		if err := fv(ctx, m.GetSend(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUdpHealthCheckValidator = func() *ValidateUdpHealthCheck {
 	v := &ValidateUdpHealthCheck{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

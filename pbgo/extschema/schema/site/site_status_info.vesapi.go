@@ -42,7 +42,6 @@ func (c *CustomSiteStatusAPIGrpcClient) doRPCCheckSiteExist(ctx context.Context,
 	rsp, err := c.grpcClient.CheckSiteExist(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomSiteStatusAPIGrpcClient) doRPCSiteStatusMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SiteStatusMetricsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomSiteStatusAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CheckSiteExist"] = ccl.doRPCCheckSiteExist
-
 	rpcFns["SiteStatusMetrics"] = ccl.doRPCSiteStatusMetrics
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -175,7 +171,6 @@ func (c *CustomSiteStatusAPIRestClient) doRPCCheckSiteExist(ctx context.Context,
 	pbRsp := &CheckSiteExistResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.CheckSiteExistResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -183,7 +178,6 @@ func (c *CustomSiteStatusAPIRestClient) doRPCCheckSiteExist(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomSiteStatusAPIRestClient) doRPCSiteStatusMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -265,7 +259,6 @@ func (c *CustomSiteStatusAPIRestClient) doRPCSiteStatusMetrics(ctx context.Conte
 	pbRsp := &SiteStatusMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.SiteStatusMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -299,11 +292,8 @@ func NewCustomSiteStatusAPIRestClient(baseURL string, hc http.Client) server.Cus
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CheckSiteExist"] = ccl.doRPCCheckSiteExist
-
 	rpcFns["SiteStatusMetrics"] = ccl.doRPCSiteStatusMetrics
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -388,7 +378,6 @@ func (s *customSiteStatusAPISrv) CheckSiteExist(ctx context.Context, in *CheckSi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.CheckSiteExistResponse", rsp)...)
 
 	return rsp, nil
@@ -437,7 +426,6 @@ func (s *customSiteStatusAPISrv) SiteStatusMetrics(ctx context.Context, in *Site
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.SiteStatusMetricsResponse", rsp)...)
 
 	return rsp, nil

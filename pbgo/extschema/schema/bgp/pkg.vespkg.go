@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.bgp.Object"] = ObjectValidator()
 	vr["ves.io.schema.bgp.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.bgp.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.bgp.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.bgp.DeleteRequest"] = DeleteRequestValidator()
@@ -28,11 +26,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.bgp.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.bgp.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.bgp.GetStatusRequest"] = GetStatusRequestValidator()
 	vr["ves.io.schema.bgp.GetStatusResponse"] = GetStatusResponseValidator()
-
+	vr["ves.io.schema.bgp.AggregationIPv4"] = AggregationIPv4Validator()
+	vr["ves.io.schema.bgp.AggregationIPv6"] = AggregationIPv6Validator()
+	vr["ves.io.schema.bgp.AggregationOption"] = AggregationOptionValidator()
 	vr["ves.io.schema.bgp.BFD"] = BFDValidator()
+	vr["ves.io.schema.bgp.BfdPeerStatusType"] = BfdPeerStatusTypeValidator()
 	vr["ves.io.schema.bgp.BgpParameters"] = BgpParametersValidator()
 	vr["ves.io.schema.bgp.BgpPeer"] = BgpPeerValidator()
 	vr["ves.io.schema.bgp.BgpPeerStatusType"] = BgpPeerStatusTypeValidator()
@@ -56,7 +56,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp.PeerFamilyParameters"] = PeerFamilyParametersValidator()
 	vr["ves.io.schema.bgp.PeerInternal"] = PeerInternalValidator()
 	vr["ves.io.schema.bgp.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
+	vr["ves.io.schema.bgp.UnicastIPv4"] = UnicastIPv4Validator()
+	vr["ves.io.schema.bgp.UnicastIPv6"] = UnicastIPv6Validator()
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -68,11 +69,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.bgp.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.bgp.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.bgp.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.address_choice_v6.address_ipv6",
@@ -99,7 +98,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.bgp.API.Create"] = []string{
 		"spec.bgp_parameters.bgp_router_id",
 		"spec.bgp_parameters.bgp_router_id_key",
@@ -112,7 +110,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.peers.#.external.address_choice_v6",
@@ -123,7 +120,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.peers.#.external.address_choice_v6",
@@ -134,9 +130,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.API.Create"] = "ves.io.schema.bgp.CreateRequest"
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.peers.#.external.address_choice_v6",
@@ -163,7 +157,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.peers.#.external.address_choice_v6",
@@ -174,7 +167,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.bgp.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.address_choice_v6.address_ipv6",
@@ -201,7 +193,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.bgp.API.Replace"] = []string{
 		"spec.bgp_parameters.bgp_router_id",
 		"spec.bgp_parameters.bgp_router_id_key",
@@ -214,7 +205,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.peers.#.external.address_choice_v6",
@@ -225,24 +215,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.API.Replace"] = "ves.io.schema.bgp.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.bgp.API"] = "config"
 	sm["ves.io.schema.bgp.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -251,9 +236,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.bgp.Object"] = APISwaggerJSON
@@ -267,16 +250,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.bgp.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.bgp.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.bgp.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.bgp.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.bgp.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.bgp.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -287,22 +265,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.bgp.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

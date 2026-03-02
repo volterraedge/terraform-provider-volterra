@@ -44,7 +44,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCCreateTicket(ctx context.Context, yamlRe
 	rsp, err := c.grpcClient.CreateTicket(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPICallSummary(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetAPICallSummaryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -53,7 +52,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPICallSummary(ctx context.Context, y
 	rsp, err := c.grpcClient.GetAPICallSummary(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEPSourceOpenApiSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEPSourceOpenApiSchemaReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -62,7 +60,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEPSourceOpenApiSchema(ctx context.
 	rsp, err := c.grpcClient.GetAPIEPSourceOpenApiSchema(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpoint(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEndpointReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -71,7 +68,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpoint(ctx context.Context, yaml
 	rsp, err := c.grpcClient.GetAPIEndpoint(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpointLearntSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEndpointLearntSchemaReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -80,7 +76,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpointLearntSchema(ctx context.C
 	rsp, err := c.grpcClient.GetAPIEndpointLearntSchema(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpointPDF(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEndpointPDFReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -89,7 +84,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpointPDF(ctx context.Context, y
 	rsp, err := c.grpcClient.GetAPIEndpointPDF(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpoints(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEndpointsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -98,7 +92,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpoints(ctx context.Context, yam
 	rsp, err := c.grpcClient.GetAPIEndpoints(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetAPIEndpointsSchemaUpdatesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -107,7 +100,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context
 	rsp, err := c.grpcClient.GetAPIEndpointsSchemaUpdates(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetApiEndpointsStats(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ApiEndpointsStatsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -116,7 +108,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetApiEndpointsStats(ctx context.Context
 	rsp, err := c.grpcClient.GetApiEndpointsStats(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SwaggerSpecReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -125,7 +116,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yaml
 	rsp, err := c.grpcClient.GetSwaggerSpec(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetTopAPIEndpoints(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetTopAPIEndpointsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -134,7 +124,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetTopAPIEndpoints(ctx context.Context, 
 	rsp, err := c.grpcClient.GetTopAPIEndpoints(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetTopSensitiveData(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetTopSensitiveDataReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -143,7 +132,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetTopSensitiveData(ctx context.Context,
 	rsp, err := c.grpcClient.GetTopSensitiveData(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCGetVulnerabilities(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetVulnerabilitiesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -152,7 +140,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetVulnerabilities(ctx context.Context, 
 	rsp, err := c.grpcClient.GetVulnerabilities(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCUnlinkTickets(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnlinkTicketsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -161,7 +148,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCUnlinkTickets(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.UnlinkTickets(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCUnmergeAPIEPSourceOpenApiSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnmergeAPIEPSourceOpenApiSchemaReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -170,7 +156,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCUnmergeAPIEPSourceOpenApiSchema(ctx cont
 	rsp, err := c.grpcClient.UnmergeAPIEPSourceOpenApiSchema(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateAPIEndpointsSchemasReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -179,7 +164,6 @@ func (c *ApiepCustomAPIGrpcClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Co
 	rsp, err := c.grpcClient.UpdateAPIEndpointsSchemas(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepCustomAPIGrpcClient) doRPCUpdateVulnerabilitiesState(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateVulnerabilitiesStateReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -220,41 +204,23 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CreateTicket"] = ccl.doRPCCreateTicket
-
 	rpcFns["GetAPICallSummary"] = ccl.doRPCGetAPICallSummary
-
 	rpcFns["GetAPIEPSourceOpenApiSchema"] = ccl.doRPCGetAPIEPSourceOpenApiSchema
-
 	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
-
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
-
 	rpcFns["GetAPIEndpointPDF"] = ccl.doRPCGetAPIEndpointPDF
-
 	rpcFns["GetAPIEndpoints"] = ccl.doRPCGetAPIEndpoints
-
 	rpcFns["GetAPIEndpointsSchemaUpdates"] = ccl.doRPCGetAPIEndpointsSchemaUpdates
-
 	rpcFns["GetApiEndpointsStats"] = ccl.doRPCGetApiEndpointsStats
-
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
-
 	rpcFns["GetTopAPIEndpoints"] = ccl.doRPCGetTopAPIEndpoints
-
 	rpcFns["GetTopSensitiveData"] = ccl.doRPCGetTopSensitiveData
-
 	rpcFns["GetVulnerabilities"] = ccl.doRPCGetVulnerabilities
-
 	rpcFns["UnlinkTickets"] = ccl.doRPCUnlinkTickets
-
 	rpcFns["UnmergeAPIEPSourceOpenApiSchema"] = ccl.doRPCUnmergeAPIEPSourceOpenApiSchema
-
 	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
-
 	rpcFns["UpdateVulnerabilitiesState"] = ccl.doRPCUpdateVulnerabilitiesState
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -344,7 +310,6 @@ func (c *ApiepCustomAPIRestClient) doRPCCreateTicket(ctx context.Context, callOp
 	pbRsp := &CreateTicketResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.CreateTicketResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -352,7 +317,6 @@ func (c *ApiepCustomAPIRestClient) doRPCCreateTicket(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetAPICallSummary(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -429,7 +393,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPICallSummary(ctx context.Context, c
 	pbRsp := &GetAPICallSummaryRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetAPICallSummaryRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -437,7 +400,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPICallSummary(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetAPIEPSourceOpenApiSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -517,7 +479,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEPSourceOpenApiSchema(ctx context.
 	pbRsp := &APIEPSourceOpenApiSchemaRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -525,7 +486,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEPSourceOpenApiSchema(ctx context.
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoint(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -609,7 +569,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoint(ctx context.Context, call
 	pbRsp := &APIEndpointRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -617,7 +576,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoint(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -701,7 +659,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.C
 	pbRsp := &APIEndpointLearntSchemaRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -709,7 +666,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.C
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointPDF(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -787,7 +743,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointPDF(ctx context.Context, c
 	pbRsp := &APIEndpointPDFRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointPDFRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -795,7 +750,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointPDF(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -882,7 +836,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 	pbRsp := &APIEndpointsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -890,7 +843,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -970,7 +922,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context
 	pbRsp := &GetAPIEndpointsSchemaUpdatesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetAPIEndpointsSchemaUpdatesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -978,7 +929,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetApiEndpointsStats(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1054,7 +1004,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetApiEndpointsStats(ctx context.Context
 	pbRsp := &ApiEndpointsStatsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.ApiEndpointsStatsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1062,7 +1011,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetApiEndpointsStats(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1143,7 +1091,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, call
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1151,7 +1098,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetTopAPIEndpoints(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1230,7 +1176,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetTopAPIEndpoints(ctx context.Context, 
 	pbRsp := &GetTopAPIEndpointsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetTopAPIEndpointsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1238,7 +1183,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetTopAPIEndpoints(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetTopSensitiveData(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1321,7 +1265,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetTopSensitiveData(ctx context.Context,
 	pbRsp := &GetTopSensitiveDataRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetTopSensitiveDataRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1329,7 +1272,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetTopSensitiveData(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCGetVulnerabilities(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1409,7 +1351,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetVulnerabilities(ctx context.Context, 
 	pbRsp := &GetVulnerabilitiesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetVulnerabilitiesRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1417,7 +1358,6 @@ func (c *ApiepCustomAPIRestClient) doRPCGetVulnerabilities(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCUnlinkTickets(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1494,7 +1434,6 @@ func (c *ApiepCustomAPIRestClient) doRPCUnlinkTickets(ctx context.Context, callO
 	pbRsp := &UnlinkTicketsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.UnlinkTicketsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1502,7 +1441,6 @@ func (c *ApiepCustomAPIRestClient) doRPCUnlinkTickets(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCUnmergeAPIEPSourceOpenApiSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1580,7 +1518,6 @@ func (c *ApiepCustomAPIRestClient) doRPCUnmergeAPIEPSourceOpenApiSchema(ctx cont
 	pbRsp := &google_protobuf.Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *google.protobuf.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1588,7 +1525,6 @@ func (c *ApiepCustomAPIRestClient) doRPCUnmergeAPIEPSourceOpenApiSchema(ctx cont
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1667,7 +1603,6 @@ func (c *ApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Co
 	pbRsp := &UpdateAPIEndpointsSchemasResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1675,7 +1610,6 @@ func (c *ApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Co
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepCustomAPIRestClient) doRPCUpdateVulnerabilitiesState(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1755,7 +1689,6 @@ func (c *ApiepCustomAPIRestClient) doRPCUpdateVulnerabilitiesState(ctx context.C
 	pbRsp := &UpdateVulnerabilitiesStateRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.UpdateVulnerabilitiesStateRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1789,41 +1722,23 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CreateTicket"] = ccl.doRPCCreateTicket
-
 	rpcFns["GetAPICallSummary"] = ccl.doRPCGetAPICallSummary
-
 	rpcFns["GetAPIEPSourceOpenApiSchema"] = ccl.doRPCGetAPIEPSourceOpenApiSchema
-
 	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
-
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
-
 	rpcFns["GetAPIEndpointPDF"] = ccl.doRPCGetAPIEndpointPDF
-
 	rpcFns["GetAPIEndpoints"] = ccl.doRPCGetAPIEndpoints
-
 	rpcFns["GetAPIEndpointsSchemaUpdates"] = ccl.doRPCGetAPIEndpointsSchemaUpdates
-
 	rpcFns["GetApiEndpointsStats"] = ccl.doRPCGetApiEndpointsStats
-
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
-
 	rpcFns["GetTopAPIEndpoints"] = ccl.doRPCGetTopAPIEndpoints
-
 	rpcFns["GetTopSensitiveData"] = ccl.doRPCGetTopSensitiveData
-
 	rpcFns["GetVulnerabilities"] = ccl.doRPCGetVulnerabilities
-
 	rpcFns["UnlinkTickets"] = ccl.doRPCUnlinkTickets
-
 	rpcFns["UnmergeAPIEPSourceOpenApiSchema"] = ccl.doRPCUnmergeAPIEPSourceOpenApiSchema
-
 	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
-
 	rpcFns["UpdateVulnerabilitiesState"] = ccl.doRPCUpdateVulnerabilitiesState
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1968,7 +1883,6 @@ func (s *apiepCustomAPISrv) CreateTicket(ctx context.Context, in *CreateTicketRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.CreateTicketResponse", rsp)...)
 
 	return rsp, nil
@@ -2017,7 +1931,6 @@ func (s *apiepCustomAPISrv) GetAPICallSummary(ctx context.Context, in *GetAPICal
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetAPICallSummaryRsp", rsp)...)
 
 	return rsp, nil
@@ -2066,7 +1979,6 @@ func (s *apiepCustomAPISrv) GetAPIEPSourceOpenApiSchema(ctx context.Context, in 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaRsp", rsp)...)
 
 	return rsp, nil
@@ -2115,7 +2027,6 @@ func (s *apiepCustomAPISrv) GetAPIEndpoint(ctx context.Context, in *APIEndpointR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEndpointRsp", rsp)...)
 
 	return rsp, nil
@@ -2164,7 +2075,6 @@ func (s *apiepCustomAPISrv) GetAPIEndpointLearntSchema(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp", rsp)...)
 
 	return rsp, nil
@@ -2213,7 +2123,6 @@ func (s *apiepCustomAPISrv) GetAPIEndpointPDF(ctx context.Context, in *APIEndpoi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEndpointPDFRsp", rsp)...)
 
 	return rsp, nil
@@ -2262,7 +2171,6 @@ func (s *apiepCustomAPISrv) GetAPIEndpoints(ctx context.Context, in *APIEndpoint
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEndpointsRsp", rsp)...)
 
 	return rsp, nil
@@ -2311,7 +2219,6 @@ func (s *apiepCustomAPISrv) GetAPIEndpointsSchemaUpdates(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetAPIEndpointsSchemaUpdatesResp", rsp)...)
 
 	return rsp, nil
@@ -2360,7 +2267,6 @@ func (s *apiepCustomAPISrv) GetApiEndpointsStats(ctx context.Context, in *ApiEnd
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.ApiEndpointsStatsRsp", rsp)...)
 
 	return rsp, nil
@@ -2409,7 +2315,6 @@ func (s *apiepCustomAPISrv) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -2458,7 +2363,6 @@ func (s *apiepCustomAPISrv) GetTopAPIEndpoints(ctx context.Context, in *GetTopAP
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetTopAPIEndpointsRsp", rsp)...)
 
 	return rsp, nil
@@ -2507,7 +2411,6 @@ func (s *apiepCustomAPISrv) GetTopSensitiveData(ctx context.Context, in *GetTopS
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetTopSensitiveDataRsp", rsp)...)
 
 	return rsp, nil
@@ -2556,7 +2459,6 @@ func (s *apiepCustomAPISrv) GetVulnerabilities(ctx context.Context, in *GetVulne
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetVulnerabilitiesRsp", rsp)...)
 
 	return rsp, nil
@@ -2605,7 +2507,6 @@ func (s *apiepCustomAPISrv) UnlinkTickets(ctx context.Context, in *UnlinkTickets
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.UnlinkTicketsResponse", rsp)...)
 
 	return rsp, nil
@@ -2654,7 +2555,6 @@ func (s *apiepCustomAPISrv) UnmergeAPIEPSourceOpenApiSchema(ctx context.Context,
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.protobuf.Empty", rsp)...)
 
 	return rsp, nil
@@ -2703,7 +2603,6 @@ func (s *apiepCustomAPISrv) UpdateAPIEndpointsSchemas(ctx context.Context, in *U
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasResp", rsp)...)
 
 	return rsp, nil
@@ -2752,7 +2651,6 @@ func (s *apiepCustomAPISrv) UpdateVulnerabilitiesState(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.UpdateVulnerabilitiesStateRsp", rsp)...)
 
 	return rsp, nil
@@ -2766,7 +2664,7 @@ var ApiepCustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Virtual host",
-        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is \nreverse proxy.  Virtual host object is used to create a Loadbalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTerminology\n\nDownstream: A downstream host connects to F5XC ADC, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from F5XC ADC and returns responses.",
+        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is\nreverse proxy.  Virtual host object is used to create a Loadbalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTerminology\n\nDownstream: A downstream host connects to F5XC ADC, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from F5XC ADC and returns responses.",
         "version": "version not set"
     },
     "schemes": [
@@ -4811,6 +4709,15 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-displayname": "HTTP Method",
                     "x-ves-example": "GET"
                 },
+                "owasp_categories": {
+                    "type": "array",
+                    "description": " Categories of the vulnerability as per the OWASP API Top 10",
+                    "title": "owasp_categories",
+                    "items": {
+                        "$ref": "#/definitions/schemaOwaspCategory"
+                    },
+                    "x-displayname": "OWASP Categories"
+                },
                 "pdf_info": {
                     "description": " Metrics supported currently are request_size response_size latency_with_data, latency_no_data, request_rate, error_rate, response_throughput.\n PDF is calculated for each combination of (Tenant, App type, API endpoint).\n API endpoint is determined from automatically identified API (collapsed_url) and method.",
                     "title": "Probability Density Function",
@@ -5560,6 +5467,29 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-displayname": "HTTP Response Code Class",
             "x-ves-proto-enum": "ves.io.schema.HttpResponseCodeClass"
         },
+        "schemaOwaspCategory": {
+            "type": "object",
+            "description": "Represents a category of vulnerability as defined in the OWASP API Top 10",
+            "title": "OWASP Category",
+            "x-displayname": "OWASP Category",
+            "x-ves-proto-message": "ves.io.schema.OwaspCategory",
+            "properties": {
+                "link_to_owasp": {
+                    "type": "string",
+                    "description": " Link to the OWASP documentation for this category\n\nExample: - \"https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/\"-",
+                    "title": "OWASP reference link",
+                    "x-displayname": "OWASP Reference Link",
+                    "x-ves-example": "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of the OWASP API security category\n\nExample: - \"API1:2023\"-",
+                    "title": "Category name",
+                    "x-displayname": "Category Name",
+                    "x-ves-example": "API1:2023"
+                }
+            }
+        },
         "schemavirtual_hostAPIEndpoint": {
             "type": "object",
             "description": "APIEndpoint Object.",
@@ -5640,7 +5570,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-displayname": "Issue Type"
                 },
                 "project": {
-                    "description": " external ID of the project ",
+                    "description": " external ID of the project",
                     "title": "project",
                     "$ref": "#/definitions/ticket_managementJiraProject",
                     "x-displayname": "Project"
@@ -6275,7 +6205,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 },
                 "project": {
                     "type": "string",
-                    "description": " external ID of the project \n\nExample: - \"10001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " external ID of the project\n\nExample: - \"10001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "project",
                     "maxLength": 256,
                     "x-displayname": "Project",
@@ -7230,6 +7160,15 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "title": "last_observed_time",
                     "format": "date-time",
                     "x-displayname": "Last Observed Time"
+                },
+                "owasp_categories": {
+                    "type": "array",
+                    "description": " Categories of the vulnerability as per the OWASP API Top 10",
+                    "title": "owasp_categories",
+                    "items": {
+                        "$ref": "#/definitions/schemaOwaspCategory"
+                    },
+                    "x-displayname": "OWASP Categories"
                 },
                 "remediation": {
                     "type": "array",

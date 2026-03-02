@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_firewall.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.app_firewall.Object"] = ObjectValidator()
 	vr["ves.io.schema.app_firewall.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.app_firewall.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.app_firewall.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.app_firewall.DeleteRequest"] = DeleteRequestValidator()
@@ -28,12 +26,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_firewall.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.app_firewall.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.app_firewall.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.app_firewall.MetricData"] = MetricDataValidator()
 	vr["ves.io.schema.app_firewall.MetricTypeData"] = MetricTypeDataValidator()
 	vr["ves.io.schema.app_firewall.MetricsRequest"] = MetricsRequestValidator()
 	vr["ves.io.schema.app_firewall.MetricsResponse"] = MetricsResponseValidator()
-
+	vr["ves.io.schema.app_firewall.AIEnhancementsConfig"] = AIEnhancementsConfigValidator()
 	vr["ves.io.schema.app_firewall.AiRiskBasedBlocking"] = AiRiskBasedBlockingValidator()
 	vr["ves.io.schema.app_firewall.AllowedResponseCodes"] = AllowedResponseCodesValidator()
 	vr["ves.io.schema.app_firewall.AnonymizationConfiguration"] = AnonymizationConfigurationValidator()
@@ -51,8 +48,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_firewall.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.app_firewall.SignatureSelectionSetting"] = SignatureSelectionSettingValidator()
 	vr["ves.io.schema.app_firewall.SignaturesStagingSettings"] = SignaturesStagingSettingsValidator()
+	vr["ves.io.schema.app_firewall.ViolationConfigView"] = ViolationConfigViewValidator()
+	vr["ves.io.schema.app_firewall.ViolationConfiguration"] = ViolationConfigurationValidator()
 	vr["ves.io.schema.app_firewall.ViolationSettings"] = ViolationSettingsValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -64,34 +62,31 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.app_firewall.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.app_firewall.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.app_firewall.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_firewall.API.Create"] = []string{
+		"spec.ai_risk_based_blocking",
+		"spec.detection_settings.configured_violations.#",
 		"spec.use_loadbalancer_setting",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_firewall.API.Replace"] = []string{
+		"spec.ai_risk_based_blocking",
+		"spec.detection_settings.configured_violations.#",
 		"spec.use_loadbalancer_setting",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.app_firewall.API"] = "config"
 	sm["ves.io.schema.app_firewall.CustomDataAPI"] = "data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -100,9 +95,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.app_firewall.Object"] = APISwaggerJSON
@@ -116,16 +109,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.app_firewall.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.app_firewall.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.app_firewall.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.app_firewall.Object"] = CustomDataAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.app_firewall.CustomDataAPI"] = NewCustomDataAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.app_firewall.CustomDataAPI"] = NewCustomDataAPIRestClient
 		if isExternal {
@@ -136,22 +124,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_firewall.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

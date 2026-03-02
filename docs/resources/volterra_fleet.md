@@ -31,7 +31,7 @@ resource "volterra_fleet" "example" {
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
 
-  disable_gpu = true
+  enable_gpu = true
 
   // One of the arguments from this list "default_config device_list interface_list" must be set
 
@@ -49,7 +49,15 @@ resource "volterra_fleet" "example" {
 
   // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
 
-  default_sriov_interface = true
+  sriov_interfaces {
+    sriov_interface {
+      interface_name = "eth0"
+
+      number_of_vfio_vfs = "2"
+
+      number_of_vfs = "3"
+    }
+  }
 
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
 
@@ -57,7 +65,80 @@ resource "volterra_fleet" "example" {
 
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
 
-  no_storage_device = true
+  storage_device_list {
+    storage_devices {
+      advanced_advanced_parameters = {
+        "key1" = "value1"
+      }
+
+      // One of the arguments from this list "custom_storage hpe_storage netapp_trident pure_service_orchestrator" must be set
+
+      hpe_storage {
+        api_server_port = "8080"
+
+        csi_version = "2.2.0"
+
+        iscsi_chap_password {
+          blindfold_secret_info_internal {
+            decryption_provider = "value"
+
+            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+            store_provider = "value"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
+
+          vault_secret_info {
+            key = "key_pem"
+
+            location = "v1/data/vhost_key"
+
+            provider = "vault-vh-provider"
+
+            secret_encoding = "secret_encoding"
+
+            version = "1"
+          }
+        }
+
+        iscsi_chap_user = "admin"
+
+        log_level = "info"
+
+        password {
+          blindfold_secret_info_internal {
+            decryption_provider = "value"
+
+            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+            store_provider = "value"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
+
+          blindfold_secret_info {
+            decryption_provider = "value"
+
+            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+            store_provider = "value"
+          }
+        }
+
+        storage_server_ip_address = "10.10.10.10"
+
+        storage_server_name = "hpe-backend"
+
+        username = "admin"
+      }
+      storage_device = "DellEMC-isilon-F800-0"
+    }
+  }
 
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
 
@@ -69,13 +150,8 @@ resource "volterra_fleet" "example" {
 
   // One of the arguments from this list "allow_all_usb deny_all_usb usb_policy" must be set
 
-  usb_policy {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  deny_all_usb = true
 }
-
 ```
 
 Argument Reference
@@ -231,7 +307,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Api Token Blindfold Secret Info Internal
 
@@ -943,6 +1019,14 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 x-displayName: "Enabled".
 
+### Perf Mode Choice Jumbo Disabled
+
+x-displayName: "Disabled".
+
+### Perf Mode Choice Jumbo Enabled
+
+x-displayName: "Enabled".
+
 ### Perf Mode Choice No Jumbo
 
 x-displayName: "Disabled".
@@ -960,6 +1044,12 @@ Site optimized for L3 traffic processing.
 ### Perf Mode Choice Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
+
+###### One of the arguments from this list "jumbo_disabled, jumbo_enabled" must be set
+
+`jumbo_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
+`jumbo_enabled` - (Optional) x-displayName: "Enabled" (`Bool`).
 
 ### Pure Service Orchestrator Arrays
 
@@ -1250,4 +1340,4 @@ VMs support is enabled for this fleet.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured fleet.
+*   `id` - This is the id of the configured fleet.

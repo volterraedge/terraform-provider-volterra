@@ -70,21 +70,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCertificatesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCertificatesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVirtualHostsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualHostsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -109,7 +105,6 @@ func (m *GlobalSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAdvertisePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -128,7 +123,6 @@ func (m *GlobalSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -154,7 +148,6 @@ func (m *GlobalSpecType) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCertificatesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -173,7 +166,6 @@ func (m *GlobalSpecType) GetCertificatesDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -199,7 +191,6 @@ func (m *GlobalSpecType) GetVirtualHostsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualHostsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -218,7 +209,6 @@ func (m *GlobalSpecType) GetVirtualHostsDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -239,9 +229,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["advertise_policies"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("advertise_policies"))
 		for idx, item := range m.GetAdvertisePolicies() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -249,20 +237,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_url"))
 		if err := fv(ctx, m.GetCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certificates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificates"))
 		for idx, item := range m.GetCertificates() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -270,38 +252,26 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ocsp_response_base64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ocsp_response_base64"))
 		if err := fv(ctx, m.GetOcspResponseBase64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ocsp_response_sha1_base64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ocsp_response_sha1_base64"))
 		if err := fv(ctx, m.GetOcspResponseSha1Base64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ocsp_response_sha256_base64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ocsp_response_sha256_base64"))
 		if err := fv(ctx, m.GetOcspResponseSha256Base64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_hosts"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_hosts"))
 		for idx, item := range m.GetVirtualHosts() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -309,9 +279,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

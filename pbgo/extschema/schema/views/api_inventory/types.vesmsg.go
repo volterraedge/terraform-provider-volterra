@@ -75,43 +75,35 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetApiDiscoveryDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiDiscoveryDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCrawlerRefDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCrawlerRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSelectedCodeBaseIntegrationsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSelectedCodeBaseIntegrationsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSensitiveDataPolicyRefDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSensitiveDataPolicyRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetApiDefinitionRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetApiDefinitionRef()
 	if vref == nil {
 		return nil, nil
@@ -127,7 +119,6 @@ func (m *GlobalSpecType) GetApiDefinitionRefDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetApiDefinitionRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -137,7 +128,6 @@ func (m *GlobalSpecType) GetApiDefinitionRefDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: api_definition")
 	}
-
 	vref := m.GetApiDefinitionRef()
 	if vref == nil {
 		return nil, nil
@@ -155,12 +145,10 @@ func (m *GlobalSpecType) GetApiDefinitionRefDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetApiDiscoveryDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetApiDiscovery()
 	if vref == nil {
 		return nil, nil
@@ -176,7 +164,6 @@ func (m *GlobalSpecType) GetApiDiscoveryDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetApiDiscoveryDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -186,7 +173,6 @@ func (m *GlobalSpecType) GetApiDiscoveryDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: api_discovery")
 	}
-
 	vref := m.GetApiDiscovery()
 	if vref == nil {
 		return nil, nil
@@ -204,12 +190,10 @@ func (m *GlobalSpecType) GetApiDiscoveryDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetCrawlerRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCrawlerRef()
 	if vref == nil {
 		return nil, nil
@@ -225,7 +209,6 @@ func (m *GlobalSpecType) GetCrawlerRefDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCrawlerRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -235,7 +218,6 @@ func (m *GlobalSpecType) GetCrawlerRefDBEntries(ctx context.Context, d db.Interf
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: api_crawler")
 	}
-
 	vref := m.GetCrawlerRef()
 	if vref == nil {
 		return nil, nil
@@ -253,7 +235,6 @@ func (m *GlobalSpecType) GetCrawlerRefDBEntries(ctx context.Context, d db.Interf
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -262,7 +243,6 @@ func (m *GlobalSpecType) GetSelectedCodeBaseIntegrationsDRefInfo() ([]db.DRefInf
 	if m.GetSelectedCodeBaseIntegrations() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSelectedCodeBaseIntegrations() {
 		driSet, err := e.GetDRefInfo()
@@ -276,11 +256,9 @@ func (m *GlobalSpecType) GetSelectedCodeBaseIntegrationsDRefInfo() ([]db.DRefInf
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetSensitiveDataPolicyRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSensitiveDataPolicyRef()
 	if vref == nil {
 		return nil, nil
@@ -296,7 +274,6 @@ func (m *GlobalSpecType) GetSensitiveDataPolicyRefDRefInfo() ([]db.DRefInfo, err
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSensitiveDataPolicyRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -306,7 +283,6 @@ func (m *GlobalSpecType) GetSensitiveDataPolicyRefDBEntries(ctx context.Context,
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: sensitive_data_policy")
 	}
-
 	vref := m.GetSensitiveDataPolicyRef()
 	if vref == nil {
 		return nil, nil
@@ -324,12 +300,10 @@ func (m *GlobalSpecType) GetSensitiveDataPolicyRefDBEntries(ctx context.Context,
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -345,7 +319,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -355,7 +328,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -373,7 +345,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -394,36 +365,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_definition_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_definition_ref"))
 		if err := fv(ctx, m.GetApiDefinitionRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_discovery"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery"))
 		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["crawler_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("crawler_ref"))
 		if err := fv(ctx, m.GetCrawlerRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_api_groups_builders"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_api_groups_builders"))
 		for idx, item := range m.GetInternalApiGroupsBuilders() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -431,11 +391,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["selected_code_base_integrations"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("selected_code_base_integrations"))
 		for idx, item := range m.GetSelectedCodeBaseIntegrations() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -443,46 +400,31 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sensitive_data_policy_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sensitive_data_policy_ref"))
 		if err := fv(ctx, m.GetSensitiveDataPolicyRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["internal_api_groups_builders"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
-
 	v.FldValidators["api_definition_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["sensitive_data_policy_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["selected_code_base_integrations"] = ves_io_schema_views_common_waf.CodeBaseIntegrationSelectionValidator().Validate
-
 	v.FldValidators["crawler_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["api_discovery"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

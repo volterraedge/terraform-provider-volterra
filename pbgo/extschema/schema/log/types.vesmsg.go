@@ -76,16 +76,12 @@ func (v *ValidateAvgAggregationData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,25 +150,18 @@ func (v *ValidateCardinalityAggregationData) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trend_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trend_value"))
 		if err := fv(ctx, m.GetTrendValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -241,18 +230,13 @@ func (v *ValidateDateAggregationBucket) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		for key, value := range m.GetSubAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -260,27 +244,19 @@ func (v *ValidateDateAggregationBucket) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("time"))
 		if err := fv(ctx, m.GetTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trend_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trend_value"))
 		if err := fv(ctx, m.GetTrendValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -337,7 +313,6 @@ type ValidateDateAggregationData struct {
 }
 
 func (v *ValidateDateAggregationData) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
@@ -359,9 +334,7 @@ func (v *ValidateDateAggregationData) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["buckets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("buckets"))
 		for idx, item := range m.GetBuckets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -369,25 +342,19 @@ func (v *ValidateDateAggregationData) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["step"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("step"))
 		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDateAggregationDataValidator = func() *ValidateDateAggregationData {
 	v := &ValidateDateAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -468,25 +435,18 @@ func (v *ValidateDateSubAggregationData) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_aggregation"))
 		if err := fv(ctx, m.GetFieldAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["multi_field_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multi_field_aggregation"))
 		if err := fv(ctx, m.GetMultiFieldAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -555,36 +515,25 @@ func (v *ValidateFieldAggregationBucket) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["order_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("order_by"))
 		if err := fv(ctx, m.GetOrderBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		for key, value := range m.GetSubAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -592,18 +541,13 @@ func (v *ValidateFieldAggregationBucket) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trend_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trend_value"))
 		if err := fv(ctx, m.GetTrendValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -672,9 +616,7 @@ func (v *ValidateFieldAggregationData) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["buckets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("buckets"))
 		for idx, item := range m.GetBuckets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -682,9 +624,7 @@ func (v *ValidateFieldAggregationData) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -753,34 +693,24 @@ func (v *ValidateFieldSubAggregationBucket) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["order_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("order_by"))
 		if err := fv(ctx, m.GetOrderBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -849,18 +779,13 @@ func (v *ValidateFieldSubAggregationData) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["avg_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("avg_aggregation"))
 		if err := fv(ctx, m.GetAvgAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["buckets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("buckets"))
 		for idx, item := range m.GetBuckets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -868,54 +793,37 @@ func (v *ValidateFieldSubAggregationData) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cardinality_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cardinality_aggregation"))
 		if err := fv(ctx, m.GetCardinalityAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filter_aggregation"))
 		if err := fv(ctx, m.GetFilterAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_aggregation"))
 		if err := fv(ctx, m.GetMaxAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_aggregation"))
 		if err := fv(ctx, m.GetMinAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["multi_filter_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multi_filter_aggregation"))
 		if err := fv(ctx, m.GetMultiFilterAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -984,25 +892,18 @@ func (v *ValidateFieldSubFieldAggregationBucket) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1071,9 +972,7 @@ func (v *ValidateFieldSubFieldAggregationData) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["buckets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("buckets"))
 		for idx, item := range m.GetBuckets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1081,9 +980,7 @@ func (v *ValidateFieldSubFieldAggregationData) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1152,18 +1049,13 @@ func (v *ValidateFilterAggregationData) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		for key, value := range m.GetSubAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1171,9 +1063,7 @@ func (v *ValidateFilterAggregationData) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1242,9 +1132,7 @@ func (v *ValidateFilterSubAggregationData) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["buckets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("buckets"))
 		for idx, item := range m.GetBuckets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1252,9 +1140,7 @@ func (v *ValidateFilterSubAggregationData) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1323,27 +1209,19 @@ func (v *ValidateFilterSubFieldAggregationBucket) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		for key, value := range m.GetSubAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1351,9 +1229,7 @@ func (v *ValidateFilterSubFieldAggregationBucket) Validate(ctx context.Context, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1422,104 +1298,72 @@ func (v *ValidateLogAggregationData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["avg_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("avg_aggregation"))
 		if err := fv(ctx, m.GetAvgAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cardinality_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cardinality_aggregation"))
 		if err := fv(ctx, m.GetCardinalityAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["date_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("date_aggregation"))
 		if err := fv(ctx, m.GetDateAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["field_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_aggregation"))
 		if err := fv(ctx, m.GetFieldAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["filter_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("filter_aggregation"))
 		if err := fv(ctx, m.GetFilterAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_aggregation"))
 		if err := fv(ctx, m.GetMaxAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metrics_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metrics_aggregation"))
 		if err := fv(ctx, m.GetMetricsAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_aggregation"))
 		if err := fv(ctx, m.GetMinAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["multi_field_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multi_field_aggregation"))
 		if err := fv(ctx, m.GetMultiFieldAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["multi_filter_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multi_filter_aggregation"))
 		if err := fv(ctx, m.GetMultiFilterAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLogAggregationDataValidator = func() *ValidateLogAggregationData {
 	v := &ValidateLogAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["date_aggregation"] = DateAggregationDataValidator().Validate
 
 	return v
@@ -1583,16 +1427,12 @@ func (v *ValidateMaxAggregationData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1674,9 +1514,7 @@ func (v *ValidateMetricsAggregationData) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1745,16 +1583,12 @@ func (v *ValidateMinAggregationData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1823,18 +1657,13 @@ func (v *ValidateMultiFieldAggregationBucket) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["keys"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("keys"))
 		for key, value := range m.GetKeys() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1842,20 +1671,14 @@ func (v *ValidateMultiFieldAggregationBucket) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["order_by"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("order_by"))
 		if err := fv(ctx, m.GetOrderBy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sub_aggs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sub_aggs"))
 		for key, value := range m.GetSubAggs() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1863,9 +1686,7 @@ func (v *ValidateMultiFieldAggregationBucket) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1934,9 +1755,7 @@ func (v *ValidateMultiFieldAggregationData) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["buckets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("buckets"))
 		for idx, item := range m.GetBuckets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1944,9 +1763,7 @@ func (v *ValidateMultiFieldAggregationData) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2015,52 +1832,36 @@ func (v *ValidateMultiFieldSubAggregationData) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["avg_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("avg_aggregation"))
 		if err := fv(ctx, m.GetAvgAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cardinality_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cardinality_aggregation"))
 		if err := fv(ctx, m.GetCardinalityAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["max_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("max_aggregation"))
 		if err := fv(ctx, m.GetMaxAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["min_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("min_aggregation"))
 		if err := fv(ctx, m.GetMinAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["top_hits_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("top_hits_aggregation"))
 		if err := fv(ctx, m.GetTopHitsAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2129,16 +1930,12 @@ func (v *ValidateMultiFilterAggregationData) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2207,16 +2004,12 @@ func (v *ValidateOrderByData) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metrics_aggregation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metrics_aggregation"))
 		if err := fv(ctx, m.GetMetricsAggregation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2285,25 +2078,18 @@ func (v *ValidatePercentileAggregationData) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2372,18 +2158,13 @@ func (v *ValidateTopHitsAggregationData) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["documents"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("documents"))
 		for idx, item := range m.GetDocuments() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2391,9 +2172,7 @@ func (v *ValidateTopHitsAggregationData) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

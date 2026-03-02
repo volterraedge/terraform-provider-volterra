@@ -22,8 +22,42 @@ resource "volterra_alert_receiver" "example" {
 
   // One of the arguments from this list "email opsgenie pagerduty slack sms webhook" must be set
 
-  opsgenie {
-    api_key {
+  webhook {
+    http_config {
+      // One of the arguments from this list "auth_token basic_auth client_cert_obj no_authorization" must be set
+
+      no_authorization = true
+
+      enable_http2 = true
+
+      follow_redirects = true
+
+      // One of the arguments from this list "no_tls use_tls" must be set
+
+      use_tls {
+        max_version = "max_version"
+
+        min_version = "min_version"
+
+        // One of the arguments from this list "use_server_verification volterra_trusted_ca" must be set
+
+        use_server_verification {
+          ca_cert_obj {
+            trusted_ca {
+              name      = "test1"
+              namespace = "staging"
+              tenant    = "acmecorp"
+            }
+          }
+        }
+
+        // One of the arguments from this list "disable_sni sni" must be set
+
+        sni = "sni"
+      }
+    }
+
+    url {
       blindfold_secret_info_internal {
         decryption_provider = "value"
 
@@ -36,19 +70,12 @@ resource "volterra_alert_receiver" "example" {
 
       // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "value"
-
-        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-        store_provider = "value"
+      wingman_secret_info {
+        name = "ChargeBack-API-Key"
       }
     }
-
-    url = "value"
   }
 }
-
 ```
 
 Argument Reference
@@ -429,4 +456,4 @@ Incoming webhook url to send alert notifications..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured alert_receiver.
+*   `id` - This is the id of the configured alert_receiver.

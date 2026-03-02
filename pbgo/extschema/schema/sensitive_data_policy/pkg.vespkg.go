@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.sensitive_data_policy.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.sensitive_data_policy.Object"] = ObjectValidator()
 	vr["ves.io.schema.sensitive_data_policy.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.sensitive_data_policy.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.sensitive_data_policy.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.sensitive_data_policy.DeleteRequest"] = DeleteRequestValidator()
@@ -27,14 +25,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.sensitive_data_policy.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.sensitive_data_policy.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.sensitive_data_policy.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.sensitive_data_policy.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.sensitive_data_policy.CustomDataTypeRef"] = CustomDataTypeRefValidator()
 	vr["ves.io.schema.sensitive_data_policy.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.sensitive_data_policy.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.sensitive_data_policy.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.sensitive_data_policy.SensitiveDataPolicy"] = SensitiveDataPolicyValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -46,25 +42,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.sensitive_data_policy.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.sensitive_data_policy.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.sensitive_data_policy.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.sensitive_data_policy.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -73,9 +64,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.sensitive_data_policy.Object"] = APISwaggerJSON
@@ -89,22 +78,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.sensitive_data_policy.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.sensitive_data_policy.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.sensitive_data_policy.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

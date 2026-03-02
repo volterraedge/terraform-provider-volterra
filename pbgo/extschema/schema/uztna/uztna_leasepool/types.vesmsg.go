@@ -66,7 +66,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) IpVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_version")
@@ -75,7 +74,6 @@ func (v *ValidateCreateSpecType) IpVersionValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -95,23 +93,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_version"))
 		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -180,7 +173,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) IpVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_version")
@@ -189,7 +181,6 @@ func (v *ValidateGetSpecType) IpVersionValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -209,23 +200,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_version"))
 		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -294,7 +280,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) IpVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_version")
@@ -303,7 +288,6 @@ func (v *ValidateGlobalSpecType) IpVersionValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -323,23 +307,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_version"))
 		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -408,7 +387,6 @@ type ValidateIPV4LeasePoolConfig struct {
 }
 
 func (v *ValidateIPV4LeasePoolConfig) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -462,17 +440,13 @@ func (v *ValidateIPV4LeasePoolConfig) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip4_range"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip4_range"))
 		for idx, item := range m.GetVip4Range() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -480,16 +454,13 @@ func (v *ValidateIPV4LeasePoolConfig) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV4LeasePoolConfigValidator = func() *ValidateIPV4LeasePoolConfig {
 	v := &ValidateIPV4LeasePoolConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -511,7 +482,6 @@ var DefaultIPV4LeasePoolConfigValidator = func() *ValidateIPV4LeasePoolConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["prefix"] = vFn
-
 	v.FldValidators["vip4_range"] = IPV4LeasePoolRangeValidator().Validate
 
 	return v
@@ -575,34 +545,25 @@ func (v *ValidateIPV4LeasePoolRange) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_address"))
 		if err := fv(ctx, m.GetEndAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_address"))
 		if err := fv(ctx, m.GetStartAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV4LeasePoolRangeValidator = func() *ValidateIPV4LeasePoolRange {
 	v := &ValidateIPV4LeasePoolRange{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["start_address"] = ves_io_schema.Ipv4AddressTypeValidator().Validate
-
 	v.FldValidators["end_address"] = ves_io_schema.Ipv4AddressTypeValidator().Validate
 
 	return v
@@ -654,7 +615,6 @@ type ValidateIPV6LeasePoolConfig struct {
 }
 
 func (v *ValidateIPV6LeasePoolConfig) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -708,17 +668,13 @@ func (v *ValidateIPV6LeasePoolConfig) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip6_range"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip6_range"))
 		for idx, item := range m.GetVip6Range() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -726,16 +682,13 @@ func (v *ValidateIPV6LeasePoolConfig) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV6LeasePoolConfigValidator = func() *ValidateIPV6LeasePoolConfig {
 	v := &ValidateIPV6LeasePoolConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -757,7 +710,6 @@ var DefaultIPV6LeasePoolConfigValidator = func() *ValidateIPV6LeasePoolConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["ipv6_prefix"] = vFn
-
 	v.FldValidators["vip6_range"] = IPV6LeasePoolRangeValidator().Validate
 
 	return v
@@ -821,34 +773,25 @@ func (v *ValidateIPV6LeasePoolRange) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_address"))
 		if err := fv(ctx, m.GetEndAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_address"))
 		if err := fv(ctx, m.GetStartAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPV6LeasePoolRangeValidator = func() *ValidateIPV6LeasePoolRange {
 	v := &ValidateIPV6LeasePoolRange{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["start_address"] = ves_io_schema.Ipv6AddressTypeValidator().Validate
-
 	v.FldValidators["end_address"] = ves_io_schema.Ipv6AddressTypeValidator().Validate
 
 	return v
@@ -936,16 +879,13 @@ func (v *ValidateIPVersion) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPVersionValidator = func() *ValidateIPVersion {
 	v := &ValidateIPVersion{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["ip_vip.ipv4_vip"] = IPV4LeasePoolConfigValidator().Validate
 	v.FldValidators["ip_vip.ipv6_vip"] = IPV6LeasePoolConfigValidator().Validate
 
@@ -998,7 +938,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) IpVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_version")
@@ -1007,7 +946,6 @@ func (v *ValidateReplaceSpecType) IpVersionValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1027,23 +965,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_version"))
 		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

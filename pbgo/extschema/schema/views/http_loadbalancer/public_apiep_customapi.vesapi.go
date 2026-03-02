@@ -43,7 +43,6 @@ func (c *ApiepLBCustomAPIGrpcClient) doRPCGetAPIEndpointsForGroups(ctx context.C
 	rsp, err := c.grpcClient.GetAPIEndpointsForGroups(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepLBCustomAPIGrpcClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetAPIEndpointsSchemaUpdatesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -52,7 +51,6 @@ func (c *ApiepLBCustomAPIGrpcClient) doRPCGetAPIEndpointsSchemaUpdates(ctx conte
 	rsp, err := c.grpcClient.GetAPIEndpointsSchemaUpdates(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepLBCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SwaggerSpecReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -61,7 +59,6 @@ func (c *ApiepLBCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, ya
 	rsp, err := c.grpcClient.GetSwaggerSpec(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ApiepLBCustomAPIGrpcClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateAPIEndpointsSchemasReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -102,15 +99,10 @@ func NewApiepLBCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetAPIEndpointsForGroups"] = ccl.doRPCGetAPIEndpointsForGroups
-
 	rpcFns["GetAPIEndpointsSchemaUpdates"] = ccl.doRPCGetAPIEndpointsSchemaUpdates
-
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
-
 	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -197,7 +189,6 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetAPIEndpointsForGroups(ctx context.C
 	pbRsp := &GetAPIEndpointsForGroupsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -205,7 +196,6 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetAPIEndpointsForGroups(ctx context.C
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepLBCustomAPIRestClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -285,7 +275,6 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetAPIEndpointsSchemaUpdates(ctx conte
 	pbRsp := &GetAPIEndpointsSchemaUpdatesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -293,7 +282,6 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetAPIEndpointsSchemaUpdates(ctx conte
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepLBCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -371,7 +359,6 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, ca
 		// server strips HTTP Body proto message and sends only data, re-build it here
 		pbRsp.ContentType = rsp.Header.Get("Content-Type")
 		pbRsp.Data = body
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -379,7 +366,6 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *ApiepLBCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -458,7 +444,6 @@ func (c *ApiepLBCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.
 	pbRsp := &UpdateAPIEndpointsSchemasResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -492,15 +477,10 @@ func NewApiepLBCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetAPIEndpointsForGroups"] = ccl.doRPCGetAPIEndpointsForGroups
-
 	rpcFns["GetAPIEndpointsSchemaUpdates"] = ccl.doRPCGetAPIEndpointsSchemaUpdates
-
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
-
 	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -593,7 +573,6 @@ func (s *apiepLBCustomAPISrv) GetAPIEndpointsForGroups(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsRsp", rsp)...)
 
 	return rsp, nil
@@ -642,7 +621,6 @@ func (s *apiepLBCustomAPISrv) GetAPIEndpointsSchemaUpdates(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesResp", rsp)...)
 
 	return rsp, nil
@@ -691,7 +669,6 @@ func (s *apiepLBCustomAPISrv) GetSwaggerSpec(ctx context.Context, in *SwaggerSpe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
@@ -740,7 +717,6 @@ func (s *apiepLBCustomAPISrv) UpdateAPIEndpointsSchemas(ctx context.Context, in 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasResp", rsp)...)
 
 	return rsp, nil

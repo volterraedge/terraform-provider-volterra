@@ -40,7 +40,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetJiraConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.jira_config")
 	}
@@ -123,16 +122,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -140,7 +136,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhProviderConfig := v.ProviderConfigValidationRuleHandler
 	rulesProviderConfig := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -151,7 +146,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["provider_config"] = vFn
-
 	v.FldValidators["provider_config.jira_config"] = JiraConfigurationTypeValidator().Validate
 
 	return v
@@ -177,7 +171,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetJiraConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.jira_config")
 	}
@@ -260,16 +253,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -277,7 +267,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhProviderConfig := v.ProviderConfigValidationRuleHandler
 	rulesProviderConfig := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -288,7 +277,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["provider_config"] = vFn
-
 	v.FldValidators["provider_config.jira_config"] = JiraConfigurationTypeValidator().Validate
 
 	return v
@@ -314,7 +302,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetJiraConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.jira_config")
 	}
@@ -397,25 +384,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -423,7 +404,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhProviderConfig := v.ProviderConfigValidationRuleHandler
 	rulesProviderConfig := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -434,7 +414,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["provider_config"] = vFn
-
 	v.FldValidators["provider_config.jira_config"] = JiraConfigurationTypeValidator().Validate
 
 	return v
@@ -453,7 +432,6 @@ func (m *JiraAdhocRestApiConfigurationType) ToJSON() (string, error) {
 func (m *JiraAdhocRestApiConfigurationType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *JiraAdhocRestApiConfigurationType) String() string {
 	if m == nil {
 		return ""
@@ -515,7 +493,6 @@ type ValidateJiraAdhocRestApiConfigurationType struct {
 }
 
 func (v *ValidateJiraAdhocRestApiConfigurationType) AccountEmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for account_email")
@@ -523,9 +500,7 @@ func (v *ValidateJiraAdhocRestApiConfigurationType) AccountEmailValidationRuleHa
 
 	return validatorFn, nil
 }
-
 func (v *ValidateJiraAdhocRestApiConfigurationType) OrganizationDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for organization_domain")
@@ -533,9 +508,7 @@ func (v *ValidateJiraAdhocRestApiConfigurationType) OrganizationDomainValidation
 
 	return validatorFn, nil
 }
-
 func (v *ValidateJiraAdhocRestApiConfigurationType) ApiTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for api_token")
@@ -557,50 +530,36 @@ func (v *ValidateJiraAdhocRestApiConfigurationType) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["account_email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("account_email"))
 		if err := fv(ctx, m.GetAccountEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["api_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_token"))
 		if err := fv(ctx, m.GetApiToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["encrypted_api_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("encrypted_api_token"))
 		if err := fv(ctx, m.GetEncryptedApiToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["organization_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("organization_domain"))
 		if err := fv(ctx, m.GetOrganizationDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultJiraAdhocRestApiConfigurationTypeValidator = func() *ValidateJiraAdhocRestApiConfigurationType {
 	v := &ValidateJiraAdhocRestApiConfigurationType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -646,7 +605,6 @@ var DefaultJiraAdhocRestApiConfigurationTypeValidator = func() *ValidateJiraAdho
 		panic(errMsg)
 	}
 	v.FldValidators["api_token"] = vFn
-
 	v.FldValidators["encrypted_api_token"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -672,7 +630,6 @@ func (m *JiraConfigurationType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdhocRestApi().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting JiraConfigurationType.adhoc_rest_api")
 	}
@@ -737,16 +694,13 @@ func (v *ValidateJiraConfigurationType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultJiraConfigurationTypeValidator = func() *ValidateJiraConfigurationType {
 	v := &ValidateJiraConfigurationType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["config.adhoc_rest_api"] = JiraAdhocRestApiConfigurationTypeValidator().Validate
 
 	return v
@@ -772,7 +726,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetJiraConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.jira_config")
 	}
@@ -855,16 +808,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -872,7 +822,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhProviderConfig := v.ProviderConfigValidationRuleHandler
 	rulesProviderConfig := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -883,7 +832,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["provider_config"] = vFn
-
 	v.FldValidators["provider_config.jira_config"] = JiraConfigurationTypeValidator().Validate
 
 	return v

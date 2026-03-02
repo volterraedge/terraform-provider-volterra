@@ -67,7 +67,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReceiversDRefInfo()
-
 }
 
 func (m *CreateSpecType) GetReceiversDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *CreateSpecType) GetReceiversDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetReceiversDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *CreateSpecType) GetReceiversDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ReceiversValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -166,9 +162,7 @@ func (v *ValidateCreateSpecType) ReceiversValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -228,39 +222,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["notification_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("notification_parameters"))
 		if err := fv(ctx, m.GetNotificationParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receivers"]; exists {
 		vOpts := append(opts, db.WithValidateField("receivers"))
 		if err := fv(ctx, m.GetReceivers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("routes"))
 		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -292,7 +277,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["routes"] = vFn
-
 	v.FldValidators["notification_parameters"] = NotificationParametersValidator().Validate
 
 	return v
@@ -344,7 +328,6 @@ type ValidateCustomGroupBy struct {
 }
 
 func (v *ValidateCustomGroupBy) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -398,22 +381,18 @@ func (v *ValidateCustomGroupBy) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
 		vOpts := append(opts, db.WithValidateField("labels"))
 		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomGroupByValidator = func() *ValidateCustomGroupBy {
 	v := &ValidateCustomGroupBy{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -484,7 +463,6 @@ type ValidateCustomMatcher struct {
 }
 
 func (v *ValidateCustomMatcher) AlertlabelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -536,49 +514,36 @@ func (v *ValidateCustomMatcher) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["alertlabel"]; exists {
 		vOpts := append(opts, db.WithValidateField("alertlabel"))
 		if err := fv(ctx, m.GetAlertlabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["alertname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("alertname"))
 		if err := fv(ctx, m.GetAlertname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group"))
 		if err := fv(ctx, m.GetGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["severity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("severity"))
 		if err := fv(ctx, m.GetSeverity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomMatcherValidator = func() *ValidateCustomMatcher {
 	v := &ValidateCustomMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -600,11 +565,8 @@ var DefaultCustomMatcherValidator = func() *ValidateCustomMatcher {
 		panic(errMsg)
 	}
 	v.FldValidators["alertlabel"] = vFn
-
 	v.FldValidators["severity"] = LabelMatcherValidator().Validate
-
 	v.FldValidators["group"] = LabelMatcherValidator().Validate
-
 	v.FldValidators["alertname"] = LabelMatcherValidator().Validate
 
 	return v
@@ -657,7 +619,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReceiversDRefInfo()
-
 }
 
 func (m *GetSpecType) GetReceiversDRefInfo() ([]db.DRefInfo, error) {
@@ -682,7 +643,6 @@ func (m *GetSpecType) GetReceiversDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetReceiversDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -701,7 +661,6 @@ func (m *GetSpecType) GetReceiversDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -710,7 +669,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ReceiversValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -756,9 +714,7 @@ func (v *ValidateGetSpecType) ReceiversValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -818,39 +774,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["notification_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("notification_parameters"))
 		if err := fv(ctx, m.GetNotificationParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receivers"]; exists {
 		vOpts := append(opts, db.WithValidateField("receivers"))
 		if err := fv(ctx, m.GetReceivers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("routes"))
 		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -882,7 +829,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["routes"] = vFn
-
 	v.FldValidators["notification_parameters"] = NotificationParametersValidator().Validate
 
 	return v
@@ -935,7 +881,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReceiversDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetReceiversDRefInfo() ([]db.DRefInfo, error) {
@@ -960,7 +905,6 @@ func (m *GlobalSpecType) GetReceiversDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetReceiversDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -979,7 +923,6 @@ func (m *GlobalSpecType) GetReceiversDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -988,7 +931,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ReceiversValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1034,9 +976,7 @@ func (v *ValidateGlobalSpecType) ReceiversValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1096,39 +1036,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["notification_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("notification_parameters"))
 		if err := fv(ctx, m.GetNotificationParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receivers"]; exists {
 		vOpts := append(opts, db.WithValidateField("receivers"))
 		if err := fv(ctx, m.GetReceivers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("routes"))
 		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1160,7 +1091,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["routes"] = vFn
-
 	v.FldValidators["notification_parameters"] = NotificationParametersValidator().Validate
 
 	return v
@@ -1224,9 +1154,7 @@ func (v *ValidateGroupMatcher) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("groups"))
 		for idx, item := range m.GetGroups() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1234,9 +1162,7 @@ func (v *ValidateGroupMatcher) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1347,16 +1273,13 @@ func (v *ValidateLabelMatcher) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLabelMatcherValidator = func() *ValidateLabelMatcher {
 	v := &ValidateLabelMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1364,7 +1287,6 @@ var DefaultLabelMatcherValidator = func() *ValidateLabelMatcher {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMatcherType := v.MatcherTypeValidationRuleHandler
 	rulesMatcherType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1431,9 +1353,7 @@ func (v *ValidateNotificationParameters) GroupByValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateNotificationParameters) GroupWaitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for group_wait")
@@ -1441,9 +1361,7 @@ func (v *ValidateNotificationParameters) GroupWaitValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNotificationParameters) GroupIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for group_interval")
@@ -1451,9 +1369,7 @@ func (v *ValidateNotificationParameters) GroupIntervalValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNotificationParameters) RepeatIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for repeat_interval")
@@ -1531,43 +1447,31 @@ func (v *ValidateNotificationParameters) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_interval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_interval"))
 		if err := fv(ctx, m.GetGroupInterval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_wait"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_wait"))
 		if err := fv(ctx, m.GetGroupWait(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["repeat_interval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("repeat_interval"))
 		if err := fv(ctx, m.GetRepeatInterval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNotificationParametersValidator = func() *ValidateNotificationParameters {
 	v := &ValidateNotificationParameters{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1575,7 +1479,6 @@ var DefaultNotificationParametersValidator = func() *ValidateNotificationParamet
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhGroupBy := v.GroupByValidationRuleHandler
 	rulesGroupBy := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1625,7 +1528,6 @@ var DefaultNotificationParametersValidator = func() *ValidateNotificationParamet
 		panic(errMsg)
 	}
 	v.FldValidators["repeat_interval"] = vFn
-
 	v.FldValidators["group_by.custom"] = CustomGroupByValidator().Validate
 
 	return v
@@ -1678,7 +1580,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetReceiversDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetReceiversDRefInfo() ([]db.DRefInfo, error) {
@@ -1703,7 +1604,6 @@ func (m *ReplaceSpecType) GetReceiversDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetReceiversDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1722,7 +1622,6 @@ func (m *ReplaceSpecType) GetReceiversDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1731,7 +1630,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) ReceiversValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1777,9 +1675,7 @@ func (v *ValidateReplaceSpecType) ReceiversValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1839,39 +1735,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["notification_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("notification_parameters"))
 		if err := fv(ctx, m.GetNotificationParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["receivers"]; exists {
 		vOpts := append(opts, db.WithValidateField("receivers"))
 		if err := fv(ctx, m.GetReceivers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("routes"))
 		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1903,7 +1790,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["routes"] = vFn
-
 	v.FldValidators["notification_parameters"] = NotificationParametersValidator().Validate
 
 	return v
@@ -2009,7 +1895,6 @@ func (v *ValidateRoute) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetMatcher().(type) {
@@ -2079,25 +1964,19 @@ func (v *ValidateRoute) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["notification_parameters"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("notification_parameters"))
 		if err := fv(ctx, m.GetNotificationParameters(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRouteValidator = func() *ValidateRoute {
 	v := &ValidateRoute{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2105,7 +1984,6 @@ var DefaultRouteValidator = func() *ValidateRoute {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAction := v.ActionValidationRuleHandler
 	rulesAction := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2116,9 +1994,7 @@ var DefaultRouteValidator = func() *ValidateRoute {
 		panic(errMsg)
 	}
 	v.FldValidators["action"] = vFn
-
 	v.FldValidators["matcher.custom"] = CustomMatcherValidator().Validate
-
 	v.FldValidators["notification_parameters"] = NotificationParametersValidator().Validate
 
 	return v
@@ -2182,9 +2058,7 @@ func (v *ValidateSeverityMatcher) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["severities"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("severities"))
 		for idx, item := range m.GetSeverities() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2192,9 +2066,7 @@ func (v *ValidateSeverityMatcher) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

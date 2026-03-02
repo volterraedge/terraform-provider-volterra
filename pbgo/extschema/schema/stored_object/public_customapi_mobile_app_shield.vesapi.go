@@ -42,7 +42,6 @@ func (c *MobileAppShieldCustomAPIGrpcClient) doRPCGetMobileAppShield(ctx context
 	rsp, err := c.grpcClient.GetMobileAppShield(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *MobileAppShieldCustomAPIGrpcClient) doRPCListMobileAppShields(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListObjectsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewMobileAppShieldCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomCli
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetMobileAppShield"] = ccl.doRPCGetMobileAppShield
-
 	rpcFns["ListMobileAppShields"] = ccl.doRPCListMobileAppShields
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -176,7 +172,6 @@ func (c *MobileAppShieldCustomAPIRestClient) doRPCGetMobileAppShield(ctx context
 	pbRsp := &GetObjectResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.stored_object.GetObjectResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -184,7 +179,6 @@ func (c *MobileAppShieldCustomAPIRestClient) doRPCGetMobileAppShield(ctx context
 	}
 	return pbRsp, nil
 }
-
 func (c *MobileAppShieldCustomAPIRestClient) doRPCListMobileAppShields(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -263,7 +257,6 @@ func (c *MobileAppShieldCustomAPIRestClient) doRPCListMobileAppShields(ctx conte
 	pbRsp := &ListObjectsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.stored_object.ListObjectsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -297,11 +290,8 @@ func NewMobileAppShieldCustomAPIRestClient(baseURL string, hc http.Client) serve
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetMobileAppShield"] = ccl.doRPCGetMobileAppShield
-
 	rpcFns["ListMobileAppShields"] = ccl.doRPCListMobileAppShields
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -386,7 +376,6 @@ func (s *mobileAppShieldCustomAPISrv) GetMobileAppShield(ctx context.Context, in
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.stored_object.GetObjectResponse", rsp)...)
 
 	return rsp, nil
@@ -435,7 +424,6 @@ func (s *mobileAppShieldCustomAPISrv) ListMobileAppShields(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.stored_object.ListObjectsResponse", rsp)...)
 
 	return rsp, nil
@@ -778,26 +766,32 @@ var MobileAppShieldCustomAPISwaggerJSON string = `{
             "description": "A descriptor for list response item.",
             "title": "ListItemDescriptor",
             "x-displayname": "List Item Descriptor",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_app_shield\",\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_app_shield\",\"mobile_integrator\",\"mobile_sdk\",\"mobile_sdk_self_serve\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.ListItemDescriptor",
             "properties": {
                 "mobile_app_shield": {
-                    "description": "Exclusive with [mobile_integrator mobile_sdk no_attributes]\n Attributes of a object of a type mobile-app-shield",
+                    "description": "Exclusive with [mobile_integrator mobile_sdk mobile_sdk_self_serve no_attributes]\n Attributes of a object of a type mobile-app-shield",
                     "title": "mobile_app_shield",
                     "$ref": "#/definitions/stored_objectMobileAppShieldAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-app-shield"
                 },
                 "mobile_integrator": {
-                    "description": "Exclusive with [mobile_app_shield mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "description": "Exclusive with [mobile_app_shield mobile_sdk mobile_sdk_self_serve no_attributes]\n Attributes of a object of a type mobile-integrator",
                     "title": "mobile_integrator",
                     "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-integrator"
                 },
                 "mobile_sdk": {
-                    "description": "Exclusive with [mobile_app_shield mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk_self_serve no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
+                },
+                "mobile_sdk_self_serve": {
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk no_attributes]\n Attributes of a object of a type mobile-sdk-self-serve",
+                    "title": "mobile_sdk_self_serve",
+                    "$ref": "#/definitions/stored_objectMobileSDKAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-sdk-self-serve"
                 },
                 "name": {
                     "type": "string",
@@ -806,7 +800,7 @@ var MobileAppShieldCustomAPISwaggerJSON string = `{
                     "x-displayname": "Object Name"
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk mobile_sdk_self_serve]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"
@@ -1005,7 +999,7 @@ var MobileAppShieldCustomAPISwaggerJSON string = `{
             "description": "Response for Get, Create APIs",
             "title": "StoredObjectDescriptor",
             "x-displayname": "Object Metadata Response",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_app_shield\",\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_app_shield\",\"mobile_integrator\",\"mobile_sdk\",\"mobile_sdk_self_serve\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.StoredObjectDescriptor",
             "properties": {
                 "creation_timestamp": {
@@ -1030,22 +1024,28 @@ var MobileAppShieldCustomAPISwaggerJSON string = `{
                     }
                 },
                 "mobile_app_shield": {
-                    "description": "Exclusive with [mobile_integrator mobile_sdk no_attributes]\n Attributes of a object of a type mobile-app-shield",
+                    "description": "Exclusive with [mobile_integrator mobile_sdk mobile_sdk_self_serve no_attributes]\n Attributes of a object of a type mobile-app-shield",
                     "title": "mobile_app_shield",
                     "$ref": "#/definitions/stored_objectMobileAppShieldAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-app-shield"
                 },
                 "mobile_integrator": {
-                    "description": "Exclusive with [mobile_app_shield mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "description": "Exclusive with [mobile_app_shield mobile_sdk mobile_sdk_self_serve no_attributes]\n Attributes of a object of a type mobile-integrator",
                     "title": "mobile_integrator",
                     "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-integrator"
                 },
                 "mobile_sdk": {
-                    "description": "Exclusive with [mobile_app_shield mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk_self_serve no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
+                },
+                "mobile_sdk_self_serve": {
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk no_attributes]\n Attributes of a object of a type mobile-sdk-self-serve",
+                    "title": "mobile_sdk_self_serve",
+                    "$ref": "#/definitions/stored_objectMobileSDKAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-sdk-self-serve"
                 },
                 "name": {
                     "type": "string",
@@ -1068,7 +1068,7 @@ var MobileAppShieldCustomAPISwaggerJSON string = `{
                     }
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk mobile_sdk_self_serve]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"

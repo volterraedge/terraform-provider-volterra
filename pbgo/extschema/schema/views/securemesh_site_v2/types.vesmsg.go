@@ -73,7 +73,6 @@ func (m *AWSProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -83,7 +82,6 @@ func (m *AWSProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *AWSProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -93,9 +91,7 @@ func (m *AWSProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	case *AWSProviderType_Managed:
-
 		drInfos, err := m.GetManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetManaged().GetDRefInfo() FAILED")
@@ -105,11 +101,9 @@ func (m *AWSProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateAWSProviderType struct {
@@ -171,16 +165,13 @@ func (v *ValidateAWSProviderType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSProviderTypeValidator = func() *ValidateAWSProviderType {
 	v := &ValidateAWSProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -188,7 +179,6 @@ var DefaultAWSProviderTypeValidator = func() *ValidateAWSProviderType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhOrchestrationChoice := v.OrchestrationChoiceValidationRuleHandler
 	rulesOrchestrationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -199,7 +189,6 @@ var DefaultAWSProviderTypeValidator = func() *ValidateAWSProviderType {
 		panic(errMsg)
 	}
 	v.FldValidators["orchestration_choice"] = vFn
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 	v.FldValidators["orchestration_choice.managed"] = AWSManagedModeValidator().Validate
 
@@ -253,7 +242,6 @@ func (m *AzureProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -263,7 +251,6 @@ func (m *AzureProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *AzureProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -273,9 +260,7 @@ func (m *AzureProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	case *AzureProviderType_Managed:
-
 		drInfos, err := m.GetManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetManaged().GetDRefInfo() FAILED")
@@ -285,11 +270,9 @@ func (m *AzureProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateAzureProviderType struct {
@@ -351,16 +334,13 @@ func (v *ValidateAzureProviderType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureProviderTypeValidator = func() *ValidateAzureProviderType {
 	v := &ValidateAzureProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -368,7 +348,6 @@ var DefaultAzureProviderTypeValidator = func() *ValidateAzureProviderType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhOrchestrationChoice := v.OrchestrationChoiceValidationRuleHandler
 	rulesOrchestrationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -379,7 +358,6 @@ var DefaultAzureProviderTypeValidator = func() *ValidateAzureProviderType {
 		panic(errMsg)
 	}
 	v.FldValidators["orchestration_choice"] = vFn
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 	v.FldValidators["orchestration_choice.managed"] = AzureManagedModeValidator().Validate
 
@@ -433,7 +411,6 @@ func (m *BaremetalProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -443,7 +420,6 @@ func (m *BaremetalProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo,
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *BaremetalProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -453,11 +429,9 @@ func (m *BaremetalProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateBaremetalProviderType struct {
@@ -490,16 +464,13 @@ func (v *ValidateBaremetalProviderType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBaremetalProviderTypeValidator = func() *ValidateBaremetalProviderType {
 	v := &ValidateBaremetalProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 
 	return v
@@ -525,11 +496,9 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.admin_user_credentials")
 	}
-
 	if err := m.GetCustomProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.custom_proxy")
 	}
@@ -575,51 +544,42 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLocalVrfDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLocalVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProviderChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProviderChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetS2SConnectivitySliChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySliChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetS2SConnectivitySloChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySloChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentVrfDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -629,11 +589,8 @@ func (m *CreateSpecType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetForwardProxyChoice().(type) {
 	case *CreateSpecType_NoForwardProxy:
-
 		return nil, nil
-
 	case *CreateSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -643,11 +600,9 @@ func (m *CreateSpecType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -655,7 +610,6 @@ func (m *CreateSpecType) GetLocalVrfDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetLocalVrf() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetLocalVrf().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetLocalVrf().GetDRefInfo() FAILED")
@@ -665,17 +619,17 @@ func (m *CreateSpecType) GetLocalVrfDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "local_vrf." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
+// GetDRefInfo for the field's type
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLogsReceiverChoice() == nil {
+		return nil, nil
+	}
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
-
 		return nil, nil
-
 	case *CreateSpecType_LogReceiver:
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -691,46 +645,19 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
+	case *CreateSpecType_LogReceiverWithNet:
+		drInfos, err := m.GetLogReceiverWithNet().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLogReceiverWithNet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "log_receiver_with_net." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-}
-
-// GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetLogsReceiverChoice().(type) {
-	case *CreateSpecType_LogsStreamingDisabled:
-
-	case *CreateSpecType_LogReceiver:
-		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
-		}
-
-		vref := m.GetLogReceiver()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "log_receiver.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -740,11 +667,8 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *CreateSpecType_NoNetworkPolicy:
-
 		return nil, nil
-
 	case *CreateSpecType_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -754,11 +678,9 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -768,7 +690,6 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProviderChoice().(type) {
 	case *CreateSpecType_Vmware:
-
 		drInfos, err := m.GetVmware().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVmware().GetDRefInfo() FAILED")
@@ -778,9 +699,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "vmware." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Kvm:
-
 		drInfos, err := m.GetKvm().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetKvm().GetDRefInfo() FAILED")
@@ -790,9 +709,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "kvm." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -802,9 +719,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Azure:
-
 		drInfos, err := m.GetAzure().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAzure().GetDRefInfo() FAILED")
@@ -814,9 +729,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "azure." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Gcp:
-
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -826,9 +739,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Rseries:
-
 		drInfos, err := m.GetRseries().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRseries().GetDRefInfo() FAILED")
@@ -838,9 +749,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "rseries." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Baremetal:
-
 		drInfos, err := m.GetBaremetal().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBaremetal().GetDRefInfo() FAILED")
@@ -850,9 +759,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "baremetal." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Oci:
-
 		drInfos, err := m.GetOci().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOci().GetDRefInfo() FAILED")
@@ -862,9 +769,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "oci." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Openstack:
-
 		drInfos, err := m.GetOpenstack().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOpenstack().GetDRefInfo() FAILED")
@@ -874,9 +779,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "openstack." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Nutanix:
-
 		drInfos, err := m.GetNutanix().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNutanix().GetDRefInfo() FAILED")
@@ -886,9 +789,7 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "nutanix." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_Equinix:
-
 		drInfos, err := m.GetEquinix().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEquinix().GetDRefInfo() FAILED")
@@ -898,21 +799,26 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "equinix." + dri.DRField
 		}
 		return drInfos, err
-
+	case *CreateSpecType_OpenshiftVirtualization:
+		drInfos, err := m.GetOpenshiftVirtualization().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOpenshiftVirtualization().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "openshift_virtualization." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *CreateSpecType) GetS2SConnectivitySliChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetS2SConnectivitySliChoice().(type) {
 	case *CreateSpecType_NoS2SConnectivitySli:
-
 		return nil, nil
-
 	case *CreateSpecType_DcClusterGroupSli:
-
 		vref := m.GetDcClusterGroupSli()
 		if vref == nil {
 			return nil, nil
@@ -928,7 +834,6 @@ func (m *CreateSpecType) GetS2SConnectivitySliChoiceDRefInfo() ([]db.DRefInfo, e
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -940,13 +845,11 @@ func (m *CreateSpecType) GetS2SConnectivitySliChoiceDBEntries(ctx context.Contex
 
 	switch m.GetS2SConnectivitySliChoice().(type) {
 	case *CreateSpecType_NoS2SConnectivitySli:
-
 	case *CreateSpecType_DcClusterGroupSli:
 		refdType, err := d.TypeForEntryKind("", "", "dc_cluster_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: dc_cluster_group")
 		}
-
 		vref := m.GetDcClusterGroupSli()
 		if vref == nil {
 			return nil, nil
@@ -964,7 +867,6 @@ func (m *CreateSpecType) GetS2SConnectivitySliChoiceDBEntries(ctx context.Contex
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -977,11 +879,8 @@ func (m *CreateSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetS2SConnectivitySloChoice().(type) {
 	case *CreateSpecType_NoS2SConnectivitySlo:
-
 		return nil, nil
-
 	case *CreateSpecType_SiteMeshGroupOnSlo:
-
 		drInfos, err := m.GetSiteMeshGroupOnSlo().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteMeshGroupOnSlo().GetDRefInfo() FAILED")
@@ -991,9 +890,7 @@ func (m *CreateSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "site_mesh_group_on_slo." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_DcClusterGroupSlo:
-
 		vref := m.GetDcClusterGroupSlo()
 		if vref == nil {
 			return nil, nil
@@ -1009,11 +906,9 @@ func (m *CreateSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, e
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1021,7 +916,6 @@ func (m *CreateSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentVrf() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSegmentVrf() {
 		driSet, err := e.GetDRefInfo()
@@ -1035,7 +929,6 @@ func (m *CreateSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCreateSpecType struct {
@@ -1050,6 +943,9 @@ func (v *ValidateCreateSpecType) BlockedServicesChoiceValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) EnterpriseProxyChoicePrivateAdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return PrivateADNTypeValidator().Validate, nil
+}
 func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1057,7 +953,6 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1065,9 +960,7 @@ func (v *ValidateCreateSpecType) ProviderChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) TunnelDeadTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_dead_timeout")
@@ -1075,9 +968,7 @@ func (v *ValidateCreateSpecType) TunnelDeadTimeoutValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SegmentVrfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1137,14 +1028,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
 		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
@@ -1180,16 +1068,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_ntp_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_ntp_config"))
 		if err := fv(ctx, m.GetDnsNtpConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetEnterpriseProxyChoice().(type) {
@@ -1215,7 +1099,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *CreateSpecType_PrivateAdn:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.private_adn"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*CreateSpecType_PrivateAdn).PrivateAdn
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("private_adn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetForwardProxyChoice().(type) {
@@ -1241,25 +1135,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["load_balancing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("load_balancing"))
 		if err := fv(ctx, m.GetLoadBalancing(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_vrf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_vrf"))
 		if err := fv(ctx, m.GetLocalVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
@@ -1295,7 +1182,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_LogReceiverWithNet:
+		if fv, exists := v.FldValidators["logs_receiver_choice.log_receiver_with_net"]; exists {
+			val := m.GetLogsReceiverChoice().(*CreateSpecType_LogReceiverWithNet).LogReceiverWithNet
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("log_receiver_with_net"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 
+	switch m.GetManagementNetworkChoice().(type) {
+	case *CreateSpecType_DisableManagementNetwork:
+		if fv, exists := v.FldValidators["management_network_choice.disable_management_network"]; exists {
+			val := m.GetManagementNetworkChoice().(*CreateSpecType_DisableManagementNetwork).DisableManagementNetwork
+			vOpts := append(opts,
+				db.WithValidateField("management_network_choice"),
+				db.WithValidateField("disable_management_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableManagementNetwork:
+		if fv, exists := v.FldValidators["management_network_choice.enable_management_network"]; exists {
+			val := m.GetManagementNetworkChoice().(*CreateSpecType_EnableManagementNetwork).EnableManagementNetwork
+			vOpts := append(opts,
+				db.WithValidateField("management_network_choice"),
+				db.WithValidateField("enable_management_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetNetworkPolicyChoice().(type) {
@@ -1321,7 +1243,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetNodeHaChoice().(type) {
@@ -1347,25 +1268,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
 		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
@@ -1500,7 +1414,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *CreateSpecType_OpenshiftVirtualization:
+		if fv, exists := v.FldValidators["provider_choice.openshift_virtualization"]; exists {
+			val := m.GetProviderChoice().(*CreateSpecType_OpenshiftVirtualization).OpenshiftVirtualization
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("openshift_virtualization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetProxyBypassChoice().(type) {
@@ -1526,16 +1450,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["re_select"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("re_select"))
 		if err := fv(ctx, m.GetReSelect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetS2SConnectivitySliChoice().(type) {
@@ -1561,7 +1481,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetS2SConnectivitySloChoice().(type) {
@@ -1598,51 +1517,36 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_vrf"]; exists {
 		vOpts := append(opts, db.WithValidateField("segment_vrf"))
 		if err := fv(ctx, m.GetSegmentVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["software_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("software_settings"))
 		if err := fv(ctx, m.GetSoftwareSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_dead_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_dead_timeout"))
 		if err := fv(ctx, m.GetTunnelDeadTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upgrade_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upgrade_settings"))
 		if err := fv(ctx, m.GetUpgradeSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetUrlCategorizationChoice().(type) {
@@ -1668,16 +1572,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1685,7 +1586,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
 	rulesBlockedServicesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1696,7 +1596,16 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
-
+	vrhEnterpriseProxyChoicePrivateAdn := v.EnterpriseProxyChoicePrivateAdnValidationRuleHandler
+	rulesEnterpriseProxyChoicePrivateAdn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["enterprise_proxy_choice.private_adn"], err = vrhEnterpriseProxyChoicePrivateAdn(rulesEnterpriseProxyChoicePrivateAdn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.enterprise_proxy_choice_private_adn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enterprise_proxy_choice.private_adn"] = vFnMap["enterprise_proxy_choice.private_adn"]
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1707,7 +1616,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
 	vrhProviderChoice := v.ProviderChoiceValidationRuleHandler
 	rulesProviderChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1741,17 +1649,12 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["segment_vrf"] = vFn
-
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
-
 	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
-
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
+	v.FldValidators["logs_receiver_choice.log_receiver_with_net"] = LogReceiverWithNetValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
-
 	v.FldValidators["provider_choice.vmware"] = VMwareProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.kvm"] = KVMProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.aws"] = AWSProviderTypeValidator().Validate
@@ -1763,28 +1666,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.equinix"] = EquinixProviderTypeValidator().Validate
-
+	v.FldValidators["provider_choice.openshift_virtualization"] = OpenShiftProviderTypeValidator().Validate
 	v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"] = CustomProxyBypassSettingsValidator().Validate
-
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["s2s_connectivity_slo_choice.site_mesh_group_on_slo"] = SiteMeshGroupTypeValidator().Validate
 	v.FldValidators["s2s_connectivity_slo_choice.dc_cluster_group_slo"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["software_settings"] = SoftwareSettingsTypeValidator().Validate
-
 	v.FldValidators["upgrade_settings"] = UpgradeSettingsTypeValidator().Validate
-
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
 	v.FldValidators["local_vrf"] = LocalVRFSettingTypeValidator().Validate
-
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
-
 	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
-
 	v.FldValidators["dns_ntp_config"] = DNSNTPServerConfigValidator().Validate
 
 	return v
@@ -1836,7 +1729,6 @@ type ValidateCustomDNSSettings struct {
 }
 
 func (v *ValidateCustomDNSSettings) DnsServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1890,22 +1782,18 @@ func (v *ValidateCustomDNSSettings) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("dns_servers"))
 		if err := fv(ctx, m.GetDnsServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomDNSSettingsValidator = func() *ValidateCustomDNSSettings {
 	v := &ValidateCustomDNSSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1975,7 +1863,6 @@ type ValidateCustomNTPSettings struct {
 }
 
 func (v *ValidateCustomNTPSettings) NtpServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2029,22 +1916,18 @@ func (v *ValidateCustomNTPSettings) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ntp_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("ntp_servers"))
 		if err := fv(ctx, m.GetNtpServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomNTPSettingsValidator = func() *ValidateCustomNTPSettings {
 	v := &ValidateCustomNTPSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2088,7 +1971,6 @@ func (m *CustomProxy) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CustomProxy.password")
 	}
@@ -2128,7 +2010,6 @@ type ValidateCustomProxy struct {
 }
 
 func (v *ValidateCustomProxy) ProxyIpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_ip_address")
@@ -2136,9 +2017,7 @@ func (v *ValidateCustomProxy) ProxyIpAddressValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCustomProxy) ProxyPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_port")
@@ -2160,32 +2039,23 @@ func (v *ValidateCustomProxy) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_ip_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_ip_address"))
 		if err := fv(ctx, m.GetProxyIpAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proxy_port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proxy_port"))
 		if err := fv(ctx, m.GetProxyPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetUseForReTunnelChoice().(type) {
@@ -2211,25 +2081,19 @@ func (v *ValidateCustomProxy) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomProxyValidator = func() *ValidateCustomProxy {
 	v := &ValidateCustomProxy{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2262,7 +2126,6 @@ var DefaultCustomProxyValidator = func() *ValidateCustomProxy {
 		panic(errMsg)
 	}
 	v.FldValidators["proxy_port"] = vFn
-
 	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -2314,7 +2177,6 @@ type ValidateCustomProxyBypassSettings struct {
 }
 
 func (v *ValidateCustomProxyBypassSettings) ProxyBypassValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2368,22 +2230,18 @@ func (v *ValidateCustomProxyBypassSettings) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["proxy_bypass"]; exists {
 		vOpts := append(opts, db.WithValidateField("proxy_bypass"))
 		if err := fv(ctx, m.GetProxyBypass(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomProxyBypassSettingsValidator = func() *ValidateCustomProxyBypassSettings {
 	v := &ValidateCustomProxyBypassSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2491,7 +2349,6 @@ func (v *ValidateDNSNTPServerConfig) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetNtpServerChoice().(type) {
@@ -2517,18 +2374,14 @@ func (v *ValidateDNSNTPServerConfig) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSNTPServerConfigValidator = func() *ValidateDNSNTPServerConfig {
 	v := &ValidateDNSNTPServerConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["dns_server_choice.custom_dns"] = CustomDNSSettingsValidator().Validate
-
 	v.FldValidators["ntp_server_choice.custom_ntp"] = CustomNTPSettingsValidator().Validate
 
 	return v
@@ -2581,7 +2434,6 @@ func (m *EquinixProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2591,7 +2443,6 @@ func (m *EquinixProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *EquinixProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -2601,11 +2452,9 @@ func (m *EquinixProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateEquinixProviderType struct {
@@ -2638,16 +2487,13 @@ func (v *ValidateEquinixProviderType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEquinixProviderTypeValidator = func() *ValidateEquinixProviderType {
 	v := &ValidateEquinixProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 
 	return v
@@ -2699,7 +2545,6 @@ type ValidateEthernetInterfaceType struct {
 }
 
 func (v *ValidateEthernetInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
@@ -2707,9 +2552,7 @@ func (v *ValidateEthernetInterfaceType) DeviceValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateEthernetInterfaceType) MacValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mac")
@@ -2731,32 +2574,24 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["device"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mac"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mac"))
 		if err := fv(ctx, m.GetMac(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceType {
 	v := &ValidateEthernetInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2839,7 +2674,6 @@ func (m *GCPProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2849,7 +2683,6 @@ func (m *GCPProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *GCPProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -2859,9 +2692,7 @@ func (m *GCPProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GCPProviderType_Managed:
-
 		drInfos, err := m.GetManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetManaged().GetDRefInfo() FAILED")
@@ -2871,11 +2702,9 @@ func (m *GCPProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGCPProviderType struct {
@@ -2937,16 +2766,13 @@ func (v *ValidateGCPProviderType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPProviderTypeValidator = func() *ValidateGCPProviderType {
 	v := &ValidateGCPProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2954,7 +2780,6 @@ var DefaultGCPProviderTypeValidator = func() *ValidateGCPProviderType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhOrchestrationChoice := v.OrchestrationChoiceValidationRuleHandler
 	rulesOrchestrationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2965,7 +2790,6 @@ var DefaultGCPProviderTypeValidator = func() *ValidateGCPProviderType {
 		panic(errMsg)
 	}
 	v.FldValidators["orchestration_choice"] = vFn
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 	v.FldValidators["orchestration_choice.managed"] = GCPManagedModeValidator().Validate
 
@@ -2992,11 +2816,9 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.admin_user_credentials")
 	}
-
 	if err := m.GetCustomProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.custom_proxy")
 	}
@@ -3042,51 +2864,42 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLocalVrfDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLocalVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProviderChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProviderChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetS2SConnectivitySliChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySliChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetS2SConnectivitySloChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySloChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentVrfDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3096,11 +2909,8 @@ func (m *GetSpecType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetForwardProxyChoice().(type) {
 	case *GetSpecType_NoForwardProxy:
-
 		return nil, nil
-
 	case *GetSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -3110,11 +2920,9 @@ func (m *GetSpecType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3122,7 +2930,6 @@ func (m *GetSpecType) GetLocalVrfDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetLocalVrf() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetLocalVrf().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetLocalVrf().GetDRefInfo() FAILED")
@@ -3132,17 +2939,17 @@ func (m *GetSpecType) GetLocalVrfDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "local_vrf." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
+// GetDRefInfo for the field's type
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLogsReceiverChoice() == nil {
+		return nil, nil
+	}
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
-
 		return nil, nil
-
 	case *GetSpecType_LogReceiver:
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -3158,46 +2965,19 @@ func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
+	case *GetSpecType_LogReceiverWithNet:
+		drInfos, err := m.GetLogReceiverWithNet().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLogReceiverWithNet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "log_receiver_with_net." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-}
-
-// GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetLogsReceiverChoice().(type) {
-	case *GetSpecType_LogsStreamingDisabled:
-
-	case *GetSpecType_LogReceiver:
-		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
-		}
-
-		vref := m.GetLogReceiver()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "log_receiver.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -3207,11 +2987,8 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *GetSpecType_NoNetworkPolicy:
-
 		return nil, nil
-
 	case *GetSpecType_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -3221,11 +2998,9 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3235,7 +3010,6 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProviderChoice().(type) {
 	case *GetSpecType_Vmware:
-
 		drInfos, err := m.GetVmware().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVmware().GetDRefInfo() FAILED")
@@ -3245,9 +3019,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "vmware." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Kvm:
-
 		drInfos, err := m.GetKvm().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetKvm().GetDRefInfo() FAILED")
@@ -3257,9 +3029,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "kvm." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -3269,9 +3039,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Azure:
-
 		drInfos, err := m.GetAzure().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAzure().GetDRefInfo() FAILED")
@@ -3281,9 +3049,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "azure." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Gcp:
-
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -3293,9 +3059,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Rseries:
-
 		drInfos, err := m.GetRseries().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRseries().GetDRefInfo() FAILED")
@@ -3305,9 +3069,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "rseries." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Baremetal:
-
 		drInfos, err := m.GetBaremetal().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBaremetal().GetDRefInfo() FAILED")
@@ -3317,9 +3079,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "baremetal." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Oci:
-
 		drInfos, err := m.GetOci().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOci().GetDRefInfo() FAILED")
@@ -3329,9 +3089,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "oci." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Openstack:
-
 		drInfos, err := m.GetOpenstack().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOpenstack().GetDRefInfo() FAILED")
@@ -3341,9 +3099,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "openstack." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Nutanix:
-
 		drInfos, err := m.GetNutanix().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNutanix().GetDRefInfo() FAILED")
@@ -3353,9 +3109,7 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "nutanix." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_Equinix:
-
 		drInfos, err := m.GetEquinix().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEquinix().GetDRefInfo() FAILED")
@@ -3365,21 +3119,26 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "equinix." + dri.DRField
 		}
 		return drInfos, err
-
+	case *GetSpecType_OpenshiftVirtualization:
+		drInfos, err := m.GetOpenshiftVirtualization().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOpenshiftVirtualization().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "openshift_virtualization." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetS2SConnectivitySliChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetS2SConnectivitySliChoice().(type) {
 	case *GetSpecType_NoS2SConnectivitySli:
-
 		return nil, nil
-
 	case *GetSpecType_DcClusterGroupSli:
-
 		vref := m.GetDcClusterGroupSli()
 		if vref == nil {
 			return nil, nil
@@ -3395,7 +3154,6 @@ func (m *GetSpecType) GetS2SConnectivitySliChoiceDRefInfo() ([]db.DRefInfo, erro
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -3407,13 +3165,11 @@ func (m *GetSpecType) GetS2SConnectivitySliChoiceDBEntries(ctx context.Context, 
 
 	switch m.GetS2SConnectivitySliChoice().(type) {
 	case *GetSpecType_NoS2SConnectivitySli:
-
 	case *GetSpecType_DcClusterGroupSli:
 		refdType, err := d.TypeForEntryKind("", "", "dc_cluster_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: dc_cluster_group")
 		}
-
 		vref := m.GetDcClusterGroupSli()
 		if vref == nil {
 			return nil, nil
@@ -3431,7 +3187,6 @@ func (m *GetSpecType) GetS2SConnectivitySliChoiceDBEntries(ctx context.Context, 
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -3444,11 +3199,8 @@ func (m *GetSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetS2SConnectivitySloChoice().(type) {
 	case *GetSpecType_NoS2SConnectivitySlo:
-
 		return nil, nil
-
 	case *GetSpecType_SiteMeshGroupOnSlo:
-
 		drInfos, err := m.GetSiteMeshGroupOnSlo().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteMeshGroupOnSlo().GetDRefInfo() FAILED")
@@ -3458,9 +3210,7 @@ func (m *GetSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "site_mesh_group_on_slo." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_DcClusterGroupSlo:
-
 		vref := m.GetDcClusterGroupSlo()
 		if vref == nil {
 			return nil, nil
@@ -3476,11 +3226,9 @@ func (m *GetSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, erro
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3488,7 +3236,6 @@ func (m *GetSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentVrf() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSegmentVrf() {
 		driSet, err := e.GetDRefInfo()
@@ -3502,7 +3249,6 @@ func (m *GetSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetSpecType struct {
@@ -3517,6 +3263,9 @@ func (v *ValidateGetSpecType) BlockedServicesChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) EnterpriseProxyChoicePrivateAdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return PrivateADNTypeValidator().Validate, nil
+}
 func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3524,7 +3273,6 @@ func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3532,9 +3280,7 @@ func (v *ValidateGetSpecType) ProviderChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) TunnelDeadTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_dead_timeout")
@@ -3542,9 +3288,7 @@ func (v *ValidateGetSpecType) TunnelDeadTimeoutValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
@@ -3552,9 +3296,7 @@ func (v *ValidateGetSpecType) VolterraSoftwareVersionValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
@@ -3562,9 +3304,7 @@ func (v *ValidateGetSpecType) OperatingSystemVersionValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SegmentVrfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3624,14 +3364,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
 		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
@@ -3667,16 +3404,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_ntp_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_ntp_config"))
 		if err := fv(ctx, m.GetDnsNtpConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetEnterpriseProxyChoice().(type) {
@@ -3702,7 +3435,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
+	case *GetSpecType_PrivateAdn:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.private_adn"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*GetSpecType_PrivateAdn).PrivateAdn
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("private_adn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetForwardProxyChoice().(type) {
@@ -3728,25 +3471,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["load_balancing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("load_balancing"))
 		if err := fv(ctx, m.GetLoadBalancing(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_vrf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_vrf"))
 		if err := fv(ctx, m.GetLocalVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
@@ -3782,7 +3518,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_LogReceiverWithNet:
+		if fv, exists := v.FldValidators["logs_receiver_choice.log_receiver_with_net"]; exists {
+			val := m.GetLogsReceiverChoice().(*GetSpecType_LogReceiverWithNet).LogReceiverWithNet
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("log_receiver_with_net"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 
+	switch m.GetManagementNetworkChoice().(type) {
+	case *GetSpecType_DisableManagementNetwork:
+		if fv, exists := v.FldValidators["management_network_choice.disable_management_network"]; exists {
+			val := m.GetManagementNetworkChoice().(*GetSpecType_DisableManagementNetwork).DisableManagementNetwork
+			vOpts := append(opts,
+				db.WithValidateField("management_network_choice"),
+				db.WithValidateField("disable_management_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableManagementNetwork:
+		if fv, exists := v.FldValidators["management_network_choice.enable_management_network"]; exists {
+			val := m.GetManagementNetworkChoice().(*GetSpecType_EnableManagementNetwork).EnableManagementNetwork
+			vOpts := append(opts,
+				db.WithValidateField("management_network_choice"),
+				db.WithValidateField("enable_management_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetNetworkPolicyChoice().(type) {
@@ -3808,7 +3579,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetNodeHaChoice().(type) {
@@ -3834,34 +3604,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
 		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
 		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
@@ -3996,7 +3756,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
+	case *GetSpecType_OpenshiftVirtualization:
+		if fv, exists := v.FldValidators["provider_choice.openshift_virtualization"]; exists {
+			val := m.GetProviderChoice().(*GetSpecType_OpenshiftVirtualization).OpenshiftVirtualization
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("openshift_virtualization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetProxyBypassChoice().(type) {
@@ -4022,16 +3792,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["re_select"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("re_select"))
 		if err := fv(ctx, m.GetReSelect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetS2SConnectivitySliChoice().(type) {
@@ -4057,7 +3823,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetS2SConnectivitySloChoice().(type) {
@@ -4094,19 +3859,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_vrf"]; exists {
 		vOpts := append(opts, db.WithValidateField("segment_vrf"))
 		if err := fv(ctx, m.GetSegmentVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_errors"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_errors"))
 		for idx, item := range m.GetSiteErrors() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4114,52 +3874,36 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_state"))
 		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["software_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("software_settings"))
 		if err := fv(ctx, m.GetSoftwareSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_dead_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_dead_timeout"))
 		if err := fv(ctx, m.GetTunnelDeadTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upgrade_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upgrade_settings"))
 		if err := fv(ctx, m.GetUpgradeSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetUrlCategorizationChoice().(type) {
@@ -4185,25 +3929,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
 		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4211,7 +3949,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
 	rulesBlockedServicesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4222,7 +3959,16 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
-
+	vrhEnterpriseProxyChoicePrivateAdn := v.EnterpriseProxyChoicePrivateAdnValidationRuleHandler
+	rulesEnterpriseProxyChoicePrivateAdn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["enterprise_proxy_choice.private_adn"], err = vrhEnterpriseProxyChoicePrivateAdn(rulesEnterpriseProxyChoicePrivateAdn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.enterprise_proxy_choice_private_adn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enterprise_proxy_choice.private_adn"] = vFnMap["enterprise_proxy_choice.private_adn"]
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4233,7 +3979,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
 	vrhProviderChoice := v.ProviderChoiceValidationRuleHandler
 	rulesProviderChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4289,17 +4034,12 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["segment_vrf"] = vFn
-
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
-
 	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
-
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
+	v.FldValidators["logs_receiver_choice.log_receiver_with_net"] = LogReceiverWithNetValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
-
 	v.FldValidators["provider_choice.vmware"] = VMwareProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.kvm"] = KVMProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.aws"] = AWSProviderTypeValidator().Validate
@@ -4311,28 +4051,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.equinix"] = EquinixProviderTypeValidator().Validate
-
+	v.FldValidators["provider_choice.openshift_virtualization"] = OpenShiftProviderTypeValidator().Validate
 	v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"] = CustomProxyBypassSettingsValidator().Validate
-
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["s2s_connectivity_slo_choice.site_mesh_group_on_slo"] = SiteMeshGroupTypeValidator().Validate
 	v.FldValidators["s2s_connectivity_slo_choice.dc_cluster_group_slo"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["software_settings"] = SoftwareSettingsTypeValidator().Validate
-
 	v.FldValidators["upgrade_settings"] = UpgradeSettingsTypeValidator().Validate
-
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
 	v.FldValidators["local_vrf"] = LocalVRFSettingTypeValidator().Validate
-
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
-
 	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
-
 	v.FldValidators["dns_ntp_config"] = DNSNTPServerConfigValidator().Validate
 
 	return v
@@ -4358,11 +4088,9 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.admin_user_credentials")
 	}
-
 	if err := m.GetCustomProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.custom_proxy")
 	}
@@ -4408,57 +4136,47 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLocalVrfDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLocalVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProviderChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProviderChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetS2SConnectivitySliChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySliChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetS2SConnectivitySloChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySloChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentVrfDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -4468,11 +4186,8 @@ func (m *GlobalSpecType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetForwardProxyChoice().(type) {
 	case *GlobalSpecType_NoForwardProxy:
-
 		return nil, nil
-
 	case *GlobalSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -4482,11 +4197,9 @@ func (m *GlobalSpecType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -4494,7 +4207,6 @@ func (m *GlobalSpecType) GetLocalVrfDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetLocalVrf() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetLocalVrf().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetLocalVrf().GetDRefInfo() FAILED")
@@ -4504,17 +4216,17 @@ func (m *GlobalSpecType) GetLocalVrfDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "local_vrf." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
+// GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLogsReceiverChoice() == nil {
+		return nil, nil
+	}
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GlobalSpecType_LogsStreamingDisabled:
-
 		return nil, nil
-
 	case *GlobalSpecType_LogReceiver:
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -4530,46 +4242,19 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
+	case *GlobalSpecType_LogReceiverWithNet:
+		drInfos, err := m.GetLogReceiverWithNet().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLogReceiverWithNet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "log_receiver_with_net." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-}
-
-// GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetLogsReceiverChoice().(type) {
-	case *GlobalSpecType_LogsStreamingDisabled:
-
-	case *GlobalSpecType_LogReceiver:
-		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
-		}
-
-		vref := m.GetLogReceiver()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "log_receiver.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -4579,11 +4264,8 @@ func (m *GlobalSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *GlobalSpecType_NoNetworkPolicy:
-
 		return nil, nil
-
 	case *GlobalSpecType_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -4593,11 +4275,9 @@ func (m *GlobalSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -4607,7 +4287,6 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProviderChoice().(type) {
 	case *GlobalSpecType_Vmware:
-
 		drInfos, err := m.GetVmware().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVmware().GetDRefInfo() FAILED")
@@ -4617,9 +4296,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "vmware." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Kvm:
-
 		drInfos, err := m.GetKvm().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetKvm().GetDRefInfo() FAILED")
@@ -4629,9 +4306,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "kvm." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -4641,9 +4316,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Azure:
-
 		drInfos, err := m.GetAzure().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAzure().GetDRefInfo() FAILED")
@@ -4653,9 +4326,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "azure." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Gcp:
-
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -4665,9 +4336,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Rseries:
-
 		drInfos, err := m.GetRseries().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRseries().GetDRefInfo() FAILED")
@@ -4677,9 +4346,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "rseries." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Baremetal:
-
 		drInfos, err := m.GetBaremetal().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBaremetal().GetDRefInfo() FAILED")
@@ -4689,9 +4356,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "baremetal." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Oci:
-
 		drInfos, err := m.GetOci().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOci().GetDRefInfo() FAILED")
@@ -4701,9 +4366,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "oci." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Openstack:
-
 		drInfos, err := m.GetOpenstack().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOpenstack().GetDRefInfo() FAILED")
@@ -4713,9 +4376,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "openstack." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Nutanix:
-
 		drInfos, err := m.GetNutanix().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNutanix().GetDRefInfo() FAILED")
@@ -4725,9 +4386,7 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "nutanix." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_Equinix:
-
 		drInfos, err := m.GetEquinix().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEquinix().GetDRefInfo() FAILED")
@@ -4737,21 +4396,26 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "equinix." + dri.DRField
 		}
 		return drInfos, err
-
+	case *GlobalSpecType_OpenshiftVirtualization:
+		drInfos, err := m.GetOpenshiftVirtualization().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOpenshiftVirtualization().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "openshift_virtualization." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetS2SConnectivitySliChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetS2SConnectivitySliChoice().(type) {
 	case *GlobalSpecType_NoS2SConnectivitySli:
-
 		return nil, nil
-
 	case *GlobalSpecType_DcClusterGroupSli:
-
 		vref := m.GetDcClusterGroupSli()
 		if vref == nil {
 			return nil, nil
@@ -4767,7 +4431,6 @@ func (m *GlobalSpecType) GetS2SConnectivitySliChoiceDRefInfo() ([]db.DRefInfo, e
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -4779,13 +4442,11 @@ func (m *GlobalSpecType) GetS2SConnectivitySliChoiceDBEntries(ctx context.Contex
 
 	switch m.GetS2SConnectivitySliChoice().(type) {
 	case *GlobalSpecType_NoS2SConnectivitySli:
-
 	case *GlobalSpecType_DcClusterGroupSli:
 		refdType, err := d.TypeForEntryKind("", "", "dc_cluster_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: dc_cluster_group")
 		}
-
 		vref := m.GetDcClusterGroupSli()
 		if vref == nil {
 			return nil, nil
@@ -4803,7 +4464,6 @@ func (m *GlobalSpecType) GetS2SConnectivitySliChoiceDBEntries(ctx context.Contex
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -4816,11 +4476,8 @@ func (m *GlobalSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetS2SConnectivitySloChoice().(type) {
 	case *GlobalSpecType_NoS2SConnectivitySlo:
-
 		return nil, nil
-
 	case *GlobalSpecType_SiteMeshGroupOnSlo:
-
 		drInfos, err := m.GetSiteMeshGroupOnSlo().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteMeshGroupOnSlo().GetDRefInfo() FAILED")
@@ -4830,9 +4487,7 @@ func (m *GlobalSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "site_mesh_group_on_slo." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_DcClusterGroupSlo:
-
 		vref := m.GetDcClusterGroupSlo()
 		if vref == nil {
 			return nil, nil
@@ -4848,11 +4503,9 @@ func (m *GlobalSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, e
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -4860,7 +4513,6 @@ func (m *GlobalSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentVrf() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSegmentVrf() {
 		driSet, err := e.GetDRefInfo()
@@ -4874,11 +4526,9 @@ func (m *GlobalSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -4894,7 +4544,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4904,7 +4553,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -4922,7 +4570,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -4938,6 +4585,9 @@ func (v *ValidateGlobalSpecType) BlockedServicesChoiceValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) EnterpriseProxyChoicePrivateAdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return PrivateADNTypeValidator().Validate, nil
+}
 func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4945,7 +4595,6 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4953,9 +4602,7 @@ func (v *ValidateGlobalSpecType) ProviderChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TunnelDeadTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_dead_timeout")
@@ -4963,9 +4610,7 @@ func (v *ValidateGlobalSpecType) TunnelDeadTimeoutValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
@@ -4973,9 +4618,7 @@ func (v *ValidateGlobalSpecType) VolterraSoftwareVersionValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
@@ -4983,9 +4626,7 @@ func (v *ValidateGlobalSpecType) OperatingSystemVersionValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SegmentVrfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5031,9 +4672,7 @@ func (v *ValidateGlobalSpecType) SegmentVrfValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
@@ -5055,23 +4694,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
 		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
@@ -5107,16 +4740,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetDiscoveryMode().(type) {
@@ -5142,16 +4771,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_ntp_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_ntp_config"))
 		if err := fv(ctx, m.GetDnsNtpConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetEnterpriseProxyChoice().(type) {
@@ -5177,7 +4802,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *GlobalSpecType_PrivateAdn:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.private_adn"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*GlobalSpecType_PrivateAdn).PrivateAdn
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("private_adn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetForwardProxyChoice().(type) {
@@ -5203,25 +4838,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["load_balancing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("load_balancing"))
 		if err := fv(ctx, m.GetLoadBalancing(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_vrf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_vrf"))
 		if err := fv(ctx, m.GetLocalVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
@@ -5257,7 +4885,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_LogReceiverWithNet:
+		if fv, exists := v.FldValidators["logs_receiver_choice.log_receiver_with_net"]; exists {
+			val := m.GetLogsReceiverChoice().(*GlobalSpecType_LogReceiverWithNet).LogReceiverWithNet
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("log_receiver_with_net"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 
+	switch m.GetManagementNetworkChoice().(type) {
+	case *GlobalSpecType_DisableManagementNetwork:
+		if fv, exists := v.FldValidators["management_network_choice.disable_management_network"]; exists {
+			val := m.GetManagementNetworkChoice().(*GlobalSpecType_DisableManagementNetwork).DisableManagementNetwork
+			vOpts := append(opts,
+				db.WithValidateField("management_network_choice"),
+				db.WithValidateField("disable_management_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableManagementNetwork:
+		if fv, exists := v.FldValidators["management_network_choice.enable_management_network"]; exists {
+			val := m.GetManagementNetworkChoice().(*GlobalSpecType_EnableManagementNetwork).EnableManagementNetwork
+			vOpts := append(opts,
+				db.WithValidateField("management_network_choice"),
+				db.WithValidateField("enable_management_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetNetworkPolicyChoice().(type) {
@@ -5283,7 +4946,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetNodeHaChoice().(type) {
@@ -5309,43 +4971,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
 		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
 		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
 		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
@@ -5480,7 +5129,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *GlobalSpecType_OpenshiftVirtualization:
+		if fv, exists := v.FldValidators["provider_choice.openshift_virtualization"]; exists {
+			val := m.GetProviderChoice().(*GlobalSpecType_OpenshiftVirtualization).OpenshiftVirtualization
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("openshift_virtualization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetProxyBypassChoice().(type) {
@@ -5506,16 +5165,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["re_select"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("re_select"))
 		if err := fv(ctx, m.GetReSelect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetS2SConnectivitySliChoice().(type) {
@@ -5541,7 +5196,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetS2SConnectivitySloChoice().(type) {
@@ -5578,19 +5232,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_vrf"]; exists {
 		vOpts := append(opts, db.WithValidateField("segment_vrf"))
 		if err := fv(ctx, m.GetSegmentVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_errors"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_errors"))
 		for idx, item := range m.GetSiteErrors() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5598,52 +5247,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_state"))
 		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["software_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("software_settings"))
 		if err := fv(ctx, m.GetSoftwareSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_dead_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_dead_timeout"))
 		if err := fv(ctx, m.GetTunnelDeadTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upgrade_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upgrade_settings"))
 		if err := fv(ctx, m.GetUpgradeSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetUrlCategorizationChoice().(type) {
@@ -5669,34 +5302,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
 		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5704,7 +5328,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
 	rulesBlockedServicesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5715,7 +5338,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
-
+	vrhEnterpriseProxyChoicePrivateAdn := v.EnterpriseProxyChoicePrivateAdnValidationRuleHandler
+	rulesEnterpriseProxyChoicePrivateAdn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["enterprise_proxy_choice.private_adn"], err = vrhEnterpriseProxyChoicePrivateAdn(rulesEnterpriseProxyChoicePrivateAdn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.enterprise_proxy_choice_private_adn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enterprise_proxy_choice.private_adn"] = vFnMap["enterprise_proxy_choice.private_adn"]
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5726,7 +5358,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
 	vrhProviderChoice := v.ProviderChoiceValidationRuleHandler
 	rulesProviderChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5793,17 +5424,12 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
-
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
-
 	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
-
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
+	v.FldValidators["logs_receiver_choice.log_receiver_with_net"] = LogReceiverWithNetValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
-
 	v.FldValidators["provider_choice.vmware"] = VMwareProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.kvm"] = KVMProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.aws"] = AWSProviderTypeValidator().Validate
@@ -5815,32 +5441,20 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.equinix"] = EquinixProviderTypeValidator().Validate
-
+	v.FldValidators["provider_choice.openshift_virtualization"] = OpenShiftProviderTypeValidator().Validate
 	v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"] = CustomProxyBypassSettingsValidator().Validate
-
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["s2s_connectivity_slo_choice.site_mesh_group_on_slo"] = SiteMeshGroupTypeValidator().Validate
 	v.FldValidators["s2s_connectivity_slo_choice.dc_cluster_group_slo"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["software_settings"] = SoftwareSettingsTypeValidator().Validate
-
 	v.FldValidators["upgrade_settings"] = UpgradeSettingsTypeValidator().Validate
-
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
 	v.FldValidators["local_vrf"] = LocalVRFSettingTypeValidator().Validate
-
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
-
 	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
-
 	v.FldValidators["dns_ntp_config"] = DNSNTPServerConfigValidator().Validate
-
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -5898,21 +5512,17 @@ func (m *Interface) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetIpv6AddressChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpv6AddressChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkOptionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOptionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -5922,15 +5532,10 @@ func (m *Interface) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAddressChoice().(type) {
 	case *Interface_DhcpClient:
-
 		return nil, nil
-
 	case *Interface_StaticIp:
-
 		return nil, nil
-
 	case *Interface_DhcpServer:
-
 		drInfos, err := m.GetDhcpServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfo() FAILED")
@@ -5940,15 +5545,11 @@ func (m *Interface) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "dhcp_server." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Interface_NoIpv4Address:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -5958,11 +5559,8 @@ func (m *Interface) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpv6AddressChoice().(type) {
 	case *Interface_NoIpv6Address:
-
 		return nil, nil
-
 	case *Interface_StaticIpv6Address:
-
 		drInfos, err := m.GetStaticIpv6Address().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIpv6Address().GetDRefInfo() FAILED")
@@ -5972,9 +5570,7 @@ func (m *Interface) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "static_ipv6_address." + dri.DRField
 		}
 		return drInfos, err
-
 	case *Interface_Ipv6AutoConfig:
-
 		drInfos, err := m.GetIpv6AutoConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpv6AutoConfig().GetDRefInfo() FAILED")
@@ -5984,11 +5580,9 @@ func (m *Interface) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ipv6_auto_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -5996,7 +5590,6 @@ func (m *Interface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNetworkOption() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
@@ -6006,7 +5599,6 @@ func (m *Interface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "network_option." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateInterface struct {
@@ -6020,7 +5612,6 @@ func (v *ValidateInterface) AddressChoiceValidationRuleHandler(rules map[string]
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) InterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6028,9 +5619,7 @@ func (v *ValidateInterface) InterfaceChoiceValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
@@ -6038,9 +5627,7 @@ func (v *ValidateInterface) DescriptionValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -6083,9 +5670,7 @@ func (v *ValidateInterface) LabelsValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -6093,9 +5678,7 @@ func (v *ValidateInterface) NameValidationRuleHandler(rules map[string]string) (
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
@@ -6103,9 +5686,7 @@ func (v *ValidateInterface) MtuValidationRuleHandler(rules map[string]string) (d
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) NetworkOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for network_option")
@@ -6114,15 +5695,12 @@ func (v *ValidateInterface) NetworkOptionValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInterface) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
@@ -6200,16 +5778,12 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["interface_choice"]; exists {
@@ -6256,7 +5830,6 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetIpv6AddressChoice().(type) {
@@ -6293,33 +5866,24 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_management"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_management"))
 		if err := fv(ctx, m.GetIsManagement(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["is_primary"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("is_primary"))
 		if err := fv(ctx, m.GetIsPrimary(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
 		vOpts := append(opts, db.WithValidateField("labels"))
 		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetMonitoringChoice().(type) {
@@ -6345,43 +5909,30 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["network_option"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("network_option"))
 		if err := fv(ctx, m.GetNetworkOption(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSiteToSiteConnectivityInterfaceChoice().(type) {
@@ -6407,16 +5958,13 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInterfaceValidator = func() *ValidateInterface {
 	v := &ValidateInterface{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6424,7 +5972,6 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
 	rulesAddressChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6435,7 +5982,6 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 		panic(errMsg)
 	}
 	v.FldValidators["address_choice"] = vFn
-
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6517,14 +6063,11 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 		panic(errMsg)
 	}
 	v.FldValidators["priority"] = vFn
-
 	v.FldValidators["address_choice.static_ip"] = ves_io_schema_network_interface.StaticIpParametersNodeTypeValidator().Validate
 	v.FldValidators["address_choice.dhcp_server"] = ves_io_schema_network_interface.DHCPServerParametersTypeValidator().Validate
-
 	v.FldValidators["interface_choice.ethernet_interface"] = EthernetInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.vlan_interface"] = VlanInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.bond_interface"] = ves_io_schema_fleet.FleetBondDeviceTypeValidator().Validate
-
 	v.FldValidators["ipv6_address_choice.static_ipv6_address"] = ves_io_schema_network_interface.StaticIPParametersTypeValidator().Validate
 	v.FldValidators["ipv6_address_choice.ipv6_auto_config"] = ves_io_schema_network_interface.IPV6AutoConfigTypeValidator().Validate
 
@@ -6578,7 +6121,6 @@ func (m *KVMProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -6588,7 +6130,6 @@ func (m *KVMProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *KVMProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -6598,11 +6139,9 @@ func (m *KVMProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateKVMProviderType struct {
@@ -6635,16 +6174,13 @@ func (v *ValidateKVMProviderType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultKVMProviderTypeValidator = func() *ValidateKVMProviderType {
 	v := &ValidateKVMProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 
 	return v
@@ -6708,16 +6244,12 @@ func (v *ValidateLoadBalancingSettingsType) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vip_vrrp_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip_vrrp_mode"))
 		if err := fv(ctx, m.GetVipVrrpMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -6780,15 +6312,12 @@ func (m *LocalVRFSettingType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSloChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSloChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -6798,11 +6327,8 @@ func (m *LocalVRFSettingType) GetSliChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSliChoice().(type) {
 	case *LocalVRFSettingType_DefaultSliConfig:
-
 		return nil, nil
-
 	case *LocalVRFSettingType_SliConfig:
-
 		drInfos, err := m.GetSliConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliConfig().GetDRefInfo() FAILED")
@@ -6812,11 +6338,9 @@ func (m *LocalVRFSettingType) GetSliChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "sli_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -6826,11 +6350,8 @@ func (m *LocalVRFSettingType) GetSloChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSloChoice().(type) {
 	case *LocalVRFSettingType_DefaultConfig:
-
 		return nil, nil
-
 	case *LocalVRFSettingType_SloConfig:
-
 		drInfos, err := m.GetSloConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloConfig().GetDRefInfo() FAILED")
@@ -6840,11 +6361,9 @@ func (m *LocalVRFSettingType) GetSloChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "slo_config." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateLocalVRFSettingType struct {
@@ -6896,7 +6415,6 @@ func (v *ValidateLocalVRFSettingType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["slo_choice"]; exists {
@@ -6932,16 +6450,13 @@ func (v *ValidateLocalVRFSettingType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLocalVRFSettingTypeValidator = func() *ValidateLocalVRFSettingType {
 	v := &ValidateLocalVRFSettingType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6949,7 +6464,6 @@ var DefaultLocalVRFSettingTypeValidator = func() *ValidateLocalVRFSettingType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSloChoice := v.SloChoiceValidationRuleHandler
 	rulesSloChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6960,9 +6474,7 @@ var DefaultLocalVRFSettingTypeValidator = func() *ValidateLocalVRFSettingType {
 		panic(errMsg)
 	}
 	v.FldValidators["slo_choice"] = vFn
-
 	v.FldValidators["sli_choice.sli_config"] = VirtualNetworkConfigurationValidator().Validate
-
 	v.FldValidators["slo_choice.slo_config"] = VirtualNetworkConfigurationValidator().Validate
 
 	return v
@@ -6970,6 +6482,159 @@ var DefaultLocalVRFSettingTypeValidator = func() *ValidateLocalVRFSettingType {
 
 func LocalVRFSettingTypeValidator() db.Validator {
 	return DefaultLocalVRFSettingTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LogReceiverWithNet) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LogReceiverWithNet) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LogReceiverWithNet) DeepCopy() *LogReceiverWithNet {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LogReceiverWithNet{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LogReceiverWithNet) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LogReceiverWithNet) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LogReceiverWithNetValidator().Validate(ctx, m, opts...)
+}
+
+func (m *LogReceiverWithNet) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetLogReceiverDRefInfo()
+}
+
+func (m *LogReceiverWithNet) GetLogReceiverDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetLogReceiver()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("log_receiver.Object")
+	dri := db.DRefInfo{
+		RefdType:   "log_receiver.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "log_receiver",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetLogReceiverDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *LogReceiverWithNet) GetLogReceiverDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
+	}
+	vref := m.GetLogReceiver()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "log_receiver.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+type ValidateLogReceiverWithNet struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLogReceiverWithNet) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LogReceiverWithNet)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LogReceiverWithNet got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["log_receiver"]; exists {
+		vOpts := append(opts, db.WithValidateField("log_receiver"))
+		if err := fv(ctx, m.GetLogReceiver(), vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNetworkChoice().(type) {
+	case *LogReceiverWithNet_UseSloSli:
+		if fv, exists := v.FldValidators["network_choice.use_slo_sli"]; exists {
+			val := m.GetNetworkChoice().(*LogReceiverWithNet_UseSloSli).UseSloSli
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("use_slo_sli"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LogReceiverWithNet_UseManagementNetwork:
+		if fv, exists := v.FldValidators["network_choice.use_management_network"]; exists {
+			val := m.GetNetworkChoice().(*LogReceiverWithNet_UseManagementNetwork).UseManagementNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("use_management_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLogReceiverWithNetValidator = func() *ValidateLogReceiverWithNet {
+	v := &ValidateLogReceiverWithNet{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func LogReceiverWithNetValidator() db.Validator {
+	return DefaultLogReceiverWithNetValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -7015,7 +6680,6 @@ func (m *Node) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetInterfaceListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7023,7 +6687,6 @@ func (m *Node) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInterfaceList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetInterfaceList() {
 		driSet, err := e.GetDRefInfo()
@@ -7037,7 +6700,6 @@ func (m *Node) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateNode struct {
@@ -7045,7 +6707,6 @@ type ValidateNode struct {
 }
 
 func (v *ValidateNode) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
@@ -7053,9 +6714,7 @@ func (v *ValidateNode) TypeValidationRuleHandler(rules map[string]string) (db.Va
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNode) HostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
@@ -7063,9 +6722,7 @@ func (v *ValidateNode) HostnameValidationRuleHandler(rules map[string]string) (d
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNode) PublicIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for public_ip")
@@ -7073,9 +6730,7 @@ func (v *ValidateNode) PublicIpValidationRuleHandler(rules map[string]string) (d
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNode) InterfaceListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7135,49 +6790,36 @@ func (v *ValidateNode) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hostname"))
 		if err := fv(ctx, m.GetHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["interface_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("interface_list"))
 		if err := fv(ctx, m.GetInterfaceList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_ip"))
 		if err := fv(ctx, m.GetPublicIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNodeValidator = func() *ValidateNode {
 	v := &ValidateNode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7281,7 +6923,6 @@ func (m *NodeList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetNodeListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7289,7 +6930,6 @@ func (m *NodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetNodeList() {
 		driSet, err := e.GetDRefInfo()
@@ -7303,7 +6943,6 @@ func (m *NodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateNodeList struct {
@@ -7311,7 +6950,6 @@ type ValidateNodeList struct {
 }
 
 func (v *ValidateNodeList) NodeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7371,22 +7009,18 @@ func (v *ValidateNodeList) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["node_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("node_list"))
 		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNodeListValidator = func() *ValidateNodeList {
 	v := &ValidateNodeList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7457,7 +7091,6 @@ func (m *NutanixProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7467,7 +7100,6 @@ func (m *NutanixProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *NutanixProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -7477,11 +7109,9 @@ func (m *NutanixProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateNutanixProviderType struct {
@@ -7514,16 +7144,13 @@ func (v *ValidateNutanixProviderType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNutanixProviderTypeValidator = func() *ValidateNutanixProviderType {
 	v := &ValidateNutanixProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 
 	return v
@@ -7576,7 +7203,6 @@ func (m *OCIProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7586,7 +7212,6 @@ func (m *OCIProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *OCIProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -7596,11 +7221,9 @@ func (m *OCIProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateOCIProviderType struct {
@@ -7633,16 +7256,13 @@ func (v *ValidateOCIProviderType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOCIProviderTypeValidator = func() *ValidateOCIProviderType {
 	v := &ValidateOCIProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 
 	return v
@@ -7650,6 +7270,118 @@ var DefaultOCIProviderTypeValidator = func() *ValidateOCIProviderType {
 
 func OCIProviderTypeValidator() db.Validator {
 	return DefaultOCIProviderTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OpenShiftProviderType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OpenShiftProviderType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OpenShiftProviderType) DeepCopy() *OpenShiftProviderType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OpenShiftProviderType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OpenShiftProviderType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OpenShiftProviderType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OpenShiftProviderTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *OpenShiftProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOrchestrationChoiceDRefInfo()
+}
+
+// GetDRefInfo for the field's type
+func (m *OpenShiftProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetOrchestrationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOrchestrationChoice().(type) {
+	case *OpenShiftProviderType_NotManaged:
+		drInfos, err := m.GetNotManaged().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "not_managed." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+type ValidateOpenShiftProviderType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOpenShiftProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OpenShiftProviderType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OpenShiftProviderType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetOrchestrationChoice().(type) {
+	case *OpenShiftProviderType_NotManaged:
+		if fv, exists := v.FldValidators["orchestration_choice.not_managed"]; exists {
+			val := m.GetOrchestrationChoice().(*OpenShiftProviderType_NotManaged).NotManaged
+			vOpts := append(opts,
+				db.WithValidateField("orchestration_choice"),
+				db.WithValidateField("not_managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOpenShiftProviderTypeValidator = func() *ValidateOpenShiftProviderType {
+	v := &ValidateOpenShiftProviderType{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
+
+	return v
+}()
+
+func OpenShiftProviderTypeValidator() db.Validator {
+	return DefaultOpenShiftProviderTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -7695,7 +7427,6 @@ func (m *OpenstackProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7705,7 +7436,6 @@ func (m *OpenstackProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo,
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *OpenstackProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -7715,11 +7445,9 @@ func (m *OpenstackProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateOpenstackProviderType struct {
@@ -7752,16 +7480,13 @@ func (v *ValidateOpenstackProviderType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOpenstackProviderTypeValidator = func() *ValidateOpenstackProviderType {
 	v := &ValidateOpenstackProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 
 	return v
@@ -7769,6 +7494,108 @@ var DefaultOpenstackProviderTypeValidator = func() *ValidateOpenstackProviderTyp
 
 func OpenstackProviderTypeValidator() db.Validator {
 	return DefaultOpenstackProviderTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PrivateADNType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PrivateADNType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PrivateADNType) DeepCopy() *PrivateADNType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PrivateADNType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PrivateADNType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PrivateADNType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PrivateADNTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePrivateADNType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePrivateADNType) PrivateAdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_adn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePrivateADNType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PrivateADNType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PrivateADNType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["private_adn"]; exists {
+		vOpts := append(opts, db.WithValidateField("private_adn"))
+		if err := fv(ctx, m.GetPrivateAdn(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPrivateADNTypeValidator = func() *ValidatePrivateADNType {
+	v := &ValidatePrivateADNType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPrivateAdn := v.PrivateAdnValidationRuleHandler
+	rulesPrivateAdn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+	}
+	vFn, err = vrhPrivateAdn(rulesPrivateAdn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrivateADNType.private_adn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_adn"] = vFn
+
+	return v
+}()
+
+func PrivateADNTypeValidator() db.Validator {
+	return DefaultPrivateADNTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -7814,7 +7641,6 @@ func (m *RSeriesProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7824,7 +7650,6 @@ func (m *RSeriesProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *RSeriesProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -7834,11 +7659,9 @@ func (m *RSeriesProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, e
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateRSeriesProviderType struct {
@@ -7871,16 +7694,13 @@ func (v *ValidateRSeriesProviderType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRSeriesProviderTypeValidator = func() *ValidateRSeriesProviderType {
 	v := &ValidateRSeriesProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 
 	return v
@@ -7906,11 +7726,9 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.admin_user_credentials")
 	}
-
 	if err := m.GetCustomProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.custom_proxy")
 	}
@@ -7956,51 +7774,42 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLocalVrfDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLocalVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetProviderChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetProviderChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetS2SConnectivitySliChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySliChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetS2SConnectivitySloChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySloChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentVrfDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -8010,11 +7819,8 @@ func (m *ReplaceSpecType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetForwardProxyChoice().(type) {
 	case *ReplaceSpecType_NoForwardProxy:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ActiveForwardProxyPolicies:
-
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -8024,11 +7830,9 @@ func (m *ReplaceSpecType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "active_forward_proxy_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -8036,7 +7840,6 @@ func (m *ReplaceSpecType) GetLocalVrfDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetLocalVrf() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetLocalVrf().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetLocalVrf().GetDRefInfo() FAILED")
@@ -8046,17 +7849,17 @@ func (m *ReplaceSpecType) GetLocalVrfDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "local_vrf." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
+// GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLogsReceiverChoice() == nil {
+		return nil, nil
+	}
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
-
 		return nil, nil
-
 	case *ReplaceSpecType_LogReceiver:
-
 		vref := m.GetLogReceiver()
 		if vref == nil {
 			return nil, nil
@@ -8072,46 +7875,19 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error)
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
+	case *ReplaceSpecType_LogReceiverWithNet:
+		drInfos, err := m.GetLogReceiverWithNet().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLogReceiverWithNet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "log_receiver_with_net." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-}
-
-// GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetLogsReceiverChoice().(type) {
-	case *ReplaceSpecType_LogsStreamingDisabled:
-
-	case *ReplaceSpecType_LogReceiver:
-		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
-		}
-
-		vref := m.GetLogReceiver()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "log_receiver.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -8121,11 +7897,8 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetNetworkPolicyChoice().(type) {
 	case *ReplaceSpecType_NoNetworkPolicy:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ActiveEnhancedFirewallPolicies:
-
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -8135,11 +7908,9 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -8149,7 +7920,6 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetProviderChoice().(type) {
 	case *ReplaceSpecType_Vmware:
-
 		drInfos, err := m.GetVmware().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVmware().GetDRefInfo() FAILED")
@@ -8159,9 +7929,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "vmware." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Kvm:
-
 		drInfos, err := m.GetKvm().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetKvm().GetDRefInfo() FAILED")
@@ -8171,9 +7939,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "kvm." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Aws:
-
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -8183,9 +7949,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "aws." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Azure:
-
 		drInfos, err := m.GetAzure().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAzure().GetDRefInfo() FAILED")
@@ -8195,9 +7959,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "azure." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Gcp:
-
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -8207,9 +7969,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "gcp." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Rseries:
-
 		drInfos, err := m.GetRseries().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRseries().GetDRefInfo() FAILED")
@@ -8219,9 +7979,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "rseries." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Baremetal:
-
 		drInfos, err := m.GetBaremetal().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBaremetal().GetDRefInfo() FAILED")
@@ -8231,9 +7989,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "baremetal." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Oci:
-
 		drInfos, err := m.GetOci().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOci().GetDRefInfo() FAILED")
@@ -8243,9 +7999,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "oci." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Openstack:
-
 		drInfos, err := m.GetOpenstack().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOpenstack().GetDRefInfo() FAILED")
@@ -8255,9 +8009,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "openstack." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Nutanix:
-
 		drInfos, err := m.GetNutanix().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNutanix().GetDRefInfo() FAILED")
@@ -8267,9 +8019,7 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "nutanix." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_Equinix:
-
 		drInfos, err := m.GetEquinix().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEquinix().GetDRefInfo() FAILED")
@@ -8279,21 +8029,26 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "equinix." + dri.DRField
 		}
 		return drInfos, err
-
+	case *ReplaceSpecType_OpenshiftVirtualization:
+		drInfos, err := m.GetOpenshiftVirtualization().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOpenshiftVirtualization().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "openshift_virtualization." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ReplaceSpecType) GetS2SConnectivitySliChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetS2SConnectivitySliChoice().(type) {
 	case *ReplaceSpecType_NoS2SConnectivitySli:
-
 		return nil, nil
-
 	case *ReplaceSpecType_DcClusterGroupSli:
-
 		vref := m.GetDcClusterGroupSli()
 		if vref == nil {
 			return nil, nil
@@ -8309,7 +8064,6 @@ func (m *ReplaceSpecType) GetS2SConnectivitySliChoiceDRefInfo() ([]db.DRefInfo, 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -8321,13 +8075,11 @@ func (m *ReplaceSpecType) GetS2SConnectivitySliChoiceDBEntries(ctx context.Conte
 
 	switch m.GetS2SConnectivitySliChoice().(type) {
 	case *ReplaceSpecType_NoS2SConnectivitySli:
-
 	case *ReplaceSpecType_DcClusterGroupSli:
 		refdType, err := d.TypeForEntryKind("", "", "dc_cluster_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: dc_cluster_group")
 		}
-
 		vref := m.GetDcClusterGroupSli()
 		if vref == nil {
 			return nil, nil
@@ -8345,7 +8097,6 @@ func (m *ReplaceSpecType) GetS2SConnectivitySliChoiceDBEntries(ctx context.Conte
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -8358,11 +8109,8 @@ func (m *ReplaceSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 	switch m.GetS2SConnectivitySloChoice().(type) {
 	case *ReplaceSpecType_NoS2SConnectivitySlo:
-
 		return nil, nil
-
 	case *ReplaceSpecType_SiteMeshGroupOnSlo:
-
 		drInfos, err := m.GetSiteMeshGroupOnSlo().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteMeshGroupOnSlo().GetDRefInfo() FAILED")
@@ -8372,9 +8120,7 @@ func (m *ReplaceSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, 
 			dri.DRField = "site_mesh_group_on_slo." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_DcClusterGroupSlo:
-
 		vref := m.GetDcClusterGroupSlo()
 		if vref == nil {
 			return nil, nil
@@ -8390,11 +8136,9 @@ func (m *ReplaceSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -8402,7 +8146,6 @@ func (m *ReplaceSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentVrf() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSegmentVrf() {
 		driSet, err := e.GetDRefInfo()
@@ -8416,7 +8159,6 @@ func (m *ReplaceSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -8431,6 +8173,9 @@ func (v *ValidateReplaceSpecType) BlockedServicesChoiceValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) EnterpriseProxyChoicePrivateAdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return PrivateADNTypeValidator().Validate, nil
+}
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8438,7 +8183,6 @@ func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8446,9 +8190,7 @@ func (v *ValidateReplaceSpecType) ProviderChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) TunnelDeadTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_dead_timeout")
@@ -8456,9 +8198,7 @@ func (v *ValidateReplaceSpecType) TunnelDeadTimeoutValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SegmentVrfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -8518,14 +8258,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
 		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
@@ -8561,16 +8298,12 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_ntp_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_ntp_config"))
 		if err := fv(ctx, m.GetDnsNtpConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetEnterpriseProxyChoice().(type) {
@@ -8596,7 +8329,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
+	case *ReplaceSpecType_PrivateAdn:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.private_adn"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*ReplaceSpecType_PrivateAdn).PrivateAdn
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("private_adn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetForwardProxyChoice().(type) {
@@ -8622,25 +8365,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["load_balancing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("load_balancing"))
 		if err := fv(ctx, m.GetLoadBalancing(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_vrf"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_vrf"))
 		if err := fv(ctx, m.GetLocalVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
@@ -8676,7 +8412,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
+	case *ReplaceSpecType_LogReceiverWithNet:
+		if fv, exists := v.FldValidators["logs_receiver_choice.log_receiver_with_net"]; exists {
+			val := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogReceiverWithNet).LogReceiverWithNet
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("log_receiver_with_net"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetNetworkPolicyChoice().(type) {
@@ -8702,7 +8448,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetNodeHaChoice().(type) {
@@ -8728,25 +8473,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
 		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
@@ -8881,7 +8619,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
+	case *ReplaceSpecType_OpenshiftVirtualization:
+		if fv, exists := v.FldValidators["provider_choice.openshift_virtualization"]; exists {
+			val := m.GetProviderChoice().(*ReplaceSpecType_OpenshiftVirtualization).OpenshiftVirtualization
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("openshift_virtualization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 
 	switch m.GetProxyBypassChoice().(type) {
@@ -8907,16 +8655,12 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["re_select"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("re_select"))
 		if err := fv(ctx, m.GetReSelect(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetS2SConnectivitySliChoice().(type) {
@@ -8942,7 +8686,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetS2SConnectivitySloChoice().(type) {
@@ -8979,51 +8722,36 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_vrf"]; exists {
 		vOpts := append(opts, db.WithValidateField("segment_vrf"))
 		if err := fv(ctx, m.GetSegmentVrf(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["software_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("software_settings"))
 		if err := fv(ctx, m.GetSoftwareSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_dead_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_dead_timeout"))
 		if err := fv(ctx, m.GetTunnelDeadTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upgrade_settings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upgrade_settings"))
 		if err := fv(ctx, m.GetUpgradeSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetUrlCategorizationChoice().(type) {
@@ -9049,16 +8777,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9066,7 +8791,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBlockedServicesChoice := v.BlockedServicesChoiceValidationRuleHandler
 	rulesBlockedServicesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9077,7 +8801,16 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
-
+	vrhEnterpriseProxyChoicePrivateAdn := v.EnterpriseProxyChoicePrivateAdnValidationRuleHandler
+	rulesEnterpriseProxyChoicePrivateAdn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["enterprise_proxy_choice.private_adn"], err = vrhEnterpriseProxyChoicePrivateAdn(rulesEnterpriseProxyChoicePrivateAdn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.enterprise_proxy_choice_private_adn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enterprise_proxy_choice.private_adn"] = vFnMap["enterprise_proxy_choice.private_adn"]
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9088,7 +8821,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
 	vrhProviderChoice := v.ProviderChoiceValidationRuleHandler
 	rulesProviderChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9122,17 +8854,12 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["segment_vrf"] = vFn
-
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
-
 	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
-
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
+	v.FldValidators["logs_receiver_choice.log_receiver_with_net"] = LogReceiverWithNetValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
-
 	v.FldValidators["provider_choice.vmware"] = VMwareProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.kvm"] = KVMProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.aws"] = AWSProviderTypeValidator().Validate
@@ -9144,28 +8871,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.equinix"] = EquinixProviderTypeValidator().Validate
-
+	v.FldValidators["provider_choice.openshift_virtualization"] = OpenShiftProviderTypeValidator().Validate
 	v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"] = CustomProxyBypassSettingsValidator().Validate
-
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["s2s_connectivity_slo_choice.site_mesh_group_on_slo"] = SiteMeshGroupTypeValidator().Validate
 	v.FldValidators["s2s_connectivity_slo_choice.dc_cluster_group_slo"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["software_settings"] = SoftwareSettingsTypeValidator().Validate
-
 	v.FldValidators["upgrade_settings"] = UpgradeSettingsTypeValidator().Validate
-
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
 	v.FldValidators["local_vrf"] = LocalVRFSettingTypeValidator().Validate
-
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
-
 	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
-
 	v.FldValidators["dns_ntp_config"] = DNSNTPServerConfigValidator().Validate
 
 	return v
@@ -9223,15 +8940,12 @@ func (m *SegmentNetworkConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticV6RouteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticV6RouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -9241,11 +8955,8 @@ func (m *SegmentNetworkConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefI
 	}
 	switch m.GetStaticRouteChoice().(type) {
 	case *SegmentNetworkConfiguration_NoStaticRoutes:
-
 		return nil, nil
-
 	case *SegmentNetworkConfiguration_StaticRoutes:
-
 		drInfos, err := m.GetStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticRoutes().GetDRefInfo() FAILED")
@@ -9255,11 +8966,9 @@ func (m *SegmentNetworkConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefI
 			dri.DRField = "static_routes." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -9269,11 +8978,8 @@ func (m *SegmentNetworkConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRe
 	}
 	switch m.GetStaticV6RouteChoice().(type) {
 	case *SegmentNetworkConfiguration_NoV6StaticRoutes:
-
 		return nil, nil
-
 	case *SegmentNetworkConfiguration_StaticV6Routes:
-
 		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
@@ -9283,11 +8989,9 @@ func (m *SegmentNetworkConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRe
 			dri.DRField = "static_v6_routes." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateSegmentNetworkConfiguration struct {
@@ -9301,7 +9005,6 @@ func (v *ValidateSegmentNetworkConfiguration) StaticRouteChoiceValidationRuleHan
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSegmentNetworkConfiguration) StaticV6RouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -9309,9 +9012,7 @@ func (v *ValidateSegmentNetworkConfiguration) StaticV6RouteChoiceValidationRuleH
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSegmentNetworkConfiguration) NameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver")
@@ -9319,12 +9020,26 @@ func (v *ValidateSegmentNetworkConfiguration) NameserverValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSegmentNetworkConfiguration) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateSegmentNetworkConfiguration) SecondaryNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateSegmentNetworkConfiguration) SecondaryNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v6")
 	}
 
 	return validatorFn, nil
@@ -9343,23 +9058,29 @@ func (v *ValidateSegmentNetworkConfiguration) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nameserver"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver"))
 		if err := fv(ctx, m.GetNameserver(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
 		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
+	}
+	if fv, exists := v.FldValidators["secondary_nameserver"]; exists {
+		vOpts := append(opts, db.WithValidateField("secondary_nameserver"))
+		if err := fv(ctx, m.GetSecondaryNameserver(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["secondary_nameserver_v6"]; exists {
+		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v6"))
+		if err := fv(ctx, m.GetSecondaryNameserverV6(), vOpts...); err != nil {
+			return err
+		}
 	}
 
 	if fv, exists := v.FldValidators["static_route_choice"]; exists {
@@ -9395,7 +9116,6 @@ func (v *ValidateSegmentNetworkConfiguration) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["static_v6_route_choice"]; exists {
@@ -9431,16 +9151,13 @@ func (v *ValidateSegmentNetworkConfiguration) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSegmentNetworkConfigurationValidator = func() *ValidateSegmentNetworkConfiguration {
 	v := &ValidateSegmentNetworkConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9448,7 +9165,6 @@ var DefaultSegmentNetworkConfigurationValidator = func() *ValidateSegmentNetwork
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhStaticRouteChoice := v.StaticRouteChoiceValidationRuleHandler
 	rulesStaticRouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9459,7 +9175,6 @@ var DefaultSegmentNetworkConfigurationValidator = func() *ValidateSegmentNetwork
 		panic(errMsg)
 	}
 	v.FldValidators["static_route_choice"] = vFn
-
 	vrhStaticV6RouteChoice := v.StaticV6RouteChoiceValidationRuleHandler
 	rulesStaticV6RouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9493,8 +9208,28 @@ var DefaultSegmentNetworkConfigurationValidator = func() *ValidateSegmentNetwork
 	}
 	v.FldValidators["nameserver_v6"] = vFn
 
-	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
+	vrhSecondaryNameserver := v.SecondaryNameserverValidationRuleHandler
+	rulesSecondaryNameserver := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhSecondaryNameserver(rulesSecondaryNameserver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentNetworkConfiguration.secondary_nameserver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["secondary_nameserver"] = vFn
 
+	vrhSecondaryNameserverV6 := v.SecondaryNameserverV6ValidationRuleHandler
+	rulesSecondaryNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhSecondaryNameserverV6(rulesSecondaryNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentNetworkConfiguration.secondary_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["secondary_nameserver_v6"] = vFn
+	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
 	v.FldValidators["static_v6_route_choice.static_v6_routes"] = ves_io_schema_virtual_network.StaticV6RoutesListTypeValidator().Validate
 
 	return v
@@ -9552,15 +9287,12 @@ func (m *SegmentVRFSettingType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSegmentNetworkDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSegmentNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -9568,7 +9300,6 @@ func (m *SegmentVRFSettingType) GetSegmentConfigDRefInfo() ([]db.DRefInfo, error
 	if m.GetSegmentConfig() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSegmentConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentConfig().GetDRefInfo() FAILED")
@@ -9578,11 +9309,9 @@ func (m *SegmentVRFSettingType) GetSegmentConfigDRefInfo() ([]db.DRefInfo, error
 		dri.DRField = "segment_config." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *SegmentVRFSettingType) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegmentNetwork()
 	if vref == nil {
 		return nil, nil
@@ -9598,7 +9327,6 @@ func (m *SegmentVRFSettingType) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, erro
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -9608,7 +9336,6 @@ func (m *SegmentVRFSettingType) GetSegmentNetworkDBEntries(ctx context.Context, 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegmentNetwork()
 	if vref == nil {
 		return nil, nil
@@ -9626,7 +9353,6 @@ func (m *SegmentVRFSettingType) GetSegmentNetworkDBEntries(ctx context.Context, 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -9647,34 +9373,25 @@ func (v *ValidateSegmentVRFSettingType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["segment_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_config"))
 		if err := fv(ctx, m.GetSegmentConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_network"))
 		if err := fv(ctx, m.GetSegmentNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSegmentVRFSettingTypeValidator = func() *ValidateSegmentVRFSettingType {
 	v := &ValidateSegmentVRFSettingType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["segment_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["segment_config"] = SegmentNetworkConfigurationValidator().Validate
 
 	return v
@@ -9727,17 +9444,13 @@ func (m *SiteMeshGroupType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteMeshGroupChoiceDRefInfo()
-
 }
 
 func (m *SiteMeshGroupType) GetSiteMeshGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetSiteMeshGroupChoice().(type) {
 	case *SiteMeshGroupType_NoSiteMeshGroup:
-
 		return nil, nil
-
 	case *SiteMeshGroupType_SiteMeshGroup:
-
 		vref := m.GetSiteMeshGroup()
 		if vref == nil {
 			return nil, nil
@@ -9753,7 +9466,6 @@ func (m *SiteMeshGroupType) GetSiteMeshGroupChoiceDRefInfo() ([]db.DRefInfo, err
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -9765,13 +9477,11 @@ func (m *SiteMeshGroupType) GetSiteMeshGroupChoiceDBEntries(ctx context.Context,
 
 	switch m.GetSiteMeshGroupChoice().(type) {
 	case *SiteMeshGroupType_NoSiteMeshGroup:
-
 	case *SiteMeshGroupType_SiteMeshGroup:
 		refdType, err := d.TypeForEntryKind("", "", "site_mesh_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: site_mesh_group")
 		}
-
 		vref := m.GetSiteMeshGroup()
 		if vref == nil {
 			return nil, nil
@@ -9789,7 +9499,6 @@ func (m *SiteMeshGroupType) GetSiteMeshGroupChoiceDBEntries(ctx context.Context,
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -9806,7 +9515,6 @@ func (v *ValidateSiteMeshGroupType) SiteMeshGroupChoiceValidationRuleHandler(rul
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateSiteMeshGroupType) SiteMeshGroupIpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -9862,7 +9570,6 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["site_mesh_group_ip_choice"]; exists {
@@ -9898,16 +9605,13 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteMeshGroupTypeValidator = func() *ValidateSiteMeshGroupType {
 	v := &ValidateSiteMeshGroupType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9915,7 +9619,6 @@ var DefaultSiteMeshGroupTypeValidator = func() *ValidateSiteMeshGroupType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
 	rulesSiteMeshGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9926,7 +9629,6 @@ var DefaultSiteMeshGroupTypeValidator = func() *ValidateSiteMeshGroupType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_mesh_group_choice"] = vFn
-
 	vrhSiteMeshGroupIpChoice := v.SiteMeshGroupIpChoiceValidationRuleHandler
 	rulesSiteMeshGroupIpChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9937,7 +9639,6 @@ var DefaultSiteMeshGroupTypeValidator = func() *ValidateSiteMeshGroupType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_mesh_group_ip_choice"] = vFn
-
 	v.FldValidators["site_mesh_group_choice.site_mesh_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -10001,34 +9702,25 @@ func (v *ValidateSoftwareSettingsType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["os"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sw"))
 		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSoftwareSettingsTypeValidator = func() *ValidateSoftwareSettingsType {
 	v := &ValidateSoftwareSettingsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
-
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	return v
@@ -10081,7 +9773,6 @@ func (m *StaticRoutesListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetStaticRoutesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -10089,7 +9780,6 @@ func (m *StaticRoutesListType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetStaticRoutes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
@@ -10103,7 +9793,6 @@ func (m *StaticRoutesListType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateStaticRoutesListType struct {
@@ -10111,7 +9800,6 @@ type ValidateStaticRoutesListType struct {
 }
 
 func (v *ValidateStaticRoutesListType) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -10171,22 +9859,18 @@ func (v *ValidateStaticRoutesListType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStaticRoutesListTypeValidator = func() *ValidateStaticRoutesListType {
 	v := &ValidateStaticRoutesListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -10270,23 +9954,18 @@ func (v *ValidateUpgradeSettingsType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
 		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpgradeSettingsTypeValidator = func() *ValidateUpgradeSettingsType {
 	v := &ValidateUpgradeSettingsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
@@ -10339,7 +10018,6 @@ func (m *VMwareProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetOrchestrationChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -10349,7 +10027,6 @@ func (m *VMwareProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 	switch m.GetOrchestrationChoice().(type) {
 	case *VMwareProviderType_NotManaged:
-
 		drInfos, err := m.GetNotManaged().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
@@ -10359,11 +10036,9 @@ func (m *VMwareProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, er
 			dri.DRField = "not_managed." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateVMwareProviderType struct {
@@ -10396,16 +10071,13 @@ func (v *ValidateVMwareProviderType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVMwareProviderTypeValidator = func() *ValidateVMwareProviderType {
 	v := &ValidateVMwareProviderType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 
 	return v
@@ -10463,15 +10135,12 @@ func (m *VirtualNetworkConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetStaticV6RouteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticV6RouteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -10481,11 +10150,8 @@ func (m *VirtualNetworkConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefI
 	}
 	switch m.GetStaticRouteChoice().(type) {
 	case *VirtualNetworkConfiguration_NoStaticRoutes:
-
 		return nil, nil
-
 	case *VirtualNetworkConfiguration_StaticRoutes:
-
 		drInfos, err := m.GetStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticRoutes().GetDRefInfo() FAILED")
@@ -10495,11 +10161,9 @@ func (m *VirtualNetworkConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefI
 			dri.DRField = "static_routes." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -10509,11 +10173,8 @@ func (m *VirtualNetworkConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRe
 	}
 	switch m.GetStaticV6RouteChoice().(type) {
 	case *VirtualNetworkConfiguration_NoV6StaticRoutes:
-
 		return nil, nil
-
 	case *VirtualNetworkConfiguration_StaticV6Routes:
-
 		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
@@ -10523,11 +10184,9 @@ func (m *VirtualNetworkConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRe
 			dri.DRField = "static_v6_routes." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateVirtualNetworkConfiguration struct {
@@ -10541,7 +10200,6 @@ func (v *ValidateVirtualNetworkConfiguration) StaticRouteChoiceValidationRuleHan
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualNetworkConfiguration) StaticV6RouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -10549,9 +10207,7 @@ func (v *ValidateVirtualNetworkConfiguration) StaticV6RouteChoiceValidationRuleH
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualNetworkConfiguration) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -10594,9 +10250,7 @@ func (v *ValidateVirtualNetworkConfiguration) LabelsValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualNetworkConfiguration) VipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vip")
@@ -10604,9 +10258,7 @@ func (v *ValidateVirtualNetworkConfiguration) VipValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualNetworkConfiguration) NameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver")
@@ -10614,9 +10266,7 @@ func (v *ValidateVirtualNetworkConfiguration) NameserverValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualNetworkConfiguration) VipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vip_v6")
@@ -10624,12 +10274,26 @@ func (v *ValidateVirtualNetworkConfiguration) VipV6ValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVirtualNetworkConfiguration) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateVirtualNetworkConfiguration) SecondaryNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateVirtualNetworkConfiguration) SecondaryNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for secondary_nameserver_v6")
 	}
 
 	return validatorFn, nil
@@ -10648,31 +10312,35 @@ func (v *ValidateVirtualNetworkConfiguration) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["labels"]; exists {
 		vOpts := append(opts, db.WithValidateField("labels"))
 		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver"))
 		if err := fv(ctx, m.GetNameserver(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
 		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
 			return err
 		}
-
+	}
+	if fv, exists := v.FldValidators["secondary_nameserver"]; exists {
+		vOpts := append(opts, db.WithValidateField("secondary_nameserver"))
+		if err := fv(ctx, m.GetSecondaryNameserver(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["secondary_nameserver_v6"]; exists {
+		vOpts := append(opts, db.WithValidateField("secondary_nameserver_v6"))
+		if err := fv(ctx, m.GetSecondaryNameserverV6(), vOpts...); err != nil {
+			return err
+		}
 	}
 
 	if fv, exists := v.FldValidators["static_route_choice"]; exists {
@@ -10708,7 +10376,6 @@ func (v *ValidateVirtualNetworkConfiguration) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["static_v6_route_choice"]; exists {
@@ -10744,34 +10411,25 @@ func (v *ValidateVirtualNetworkConfiguration) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip"))
 		if err := fv(ctx, m.GetVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vip_v6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vip_v6"))
 		if err := fv(ctx, m.GetVipV6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVirtualNetworkConfigurationValidator = func() *ValidateVirtualNetworkConfiguration {
 	v := &ValidateVirtualNetworkConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -10779,7 +10437,6 @@ var DefaultVirtualNetworkConfigurationValidator = func() *ValidateVirtualNetwork
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhStaticRouteChoice := v.StaticRouteChoiceValidationRuleHandler
 	rulesStaticRouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -10790,7 +10447,6 @@ var DefaultVirtualNetworkConfigurationValidator = func() *ValidateVirtualNetwork
 		panic(errMsg)
 	}
 	v.FldValidators["static_route_choice"] = vFn
-
 	vrhStaticV6RouteChoice := v.StaticV6RouteChoiceValidationRuleHandler
 	rulesStaticV6RouteChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -10861,8 +10517,28 @@ var DefaultVirtualNetworkConfigurationValidator = func() *ValidateVirtualNetwork
 	}
 	v.FldValidators["nameserver_v6"] = vFn
 
-	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
+	vrhSecondaryNameserver := v.SecondaryNameserverValidationRuleHandler
+	rulesSecondaryNameserver := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhSecondaryNameserver(rulesSecondaryNameserver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualNetworkConfiguration.secondary_nameserver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["secondary_nameserver"] = vFn
 
+	vrhSecondaryNameserverV6 := v.SecondaryNameserverV6ValidationRuleHandler
+	rulesSecondaryNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhSecondaryNameserverV6(rulesSecondaryNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualNetworkConfiguration.secondary_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["secondary_nameserver_v6"] = vFn
+	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
 	v.FldValidators["static_v6_route_choice.static_v6_routes"] = ves_io_schema_virtual_network.StaticV6RoutesListTypeValidator().Validate
 
 	return v
@@ -10914,7 +10590,6 @@ type ValidateVlanInterfaceType struct {
 }
 
 func (v *ValidateVlanInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
@@ -10922,9 +10597,7 @@ func (v *ValidateVlanInterfaceType) DeviceValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVlanInterfaceType) VlanIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_id")
@@ -10946,32 +10619,24 @@ func (v *ValidateVlanInterfaceType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["device"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vlan_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vlan_id"))
 		if err := fv(ctx, m.GetVlanId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVlanInterfaceTypeValidator = func() *ValidateVlanInterfaceType {
 	v := &ValidateVlanInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -11059,6 +10724,9 @@ func (r *CreateSpecType) SetEnterpriseProxyChoiceToGlobalSpecType(o *GlobalSpecT
 	case *CreateSpecType_F5Proxy:
 		o.EnterpriseProxyChoice = &GlobalSpecType_F5Proxy{F5Proxy: of.F5Proxy}
 
+	case *CreateSpecType_PrivateAdn:
+		o.EnterpriseProxyChoice = &GlobalSpecType_PrivateAdn{PrivateAdn: of.PrivateAdn}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -11075,6 +10743,9 @@ func (r *CreateSpecType) GetEnterpriseProxyChoiceFromGlobalSpecType(o *GlobalSpe
 
 	case *GlobalSpecType_F5Proxy:
 		r.EnterpriseProxyChoice = &CreateSpecType_F5Proxy{F5Proxy: of.F5Proxy}
+
+	case *GlobalSpecType_PrivateAdn:
+		r.EnterpriseProxyChoice = &CreateSpecType_PrivateAdn{PrivateAdn: of.PrivateAdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -11126,6 +10797,9 @@ func (r *CreateSpecType) SetLogsReceiverChoiceToGlobalSpecType(o *GlobalSpecType
 	case *CreateSpecType_LogReceiver:
 		o.LogsReceiverChoice = &GlobalSpecType_LogReceiver{LogReceiver: of.LogReceiver}
 
+	case *CreateSpecType_LogReceiverWithNet:
+		o.LogsReceiverChoice = &GlobalSpecType_LogReceiverWithNet{LogReceiverWithNet: of.LogReceiverWithNet}
+
 	case *CreateSpecType_LogsStreamingDisabled:
 		o.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
 
@@ -11143,8 +10817,46 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 	case *GlobalSpecType_LogReceiver:
 		r.LogsReceiverChoice = &CreateSpecType_LogReceiver{LogReceiver: of.LogReceiver}
 
+	case *GlobalSpecType_LogReceiverWithNet:
+		r.LogsReceiverChoice = &CreateSpecType_LogReceiverWithNet{LogReceiverWithNet: of.LogReceiverWithNet}
+
 	case *GlobalSpecType_LogsStreamingDisabled:
 		r.LogsReceiverChoice = &CreateSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetManagementNetworkChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ManagementNetworkChoice.(type) {
+	case nil:
+		o.ManagementNetworkChoice = nil
+
+	case *CreateSpecType_DisableManagementNetwork:
+		o.ManagementNetworkChoice = &GlobalSpecType_DisableManagementNetwork{DisableManagementNetwork: of.DisableManagementNetwork}
+
+	case *CreateSpecType_EnableManagementNetwork:
+		o.ManagementNetworkChoice = &GlobalSpecType_EnableManagementNetwork{EnableManagementNetwork: of.EnableManagementNetwork}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetManagementNetworkChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ManagementNetworkChoice.(type) {
+	case nil:
+		r.ManagementNetworkChoice = nil
+
+	case *GlobalSpecType_DisableManagementNetwork:
+		r.ManagementNetworkChoice = &CreateSpecType_DisableManagementNetwork{DisableManagementNetwork: of.DisableManagementNetwork}
+
+	case *GlobalSpecType_EnableManagementNetwork:
+		r.ManagementNetworkChoice = &CreateSpecType_EnableManagementNetwork{EnableManagementNetwork: of.EnableManagementNetwork}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -11252,6 +10964,9 @@ func (r *CreateSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) er
 	case *CreateSpecType_Oci:
 		o.ProviderChoice = &GlobalSpecType_Oci{Oci: of.Oci}
 
+	case *CreateSpecType_OpenshiftVirtualization:
+		o.ProviderChoice = &GlobalSpecType_OpenshiftVirtualization{OpenshiftVirtualization: of.OpenshiftVirtualization}
+
 	case *CreateSpecType_Openstack:
 		o.ProviderChoice = &GlobalSpecType_Openstack{Openstack: of.Openstack}
 
@@ -11295,6 +11010,9 @@ func (r *CreateSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType) 
 
 	case *GlobalSpecType_Oci:
 		r.ProviderChoice = &CreateSpecType_Oci{Oci: of.Oci}
+
+	case *GlobalSpecType_OpenshiftVirtualization:
+		r.ProviderChoice = &CreateSpecType_OpenshiftVirtualization{OpenshiftVirtualization: of.OpenshiftVirtualization}
 
 	case *GlobalSpecType_Openstack:
 		r.ProviderChoice = &CreateSpecType_Openstack{Openstack: of.Openstack}
@@ -11469,6 +11187,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.LoadBalancing = f.GetLoadBalancing()
 	m.LocalVrf = f.GetLocalVrf()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.GetManagementNetworkChoiceFromGlobalSpecType(f)
 	m.GetNetworkPolicyChoiceFromGlobalSpecType(f)
 	m.GetNodeHaChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -11509,6 +11228,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.LoadBalancing = m1.LoadBalancing
 	f.LocalVrf = m1.LocalVrf
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	m1.SetManagementNetworkChoiceToGlobalSpecType(f)
 	m1.SetNetworkPolicyChoiceToGlobalSpecType(f)
 	m1.SetNodeHaChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
@@ -11581,6 +11301,9 @@ func (r *GetSpecType) SetEnterpriseProxyChoiceToGlobalSpecType(o *GlobalSpecType
 	case *GetSpecType_F5Proxy:
 		o.EnterpriseProxyChoice = &GlobalSpecType_F5Proxy{F5Proxy: of.F5Proxy}
 
+	case *GetSpecType_PrivateAdn:
+		o.EnterpriseProxyChoice = &GlobalSpecType_PrivateAdn{PrivateAdn: of.PrivateAdn}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -11597,6 +11320,9 @@ func (r *GetSpecType) GetEnterpriseProxyChoiceFromGlobalSpecType(o *GlobalSpecTy
 
 	case *GlobalSpecType_F5Proxy:
 		r.EnterpriseProxyChoice = &GetSpecType_F5Proxy{F5Proxy: of.F5Proxy}
+
+	case *GlobalSpecType_PrivateAdn:
+		r.EnterpriseProxyChoice = &GetSpecType_PrivateAdn{PrivateAdn: of.PrivateAdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -11648,6 +11374,9 @@ func (r *GetSpecType) SetLogsReceiverChoiceToGlobalSpecType(o *GlobalSpecType) e
 	case *GetSpecType_LogReceiver:
 		o.LogsReceiverChoice = &GlobalSpecType_LogReceiver{LogReceiver: of.LogReceiver}
 
+	case *GetSpecType_LogReceiverWithNet:
+		o.LogsReceiverChoice = &GlobalSpecType_LogReceiverWithNet{LogReceiverWithNet: of.LogReceiverWithNet}
+
 	case *GetSpecType_LogsStreamingDisabled:
 		o.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
 
@@ -11665,8 +11394,46 @@ func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType)
 	case *GlobalSpecType_LogReceiver:
 		r.LogsReceiverChoice = &GetSpecType_LogReceiver{LogReceiver: of.LogReceiver}
 
+	case *GlobalSpecType_LogReceiverWithNet:
+		r.LogsReceiverChoice = &GetSpecType_LogReceiverWithNet{LogReceiverWithNet: of.LogReceiverWithNet}
+
 	case *GlobalSpecType_LogsStreamingDisabled:
 		r.LogsReceiverChoice = &GetSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetManagementNetworkChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ManagementNetworkChoice.(type) {
+	case nil:
+		o.ManagementNetworkChoice = nil
+
+	case *GetSpecType_DisableManagementNetwork:
+		o.ManagementNetworkChoice = &GlobalSpecType_DisableManagementNetwork{DisableManagementNetwork: of.DisableManagementNetwork}
+
+	case *GetSpecType_EnableManagementNetwork:
+		o.ManagementNetworkChoice = &GlobalSpecType_EnableManagementNetwork{EnableManagementNetwork: of.EnableManagementNetwork}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetManagementNetworkChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ManagementNetworkChoice.(type) {
+	case nil:
+		r.ManagementNetworkChoice = nil
+
+	case *GlobalSpecType_DisableManagementNetwork:
+		r.ManagementNetworkChoice = &GetSpecType_DisableManagementNetwork{DisableManagementNetwork: of.DisableManagementNetwork}
+
+	case *GlobalSpecType_EnableManagementNetwork:
+		r.ManagementNetworkChoice = &GetSpecType_EnableManagementNetwork{EnableManagementNetwork: of.EnableManagementNetwork}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -11774,6 +11541,9 @@ func (r *GetSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) error
 	case *GetSpecType_Oci:
 		o.ProviderChoice = &GlobalSpecType_Oci{Oci: of.Oci}
 
+	case *GetSpecType_OpenshiftVirtualization:
+		o.ProviderChoice = &GlobalSpecType_OpenshiftVirtualization{OpenshiftVirtualization: of.OpenshiftVirtualization}
+
 	case *GetSpecType_Openstack:
 		o.ProviderChoice = &GlobalSpecType_Openstack{Openstack: of.Openstack}
 
@@ -11817,6 +11587,9 @@ func (r *GetSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType) err
 
 	case *GlobalSpecType_Oci:
 		r.ProviderChoice = &GetSpecType_Oci{Oci: of.Oci}
+
+	case *GlobalSpecType_OpenshiftVirtualization:
+		r.ProviderChoice = &GetSpecType_OpenshiftVirtualization{OpenshiftVirtualization: of.OpenshiftVirtualization}
 
 	case *GlobalSpecType_Openstack:
 		r.ProviderChoice = &GetSpecType_Openstack{Openstack: of.Openstack}
@@ -11991,6 +11764,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.LoadBalancing = f.GetLoadBalancing()
 	m.LocalVrf = f.GetLocalVrf()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.GetManagementNetworkChoiceFromGlobalSpecType(f)
 	m.GetNetworkPolicyChoiceFromGlobalSpecType(f)
 	m.GetNodeHaChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -12035,6 +11809,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.LoadBalancing = m1.LoadBalancing
 	f.LocalVrf = m1.LocalVrf
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	m1.SetManagementNetworkChoiceToGlobalSpecType(f)
 	m1.SetNetworkPolicyChoiceToGlobalSpecType(f)
 	m1.SetNodeHaChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
@@ -12111,6 +11886,9 @@ func (r *ReplaceSpecType) SetEnterpriseProxyChoiceToGlobalSpecType(o *GlobalSpec
 	case *ReplaceSpecType_F5Proxy:
 		o.EnterpriseProxyChoice = &GlobalSpecType_F5Proxy{F5Proxy: of.F5Proxy}
 
+	case *ReplaceSpecType_PrivateAdn:
+		o.EnterpriseProxyChoice = &GlobalSpecType_PrivateAdn{PrivateAdn: of.PrivateAdn}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -12127,6 +11905,9 @@ func (r *ReplaceSpecType) GetEnterpriseProxyChoiceFromGlobalSpecType(o *GlobalSp
 
 	case *GlobalSpecType_F5Proxy:
 		r.EnterpriseProxyChoice = &ReplaceSpecType_F5Proxy{F5Proxy: of.F5Proxy}
+
+	case *GlobalSpecType_PrivateAdn:
+		r.EnterpriseProxyChoice = &ReplaceSpecType_PrivateAdn{PrivateAdn: of.PrivateAdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -12178,6 +11959,9 @@ func (r *ReplaceSpecType) SetLogsReceiverChoiceToGlobalSpecType(o *GlobalSpecTyp
 	case *ReplaceSpecType_LogReceiver:
 		o.LogsReceiverChoice = &GlobalSpecType_LogReceiver{LogReceiver: of.LogReceiver}
 
+	case *ReplaceSpecType_LogReceiverWithNet:
+		o.LogsReceiverChoice = &GlobalSpecType_LogReceiverWithNet{LogReceiverWithNet: of.LogReceiverWithNet}
+
 	case *ReplaceSpecType_LogsStreamingDisabled:
 		o.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
 
@@ -12194,6 +11978,9 @@ func (r *ReplaceSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecT
 
 	case *GlobalSpecType_LogReceiver:
 		r.LogsReceiverChoice = &ReplaceSpecType_LogReceiver{LogReceiver: of.LogReceiver}
+
+	case *GlobalSpecType_LogReceiverWithNet:
+		r.LogsReceiverChoice = &ReplaceSpecType_LogReceiverWithNet{LogReceiverWithNet: of.LogReceiverWithNet}
 
 	case *GlobalSpecType_LogsStreamingDisabled:
 		r.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
@@ -12304,6 +12091,9 @@ func (r *ReplaceSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) e
 	case *ReplaceSpecType_Oci:
 		o.ProviderChoice = &GlobalSpecType_Oci{Oci: of.Oci}
 
+	case *ReplaceSpecType_OpenshiftVirtualization:
+		o.ProviderChoice = &GlobalSpecType_OpenshiftVirtualization{OpenshiftVirtualization: of.OpenshiftVirtualization}
+
 	case *ReplaceSpecType_Openstack:
 		o.ProviderChoice = &GlobalSpecType_Openstack{Openstack: of.Openstack}
 
@@ -12347,6 +12137,9 @@ func (r *ReplaceSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType)
 
 	case *GlobalSpecType_Oci:
 		r.ProviderChoice = &ReplaceSpecType_Oci{Oci: of.Oci}
+
+	case *GlobalSpecType_OpenshiftVirtualization:
+		r.ProviderChoice = &ReplaceSpecType_OpenshiftVirtualization{OpenshiftVirtualization: of.OpenshiftVirtualization}
 
 	case *GlobalSpecType_Openstack:
 		r.ProviderChoice = &ReplaceSpecType_Openstack{Openstack: of.Openstack}

@@ -67,7 +67,6 @@ func (m *AppTypeSettings) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAppTypeRefDRefInfo()
-
 }
 
 func (m *AppTypeSettings) GetAppTypeRefDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *AppTypeSettings) GetAppTypeRefDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppTypeRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *AppTypeSettings) GetAppTypeRefDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateAppTypeSettings struct {
 }
 
 func (v *ValidateAppTypeSettings) AppTypeRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -180,49 +176,36 @@ func (v *ValidateAppTypeSettings) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["app_type_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_type_ref"))
 		if err := fv(ctx, m.GetAppTypeRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["business_logic_markup_setting"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("business_logic_markup_setting"))
 		if err := fv(ctx, m.GetBusinessLogicMarkupSetting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["timeseries_analyses_setting"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("timeseries_analyses_setting"))
 		if err := fv(ctx, m.GetTimeseriesAnalysesSetting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_behavior_analysis_setting"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_behavior_analysis_setting"))
 		if err := fv(ctx, m.GetUserBehaviorAnalysisSetting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAppTypeSettingsValidator = func() *ValidateAppTypeSettings {
 	v := &ValidateAppTypeSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -242,9 +225,7 @@ var DefaultAppTypeSettingsValidator = func() *ValidateAppTypeSettings {
 		panic(errMsg)
 	}
 	v.FldValidators["app_type_ref"] = vFn
-
 	v.FldValidators["timeseries_analyses_setting"] = TimeseriesAnalysesSettingValidator().Validate
-
 	v.FldValidators["user_behavior_analysis_setting"] = UserBehaviorAnalysisSettingValidator().Validate
 
 	return v
@@ -394,16 +375,13 @@ func (v *ValidateBolaDetectionManualSettings) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBolaDetectionManualSettingsValidator = func() *ValidateBolaDetectionManualSettings {
 	v := &ValidateBolaDetectionManualSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -411,7 +389,6 @@ var DefaultBolaDetectionManualSettingsValidator = func() *ValidateBolaDetectionM
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhThresholdLevels := v.ThresholdLevelsValidationRuleHandler
 	rulesThresholdLevels := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -508,9 +485,7 @@ func (v *ValidateBusinessLogicMarkupSetting) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -573,15 +548,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAppTypeSettingsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAppTypeSettingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -606,7 +578,6 @@ func (m *CreateSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppTypeRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -625,7 +596,6 @@ func (m *CreateSpecType) GetAppTypeRefsDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -634,7 +604,6 @@ func (m *CreateSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAppTypeSettings() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAppTypeSettings() {
 		driSet, err := e.GetDRefInfo()
@@ -648,7 +617,6 @@ func (m *CreateSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCreateSpecType struct {
@@ -656,7 +624,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) AppTypeSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -716,9 +683,7 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["anomaly_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("anomaly_types"))
 		for idx, item := range m.GetAnomalyTypes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -726,11 +691,8 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_refs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_refs"))
 		for idx, item := range m.GetAppTypeRefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -738,24 +700,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_settings"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_type_settings"))
 		if err := fv(ctx, m.GetAppTypeSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -826,7 +783,6 @@ type ValidateFailedLoginActivitySetting struct {
 }
 
 func (v *ValidateFailedLoginActivitySetting) LoginFailuresThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for login_failures_threshold")
@@ -848,23 +804,18 @@ func (v *ValidateFailedLoginActivitySetting) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["login_failures_threshold"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("login_failures_threshold"))
 		if err := fv(ctx, m.GetLoginFailuresThreshold(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFailedLoginActivitySettingValidator = func() *ValidateFailedLoginActivitySetting {
 	v := &ValidateFailedLoginActivitySetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -934,7 +885,6 @@ type ValidateForbiddenActivitySetting struct {
 }
 
 func (v *ValidateForbiddenActivitySetting) ForbiddenRequestsThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for forbidden_requests_threshold")
@@ -956,23 +906,18 @@ func (v *ValidateForbiddenActivitySetting) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["forbidden_requests_threshold"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("forbidden_requests_threshold"))
 		if err := fv(ctx, m.GetForbiddenRequestsThreshold(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultForbiddenActivitySettingValidator = func() *ValidateForbiddenActivitySetting {
 	v := &ValidateForbiddenActivitySetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1048,15 +993,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAppTypeSettingsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAppTypeSettingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -1081,7 +1023,6 @@ func (m *GetSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppTypeRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1100,7 +1041,6 @@ func (m *GetSpecType) GetAppTypeRefsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1109,7 +1049,6 @@ func (m *GetSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAppTypeSettings() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAppTypeSettings() {
 		driSet, err := e.GetDRefInfo()
@@ -1123,7 +1062,6 @@ func (m *GetSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetSpecType struct {
@@ -1131,7 +1069,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) AppTypeSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1191,9 +1128,7 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["anomaly_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("anomaly_types"))
 		for idx, item := range m.GetAnomalyTypes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1201,11 +1136,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_refs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_refs"))
 		for idx, item := range m.GetAppTypeRefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1213,24 +1145,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_settings"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_type_settings"))
 		if err := fv(ctx, m.GetAppTypeSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1307,15 +1234,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAppTypeSettingsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAppTypeSettingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -1340,7 +1264,6 @@ func (m *GlobalSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppTypeRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1359,7 +1282,6 @@ func (m *GlobalSpecType) GetAppTypeRefsDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1368,7 +1290,6 @@ func (m *GlobalSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAppTypeSettings() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAppTypeSettings() {
 		driSet, err := e.GetDRefInfo()
@@ -1382,7 +1303,6 @@ func (m *GlobalSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -1390,7 +1310,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) AppTypeSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1450,9 +1369,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["anomaly_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("anomaly_types"))
 		for idx, item := range m.GetAnomalyTypes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1460,11 +1377,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_refs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_refs"))
 		for idx, item := range m.GetAppTypeRefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1472,24 +1386,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_settings"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_type_settings"))
 		if err := fv(ctx, m.GetAppTypeSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1566,7 +1475,6 @@ func (v *ValidateMaliciousUserDetectionSetting) BotDefenseActivityChoiceValidati
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateMaliciousUserDetectionSetting) CoolingOffPeriodSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1582,7 +1490,6 @@ func (v *ValidateMaliciousUserDetectionSetting) CoolingOffPeriodSettingCoolingOf
 	}
 	return oValidatorFn_CoolingOffPeriod, nil
 }
-
 func (v *ValidateMaliciousUserDetectionSetting) FailedLoginActivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1590,7 +1497,6 @@ func (v *ValidateMaliciousUserDetectionSetting) FailedLoginActivityChoiceValidat
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateMaliciousUserDetectionSetting) ForbiddenActivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1598,7 +1504,6 @@ func (v *ValidateMaliciousUserDetectionSetting) ForbiddenActivityChoiceValidatio
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateMaliciousUserDetectionSetting) IpReputationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1606,7 +1511,6 @@ func (v *ValidateMaliciousUserDetectionSetting) IpReputationChoiceValidationRule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateMaliciousUserDetectionSetting) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1614,7 +1518,6 @@ func (v *ValidateMaliciousUserDetectionSetting) RateLimitChoiceValidationRuleHan
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateMaliciousUserDetectionSetting) WafActivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1671,7 +1574,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["bot_defense_activity_choice"]; exists {
@@ -1707,7 +1609,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cooling_off_period_setting"]; exists {
@@ -1732,7 +1633,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["failed_login_activity_choice"]; exists {
@@ -1768,7 +1668,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["forbidden_activity_choice"]; exists {
@@ -1804,7 +1703,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["ip_reputation_choice"]; exists {
@@ -1840,7 +1738,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetNonExistentUrlActivityChoice().(type) {
@@ -1877,7 +1774,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
@@ -1913,7 +1809,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["waf_activity_choice"]; exists {
@@ -1949,16 +1844,13 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUserDetectionSetting {
 	v := &ValidateMaliciousUserDetectionSetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1966,7 +1858,6 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhBotDefenseActivityChoice := v.BotDefenseActivityChoiceValidationRuleHandler
 	rulesBotDefenseActivityChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1977,7 +1868,6 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["bot_defense_activity_choice"] = vFn
-
 	vrhCoolingOffPeriodSetting := v.CoolingOffPeriodSettingValidationRuleHandler
 	rulesCoolingOffPeriodSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1988,7 +1878,6 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["cooling_off_period_setting"] = vFn
-
 	vrhCoolingOffPeriodSettingCoolingOffPeriod := v.CoolingOffPeriodSettingCoolingOffPeriodValidationRuleHandler
 	rulesCoolingOffPeriodSettingCoolingOffPeriod := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "5",
@@ -1999,9 +1888,7 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field MaliciousUserDetectionSetting.cooling_off_period_setting_cooling_off_period: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["cooling_off_period_setting.cooling_off_period"] = vFnMap["cooling_off_period_setting.cooling_off_period"]
-
 	vrhFailedLoginActivityChoice := v.FailedLoginActivityChoiceValidationRuleHandler
 	rulesFailedLoginActivityChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2012,7 +1899,6 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["failed_login_activity_choice"] = vFn
-
 	vrhForbiddenActivityChoice := v.ForbiddenActivityChoiceValidationRuleHandler
 	rulesForbiddenActivityChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2023,7 +1909,6 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["forbidden_activity_choice"] = vFn
-
 	vrhIpReputationChoice := v.IpReputationChoiceValidationRuleHandler
 	rulesIpReputationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2034,7 +1919,6 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["ip_reputation_choice"] = vFn
-
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2045,7 +1929,6 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limit_choice"] = vFn
-
 	vrhWafActivityChoice := v.WafActivityChoiceValidationRuleHandler
 	rulesWafActivityChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2056,13 +1939,9 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["waf_activity_choice"] = vFn
-
 	v.FldValidators["bola_activity_choice.bola_detection_manual"] = BolaDetectionManualSettingsValidator().Validate
-
 	v.FldValidators["failed_login_activity_choice.include_failed_login_activity"] = FailedLoginActivitySettingValidator().Validate
-
 	v.FldValidators["forbidden_activity_choice.include_forbidden_activity"] = ForbiddenActivitySettingValidator().Validate
-
 	v.FldValidators["non_existent_url_activity_choice.include_non_existent_url_activity_custom"] = NonexistentUrlCustomActivitySettingValidator().Validate
 	v.FldValidators["non_existent_url_activity_choice.include_non_existent_url_activity_automatic"] = NonexistentUrlAutomaticActivitySettingValidator().Validate
 
@@ -2115,7 +1994,6 @@ type ValidateMetricSelector struct {
 }
 
 func (v *ValidateMetricSelector) MetricValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -2175,31 +2053,24 @@ func (v *ValidateMetricSelector) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metric"]; exists {
 		vOpts := append(opts, db.WithValidateField("metric"))
 		if err := fv(ctx, m.GetMetric(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metrics_source"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metrics_source"))
 		if err := fv(ctx, m.GetMetricsSource(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMetricSelectorValidator = func() *ValidateMetricSelector {
 	v := &ValidateMetricSelector{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2333,16 +2204,13 @@ func (v *ValidateNonexistentUrlAutomaticActivitySetting) Validate(ctx context.Co
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNonexistentUrlAutomaticActivitySettingValidator = func() *ValidateNonexistentUrlAutomaticActivitySetting {
 	v := &ValidateNonexistentUrlAutomaticActivitySetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2350,7 +2218,6 @@ var DefaultNonexistentUrlAutomaticActivitySettingValidator = func() *ValidateNon
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSensitivity := v.SensitivityValidationRuleHandler
 	rulesSensitivity := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2411,7 +2278,6 @@ type ValidateNonexistentUrlCustomActivitySetting struct {
 }
 
 func (v *ValidateNonexistentUrlCustomActivitySetting) NonexistentRequestsThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nonexistent_requests_threshold")
@@ -2433,23 +2299,18 @@ func (v *ValidateNonexistentUrlCustomActivitySetting) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["nonexistent_requests_threshold"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nonexistent_requests_threshold"))
 		if err := fv(ctx, m.GetNonexistentRequestsThreshold(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNonexistentUrlCustomActivitySettingValidator = func() *ValidateNonexistentUrlCustomActivitySetting {
 	v := &ValidateNonexistentUrlCustomActivitySetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2526,15 +2387,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetAppTypeSettingsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAppTypeSettingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -2559,7 +2417,6 @@ func (m *ReplaceSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetAppTypeRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2578,7 +2435,6 @@ func (m *ReplaceSpecType) GetAppTypeRefsDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2587,7 +2443,6 @@ func (m *ReplaceSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAppTypeSettings() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAppTypeSettings() {
 		driSet, err := e.GetDRefInfo()
@@ -2601,7 +2456,6 @@ func (m *ReplaceSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -2609,7 +2463,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) AppTypeSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2669,9 +2522,7 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["anomaly_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("anomaly_types"))
 		for idx, item := range m.GetAnomalyTypes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2679,11 +2530,8 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_refs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("app_type_refs"))
 		for idx, item := range m.GetAppTypeRefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2691,24 +2539,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["app_type_settings"]; exists {
 		vOpts := append(opts, db.WithValidateField("app_type_settings"))
 		if err := fv(ctx, m.GetAppTypeSettings(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2779,7 +2622,6 @@ type ValidateTimeseriesAnalysesSetting struct {
 }
 
 func (v *ValidateTimeseriesAnalysesSetting) MetricSelectorsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2839,22 +2681,18 @@ func (v *ValidateTimeseriesAnalysesSetting) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metric_selectors"]; exists {
 		vOpts := append(opts, db.WithValidateField("metric_selectors"))
 		if err := fv(ctx, m.GetMetricSelectors(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTimeseriesAnalysesSettingValidator = func() *ValidateTimeseriesAnalysesSetting {
 	v := &ValidateTimeseriesAnalysesSetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2929,7 +2767,6 @@ func (v *ValidateUserBehaviorAnalysisSetting) LearnFromNamespaceValidationRuleHa
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateUserBehaviorAnalysisSetting) MaliciousUserDetectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2985,7 +2822,6 @@ func (v *ValidateUserBehaviorAnalysisSetting) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["malicious_user_detection"]; exists {
@@ -3021,16 +2857,13 @@ func (v *ValidateUserBehaviorAnalysisSetting) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUserBehaviorAnalysisSettingValidator = func() *ValidateUserBehaviorAnalysisSetting {
 	v := &ValidateUserBehaviorAnalysisSetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3038,7 +2871,6 @@ var DefaultUserBehaviorAnalysisSettingValidator = func() *ValidateUserBehaviorAn
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLearnFromNamespace := v.LearnFromNamespaceValidationRuleHandler
 	rulesLearnFromNamespace := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3049,7 +2881,6 @@ var DefaultUserBehaviorAnalysisSettingValidator = func() *ValidateUserBehaviorAn
 		panic(errMsg)
 	}
 	v.FldValidators["learn_from_namespace"] = vFn
-
 	vrhMaliciousUserDetection := v.MaliciousUserDetectionValidationRuleHandler
 	rulesMaliciousUserDetection := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3060,7 +2891,6 @@ var DefaultUserBehaviorAnalysisSettingValidator = func() *ValidateUserBehaviorAn
 		panic(errMsg)
 	}
 	v.FldValidators["malicious_user_detection"] = vFn
-
 	v.FldValidators["malicious_user_detection.enable_detection"] = MaliciousUserDetectionSettingValidator().Validate
 
 	return v

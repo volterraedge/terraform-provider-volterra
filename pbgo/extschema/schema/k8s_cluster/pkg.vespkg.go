@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.k8s_cluster.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.k8s_cluster.Object"] = ObjectValidator()
 	vr["ves.io.schema.k8s_cluster.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.k8s_cluster.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.k8s_cluster.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.k8s_cluster.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.k8s_cluster.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.k8s_cluster.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.k8s_cluster.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.k8s_cluster.ApplicationArgoCDType"] = ApplicationArgoCDTypeValidator()
 	vr["ves.io.schema.k8s_cluster.ApplicationDashboardType"] = ApplicationDashboardTypeValidator()
 	vr["ves.io.schema.k8s_cluster.ApplicationMetricsServerType"] = ApplicationMetricsServerTypeValidator()
@@ -44,7 +41,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.k8s_cluster.LocalAccessConfigType"] = LocalAccessConfigTypeValidator()
 	vr["ves.io.schema.k8s_cluster.PodSecurityPolicyListType"] = PodSecurityPolicyListTypeValidator()
 	vr["ves.io.schema.k8s_cluster.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -56,11 +52,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.k8s_cluster.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.k8s_cluster.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.k8s_cluster.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.k8s_cluster.API.Create"] = []string{
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.argo_cd.generated_yaml",
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.argo_cd.local_domain.password.blindfold_secret_info_internal",
@@ -71,9 +65,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.metrics_server.generated_yaml",
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.prometheus.generated_yaml",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.k8s_cluster.API.Create"] = "ves.io.schema.k8s_cluster.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.k8s_cluster.API.Replace"] = []string{
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.argo_cd.generated_yaml",
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.argo_cd.local_domain.password.blindfold_secret_info_internal",
@@ -84,23 +76,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.metrics_server.generated_yaml",
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.prometheus.generated_yaml",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.k8s_cluster.API.Replace"] = "ves.io.schema.k8s_cluster.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.k8s_cluster.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -109,9 +96,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.k8s_cluster.Object"] = APISwaggerJSON
@@ -125,22 +110,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.k8s_cluster.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.k8s_cluster.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.k8s_cluster.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -78,7 +78,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -136,7 +135,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRbacPolicyDRefInfo()
-
 }
 
 func (m *GetSpecType) GetRbacPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -161,7 +159,6 @@ func (m *GetSpecType) GetRbacPolicyDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRbacPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -180,7 +177,6 @@ func (m *GetSpecType) GetRbacPolicyDBEntries(ctx context.Context, d db.Interface
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -189,7 +185,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) RbacPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -249,22 +244,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rbac_policy"]; exists {
 		vOpts := append(opts, db.WithValidateField("rbac_policy"))
 		if err := fv(ctx, m.GetRbacPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -335,7 +326,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRbacPolicyDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetRbacPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -360,7 +350,6 @@ func (m *GlobalSpecType) GetRbacPolicyDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRbacPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -379,7 +368,6 @@ func (m *GlobalSpecType) GetRbacPolicyDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -388,7 +376,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RbacPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -448,22 +435,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rbac_policy"]; exists {
 		vOpts := append(opts, db.WithValidateField("rbac_policy"))
 		if err := fv(ctx, m.GetRbacPolicy(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -545,7 +528,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

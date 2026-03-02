@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.trusted_ca_list.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.trusted_ca_list.Object"] = ObjectValidator()
 	vr["ves.io.schema.trusted_ca_list.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.trusted_ca_list.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.trusted_ca_list.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.trusted_ca_list.DeleteRequest"] = DeleteRequestValidator()
@@ -27,12 +25,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.trusted_ca_list.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.trusted_ca_list.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.trusted_ca_list.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.trusted_ca_list.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.trusted_ca_list.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.trusted_ca_list.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.trusted_ca_list.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -44,25 +40,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.trusted_ca_list.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.trusted_ca_list.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.trusted_ca_list.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.trusted_ca_list.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -71,9 +62,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.trusted_ca_list.Object"] = APISwaggerJSON
@@ -87,22 +76,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.trusted_ca_list.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.trusted_ca_list.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.trusted_ca_list.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

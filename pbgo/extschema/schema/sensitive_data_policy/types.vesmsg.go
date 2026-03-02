@@ -69,7 +69,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCustomDataTypesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -77,7 +76,6 @@ func (m *CreateSpecType) GetCustomDataTypesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCustomDataTypes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetCustomDataTypes() {
 		driSet, err := e.GetDRefInfo()
@@ -91,7 +89,6 @@ func (m *CreateSpecType) GetCustomDataTypesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCreateSpecType struct {
@@ -99,7 +96,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) CompliancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -145,9 +141,7 @@ func (v *ValidateCreateSpecType) CompliancesValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) DisabledPredefinedDataTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -187,9 +181,7 @@ func (v *ValidateCreateSpecType) DisabledPredefinedDataTypesValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) CustomDataTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -249,38 +241,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		if err := fv(ctx, m.GetCompliances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["custom_data_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("custom_data_types"))
 		if err := fv(ctx, m.GetCustomDataTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled_predefined_data_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("disabled_predefined_data_types"))
 		if err := fv(ctx, m.GetDisabledPredefinedDataTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -377,11 +361,9 @@ func (m *CustomDataTypeRef) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCustomDataTypeRefDRefInfo()
-
 }
 
 func (m *CustomDataTypeRef) GetCustomDataTypeRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCustomDataTypeRef()
 	if vref == nil {
 		return nil, nil
@@ -397,7 +379,6 @@ func (m *CustomDataTypeRef) GetCustomDataTypeRefDRefInfo() ([]db.DRefInfo, error
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCustomDataTypeRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -407,7 +388,6 @@ func (m *CustomDataTypeRef) GetCustomDataTypeRefDBEntries(ctx context.Context, d
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: data_type")
 	}
-
 	vref := m.GetCustomDataTypeRef()
 	if vref == nil {
 		return nil, nil
@@ -425,7 +405,6 @@ func (m *CustomDataTypeRef) GetCustomDataTypeRefDBEntries(ctx context.Context, d
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -446,23 +425,18 @@ func (v *ValidateCustomDataTypeRef) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["custom_data_type_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("custom_data_type_ref"))
 		if err := fv(ctx, m.GetCustomDataTypeRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomDataTypeRefValidator = func() *ValidateCustomDataTypeRef {
 	v := &ValidateCustomDataTypeRef{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["custom_data_type_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -515,7 +489,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCustomDataTypesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -523,7 +496,6 @@ func (m *GetSpecType) GetCustomDataTypesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCustomDataTypes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetCustomDataTypes() {
 		driSet, err := e.GetDRefInfo()
@@ -537,7 +509,6 @@ func (m *GetSpecType) GetCustomDataTypesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetSpecType struct {
@@ -545,7 +516,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) CompliancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -591,9 +561,7 @@ func (v *ValidateGetSpecType) CompliancesValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DisabledPredefinedDataTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -633,9 +601,7 @@ func (v *ValidateGetSpecType) DisabledPredefinedDataTypesValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) CustomDataTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -695,38 +661,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		if err := fv(ctx, m.GetCompliances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["custom_data_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("custom_data_types"))
 		if err := fv(ctx, m.GetCustomDataTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled_predefined_data_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("disabled_predefined_data_types"))
 		if err := fv(ctx, m.GetDisabledPredefinedDataTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -823,7 +781,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCustomDataTypesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -831,7 +788,6 @@ func (m *GlobalSpecType) GetCustomDataTypesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCustomDataTypes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetCustomDataTypes() {
 		driSet, err := e.GetDRefInfo()
@@ -845,7 +801,6 @@ func (m *GlobalSpecType) GetCustomDataTypesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -853,7 +808,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) CompliancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -899,9 +853,7 @@ func (v *ValidateGlobalSpecType) CompliancesValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DisabledPredefinedDataTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -941,9 +893,7 @@ func (v *ValidateGlobalSpecType) DisabledPredefinedDataTypesValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CustomDataTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1003,38 +953,30 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		if err := fv(ctx, m.GetCompliances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["custom_data_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("custom_data_types"))
 		if err := fv(ctx, m.GetCustomDataTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled_predefined_data_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("disabled_predefined_data_types"))
 		if err := fv(ctx, m.GetDisabledPredefinedDataTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1131,7 +1073,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCustomDataTypesDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1139,7 +1080,6 @@ func (m *ReplaceSpecType) GetCustomDataTypesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCustomDataTypes() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetCustomDataTypes() {
 		driSet, err := e.GetDRefInfo()
@@ -1153,7 +1093,6 @@ func (m *ReplaceSpecType) GetCustomDataTypesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1161,7 +1100,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) CompliancesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1207,9 +1145,7 @@ func (v *ValidateReplaceSpecType) CompliancesValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) DisabledPredefinedDataTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1249,9 +1185,7 @@ func (v *ValidateReplaceSpecType) DisabledPredefinedDataTypesValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) CustomDataTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1311,38 +1245,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		if err := fv(ctx, m.GetCompliances(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["custom_data_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("custom_data_types"))
 		if err := fv(ctx, m.GetCustomDataTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled_predefined_data_types"]; exists {
 		vOpts := append(opts, db.WithValidateField("disabled_predefined_data_types"))
 		if err := fv(ctx, m.GetDisabledPredefinedDataTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1439,7 +1365,6 @@ func (m *SensitiveDataPolicy) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return nil, nil
-
 }
 
 type ValidateSensitiveDataPolicy struct {
@@ -1459,9 +1384,7 @@ func (v *ValidateSensitiveDataPolicy) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["compliances"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("compliances"))
 		for idx, item := range m.GetCompliances() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1469,11 +1392,8 @@ func (v *ValidateSensitiveDataPolicy) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["custom_data_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("custom_data_types"))
 		for idx, item := range m.GetCustomDataTypes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1481,11 +1401,8 @@ func (v *ValidateSensitiveDataPolicy) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled_predefined_data_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disabled_predefined_data_types"))
 		for idx, item := range m.GetDisabledPredefinedDataTypes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1493,16 +1410,13 @@ func (v *ValidateSensitiveDataPolicy) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSensitiveDataPolicyValidator = func() *ValidateSensitiveDataPolicy {
 	v := &ValidateSensitiveDataPolicy{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["custom_data_types"] = ves_io_schema_data_type.ObjectValidator().Validate
 
 	return v

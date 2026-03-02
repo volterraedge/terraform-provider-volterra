@@ -63,7 +63,6 @@ func (c *Conf) GetDmnConfOverrides() []*google_protobuf.Any {
 
 // GetDmnConfGrpcPort() implements ves.io/stdlib/svcfw.DaemonConf interface
 func (c *Conf) GetDmnConfGrpcPort() int32 {
-
 	return c.GetGrpcPort()
 }
 
@@ -129,11 +128,9 @@ func (c *Conf) GetDmnConfEtcdServerURLs() []string {
 // GetDmnConfStatusEtcdServerURLs() implements ves.io/stdlib/svcfw.DaemonConf interface
 func (c *Conf) GetDmnConfStatusEtcdServerURLs() []string {
 	return []string{}
-
 }
 
 // GetDmnConfStatusServerParams() implements ves.io/stdlib/svcfw.statusMarsGetter interface
 func (c *Conf) GetDmnConfSyncServerParams() []*mars.SyncServerParams {
 	return nil
-
 }

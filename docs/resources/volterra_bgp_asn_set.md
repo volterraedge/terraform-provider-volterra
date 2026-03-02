@@ -17,12 +17,10 @@ Example Usage
 
 ```hcl
 resource "volterra_bgp_asn_set" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
+  name       = "acmecorp-web"
+  namespace  = "staging"
   as_numbers = ["[713, 7932, 847325, 4683, 15269, 1000001]"]
 }
-
 ```
 
 Argument Reference
@@ -49,4 +47,4 @@ Argument Reference
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured bgp_asn_set.
+*   `id` - This is the id of the configured bgp_asn_set.

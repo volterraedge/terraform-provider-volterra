@@ -76,16 +76,12 @@ func (v *ValidateModuleManagementRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,16 +150,12 @@ func (v *ValidateModuleManagementResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["glr_configuration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("glr_configuration"))
 		if err := fv(ctx, m.GetGlrConfiguration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

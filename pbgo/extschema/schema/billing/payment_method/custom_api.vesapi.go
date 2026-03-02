@@ -43,7 +43,6 @@ func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Create(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCDelete(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DeletePaymentMethodRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -52,7 +51,6 @@ func (c *CustomAPIGrpcClient) doRPCDelete(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Delete(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCMakePaymentMethodPrimary(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PaymentMethodPrimaryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -61,7 +59,6 @@ func (c *CustomAPIGrpcClient) doRPCMakePaymentMethodPrimary(ctx context.Context,
 	rsp, err := c.grpcClient.MakePaymentMethodPrimary(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCMakePaymentMethodSecondary(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PaymentMethodSecondaryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -70,7 +67,6 @@ func (c *CustomAPIGrpcClient) doRPCMakePaymentMethodSecondary(ctx context.Contex
 	rsp, err := c.grpcClient.MakePaymentMethodSecondary(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSwapPaymentMethodRole(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PaymentMethodRoleSwapReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -111,17 +107,11 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Delete"] = ccl.doRPCDelete
-
 	rpcFns["MakePaymentMethodPrimary"] = ccl.doRPCMakePaymentMethodPrimary
-
 	rpcFns["MakePaymentMethodSecondary"] = ccl.doRPCMakePaymentMethodSecondary
-
 	rpcFns["SwapPaymentMethodRole"] = ccl.doRPCSwapPaymentMethodRole
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -210,7 +200,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	pbRsp := &CreatePaymentMethodResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.billing.payment_method.CreatePaymentMethodResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -218,7 +207,6 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -294,7 +282,6 @@ func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.
 	pbRsp := &google_protobuf.Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *google.protobuf.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -302,7 +289,6 @@ func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCMakePaymentMethodPrimary(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -378,7 +364,6 @@ func (c *CustomAPIRestClient) doRPCMakePaymentMethodPrimary(ctx context.Context,
 	pbRsp := &google_protobuf.Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *google.protobuf.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -386,7 +371,6 @@ func (c *CustomAPIRestClient) doRPCMakePaymentMethodPrimary(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCMakePaymentMethodSecondary(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -462,7 +446,6 @@ func (c *CustomAPIRestClient) doRPCMakePaymentMethodSecondary(ctx context.Contex
 	pbRsp := &google_protobuf.Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *google.protobuf.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -470,7 +453,6 @@ func (c *CustomAPIRestClient) doRPCMakePaymentMethodSecondary(ctx context.Contex
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSwapPaymentMethodRole(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -546,7 +528,6 @@ func (c *CustomAPIRestClient) doRPCSwapPaymentMethodRole(ctx context.Context, ca
 	pbRsp := &google_protobuf.Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *google.protobuf.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -580,17 +561,11 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Delete"] = ccl.doRPCDelete
-
 	rpcFns["MakePaymentMethodPrimary"] = ccl.doRPCMakePaymentMethodPrimary
-
 	rpcFns["MakePaymentMethodSecondary"] = ccl.doRPCMakePaymentMethodSecondary
-
 	rpcFns["SwapPaymentMethodRole"] = ccl.doRPCSwapPaymentMethodRole
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -687,7 +662,6 @@ func (s *customAPISrv) Create(ctx context.Context, in *CreatePaymentMethodReques
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.billing.payment_method.CreatePaymentMethodResponse", rsp)...)
 
 	return rsp, nil
@@ -736,7 +710,6 @@ func (s *customAPISrv) Delete(ctx context.Context, in *DeletePaymentMethodReques
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.protobuf.Empty", rsp)...)
 
 	return rsp, nil
@@ -785,7 +758,6 @@ func (s *customAPISrv) MakePaymentMethodPrimary(ctx context.Context, in *Payment
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.protobuf.Empty", rsp)...)
 
 	return rsp, nil
@@ -834,7 +806,6 @@ func (s *customAPISrv) MakePaymentMethodSecondary(ctx context.Context, in *Payme
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.protobuf.Empty", rsp)...)
 
 	return rsp, nil
@@ -883,7 +854,6 @@ func (s *customAPISrv) SwapPaymentMethodRole(ctx context.Context, in *PaymentMet
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.protobuf.Empty", rsp)...)
 
 	return rsp, nil
@@ -1496,10 +1466,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This namespace specifies the namespace in which the payment method will be created.\n If not provided, the default 'system' namespace will be used.\n\nExample: - \"system\"-",
+                    "description": " This namespace specifies the namespace in which the payment method will be created.\n If not provided, the default 'system' namespace will be used.\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "role": {
                     "description": " Role of the payment method",
@@ -1545,10 +1518,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace in which the payment method object is present.\n\nExample: - \"system\"-",
+                    "description": " The namespace in which the payment method object is present.\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },
@@ -1582,10 +1558,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace in which the payment method object is present.\n\nExample: - \"system\"-",
+                    "description": " The namespace in which the payment method object is present.\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         },
@@ -1605,10 +1584,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " The namespace in which the payment method object is present.\n\nExample: - \"system\"-",
+                    "description": " The namespace in which the payment method object is present.\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 }
             }
         }

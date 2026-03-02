@@ -78,25 +78,18 @@ func (v *ValidateAddonServiceDetails) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -165,7 +158,6 @@ func (v *ValidateListUsagePlansReq) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -234,9 +226,7 @@ func (v *ValidateListUsagePlansRsp) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["usage_plans"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usage_plans"))
 		for idx, item := range m.GetUsagePlans() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -244,16 +234,13 @@ func (v *ValidateListUsagePlansRsp) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListUsagePlansRspValidator = func() *ValidateListUsagePlansRsp {
 	v := &ValidateListUsagePlansRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["usage_plans"] = LocalizedPlanValidator().Validate
 
 	return v
@@ -317,18 +304,13 @@ func (v *ValidateLocalizedPlan) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["locale"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("locale"))
 		if err := fv(ctx, m.GetLocale(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plans"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plans"))
 		for idx, item := range m.GetPlans() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -336,16 +318,13 @@ func (v *ValidateLocalizedPlan) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLocalizedPlanValidator = func() *ValidateLocalizedPlan {
 	v := &ValidateLocalizedPlan{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["plans"] = PlanInternalValidator().Validate
 
 	return v
@@ -409,9 +388,7 @@ func (v *ValidatePlanInternal) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allowed_addon_services"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allowed_addon_services"))
 		for idx, item := range m.GetAllowedAddonServices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -419,56 +396,38 @@ func (v *ValidatePlanInternal) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["billing_disabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("billing_disabled"))
 		if err := fv(ctx, m.GetBillingDisabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["current"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current"))
 		if err := fv(ctx, m.GetCurrent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["default_quota"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_quota"))
 		if err := fv(ctx, m.GetDefaultQuota(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["flat_price"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flat_price"))
 		if err := fv(ctx, m.GetFlatPrice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["included_addon_services"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("included_addon_services"))
 		for idx, item := range m.GetIncludedAddonServices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -476,106 +435,73 @@ func (v *ValidatePlanInternal) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["renewal_period_unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("renewal_period_unit"))
 		if err := fv(ctx, m.GetRenewalPeriodUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subtitle"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subtitle"))
 		if err := fv(ctx, m.GetSubtitle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_type"))
 		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["title"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("title"))
 		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transition_flow"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transition_flow"))
 		if err := fv(ctx, m.GetTransitionFlow(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trial_period"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trial_period"))
 		if err := fv(ctx, m.GetTrialPeriod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trial_period_unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trial_period_unit"))
 		if err := fv(ctx, m.GetTrialPeriodUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["usage_plan_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usage_plan_type"))
 		if err := fv(ctx, m.GetUsagePlanType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPlanInternalValidator = func() *ValidatePlanInternal {
 	v := &ValidatePlanInternal{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["default_quota"] = ves_io_schema_quota.GlobalSpecTypeValidator().Validate
 
 	return v
@@ -639,18 +565,13 @@ func (v *ValidateUsagePlanTransitionFlow) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["required_fields"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("required_fields"))
 		for idx, item := range m.GetRequiredFields() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -658,18 +579,13 @@ func (v *ValidateUsagePlanTransitionFlow) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["requires_manual_approval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("requires_manual_approval"))
 		if err := fv(ctx, m.GetRequiresManualApproval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

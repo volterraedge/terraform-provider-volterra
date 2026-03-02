@@ -21,7 +21,6 @@ resource "volterra_ztna_application" "example" {
   namespace      = "staging"
   transport_type = ["transport_type"]
 }
-
 ```
 
 Argument Reference
@@ -272,4 +271,4 @@ Use the default VIP, system allocated or configured in the virtual network.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured ztna_application.
+*   `id` - This is the id of the configured ztna_application.

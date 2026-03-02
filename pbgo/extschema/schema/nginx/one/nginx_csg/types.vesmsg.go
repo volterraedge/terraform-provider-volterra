@@ -78,52 +78,37 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_spec"))
 		if err := fv(ctx, m.GetApiDiscoverySpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["csg_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("csg_name"))
 		if err := fv(ctx, m.GetCsgName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_id"))
 		if err := fv(ctx, m.GetObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_spec"))
 		if err := fv(ctx, m.GetWafSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["waf_spec"] = ves_io_schema_nginx_one_nginx_instance.WAFSpecValidator().Validate
-
 	v.FldValidators["api_discovery_spec"] = ves_io_schema_nginx_one_nginx_instance.APIDiscoverySpecValidator().Validate
 
 	return v
@@ -187,52 +172,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_spec"))
 		if err := fv(ctx, m.GetApiDiscoverySpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["csg_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("csg_name"))
 		if err := fv(ctx, m.GetCsgName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_id"))
 		if err := fv(ctx, m.GetObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_spec"))
 		if err := fv(ctx, m.GetWafSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["waf_spec"] = ves_io_schema_nginx_one_nginx_instance.WAFSpecValidator().Validate
-
 	v.FldValidators["api_discovery_spec"] = ves_io_schema_nginx_one_nginx_instance.APIDiscoverySpecValidator().Validate
 
 	return v

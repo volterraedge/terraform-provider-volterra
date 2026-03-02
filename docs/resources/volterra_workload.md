@@ -134,7 +134,6 @@ resource "volterra_workload" "example" {
     scale_to_zero = true
   }
 }
-
 ```
 
 Argument Reference
@@ -276,9 +275,23 @@ Ports to advertise.
 
 `port` - (Required) Port information. See [Ports Port ](#ports-port) below for details.
 
+### Caching Caching Disable
+
+x-displayName: "Disable".
+
+### Caching Caching Inherit
+
+x-displayName: "Inherit".
+
 ### Choice Custom Route Object
 
 A custom route uses a route object created outside of this view..
+
+###### One of the arguments from this list "caching_disable, caching_inherit" can be set
+
+`caching_disable` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`caching_inherit` - (Optional) x-displayName: "Inherit" (`Bool`).
 
 `route_ref` - (Optional) Reference to a custom route object. See [ref](#ref) below for details.
 
@@ -1751,4 +1764,4 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured workload.
+*   `id` - This is the id of the configured workload.

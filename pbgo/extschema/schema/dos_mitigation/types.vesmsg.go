@@ -68,7 +68,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDestinationDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -76,7 +75,6 @@ func (m *CreateSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDestination() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDestination().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDestination().GetDRefInfo() FAILED")
@@ -86,7 +84,6 @@ func (m *CreateSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "destination." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -108,9 +105,7 @@ func (v *ValidateCreateSpecType) ExpirationExpirationTtlValidationRuleHandler(ru
 	}
 	return oValidatorFn_ExpirationTtl, nil
 }
-
 func (v *ValidateCreateSpecType) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination")
@@ -119,19 +114,15 @@ func (v *ValidateCreateSpecType) DestinationValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := DestinationValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -171,9 +162,7 @@ func (v *ValidateCreateSpecType) IpPrefixesValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) CountriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -219,9 +208,7 @@ func (v *ValidateCreateSpecType) CountriesValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AsNumbersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepUint32ItemRules(rules)
 	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
 	if err != nil {
@@ -261,9 +248,7 @@ func (v *ValidateCreateSpecType) AsNumbersValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) TlsFingerprintsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -303,9 +288,7 @@ func (v *ValidateCreateSpecType) TlsFingerprintsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PathsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -359,30 +342,23 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["as_numbers"]; exists {
 		vOpts := append(opts, db.WithValidateField("as_numbers"))
 		if err := fv(ctx, m.GetAsNumbers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["countries"]; exists {
 		vOpts := append(opts, db.WithValidateField("countries"))
 		if err := fv(ctx, m.GetCountries(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination"))
 		if err := fv(ctx, m.GetDestination(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["expiration"]; exists {
@@ -429,49 +405,37 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_prefixes"))
 		if err := fv(ctx, m.GetIpPrefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["paths"]; exists {
 		vOpts := append(opts, db.WithValidateField("paths"))
 		if err := fv(ctx, m.GetPaths(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_fingerprints"]; exists {
 		vOpts := append(opts, db.WithValidateField("tls_fingerprints"))
 		if err := fv(ctx, m.GetTlsFingerprints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -479,7 +443,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhExpiration := v.ExpirationValidationRuleHandler
 	rulesExpiration := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -490,7 +453,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["expiration"] = vFn
-
 	vrhExpirationExpirationTtl := v.ExpirationExpirationTtlValidationRuleHandler
 	rulesExpirationExpirationTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
@@ -501,7 +463,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.expiration_expiration_ttl: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["expiration.expiration_ttl"] = vFnMap["expiration.expiration_ttl"]
 
 	vrhDestination := v.DestinationValidationRuleHandler
@@ -630,7 +591,6 @@ func (m *Destination) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetVirtualHostDRefInfo()
-
 }
 
 func (m *Destination) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
@@ -655,7 +615,6 @@ func (m *Destination) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVirtualHostDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -674,7 +633,6 @@ func (m *Destination) GetVirtualHostDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -683,7 +641,6 @@ type ValidateDestination struct {
 }
 
 func (v *ValidateDestination) VirtualHostValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -743,22 +700,18 @@ func (v *ValidateDestination) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["virtual_host"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_host"))
 		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDestinationValidator = func() *ValidateDestination {
 	v := &ValidateDestination{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -828,7 +781,6 @@ func (m *DoSMitigationRuleInfo) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetItemDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -836,7 +788,6 @@ func (m *DoSMitigationRuleInfo) GetItemDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItem() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetItem().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetItem().GetDRefInfo() FAILED")
@@ -846,7 +797,6 @@ func (m *DoSMitigationRuleInfo) GetItemDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "item." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateDoSMitigationRuleInfo struct {
@@ -854,7 +804,6 @@ type ValidateDoSMitigationRuleInfo struct {
 }
 
 func (v *ValidateDoSMitigationRuleInfo) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -876,50 +825,36 @@ func (v *ValidateDoSMitigationRuleInfo) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creation_timestamp"))
 		if err := fv(ctx, m.GetCreationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["item"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("item"))
 		if err := fv(ctx, m.GetItem(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDoSMitigationRuleInfoValidator = func() *ValidateDoSMitigationRuleInfo {
 	v := &ValidateDoSMitigationRuleInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -938,7 +873,6 @@ var DefaultDoSMitigationRuleInfoValidator = func() *ValidateDoSMitigationRuleInf
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
-
 	v.FldValidators["item"] = GetSpecTypeValidator().Validate
 
 	return v
@@ -991,7 +925,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDestinationDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -999,7 +932,6 @@ func (m *GetSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDestination() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDestination().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDestination().GetDRefInfo() FAILED")
@@ -1009,7 +941,6 @@ func (m *GetSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "destination." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -1031,9 +962,7 @@ func (v *ValidateGetSpecType) ExpirationExpirationTtlValidationRuleHandler(rules
 	}
 	return oValidatorFn_ExpirationTtl, nil
 }
-
 func (v *ValidateGetSpecType) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination")
@@ -1042,19 +971,15 @@ func (v *ValidateGetSpecType) DestinationValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := DestinationValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1094,9 +1019,7 @@ func (v *ValidateGetSpecType) IpPrefixesValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) CountriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1142,9 +1065,7 @@ func (v *ValidateGetSpecType) CountriesValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AsNumbersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepUint32ItemRules(rules)
 	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1184,9 +1105,7 @@ func (v *ValidateGetSpecType) AsNumbersValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) TlsFingerprintsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1226,9 +1145,7 @@ func (v *ValidateGetSpecType) TlsFingerprintsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PathsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1282,30 +1199,23 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["as_numbers"]; exists {
 		vOpts := append(opts, db.WithValidateField("as_numbers"))
 		if err := fv(ctx, m.GetAsNumbers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["countries"]; exists {
 		vOpts := append(opts, db.WithValidateField("countries"))
 		if err := fv(ctx, m.GetCountries(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination"))
 		if err := fv(ctx, m.GetDestination(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["expiration"]; exists {
@@ -1352,49 +1262,37 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_prefixes"))
 		if err := fv(ctx, m.GetIpPrefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["paths"]; exists {
 		vOpts := append(opts, db.WithValidateField("paths"))
 		if err := fv(ctx, m.GetPaths(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_fingerprints"]; exists {
 		vOpts := append(opts, db.WithValidateField("tls_fingerprints"))
 		if err := fv(ctx, m.GetTlsFingerprints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1402,7 +1300,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhExpiration := v.ExpirationValidationRuleHandler
 	rulesExpiration := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1413,7 +1310,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["expiration"] = vFn
-
 	vrhExpirationExpirationTtl := v.ExpirationExpirationTtlValidationRuleHandler
 	rulesExpirationExpirationTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
@@ -1424,7 +1320,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.expiration_expiration_ttl: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["expiration.expiration_ttl"] = vFnMap["expiration.expiration_ttl"]
 
 	vrhDestination := v.DestinationValidationRuleHandler
@@ -1553,7 +1448,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDestinationDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1561,7 +1455,6 @@ func (m *GlobalSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDestination() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDestination().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDestination().GetDRefInfo() FAILED")
@@ -1571,7 +1464,6 @@ func (m *GlobalSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "destination." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -1593,9 +1485,7 @@ func (v *ValidateGlobalSpecType) ExpirationExpirationTtlValidationRuleHandler(ru
 	}
 	return oValidatorFn_ExpirationTtl, nil
 }
-
 func (v *ValidateGlobalSpecType) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination")
@@ -1604,19 +1494,15 @@ func (v *ValidateGlobalSpecType) DestinationValidationRuleHandler(rules map[stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := DestinationValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1656,9 +1542,7 @@ func (v *ValidateGlobalSpecType) IpPrefixesValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CountriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1704,9 +1588,7 @@ func (v *ValidateGlobalSpecType) CountriesValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AsNumbersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepUint32ItemRules(rules)
 	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1746,9 +1628,7 @@ func (v *ValidateGlobalSpecType) AsNumbersValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) TlsFingerprintsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1788,9 +1668,7 @@ func (v *ValidateGlobalSpecType) TlsFingerprintsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PathsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1830,9 +1708,7 @@ func (v *ValidateGlobalSpecType) PathsValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) Ja4TlsFingerprintsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1886,30 +1762,23 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["as_numbers"]; exists {
 		vOpts := append(opts, db.WithValidateField("as_numbers"))
 		if err := fv(ctx, m.GetAsNumbers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["countries"]; exists {
 		vOpts := append(opts, db.WithValidateField("countries"))
 		if err := fv(ctx, m.GetCountries(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination"))
 		if err := fv(ctx, m.GetDestination(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["expiration"]; exists {
@@ -1956,66 +1825,49 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_prefixes"))
 		if err := fv(ctx, m.GetIpPrefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ja4_tls_fingerprints"]; exists {
 		vOpts := append(opts, db.WithValidateField("ja4_tls_fingerprints"))
 		if err := fv(ctx, m.GetJa4TlsFingerprints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["paths"]; exists {
 		vOpts := append(opts, db.WithValidateField("paths"))
 		if err := fv(ctx, m.GetPaths(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["throttling"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("throttling"))
 		if err := fv(ctx, m.GetThrottling(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_fingerprints"]; exists {
 		vOpts := append(opts, db.WithValidateField("tls_fingerprints"))
 		if err := fv(ctx, m.GetTlsFingerprints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2023,7 +1875,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhExpiration := v.ExpirationValidationRuleHandler
 	rulesExpiration := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2034,7 +1885,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["expiration"] = vFn
-
 	vrhExpirationExpirationTtl := v.ExpirationExpirationTtlValidationRuleHandler
 	rulesExpirationExpirationTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
@@ -2045,7 +1895,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.expiration_expiration_ttl: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["expiration.expiration_ttl"] = vFnMap["expiration.expiration_ttl"]
 
 	vrhDestination := v.DestinationValidationRuleHandler
@@ -2187,7 +2036,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDestinationDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2195,7 +2043,6 @@ func (m *ReplaceSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDestination() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDestination().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDestination().GetDRefInfo() FAILED")
@@ -2205,7 +2052,6 @@ func (m *ReplaceSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "destination." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -2227,9 +2073,7 @@ func (v *ValidateReplaceSpecType) ExpirationExpirationTtlValidationRuleHandler(r
 	}
 	return oValidatorFn_ExpirationTtl, nil
 }
-
 func (v *ValidateReplaceSpecType) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination")
@@ -2238,19 +2082,15 @@ func (v *ValidateReplaceSpecType) DestinationValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := DestinationValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2290,9 +2130,7 @@ func (v *ValidateReplaceSpecType) IpPrefixesValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) CountriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -2338,9 +2176,7 @@ func (v *ValidateReplaceSpecType) CountriesValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) AsNumbersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepUint32ItemRules(rules)
 	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2380,9 +2216,7 @@ func (v *ValidateReplaceSpecType) AsNumbersValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) TlsFingerprintsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2422,9 +2256,7 @@ func (v *ValidateReplaceSpecType) TlsFingerprintsValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PathsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2478,30 +2310,23 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["as_numbers"]; exists {
 		vOpts := append(opts, db.WithValidateField("as_numbers"))
 		if err := fv(ctx, m.GetAsNumbers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["countries"]; exists {
 		vOpts := append(opts, db.WithValidateField("countries"))
 		if err := fv(ctx, m.GetCountries(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["destination"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("destination"))
 		if err := fv(ctx, m.GetDestination(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["expiration"]; exists {
@@ -2548,40 +2373,31 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_prefixes"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_prefixes"))
 		if err := fv(ctx, m.GetIpPrefixes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["paths"]; exists {
 		vOpts := append(opts, db.WithValidateField("paths"))
 		if err := fv(ctx, m.GetPaths(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_fingerprints"]; exists {
 		vOpts := append(opts, db.WithValidateField("tls_fingerprints"))
 		if err := fv(ctx, m.GetTlsFingerprints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2589,7 +2405,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhExpiration := v.ExpirationValidationRuleHandler
 	rulesExpiration := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2600,7 +2415,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["expiration"] = vFn
-
 	vrhExpirationExpirationTtl := v.ExpirationExpirationTtlValidationRuleHandler
 	rulesExpirationExpirationTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
@@ -2611,7 +2425,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.expiration_expiration_ttl: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["expiration.expiration_ttl"] = vFnMap["expiration.expiration_ttl"]
 
 	vrhDestination := v.DestinationValidationRuleHandler

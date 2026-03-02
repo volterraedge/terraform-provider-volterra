@@ -1,4 +1,4 @@
-// Copyright (c) 2023 F5 Inc. All rights reserved.
+// Copyright (c) 2026 F5 Inc. All rights reserved.
 package volterra
 
 import (
@@ -180,6 +180,70 @@ func (s *apiCredentialCustomAPIServer) GetServiceCredentials(ctx context.Context
 
 func (s *apiCredentialCustomAPIServer) ReplaceServiceCredentials(context.Context, *ves_io_schema_api_credential.ReplaceServiceCredentialsRequest) (*ves_io_schema_api_credential.ReplaceServiceCredentialsResponse, error) {
 	return &ves_io_schema_api_credential.ReplaceServiceCredentialsResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) CreateKubeConfig(context.Context, *ves_io_schema_api_credential.CreateKubeConfigRequest) (*ves_io_schema_api_credential.CreateResponse, error) {
+	return &ves_io_schema_api_credential.CreateResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) GetKubeConfig(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.GetResponse, error) {
+	return &ves_io_schema_api_credential.GetResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) GetKubeConfigServiceCredentials(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.GetServiceCredentialsResponse, error) {
+	return &ves_io_schema_api_credential.GetServiceCredentialsResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) ListKubeConfigs(context.Context, *ves_io_schema_api_credential.ListRequest) (*ves_io_schema_api_credential.ListResponse, error) {
+	return &ves_io_schema_api_credential.ListResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) ListKubeConfigServiceCredentials(context.Context, *ves_io_schema_api_credential.ListRequest) (*ves_io_schema_api_credential.ListServiceCredentialsResponse, error) {
+	return &ves_io_schema_api_credential.ListServiceCredentialsResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) RevokeKubeConfig(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) RevokeKubeConfigServiceCredentials(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) ActivateKubeConfigServiceCredentials(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) ActivateKubeConfig(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) CreateKubeConfigServiceCredentials(context.Context, *ves_io_schema_api_credential.CreateKubeConfigServiceCredentialsRequest) (*ves_io_schema_api_credential.CreateResponse, error) {
+	return &ves_io_schema_api_credential.CreateResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) CreateSiteGlobalKubeConfig(context.Context, *ves_io_schema_api_credential.CreateSiteGlobalKubeConfigRequest) (*ves_io_schema_api_credential.CreateResponse, error) {
+	return &ves_io_schema_api_credential.CreateResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) GetSiteGlobalKubeConfig(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.GetServiceCredentialsResponse, error) {
+	return &ves_io_schema_api_credential.GetServiceCredentialsResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) ListSiteGlobalKubeConfig(context.Context, *ves_io_schema_api_credential.ListRequest) (*ves_io_schema_api_credential.ListServiceCredentialsResponse, error) {
+	return &ves_io_schema_api_credential.ListServiceCredentialsResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) RevokeSiteGlobalKubeConfig(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) ActivateSiteGlobalKubeConfig(context.Context, *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) ListKubeConfig(context.Context, *ves_io_schema_api_credential.ListRequest) (*ves_io_schema_api_credential.ListResponse, error) {
+	return &ves_io_schema_api_credential.ListResponse{}, nil
 }
 
 var _ ves_io_schema_api_credential.CustomAPIServer = &apiCredentialCustomAPIServer{}
@@ -497,6 +561,10 @@ func (n *namespaceCustomAPIServer) AllApplicationInventory(context.Context,
 func (n *namespaceCustomAPIServer) AllApplicationInventoryWaf(context.Context,
 	*ves_io_schema_ns.AllApplicationInventoryWafFilterRequest) (*ves_io_schema_ns.AllApplicationInventoryWafFilterResponse, error) {
 	return &ves_io_schema_ns.AllApplicationInventoryWafFilterResponse{}, nil
+}
+
+func (n *namespaceCustomAPIServer) DynamicData(context.Context, *ves_io_schema_ns.DynamicDataReq) (*ves_io_schema_ns.DynamicDataResp, error) {
+	return &ves_io_schema_ns.DynamicDataResp{}, nil
 }
 
 var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}

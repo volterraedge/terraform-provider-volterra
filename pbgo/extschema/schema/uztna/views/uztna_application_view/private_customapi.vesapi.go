@@ -42,7 +42,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCDeleteExtendedTags(ctx context.Context
 	rsp, err := c.grpcClient.DeleteExtendedTags(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCSetExtendedTags(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetExtendedTagsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomPrivateAPIGrpcClient) doRPCSetExtendedTags(ctx context.Context, y
 	rsp, err := c.grpcClient.SetExtendedTags(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIGrpcClient) doRPCUpdateExtendedTags(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateExtendedTagsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DeleteExtendedTags"] = ccl.doRPCDeleteExtendedTags
-
 	rpcFns["SetExtendedTags"] = ccl.doRPCSetExtendedTags
-
 	rpcFns["UpdateExtendedTags"] = ccl.doRPCUpdateExtendedTags
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -188,7 +182,6 @@ func (c *CustomPrivateAPIRestClient) doRPCDeleteExtendedTags(ctx context.Context
 	pbRsp := &DeleteExtendedTagsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.uztna.views.uztna_application_view.DeleteExtendedTagsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,7 +189,6 @@ func (c *CustomPrivateAPIRestClient) doRPCDeleteExtendedTags(ctx context.Context
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCSetExtendedTags(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -275,7 +267,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSetExtendedTags(ctx context.Context, c
 	pbRsp := &SetExtendedTagsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.uztna.views.uztna_application_view.SetExtendedTagsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -283,7 +274,6 @@ func (c *CustomPrivateAPIRestClient) doRPCSetExtendedTags(ctx context.Context, c
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIRestClient) doRPCUpdateExtendedTags(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -365,7 +355,6 @@ func (c *CustomPrivateAPIRestClient) doRPCUpdateExtendedTags(ctx context.Context
 	pbRsp := &UpdateExtendedTagsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.uztna.views.uztna_application_view.UpdateExtendedTagsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -399,13 +388,9 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DeleteExtendedTags"] = ccl.doRPCDeleteExtendedTags
-
 	rpcFns["SetExtendedTags"] = ccl.doRPCSetExtendedTags
-
 	rpcFns["UpdateExtendedTags"] = ccl.doRPCUpdateExtendedTags
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -558,7 +543,7 @@ var CustomPrivateAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Onboarded Application Object",
-        "description": " \nApplications are services that run within your organization, \nand end users are granted access to them after the ZTNA Access Policy \nis successfully evaluated. Access to these applications is subject to user authorization.\nThis section allows you to onboard your private applications to the ZTNA platform.",
+        "description": "\nApplications are services that run within your organization,\nand end users are granted access to them after the ZTNA Access Policy\nis successfully evaluated. Access to these applications is subject to user authorization.\nThis section allows you to onboard your private applications to the ZTNA platform.",
         "version": "version not set"
     },
     "schemes": [

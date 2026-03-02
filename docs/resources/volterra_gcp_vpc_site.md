@@ -44,20 +44,59 @@ resource "volterra_gcp_vpc_site" "example" {
 
   // One of the arguments from this list "ingress_egress_gw ingress_gw voltstack_cluster" must be set
 
-  ingress_gw {
-    gcp_certified_hw = "gcp-byol-voltmesh"
+  ingress_egress_gw {
+    // One of the arguments from this list "dc_cluster_group_inside_vn dc_cluster_group_outside_vn no_dc_cluster_group" must be set
 
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+
+    no_forward_proxy = true
+    gcp_certified_hw = "gcp-byol-multi-nic-voltmesh"
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
-    local_network {
+    // One of the arguments from this list "global_network_list no_global_network" must be set
+
+    no_global_network = true
+    inside_network {
       // One of the arguments from this list "existing_network new_network new_network_autogenerate" must be set
 
-      new_network_autogenerate {
-        autogenerate = true
+      new_network {
+        name = "network1"
       }
     }
 
-    local_subnet {
+    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
+
+    no_inside_static_routes = true
+    inside_subnet {
+      // One of the arguments from this list "existing_subnet new_subnet" must be set
+
+      existing_subnet {
+        subnet_name = "subnet1-in-network1"
+      }
+    }
+
+    // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies no_network_policy" must be set
+
+    no_network_policy = true
+    node_number = "1"
+    outside_network {
+      // One of the arguments from this list "existing_network new_network new_network_autogenerate" must be set
+
+      existing_network {
+        name = "network1"
+
+        // One of the arguments from this list "f5_orchestrated_routing manual_routing" can be set
+
+        f5_orchestrated_routing = true
+      }
+    }
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+
+    no_outside_static_routes = true
+    outside_subnet {
       // One of the arguments from this list "existing_subnet new_subnet" must be set
 
       new_subnet {
@@ -66,22 +105,22 @@ resource "volterra_gcp_vpc_site" "example" {
         subnet_name = "subnet1-in-network1"
       }
     }
-
-    node_number = "1"
-
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l3_enhanced perf_mode_l7_enhanced" must be set
 
-      perf_mode_l3_enhanced {
-        // One of the arguments from this list "jumbo no_jumbo" must be set
+      perf_mode_l7_enhanced {
+        // One of the arguments from this list "jumbo_disabled jumbo_enabled" must be set
 
-        jumbo = true
+        jumbo_disabled = true
       }
     }
+
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+
+    sm_connection_public_ip = true
   }
   ssh_key = ["ssh-rsa AAAAB..."]
 }
-
 ```
 
 Argument Reference
@@ -124,6 +163,12 @@ Argument Reference
 `cloud_credentials` - (Optional) Reference to GCP credentials for automatic deployment. See [ref](#ref) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
+
+###### One of the arguments from this list "disable_encryption, enable_encryption" can be set
+
+`disable_encryption` - (Optional) Disk attached to VM will not be encrypted with CMK (`Bool`).
+
+`enable_encryption` - (Optional) Disk will be encrypted with the specified key. See [Encryption Choice Enable Encryption ](#encryption-choice-enable-encryption) below for details.
 
 `gcp_labels` - (Optional) It helps to manage, identify, organize, search for, and filter resources in GCP console. (`String`).
 
@@ -395,6 +440,14 @@ Disable Interception.
 
 Enable Interception.
 
+### Encryption Choice Enable Encryption
+
+Disk will be encrypted with the specified key.
+
+`kms_key_resource_id` - (Required) GCP KMS Key to be used to encrypt the disk attached to the VM (`String`).
+
+`kms_key_ring_id` - (Required) Key ring in which the CMK to be used to encrypt is present (`String`).
+
 ### Forward Proxy Choice Active Forward Proxy Policies
 
 Enable Forward Proxy for this site and manage policies.
@@ -509,7 +562,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Ingress Gw Local Network
 
@@ -541,7 +594,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Inside Static Route Choice Inside Static Routes
 
@@ -695,6 +748,14 @@ List of Static routes.
 
 x-displayName: "Enabled".
 
+### Perf Mode Choice Jumbo Disabled
+
+x-displayName: "Disabled".
+
+### Perf Mode Choice Jumbo Enabled
+
+x-displayName: "Enabled".
+
 ### Perf Mode Choice No Jumbo
 
 x-displayName: "Disabled".
@@ -712,6 +773,12 @@ Site optimized for L3 traffic processing.
 ### Perf Mode Choice Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
+
+###### One of the arguments from this list "jumbo_disabled, jumbo_enabled" must be set
+
+`jumbo_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
+`jumbo_enabled` - (Optional) x-displayName: "Enabled" (`Bool`).
 
 ### Policy Interception Rules
 
@@ -763,7 +830,7 @@ F5 will orchestrate required routes for SLO Route Table towards Internet and SLI
 
 ### Routing Type Manual Routing
 
-In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. .
+In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments..
 
 ### Secret Info Oneof Blindfold Secret Info
 
@@ -923,7 +990,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 ###### One of the arguments from this list "dc_cluster_group, no_dc_cluster_group" must be set
 
-`dc_cluster_group` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+`dc_cluster_group`- (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
 
@@ -1096,4 +1163,4 @@ Subnet for the local interface of the node..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured gcp_vpc_site.
+*   `id` - This is the id of the configured gcp_vpc_site.

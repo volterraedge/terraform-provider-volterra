@@ -14,9 +14,7 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.Object"] = ObjectValidator()
-
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.DeleteRequest"] = DeleteRequestValidator()
@@ -27,19 +25,16 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.JiraProjectsIssueTypesRequest"] = JiraProjectsIssueTypesRequestValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.JiraProjectsIssueTypesResponse"] = JiraProjectsIssueTypesResponseValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.ValidateTicketTrackingSystemRequest"] = ValidateTicketTrackingSystemRequestValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.ValidateTicketTrackingSystemResponse"] = ValidateTicketTrackingSystemResponseValidator()
-
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.JiraAdhocRestApiConfigurationType"] = JiraAdhocRestApiConfigurationTypeValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.JiraConfigurationType"] = JiraConfigurationTypeValidator()
 	vr["ves.io.schema.ticket_management.ticket_tracking_system.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -47,39 +42,29 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.ticket_management.ticket_tracking_system.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.ticket_management.ticket_tracking_system.Object"] = reflect.TypeOf(&DBObject{})
 	mdr.EntryIndexers["ves.io.schema.ticket_management.ticket_tracking_system.Object"] = GetObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ticket_management.ticket_tracking_system.API.Create"] = []string{
 		"spec.jira_config.adhoc_rest_api.encrypted_api_token",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.ticket_management.ticket_tracking_system.API.Create"] = "ves.io.schema.ticket_management.ticket_tracking_system.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ticket_management.ticket_tracking_system.API.Replace"] = []string{
 		"spec.jira_config.adhoc_rest_api.encrypted_api_token",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.ticket_management.ticket_tracking_system.API.Replace"] = "ves.io.schema.ticket_management.ticket_tracking_system.ReplaceRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI.ValidateTicketTrackingSystem"] = []string{
 		".jira_config.adhoc_rest_api.encrypted_api_token",
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI.ValidateTicketTrackingSystem"] = "ves.io.schema.ticket_management.ticket_tracking_system.ValidateTicketTrackingSystemRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.ticket_management.ticket_tracking_system.API"] = "web"
 	sm["ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI"] = "web"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -88,9 +73,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.ticket_management.ticket_tracking_system.Object"] = APISwaggerJSON
@@ -104,15 +87,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.ticket_management.ticket_tracking_system.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.ticket_management.ticket_tracking_system.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.ticket_management.ticket_tracking_system.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -123,22 +102,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

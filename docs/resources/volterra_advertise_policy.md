@@ -24,7 +24,6 @@ resource "volterra_advertise_policy" "example" {
 
   port = "80"
 }
-
 ```
 
 Argument Reference
@@ -86,7 +85,7 @@ Optional. TLS parameters to use. If not specified, will take from Virtual Host c
 
 ### Where
 
--	site Advertised on site local network in case of customer sites and Public network in case of regional sites.
+*   site Advertised on site local network in case of customer sites and Public network in case of regional sites.
 
 ###### One of the arguments from this list "site, virtual_network, virtual_site" must be set
 
@@ -303,4 +302,4 @@ Root CA Certificate.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured advertise_policy.
+*   `id` - This is the id of the configured advertise_policy.

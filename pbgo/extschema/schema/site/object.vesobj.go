@@ -11,17 +11,16 @@ import (
 	"time"
 
 	google_protobuf "github.com/gogo/protobuf/types"
+	"github.com/google/uuid"
 	multierror "github.com/hashicorp/go-multierror"
 
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/db/sro"
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/store"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	"github.com/google/uuid"
-	"gopkg.volterra.us/stdlib/db/sro"
 )
 
 const (
@@ -120,7 +119,6 @@ func (o *Object) Redact(ctx context.Context) error {
 	if o == nil {
 		return nil
 	}
-
 	if err := o.GetSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting Object.spec")
 	}
@@ -171,9 +169,7 @@ type DBObject struct {
 
 // GetObjectIndexers returns the associated store.Indexers for Object
 func GetObjectIndexers() store.Indexers {
-
 	return nil
-
 }
 
 func (e *DBObject) GetDB() (*db.DB, error) {
@@ -380,9 +376,7 @@ func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (e *DBObject) ToStore() store.Entry {
@@ -430,7 +424,6 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -440,7 +433,6 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -448,7 +440,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -458,7 +449,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // Implement sro.SRO interface
@@ -641,7 +631,6 @@ func (o *StatusObject) GetVtrpStale() bool {
 func (o *StatusObject) SetVtrpStale(isStale bool) {
 	o.GetMetadata().SetVtrpStale(isStale)
 }
-
 func (o *StatusObject) GetStatusObjConditions() []sro.StatusObjectCondition {
 	if o == nil {
 		return nil
@@ -895,47 +884,33 @@ func (v *ValidateObject) Validate(ctx context.Context, pm interface{}, opts ...d
 	if e == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, e.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, e.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectValidator = func() *ValidateObject {
 	v := &ValidateObject{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = SpecTypeValidator().Validate
-
 	return v
 }()
 
@@ -1019,9 +994,7 @@ type DBStatusObject struct {
 
 // GetStatusObjectIndexers returns the associated store.Indexers for StatusObject
 func GetStatusObjectIndexers() store.Indexers {
-
 	return nil
-
 }
 
 func (e *DBStatusObject) GetDB() (*db.DB, error) {
@@ -1058,7 +1031,6 @@ func (e *DBStatusObject) UnmarshalBytes(b []byte) error {
 }
 
 func (e *DBStatusObject) Sample(r *rand.Rand) (db.Entry, error) {
-
 	o := &StatusObject{}
 
 	return &DBStatusObject{o, e.tbl}, nil
@@ -1255,9 +1227,7 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (e *DBStatusObject) ToStore() store.Entry {
@@ -1305,7 +1275,6 @@ func (e *DBStatusObject) GetDcClusterGroupStatusDRefInfo() ([]db.DRefInfo, error
 	if e.GetDcClusterGroupStatus() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetDcClusterGroupStatus().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDcClusterGroupStatus().GetDRefInfo() FAILED")
@@ -1315,7 +1284,6 @@ func (e *DBStatusObject) GetDcClusterGroupStatusDRefInfo() ([]db.DRefInfo, error
 		dri.DRField = "dc_cluster_group_status." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (e *DBStatusObject) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -1381,7 +1349,6 @@ func (e *DBStatusObject) GetSiteMeshGroupStatusDRefInfo() ([]db.DRefInfo, error)
 	if e.GetSiteMeshGroupStatus() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSiteMeshGroupStatus().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSiteMeshGroupStatus().GetDRefInfo() FAILED")
@@ -1391,7 +1358,6 @@ func (e *DBStatusObject) GetSiteMeshGroupStatusDRefInfo() ([]db.DRefInfo, error)
 		dri.DRField = "site_mesh_group_status." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1399,7 +1365,6 @@ func (e *DBStatusObject) GetVerStatusDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetVerStatus() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetVerStatus().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVerStatus().GetDRefInfo() FAILED")
@@ -1409,7 +1374,6 @@ func (e *DBStatusObject) GetVerStatusDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "ver_status." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateStatusObject struct {
@@ -1427,18 +1391,13 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 	if e == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certified_hardware"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hardware"))
 		if err := fv(ctx, e.GetCertifiedHardware(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["conditions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("conditions"))
 		for idx, item := range e.GetConditions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1446,101 +1405,74 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dc_cluster_group_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dc_cluster_group_status"))
 		if err := fv(ctx, e.GetDcClusterGroupStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment"))
 		if err := fv(ctx, e.GetDeployment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_status"))
 		if err := fv(ctx, e.GetDirectConnectStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["express_route_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("express_route_status"))
 		if err := fv(ctx, e.GetExpressRouteStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fleet_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fleet_status"))
 		if err := fv(ctx, e.GetFleetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hostname"))
 		if err := fv(ctx, e.GetHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hw_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hw_info"))
 		if err := fv(ctx, e.GetHwInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_VIP_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_VIP_status"))
 		if err := fv(ctx, e.GetInternet_VIPStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["managed_site_orchestration_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("managed_site_orchestration_status"))
+		if err := fv(ctx, e.GetManagedSiteOrchestrationStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_info"))
 		if err := fv(ctx, e.GetNodeInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_refs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_refs"))
 		for idx, item := range e.GetObjectRefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1548,47 +1480,41 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["offline_survivability_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("offline_survivability_status"))
 		if err := fv(ctx, e.GetOfflineSurvivabilityStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["operating_system_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operating_system_status"))
 		if err := fv(ctx, e.GetOperatingSystemStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scaling_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scaling_status"))
 		if err := fv(ctx, e.GetScalingStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["site_errors"]; exists {
+		vOpts := append(opts, db.WithValidateField("site_errors"))
+		for idx, item := range e.GetSiteErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["site_mesh_group_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_mesh_group_status"))
 		if err := fv(ctx, e.GetSiteMeshGroupStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_reachability_scan_status_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_reachability_scan_status_list"))
 		for idx, item := range e.GetSiteReachabilityScanStatusList() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1596,68 +1522,52 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["site_state_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("site_state_status"))
+		if err := fv(ctx, e.GetSiteStateStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["ver_master_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ver_master_status"))
 		if err := fv(ctx, e.GetVerMasterStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ver_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ver_status"))
 		if err := fv(ctx, e.GetVerStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet_peering_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_peering_status"))
 		if err := fv(ctx, e.GetVnetPeeringStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volterra_software_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volterra_software_status"))
 		if err := fv(ctx, e.GetVolterraSoftwareStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
-
 	v.FldValidators["ver_status"] = VerStatusTypeValidator().Validate
-
 	v.FldValidators["volterra_software_status"] = VolterraSoftwareStatusValidator().Validate
-
 	v.FldValidators["hw_info"] = OsInfoValidator().Validate
-
 	v.FldValidators["operating_system_status"] = OperatingSystemStatusValidator().Validate
-
 	v.FldValidators["vnet_peering_status"] = AzureHubSpokeVnetPeeringStatusInfoValidator().Validate
-
 	v.FldValidators["site_mesh_group_status"] = ves_io_schema.SiteMeshGroupStatusValidator().Validate
-
 	v.FldValidators["dc_cluster_group_status"] = ves_io_schema.DcClusterGroupStatusValidator().Validate
-
+	v.FldValidators["managed_site_orchestration_status"] = OrchestrationStatusTypeValidator().Validate
 	return v
 }()
 

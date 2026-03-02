@@ -26,7 +26,6 @@ resource "volterra_cloud_elastic_ip" "example" {
     tenant    = "acmecorp"
   }
 }
-
 ```
 
 Argument Reference
@@ -65,4 +64,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cloud_elastic_ip.
+*   `id` - This is the id of the configured cloud_elastic_ip.

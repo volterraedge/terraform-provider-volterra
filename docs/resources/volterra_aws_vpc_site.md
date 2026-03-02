@@ -35,16 +35,22 @@ resource "volterra_aws_vpc_site" "example" {
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
 
-  direct_connect_disabled = true
+  private_connectivity {
+    cloud_link {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "inside outside" can be set
+
+    inside = true
+  }
 
   // One of the arguments from this list "egress_gateway_default egress_nat_gw egress_virtual_private_gateway" must be set
 
-  egress_nat_gw {
-    // One of the arguments from this list "nat_gw_id" must be set
-
-    nat_gw_id = "nat_gw_id"
-  }
-  instance_type = ["a1.xlarge"]
+  egress_gateway_default = true
+  instance_type          = ["a1.xlarge"]
 
   // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
 
@@ -56,19 +62,15 @@ resource "volterra_aws_vpc_site" "example" {
 
   // One of the arguments from this list "f5_orchestrated_routing manual_routing" must be set
 
-  f5_orchestrated_routing = true
+  manual_routing = true
 
   // One of the arguments from this list "custom_security_group f5xc_security_group" must be set
 
-  custom_security_group {
-    inside_security_group_id = "sg-0db952838ba829943"
-
-    outside_security_group_id = "sg-0db952838ba829943"
-  }
+  f5xc_security_group = true
 
   // One of the arguments from this list "ingress_egress_gw ingress_gw voltstack_cluster" must be set
 
-  ingress_gw {
+  ingress_egress_gw {
     allowed_vip_port {
       // One of the arguments from this list "custom_ports disable_allowed_vip_port use_http_https_port use_http_port use_https_port" can be set
 
@@ -77,14 +79,27 @@ resource "volterra_aws_vpc_site" "example" {
       }
     }
 
-    aws_certified_hw = "aws-byol-voltmesh"
+    allowed_vip_port_sli {
+      // One of the arguments from this list "custom_ports disable_allowed_vip_port use_http_https_port use_http_port use_https_port" can be set
+
+      use_http_port = true
+    }
+
+    aws_certified_hw = "aws-byol-multi-nic-voltmesh"
 
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      disk_size = "80"
+      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
 
-      local_subnet {
+      reserved_inside_subnet = true
+      disk_size = "80"
+      outside_subnet {
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+
+        existing_subnet_id = "subnet-12345678901234567"
+      }
+      workload_subnet {
         // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
         subnet_param {
@@ -95,23 +110,53 @@ resource "volterra_aws_vpc_site" "example" {
       }
     }
 
+    // One of the arguments from this list "dc_cluster_group_inside_vn dc_cluster_group_outside_vn no_dc_cluster_group" must be set
+
+    dc_cluster_group_inside_vn {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+
+    no_forward_proxy = true
+
+    // One of the arguments from this list "global_network_list no_global_network" must be set
+
+    no_global_network = true
+
+    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
+
+    no_inside_static_routes = true
+
+    // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies no_network_policy" must be set
+
+    no_network_policy = true
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+
+    no_outside_static_routes = true
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l3_enhanced perf_mode_l7_enhanced" must be set
 
-      perf_mode_l3_enhanced {
-        // One of the arguments from this list "jumbo no_jumbo" must be set
+      perf_mode_l7_enhanced {
+        // One of the arguments from this list "jumbo_disabled jumbo_enabled" must be set
 
-        no_jumbo = true
+        jumbo_disabled = true
       }
     }
+
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+
+    sm_connection_public_ip = true
   }
   ssh_key = ["ssh-rsa AAAAB..."]
 
   // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
 
-  no_worker_nodes = true
+  nodes_per_az = "2"
 }
-
 ```
 
 Argument Reference
@@ -172,6 +217,12 @@ Argument Reference
 `egress_nat_gw` - (Optional) With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.. See [Egress Gateway Choice Egress Nat Gw ](#egress-gateway-choice-egress-nat-gw) below for details.
 
 `egress_virtual_private_gateway` - (Optional) With this option, egress site traffic will be routed through an Virtual Private Gateway.. See [Egress Gateway Choice Egress Virtual Private Gateway ](#egress-gateway-choice-egress-virtual-private-gateway) below for details.
+
+###### One of the arguments from this list "disable_encryption, enable_encryption" can be set
+
+`disable_encryption` - (Optional) Disk attached to VM will not be encrypted (`Bool`).
+
+`enable_encryption` - (Optional) Disk will be encrypted with the specified key. See [Encryption Choice Enable Encryption ](#encryption-choice-enable-encryption) below for details.
 
 `instance_type` - (Required) Select Instance size based on performance needed (`String`).
 
@@ -559,6 +610,12 @@ Disable Interception.
 
 Enable Interception.
 
+### Encryption Choice Enable Encryption
+
+Disk will be encrypted with the specified key.
+
+`kms_key_id` - (Required) AWS KMS Key to be used to encrypt the disk attached to the VM (`String`).
+
 ### Forward Proxy Choice Active Forward Proxy Policies
 
 Enable Forward Proxy for this site and manage policies.
@@ -691,7 +748,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Ingress Gw Allowed Vip Port
 
@@ -727,7 +784,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Inside Static Route Choice Inside Static Routes
 
@@ -885,6 +942,14 @@ List of Static routes.
 
 x-displayName: "Enabled".
 
+### Perf Mode Choice Jumbo Disabled
+
+x-displayName: "Disabled".
+
+### Perf Mode Choice Jumbo Enabled
+
+x-displayName: "Enabled".
+
 ### Perf Mode Choice No Jumbo
 
 x-displayName: "Disabled".
@@ -902,6 +967,12 @@ Site optimized for L3 traffic processing.
 ### Perf Mode Choice Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
+
+###### One of the arguments from this list "jumbo_disabled, jumbo_enabled" must be set
+
+`jumbo_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
+`jumbo_enabled` - (Optional) x-displayName: "Enabled" (`Bool`).
 
 ### Policy Interception Rules
 
@@ -1312,4 +1383,4 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured aws_vpc_site.
+*   `id` - This is the id of the configured aws_vpc_site.

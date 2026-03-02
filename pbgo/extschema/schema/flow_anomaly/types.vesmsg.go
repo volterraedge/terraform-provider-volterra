@@ -76,7 +76,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -145,25 +144,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["last_enabled_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_enabled_time"))
 		if err := fv(ctx, m.GetLastEnabledTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_state"))
 		if err := fv(ctx, m.GetServiceState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -232,25 +224,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["last_enabled_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_enabled_time"))
 		if err := fv(ctx, m.GetLastEnabledTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_state"))
 		if err := fv(ctx, m.GetServiceState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -319,25 +304,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["last_enabled_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_enabled_time"))
 		if err := fv(ctx, m.GetLastEnabledTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_state"))
 		if err := fv(ctx, m.GetServiceState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

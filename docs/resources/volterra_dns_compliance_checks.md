@@ -17,12 +17,10 @@ Example Usage
 
 ```hcl
 resource "volterra_dns_compliance_checks" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
+  name            = "acmecorp-web"
+  namespace       = "staging"
   domain_denylist = ["www.f5.com"]
 }
-
 ```
 
 Argument Reference
@@ -53,4 +51,4 @@ Argument Reference
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured dns_compliance_checks.
+*   `id` - This is the id of the configured dns_compliance_checks.

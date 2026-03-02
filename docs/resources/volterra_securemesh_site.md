@@ -40,9 +40,8 @@ resource "volterra_securemesh_site" "example" {
   // One of the arguments from this list "custom_network_config default_network_config" must be set
 
   default_network_config = true
-  volterra_certified_hw  = ["isv-8000-series-voltmesh"]
+  volterra_certified_hw  = "isv-8000-series-voltmesh"
 }
-
 ```
 
 Argument Reference
@@ -162,7 +161,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing. See [Perf Mode Choice Perf Mode L7 Enhanced ](#perf-mode-choice-perf-mode-l7-enhanced) below for details.
 
 ### Sw
 
@@ -342,7 +341,7 @@ This site is not a member of dc cluster group.
 
 ### Dc Cluster Group Connectivity Interface Choice Dc Cluster Group Connectivity Interface Disabled
 
-Do not use this interface to connect to DC cluster group peers. .
+Do not use this interface to connect to DC cluster group peers..
 
 ### Dc Cluster Group Connectivity Interface Choice Dc Cluster Group Connectivity Interface Enabled
 
@@ -960,6 +959,14 @@ Will assign latest available OS version.
 
 x-displayName: "Enabled".
 
+### Perf Mode Choice Jumbo Disabled
+
+x-displayName: "Disabled".
+
+### Perf Mode Choice Jumbo Enabled
+
+x-displayName: "Enabled".
+
 ### Perf Mode Choice No Jumbo
 
 x-displayName: "Disabled".
@@ -977,6 +984,12 @@ Site optimized for L3 traffic processing.
 ### Perf Mode Choice Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
+
+###### One of the arguments from this list "jumbo_disabled, jumbo_enabled" must be set
+
+`jumbo_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
+`jumbo_enabled` - (Optional) x-displayName: "Enabled" (`Bool`).
 
 ### Policy Interception Rules
 
@@ -1291,4 +1304,4 @@ Will assign latest available F5XC Software Version.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured securemesh_site.
+*   `id` - This is the id of the configured securemesh_site.

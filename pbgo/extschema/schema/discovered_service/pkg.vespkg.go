@@ -14,21 +14,17 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovered_service.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.discovered_service.Object"] = ObjectValidator()
 	vr["ves.io.schema.discovered_service.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.discovered_service.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.discovered_service.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.discovered_service.ListRequest"] = ListRequestValidator()
 	vr["ves.io.schema.discovered_service.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.discovered_service.ListResponseItem"] = ListResponseItemValidator()
-
 	vr["ves.io.schema.discovered_service.DiscoveredServiceHealthStatusRequest"] = DiscoveredServiceHealthStatusRequestValidator()
 	vr["ves.io.schema.discovered_service.DiscoveredServiceHealthStatusResponse"] = DiscoveredServiceHealthStatusResponseValidator()
 	vr["ves.io.schema.discovered_service.VirtualServerPoolHealthStatusListResponseItem"] = VirtualServerPoolHealthStatusListResponseItemValidator()
 	vr["ves.io.schema.discovered_service.VirtualServerPoolMemberHealth"] = VirtualServerPoolMemberHealthValidator()
-
 	vr["ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest"] = CreateHTTPLoadBalancerRequestValidator()
 	vr["ves.io.schema.discovered_service.CreateHTTPLoadBalancerResponse"] = CreateHTTPLoadBalancerResponseValidator()
 	vr["ves.io.schema.discovered_service.CreateTCPLoadBalancerRequest"] = CreateTCPLoadBalancerRequestValidator()
@@ -49,7 +45,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovered_service.TCPLBRequest"] = TCPLBRequestValidator()
 	vr["ves.io.schema.discovered_service.WhereSite"] = WhereSiteValidator()
 	vr["ves.io.schema.discovered_service.WhereVirtualSite"] = WhereVirtualSiteValidator()
-
 	vr["ves.io.schema.discovered_service.ConsulService"] = ConsulServiceValidator()
 	vr["ves.io.schema.discovered_service.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.discovered_service.GetSpecType"] = GetSpecTypeValidator()
@@ -59,7 +54,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovered_service.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.discovered_service.ThirdPartyApplicationDiscovery"] = ThirdPartyApplicationDiscoveryValidator()
 	vr["ves.io.schema.discovered_service.VirtualServer"] = VirtualServerValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -71,19 +65,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.discovered_service.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.discovered_service.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.discovered_service.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.API.Get"] = []string{
 		"spec.virtual_server.protocol",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.API.List"] = []string{
 		"items.#.get_spec.virtual_server.protocol",
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.discovered_service.CustomAPI.CreateHTTPLoadBalancer"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.advertise_choice.advertise_custom.advertise_where.choice.cloud_edge_segment.ipv6",
@@ -106,12 +96,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.discovered_service.CustomAPI.CreateHTTPLoadBalancer"] = []string{
 		"http_lb_request.advertise_custom",
 		"http_lb_request.advertise_on_public_default_vip",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.discovered_service.CustomAPI.CreateHTTPLoadBalancer"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "http_lb_request.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -138,7 +126,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.discovered_service.CustomAPI.CreateTCPLoadBalancer"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.discovered_service.CreateTCPLoadBalancerRequest.tcp_lb_request.advertise_choice.advertise_custom.advertise_where.choice.cloud_edge_segment.ipv6",
@@ -161,7 +148,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.discovered_service.CustomAPI.CreateTCPLoadBalancer"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "tcp_lb_request.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -188,22 +174,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.CustomAPI.ListDiscoveredServices"] = []string{
 		"items.#.get_spec.virtual_server.protocol",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.discovered_service.API"] = "discovery"
 	sm["ves.io.schema.discovered_service.CustomDataAPI"] = "data"
 	sm["ves.io.schema.discovered_service.CustomAPI"] = "discovery"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -212,9 +194,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.discovered_service.Object"] = APISwaggerJSON
@@ -228,16 +208,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.discovered_service.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.discovered_service.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.discovered_service.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.discovered_service.Object"] = CustomDataAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.discovered_service.CustomDataAPI"] = NewCustomDataAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.discovered_service.CustomDataAPI"] = NewCustomDataAPIRestClient
 		if isExternal {
@@ -248,16 +223,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.discovered_service.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataAPIServer(svc)
 		}
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.discovered_service.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.discovered_service.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.discovered_service.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -268,22 +238,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.discovered_service.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -68,7 +68,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetEnableDisableComplianceChecksDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -76,7 +75,6 @@ func (m *CreateSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefIn
 	if m.GetEnableDisableComplianceChecks() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfo() FAILED")
@@ -86,7 +84,6 @@ func (m *CreateSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefIn
 		dri.DRField = "enable_disable_compliance_checks." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -94,7 +91,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) EnableDisableComplianceChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for enable_disable_compliance_checks")
@@ -103,19 +99,15 @@ func (v *ValidateCreateSpecType) EnableDisableComplianceChecksValidationRuleHand
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := EnableDisableComplianceChecksValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) EnableDisableSignaturesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for enable_disable_signatures")
@@ -124,11 +116,9 @@ func (v *ValidateCreateSpecType) EnableDisableSignaturesValidationRuleHandler(ru
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := EnableDisableSignaturesValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -148,41 +138,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_disable_compliance_checks"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_disable_compliance_checks"))
 		if err := fv(ctx, m.GetEnableDisableComplianceChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_disable_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_disable_signatures"))
 		if err := fv(ctx, m.GetEnableDisableSignatures(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -263,13 +242,11 @@ func (m *EnableDisableComplianceChecks) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetComplianceCheckChoiceDRefInfo()
-
 }
 
 func (m *EnableDisableComplianceChecks) GetComplianceCheckChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetComplianceCheckChoice().(type) {
 	case *EnableDisableComplianceChecks_EnableComplianceChecks:
-
 		vref := m.GetEnableComplianceChecks()
 		if vref == nil {
 			return nil, nil
@@ -285,11 +262,8 @@ func (m *EnableDisableComplianceChecks) GetComplianceCheckChoiceDRefInfo() ([]db
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	case *EnableDisableComplianceChecks_DisableComplianceChecks:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -305,7 +279,6 @@ func (m *EnableDisableComplianceChecks) GetComplianceCheckChoiceDBEntries(ctx co
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: dns_compliance_checks")
 		}
-
 		vref := m.GetEnableComplianceChecks()
 		if vref == nil {
 			return nil, nil
@@ -323,9 +296,7 @@ func (m *EnableDisableComplianceChecks) GetComplianceCheckChoiceDBEntries(ctx co
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	case *EnableDisableComplianceChecks_DisableComplianceChecks:
-
 	}
 
 	return entries, nil
@@ -390,16 +361,13 @@ func (v *ValidateEnableDisableComplianceChecks) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEnableDisableComplianceChecksValidator = func() *ValidateEnableDisableComplianceChecks {
 	v := &ValidateEnableDisableComplianceChecks{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -407,7 +375,6 @@ var DefaultEnableDisableComplianceChecksValidator = func() *ValidateEnableDisabl
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhComplianceCheckChoice := v.ComplianceCheckChoiceValidationRuleHandler
 	rulesComplianceCheckChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -418,7 +385,6 @@ var DefaultEnableDisableComplianceChecksValidator = func() *ValidateEnableDisabl
 		panic(errMsg)
 	}
 	v.FldValidators["compliance_check_choice"] = vFn
-
 	v.FldValidators["compliance_check_choice.enable_compliance_checks"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -524,16 +490,13 @@ func (v *ValidateEnableDisableSignatures) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEnableDisableSignaturesValidator = func() *ValidateEnableDisableSignatures {
 	v := &ValidateEnableDisableSignatures{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -541,7 +504,6 @@ var DefaultEnableDisableSignaturesValidator = func() *ValidateEnableDisableSigna
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSignatureChoice := v.SignatureChoiceValidationRuleHandler
 	rulesSignatureChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -603,7 +565,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetEnableDisableComplianceChecksDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -611,7 +572,6 @@ func (m *GetSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefInfo,
 	if m.GetEnableDisableComplianceChecks() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfo() FAILED")
@@ -621,7 +581,6 @@ func (m *GetSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefInfo,
 		dri.DRField = "enable_disable_compliance_checks." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -629,7 +588,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) EnableDisableComplianceChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for enable_disable_compliance_checks")
@@ -638,19 +596,15 @@ func (v *ValidateGetSpecType) EnableDisableComplianceChecksValidationRuleHandler
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := EnableDisableComplianceChecksValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) EnableDisableSignaturesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for enable_disable_signatures")
@@ -659,11 +613,9 @@ func (v *ValidateGetSpecType) EnableDisableSignaturesValidationRuleHandler(rules
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := EnableDisableSignaturesValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -683,41 +635,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_disable_compliance_checks"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_disable_compliance_checks"))
 		if err := fv(ctx, m.GetEnableDisableComplianceChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_disable_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_disable_signatures"))
 		if err := fv(ctx, m.GetEnableDisableSignatures(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -803,15 +744,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetEnableDisableComplianceChecksDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecksDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetDnsProxiesDRefInfo() ([]db.DRefInfo, error) {
@@ -837,7 +775,6 @@ func (m *GlobalSpecType) GetDnsProxiesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetDnsProxiesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -865,7 +802,6 @@ func (m *GlobalSpecType) GetDnsProxiesDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -874,7 +810,6 @@ func (m *GlobalSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefIn
 	if m.GetEnableDisableComplianceChecks() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfo() FAILED")
@@ -884,7 +819,6 @@ func (m *GlobalSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefIn
 		dri.DRField = "enable_disable_compliance_checks." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -892,7 +826,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) EnableDisableComplianceChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for enable_disable_compliance_checks")
@@ -901,19 +834,15 @@ func (v *ValidateGlobalSpecType) EnableDisableComplianceChecksValidationRuleHand
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := EnableDisableComplianceChecksValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) EnableDisableSignaturesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for enable_disable_signatures")
@@ -922,19 +851,15 @@ func (v *ValidateGlobalSpecType) EnableDisableSignaturesValidationRuleHandler(ru
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := EnableDisableSignaturesValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DnsProxiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -994,49 +919,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_proxies"]; exists {
 		vOpts := append(opts, db.WithValidateField("dns_proxies"))
 		if err := fv(ctx, m.GetDnsProxies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_disable_compliance_checks"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_disable_compliance_checks"))
 		if err := fv(ctx, m.GetEnableDisableComplianceChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_disable_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_disable_signatures"))
 		if err := fv(ctx, m.GetEnableDisableSignatures(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1128,7 +1040,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetEnableDisableComplianceChecksDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1136,7 +1047,6 @@ func (m *ReplaceSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefI
 	if m.GetEnableDisableComplianceChecks() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfo() FAILED")
@@ -1146,7 +1056,6 @@ func (m *ReplaceSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefI
 		dri.DRField = "enable_disable_compliance_checks." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1154,7 +1063,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) EnableDisableComplianceChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for enable_disable_compliance_checks")
@@ -1163,19 +1071,15 @@ func (v *ValidateReplaceSpecType) EnableDisableComplianceChecksValidationRuleHan
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := EnableDisableComplianceChecksValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) EnableDisableSignaturesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for enable_disable_signatures")
@@ -1184,11 +1088,9 @@ func (v *ValidateReplaceSpecType) EnableDisableSignaturesValidationRuleHandler(r
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := EnableDisableSignaturesValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1208,41 +1110,30 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_disable_compliance_checks"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_disable_compliance_checks"))
 		if err := fv(ctx, m.GetEnableDisableComplianceChecks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_disable_signatures"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_disable_signatures"))
 		if err := fv(ctx, m.GetEnableDisableSignatures(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

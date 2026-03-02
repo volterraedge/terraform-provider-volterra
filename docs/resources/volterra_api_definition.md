@@ -24,7 +24,6 @@ resource "volterra_api_definition" "example" {
 
   strict_schema_origin = true
 }
-
 ```
 
 Argument Reference
@@ -87,4 +86,4 @@ List of Non-API Endpoints..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured api_definition.
+*   `id` - This is the id of the configured api_definition.

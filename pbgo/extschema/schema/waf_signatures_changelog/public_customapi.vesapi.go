@@ -42,7 +42,6 @@ func (c *WafSignatureChangelogCustomApiGrpcClient) doRPCGetActiveStagedSignature
 	rsp, err := c.grpcClient.GetActiveStagedSignatures(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *WafSignatureChangelogCustomApiGrpcClient) doRPCGetReleasedSignatures(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ReleasedSignaturesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewWafSignatureChangelogCustomApiGrpcClient(cc *grpc.ClientConn) server.Cus
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetActiveStagedSignatures"] = ccl.doRPCGetActiveStagedSignatures
-
 	rpcFns["GetReleasedSignatures"] = ccl.doRPCGetReleasedSignatures
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -174,7 +170,6 @@ func (c *WafSignatureChangelogCustomApiRestClient) doRPCGetActiveStagedSignature
 	pbRsp := &ReleasedSignaturesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf_signatures_changelog.ReleasedSignaturesRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -182,7 +177,6 @@ func (c *WafSignatureChangelogCustomApiRestClient) doRPCGetActiveStagedSignature
 	}
 	return pbRsp, nil
 }
-
 func (c *WafSignatureChangelogCustomApiRestClient) doRPCGetReleasedSignatures(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -258,7 +252,6 @@ func (c *WafSignatureChangelogCustomApiRestClient) doRPCGetReleasedSignatures(ct
 	pbRsp := &ReleasedSignaturesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf_signatures_changelog.ReleasedSignaturesRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -292,11 +285,8 @@ func NewWafSignatureChangelogCustomApiRestClient(baseURL string, hc http.Client)
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetActiveStagedSignatures"] = ccl.doRPCGetActiveStagedSignatures
-
 	rpcFns["GetReleasedSignatures"] = ccl.doRPCGetReleasedSignatures
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -381,7 +371,6 @@ func (s *wafSignatureChangelogCustomApiSrv) GetActiveStagedSignatures(ctx contex
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf_signatures_changelog.ReleasedSignaturesRsp", rsp)...)
 
 	return rsp, nil
@@ -430,7 +419,6 @@ func (s *wafSignatureChangelogCustomApiSrv) GetReleasedSignatures(ctx context.Co
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.waf_signatures_changelog.ReleasedSignaturesRsp", rsp)...)
 
 	return rsp, nil

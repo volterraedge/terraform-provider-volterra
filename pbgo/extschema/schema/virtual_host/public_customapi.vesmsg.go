@@ -69,11 +69,9 @@ func (m *AssignAPIDefinitionReq) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetApiDefinitionDRefInfo()
-
 }
 
 func (m *AssignAPIDefinitionReq) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil
@@ -89,7 +87,6 @@ func (m *AssignAPIDefinitionReq) GetApiDefinitionDRefInfo() ([]db.DRefInfo, erro
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetApiDefinitionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -99,7 +96,6 @@ func (m *AssignAPIDefinitionReq) GetApiDefinitionDBEntries(ctx context.Context, 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: api_definition")
 	}
-
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil
@@ -117,7 +113,6 @@ func (m *AssignAPIDefinitionReq) GetApiDefinitionDBEntries(ctx context.Context, 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -126,7 +121,6 @@ type ValidateAssignAPIDefinitionReq struct {
 }
 
 func (v *ValidateAssignAPIDefinitionReq) ApiDefinitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_definition")
@@ -135,11 +129,9 @@ func (v *ValidateAssignAPIDefinitionReq) ApiDefinitionValidationRuleHandler(rule
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -159,50 +151,36 @@ func (v *ValidateAssignAPIDefinitionReq) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_definition"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_definition"))
 		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["create_new"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("create_new"))
 		if err := fv(ctx, m.GetCreateNew(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAssignAPIDefinitionReqValidator = func() *ValidateAssignAPIDefinitionReq {
 	v := &ValidateAssignAPIDefinitionReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -283,7 +261,6 @@ func (v *ValidateAssignAPIDefinitionResp) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -352,25 +329,18 @@ func (v *ValidateGetDnsInfoRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -428,7 +398,6 @@ func (m *GetDnsInfoResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDnsInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -436,7 +405,6 @@ func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDnsInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDnsInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDnsInfo().GetDRefInfo() FAILED")
@@ -446,7 +414,6 @@ func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "dns_info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetDnsInfoResponse struct {
@@ -466,23 +433,18 @@ func (v *ValidateGetDnsInfoResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_info"))
 		if err := fv(ctx, m.GetDnsInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetDnsInfoResponseValidator = func() *ValidateGetDnsInfoResponse {
 	v := &ValidateGetDnsInfoResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.GlobalSpecTypeValidator().Validate
 
 	return v

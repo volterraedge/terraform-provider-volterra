@@ -40,7 +40,6 @@ func (m *AzureReposIntegration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzureReposIntegration.access_token")
 	}
@@ -80,7 +79,6 @@ type ValidateAzureReposIntegration struct {
 }
 
 func (v *ValidateAzureReposIntegration) AccessTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_token")
@@ -89,11 +87,9 @@ func (v *ValidateAzureReposIntegration) AccessTokenValidationRuleHandler(rules m
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -113,23 +109,18 @@ func (v *ValidateAzureReposIntegration) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_token"))
 		if err := fv(ctx, m.GetAccessToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureReposIntegrationValidator = func() *ValidateAzureReposIntegration {
 	v := &ValidateAzureReposIntegration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -172,7 +163,6 @@ func (m *BitBucketCloudIntegration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPasswd().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting BitBucketCloudIntegration.passwd")
 	}
@@ -212,7 +202,6 @@ type ValidateBitBucketCloudIntegration struct {
 }
 
 func (v *ValidateBitBucketCloudIntegration) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
@@ -220,9 +209,7 @@ func (v *ValidateBitBucketCloudIntegration) UsernameValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBitBucketCloudIntegration) PasswdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for passwd")
@@ -231,11 +218,9 @@ func (v *ValidateBitBucketCloudIntegration) PasswdValidationRuleHandler(rules ma
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -255,32 +240,24 @@ func (v *ValidateBitBucketCloudIntegration) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["passwd"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("passwd"))
 		if err := fv(ctx, m.GetPasswd(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBitBucketCloudIntegrationValidator = func() *ValidateBitBucketCloudIntegration {
 	v := &ValidateBitBucketCloudIntegration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -334,7 +311,6 @@ func (m *BitBucketServerIntegration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPasswd().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting BitBucketServerIntegration.passwd")
 	}
@@ -374,7 +350,6 @@ type ValidateBitBucketServerIntegration struct {
 }
 
 func (v *ValidateBitBucketServerIntegration) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -382,9 +357,7 @@ func (v *ValidateBitBucketServerIntegration) UrlValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBitBucketServerIntegration) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
@@ -392,9 +365,7 @@ func (v *ValidateBitBucketServerIntegration) UsernameValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBitBucketServerIntegration) PasswdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for passwd")
@@ -403,11 +374,9 @@ func (v *ValidateBitBucketServerIntegration) PasswdValidationRuleHandler(rules m
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -427,50 +396,36 @@ func (v *ValidateBitBucketServerIntegration) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["passwd"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("passwd"))
 		if err := fv(ctx, m.GetPasswd(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["verify_ssl"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("verify_ssl"))
 		if err := fv(ctx, m.GetVerifySsl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBitBucketServerIntegrationValidator = func() *ValidateBitBucketServerIntegration {
 	v := &ValidateBitBucketServerIntegration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -535,31 +490,24 @@ func (m *CodeBaseIntegration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetGithub().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CodeBaseIntegration.github")
 	}
-
 	if err := m.GetGithubEnterprise().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CodeBaseIntegration.github_enterprise")
 	}
-
 	if err := m.GetGitlab().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CodeBaseIntegration.gitlab")
 	}
-
 	if err := m.GetGitlabEnterprise().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CodeBaseIntegration.gitlab_enterprise")
 	}
-
 	if err := m.GetBitbucket().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CodeBaseIntegration.bitbucket")
 	}
-
 	if err := m.GetBitbucketServer().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CodeBaseIntegration.bitbucket_server")
 	}
-
 	if err := m.GetAzureRepos().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CodeBaseIntegration.azure_repos")
 	}
@@ -708,16 +656,13 @@ func (v *ValidateCodeBaseIntegration) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCodeBaseIntegrationValidator = func() *ValidateCodeBaseIntegration {
 	v := &ValidateCodeBaseIntegration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -725,7 +670,6 @@ var DefaultCodeBaseIntegrationValidator = func() *ValidateCodeBaseIntegration {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -736,7 +680,6 @@ var DefaultCodeBaseIntegrationValidator = func() *ValidateCodeBaseIntegration {
 		panic(errMsg)
 	}
 	v.FldValidators["type"] = vFn
-
 	v.FldValidators["type.github"] = GithubIntegrationValidator().Validate
 	v.FldValidators["type.github_enterprise"] = GithubEnterpriseIntegrationValidator().Validate
 	v.FldValidators["type.gitlab"] = GitlabCloudIntegrationValidator().Validate
@@ -768,7 +711,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCodeBaseIntegration().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.code_base_integration")
 	}
@@ -820,23 +762,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["code_base_integration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("code_base_integration"))
 		if err := fv(ctx, m.GetCodeBaseIntegration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["code_base_integration"] = CodeBaseIntegrationValidator().Validate
 
 	return v
@@ -862,7 +799,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCodeBaseIntegration().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.code_base_integration")
 	}
@@ -902,7 +838,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) IntegrationHealthValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for integration_health")
@@ -911,7 +846,6 @@ func (v *ValidateGetSpecType) IntegrationHealthValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -931,59 +865,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["code_base_integration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("code_base_integration"))
 		if err := fv(ctx, m.GetCodeBaseIntegration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["integration_health"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("integration_health"))
 		if err := fv(ctx, m.GetIntegrationHealth(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["number_of_api_repos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("number_of_api_repos"))
 		if err := fv(ctx, m.GetNumberOfApiRepos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["number_of_repos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("number_of_repos"))
 		if err := fv(ctx, m.GetNumberOfRepos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_at"))
 		if err := fv(ctx, m.GetUpdatedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1002,7 +919,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["integration_health"] = vFn
-
 	v.FldValidators["code_base_integration"] = CodeBaseIntegrationValidator().Validate
 
 	return v
@@ -1028,7 +944,6 @@ func (m *GithubEnterpriseIntegration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GithubEnterpriseIntegration.access_token")
 	}
@@ -1068,7 +983,6 @@ type ValidateGithubEnterpriseIntegration struct {
 }
 
 func (v *ValidateGithubEnterpriseIntegration) HostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
@@ -1076,9 +990,7 @@ func (v *ValidateGithubEnterpriseIntegration) HostnameValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGithubEnterpriseIntegration) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
@@ -1086,9 +998,7 @@ func (v *ValidateGithubEnterpriseIntegration) UsernameValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGithubEnterpriseIntegration) AccessTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_token")
@@ -1097,11 +1007,9 @@ func (v *ValidateGithubEnterpriseIntegration) AccessTokenValidationRuleHandler(r
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1121,41 +1029,30 @@ func (v *ValidateGithubEnterpriseIntegration) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_token"))
 		if err := fv(ctx, m.GetAccessToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hostname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hostname"))
 		if err := fv(ctx, m.GetHostname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGithubEnterpriseIntegrationValidator = func() *ValidateGithubEnterpriseIntegration {
 	v := &ValidateGithubEnterpriseIntegration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1220,7 +1117,6 @@ func (m *GithubIntegration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GithubIntegration.access_token")
 	}
@@ -1260,7 +1156,6 @@ type ValidateGithubIntegration struct {
 }
 
 func (v *ValidateGithubIntegration) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
@@ -1268,9 +1163,7 @@ func (v *ValidateGithubIntegration) UsernameValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGithubIntegration) AccessTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_token")
@@ -1279,11 +1172,9 @@ func (v *ValidateGithubIntegration) AccessTokenValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1303,41 +1194,30 @@ func (v *ValidateGithubIntegration) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_token"))
 		if err := fv(ctx, m.GetAccessToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["verify_ssl"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("verify_ssl"))
 		if err := fv(ctx, m.GetVerifySsl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGithubIntegrationValidator = func() *ValidateGithubIntegration {
 	v := &ValidateGithubIntegration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1391,7 +1271,6 @@ func (m *GitlabCloudIntegration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GitlabCloudIntegration.access_token")
 	}
@@ -1431,7 +1310,6 @@ type ValidateGitlabCloudIntegration struct {
 }
 
 func (v *ValidateGitlabCloudIntegration) AccessTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_token")
@@ -1440,11 +1318,9 @@ func (v *ValidateGitlabCloudIntegration) AccessTokenValidationRuleHandler(rules 
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1464,23 +1340,18 @@ func (v *ValidateGitlabCloudIntegration) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_token"))
 		if err := fv(ctx, m.GetAccessToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGitlabCloudIntegrationValidator = func() *ValidateGitlabCloudIntegration {
 	v := &ValidateGitlabCloudIntegration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1523,7 +1394,6 @@ func (m *GitlabEnterpriseIntegration) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAccessToken().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GitlabEnterpriseIntegration.access_token")
 	}
@@ -1563,7 +1433,6 @@ type ValidateGitlabEnterpriseIntegration struct {
 }
 
 func (v *ValidateGitlabEnterpriseIntegration) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -1571,9 +1440,7 @@ func (v *ValidateGitlabEnterpriseIntegration) UrlValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGitlabEnterpriseIntegration) AccessTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_token")
@@ -1582,11 +1449,9 @@ func (v *ValidateGitlabEnterpriseIntegration) AccessTokenValidationRuleHandler(r
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1606,32 +1471,24 @@ func (v *ValidateGitlabEnterpriseIntegration) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_token"))
 		if err := fv(ctx, m.GetAccessToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGitlabEnterpriseIntegrationValidator = func() *ValidateGitlabEnterpriseIntegration {
 	v := &ValidateGitlabEnterpriseIntegration{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1685,7 +1542,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCodeBaseIntegration().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.code_base_integration")
 	}
@@ -1725,7 +1581,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) IntegrationHealthValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for integration_health")
@@ -1734,7 +1589,6 @@ func (v *ValidateGlobalSpecType) IntegrationHealthValidationRuleHandler(rules ma
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1754,59 +1608,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["code_base_integration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("code_base_integration"))
 		if err := fv(ctx, m.GetCodeBaseIntegration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["integration_health"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("integration_health"))
 		if err := fv(ctx, m.GetIntegrationHealth(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["number_of_api_repos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("number_of_api_repos"))
 		if err := fv(ctx, m.GetNumberOfApiRepos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["number_of_repos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("number_of_repos"))
 		if err := fv(ctx, m.GetNumberOfRepos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_at"))
 		if err := fv(ctx, m.GetUpdatedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1825,7 +1662,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["integration_health"] = vFn
-
 	v.FldValidators["code_base_integration"] = CodeBaseIntegrationValidator().Validate
 
 	return v
@@ -1889,25 +1725,18 @@ func (v *ValidateIntegrationHealth) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["health_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("health_status"))
 		if err := fv(ctx, m.GetHealthStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("reason"))
 		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1938,7 +1767,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCodeBaseIntegration().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.code_base_integration")
 	}
@@ -1990,23 +1818,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["code_base_integration"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("code_base_integration"))
 		if err := fv(ctx, m.GetCodeBaseIntegration(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["code_base_integration"] = CodeBaseIntegrationValidator().Validate
 
 	return v

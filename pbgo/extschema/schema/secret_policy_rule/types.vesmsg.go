@@ -81,9 +81,7 @@ func (v *ValidateCreateSpecType) ClientChoiceClientNameValidationRuleHandler(rul
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateCreateSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -111,14 +109,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -165,25 +160,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -191,7 +180,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -202,7 +190,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_choice"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -212,7 +199,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
 
 	vrhAction := v.ActionValidationRuleHandler
@@ -226,10 +212,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["action"] = vFn
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v
@@ -295,9 +279,7 @@ func (v *ValidateGetSpecType) ClientChoiceClientNameValidationRuleHandler(rules 
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateGetSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -325,14 +307,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -379,25 +358,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -405,7 +378,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -416,7 +388,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_choice"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -426,7 +397,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
 
 	vrhAction := v.ActionValidationRuleHandler
@@ -440,10 +410,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["action"] = vFn
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v
@@ -509,9 +477,7 @@ func (v *ValidateGlobalSpecType) ClientChoiceClientNameValidationRuleHandler(rul
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateGlobalSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -539,14 +505,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -593,25 +556,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -619,7 +576,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -630,7 +586,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_choice"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -640,7 +595,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
 
 	vrhAction := v.ActionValidationRuleHandler
@@ -654,10 +608,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["action"] = vFn
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v
@@ -723,9 +675,7 @@ func (v *ValidateReplaceSpecType) ClientChoiceClientNameValidationRuleHandler(ru
 	}
 	return oValidatorFn_ClientName, nil
 }
-
 func (v *ValidateReplaceSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema_policy.RuleAction)
@@ -753,14 +703,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_choice"]; exists {
@@ -807,25 +754,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -833,7 +774,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -844,7 +784,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_choice"] = vFn
-
 	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
 	rulesClientChoiceClientName := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -854,7 +793,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.client_choice_client_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
 
 	vrhAction := v.ActionValidationRuleHandler
@@ -868,10 +806,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["action"] = vFn
-
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
-
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v

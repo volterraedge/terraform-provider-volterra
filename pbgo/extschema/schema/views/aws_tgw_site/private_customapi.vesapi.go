@@ -76,9 +76,7 @@ func NewPrivateCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["UpdateSiteError"] = ccl.doRPCUpdateSiteError
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -169,7 +167,6 @@ func (c *PrivateCustomAPIRestClient) doRPCUpdateSiteError(ctx context.Context, c
 	pbRsp := &ves_io_schema_views.UpdateSiteErrorResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.UpdateSiteErrorResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -203,9 +200,7 @@ func NewPrivateCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["UpdateSiteError"] = ccl.doRPCUpdateSiteError
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -509,14 +504,14 @@ var PrivateCustomAPISwaggerJSON string = `{
             "properties": {
                 "error_description": {
                     "type": "string",
-                    "description": " Error Description \n\nExample: - \"invalid VPC ID\"-",
+                    "description": " Error Description\n\nExample: - \"invalid VPC ID\"-",
                     "title": "Error Description",
                     "x-displayname": "Error Description",
                     "x-ves-example": "invalid VPC ID"
                 },
                 "suggested_action": {
                     "type": "string",
-                    "description": " Suggested Action \n\nExample: - \"update VPC ID\"-",
+                    "description": " Suggested Action\n\nExample: - \"update VPC ID\"-",
                     "title": "Suggested Action",
                     "x-displayname": "Suggested Action",
                     "x-ves-example": "update VPC ID"
@@ -532,7 +527,7 @@ var PrivateCustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of the Aws TGW Site \n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Name of the Aws TGW Site\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "default",
@@ -567,7 +562,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " Tenant name \n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Tenant name\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Tenant",
                     "x-displayname": "Tenant",
                     "x-ves-example": "default",

@@ -14,15 +14,12 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.infraprotect_asn_prefix.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.infraprotect_asn_prefix.Object"] = ObjectValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixIRROverrideRequestPrivate"] = UpdateASNPrefixIRROverrideRequestPrivateValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixIRROverrideResponsePrivate"] = UpdateASNPrefixIRROverrideResponsePrivateValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixReviewStatusRequestPrivate"] = UpdateASNPrefixReviewStatusRequestPrivateValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixReviewStatusResponsePrivate"] = UpdateASNPrefixReviewStatusResponsePrivateValidator()
-
 	vr["ves.io.schema.infraprotect_asn_prefix.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.DeleteRequest"] = DeleteRequestValidator()
@@ -33,17 +30,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.infraprotect_asn_prefix.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixIRROverrideRequest"] = UpdateASNPrefixIRROverrideRequestValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixIRROverrideResponse"] = UpdateASNPrefixIRROverrideResponseValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixReviewStatusRequest"] = UpdateASNPrefixReviewStatusRequestValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixReviewStatusResponse"] = UpdateASNPrefixReviewStatusResponseValidator()
-
 	vr["ves.io.schema.infraprotect_asn_prefix.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.infraprotect_asn_prefix.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -55,31 +49,25 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.infraprotect_asn_prefix.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.infraprotect_asn_prefix.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.infraprotect_asn_prefix.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.infraprotect_asn_prefix.CustomAPI.UpdateASNPrefixIRROverride"] = []string{
 		".irr_override_false",
 		".irr_override_true",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.infraprotect_asn_prefix.API"] = "infraprotect"
 	sm["ves.io.schema.infraprotect_asn_prefix.CustomAPI"] = "infraprotect"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["infraprotect"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-infraprotect",
 		ServiceSelector: "protekti\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -88,14 +76,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.infraprotect_asn_prefix.Object"] = CustomPrivateAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.infraprotect_asn_prefix.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.infraprotect_asn_prefix.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
 		if isExternal {
@@ -106,11 +90,8 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.infraprotect_asn_prefix.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateAPIServer(svc)
 		}
-
 	}()
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.infraprotect_asn_prefix.Object"] = APISwaggerJSON
@@ -124,16 +105,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.infraprotect_asn_prefix.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.infraprotect_asn_prefix.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.infraprotect_asn_prefix.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.infraprotect_asn_prefix.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.infraprotect_asn_prefix.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.infraprotect_asn_prefix.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -144,22 +120,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.infraprotect_asn_prefix.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -15,64 +15,52 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_zone.rrset.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.dns_zone.rrset.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.dns_zone.rrset.Response"] = ResponseValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.dns_zone.rrset.CustomAPI.Create"] = []string{
 		"rrset.dlv_record",
 		"rrset.sshfp_record.values.#.fingerprint",
 		"rrset.sshfp_record.values.#.fingerprinttype",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.rrset.CustomAPI.Create"] = []string{
 		"rrset.dlv_record",
 		"rrset.sshfp_record.values.#.fingerprint",
 		"rrset.sshfp_record.values.#.fingerprinttype",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_zone.rrset.CustomAPI.Create"] = []string{
 		"rrset.alias_record.name",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.rrset.CustomAPI.Delete"] = []string{
 		"rrset.dlv_record",
 		"rrset.sshfp_record.values.#.fingerprint",
 		"rrset.sshfp_record.values.#.fingerprinttype",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.rrset.CustomAPI.Get"] = []string{
 		"rrset.dlv_record",
 		"rrset.sshfp_record.values.#.fingerprint",
 		"rrset.sshfp_record.values.#.fingerprinttype",
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.dns_zone.rrset.CustomAPI.Replace"] = []string{
 		"rrset.dlv_record",
 		"rrset.sshfp_record.values.#.fingerprint",
 		"rrset.sshfp_record.values.#.fingerprinttype",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.rrset.CustomAPI.Replace"] = []string{
 		"rrset.dlv_record",
 		"rrset.sshfp_record.values.#.fingerprint",
 		"rrset.sshfp_record.values.#.fingerprinttype",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_zone.rrset.CustomAPI.Replace"] = []string{
 		"rrset.alias_record.name",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.dns_zone.rrset.CustomAPI"] = "config/dns"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
@@ -80,7 +68,6 @@ func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
 		Name:            "ves-io-allow-config-dns",
 		ServiceSelector: "bifrost\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -89,13 +76,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.dns_zone.rrset.CustomAPI"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.dns_zone.rrset.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.dns_zone.rrset.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -106,22 +90,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.dns_zone.rrset.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

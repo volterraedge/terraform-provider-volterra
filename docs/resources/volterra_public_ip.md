@@ -28,7 +28,6 @@ resource "volterra_public_ip" "example" {
     "namespace" = "shared"
   }
 }
-
 ```
 
 ### Argument Reference
@@ -66,4 +65,4 @@ Attribute Reference
 
 ---
 
--	`id` - This is the id of Volterra site object.
+-   `id` - This is the id of Volterra site object.

@@ -76,70 +76,48 @@ func (v *ValidateUpdateCodeBaseIntegrationReq) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["integration_health"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("integration_health"))
 		if err := fv(ctx, m.GetIntegrationHealth(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["number_of_api_repos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("number_of_api_repos"))
 		if err := fv(ctx, m.GetNumberOfApiRepos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["number_of_repos"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("number_of_repos"))
 		if err := fv(ctx, m.GetNumberOfRepos(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["updated_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("updated_at"))
 		if err := fv(ctx, m.GetUpdatedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -208,7 +186,6 @@ func (v *ValidateUpdateCodeBaseIntegrationResp) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

@@ -76,16 +76,12 @@ func (v *ValidateForceDeleteCloudElasticIPRequest) Validate(ctx context.Context,
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,7 +150,6 @@ func (v *ValidateForceDeleteCloudElasticIPResponse) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

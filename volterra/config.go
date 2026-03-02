@@ -1,4 +1,4 @@
-// Copyright (c) 2023 F5 Inc. All rights reserved.
+// Copyright (c) 2026 F5 Inc. All rights reserved.
 package volterra
 
 import (
@@ -297,7 +297,7 @@ func (c *Config) Client() (*APIClient, diag.Diagnostics) {
 
 	// Initialize the global rate limiter
 	if c.limiter != nil {
-		limiter = rate.NewLimiter(rate.Limit(c.limiter.Rate), int(c.limiter.Burst))
+		limiter = rate.NewLimiter(rate.Limit(c.limiter.Rate/60.0), int(c.limiter.Burst))
 	}
 
 	apiCl := &APIClient{

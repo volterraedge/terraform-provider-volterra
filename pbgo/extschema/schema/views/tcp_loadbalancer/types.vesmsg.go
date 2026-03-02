@@ -42,7 +42,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsTcp().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.tls_tcp")
 	}
@@ -88,27 +87,22 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -118,7 +112,6 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *CreateSpecType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -128,9 +121,7 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -140,19 +131,13 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	case *CreateSpecType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -162,11 +147,8 @@ func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetLoadbalancerType().(type) {
 	case *CreateSpecType_Tcp:
-
 		return nil, nil
-
 	case *CreateSpecType_TlsTcpAutoCert:
-
 		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
@@ -176,9 +158,7 @@ func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tls_tcp_auto_cert." + dri.DRField
 		}
 		return drInfos, err
-
 	case *CreateSpecType_TlsTcp:
-
 		drInfos, err := m.GetTlsTcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
@@ -188,11 +168,9 @@ func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tls_tcp." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -200,7 +178,6 @@ func (m *CreateSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetOriginPoolsWeights() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
@@ -214,7 +191,6 @@ func (m *CreateSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -224,15 +200,10 @@ func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetServicePolicyChoice().(type) {
 	case *CreateSpecType_ServicePoliciesFromNamespace:
-
 		return nil, nil
-
 	case *CreateSpecType_NoServicePolicies:
-
 		return nil, nil
-
 	case *CreateSpecType_ActiveServicePolicies:
-
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -242,11 +213,9 @@ func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "active_service_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -260,7 +229,6 @@ func (v *ValidateCreateSpecType) AdvertiseChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -268,7 +236,6 @@ func (v *ValidateCreateSpecType) ClusterRetractChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -276,7 +243,6 @@ func (v *ValidateCreateSpecType) HashPolicyChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -284,7 +250,6 @@ func (v *ValidateCreateSpecType) LoadbalancerTypeValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -300,6 +265,7 @@ func (v *ValidateCreateSpecType) PortChoiceListenPortValidationRuleHandler(rules
 	}
 	return oValidatorFn_ListenPort, nil
 }
+
 func (v *ValidateCreateSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -307,7 +273,6 @@ func (v *ValidateCreateSpecType) PortChoicePortRangesValidationRuleHandler(rules
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateCreateSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -315,7 +280,6 @@ func (v *ValidateCreateSpecType) ServicePolicyChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -323,9 +287,7 @@ func (v *ValidateCreateSpecType) SniDefaultLbChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -365,9 +327,7 @@ func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -413,9 +373,7 @@ func (v *ValidateCreateSpecType) OriginPoolsWeightsValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
@@ -493,7 +451,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
@@ -529,24 +486,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
 		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
@@ -604,16 +555,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
@@ -660,15 +607,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools_weights"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools_weights"))
 		if err := fv(ctx, m.GetOriginPoolsWeights(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -704,7 +648,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
@@ -751,7 +694,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
@@ -798,16 +740,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -815,7 +754,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -826,7 +764,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -837,7 +774,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_retract_choice"] = vFn
-
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -848,7 +784,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
-
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -859,7 +794,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -870,7 +804,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoiceListenPort := v.PortChoiceListenPortValidationRuleHandler
 	rulesPortChoiceListenPort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -892,10 +825,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.listen_port"] = vFnMap["port_choice.listen_port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
-
 	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
 	rulesServicePolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -906,7 +837,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_choice"] = vFn
-
 	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
 	rulesSniDefaultLbChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -953,13 +883,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["idle_timeout"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
-
 	v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"] = ProxyTypeTLSTCPAutoCertsValidator().Validate
 	v.FldValidators["loadbalancer_type.tls_tcp"] = ProxyTypeTLSTCPValidator().Validate
-
 	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
 
 	return v
@@ -985,7 +912,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsTcp().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.tls_tcp")
 	}
@@ -1031,33 +957,27 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1067,7 +987,6 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *GetSpecType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -1077,9 +996,7 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -1089,19 +1006,13 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	case *GetSpecType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1111,11 +1022,8 @@ func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetLoadbalancerType().(type) {
 	case *GetSpecType_Tcp:
-
 		return nil, nil
-
 	case *GetSpecType_TlsTcpAutoCert:
-
 		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
@@ -1125,9 +1033,7 @@ func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tls_tcp_auto_cert." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GetSpecType_TlsTcp:
-
 		drInfos, err := m.GetTlsTcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
@@ -1137,11 +1043,9 @@ func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tls_tcp." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
@@ -1167,7 +1071,6 @@ func (m *GetSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetOriginPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1195,7 +1098,6 @@ func (m *GetSpecType) GetOriginPoolsDBEntries(ctx context.Context, d db.Interfac
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1204,7 +1106,6 @@ func (m *GetSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginPoolsWeights() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
@@ -1218,7 +1119,6 @@ func (m *GetSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1228,15 +1128,10 @@ func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetServicePolicyChoice().(type) {
 	case *GetSpecType_ServicePoliciesFromNamespace:
-
 		return nil, nil
-
 	case *GetSpecType_NoServicePolicies:
-
 		return nil, nil
-
 	case *GetSpecType_ActiveServicePolicies:
-
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -1246,11 +1141,9 @@ func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "active_service_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -1264,7 +1157,6 @@ func (v *ValidateGetSpecType) AdvertiseChoiceValidationRuleHandler(rules map[str
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1272,7 +1164,6 @@ func (v *ValidateGetSpecType) ClusterRetractChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1280,7 +1171,6 @@ func (v *ValidateGetSpecType) HashPolicyChoiceValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1288,7 +1178,6 @@ func (v *ValidateGetSpecType) LoadbalancerTypeValidationRuleHandler(rules map[st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1304,6 +1193,7 @@ func (v *ValidateGetSpecType) PortChoiceListenPortValidationRuleHandler(rules ma
 	}
 	return oValidatorFn_ListenPort, nil
 }
+
 func (v *ValidateGetSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1311,7 +1201,6 @@ func (v *ValidateGetSpecType) PortChoicePortRangesValidationRuleHandler(rules ma
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateGetSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1319,7 +1208,6 @@ func (v *ValidateGetSpecType) ServicePolicyChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1327,9 +1215,7 @@ func (v *ValidateGetSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1369,9 +1255,7 @@ func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1417,9 +1301,7 @@ func (v *ValidateGetSpecType) OriginPoolsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1465,9 +1347,7 @@ func (v *ValidateGetSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
@@ -1545,25 +1425,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
 		if err := fv(ctx, m.GetAutoCertInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cert_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cert_state"))
 		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
@@ -1599,11 +1472,8 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_info"))
 		for idx, item := range m.GetDnsInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1611,28 +1481,20 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
 		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["downstream_tls_certificate_expiration_timestamps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("downstream_tls_certificate_expiration_timestamps"))
 		for idx, item := range m.GetDownstreamTlsCertificateExpirationTimestamps() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1640,7 +1502,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
@@ -1698,29 +1559,20 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_vip_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_vip_info"))
 		for idx, item := range m.GetInternetVipInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1728,7 +1580,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
@@ -1775,23 +1626,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools_weights"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools_weights"))
 		if err := fv(ctx, m.GetOriginPoolsWeights(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -1827,7 +1673,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
@@ -1874,7 +1719,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
@@ -1921,16 +1765,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1938,7 +1779,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1949,7 +1789,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1960,7 +1799,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_retract_choice"] = vFn
-
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1971,7 +1809,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
-
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1982,7 +1819,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1993,7 +1829,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoiceListenPort := v.PortChoiceListenPortValidationRuleHandler
 	rulesPortChoiceListenPort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -2015,10 +1850,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.listen_port"] = vFnMap["port_choice.listen_port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
-
 	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
 	rulesServicePolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2029,7 +1862,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_choice"] = vFn
-
 	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
 	rulesSniDefaultLbChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2088,15 +1920,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["idle_timeout"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
-
 	v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"] = ProxyTypeTLSTCPAutoCertsValidator().Validate
 	v.FldValidators["loadbalancer_type.tls_tcp"] = ProxyTypeTLSTCPValidator().Validate
-
 	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
-
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
 	return v
@@ -2122,7 +1950,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsTcp().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.tls_tcp")
 	}
@@ -2168,39 +1995,32 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2210,7 +2030,6 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *GlobalSpecType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -2220,9 +2039,7 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -2232,19 +2049,13 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -2254,11 +2065,8 @@ func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetLoadbalancerType().(type) {
 	case *GlobalSpecType_Tcp:
-
 		return nil, nil
-
 	case *GlobalSpecType_TlsTcpAutoCert:
-
 		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
@@ -2268,9 +2076,7 @@ func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tls_tcp_auto_cert." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalSpecType_TlsTcp:
-
 		drInfos, err := m.GetTlsTcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
@@ -2280,11 +2086,9 @@ func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tls_tcp." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
@@ -2310,7 +2114,6 @@ func (m *GlobalSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetOriginPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2338,7 +2141,6 @@ func (m *GlobalSpecType) GetOriginPoolsDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -2347,7 +2149,6 @@ func (m *GlobalSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) 
 	if m.GetOriginPoolsWeights() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
@@ -2361,7 +2162,6 @@ func (m *GlobalSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -2371,15 +2171,10 @@ func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetServicePolicyChoice().(type) {
 	case *GlobalSpecType_ServicePoliciesFromNamespace:
-
 		return nil, nil
-
 	case *GlobalSpecType_NoServicePolicies:
-
 		return nil, nil
-
 	case *GlobalSpecType_ActiveServicePolicies:
-
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -2389,15 +2184,12 @@ func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 			dri.DRField = "active_service_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2413,7 +2205,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2423,7 +2214,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2441,7 +2231,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -2456,7 +2245,6 @@ func (v *ValidateGlobalSpecType) AdvertiseChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2464,7 +2252,6 @@ func (v *ValidateGlobalSpecType) ClusterRetractChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2472,7 +2259,6 @@ func (v *ValidateGlobalSpecType) HashPolicyChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2480,7 +2266,6 @@ func (v *ValidateGlobalSpecType) LoadbalancerTypeValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2496,6 +2281,7 @@ func (v *ValidateGlobalSpecType) PortChoiceListenPortValidationRuleHandler(rules
 	}
 	return oValidatorFn_ListenPort, nil
 }
+
 func (v *ValidateGlobalSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -2503,7 +2289,6 @@ func (v *ValidateGlobalSpecType) PortChoicePortRangesValidationRuleHandler(rules
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateGlobalSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2511,7 +2296,6 @@ func (v *ValidateGlobalSpecType) ServicePolicyChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2519,9 +2303,7 @@ func (v *ValidateGlobalSpecType) SniDefaultLbChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2561,9 +2343,7 @@ func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2609,9 +2389,7 @@ func (v *ValidateGlobalSpecType) OriginPoolsValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2657,9 +2435,7 @@ func (v *ValidateGlobalSpecType) OriginPoolsWeightsValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
@@ -2737,25 +2513,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
 		if err := fv(ctx, m.GetAutoCertInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cert_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cert_state"))
 		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
@@ -2791,11 +2560,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_info"))
 		for idx, item := range m.GetDnsInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2803,28 +2569,20 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
 		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["downstream_tls_certificate_expiration_timestamps"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("downstream_tls_certificate_expiration_timestamps"))
 		for idx, item := range m.GetDownstreamTlsCertificateExpirationTimestamps() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2832,7 +2590,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
@@ -2890,29 +2647,20 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internet_vip_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internet_vip_info"))
 		for idx, item := range m.GetInternetVipInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2920,7 +2668,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
@@ -2967,23 +2714,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools_weights"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools_weights"))
 		if err := fv(ctx, m.GetOriginPoolsWeights(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -3019,7 +2761,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
@@ -3066,7 +2807,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
@@ -3113,34 +2853,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["with_sni"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("with_sni"))
 		if err := fv(ctx, m.GetWithSni(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3148,7 +2879,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3159,7 +2889,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3170,7 +2899,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_retract_choice"] = vFn
-
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3181,7 +2909,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
-
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3192,7 +2919,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3203,7 +2929,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoiceListenPort := v.PortChoiceListenPortValidationRuleHandler
 	rulesPortChoiceListenPort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -3225,10 +2950,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.listen_port"] = vFnMap["port_choice.listen_port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
-
 	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
 	rulesServicePolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3239,7 +2962,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_choice"] = vFn
-
 	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
 	rulesSniDefaultLbChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3298,17 +3020,12 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["idle_timeout"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
-
 	v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"] = ProxyTypeTLSTCPAutoCertsValidator().Validate
 	v.FldValidators["loadbalancer_type.tls_tcp"] = ProxyTypeTLSTCPValidator().Validate
-
 	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
 	return v
@@ -3334,7 +3051,6 @@ func (m *ProxyTypeTLSTCP) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsParameters().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ProxyTypeTLSTCP.tls_parameters")
 	}
@@ -3375,7 +3091,6 @@ func (m *ProxyTypeTLSTCP) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTlsCertificatesChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3385,7 +3100,6 @@ func (m *ProxyTypeTLSTCP) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetTlsCertificatesChoice().(type) {
 	case *ProxyTypeTLSTCP_TlsParameters:
-
 		drInfos, err := m.GetTlsParameters().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -3395,9 +3109,7 @@ func (m *ProxyTypeTLSTCP) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "tls_parameters." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ProxyTypeTLSTCP_TlsCertParams:
-
 		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")
@@ -3407,11 +3119,9 @@ func (m *ProxyTypeTLSTCP) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "tls_cert_params." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateProxyTypeTLSTCP struct {
@@ -3473,16 +3183,13 @@ func (v *ValidateProxyTypeTLSTCP) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProxyTypeTLSTCPValidator = func() *ValidateProxyTypeTLSTCP {
 	v := &ValidateProxyTypeTLSTCP{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3490,7 +3197,6 @@ var DefaultProxyTypeTLSTCPValidator = func() *ValidateProxyTypeTLSTCP {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhTlsCertificatesChoice := v.TlsCertificatesChoiceValidationRuleHandler
 	rulesTlsCertificatesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3501,7 +3207,6 @@ var DefaultProxyTypeTLSTCPValidator = func() *ValidateProxyTypeTLSTCP {
 		panic(errMsg)
 	}
 	v.FldValidators["tls_certificates_choice"] = vFn
-
 	v.FldValidators["tls_certificates_choice.tls_parameters"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 	v.FldValidators["tls_certificates_choice.tls_cert_params"] = ves_io_schema_views.DownstreamTLSCertsParamsValidator().Validate
 
@@ -3555,7 +3260,6 @@ func (m *ProxyTypeTLSTCPAutoCerts) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetMtlsChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -3565,11 +3269,8 @@ func (m *ProxyTypeTLSTCPAutoCerts) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetMtlsChoice().(type) {
 	case *ProxyTypeTLSTCPAutoCerts_NoMtls:
-
 		return nil, nil
-
 	case *ProxyTypeTLSTCPAutoCerts_UseMtls:
-
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
@@ -3579,11 +3280,9 @@ func (m *ProxyTypeTLSTCPAutoCerts) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "use_mtls." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateProxyTypeTLSTCPAutoCerts struct {
@@ -3645,25 +3344,19 @@ func (v *ValidateProxyTypeTLSTCPAutoCerts) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_config"))
 		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProxyTypeTLSTCPAutoCertsValidator = func() *ValidateProxyTypeTLSTCPAutoCerts {
 	v := &ValidateProxyTypeTLSTCPAutoCerts{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3671,7 +3364,6 @@ var DefaultProxyTypeTLSTCPAutoCertsValidator = func() *ValidateProxyTypeTLSTCPAu
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3682,9 +3374,7 @@ var DefaultProxyTypeTLSTCPAutoCertsValidator = func() *ValidateProxyTypeTLSTCPAu
 		panic(errMsg)
 	}
 	v.FldValidators["mtls_choice"] = vFn
-
 	v.FldValidators["mtls_choice.use_mtls"] = ves_io_schema_views.DownstreamTlsValidationContextValidator().Validate
-
 	v.FldValidators["tls_config"] = ves_io_schema_views.TlsConfigValidator().Validate
 
 	return v
@@ -3710,7 +3400,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsTcp().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.tls_tcp")
 	}
@@ -3756,33 +3445,27 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3792,7 +3475,6 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ReplaceSpecType_AdvertiseOnPublic:
-
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -3802,9 +3484,7 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_AdvertiseCustom:
-
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -3814,19 +3494,13 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "advertise_custom." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_DoNotAdvertise:
-
 		return nil, nil
-
 	case *ReplaceSpecType_AdvertiseOnPublicDefaultVip:
-
 		return nil, nil
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -3836,11 +3510,8 @@ func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetLoadbalancerType().(type) {
 	case *ReplaceSpecType_Tcp:
-
 		return nil, nil
-
 	case *ReplaceSpecType_TlsTcpAutoCert:
-
 		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
@@ -3850,9 +3521,7 @@ func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tls_tcp_auto_cert." + dri.DRField
 		}
 		return drInfos, err
-
 	case *ReplaceSpecType_TlsTcp:
-
 		drInfos, err := m.GetTlsTcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
@@ -3862,11 +3531,9 @@ func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "tls_tcp." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ReplaceSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
@@ -3892,7 +3559,6 @@ func (m *ReplaceSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetOriginPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3920,7 +3586,6 @@ func (m *ReplaceSpecType) GetOriginPoolsDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -3929,7 +3594,6 @@ func (m *ReplaceSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error)
 	if m.GetOriginPoolsWeights() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
@@ -3943,7 +3607,6 @@ func (m *ReplaceSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error)
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -3953,15 +3616,10 @@ func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetServicePolicyChoice().(type) {
 	case *ReplaceSpecType_ServicePoliciesFromNamespace:
-
 		return nil, nil
-
 	case *ReplaceSpecType_NoServicePolicies:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ActiveServicePolicies:
-
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -3971,11 +3629,9 @@ func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "active_service_policies." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -3989,7 +3645,6 @@ func (v *ValidateReplaceSpecType) AdvertiseChoiceValidationRuleHandler(rules map
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3997,7 +3652,6 @@ func (v *ValidateReplaceSpecType) ClusterRetractChoiceValidationRuleHandler(rule
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4005,7 +3659,6 @@ func (v *ValidateReplaceSpecType) HashPolicyChoiceValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4013,7 +3666,6 @@ func (v *ValidateReplaceSpecType) LoadbalancerTypeValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4029,6 +3681,7 @@ func (v *ValidateReplaceSpecType) PortChoiceListenPortValidationRuleHandler(rule
 	}
 	return oValidatorFn_ListenPort, nil
 }
+
 func (v *ValidateReplaceSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -4036,7 +3689,6 @@ func (v *ValidateReplaceSpecType) PortChoicePortRangesValidationRuleHandler(rule
 	}
 	return oValidatorFn_PortRanges, nil
 }
-
 func (v *ValidateReplaceSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4044,7 +3696,6 @@ func (v *ValidateReplaceSpecType) ServicePolicyChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4052,9 +3703,7 @@ func (v *ValidateReplaceSpecType) SniDefaultLbChoiceValidationRuleHandler(rules 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4094,9 +3743,7 @@ func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4142,9 +3789,7 @@ func (v *ValidateReplaceSpecType) OriginPoolsValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4190,9 +3835,7 @@ func (v *ValidateReplaceSpecType) OriginPoolsWeightsValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
@@ -4270,7 +3913,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
@@ -4306,24 +3948,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
 		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
@@ -4381,16 +4017,12 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
@@ -4437,23 +4069,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["origin_pools_weights"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools_weights"))
 		if err := fv(ctx, m.GetOriginPoolsWeights(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["port_choice"]; exists {
@@ -4489,7 +4116,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
@@ -4536,7 +4162,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
@@ -4583,16 +4208,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4600,7 +4222,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4611,7 +4232,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
-
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4622,7 +4242,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_retract_choice"] = vFn
-
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4633,7 +4252,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
-
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4644,7 +4262,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
-
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4655,7 +4272,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_choice"] = vFn
-
 	vrhPortChoiceListenPort := v.PortChoiceListenPortValidationRuleHandler
 	rulesPortChoiceListenPort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -4677,10 +4293,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.port_choice_port_ranges: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["port_choice.listen_port"] = vFnMap["port_choice.listen_port"]
 	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
-
 	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
 	rulesServicePolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4691,7 +4305,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_choice"] = vFn
-
 	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
 	rulesSniDefaultLbChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4750,13 +4363,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["idle_timeout"] = vFn
-
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
-
 	v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"] = ProxyTypeTLSTCPAutoCertsValidator().Validate
 	v.FldValidators["loadbalancer_type.tls_tcp"] = ProxyTypeTLSTCPValidator().Validate
-
 	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
 
 	return v
@@ -4809,7 +4419,6 @@ func (m *ServicePolicyList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPoliciesDRefInfo()
-
 }
 
 func (m *ServicePolicyList) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -4835,7 +4444,6 @@ func (m *ServicePolicyList) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4863,7 +4471,6 @@ func (m *ServicePolicyList) GetPoliciesDBEntries(ctx context.Context, d db.Inter
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -4872,7 +4479,6 @@ type ValidateServicePolicyList struct {
 }
 
 func (v *ValidateServicePolicyList) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4932,22 +4538,18 @@ func (v *ValidateServicePolicyList) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("policies"))
 		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServicePolicyListValidator = func() *ValidateServicePolicyList {
 	v := &ValidateServicePolicyList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

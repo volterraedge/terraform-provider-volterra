@@ -78,25 +78,18 @@ func (v *ValidateGetDnsInfoRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,7 +147,6 @@ func (m *GetDnsInfoResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetDnsInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -162,7 +154,6 @@ func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDnsInfo() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetDnsInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDnsInfo().GetDRefInfo() FAILED")
@@ -172,7 +163,6 @@ func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "dns_info." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetDnsInfoResponse struct {
@@ -192,23 +182,18 @@ func (v *ValidateGetDnsInfoResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dns_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dns_info"))
 		if err := fv(ctx, m.GetDnsInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetDnsInfoResponseValidator = func() *ValidateGetDnsInfoResponse {
 	v := &ValidateGetDnsInfoResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.GlobalSpecTypeValidator().Validate
 
 	return v

@@ -118,16 +118,13 @@ func (v *ValidateAPIDiscoverySpec) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAPIDiscoverySpecValidator = func() *ValidateAPIDiscoverySpec {
 	v := &ValidateAPIDiscoverySpec{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -135,7 +132,6 @@ var DefaultAPIDiscoverySpecValidator = func() *ValidateAPIDiscoverySpec {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhEnablementMode := v.EnablementModeValidationRuleHandler
 	rulesEnablementMode := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -208,52 +204,37 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_spec"))
 		if err := fv(ctx, m.GetApiDiscoverySpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_id"))
 		if err := fv(ctx, m.GetObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_spec"))
 		if err := fv(ctx, m.GetWafSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["waf_spec"] = WAFSpecValidator().Validate
-
 	v.FldValidators["api_discovery_spec"] = APIDiscoverySpecValidator().Validate
 
 	return v
@@ -317,52 +298,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_discovery_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_discovery_spec"))
 		if err := fv(ctx, m.GetApiDiscoverySpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_id"))
 		if err := fv(ctx, m.GetObjectId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["waf_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("waf_spec"))
 		if err := fv(ctx, m.GetWafSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["waf_spec"] = WAFSpecValidator().Validate
-
 	v.FldValidators["api_discovery_spec"] = APIDiscoverySpecValidator().Validate
 
 	return v
@@ -420,7 +386,6 @@ func (v *ValidateWAFSpec) PolicyManagementPlatformValidationRuleHandler(rules ma
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateWAFSpec) WafModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -428,9 +393,7 @@ func (v *ValidateWAFSpec) WafModeValidationRuleHandler(rules map[string]string) 
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateWAFSpec) PolicyFileNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for policy_file_name")
@@ -438,9 +401,7 @@ func (v *ValidateWAFSpec) PolicyFileNameValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWAFSpec) PolicyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for policy_name")
@@ -462,14 +423,11 @@ func (v *ValidateWAFSpec) Validate(ctx context.Context, pm interface{}, opts ...
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["policy_file_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_file_name"))
 		if err := fv(ctx, m.GetPolicyFileName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["policy_management_platform"]; exists {
@@ -505,29 +463,20 @@ func (v *ValidateWAFSpec) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_name"))
 		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["security_log_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("security_log_enabled"))
 		if err := fv(ctx, m.GetSecurityLogEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["security_log_file_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("security_log_file_names"))
 		for idx, item := range m.GetSecurityLogFileNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -535,7 +484,6 @@ func (v *ValidateWAFSpec) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["waf_mode"]; exists {
@@ -582,16 +530,13 @@ func (v *ValidateWAFSpec) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWAFSpecValidator = func() *ValidateWAFSpec {
 	v := &ValidateWAFSpec{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -599,7 +544,6 @@ var DefaultWAFSpecValidator = func() *ValidateWAFSpec {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPolicyManagementPlatform := v.PolicyManagementPlatformValidationRuleHandler
 	rulesPolicyManagementPlatform := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -610,7 +554,6 @@ var DefaultWAFSpecValidator = func() *ValidateWAFSpec {
 		panic(errMsg)
 	}
 	v.FldValidators["policy_management_platform"] = vFn
-
 	vrhWafMode := v.WafModeValidationRuleHandler
 	rulesWafMode := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",

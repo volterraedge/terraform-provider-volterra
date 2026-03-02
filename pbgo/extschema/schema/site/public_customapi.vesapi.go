@@ -74,9 +74,7 @@ func NewCustomStateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SetState"] = ccl.doRPCSetState
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -164,7 +162,6 @@ func (c *CustomStateAPIRestClient) doRPCSetState(ctx context.Context, callOpts *
 	pbRsp := &SetStateResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.SetStateResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -198,9 +195,7 @@ func NewCustomStateAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SetState"] = ccl.doRPCSetState
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -281,7 +276,6 @@ func (s *customStateAPISrv) SetState(ctx context.Context, in *SetStateReq) (*Set
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.SetStateResp", rsp)...)
 
 	return rsp, nil
@@ -295,7 +289,7 @@ var CustomStateAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Site status",
-        "description": "Site objects can be in various states and this state defined how (and if) site is functional.\nObject transitions are limited by state machine so only some transitions can be triggered by \nuser and transition is always depending on previous state, e.g. site in UGPRADING state can't\nmoved to different state by user and it's necessary to wait for the system to change state",
+        "description": "Site objects can be in various states and this state defined how (and if) site is functional.\nObject transitions are limited by state machine so only some transitions can be triggered by\nuser and transition is always depending on previous state, e.g. site in UGPRADING state can't\nmoved to different state by user and it's necessary to wait for the system to change state",
         "version": "version not set"
     },
     "schemes": [
@@ -313,7 +307,7 @@ var CustomStateAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/site/{name}/state": {
             "post": {
                 "summary": "Set site state",
-                "description": "Request changing site state but this request goes through validation as some\ntrainsitions are not allowed.\nIt can be used to decomission site by sending state DECOMISSIONING. Example of \nforbidden state is PROVISIONING and UPGRADING.",
+                "description": "Request changing site state but this request goes through validation as some\ntrainsitions are not allowed.\nIt can be used to decomission site by sending state DECOMISSIONING. Example of\nforbidden state is PROVISIONING and UPGRADING.",
                 "operationId": "ves.io.schema.site.CustomStateAPI.SetState",
                 "responses": {
                     "200": {
@@ -442,7 +436,7 @@ var CustomStateAPISwaggerJSON string = `{
                     }
                 },
                 "state": {
-                    "description": " Desired (target) state for site (3 = STANDBY)\n\nExample: - 3 -\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Desired (target) state for site (3 = STANDBY)\n\nExample: - 3-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "State",
                     "$ref": "#/definitions/siteSiteState",
                     "x-displayname": "State",
@@ -462,7 +456,7 @@ var CustomStateAPISwaggerJSON string = `{
         },
         "siteSiteState": {
             "type": "string",
-            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.\nSite is in failed state for prolong period of time. Site Status Objects contain more details.\nSite resources are waiting to be updated. Check Status objects for more details\nAn Error occurred while updating cloud resources for F5XC managed site. Check Status objects for more details.\nSite resources orchestration is queued for F5XC managed site. Check Status objects for more details\nSite resources update is queued for F5XC managed site. Check Status objects for more details\nSite resources delete is queued for F5XC managed site. Check Status objects for more details",
             "title": "SiteState",
             "enum": [
                 "ONLINE",
@@ -482,7 +476,13 @@ var CustomStateAPISwaggerJSON string = `{
                 "ERROR_DELETING_CLOUD_RESOURCES",
                 "VALIDATION_IN_PROGRESS",
                 "VALIDATION_SUCCESS",
-                "VALIDATION_FAILED"
+                "VALIDATION_FAILED",
+                "FAILED_INACTIVE",
+                "UPDATING_CLOUD_RESOURCES",
+                "ERROR_UPDATING_CLOUD_RESOURCES",
+                "ORCHESTRATION_QUEUED",
+                "UPDATE_QUEUED",
+                "DELETE_QUEUED"
             ],
             "default": "ONLINE",
             "x-displayname": "Site State",

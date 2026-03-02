@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCustomGetQuotaLimits(ctx context.Context, yam
 	rsp, err := c.grpcClient.CustomGetQuotaLimits(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetQuotaUsage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequestType{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CustomGetQuotaLimits"] = ccl.doRPCCustomGetQuotaLimits
-
 	rpcFns["GetQuotaUsage"] = ccl.doRPCGetQuotaUsage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -173,7 +169,6 @@ func (c *CustomAPIRestClient) doRPCCustomGetQuotaLimits(ctx context.Context, cal
 	pbRsp := &GetQuotaLimitsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.quota.GetQuotaLimitsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -181,7 +176,6 @@ func (c *CustomAPIRestClient) doRPCCustomGetQuotaLimits(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetQuotaUsage(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -256,7 +250,6 @@ func (c *CustomAPIRestClient) doRPCGetQuotaUsage(ctx context.Context, callOpts *
 	pbRsp := &GetResponseType{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.quota.GetResponseType", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -290,11 +283,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CustomGetQuotaLimits"] = ccl.doRPCCustomGetQuotaLimits
-
 	rpcFns["GetQuotaUsage"] = ccl.doRPCGetQuotaUsage
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -379,7 +369,6 @@ func (s *customAPISrv) CustomGetQuotaLimits(ctx context.Context, in *GetQuotaLim
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.quota.GetQuotaLimitsResponse", rsp)...)
 
 	return rsp, nil
@@ -428,7 +417,6 @@ func (s *customAPISrv) GetQuotaUsage(ctx context.Context, in *GetRequestType) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.quota.GetResponseType", rsp)...)
 
 	return rsp, nil
@@ -811,7 +799,7 @@ var CustomAPISwaggerJSON string = `{
                 "usage": {
                     "description": "x-displayName: \"Usage\"\nCurrent usage in integer",
                     "title": "usage",
-                    "$ref": "#/definitions/usageUsageType"
+                    "$ref": "#/definitions/schemausageUsageType"
                 }
             }
         },
@@ -871,6 +859,19 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "schemausageUsageType": {
+            "type": "object",
+            "description": "x-displayName: \"Usage\"\nUsageType defines the number of objects of a specific object kind that are currently in use",
+            "title": "UsageType",
+            "properties": {
+                "current": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Current\"\nThe in-use value for the object kind",
+                    "title": "current",
+                    "format": "int32"
+                }
+            }
+        },
         "usageFloatUsageType": {
             "type": "object",
             "description": "x-displayName: \"Usage (float)\"\nFloatUsageType defines the usage in float. Useful to report usage for items that have limits in\nfractions",
@@ -881,19 +882,6 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Current\"\nThe in-use value",
                     "title": "current",
                     "format": "double"
-                }
-            }
-        },
-        "usageUsageType": {
-            "type": "object",
-            "description": "x-displayName: \"Usage\"\nUsageType defines the number of objects of a specific object kind that are currently in use",
-            "title": "UsageType",
-            "properties": {
-                "current": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Current\"\nThe in-use value for the object kind",
-                    "title": "current",
-                    "format": "int32"
                 }
             }
         }

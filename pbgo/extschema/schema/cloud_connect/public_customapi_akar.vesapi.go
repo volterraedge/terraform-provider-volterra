@@ -42,7 +42,6 @@ func (c *ConfigCustomAPIGrpcClient) doRPCEdgeCredentials(ctx context.Context, ya
 	rsp, err := c.grpcClient.EdgeCredentials(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *ConfigCustomAPIGrpcClient) doRPCEdgeList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &EdgeListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewConfigCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["EdgeCredentials"] = ccl.doRPCEdgeCredentials
-
 	rpcFns["EdgeList"] = ccl.doRPCEdgeList
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -173,7 +169,6 @@ func (c *ConfigCustomAPIRestClient) doRPCEdgeCredentials(ctx context.Context, ca
 	pbRsp := &CredentialsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.CredentialsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -181,7 +176,6 @@ func (c *ConfigCustomAPIRestClient) doRPCEdgeCredentials(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
-
 func (c *ConfigCustomAPIRestClient) doRPCEdgeList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -255,7 +249,6 @@ func (c *ConfigCustomAPIRestClient) doRPCEdgeList(ctx context.Context, callOpts 
 	pbRsp := &EdgeListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.EdgeListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -289,11 +282,8 @@ func NewConfigCustomAPIRestClient(baseURL string, hc http.Client) server.CustomC
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["EdgeCredentials"] = ccl.doRPCEdgeCredentials
-
 	rpcFns["EdgeList"] = ccl.doRPCEdgeList
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -378,7 +368,6 @@ func (s *configCustomAPISrv) EdgeCredentials(ctx context.Context, in *Credential
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.CredentialsResponse", rsp)...)
 
 	return rsp, nil
@@ -427,7 +416,6 @@ func (s *configCustomAPISrv) EdgeList(ctx context.Context, in *EdgeListRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.EdgeListResponse", rsp)...)
 
 	return rsp, nil

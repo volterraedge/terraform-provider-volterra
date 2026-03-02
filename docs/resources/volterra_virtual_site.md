@@ -24,9 +24,8 @@ resource "volterra_virtual_site" "example" {
     expressions = ["region in (us-west1, us-west2),tier in (staging)"]
   }
 
-  site_type = ["site_type"]
+  site_type = "site_type"
 }
-
 ```
 
 Argument Reference
@@ -61,4 +60,4 @@ Label selector for virtual-site.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured virtual_site.
+*   `id` - This is the id of the configured virtual_site.

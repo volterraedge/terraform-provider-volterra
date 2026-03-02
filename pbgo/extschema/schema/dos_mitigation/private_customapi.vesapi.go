@@ -42,7 +42,6 @@ func (c *PrivateDosMitigationAPIGrpcClient) doRPCCreateBulk(ctx context.Context,
 	rsp, err := c.grpcClient.CreateBulk(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PrivateDosMitigationAPIGrpcClient) doRPCDeleteBulk(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DeleteBulkRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewPrivateDosMitigationAPIGrpcClient(cc *grpc.ClientConn) server.CustomClie
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CreateBulk"] = ccl.doRPCCreateBulk
-
 	rpcFns["DeleteBulk"] = ccl.doRPCDeleteBulk
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -175,7 +171,6 @@ func (c *PrivateDosMitigationAPIRestClient) doRPCCreateBulk(ctx context.Context,
 	pbRsp := &CreateBulkResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dos_mitigation.CreateBulkResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -183,7 +178,6 @@ func (c *PrivateDosMitigationAPIRestClient) doRPCCreateBulk(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *PrivateDosMitigationAPIRestClient) doRPCDeleteBulk(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -260,7 +254,6 @@ func (c *PrivateDosMitigationAPIRestClient) doRPCDeleteBulk(ctx context.Context,
 	pbRsp := &DeleteBulkResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dos_mitigation.DeleteBulkResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -294,11 +287,8 @@ func NewPrivateDosMitigationAPIRestClient(baseURL string, hc http.Client) server
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CreateBulk"] = ccl.doRPCCreateBulk
-
 	rpcFns["DeleteBulk"] = ccl.doRPCDeleteBulk
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1476,7 +1466,7 @@ var PrivateDosMitigationAPISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },

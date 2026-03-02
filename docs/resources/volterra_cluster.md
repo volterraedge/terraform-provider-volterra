@@ -19,8 +19,11 @@ Example Usage
 resource "volterra_cluster" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
-}
 
+  // One of the arguments from this list "max_requests_per_connection no_request_limit_per_connection" must be set
+
+  no_request_limit_per_connection = true
+}
 ```
 
 Argument Reference
@@ -71,6 +74,12 @@ Argument Reference
 `http2_options` - (Optional) Enable HTTP/2 for upstream connections. See [Http Protocol Type Http2 Options ](#http-protocol-type-http2-options) below for details.
 
 `loadbalancer_algorithm` - (Optional) loadbalancer_algorithm to determine which host is selected. (`String`).
+
+###### One of the arguments from this list "max_requests_per_connection, no_request_limit_per_connection" must be set
+
+`max_requests_per_connection` - (Optional) Enter a value >=1 to define the request limit per connection. (`Int`).
+
+`no_request_limit_per_connection` - (Optional) When selected, no limit is enforced, and connections can handle unlimited requests. (`Bool`).
 
 `outlier_detection` - (Optional) healthy load balancing set. Outlier detection is a form of passive health checking.. See [Outlier Detection ](#outlier-detection) below for details.
 
@@ -421,4 +430,4 @@ Root CA Certificate.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cluster.
+*   `id` - This is the id of the configured cluster.

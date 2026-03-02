@@ -74,15 +74,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -92,11 +89,8 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *CreateSpecType_RuleList:
-
 		return nil, nil
-
 	case *CreateSpecType_LegacyRuleList:
-
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -106,11 +100,9 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "legacy_rule_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *CreateSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -135,7 +127,6 @@ func (m *CreateSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -154,7 +145,6 @@ func (m *CreateSpecType) GetRulesDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -163,7 +153,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -223,32 +212,23 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["algo"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("algo"))
 		if err := fv(ctx, m.GetAlgo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allow_f5xc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow_f5xc"))
 		if err := fv(ctx, m.GetAllowF5Xc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["decrypt_cache_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("decrypt_cache_timeout"))
 		if err := fv(ctx, m.GetDecryptCacheTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRuleChoice().(type) {
@@ -274,24 +254,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -310,7 +285,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rules"] = vFn
-
 	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
 	v.FldValidators["rule_choice.legacy_rule_list"] = LegacyRuleListValidator().Validate
 
@@ -369,15 +343,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -387,11 +358,8 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *GetSpecType_RuleList:
-
 		return nil, nil
-
 	case *GetSpecType_LegacyRuleList:
-
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -401,11 +369,9 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "legacy_rule_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GetSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -430,7 +396,6 @@ func (m *GetSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -449,7 +414,6 @@ func (m *GetSpecType) GetRulesDBEntries(ctx context.Context, d db.Interface) ([]
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -458,7 +422,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -518,50 +481,35 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["algo"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("algo"))
 		if err := fv(ctx, m.GetAlgo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allow_f5xc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow_f5xc"))
 		if err := fv(ctx, m.GetAllowF5Xc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["decrypt_cache_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("decrypt_cache_timeout"))
 		if err := fv(ctx, m.GetDecryptCacheTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deletion_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deletion_time"))
 		if err := fv(ctx, m.GetDeletionTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["marked_for_delete"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("marked_for_delete"))
 		if err := fv(ctx, m.GetMarkedForDelete(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRuleChoice().(type) {
@@ -587,24 +535,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -623,7 +566,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rules"] = vFn
-
 	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
 	v.FldValidators["rule_choice.legacy_rule_list"] = LegacyRuleListValidator().Validate
 
@@ -682,21 +624,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -706,11 +644,8 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *GlobalSpecType_RuleList:
-
 		return nil, nil
-
 	case *GlobalSpecType_LegacyRuleList:
-
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -720,11 +655,9 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "legacy_rule_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -749,7 +682,6 @@ func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -768,12 +700,10 @@ func (m *GlobalSpecType) GetRulesDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -789,7 +719,6 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -799,7 +728,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
 	}
-
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -817,7 +745,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -826,7 +753,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -886,50 +812,35 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["algo"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("algo"))
 		if err := fv(ctx, m.GetAlgo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allow_f5xc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow_f5xc"))
 		if err := fv(ctx, m.GetAllowF5Xc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["decrypt_cache_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("decrypt_cache_timeout"))
 		if err := fv(ctx, m.GetDecryptCacheTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["delete_delay"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("delete_delay"))
 		if err := fv(ctx, m.GetDeleteDelay(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deleted_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deleted_at"))
 		if err := fv(ctx, m.GetDeletedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRuleChoice().(type) {
@@ -955,33 +866,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_internal"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1000,10 +903,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rules"] = vFn
-
 	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
 	v.FldValidators["rule_choice.legacy_rule_list"] = LegacyRuleListValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1056,7 +957,6 @@ func (m *LegacyRuleList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetRulesDRefInfo()
-
 }
 
 func (m *LegacyRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -1081,7 +981,6 @@ func (m *LegacyRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1100,7 +999,6 @@ func (m *LegacyRuleList) GetRulesDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1109,7 +1007,6 @@ type ValidateLegacyRuleList struct {
 }
 
 func (v *ValidateLegacyRuleList) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1169,22 +1066,18 @@ func (v *ValidateLegacyRuleList) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLegacyRuleListValidator = func() *ValidateLegacyRuleList {
 	v := &ValidateLegacyRuleList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1259,15 +1152,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1277,11 +1167,8 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *ReplaceSpecType_RuleList:
-
 		return nil, nil
-
 	case *ReplaceSpecType_LegacyRuleList:
-
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -1291,11 +1178,9 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "legacy_rule_list." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 func (m *ReplaceSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -1320,7 +1205,6 @@ func (m *ReplaceSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1339,7 +1223,6 @@ func (m *ReplaceSpecType) GetRulesDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1348,7 +1231,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1408,32 +1290,23 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["algo"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("algo"))
 		if err := fv(ctx, m.GetAlgo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allow_f5xc"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allow_f5xc"))
 		if err := fv(ctx, m.GetAllowF5Xc(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["decrypt_cache_timeout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("decrypt_cache_timeout"))
 		if err := fv(ctx, m.GetDecryptCacheTimeout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRuleChoice().(type) {
@@ -1459,24 +1332,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1495,7 +1363,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rules"] = vFn
-
 	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
 	v.FldValidators["rule_choice.legacy_rule_list"] = LegacyRuleListValidator().Validate
 
@@ -1548,7 +1415,6 @@ type ValidateRule struct {
 }
 
 func (v *ValidateRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -1557,19 +1423,15 @@ func (v *ValidateRule) MetadataValidationRuleHandler(rules map[string]string) (d
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateRule) SpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for spec")
@@ -1578,11 +1440,9 @@ func (v *ValidateRule) SpecValidationRuleHandler(rules map[string]string) (db.Va
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_secret_policy_rule.GlobalSpecTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1602,32 +1462,24 @@ func (v *ValidateRule) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRuleValidator = func() *ValidateRule {
 	v := &ValidateRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1707,7 +1559,6 @@ type ValidateRuleList struct {
 }
 
 func (v *ValidateRuleList) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1767,22 +1618,18 @@ func (v *ValidateRuleList) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRuleListValidator = func() *ValidateRuleList {
 	v := &ValidateRuleList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

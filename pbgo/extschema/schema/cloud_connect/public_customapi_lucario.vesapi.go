@@ -42,7 +42,6 @@ func (c *CloudDataCustomAPIGrpcClient) doRPCDiscoverVPC(ctx context.Context, yam
 	rsp, err := c.grpcClient.DiscoverVPC(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CloudDataCustomAPIGrpcClient) doRPCReApplyVPCAttachment(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ReApplyVPCAttachmentRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCloudDataCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DiscoverVPC"] = ccl.doRPCDiscoverVPC
-
 	rpcFns["ReApplyVPCAttachment"] = ccl.doRPCReApplyVPCAttachment
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -176,7 +172,6 @@ func (c *CloudDataCustomAPIRestClient) doRPCDiscoverVPC(ctx context.Context, cal
 	pbRsp := &DiscoverVPCResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.DiscoverVPCResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -184,7 +179,6 @@ func (c *CloudDataCustomAPIRestClient) doRPCDiscoverVPC(ctx context.Context, cal
 	}
 	return pbRsp, nil
 }
-
 func (c *CloudDataCustomAPIRestClient) doRPCReApplyVPCAttachment(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -261,7 +255,6 @@ func (c *CloudDataCustomAPIRestClient) doRPCReApplyVPCAttachment(ctx context.Con
 	pbRsp := &ReApplyVPCAttachmentResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.ReApplyVPCAttachmentResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -295,11 +288,8 @@ func NewCloudDataCustomAPIRestClient(baseURL string, hc http.Client) server.Cust
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DiscoverVPC"] = ccl.doRPCDiscoverVPC
-
 	rpcFns["ReApplyVPCAttachment"] = ccl.doRPCReApplyVPCAttachment
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -387,7 +377,6 @@ func (s *cloudDataCustomAPISrv) DiscoverVPC(ctx context.Context, in *DiscoverVPC
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.DiscoverVPCResponse", rsp)...)
 
 	return rsp, nil
@@ -439,7 +428,6 @@ func (s *cloudDataCustomAPISrv) ReApplyVPCAttachment(ctx context.Context, in *Re
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.ReApplyVPCAttachmentResponse", rsp)...)
 
 	return rsp, nil

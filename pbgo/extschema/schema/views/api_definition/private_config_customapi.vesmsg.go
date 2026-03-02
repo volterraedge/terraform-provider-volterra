@@ -64,7 +64,6 @@ type ValidateUpdateAPIInventoryOpenAPISpecsReq struct {
 }
 
 func (v *ValidateUpdateAPIInventoryOpenAPISpecsReq) ApiInventoryOpenapiSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -118,40 +117,30 @@ func (v *ValidateUpdateAPIInventoryOpenAPISpecsReq) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_inventory_openapi_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("api_inventory_openapi_specs"))
 		if err := fv(ctx, m.GetApiInventoryOpenapiSpecs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateAPIInventoryOpenAPISpecsReqValidator = func() *ValidateUpdateAPIInventoryOpenAPISpecsReq {
 	v := &ValidateUpdateAPIInventoryOpenAPISpecsReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -233,7 +222,6 @@ func (v *ValidateUpdateAPIInventoryOpenAPISpecsResp) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

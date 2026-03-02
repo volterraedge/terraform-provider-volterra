@@ -42,7 +42,7 @@ resource "volterra_nat_policy" "example" {
       destination_port {
         // One of the arguments from this list "no_port_match port port_ranges" can be set
 
-        port = "6443"
+        port_ranges = "8080-8191"
       }
 
       // One of the arguments from this list "segment site_local_inside_network site_local_network virtual_network" can be set
@@ -74,7 +74,7 @@ resource "volterra_nat_policy" "example" {
 
     // One of the arguments from this list "cloud_connect network_interface node_interface segment virtual_network" must be set
 
-    network_interface {
+    cloud_connect {
       refs {
         name      = "test1"
         namespace = "staging"
@@ -83,7 +83,6 @@ resource "volterra_nat_policy" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -131,9 +130,9 @@ List of rules to apply under the NAT Policy. Rule that matches first would be ap
 
 `cloud_connect` - (Optional) NAT rule is applied to packet coming from cloud connect. See [Scope Choice Cloud Connect ](#scope-choice-cloud-connect) below for details.
 
-`network_interface` - (Optional) NAT rule is applied to packet coming from interface. See [Scope Choice Network Interface ](#scope-choice-network-interface) below for details.
+`network_interface` - (Optional) NAT rule is applied to packet coming from interface. See [Scope Choice Network Interface ](#scope-choice-network-interface) below for details.(Deprecated)
 
-`node_interface` - (Optional) NAT rule is applied to packet coming from one or more interfaces of nodes. See [Scope Choice Node Interface ](#scope-choice-node-interface) below for details.(Deprecated)
+`node_interface` - (Optional) NAT rule is applied to packet coming from one or more interfaces of nodes. See [Scope Choice Node Interface ](#scope-choice-node-interface) below for details.
 
 `segment` - (Optional) NAT rule is applied to packet in the segment. See [Scope Choice Segment ](#scope-choice-segment) below for details.
 
@@ -275,33 +274,33 @@ Criteria to match on the packet to apply the Action.
 
 `destination_cidr` - (Optional) Destination IP of the packet to match (`String`).
 
-`destination_port` - (Optional) Destination port of the packet to match. See [Criteria Destination Port ](#criteria-destination-port) below for details.
+`destination_port` - (Optional) Destination port of the packet to match. See [Criteria Destination Port ](#criteria-destination-port) below for details.(Deprecated)
 
 ###### One of the arguments from this list "segment, site_local_inside_network, site_local_network, virtual_network" can be set
 
-`segment` - (Optional) When there is no segment connector, this field need not be specified. When there is segment connector configured and if packet is destined to destination segment, destination segment needs to be configured here. See [Network Choice Segment ](#network-choice-segment) below for details.
+`segment` - (Optional) When there is no segment connector, this field need not be specified. When there is segment connector configured and if packet is destined to destination segment, destination segment needs to be configured here. See [Network Choice Segment ](#network-choice-segment) below for details.(Deprecated)
 
-`site_local_inside_network` - (Optional) x-displayName: "Site Local Inside Virtual Network" (`Bool`).(Deprecated)
+`site_local_inside_network` - (Optional) x-displayName: "Site Local Inside Virtual Network" (`Bool`).
 
-`site_local_network` - (Optional) x-displayName: "Site Local Outside Virtual Network" (`Bool`).(Deprecated)
+`site_local_network` - (Optional) x-displayName: "Site Local Outside Virtual Network" (`Bool`).
 
-`virtual_network` - (Optional) When there is no network connector, this field need not be specified. When there is network connector configured and if packet is destined to destination network, destination network needs to be configured here. See [Network Choice Virtual Network ](#network-choice-virtual-network) below for details.
+`virtual_network` - (Optional) When there is no network connector, this field need not be specified. When there is network connector configured and if packet is destined to destination network, destination network needs to be configured here. See [Network Choice Virtual Network ](#network-choice-virtual-network) below for details.(Deprecated)
 
-`protocol` - (Optional) Protocol of the packet to match (`String`).
+`protocol` - (Optional) Protocol of the packet to match (`String`).(Deprecated)
 
 ###### One of the arguments from this list "any, icmp, tcp, udp" can be set
 
-`any` - (Optional) Match Any Protocol (`Bool`).(Deprecated)
+`any` - (Optional) Match Any Protocol (`Bool`).
 
-`icmp` - (Optional) Match ICMP Protocol (`Bool`).(Deprecated)
+`icmp` - (Optional) Match ICMP Protocol (`Bool`).
 
-`tcp` - (Optional) Match TCP Protocol. See [Protocol Choice Tcp ](#protocol-choice-tcp) below for details.(Deprecated)
+`tcp` - (Optional) Match TCP Protocol. See [Protocol Choice Tcp ](#protocol-choice-tcp) below for details.
 
-`udp` - (Optional) Match UDP Protocol. See [Protocol Choice Udp ](#protocol-choice-udp) below for details.(Deprecated)
+`udp` - (Optional) Match UDP Protocol. See [Protocol Choice Udp ](#protocol-choice-udp) below for details.
 
 `source_cidr` - (Optional) Source IP of the packet to match (`String`).
 
-`source_port` - (Optional) Source port of the packet to match. See [Criteria Source Port ](#criteria-source-port) below for details.
+`source_port` - (Optional) Source port of the packet to match. See [Criteria Source Port ](#criteria-source-port) below for details.(Deprecated)
 
 ### Scope Choice Cloud Connect
 
@@ -396,4 +395,4 @@ Source port of the packet to match.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured nat_policy.
+*   `id` - This is the id of the configured nat_policy.

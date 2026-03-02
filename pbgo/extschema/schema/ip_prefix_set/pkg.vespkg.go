@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ip_prefix_set.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.ip_prefix_set.Object"] = ObjectValidator()
 	vr["ves.io.schema.ip_prefix_set.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.ip_prefix_set.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.ip_prefix_set.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.ip_prefix_set.DeleteRequest"] = DeleteRequestValidator()
@@ -27,14 +25,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ip_prefix_set.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.ip_prefix_set.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.ip_prefix_set.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.ip_prefix_set.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.ip_prefix_set.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.ip_prefix_set.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.ip_prefix_set.Ipv4Prefix"] = Ipv4PrefixValidator()
 	vr["ves.io.schema.ip_prefix_set.Ipv6Prefix"] = Ipv6PrefixValidator()
 	vr["ves.io.schema.ip_prefix_set.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -46,26 +42,21 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.ip_prefix_set.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.ip_prefix_set.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.ip_prefix_set.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
 		"spec.ipv6_prefix.#",
 		"spec.prefix.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
 		"spec.ipv6_prefix.#",
 		"spec.prefix.#",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
 		"spec.ipv6_prefix.#",
 		"spec.prefix.#",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.ipv6_prefix.#",
@@ -76,7 +67,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.ipv6_prefix.#",
@@ -87,7 +77,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.Get"] = []string{
 		"create_form.spec.ipv6_prefix.#",
 		"create_form.spec.prefix.#",
@@ -96,7 +85,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ipv6_prefix.#",
 		"spec.prefix.#",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ip_prefix_set.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.ipv6_prefix.#",
@@ -123,12 +111,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.List"] = []string{
 		"items.#.get_spec.ipv6_prefix.#",
 		"items.#.get_spec.prefix.#",
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ip_prefix_set.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.ipv6_prefix.#",
@@ -139,17 +125,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []string{
 		"spec.ipv6_prefix.#",
 		"spec.prefix.#",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []string{
 		"spec.ipv6_prefix.#",
 		"spec.prefix.#",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.ipv6_prefix.#",
@@ -160,21 +143,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.ip_prefix_set.API"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -183,9 +162,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.ip_prefix_set.Object"] = APISwaggerJSON
@@ -199,22 +176,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.ip_prefix_set.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.ip_prefix_set.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.ip_prefix_set.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

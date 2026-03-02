@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_lb_health_check.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.dns_lb_health_check.Object"] = ObjectValidator()
 	vr["ves.io.schema.dns_lb_health_check.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.dns_lb_health_check.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.dns_lb_health_check.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.dns_lb_health_check.DeleteRequest"] = DeleteRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_lb_health_check.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.dns_lb_health_check.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.dns_lb_health_check.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.dns_lb_health_check.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.dns_lb_health_check.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.dns_lb_health_check.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -36,7 +33,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_lb_health_check.TcpHealthCheck"] = TcpHealthCheckValidator()
 	vr["ves.io.schema.dns_lb_health_check.TcpHexHealthCheck"] = TcpHexHealthCheckValidator()
 	vr["ves.io.schema.dns_lb_health_check.UdpHealthCheck"] = UdpHealthCheckValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -48,25 +44,86 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.dns_lb_health_check.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.dns_lb_health_check.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.dns_lb_health_check.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.dns_lb_health_check.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.http_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.https_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_lb_health_check.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.http_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.https_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_lb_health_check.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.http_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.http_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.http_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.https_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_lb_health_check.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.http_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.dns_lb_health_check.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.http_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.https_health_check.virtual_host_choice",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.dns_lb_health_check.API"] = "config/dns"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["dns"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config-dns",
 		ServiceSelector: "bifrost\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -75,9 +132,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.dns_lb_health_check.Object"] = APISwaggerJSON
@@ -91,22 +146,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.dns_lb_health_check.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.dns_lb_health_check.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.dns_lb_health_check.Object"] = NewCRUDAPIServer
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

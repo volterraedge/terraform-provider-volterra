@@ -23,10 +23,9 @@ resource "volterra_user_identification" "example" {
   rules {
     // One of the arguments from this list "client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_ja4_tls_fingerprint ip_and_tls_fingerprint ja4_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint" must be set
 
-    http_header_name = "http_header_name"
+    query_param_key = "query_param_key"
   }
 }
-
 ```
 
 Argument Reference
@@ -129,4 +128,4 @@ User JA3 TLS Fingerprint as user identifier.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured user_identification.
+*   `id` - This is the id of the configured user_identification.

@@ -76,54 +76,37 @@ func (v *ValidateCertInfoType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["common_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("common_name"))
 		if err := fv(ctx, m.GetCommonName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expiry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expiry"))
 		if err := fv(ctx, m.GetExpiry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["issuer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("issuer"))
 		if err := fv(ctx, m.GetIssuer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["organization"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("organization"))
 		if err := fv(ctx, m.GetOrganization(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_key_algorithm"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_key_algorithm"))
 		if err := fv(ctx, m.GetPublicKeyAlgorithm(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subject_alternative_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subject_alternative_names"))
 		for idx, item := range m.GetSubjectAlternativeNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -131,9 +114,7 @@ func (v *ValidateCertInfoType) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -196,21 +177,17 @@ func (m *CertificateParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCrlDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCrlDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetValidationParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetValidationParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
@@ -235,7 +212,6 @@ func (m *CertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo, error)
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCertificatesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -254,7 +230,6 @@ func (m *CertificateParamsType) GetCertificatesDBEntries(ctx context.Context, d 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -280,7 +255,6 @@ func (m *CertificateParamsType) GetCrlDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCrlDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -299,7 +273,6 @@ func (m *CertificateParamsType) GetCrlDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -308,7 +281,6 @@ func (m *CertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, er
 	if m.GetValidationParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetValidationParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
@@ -318,7 +290,6 @@ func (m *CertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, er
 		dri.DRField = "validation_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCertificateParamsType struct {
@@ -332,9 +303,7 @@ func (v *ValidateCertificateParamsType) ClientCertificateVerifyChoiceValidationR
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCertificateParamsType) CertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -380,9 +349,7 @@ func (v *ValidateCertificateParamsType) CertificatesValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCertificateParamsType) CipherSuitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -422,9 +389,7 @@ func (v *ValidateCertificateParamsType) CipherSuitesValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCertificateParamsType) CrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -470,9 +435,7 @@ func (v *ValidateCertificateParamsType) CrlValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCertificateParamsType) XfccHeaderElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -532,21 +495,17 @@ func (v *ValidateCertificateParamsType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificates"]; exists {
 		vOpts := append(opts, db.WithValidateField("certificates"))
 		if err := fv(ctx, m.GetCertificates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cipher_suites"]; exists {
 		vOpts := append(opts, db.WithValidateField("cipher_suites"))
 		if err := fv(ctx, m.GetCipherSuites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["client_certificate_verify_choice"]; exists {
@@ -593,68 +552,49 @@ func (v *ValidateCertificateParamsType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["crl"]; exists {
 		vOpts := append(opts, db.WithValidateField("crl"))
 		if err := fv(ctx, m.GetCrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["maximum_protocol_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("maximum_protocol_version"))
 		if err := fv(ctx, m.GetMaximumProtocolVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["minimum_protocol_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("minimum_protocol_version"))
 		if err := fv(ctx, m.GetMinimumProtocolVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["require_client_certificate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("require_client_certificate"))
 		if err := fv(ctx, m.GetRequireClientCertificate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["validation_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("validation_params"))
 		if err := fv(ctx, m.GetValidationParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["xfcc_header_elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("xfcc_header_elements"))
 		if err := fv(ctx, m.GetXfccHeaderElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCertificateParamsTypeValidator = func() *ValidateCertificateParamsType {
 	v := &ValidateCertificateParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -662,7 +602,6 @@ var DefaultCertificateParamsTypeValidator = func() *ValidateCertificateParamsTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClientCertificateVerifyChoice := v.ClientCertificateVerifyChoiceValidationRuleHandler
 	rulesClientCertificateVerifyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -722,7 +661,6 @@ var DefaultCertificateParamsTypeValidator = func() *ValidateCertificateParamsTyp
 		panic(errMsg)
 	}
 	v.FldValidators["xfcc_header_elements"] = vFn
-
 	v.FldValidators["validation_params"] = TlsValidationParamsTypeValidator().Validate
 
 	return v
@@ -748,7 +686,6 @@ func (m *DownstreamTlsParamsType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCommonParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DownstreamTlsParamsType.common_params")
 	}
@@ -794,15 +731,12 @@ func (m *DownstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetCrlDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCrlDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -810,7 +744,6 @@ func (m *DownstreamTlsParamsType) GetCommonParamsDRefInfo() ([]db.DRefInfo, erro
 	if m.GetCommonParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCommonParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCommonParams().GetDRefInfo() FAILED")
@@ -820,7 +753,6 @@ func (m *DownstreamTlsParamsType) GetCommonParamsDRefInfo() ([]db.DRefInfo, erro
 		dri.DRField = "common_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 func (m *DownstreamTlsParamsType) GetCrlDRefInfo() ([]db.DRefInfo, error) {
@@ -845,7 +777,6 @@ func (m *DownstreamTlsParamsType) GetCrlDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCrlDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -864,7 +795,6 @@ func (m *DownstreamTlsParamsType) GetCrlDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -879,9 +809,7 @@ func (v *ValidateDownstreamTlsParamsType) ClientCertificateVerifyChoiceValidatio
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDownstreamTlsParamsType) CrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -927,9 +855,7 @@ func (v *ValidateDownstreamTlsParamsType) CrlValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDownstreamTlsParamsType) XfccHeaderElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -1034,50 +960,37 @@ func (v *ValidateDownstreamTlsParamsType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["common_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("common_params"))
 		if err := fv(ctx, m.GetCommonParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["crl"]; exists {
 		vOpts := append(opts, db.WithValidateField("crl"))
 		if err := fv(ctx, m.GetCrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["require_client_certificate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("require_client_certificate"))
 		if err := fv(ctx, m.GetRequireClientCertificate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["xfcc_header_elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("xfcc_header_elements"))
 		if err := fv(ctx, m.GetXfccHeaderElements(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParamsType {
 	v := &ValidateDownstreamTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1085,7 +998,6 @@ var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParam
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhClientCertificateVerifyChoice := v.ClientCertificateVerifyChoiceValidationRuleHandler
 	rulesClientCertificateVerifyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1120,7 +1032,6 @@ var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParam
 		panic(errMsg)
 	}
 	v.FldValidators["xfcc_header_elements"] = vFn
-
 	v.FldValidators["common_params"] = TlsParamsTypeValidator().Validate
 
 	return v
@@ -1146,15 +1057,12 @@ func (m *HostAccessInfoType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetTlsConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HostAccessInfoType.tls_config")
 	}
-
 	if err := m.GetRestAuthInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HostAccessInfoType.rest_auth_info")
 	}
-
 	if err := m.GetVaultAuthInfo().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HostAccessInfoType.vault_auth_info")
 	}
@@ -1195,7 +1103,6 @@ func (m *HostAccessInfoType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTlsConfigDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1203,7 +1110,6 @@ func (m *HostAccessInfoType) GetTlsConfigDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsConfig() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetTlsConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsConfig().GetDRefInfo() FAILED")
@@ -1213,7 +1119,6 @@ func (m *HostAccessInfoType) GetTlsConfigDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "tls_config." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateHostAccessInfoType struct {
@@ -1221,7 +1126,6 @@ type ValidateHostAccessInfoType struct {
 }
 
 func (v *ValidateHostAccessInfoType) ServerEndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for server_endpoint")
@@ -1267,43 +1171,31 @@ func (v *ValidateHostAccessInfoType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["scheme"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_endpoint"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_endpoint"))
 		if err := fv(ctx, m.GetServerEndpoint(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_config"))
 		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHostAccessInfoTypeValidator = func() *ValidateHostAccessInfoType {
 	v := &ValidateHostAccessInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1324,10 +1216,8 @@ var DefaultHostAccessInfoTypeValidator = func() *ValidateHostAccessInfoType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_endpoint"] = vFn
-
 	v.FldValidators["auth_params.rest_auth_info"] = RestAuthInfoTypeValidator().Validate
 	v.FldValidators["auth_params.vault_auth_info"] = VaultAuthInfoTypeValidator().Validate
-
 	v.FldValidators["tls_config"] = UpstreamTlsParamsTypeValidator().Validate
 
 	return v
@@ -1433,16 +1323,13 @@ func (v *ValidateTLSCoalescingOptions) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTLSCoalescingOptionsValidator = func() *ValidateTLSCoalescingOptions {
 	v := &ValidateTLSCoalescingOptions{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1450,7 +1337,6 @@ var DefaultTLSCoalescingOptionsValidator = func() *ValidateTLSCoalescingOptions 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCoalescingChoice := v.CoalescingChoiceValidationRuleHandler
 	rulesCoalescingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1485,7 +1371,6 @@ func (m *TlsParamsType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetTlsCertificates() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting TlsParamsType.tls_certificates idx %v", idx)
@@ -1528,7 +1413,6 @@ func (m *TlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetValidationParamsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1536,7 +1420,6 @@ func (m *TlsParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetValidationParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetValidationParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
@@ -1546,7 +1429,6 @@ func (m *TlsParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "validation_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateTlsParamsType struct {
@@ -1554,7 +1436,6 @@ type ValidateTlsParamsType struct {
 }
 
 func (v *ValidateTlsParamsType) CipherSuitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1608,35 +1489,25 @@ func (v *ValidateTlsParamsType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cipher_suites"]; exists {
 		vOpts := append(opts, db.WithValidateField("cipher_suites"))
 		if err := fv(ctx, m.GetCipherSuites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["maximum_protocol_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("maximum_protocol_version"))
 		if err := fv(ctx, m.GetMaximumProtocolVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["minimum_protocol_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("minimum_protocol_version"))
 		if err := fv(ctx, m.GetMinimumProtocolVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_certificates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_certificates"))
 		for idx, item := range m.GetTlsCertificates() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1644,34 +1515,25 @@ func (v *ValidateTlsParamsType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trusted_ca_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trusted_ca_url"))
 		if err := fv(ctx, m.GetTrustedCaUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["validation_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("validation_params"))
 		if err := fv(ctx, m.GetValidationParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTlsParamsTypeValidator = func() *ValidateTlsParamsType {
 	v := &ValidateTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1691,9 +1553,7 @@ var DefaultTlsParamsTypeValidator = func() *ValidateTlsParamsType {
 		panic(errMsg)
 	}
 	v.FldValidators["cipher_suites"] = vFn
-
 	v.FldValidators["tls_certificates"] = TlsCertificateTypeValidator().Validate
-
 	v.FldValidators["validation_params"] = TlsValidationParamsTypeValidator().Validate
 
 	return v
@@ -1751,15 +1611,12 @@ func (m *UpstreamCertificateParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetValidationParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetValidationParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *UpstreamCertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
@@ -1784,7 +1641,6 @@ func (m *UpstreamCertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCertificatesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1803,7 +1659,6 @@ func (m *UpstreamCertificateParamsType) GetCertificatesDBEntries(ctx context.Con
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1812,7 +1667,6 @@ func (m *UpstreamCertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRef
 	if m.GetValidationParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetValidationParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
@@ -1822,7 +1676,6 @@ func (m *UpstreamCertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRef
 		dri.DRField = "validation_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateUpstreamCertificateParamsType struct {
@@ -1830,7 +1683,6 @@ type ValidateUpstreamCertificateParamsType struct {
 }
 
 func (v *ValidateUpstreamCertificateParamsType) CertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1876,9 +1728,7 @@ func (v *ValidateUpstreamCertificateParamsType) CertificatesValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpstreamCertificateParamsType) CipherSuitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1932,57 +1782,42 @@ func (v *ValidateUpstreamCertificateParamsType) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificates"]; exists {
 		vOpts := append(opts, db.WithValidateField("certificates"))
 		if err := fv(ctx, m.GetCertificates(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cipher_suites"]; exists {
 		vOpts := append(opts, db.WithValidateField("cipher_suites"))
 		if err := fv(ctx, m.GetCipherSuites(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["maximum_protocol_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("maximum_protocol_version"))
 		if err := fv(ctx, m.GetMaximumProtocolVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["minimum_protocol_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("minimum_protocol_version"))
 		if err := fv(ctx, m.GetMinimumProtocolVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["validation_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("validation_params"))
 		if err := fv(ctx, m.GetValidationParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpstreamCertificateParamsTypeValidator = func() *ValidateUpstreamCertificateParamsType {
 	v := &ValidateUpstreamCertificateParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2015,7 +1850,6 @@ var DefaultUpstreamCertificateParamsTypeValidator = func() *ValidateUpstreamCert
 		panic(errMsg)
 	}
 	v.FldValidators["cipher_suites"] = vFn
-
 	v.FldValidators["validation_params"] = TlsValidationParamsTypeValidator().Validate
 
 	return v
@@ -2041,7 +1875,6 @@ func (m *UpstreamTlsParamsType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCommonParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting UpstreamTlsParamsType.common_params")
 	}
@@ -2082,7 +1915,6 @@ func (m *UpstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetTlsParamsChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -2092,7 +1924,6 @@ func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetTlsParamsChoice().(type) {
 	case *UpstreamTlsParamsType_CommonParams:
-
 		drInfos, err := m.GetCommonParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCommonParams().GetDRefInfo() FAILED")
@@ -2102,9 +1933,7 @@ func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "common_params." + dri.DRField
 		}
 		return drInfos, err
-
 	case *UpstreamTlsParamsType_CertParams:
-
 		drInfos, err := m.GetCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCertParams().GetDRefInfo() FAILED")
@@ -2114,11 +1943,9 @@ func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "cert_params." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateUpstreamTlsParamsType struct {
@@ -2140,7 +1967,6 @@ func (v *ValidateUpstreamTlsParamsType) MaxSessionKeysTypeMaxSessionKeysValidati
 	}
 	return oValidatorFn_MaxSessionKeys, nil
 }
-
 func (v *ValidateUpstreamTlsParamsType) SniChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2156,7 +1982,6 @@ func (v *ValidateUpstreamTlsParamsType) SniChoiceSniValidationRuleHandler(rules 
 	}
 	return oValidatorFn_Sni, nil
 }
-
 func (v *ValidateUpstreamTlsParamsType) TlsParamsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2223,7 +2048,6 @@ func (v *ValidateUpstreamTlsParamsType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["sni_choice"]; exists {
@@ -2270,7 +2094,6 @@ func (v *ValidateUpstreamTlsParamsType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["tls_params_choice"]; exists {
@@ -2306,16 +2129,13 @@ func (v *ValidateUpstreamTlsParamsType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsType {
 	v := &ValidateUpstreamTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2323,7 +2143,6 @@ var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMaxSessionKeysType := v.MaxSessionKeysTypeValidationRuleHandler
 	rulesMaxSessionKeysType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2334,7 +2153,6 @@ var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsTyp
 		panic(errMsg)
 	}
 	v.FldValidators["max_session_keys_type"] = vFn
-
 	vrhMaxSessionKeysTypeMaxSessionKeys := v.MaxSessionKeysTypeMaxSessionKeysValidationRuleHandler
 	rulesMaxSessionKeysTypeMaxSessionKeys := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "2",
@@ -2345,9 +2163,7 @@ var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UpstreamTlsParamsType.max_session_keys_type_max_session_keys: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["max_session_keys_type.max_session_keys"] = vFnMap["max_session_keys_type.max_session_keys"]
-
 	vrhSniChoice := v.SniChoiceValidationRuleHandler
 	rulesSniChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2358,7 +2174,6 @@ var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsTyp
 		panic(errMsg)
 	}
 	v.FldValidators["sni_choice"] = vFn
-
 	vrhSniChoiceSni := v.SniChoiceSniValidationRuleHandler
 	rulesSniChoiceSni := map[string]string{
 		"ves.io.schema.rules.string.hostname": "true",
@@ -2369,9 +2184,7 @@ var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UpstreamTlsParamsType.sni_choice_sni: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["sni_choice.sni"] = vFnMap["sni_choice.sni"]
-
 	vrhTlsParamsChoice := v.TlsParamsChoiceValidationRuleHandler
 	rulesTlsParamsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2382,7 +2195,6 @@ var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsTyp
 		panic(errMsg)
 	}
 	v.FldValidators["tls_params_choice"] = vFn
-
 	v.FldValidators["tls_params_choice.common_params"] = TlsParamsTypeValidator().Validate
 	v.FldValidators["tls_params_choice.cert_params"] = UpstreamCertificateParamsTypeValidator().Validate
 

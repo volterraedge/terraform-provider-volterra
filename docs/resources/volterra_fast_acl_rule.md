@@ -40,7 +40,6 @@ resource "volterra_fast_acl_rule" "example" {
     prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
   }
 }
-
 ```
 
 Argument Reference
@@ -143,4 +142,4 @@ List of IP prefixes.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured fast_acl_rule.
+*   `id` - This is the id of the configured fast_acl_rule.

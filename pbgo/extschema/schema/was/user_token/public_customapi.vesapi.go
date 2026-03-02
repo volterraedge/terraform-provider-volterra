@@ -74,9 +74,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetUserToken"] = ccl.doRPCGetUserToken
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -161,7 +159,6 @@ func (c *CustomAPIRestClient) doRPCGetUserToken(ctx context.Context, callOpts *s
 	pbRsp := &GetUserTokenResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.was.user_token.GetUserTokenResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -195,9 +192,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetUserToken"] = ccl.doRPCGetUserToken
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -278,7 +273,6 @@ func (s *customAPISrv) GetUserToken(ctx context.Context, in *GetUserTokenRequest
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.was.user_token.GetUserTokenResponse", rsp)...)
 
 	return rsp, nil

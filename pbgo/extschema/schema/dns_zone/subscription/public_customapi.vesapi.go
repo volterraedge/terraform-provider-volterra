@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCSubscribe(ctx context.Context, yamlReq string
 	rsp, err := c.grpcClient.Subscribe(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCUnsubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnsubscribeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Subscribe"] = ccl.doRPCSubscribe
-
 	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -172,7 +168,6 @@ func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *serv
 	pbRsp := &SubscribeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.subscription.SubscribeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -180,7 +175,6 @@ func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *serv
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -254,7 +248,6 @@ func (c *CustomAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *se
 	pbRsp := &UnsubscribeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.subscription.UnsubscribeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -288,11 +281,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Subscribe"] = ccl.doRPCSubscribe
-
 	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -377,7 +367,6 @@ func (s *customAPISrv) Subscribe(ctx context.Context, in *SubscribeRequest) (*Su
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.subscription.SubscribeResponse", rsp)...)
 
 	return rsp, nil
@@ -426,7 +415,6 @@ func (s *customAPISrv) Unsubscribe(ctx context.Context, in *UnsubscribeRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.subscription.UnsubscribeResponse", rsp)...)
 
 	return rsp, nil

@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCCustomCreate(ctx context.Context, yamlReq str
 	rsp, err := c.grpcClient.CustomCreate(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCustomGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CustomGetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCCustomGet(ctx context.Context, yamlReq string
 	rsp, err := c.grpcClient.CustomGet(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCustomList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CustomListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCCustomList(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.CustomList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCCustomReplace(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CustomReplaceRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,15 +98,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CustomCreate"] = ccl.doRPCCustomCreate
-
 	rpcFns["CustomGet"] = ccl.doRPCCustomGet
-
 	rpcFns["CustomList"] = ccl.doRPCCustomList
-
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -200,7 +192,6 @@ func (c *CustomAPIRestClient) doRPCCustomCreate(ctx context.Context, callOpts *s
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.role.Object", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -208,7 +199,6 @@ func (c *CustomAPIRestClient) doRPCCustomCreate(ctx context.Context, callOpts *s
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCustomGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -284,7 +274,6 @@ func (c *CustomAPIRestClient) doRPCCustomGet(ctx context.Context, callOpts *serv
 	pbRsp := &CustomGetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.role.CustomGetResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -292,7 +281,6 @@ func (c *CustomAPIRestClient) doRPCCustomGet(ctx context.Context, callOpts *serv
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCustomList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -367,7 +355,6 @@ func (c *CustomAPIRestClient) doRPCCustomList(ctx context.Context, callOpts *ser
 	pbRsp := &CustomListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.role.CustomListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -375,7 +362,6 @@ func (c *CustomAPIRestClient) doRPCCustomList(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCCustomReplace(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -455,7 +441,6 @@ func (c *CustomAPIRestClient) doRPCCustomReplace(ctx context.Context, callOpts *
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.role.Object", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -489,15 +474,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CustomCreate"] = ccl.doRPCCustomCreate
-
 	rpcFns["CustomGet"] = ccl.doRPCCustomGet
-
 	rpcFns["CustomList"] = ccl.doRPCCustomList
-
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -590,7 +570,6 @@ func (s *customAPISrv) CustomCreate(ctx context.Context, in *CustomCreateRequest
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.role.Object", rsp)...)
 
 	return rsp, nil
@@ -639,7 +618,6 @@ func (s *customAPISrv) CustomGet(ctx context.Context, in *CustomGetRequest) (*Cu
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.role.CustomGetResponse", rsp)...)
 
 	return rsp, nil
@@ -688,7 +666,6 @@ func (s *customAPISrv) CustomList(ctx context.Context, in *CustomListRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.role.CustomListResponse", rsp)...)
 
 	return rsp, nil
@@ -737,7 +714,6 @@ func (s *customAPISrv) CustomReplace(ctx context.Context, in *CustomReplaceReque
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.role.Object", rsp)...)
 
 	return rsp, nil
@@ -1160,10 +1136,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace.\n\nExample: - \"value\"-",
+                    "description": " Namespace.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "spec": {
                     "description": " A specification of the configuration object to be created.",
@@ -1249,10 +1228,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace.\n\nExample: - \"value\"-",
+                    "description": " Namespace.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "spec": {
                     "description": " A specification of the configuration object to be replaced.",
@@ -1712,7 +1694,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },

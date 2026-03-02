@@ -76,34 +76,24 @@ func (v *ValidateGetStatusRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_kind"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_kind"))
 		if err := fv(ctx, m.GetViewKind(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["view_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("view_name"))
 		if err := fv(ctx, m.GetViewName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -161,7 +151,6 @@ func (m *GetStatusResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return nil, nil
-
 }
 
 type ValidateGetStatusResponse struct {
@@ -181,9 +170,7 @@ func (v *ValidateGetStatusResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		for idx, item := range m.GetStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -191,16 +178,13 @@ func (v *ValidateGetStatusResponse) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetStatusResponseValidator = func() *ValidateGetStatusResponse {
 	v := &ValidateGetStatusResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["status"] = StatusObjectValidator().Validate
 
 	return v

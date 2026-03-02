@@ -20,7 +20,6 @@ resource "volterra_unified_policy_group" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -133,4 +132,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured unified_policy_group.
+*   `id` - This is the id of the configured unified_policy_group.

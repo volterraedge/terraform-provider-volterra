@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCGenerateReport(ctx context.Context, yamlReq s
 	rsp, err := c.grpcClient.GenerateReport(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListReportsHistory(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListReportsHistoryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCListReportsHistory(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.ListReportsHistory(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListReportsHistoryBotDefence(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListReportsHistoryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCListReportsHistoryBotDefence(ctx context.Cont
 	rsp, err := c.grpcClient.ListReportsHistoryBotDefence(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListReportsHistoryWaap(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListReportsHistoryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,15 +98,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GenerateReport"] = ccl.doRPCGenerateReport
-
 	rpcFns["ListReportsHistory"] = ccl.doRPCListReportsHistory
-
 	rpcFns["ListReportsHistoryBotDefence"] = ccl.doRPCListReportsHistoryBotDefence
-
 	rpcFns["ListReportsHistoryWaap"] = ccl.doRPCListReportsHistoryWaap
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -196,7 +188,6 @@ func (c *CustomAPIRestClient) doRPCGenerateReport(ctx context.Context, callOpts 
 	pbRsp := &GenerateReportResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.report_config.GenerateReportResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -204,7 +195,6 @@ func (c *CustomAPIRestClient) doRPCGenerateReport(ctx context.Context, callOpts 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListReportsHistory(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -280,7 +270,6 @@ func (c *CustomAPIRestClient) doRPCListReportsHistory(ctx context.Context, callO
 	pbRsp := &ListReportsHistoryResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.report_config.ListReportsHistoryResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -288,7 +277,6 @@ func (c *CustomAPIRestClient) doRPCListReportsHistory(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListReportsHistoryBotDefence(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -364,7 +352,6 @@ func (c *CustomAPIRestClient) doRPCListReportsHistoryBotDefence(ctx context.Cont
 	pbRsp := &ListReportsHistoryResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.report_config.ListReportsHistoryResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -372,7 +359,6 @@ func (c *CustomAPIRestClient) doRPCListReportsHistoryBotDefence(ctx context.Cont
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListReportsHistoryWaap(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -448,7 +434,6 @@ func (c *CustomAPIRestClient) doRPCListReportsHistoryWaap(ctx context.Context, c
 	pbRsp := &ListReportsHistoryResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.report_config.ListReportsHistoryResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -482,15 +467,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GenerateReport"] = ccl.doRPCGenerateReport
-
 	rpcFns["ListReportsHistory"] = ccl.doRPCListReportsHistory
-
 	rpcFns["ListReportsHistoryBotDefence"] = ccl.doRPCListReportsHistoryBotDefence
-
 	rpcFns["ListReportsHistoryWaap"] = ccl.doRPCListReportsHistoryWaap
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -583,7 +563,6 @@ func (s *customAPISrv) GenerateReport(ctx context.Context, in *GenerateReportReq
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.report_config.GenerateReportResponse", rsp)...)
 
 	return rsp, nil
@@ -632,7 +611,6 @@ func (s *customAPISrv) ListReportsHistory(ctx context.Context, in *ListReportsHi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.report_config.ListReportsHistoryResponse", rsp)...)
 
 	return rsp, nil
@@ -681,7 +659,6 @@ func (s *customAPISrv) ListReportsHistoryBotDefence(ctx context.Context, in *Lis
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.report_config.ListReportsHistoryResponse", rsp)...)
 
 	return rsp, nil
@@ -730,7 +707,6 @@ func (s *customAPISrv) ListReportsHistoryWaap(ctx context.Context, in *ListRepor
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.report_config.ListReportsHistoryResponse", rsp)...)
 
 	return rsp, nil
@@ -1584,6 +1560,14 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Estimated Time at which the report generation would be complete",
                     "x-ves-example": "June 3 11PM 2022"
                 },
+                "generated_time": {
+                    "type": "string",
+                    "description": " generated time\n\nExample: - \"June 3 11PM 2022\"-",
+                    "title": "report generated time",
+                    "format": "date-time",
+                    "x-displayname": "Report Generated Time",
+                    "x-ves-example": "June 3 11PM 2022"
+                },
                 "report_status": {
                     "description": " report status\n\nExample: - \"Pending\"-\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n",
                     "title": "report delivery status",
@@ -1740,7 +1724,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "header": {
                     "type": "string",
-                    "description": " Security events header \n\nExample: - \"Security Events Breakdown\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Security events header\n\nExample: - \"Security Events Breakdown\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "header",
                     "x-displayname": "Security Events header",
                     "x-ves-example": "Security Events Breakdown",
@@ -1770,7 +1754,7 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "value": {
-                    "description": " Security events data value \n\nExample: - \"128K Total Security Events 148K Previous Month\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Security events data value\n\nExample: - \"128K Total Security Events 148K Previous Month\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Security events data value",
                     "$ref": "#/definitions/reportWaapReportFieldData",
                     "x-displayname": "Security events data value",
@@ -1973,7 +1957,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "data": {
                     "type": "array",
-                    "description": " waap report data field list \n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " waap report data field list\n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "field data list",
                     "items": {
                         "$ref": "#/definitions/reportWaapReportFieldData"
@@ -2578,7 +2562,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },

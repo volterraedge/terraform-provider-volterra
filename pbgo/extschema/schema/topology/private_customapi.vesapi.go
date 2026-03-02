@@ -34,6 +34,14 @@ type PrivateCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *PrivateCustomAPIGrpcClient) doRPCGetAWSTransitGateway(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetAWSTransitGatewayRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.topology.GetAWSTransitGatewayRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetAWSTransitGateway(ctx, req, opts...)
+	return rsp, err
+}
 func (c *PrivateCustomAPIGrpcClient) doRPCListCloudNetworkTagKeys(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListCloudNetworkTagKeysRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -42,7 +50,6 @@ func (c *PrivateCustomAPIGrpcClient) doRPCListCloudNetworkTagKeys(ctx context.Co
 	rsp, err := c.grpcClient.ListCloudNetworkTagKeys(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PrivateCustomAPIGrpcClient) doRPCListCloudNetworkTagValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListCloudNetworkTagValuesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +58,6 @@ func (c *PrivateCustomAPIGrpcClient) doRPCListCloudNetworkTagValues(ctx context.
 	rsp, err := c.grpcClient.ListCloudNetworkTagValues(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PrivateCustomAPIGrpcClient) doRPCListCloudSubnetTagKeys(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListCloudSubnetTagKeysRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +66,6 @@ func (c *PrivateCustomAPIGrpcClient) doRPCListCloudSubnetTagKeys(ctx context.Con
 	rsp, err := c.grpcClient.ListCloudSubnetTagKeys(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *PrivateCustomAPIGrpcClient) doRPCListCloudSubnetTagValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListCloudSubnetTagValuesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -100,16 +105,12 @@ func NewPrivateCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewPrivateCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["GetAWSTransitGateway"] = ccl.doRPCGetAWSTransitGateway
 	rpcFns["ListCloudNetworkTagKeys"] = ccl.doRPCListCloudNetworkTagKeys
-
 	rpcFns["ListCloudNetworkTagValues"] = ccl.doRPCListCloudNetworkTagValues
-
 	rpcFns["ListCloudSubnetTagKeys"] = ccl.doRPCListCloudSubnetTagKeys
-
 	rpcFns["ListCloudSubnetTagValues"] = ccl.doRPCListCloudSubnetTagValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -121,6 +122,89 @@ type PrivateCustomAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
+func (c *PrivateCustomAPIRestClient) doRPCGetAWSTransitGateway(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetAWSTransitGatewayRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.topology.GetAWSTransitGatewayRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("cred", fmt.Sprintf("%v", req.Cred))
+		q.Add("region", fmt.Sprintf("%v", req.Region))
+		q.Add("tgw_id", fmt.Sprintf("%v", req.TgwId))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetAWSTransitGatewayResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.GetAWSTransitGatewayResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *PrivateCustomAPIRestClient) doRPCListCloudNetworkTagKeys(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -197,7 +281,6 @@ func (c *PrivateCustomAPIRestClient) doRPCListCloudNetworkTagKeys(ctx context.Co
 	pbRsp := &ListCloudNetworkTagKeysResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.ListCloudNetworkTagKeysResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -205,7 +288,6 @@ func (c *PrivateCustomAPIRestClient) doRPCListCloudNetworkTagKeys(ctx context.Co
 	}
 	return pbRsp, nil
 }
-
 func (c *PrivateCustomAPIRestClient) doRPCListCloudNetworkTagValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -283,7 +365,6 @@ func (c *PrivateCustomAPIRestClient) doRPCListCloudNetworkTagValues(ctx context.
 	pbRsp := &ListCloudNetworkTagValuesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.ListCloudNetworkTagValuesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -291,7 +372,6 @@ func (c *PrivateCustomAPIRestClient) doRPCListCloudNetworkTagValues(ctx context.
 	}
 	return pbRsp, nil
 }
-
 func (c *PrivateCustomAPIRestClient) doRPCListCloudSubnetTagKeys(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -368,7 +448,6 @@ func (c *PrivateCustomAPIRestClient) doRPCListCloudSubnetTagKeys(ctx context.Con
 	pbRsp := &ListCloudSubnetTagKeysResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.ListCloudSubnetTagKeysResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -376,7 +455,6 @@ func (c *PrivateCustomAPIRestClient) doRPCListCloudSubnetTagKeys(ctx context.Con
 	}
 	return pbRsp, nil
 }
-
 func (c *PrivateCustomAPIRestClient) doRPCListCloudSubnetTagValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -454,7 +532,6 @@ func (c *PrivateCustomAPIRestClient) doRPCListCloudSubnetTagValues(ctx context.C
 	pbRsp := &ListCloudSubnetTagValuesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.ListCloudSubnetTagValuesResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -487,16 +564,12 @@ func NewPrivateCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["GetAWSTransitGateway"] = ccl.doRPCGetAWSTransitGateway
 	rpcFns["ListCloudNetworkTagKeys"] = ccl.doRPCListCloudNetworkTagKeys
-
 	rpcFns["ListCloudNetworkTagValues"] = ccl.doRPCListCloudNetworkTagValues
-
 	rpcFns["ListCloudSubnetTagKeys"] = ccl.doRPCListCloudSubnetTagKeys
-
 	rpcFns["ListCloudSubnetTagValues"] = ccl.doRPCListCloudSubnetTagValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -507,6 +580,10 @@ type privateCustomAPIInprocClient struct {
 	PrivateCustomAPIServer
 }
 
+func (c *privateCustomAPIInprocClient) GetAWSTransitGateway(ctx context.Context, in *GetAWSTransitGatewayRequest, opts ...grpc.CallOption) (*GetAWSTransitGatewayResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.PrivateCustomAPI.GetAWSTransitGateway")
+	return c.PrivateCustomAPIServer.GetAWSTransitGateway(ctx, in)
+}
 func (c *privateCustomAPIInprocClient) ListCloudNetworkTagKeys(ctx context.Context, in *ListCloudNetworkTagKeysRequest, opts ...grpc.CallOption) (*ListCloudNetworkTagKeysResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagKeys")
 	return c.PrivateCustomAPIServer.ListCloudNetworkTagKeys(ctx, in)
@@ -545,6 +622,39 @@ type privateCustomAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *privateCustomAPISrv) GetAWSTransitGateway(ctx context.Context, in *GetAWSTransitGatewayRequest) (*GetAWSTransitGatewayResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.topology.PrivateCustomAPI")
+	cah, ok := ah.(PrivateCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *PrivateCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetAWSTransitGatewayResponse
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.topology.PrivateCustomAPI.GetAWSTransitGateway"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetAWSTransitGateway(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
 func (s *privateCustomAPISrv) ListCloudNetworkTagKeys(ctx context.Context, in *ListCloudNetworkTagKeysRequest) (*ListCloudNetworkTagKeysResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.topology.PrivateCustomAPI")
 	cah, ok := ah.(PrivateCustomAPIServer)
@@ -700,6 +810,91 @@ var PrivateCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/private/custom/namespaces/system/aws_transit_gateway": {
+            "post": {
+                "summary": "Get AWS Transit Gateway Info",
+                "description": "GetAWSTransitGateway retrieves AWS Transit Gateway information from AWS cloud.",
+                "operationId": "ves.io.schema.topology.PrivateCustomAPI.GetAWSTransitGateway",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/topologyGetAWSTransitGatewayResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/topologyGetAWSTransitGatewayRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "PrivateCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-getawstransitgateway"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.GetAWSTransitGateway"
+            },
+            "x-displayname": "Private Custom API",
+            "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
         "/private/custom/namespaces/{namespace}/network_tag_keys": {
             "get": {
                 "summary": "List Cloud Network Tag Keys",
@@ -1169,6 +1364,91 @@ var PrivateCustomAPISwaggerJSON string = `{
                 },
                 "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues"
+            },
+            "x-displayname": "Private Custom API",
+            "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/ves.io.schema/introspect/read/private/custom/namespaces/system/aws_transit_gateway": {
+            "post": {
+                "summary": "Get AWS Transit Gateway Info",
+                "description": "GetAWSTransitGateway retrieves AWS Transit Gateway information from AWS cloud.",
+                "operationId": "ves.io.schema.topology.PrivateCustomAPI.GetAWSTransitGateway",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/topologyGetAWSTransitGatewayResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/topologyGetAWSTransitGatewayRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "PrivateCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-getawstransitgateway"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.GetAWSTransitGateway"
             },
             "x-displayname": "Private Custom API",
             "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
@@ -1650,6 +1930,126 @@ var PrivateCustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
+        "topologyGetAWSTransitGatewayRequest": {
+            "type": "object",
+            "description": "Get AWS Transit Gateway Info Request",
+            "title": "Get AWS Transit Gateway Info Request",
+            "x-displayname": "Get AWS Transit Gateway Info Request",
+            "x-ves-proto-message": "ves.io.schema.topology.GetAWSTransitGatewayRequest",
+            "properties": {
+                "cred": {
+                    "description": " Cloud User Account Reference",
+                    "title": "Cloud User Account Reference",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Cloud User Account Reference"
+                },
+                "region": {
+                    "type": "string",
+                    "description": " Region of Transit Gateway",
+                    "title": "Region",
+                    "x-displayname": "Region"
+                },
+                "tgw_id": {
+                    "type": "string",
+                    "description": " AWS Transit Gateway ID",
+                    "title": "AWS Transit Gateway ID",
+                    "x-displayname": "AWS Transit Gateway ID"
+                }
+            }
+        },
+        "topologyGetAWSTransitGatewayResponse": {
+            "type": "object",
+            "description": "Get AWS Transit Gateway Info Response",
+            "title": "Get AWS Transit Gateway Info Response",
+            "x-displayname": "Get AWS Transit Gateway Info Response",
+            "x-ves-proto-message": "ves.io.schema.topology.GetAWSTransitGatewayResponse",
+            "properties": {
+                "account_id": {
+                    "type": "string",
+                    "description": " TGW Owner Account",
+                    "title": "TGW Owner",
+                    "x-displayname": "Owner Account"
+                },
+                "amazon_asn": {
+                    "type": "string",
+                    "description": " AWS Side ASN of TGW",
+                    "title": "AWS Side ASN of TGW",
+                    "format": "uint64",
+                    "x-displayname": "AWS Side ASN"
+                },
+                "arn": {
+                    "type": "string",
+                    "description": " TGW ARN",
+                    "title": "TGW ARN",
+                    "x-displayname": "ARN"
+                },
+                "cidrs": {
+                    "type": "array",
+                    "description": " x-displayName \"CIDRs\"\n TGW CIDRs",
+                    "title": "TGW CIDRs",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "string",
+                    "description": " AWS Transit Gateway ID",
+                    "title": "AWS Transit Gateway ID",
+                    "x-displayname": "AWS Transit Gateway ID"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " x-displayName \"Tags\"\n Tags of AWS Transit Gateway",
+                    "title": "Tags"
+                }
+            }
+        },
         "topologyListCloudNetworkTagKeysResponse": {
             "type": "object",
             "description": "Listing of cloud network tag keys response",

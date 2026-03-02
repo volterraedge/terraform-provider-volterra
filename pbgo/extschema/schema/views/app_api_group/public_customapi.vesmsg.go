@@ -66,7 +66,6 @@ type ValidateApiEndpoint struct {
 }
 
 func (v *ValidateApiEndpoint) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpMethod)
@@ -80,9 +79,7 @@ func (v *ValidateApiEndpoint) MethodValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateApiEndpoint) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
@@ -104,32 +101,24 @@ func (v *ValidateApiEndpoint) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiEndpointValidator = func() *ValidateApiEndpoint {
 	v := &ValidateApiEndpoint{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -224,25 +213,18 @@ func (v *ValidateApiGroupId) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -311,16 +293,12 @@ func (v *ValidateApiGroupStats) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["outdated_api_endpoints_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outdated_api_endpoints_count"))
 		if err := fv(ctx, m.GetOutdatedApiEndpointsCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -389,25 +367,18 @@ func (v *ValidateApiGroupsStatsItem) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["stats"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("stats"))
 		if err := fv(ctx, m.GetStats(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -465,7 +436,6 @@ func (m *EvaluateApiGroupReq) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetApiGroupDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -473,7 +443,6 @@ func (m *EvaluateApiGroupReq) GetApiGroupDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiGroup() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetApiGroup().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApiGroup().GetDRefInfo() FAILED")
@@ -483,7 +452,6 @@ func (m *EvaluateApiGroupReq) GetApiGroupDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "api_group." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateEvaluateApiGroupReq struct {
@@ -503,32 +471,24 @@ func (v *ValidateEvaluateApiGroupReq) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group"))
 		if err := fv(ctx, m.GetApiGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEvaluateApiGroupReqValidator = func() *ValidateEvaluateApiGroupReq {
 	v := &ValidateEvaluateApiGroupReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["api_group"] = GlobalSpecTypeValidator().Validate
 
 	return v
@@ -581,7 +541,6 @@ func (m *EvaluateApiGroupRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetApiGroupDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -589,7 +548,6 @@ func (m *EvaluateApiGroupRsp) GetApiGroupDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiGroup() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetApiGroup().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApiGroup().GetDRefInfo() FAILED")
@@ -599,7 +557,6 @@ func (m *EvaluateApiGroupRsp) GetApiGroupDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "api_group." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateEvaluateApiGroupRsp struct {
@@ -619,27 +576,19 @@ func (v *ValidateEvaluateApiGroupRsp) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group"))
 		if err := fv(ctx, m.GetApiGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["apieps_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apieps_timestamp"))
 		if err := fv(ctx, m.GetApiepsTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["matching_api_endpoints"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("matching_api_endpoints"))
 		for idx, item := range m.GetMatchingApiEndpoints() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -647,18 +596,14 @@ func (v *ValidateEvaluateApiGroupRsp) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultEvaluateApiGroupRspValidator = func() *ValidateEvaluateApiGroupRsp {
 	v := &ValidateEvaluateApiGroupRsp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["api_group"] = GlobalSpecTypeValidator().Validate
-
 	v.FldValidators["matching_api_endpoints"] = ApiEndpointValidator().Validate
 
 	return v
@@ -722,16 +667,12 @@ func (v *ValidateGetApiGroupsStatsReq) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -800,9 +741,7 @@ func (v *ValidateGetApiGroupsStatsRsp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -810,9 +749,7 @@ func (v *ValidateGetApiGroupsStatsRsp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

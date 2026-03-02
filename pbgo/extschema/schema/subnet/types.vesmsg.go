@@ -74,15 +74,12 @@ func (m *ConnectToLayer2) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetLayer2IntfRefDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLayer2IntfRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ConnectToLayer2) GetLayer2IntfInternalRefDRefInfo() ([]db.DRefInfo, error) {
@@ -107,7 +104,6 @@ func (m *ConnectToLayer2) GetLayer2IntfInternalRefDRefInfo() ([]db.DRefInfo, err
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetLayer2IntfInternalRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -126,12 +122,10 @@ func (m *ConnectToLayer2) GetLayer2IntfInternalRefDBEntries(ctx context.Context,
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
 func (m *ConnectToLayer2) GetLayer2IntfRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetLayer2IntfRef()
 	if vref == nil {
 		return nil, nil
@@ -147,7 +141,6 @@ func (m *ConnectToLayer2) GetLayer2IntfRefDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetLayer2IntfRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -157,7 +150,6 @@ func (m *ConnectToLayer2) GetLayer2IntfRefDBEntries(ctx context.Context, d db.In
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
 	}
-
 	vref := m.GetLayer2IntfRef()
 	if vref == nil {
 		return nil, nil
@@ -175,7 +167,6 @@ func (m *ConnectToLayer2) GetLayer2IntfRefDBEntries(ctx context.Context, d db.In
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -184,7 +175,6 @@ type ValidateConnectToLayer2 struct {
 }
 
 func (v *ValidateConnectToLayer2) Layer2IntfRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for layer2_intf_ref")
@@ -193,11 +183,9 @@ func (v *ValidateConnectToLayer2) Layer2IntfRefValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -217,9 +205,7 @@ func (v *ValidateConnectToLayer2) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["layer2_intf_internal_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("layer2_intf_internal_ref"))
 		for idx, item := range m.GetLayer2IntfInternalRef() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -227,25 +213,19 @@ func (v *ValidateConnectToLayer2) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["layer2_intf_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("layer2_intf_ref"))
 		if err := fv(ctx, m.GetLayer2IntfRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultConnectToLayer2Validator = func() *ValidateConnectToLayer2 {
 	v := &ValidateConnectToLayer2{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -320,15 +300,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteSubnetParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteSubnetParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -338,19 +315,12 @@ func (m *CreateSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectionChoice().(type) {
 	case *CreateSpecType_ConnectToSlo:
-
 		return nil, nil
-
 	case *CreateSpecType_ConnectToSli:
-
 		return nil, nil
-
 	case *CreateSpecType_IsolatedNw:
-
 		return nil, nil
-
 	case *CreateSpecType_ConnectToLayer2:
-
 		drInfos, err := m.GetConnectToLayer2().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfo() FAILED")
@@ -360,11 +330,9 @@ func (m *CreateSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "connect_to_layer2." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -372,7 +340,6 @@ func (m *CreateSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteSubnetParams() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSiteSubnetParams() {
 		driSet, err := e.GetDRefInfo()
@@ -386,7 +353,6 @@ func (m *CreateSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateCreateSpecType struct {
@@ -394,7 +360,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) SiteSubnetParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -500,24 +465,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_subnet_params"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_subnet_params"))
 		if err := fv(ctx, m.GetSiteSubnetParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -538,7 +498,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_subnet_params"] = vFn
-
 	v.FldValidators["connection_choice.connect_to_layer2"] = ConnectToLayer2Validator().Validate
 
 	return v
@@ -596,6 +555,7 @@ func (v *ValidateDHCPNetworkType) NetworkPrefixChoiceNetworkPrefixValidationRule
 	}
 	return oValidatorFn_NetworkPrefix, nil
 }
+
 func (v *ValidateDHCPNetworkType) NetworkPrefixChoiceNetworkPrefixIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_NetworkPrefixIpv6, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -641,16 +601,13 @@ func (v *ValidateDHCPNetworkType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 	v := &ValidateDHCPNetworkType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -658,7 +615,6 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNetworkPrefixChoiceNetworkPrefix := v.NetworkPrefixChoiceNetworkPrefixValidationRuleHandler
 	rulesNetworkPrefixChoiceNetworkPrefix := map[string]string{
 		"ves.io.schema.rules.string.ipv4_prefix": "true",
@@ -677,7 +633,6 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DHCPNetworkType.network_prefix_choice_network_prefix_ipv6: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["network_prefix_choice.network_prefix"] = vFnMap["network_prefix_choice.network_prefix"]
 	v.FldValidators["network_prefix_choice.network_prefix_ipv6"] = vFnMap["network_prefix_choice.network_prefix_ipv6"]
 
@@ -730,7 +685,6 @@ type ValidateDHCPServerParametersType struct {
 }
 
 func (v *ValidateDHCPServerParametersType) DhcpNetworksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -790,22 +744,18 @@ func (v *ValidateDHCPServerParametersType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["dhcp_networks"]; exists {
 		vOpts := append(opts, db.WithValidateField("dhcp_networks"))
 		if err := fv(ctx, m.GetDhcpNetworks(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDHCPServerParametersTypeValidator = func() *ValidateDHCPServerParametersType {
 	v := &ValidateDHCPServerParametersType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -881,15 +831,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteSubnetParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteSubnetParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -899,19 +846,12 @@ func (m *GetSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectionChoice().(type) {
 	case *GetSpecType_ConnectToSlo:
-
 		return nil, nil
-
 	case *GetSpecType_ConnectToSli:
-
 		return nil, nil
-
 	case *GetSpecType_IsolatedNw:
-
 		return nil, nil
-
 	case *GetSpecType_ConnectToLayer2:
-
 		drInfos, err := m.GetConnectToLayer2().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfo() FAILED")
@@ -921,11 +861,9 @@ func (m *GetSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "connect_to_layer2." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -933,7 +871,6 @@ func (m *GetSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteSubnetParams() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSiteSubnetParams() {
 		driSet, err := e.GetDRefInfo()
@@ -947,7 +884,6 @@ func (m *GetSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGetSpecType struct {
@@ -955,7 +891,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) SiteSubnetParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1061,24 +996,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_subnet_params"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_subnet_params"))
 		if err := fv(ctx, m.GetSiteSubnetParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1099,7 +1029,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_subnet_params"] = vFn
-
 	v.FldValidators["connection_choice.connect_to_layer2"] = ConnectToLayer2Validator().Validate
 
 	return v
@@ -1157,21 +1086,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteDhcpServerParamsInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteDhcpServerParamsInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSiteSubnetParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteSubnetParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1181,19 +1106,12 @@ func (m *GlobalSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectionChoice().(type) {
 	case *GlobalSpecType_ConnectToSlo:
-
 		return nil, nil
-
 	case *GlobalSpecType_ConnectToSli:
-
 		return nil, nil
-
 	case *GlobalSpecType_IsolatedNw:
-
 		return nil, nil
-
 	case *GlobalSpecType_ConnectToLayer2:
-
 		drInfos, err := m.GetConnectToLayer2().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfo() FAILED")
@@ -1203,11 +1121,9 @@ func (m *GlobalSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "connect_to_layer2." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 // GetDRefInfo for the field's type
@@ -1215,7 +1131,6 @@ func (m *GlobalSpecType) GetSiteDhcpServerParamsInternalDRefInfo() ([]db.DRefInf
 	if m.GetSiteDhcpServerParamsInternal() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSiteDhcpServerParamsInternal() {
 		driSet, err := e.GetDRefInfo()
@@ -1229,7 +1144,6 @@ func (m *GlobalSpecType) GetSiteDhcpServerParamsInternalDRefInfo() ([]db.DRefInf
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1237,7 +1151,6 @@ func (m *GlobalSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteSubnetParams() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSiteSubnetParams() {
 		driSet, err := e.GetDRefInfo()
@@ -1251,7 +1164,6 @@ func (m *GlobalSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -1259,7 +1171,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) SiteSubnetParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1305,9 +1216,7 @@ func (v *ValidateGlobalSpecType) SiteSubnetParamsValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) SiteDhcpServerParamsInternalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1413,32 +1322,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_dhcp_server_params_internal"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_dhcp_server_params_internal"))
 		if err := fv(ctx, m.GetSiteDhcpServerParamsInternal(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_subnet_params"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_subnet_params"))
 		if err := fv(ctx, m.GetSiteSubnetParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1470,7 +1372,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_dhcp_server_params_internal"] = vFn
-
 	v.FldValidators["connection_choice.connect_to_layer2"] = ConnectToLayer2Validator().Validate
 
 	return v
@@ -1523,7 +1424,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectionChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1533,19 +1433,12 @@ func (m *ReplaceSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectionChoice().(type) {
 	case *ReplaceSpecType_ConnectToSlo:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ConnectToSli:
-
 		return nil, nil
-
 	case *ReplaceSpecType_IsolatedNw:
-
 		return nil, nil
-
 	case *ReplaceSpecType_ConnectToLayer2:
-
 		drInfos, err := m.GetConnectToLayer2().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfo() FAILED")
@@ -1555,11 +1448,9 @@ func (m *ReplaceSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "connect_to_layer2." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1625,16 +1516,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["connection_choice.connect_to_layer2"] = ConnectToLayer2Validator().Validate
 
 	return v
@@ -1687,11 +1575,9 @@ func (m *SiteSubnetParametersType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteDRefInfo()
-
 }
 
 func (m *SiteSubnetParametersType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -1707,7 +1593,6 @@ func (m *SiteSubnetParametersType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1717,7 +1602,6 @@ func (m *SiteSubnetParametersType) GetSiteDBEntries(ctx context.Context, d db.In
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
-
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -1735,7 +1619,6 @@ func (m *SiteSubnetParametersType) GetSiteDBEntries(ctx context.Context, d db.In
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1744,7 +1627,6 @@ type ValidateSiteSubnetParametersType struct {
 }
 
 func (v *ValidateSiteSubnetParametersType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site")
@@ -1753,11 +1635,9 @@ func (v *ValidateSiteSubnetParametersType) SiteValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1801,34 +1681,25 @@ func (v *ValidateSiteSubnetParametersType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_dhcp_server_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_dhcp_server_params"))
 		if err := fv(ctx, m.GetSubnetDhcpServerParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteSubnetParametersTypeValidator = func() *ValidateSiteSubnetParametersType {
 	v := &ValidateSiteSubnetParametersType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1847,7 +1718,6 @@ var DefaultSiteSubnetParametersTypeValidator = func() *ValidateSiteSubnetParamet
 		panic(errMsg)
 	}
 	v.FldValidators["site"] = vFn
-
 	v.FldValidators["subnet_dhcp_server_params"] = DHCPServerParametersTypeValidator().Validate
 
 	return v
@@ -1905,15 +1775,12 @@ func (m *SubnetDHCPServerParametersType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSubnetDhcpServerParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSubnetDhcpServerParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *SubnetDHCPServerParametersType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -1938,7 +1805,6 @@ func (m *SubnetDHCPServerParametersType) GetSiteDRefInfo() ([]db.DRefInfo, error
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1957,7 +1823,6 @@ func (m *SubnetDHCPServerParametersType) GetSiteDBEntries(ctx context.Context, d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1966,7 +1831,6 @@ func (m *SubnetDHCPServerParametersType) GetSubnetDhcpServerParamsDRefInfo() ([]
 	if m.GetSubnetDhcpServerParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetSubnetDhcpServerParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSubnetDhcpServerParams().GetDRefInfo() FAILED")
@@ -1976,7 +1840,6 @@ func (m *SubnetDHCPServerParametersType) GetSubnetDhcpServerParamsDRefInfo() ([]
 		dri.DRField = "subnet_dhcp_server_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateSubnetDHCPServerParametersType struct {
@@ -1996,9 +1859,7 @@ func (v *ValidateSubnetDHCPServerParametersType) Validate(ctx context.Context, p
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site"))
 		for idx, item := range m.GetSite() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2006,25 +1867,19 @@ func (v *ValidateSubnetDHCPServerParametersType) Validate(ctx context.Context, p
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_dhcp_server_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_dhcp_server_params"))
 		if err := fv(ctx, m.GetSubnetDhcpServerParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSubnetDHCPServerParametersTypeValidator = func() *ValidateSubnetDHCPServerParametersType {
 	v := &ValidateSubnetDHCPServerParametersType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["subnet_dhcp_server_params"] = ves_io_schema_network_interface.DHCPServerParametersTypeValidator().Validate
 
 	return v

@@ -64,7 +64,6 @@ type ValidateAttackImpact struct {
 }
 
 func (v *ValidateAttackImpact) HeaderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for header")
@@ -72,9 +71,7 @@ func (v *ValidateAttackImpact) HeaderValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAttackImpact) DataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -134,31 +131,24 @@ func (v *ValidateAttackImpact) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header"))
 		if err := fv(ctx, m.GetHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAttackImpactValidator = func() *ValidateAttackImpact {
 	v := &ValidateAttackImpact{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -238,7 +228,6 @@ type ValidateAttackImpactData struct {
 }
 
 func (v *ValidateAttackImpactData) KeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(AttackImpactKey)
@@ -252,9 +241,7 @@ func (v *ValidateAttackImpactData) KeyValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAttackImpactData) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for value")
@@ -263,11 +250,9 @@ func (v *ValidateAttackImpactData) ValueValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := WaapReportFieldDataListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -287,32 +272,24 @@ func (v *ValidateAttackImpactData) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAttackImpactDataValidator = func() *ValidateAttackImpactData {
 	v := &ValidateAttackImpactData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -392,7 +369,6 @@ type ValidateAttackSources struct {
 }
 
 func (v *ValidateAttackSources) HeaderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for header")
@@ -400,9 +376,7 @@ func (v *ValidateAttackSources) HeaderValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAttackSources) DataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -462,31 +436,24 @@ func (v *ValidateAttackSources) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header"))
 		if err := fv(ctx, m.GetHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAttackSourcesValidator = func() *ValidateAttackSources {
 	v := &ValidateAttackSources{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -566,7 +533,6 @@ type ValidateAttackSourcesData struct {
 }
 
 func (v *ValidateAttackSourcesData) KeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(AttackSourcesKey)
@@ -580,9 +546,7 @@ func (v *ValidateAttackSourcesData) KeyValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAttackSourcesData) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for value")
@@ -591,11 +555,9 @@ func (v *ValidateAttackSourcesData) ValueValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := WaapReportFieldDataListValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -615,32 +577,24 @@ func (v *ValidateAttackSourcesData) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAttackSourcesDataValidator = func() *ValidateAttackSourcesData {
 	v := &ValidateAttackSourcesData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -720,7 +674,6 @@ type ValidateProtectedLBCount struct {
 }
 
 func (v *ValidateProtectedLBCount) ProtectedLbCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint64ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protected_lb_count")
@@ -728,9 +681,7 @@ func (v *ValidateProtectedLBCount) ProtectedLbCountValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateProtectedLBCount) TotalLbCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint64ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for total_lb_count")
@@ -752,32 +703,24 @@ func (v *ValidateProtectedLBCount) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["protected_lb_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protected_lb_count"))
 		if err := fv(ctx, m.GetProtectedLbCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["total_lb_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("total_lb_count"))
 		if err := fv(ctx, m.GetTotalLbCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProtectedLBCountValidator = func() *ValidateProtectedLBCount {
 	v := &ValidateProtectedLBCount{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -857,7 +800,6 @@ type ValidateReportDataWAAP struct {
 }
 
 func (v *ValidateReportDataWAAP) ReportHeaderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for report_header")
@@ -866,19 +808,15 @@ func (v *ValidateReportDataWAAP) ReportHeaderValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ReportHeaderValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReportDataWAAP) ReportFooterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for report_footer")
@@ -887,15 +825,12 @@ func (v *ValidateReportDataWAAP) ReportFooterValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReportDataWAAP) LbCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for lb_count")
@@ -904,19 +839,15 @@ func (v *ValidateReportDataWAAP) LbCountValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ProtectedLBCountValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReportDataWAAP) SecurityEventsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for security_events")
@@ -925,19 +856,15 @@ func (v *ValidateReportDataWAAP) SecurityEventsValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := SecurityEventsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReportDataWAAP) ThreatDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for threat_details")
@@ -946,19 +873,15 @@ func (v *ValidateReportDataWAAP) ThreatDetailsValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ThreatDetailsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReportDataWAAP) AttackSourcesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for attack_sources")
@@ -967,19 +890,15 @@ func (v *ValidateReportDataWAAP) AttackSourcesValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := AttackSourcesValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReportDataWAAP) AttackImpactValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for attack_impact")
@@ -988,11 +907,9 @@ func (v *ValidateReportDataWAAP) AttackImpactValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := AttackImpactValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1012,77 +929,54 @@ func (v *ValidateReportDataWAAP) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["attack_impact"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attack_impact"))
 		if err := fv(ctx, m.GetAttackImpact(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["attack_sources"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("attack_sources"))
 		if err := fv(ctx, m.GetAttackSources(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["lb_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("lb_count"))
 		if err := fv(ctx, m.GetLbCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_footer"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_footer"))
 		if err := fv(ctx, m.GetReportFooter(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["report_header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("report_header"))
 		if err := fv(ctx, m.GetReportHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["security_events"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("security_events"))
 		if err := fv(ctx, m.GetSecurityEvents(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["threat_details"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("threat_details"))
 		if err := fv(ctx, m.GetThreatDetails(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReportDataWAAPValidator = func() *ValidateReportDataWAAP {
 	v := &ValidateReportDataWAAP{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1217,7 +1111,6 @@ type ValidateSecurityEvents struct {
 }
 
 func (v *ValidateSecurityEvents) HeaderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for header")
@@ -1225,9 +1118,7 @@ func (v *ValidateSecurityEvents) HeaderValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityEvents) DataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1287,31 +1178,24 @@ func (v *ValidateSecurityEvents) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header"))
 		if err := fv(ctx, m.GetHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityEventsValidator = func() *ValidateSecurityEvents {
 	v := &ValidateSecurityEvents{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1391,7 +1275,6 @@ type ValidateSecurityEventsData struct {
 }
 
 func (v *ValidateSecurityEventsData) KeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(SecurityEventsKey)
@@ -1405,9 +1288,7 @@ func (v *ValidateSecurityEventsData) KeyValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityEventsData) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for value")
@@ -1416,11 +1297,9 @@ func (v *ValidateSecurityEventsData) ValueValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := WaapReportFieldDataValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1440,32 +1319,24 @@ func (v *ValidateSecurityEventsData) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityEventsDataValidator = func() *ValidateSecurityEventsData {
 	v := &ValidateSecurityEventsData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1545,7 +1416,6 @@ type ValidateThreatDetails struct {
 }
 
 func (v *ValidateThreatDetails) HeaderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for header")
@@ -1553,9 +1423,7 @@ func (v *ValidateThreatDetails) HeaderValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThreatDetails) DataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1615,31 +1483,24 @@ func (v *ValidateThreatDetails) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header"))
 		if err := fv(ctx, m.GetHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThreatDetailsValidator = func() *ValidateThreatDetails {
 	v := &ValidateThreatDetails{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1719,7 +1580,6 @@ type ValidateThreatDetailsData struct {
 }
 
 func (v *ValidateThreatDetailsData) KeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ThreatDetailsKey)
@@ -1733,9 +1593,7 @@ func (v *ValidateThreatDetailsData) KeyValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateThreatDetailsData) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for value")
@@ -1744,11 +1602,9 @@ func (v *ValidateThreatDetailsData) ValueValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := WaapReportFieldDataValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1768,32 +1624,24 @@ func (v *ValidateThreatDetailsData) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("key"))
 		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultThreatDetailsDataValidator = func() *ValidateThreatDetailsData {
 	v := &ValidateThreatDetailsData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1873,7 +1721,6 @@ type ValidateWaapReportFieldData struct {
 }
 
 func (v *ValidateWaapReportFieldData) CurrentValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewDoubleValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for current_value")
@@ -1881,9 +1728,7 @@ func (v *ValidateWaapReportFieldData) CurrentValueValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWaapReportFieldData) CurrentValueTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(FieldValueType)
@@ -1911,27 +1756,19 @@ func (v *ValidateWaapReportFieldData) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["current_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current_value"))
 		if err := fv(ctx, m.GetCurrentValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["current_value_header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current_value_header"))
 		if err := fv(ctx, m.GetCurrentValueHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["current_value_sub_values"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current_value_sub_values"))
 		for key, value := range m.GetCurrentValueSubValues() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1939,52 +1776,37 @@ func (v *ValidateWaapReportFieldData) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["current_value_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("current_value_type"))
 		if err := fv(ctx, m.GetCurrentValueType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prev_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prev_value"))
 		if err := fv(ctx, m.GetPrevValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prev_value_header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prev_value_header"))
 		if err := fv(ctx, m.GetPrevValueHeader(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trend_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trend_value"))
 		if err := fv(ctx, m.GetTrendValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWaapReportFieldDataValidator = func() *ValidateWaapReportFieldData {
 	v := &ValidateWaapReportFieldData{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2065,7 +1887,6 @@ type ValidateWaapReportFieldDataList struct {
 }
 
 func (v *ValidateWaapReportFieldDataList) DataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2125,22 +1946,18 @@ func (v *ValidateWaapReportFieldDataList) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["data"]; exists {
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWaapReportFieldDataListValidator = func() *ValidateWaapReportFieldDataList {
 	v := &ValidateWaapReportFieldDataList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

@@ -74,9 +74,7 @@ func NewTenantSummaryCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClien
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Summary"] = ccl.doRPCSummary
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -162,7 +160,6 @@ func (c *TenantSummaryCustomAPIRestClient) doRPCSummary(ctx context.Context, cal
 	pbRsp := &SummaryResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.SummaryResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -196,9 +193,7 @@ func NewTenantSummaryCustomAPIRestClient(baseURL string, hc http.Client) server.
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Summary"] = ccl.doRPCSummary
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -279,7 +274,6 @@ func (s *tenantSummaryCustomAPISrv) Summary(ctx context.Context, in *SummaryRequ
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.SummaryResponse", rsp)...)
 
 	return rsp, nil

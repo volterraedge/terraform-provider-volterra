@@ -66,7 +66,6 @@ type ValidateBotInfraWithVersion struct {
 }
 
 func (v *ValidateBotInfraWithVersion) BotInfraNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_infra_name")
@@ -88,32 +87,24 @@ func (v *ValidateBotInfraWithVersion) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bot_infra_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_infra_name"))
 		if err := fv(ctx, m.GetBotInfraName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["in_use_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("in_use_version"))
 		if err := fv(ctx, m.GetInUseVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBotInfraWithVersionValidator = func() *ValidateBotInfraWithVersion {
 	v := &ValidateBotInfraWithVersion{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -189,9 +180,7 @@ func (v *ValidateCookie) CookieChoiceValidationRuleHandler(rules map[string]stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCookie) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -280,25 +269,19 @@ func (v *ValidateCookie) Validate(ctx context.Context, pm interface{}, opts ...d
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCookieValidator = func() *ValidateCookie {
 	v := &ValidateCookie{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -306,7 +289,6 @@ var DefaultCookieValidator = func() *ValidateCookie {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCookieChoice := v.CookieChoiceValidationRuleHandler
 	rulesCookieChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -328,7 +310,6 @@ var DefaultCookieValidator = func() *ValidateCookie {
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
-
 	v.FldValidators["CookieChoice.cookie_or"] = CookieMatcherValidator().Validate
 	v.FldValidators["CookieChoice.cookie_and"] = CookieMatcherValidator().Validate
 	v.FldValidators["CookieChoice.cookie_none"] = CookieMatcherValidator().Validate
@@ -338,6 +319,86 @@ var DefaultCookieValidator = func() *ValidateCookie {
 
 func CookieValidator() db.Validator {
 	return DefaultCookieValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CookieDefinition) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CookieDefinition) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CookieDefinition) DeepCopy() *CookieDefinition {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CookieDefinition{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CookieDefinition) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CookieDefinition) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CookieDefinitionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCookieDefinition struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCookieDefinition) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CookieDefinition)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CookieDefinition got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["description"]; exists {
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCookieDefinitionValidator = func() *ValidateCookieDefinition {
+	v := &ValidateCookieDefinition{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CookieDefinitionValidator() db.Validator {
+	return DefaultCookieDefinitionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -382,7 +443,6 @@ type ValidateCookieMatcher struct {
 }
 
 func (v *ValidateCookieMatcher) CookieMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -442,22 +502,18 @@ func (v *ValidateCookieMatcher) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cookie_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_match"))
 		if err := fv(ctx, m.GetCookieMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCookieMatcherValidator = func() *ValidateCookieMatcher {
 	v := &ValidateCookieMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -603,16 +659,13 @@ func (v *ValidateCookieMatcherType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCookieMatcherTypeValidator = func() *ValidateCookieMatcherType {
 	v := &ValidateCookieMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -620,7 +673,6 @@ var DefaultCookieMatcherTypeValidator = func() *ValidateCookieMatcherType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCompareTypeChoice := v.CompareTypeChoiceValidationRuleHandler
 	rulesCompareTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -631,7 +683,6 @@ var DefaultCookieMatcherTypeValidator = func() *ValidateCookieMatcherType {
 		panic(errMsg)
 	}
 	v.FldValidators["compare_type_choice"] = vFn
-
 	v.FldValidators["compare_type_choice.equals"] = CookieMatcherValueValidator().Validate
 	v.FldValidators["compare_type_choice.starts_with"] = CookieMatcherValueValidator().Validate
 	v.FldValidators["compare_type_choice.contains"] = CookieMatcherValueValidator().Validate
@@ -686,7 +737,6 @@ type ValidateCookieMatcherValue struct {
 }
 
 func (v *ValidateCookieMatcherValue) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
@@ -708,41 +758,30 @@ func (v *ValidateCookieMatcherValue) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["case_sensitive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("case_sensitive"))
 		if err := fv(ctx, m.GetCaseSensitive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_value"))
 		if err := fv(ctx, m.GetNotValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCookieMatcherValueValidator = func() *ValidateCookieMatcherValue {
 	v := &ValidateCookieMatcherValue{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -813,7 +852,6 @@ type ValidateDomainField struct {
 }
 
 func (v *ValidateDomainField) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -835,32 +873,24 @@ func (v *ValidateDomainField) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain_operator"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_operator"))
 		if err := fv(ctx, m.GetDomainOperator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDomainFieldValidator = func() *ValidateDomainField {
 	v := &ValidateDomainField{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -879,7 +909,6 @@ var DefaultDomainFieldValidator = func() *ValidateDomainField {
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
-
 	v.FldValidators["domain_operator"] = DomainOperatorValidator().Validate
 
 	return v
@@ -931,7 +960,6 @@ type ValidateDomainMatcher struct {
 }
 
 func (v *ValidateDomainMatcher) DomainMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -991,22 +1019,18 @@ func (v *ValidateDomainMatcher) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("domain_match"))
 		if err := fv(ctx, m.GetDomainMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDomainMatcherValidator = func() *ValidateDomainMatcher {
 	v := &ValidateDomainMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1076,7 +1100,6 @@ type ValidateDomainMatcherType struct {
 }
 
 func (v *ValidateDomainMatcherType) OperatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ComparisonOperator)
@@ -1090,9 +1113,7 @@ func (v *ValidateDomainMatcherType) OperatorValidationRuleHandler(rules map[stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDomainMatcherType) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
@@ -1114,41 +1135,30 @@ func (v *ValidateDomainMatcherType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["negation"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("negation"))
 		if err := fv(ctx, m.GetNegation(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["operator"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operator"))
 		if err := fv(ctx, m.GetOperator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDomainMatcherTypeValidator = func() *ValidateDomainMatcherType {
 	v := &ValidateDomainMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1306,16 +1316,13 @@ func (v *ValidateDomainOperator) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDomainOperatorValidator = func() *ValidateDomainOperator {
 	v := &ValidateDomainOperator{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1323,7 +1330,6 @@ var DefaultDomainOperatorValidator = func() *ValidateDomainOperator {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDomainOperatorChoice := v.DomainOperatorChoiceValidationRuleHandler
 	rulesDomainOperatorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1334,7 +1340,6 @@ var DefaultDomainOperatorValidator = func() *ValidateDomainOperator {
 		panic(errMsg)
 	}
 	v.FldValidators["Domain_operator_choice"] = vFn
-
 	v.FldValidators["Domain_operator_choice.domain_or"] = DomainMatcherValidator().Validate
 	v.FldValidators["Domain_operator_choice.domain_and"] = DomainMatcherValidator().Validate
 	v.FldValidators["Domain_operator_choice.domain_none"] = DomainMatcherValidator().Validate
@@ -1400,7 +1405,6 @@ func (v *ValidateGenericEmptyType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -1511,16 +1515,13 @@ func (v *ValidateGoodBotDetectionSetting) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGoodBotDetectionSettingValidator = func() *ValidateGoodBotDetectionSetting {
 	v := &ValidateGoodBotDetectionSetting{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1528,7 +1529,6 @@ var DefaultGoodBotDetectionSettingValidator = func() *ValidateGoodBotDetectionSe
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhGoodbotChoice := v.GoodbotChoiceValidationRuleHandler
 	rulesGoodbotChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1589,7 +1589,6 @@ type ValidateHeaderMatcher struct {
 }
 
 func (v *ValidateHeaderMatcher) HeaderMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1649,22 +1648,18 @@ func (v *ValidateHeaderMatcher) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["header_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("header_match"))
 		if err := fv(ctx, m.GetHeaderMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHeaderMatcherValidator = func() *ValidateHeaderMatcher {
 	v := &ValidateHeaderMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1734,7 +1729,6 @@ type ValidateHeaderNameValuePair struct {
 }
 
 func (v *ValidateHeaderNameValuePair) HeaderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for header_name")
@@ -1742,9 +1736,7 @@ func (v *ValidateHeaderNameValuePair) HeaderNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHeaderNameValuePair) HeaderValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for header_value")
@@ -1766,32 +1758,24 @@ func (v *ValidateHeaderNameValuePair) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["header_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header_name"))
 		if err := fv(ctx, m.GetHeaderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header_value"))
 		if err := fv(ctx, m.GetHeaderValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHeaderNameValuePairValidator = func() *ValidateHeaderNameValuePair {
 	v := &ValidateHeaderNameValuePair{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1877,9 +1861,7 @@ func (v *ValidateHeaderOperator) HeaderOperatorChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateHeaderOperator) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -1968,25 +1950,19 @@ func (v *ValidateHeaderOperator) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHeaderOperatorValidator = func() *ValidateHeaderOperator {
 	v := &ValidateHeaderOperator{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1994,7 +1970,6 @@ var DefaultHeaderOperatorValidator = func() *ValidateHeaderOperator {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHeaderOperatorChoice := v.HeaderOperatorChoiceValidationRuleHandler
 	rulesHeaderOperatorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2016,7 +1991,6 @@ var DefaultHeaderOperatorValidator = func() *ValidateHeaderOperator {
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
-
 	v.FldValidators["header_operator_choice.header_or"] = HeaderMatcherValidator().Validate
 	v.FldValidators["header_operator_choice.header_and"] = HeaderMatcherValidator().Validate
 	v.FldValidators["header_operator_choice.header_none"] = HeaderMatcherValidator().Validate
@@ -2082,7 +2056,6 @@ func (v *ValidateHeaderOperatorEmptyType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -2175,16 +2148,13 @@ func (v *ValidateIPAllowlistDetail) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPAllowlistDetailValidator = func() *ValidateIPAllowlistDetail {
 	v := &ValidateIPAllowlistDetail{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["client_identifier_choice.ip_detail"] = IPDetailValidator().Validate
 	v.FldValidators["client_identifier_choice.ip_prefix_detail"] = IPPrefixDetailValidator().Validate
 
@@ -2237,7 +2207,6 @@ type ValidateIPAllowlists struct {
 }
 
 func (v *ValidateIPAllowlists) IpAllowlistValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2283,9 +2252,7 @@ func (v *ValidateIPAllowlists) IpAllowlistValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIPAllowlists) IpRangeAllowlistValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -2345,30 +2312,24 @@ func (v *ValidateIPAllowlists) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_allowlist"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_allowlist"))
 		if err := fv(ctx, m.GetIpAllowlist(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_range_allowlist"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_range_allowlist"))
 		if err := fv(ctx, m.GetIpRangeAllowlist(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPAllowlistsValidator = func() *ValidateIPAllowlists {
 	v := &ValidateIPAllowlists{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2448,7 +2409,6 @@ type ValidateIPDetail struct {
 }
 
 func (v *ValidateIPDetail) IpValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_value")
@@ -2470,32 +2430,24 @@ func (v *ValidateIPDetail) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_description"))
 		if err := fv(ctx, m.GetIpDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_value"))
 		if err := fv(ctx, m.GetIpValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPDetailValidator = func() *ValidateIPDetail {
 	v := &ValidateIPDetail{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2566,7 +2518,6 @@ type ValidateIPPrefixDetail struct {
 }
 
 func (v *ValidateIPPrefixDetail) IpValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_value")
@@ -2588,32 +2539,24 @@ func (v *ValidateIPPrefixDetail) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ip_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_description"))
 		if err := fv(ctx, m.GetIpDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_value"))
 		if err := fv(ctx, m.GetIpValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPPrefixDetailValidator = func() *ValidateIPPrefixDetail {
 	v := &ValidateIPPrefixDetail{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2684,7 +2627,6 @@ type ValidateIPRangeAllowlistDetail struct {
 }
 
 func (v *ValidateIPRangeAllowlistDetail) StartWithValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for start_with")
@@ -2692,9 +2634,7 @@ func (v *ValidateIPRangeAllowlistDetail) StartWithValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateIPRangeAllowlistDetail) EndWithValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_with")
@@ -2716,41 +2656,30 @@ func (v *ValidateIPRangeAllowlistDetail) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_with"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_with"))
 		if err := fv(ctx, m.GetEndWith(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_description"))
 		if err := fv(ctx, m.GetIpDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_with"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_with"))
 		if err := fv(ctx, m.GetStartWith(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultIPRangeAllowlistDetailValidator = func() *ValidateIPRangeAllowlistDetail {
 	v := &ValidateIPRangeAllowlistDetail{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2790,6 +2719,202 @@ var DefaultIPRangeAllowlistDetailValidator = func() *ValidateIPRangeAllowlistDet
 
 func IPRangeAllowlistDetailValidator() db.Validator {
 	return DefaultIPRangeAllowlistDetailValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *KnownBotAllowDenyActionType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *KnownBotAllowDenyActionType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *KnownBotAllowDenyActionType) DeepCopy() *KnownBotAllowDenyActionType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &KnownBotAllowDenyActionType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *KnownBotAllowDenyActionType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *KnownBotAllowDenyActionType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return KnownBotAllowDenyActionTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateKnownBotAllowDenyActionType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateKnownBotAllowDenyActionType) AllowListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for allow_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for allow_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated allow_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items allow_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateKnownBotAllowDenyActionType) DenyListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for deny_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for deny_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated deny_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items deny_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateKnownBotAllowDenyActionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*KnownBotAllowDenyActionType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *KnownBotAllowDenyActionType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["allow_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("allow_list"))
+		if err := fv(ctx, m.GetAllowList(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["deny_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("deny_list"))
+		if err := fv(ctx, m.GetDenyList(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["text_block"]; exists {
+		vOpts := append(opts, db.WithValidateField("text_block"))
+		if err := fv(ctx, m.GetTextBlock(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultKnownBotAllowDenyActionTypeValidator = func() *ValidateKnownBotAllowDenyActionType {
+	v := &ValidateKnownBotAllowDenyActionType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAllowList := v.AllowListValidationRuleHandler
+	rulesAllowList := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhAllowList(rulesAllowList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KnownBotAllowDenyActionType.allow_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["allow_list"] = vFn
+
+	vrhDenyList := v.DenyListValidationRuleHandler
+	rulesDenyList := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhDenyList(rulesDenyList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KnownBotAllowDenyActionType.deny_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["deny_list"] = vFn
+
+	return v
+}()
+
+func KnownBotAllowDenyActionTypeValidator() db.Validator {
+	return DefaultKnownBotAllowDenyActionTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2840,7 +2965,6 @@ func (v *ValidateManualRoutingDetail) DomainOperatorChoiceValidationRuleHandler(
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateManualRoutingDetail) OutboundOperatorChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2848,9 +2972,7 @@ func (v *ValidateManualRoutingDetail) OutboundOperatorChoiceValidationRuleHandle
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateManualRoutingDetail) DomainNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_name")
@@ -2858,9 +2980,7 @@ func (v *ValidateManualRoutingDetail) DomainNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateManualRoutingDetail) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -2868,9 +2988,7 @@ func (v *ValidateManualRoutingDetail) PortValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateManualRoutingDetail) OutboundDomainNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outbound_domain_name")
@@ -2926,25 +3044,18 @@ func (v *ValidateManualRoutingDetail) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_name"))
 		if err := fv(ctx, m.GetDomainName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outbound_domain_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outbound_domain_name"))
 		if err := fv(ctx, m.GetOutboundDomainName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["outbound_operator_choice"]; exists {
@@ -2980,25 +3091,19 @@ func (v *ValidateManualRoutingDetail) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultManualRoutingDetailValidator = func() *ValidateManualRoutingDetail {
 	v := &ValidateManualRoutingDetail{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3006,7 +3111,6 @@ var DefaultManualRoutingDetailValidator = func() *ValidateManualRoutingDetail {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhDomainOperatorChoice := v.DomainOperatorChoiceValidationRuleHandler
 	rulesDomainOperatorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3017,7 +3121,6 @@ var DefaultManualRoutingDetailValidator = func() *ValidateManualRoutingDetail {
 		panic(errMsg)
 	}
 	v.FldValidators["Domain_operator_choice"] = vFn
-
 	vrhOutboundOperatorChoice := v.OutboundOperatorChoiceValidationRuleHandler
 	rulesOutboundOperatorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3116,7 +3219,6 @@ type ValidateManualRoutings struct {
 }
 
 func (v *ValidateManualRoutings) ManualRoutingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3176,22 +3278,18 @@ func (v *ValidateManualRoutings) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["manual_routing"]; exists {
 		vOpts := append(opts, db.WithValidateField("manual_routing"))
 		if err := fv(ctx, m.GetManualRouting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultManualRoutingsValidator = func() *ValidateManualRoutings {
 	v := &ValidateManualRoutings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3336,16 +3434,13 @@ func (v *ValidateMatcherType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMatcherTypeValidator = func() *ValidateMatcherType {
 	v := &ValidateMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3353,7 +3448,6 @@ var DefaultMatcherTypeValidator = func() *ValidateMatcherType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMatchTypeChoice := v.MatchTypeChoiceValidationRuleHandler
 	rulesMatchTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3364,7 +3458,6 @@ var DefaultMatcherTypeValidator = func() *ValidateMatcherType {
 		panic(errMsg)
 	}
 	v.FldValidators["match_type_choice"] = vFn
-
 	v.FldValidators["match_type_choice.exact_value"] = MatcherValueValidator().Validate
 	v.FldValidators["match_type_choice.contain_value"] = MatcherValueValidator().Validate
 	v.FldValidators["match_type_choice.start_with_value"] = MatcherValueValidator().Validate
@@ -3419,7 +3512,6 @@ type ValidateMatcherValue struct {
 }
 
 func (v *ValidateMatcherValue) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
@@ -3441,41 +3533,30 @@ func (v *ValidateMatcherValue) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["case_insensitive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("case_insensitive"))
 		if err := fv(ctx, m.GetCaseInsensitive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not"))
 		if err := fv(ctx, m.GetNot(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMatcherValueValidator = func() *ValidateMatcherValue {
 	v := &ValidateMatcherValue{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3558,43 +3639,31 @@ func (v *ValidateNetworkPolicyContent) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["manual_routing_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("manual_routing_list"))
 		if err := fv(ctx, m.GetManualRoutingList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["upstream_routing_list"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("upstream_routing_list"))
 		if err := fv(ctx, m.GetUpstreamRoutingList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNetworkPolicyContentValidator = func() *ValidateNetworkPolicyContent {
 	v := &ValidateNetworkPolicyContent{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["upstream_routing_list"] = UpstreamRoutingsValidator().Validate
-
 	v.FldValidators["manual_routing_list"] = ManualRoutingsValidator().Validate
 
 	return v
@@ -3646,7 +3715,6 @@ type ValidatePathMatcher struct {
 }
 
 func (v *ValidatePathMatcher) PathMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -3706,22 +3774,18 @@ func (v *ValidatePathMatcher) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["path_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("path_match"))
 		if err := fv(ctx, m.GetPathMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPathMatcherValidator = func() *ValidatePathMatcher {
 	v := &ValidatePathMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3867,16 +3931,13 @@ func (v *ValidatePathMatcherType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 	v := &ValidatePathMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3884,7 +3945,6 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhMatchTypeChoice := v.MatchTypeChoiceValidationRuleHandler
 	rulesMatchTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3895,7 +3955,6 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 		panic(errMsg)
 	}
 	v.FldValidators["match_type_choice"] = vFn
-
 	v.FldValidators["match_type_choice.exact_value"] = PathMatcherValueValidator().Validate
 	v.FldValidators["match_type_choice.contain_value"] = PathMatcherValueValidator().Validate
 	v.FldValidators["match_type_choice.start_with_value"] = PathMatcherValueValidator().Validate
@@ -3950,7 +4009,6 @@ type ValidatePathMatcherValue struct {
 }
 
 func (v *ValidatePathMatcherValue) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
@@ -3972,41 +4030,30 @@ func (v *ValidatePathMatcherValue) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["case_insensitive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("case_insensitive"))
 		if err := fv(ctx, m.GetCaseInsensitive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not"))
 		if err := fv(ctx, m.GetNot(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPathMatcherValueValidator = func() *ValidatePathMatcherValue {
 	v := &ValidatePathMatcherValue{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4153,16 +4200,13 @@ func (v *ValidatePathOperator) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPathOperatorValidator = func() *ValidatePathOperator {
 	v := &ValidatePathOperator{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4170,7 +4214,6 @@ var DefaultPathOperatorValidator = func() *ValidatePathOperator {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPathOperatorChoice := v.PathOperatorChoiceValidationRuleHandler
 	rulesPathOperatorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4181,7 +4224,6 @@ var DefaultPathOperatorValidator = func() *ValidatePathOperator {
 		panic(errMsg)
 	}
 	v.FldValidators["path_operator_choice"] = vFn
-
 	v.FldValidators["path_operator_choice.path_or"] = PathMatcherValidator().Validate
 	v.FldValidators["path_operator_choice.path_and"] = PathMatcherValidator().Validate
 	v.FldValidators["path_operator_choice.path_none"] = PathMatcherValidator().Validate
@@ -4247,9 +4289,7 @@ func (v *ValidatePolicyVersion) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bot_infras_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bot_infras_name"))
 		for idx, item := range m.GetBotInfrasName() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4257,45 +4297,31 @@ func (v *ValidatePolicyVersion) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_time"))
 		if err := fv(ctx, m.GetUpdateTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_user"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_user"))
 		if err := fv(ctx, m.GetUpdateUser(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version_number"))
 		if err := fv(ctx, m.GetVersionNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version_status"))
 		if err := fv(ctx, m.GetVersionStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -4388,25 +4414,19 @@ func (v *ValidateProtectedEndpoints) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["js_download_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("js_download_path"))
 		if err := fv(ctx, m.GetJsDownloadPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProtectedEndpointsValidator = func() *ValidateProtectedEndpoints {
 	v := &ValidateProtectedEndpoints{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["endpoint_type_choice.protected_mobile_endpoints"] = ProtectedMobileEndpointListValidator().Validate
 	v.FldValidators["endpoint_type_choice.protected_web_endpoints"] = ProtectedWebEndpointListValidator().Validate
 
@@ -4458,16 +4478,14 @@ type ValidateProtectedMobileEndpoint struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateProtectedMobileEndpoint) MobileClientActionTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateProtectedMobileEndpoint) KnownBotControlsActionTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for mobile_client_action_type")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for known_bot_controls_action_type")
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateProtectedMobileEndpoint) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -4476,19 +4494,15 @@ func (v *ValidateProtectedMobileEndpoint) MetadataValidationRuleHandler(rules ma
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateProtectedMobileEndpoint) FlowLabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for flow_label_choice")
@@ -4497,19 +4511,15 @@ func (v *ValidateProtectedMobileEndpoint) FlowLabelChoiceValidationRuleHandler(r
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.BotPolicyFlowLabelCategoriesChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateProtectedMobileEndpoint) HttpMethodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -4555,9 +4565,7 @@ func (v *ValidateProtectedMobileEndpoint) HttpMethodsValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateProtectedMobileEndpoint) UsernamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4617,27 +4625,19 @@ func (v *ValidateProtectedMobileEndpoint) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["flow_label_choice"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flow_label_choice"))
 		if err := fv(ctx, m.GetFlowLabelChoice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header"))
 		for idx, item := range m.GetHeader() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -4645,32 +4645,51 @@ func (v *ValidateProtectedMobileEndpoint) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_methods"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_methods"))
 		if err := fv(ctx, m.GetHttpMethods(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
-	if fv, exists := v.FldValidators["metadata"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("metadata"))
-		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["mobile_client_action_type"]; exists {
-		val := m.GetMobileClientActionType()
+	if fv, exists := v.FldValidators["known_bot_controls_action_type"]; exists {
+		val := m.GetKnownBotControlsActionType()
 		vOpts := append(opts,
-			db.WithValidateField("mobile_client_action_type"),
+			db.WithValidateField("known_bot_controls_action_type"),
 		)
 		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetKnownBotControlsActionType().(type) {
+	case *ProtectedMobileEndpoint_RegularRequest:
+		if fv, exists := v.FldValidators["known_bot_controls_action_type.regular_request"]; exists {
+			val := m.GetKnownBotControlsActionType().(*ProtectedMobileEndpoint_RegularRequest).RegularRequest
+			vOpts := append(opts,
+				db.WithValidateField("known_bot_controls_action_type"),
+				db.WithValidateField("regular_request"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProtectedMobileEndpoint_AllowDeny:
+		if fv, exists := v.FldValidators["known_bot_controls_action_type.allow_deny"]; exists {
+			val := m.GetKnownBotControlsActionType().(*ProtectedMobileEndpoint_AllowDeny).AllowDeny
+			vOpts := append(opts,
+				db.WithValidateField("known_bot_controls_action_type"),
+				db.WithValidateField("allow_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["metadata"]; exists {
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -4709,60 +4728,43 @@ func (v *ValidateProtectedMobileEndpoint) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_body"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_body"))
 		if err := fv(ctx, m.GetRequestBody(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transaction_result_criteria"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transaction_result_criteria"))
 		if err := fv(ctx, m.GetTransactionResultCriteria(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["usernames"]; exists {
 		vOpts := append(opts, db.WithValidateField("usernames"))
 		if err := fv(ctx, m.GetUsernames(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProtectedMobileEndpointValidator = func() *ValidateProtectedMobileEndpoint {
 	v := &ValidateProtectedMobileEndpoint{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4770,17 +4772,16 @@ var DefaultProtectedMobileEndpointValidator = func() *ValidateProtectedMobileEnd
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhMobileClientActionType := v.MobileClientActionTypeValidationRuleHandler
-	rulesMobileClientActionType := map[string]string{
+	vrhKnownBotControlsActionType := v.KnownBotControlsActionTypeValidationRuleHandler
+	rulesKnownBotControlsActionType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhMobileClientActionType(rulesMobileClientActionType)
+	vFn, err = vrhKnownBotControlsActionType(rulesKnownBotControlsActionType)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProtectedMobileEndpoint.mobile_client_action_type: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProtectedMobileEndpoint.known_bot_controls_action_type: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["mobile_client_action_type"] = vFn
+	v.FldValidators["known_bot_controls_action_type"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{
@@ -4830,21 +4831,15 @@ var DefaultProtectedMobileEndpointValidator = func() *ValidateProtectedMobileEnd
 		panic(errMsg)
 	}
 	v.FldValidators["usernames"] = vFn
-
+	v.FldValidators["known_bot_controls_action_type.allow_deny"] = KnownBotAllowDenyActionTypeValidator().Validate
 	v.FldValidators["mobile_client_action_type.continue"] = WebClientContinueMitigationActionTypeValidator().Validate
 	v.FldValidators["mobile_client_action_type.transform"] = WebClientTransformMitigationActionChoiceTypeValidator().Validate
 	v.FldValidators["mobile_client_action_type.block"] = WebClientBlockMitigationActionTypeValidator().Validate
-
 	v.FldValidators["path"] = PathOperatorValidator().Validate
-
 	v.FldValidators["query"] = QueryOperatorValidator().Validate
-
 	v.FldValidators["request_body"] = RequestBodyOperatorValidator().Validate
-
 	v.FldValidators["domain"] = DomainOperatorValidator().Validate
-
 	v.FldValidators["header"] = HeaderOperatorValidator().Validate
-
 	v.FldValidators["transaction_result_criteria"] = TransactionResultValidator().Validate
 
 	return v
@@ -4896,7 +4891,6 @@ type ValidateProtectedMobileEndpointList struct {
 }
 
 func (v *ValidateProtectedMobileEndpointList) ProtectedMobileEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4956,22 +4950,18 @@ func (v *ValidateProtectedMobileEndpointList) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["protected_mobile_endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("protected_mobile_endpoints"))
 		if err := fv(ctx, m.GetProtectedMobileEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProtectedMobileEndpointListValidator = func() *ValidateProtectedMobileEndpointList {
 	v := &ValidateProtectedMobileEndpointList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5040,16 +5030,14 @@ type ValidateProtectedWebEndpoint struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateProtectedWebEndpoint) WebClientActionTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateProtectedWebEndpoint) KnownBotControlsActionTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for web_client_action_type")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for known_bot_controls_action_type")
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateProtectedWebEndpoint) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
@@ -5058,19 +5046,15 @@ func (v *ValidateProtectedWebEndpoint) MetadataValidationRuleHandler(rules map[s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateProtectedWebEndpoint) HttpMethodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -5116,9 +5100,7 @@ func (v *ValidateProtectedWebEndpoint) HttpMethodsValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateProtectedWebEndpoint) UsernamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5178,27 +5160,19 @@ func (v *ValidateProtectedWebEndpoint) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["flow_label_choice"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("flow_label_choice"))
 		if err := fv(ctx, m.GetFlowLabelChoice(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["header"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("header"))
 		for idx, item := range m.GetHeader() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -5206,76 +5180,81 @@ func (v *ValidateProtectedWebEndpoint) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["http_methods"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_methods"))
 		if err := fv(ctx, m.GetHttpMethods(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
-	if fv, exists := v.FldValidators["metadata"]; exists {
+	if fv, exists := v.FldValidators["known_bot_controls_action_type"]; exists {
+		val := m.GetKnownBotControlsActionType()
+		vOpts := append(opts,
+			db.WithValidateField("known_bot_controls_action_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
 
+	switch m.GetKnownBotControlsActionType().(type) {
+	case *ProtectedWebEndpoint_RegularRequest:
+		if fv, exists := v.FldValidators["known_bot_controls_action_type.regular_request"]; exists {
+			val := m.GetKnownBotControlsActionType().(*ProtectedWebEndpoint_RegularRequest).RegularRequest
+			vOpts := append(opts,
+				db.WithValidateField("known_bot_controls_action_type"),
+				db.WithValidateField("regular_request"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProtectedWebEndpoint_AllowDeny:
+		if fv, exists := v.FldValidators["known_bot_controls_action_type.allow_deny"]; exists {
+			val := m.GetKnownBotControlsActionType().(*ProtectedWebEndpoint_AllowDeny).AllowDeny
+			vOpts := append(opts,
+				db.WithValidateField("known_bot_controls_action_type"),
+				db.WithValidateField("allow_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["metadata"]; exists {
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["request_body"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_body"))
 		if err := fv(ctx, m.GetRequestBody(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transaction_result_criteria"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transaction_result_criteria"))
 		if err := fv(ctx, m.GetTransactionResultCriteria(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["usernames"]; exists {
 		vOpts := append(opts, db.WithValidateField("usernames"))
 		if err := fv(ctx, m.GetUsernames(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["web_client_action_type"]; exists {
-		val := m.GetWebClientActionType()
-		vOpts := append(opts,
-			db.WithValidateField("web_client_action_type"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
 		}
 	}
@@ -5325,16 +5304,13 @@ func (v *ValidateProtectedWebEndpoint) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProtectedWebEndpointValidator = func() *ValidateProtectedWebEndpoint {
 	v := &ValidateProtectedWebEndpoint{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5342,17 +5318,16 @@ var DefaultProtectedWebEndpointValidator = func() *ValidateProtectedWebEndpoint 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhWebClientActionType := v.WebClientActionTypeValidationRuleHandler
-	rulesWebClientActionType := map[string]string{
+	vrhKnownBotControlsActionType := v.KnownBotControlsActionTypeValidationRuleHandler
+	rulesKnownBotControlsActionType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhWebClientActionType(rulesWebClientActionType)
+	vFn, err = vrhKnownBotControlsActionType(rulesKnownBotControlsActionType)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProtectedWebEndpoint.web_client_action_type: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProtectedWebEndpoint.known_bot_controls_action_type: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["web_client_action_type"] = vFn
+	v.FldValidators["known_bot_controls_action_type"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{
@@ -5391,24 +5366,17 @@ var DefaultProtectedWebEndpointValidator = func() *ValidateProtectedWebEndpoint 
 		panic(errMsg)
 	}
 	v.FldValidators["usernames"] = vFn
-
+	v.FldValidators["known_bot_controls_action_type.allow_deny"] = KnownBotAllowDenyActionTypeValidator().Validate
 	v.FldValidators["web_client_action_type.continue"] = WebClientContinueMitigationActionTypeValidator().Validate
 	v.FldValidators["web_client_action_type.block"] = WebClientBlockMitigationActionTypeValidator().Validate
 	v.FldValidators["web_client_action_type.redirect"] = WebClientRedirectMitigationActionTypeValidator().Validate
 	v.FldValidators["web_client_action_type.transform"] = WebClientTransformMitigationActionChoiceTypeValidator().Validate
-
 	v.FldValidators["path"] = PathOperatorValidator().Validate
-
 	v.FldValidators["query"] = QueryOperatorValidator().Validate
-
 	v.FldValidators["request_body"] = RequestBodyOperatorValidator().Validate
-
 	v.FldValidators["flow_label_choice"] = ves_io_schema.BotPolicyFlowLabelCategoriesChoiceTypeValidator().Validate
-
 	v.FldValidators["domain"] = DomainOperatorValidator().Validate
-
 	v.FldValidators["header"] = HeaderOperatorValidator().Validate
-
 	v.FldValidators["transaction_result_criteria"] = TransactionResultValidator().Validate
 
 	return v
@@ -5460,7 +5428,6 @@ type ValidateProtectedWebEndpointList struct {
 }
 
 func (v *ValidateProtectedWebEndpointList) ProtectedWebEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5520,22 +5487,18 @@ func (v *ValidateProtectedWebEndpointList) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["protected_web_endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("protected_web_endpoints"))
 		if err := fv(ctx, m.GetProtectedWebEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProtectedWebEndpointListValidator = func() *ValidateProtectedWebEndpointList {
 	v := &ValidateProtectedWebEndpointList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5605,7 +5568,6 @@ type ValidateQueryMatcher struct {
 }
 
 func (v *ValidateQueryMatcher) QueryMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5665,22 +5627,18 @@ func (v *ValidateQueryMatcher) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["query_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("query_match"))
 		if err := fv(ctx, m.GetQueryMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultQueryMatcherValidator = func() *ValidateQueryMatcher {
 	v := &ValidateQueryMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5826,16 +5784,13 @@ func (v *ValidateQueryOperator) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultQueryOperatorValidator = func() *ValidateQueryOperator {
 	v := &ValidateQueryOperator{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5843,7 +5798,6 @@ var DefaultQueryOperatorValidator = func() *ValidateQueryOperator {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhQueryOperatorChoice := v.QueryOperatorChoiceValidationRuleHandler
 	rulesQueryOperatorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5854,7 +5808,6 @@ var DefaultQueryOperatorValidator = func() *ValidateQueryOperator {
 		panic(errMsg)
 	}
 	v.FldValidators["query_operator_choice"] = vFn
-
 	v.FldValidators["query_operator_choice.query_or"] = QueryMatcherValidator().Validate
 	v.FldValidators["query_operator_choice.query_and"] = QueryMatcherValidator().Validate
 	v.FldValidators["query_operator_choice.query_none"] = QueryMatcherValidator().Validate
@@ -5908,7 +5861,6 @@ type ValidateRequestBodyMatcher struct {
 }
 
 func (v *ValidateRequestBodyMatcher) RequestBodyMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5968,22 +5920,18 @@ func (v *ValidateRequestBodyMatcher) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["request_body_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_body_match"))
 		if err := fv(ctx, m.GetRequestBodyMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRequestBodyMatcherValidator = func() *ValidateRequestBodyMatcher {
 	v := &ValidateRequestBodyMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6129,16 +6077,13 @@ func (v *ValidateRequestBodyOperator) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultRequestBodyOperatorValidator = func() *ValidateRequestBodyOperator {
 	v := &ValidateRequestBodyOperator{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6146,7 +6091,6 @@ var DefaultRequestBodyOperatorValidator = func() *ValidateRequestBodyOperator {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRequestBodyOperatorChoice := v.RequestBodyOperatorChoiceValidationRuleHandler
 	rulesRequestBodyOperatorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6157,7 +6101,6 @@ var DefaultRequestBodyOperatorValidator = func() *ValidateRequestBodyOperator {
 		panic(errMsg)
 	}
 	v.FldValidators["request_body_operator_choice"] = vFn
-
 	v.FldValidators["request_body_operator_choice.request_body_or"] = RequestBodyMatcherValidator().Validate
 	v.FldValidators["request_body_operator_choice.request_body_and"] = RequestBodyMatcherValidator().Validate
 	v.FldValidators["request_body_operator_choice.request_body_none"] = RequestBodyMatcherValidator().Validate
@@ -6269,16 +6212,13 @@ func (v *ValidateResponseBody) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseBodyValidator = func() *ValidateResponseBody {
 	v := &ValidateResponseBody{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["ResponseBodyChoice.responseBody_or"] = ResponseBodyMatcherValidator().Validate
 	v.FldValidators["ResponseBodyChoice.responseBody_and"] = ResponseBodyMatcherValidator().Validate
 	v.FldValidators["ResponseBodyChoice.responseBody_none"] = ResponseBodyMatcherValidator().Validate
@@ -6332,7 +6272,6 @@ type ValidateResponseBodyMatcher struct {
 }
 
 func (v *ValidateResponseBodyMatcher) ResponseBodyMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6392,22 +6331,18 @@ func (v *ValidateResponseBodyMatcher) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["responseBody_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("responseBody_match"))
 		if err := fv(ctx, m.GetResponseBodyMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseBodyMatcherValidator = func() *ValidateResponseBodyMatcher {
 	v := &ValidateResponseBodyMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6553,16 +6488,13 @@ func (v *ValidateResponseBodyMatcherType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseBodyMatcherTypeValidator = func() *ValidateResponseBodyMatcherType {
 	v := &ValidateResponseBodyMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6570,7 +6502,6 @@ var DefaultResponseBodyMatcherTypeValidator = func() *ValidateResponseBodyMatche
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCompareTypeChoice := v.CompareTypeChoiceValidationRuleHandler
 	rulesCompareTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6581,7 +6512,6 @@ var DefaultResponseBodyMatcherTypeValidator = func() *ValidateResponseBodyMatche
 		panic(errMsg)
 	}
 	v.FldValidators["compare_type_choice"] = vFn
-
 	v.FldValidators["compare_type_choice.equals"] = ResponseBodyMatcherValueValidator().Validate
 	v.FldValidators["compare_type_choice.starts_with"] = ResponseBodyMatcherValueValidator().Validate
 	v.FldValidators["compare_type_choice.contains"] = ResponseBodyMatcherValueValidator().Validate
@@ -6636,7 +6566,6 @@ type ValidateResponseBodyMatcherValue struct {
 }
 
 func (v *ValidateResponseBodyMatcherValue) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
@@ -6658,41 +6587,30 @@ func (v *ValidateResponseBodyMatcherValue) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["case_sensitive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("case_sensitive"))
 		if err := fv(ctx, m.GetCaseSensitive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_value"))
 		if err := fv(ctx, m.GetNotValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseBodyMatcherValueValidator = func() *ValidateResponseBodyMatcherValue {
 	v := &ValidateResponseBodyMatcherValue{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6821,16 +6739,13 @@ func (v *ValidateResponseCode) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseCodeValidator = func() *ValidateResponseCode {
 	v := &ValidateResponseCode{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["ResponseCodeChoice.responseCode_or"] = ResponseCodeMatcherValidator().Validate
 	v.FldValidators["ResponseCodeChoice.responseCode_and"] = ResponseCodeMatcherValidator().Validate
 	v.FldValidators["ResponseCodeChoice.responseCode_none"] = ResponseCodeMatcherValidator().Validate
@@ -6884,7 +6799,6 @@ type ValidateResponseCodeMatcher struct {
 }
 
 func (v *ValidateResponseCodeMatcher) ResponseCodeMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -6944,22 +6858,18 @@ func (v *ValidateResponseCodeMatcher) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["responseCode_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("responseCode_match"))
 		if err := fv(ctx, m.GetResponseCodeMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseCodeMatcherValidator = func() *ValidateResponseCodeMatcher {
 	v := &ValidateResponseCodeMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7029,7 +6939,6 @@ type ValidateResponseCodeMatcherType struct {
 }
 
 func (v *ValidateResponseCodeMatcherType) OperatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ResponseCodeOperator)
@@ -7043,9 +6952,7 @@ func (v *ValidateResponseCodeMatcherType) OperatorValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateResponseCodeMatcherType) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
@@ -7067,32 +6974,24 @@ func (v *ValidateResponseCodeMatcherType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["operator"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("operator"))
 		if err := fv(ctx, m.GetOperator(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseCodeMatcherTypeValidator = func() *ValidateResponseCodeMatcherType {
 	v := &ValidateResponseCodeMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7179,9 +7078,7 @@ func (v *ValidateResponseHeader) HeaderOperatorChoiceValidationRuleHandler(rules
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateResponseHeader) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -7270,25 +7167,19 @@ func (v *ValidateResponseHeader) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseHeaderValidator = func() *ValidateResponseHeader {
 	v := &ValidateResponseHeader{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7296,7 +7187,6 @@ var DefaultResponseHeaderValidator = func() *ValidateResponseHeader {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhHeaderOperatorChoice := v.HeaderOperatorChoiceValidationRuleHandler
 	rulesHeaderOperatorChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7318,7 +7208,6 @@ var DefaultResponseHeaderValidator = func() *ValidateResponseHeader {
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
-
 	v.FldValidators["header_operator_choice.header_or"] = ResponseHeaderMatcherValidator().Validate
 	v.FldValidators["header_operator_choice.header_and"] = ResponseHeaderMatcherValidator().Validate
 	v.FldValidators["header_operator_choice.header_none"] = ResponseHeaderMatcherValidator().Validate
@@ -7372,7 +7261,6 @@ type ValidateResponseHeaderMatcher struct {
 }
 
 func (v *ValidateResponseHeaderMatcher) ResponseHeaderMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7432,22 +7320,18 @@ func (v *ValidateResponseHeaderMatcher) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["responseHeader_match"]; exists {
 		vOpts := append(opts, db.WithValidateField("responseHeader_match"))
 		if err := fv(ctx, m.GetResponseHeaderMatch(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseHeaderMatcherValidator = func() *ValidateResponseHeaderMatcher {
 	v := &ValidateResponseHeaderMatcher{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7593,16 +7477,13 @@ func (v *ValidateResponseHeaderMatcherType) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseHeaderMatcherTypeValidator = func() *ValidateResponseHeaderMatcherType {
 	v := &ValidateResponseHeaderMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7610,7 +7491,6 @@ var DefaultResponseHeaderMatcherTypeValidator = func() *ValidateResponseHeaderMa
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCompareTypeChoice := v.CompareTypeChoiceValidationRuleHandler
 	rulesCompareTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7621,7 +7501,6 @@ var DefaultResponseHeaderMatcherTypeValidator = func() *ValidateResponseHeaderMa
 		panic(errMsg)
 	}
 	v.FldValidators["compare_type_choice"] = vFn
-
 	v.FldValidators["compare_type_choice.equals"] = ResponseHeaderMatcherValueValidator().Validate
 	v.FldValidators["compare_type_choice.starts_with"] = ResponseHeaderMatcherValueValidator().Validate
 	v.FldValidators["compare_type_choice.contains"] = ResponseHeaderMatcherValueValidator().Validate
@@ -7676,7 +7555,6 @@ type ValidateResponseHeaderMatcherValue struct {
 }
 
 func (v *ValidateResponseHeaderMatcherValue) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
@@ -7698,41 +7576,30 @@ func (v *ValidateResponseHeaderMatcherValue) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["case_sensitive"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("case_sensitive"))
 		if err := fv(ctx, m.GetCaseSensitive(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_value"))
 		if err := fv(ctx, m.GetNotValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResponseHeaderMatcherValueValidator = func() *ValidateResponseHeaderMatcherValue {
 	v := &ValidateResponseHeaderMatcherValue{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7815,34 +7682,25 @@ func (v *ValidateTransactionResult) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["transaction_result_failure"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transaction_result_failure"))
 		if err := fv(ctx, m.GetTransactionResultFailure(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["transaction_result_success"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("transaction_result_success"))
 		if err := fv(ctx, m.GetTransactionResultSuccess(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTransactionResultValidator = func() *ValidateTransactionResult {
 	v := &ValidateTransactionResult{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["transaction_result_success"] = TransactionResultTypeValidator().Validate
-
 	v.FldValidators["transaction_result_failure"] = TransactionResultTypeValidator().Validate
 
 	return v
@@ -7906,9 +7764,7 @@ func (v *ValidateTransactionResultType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cookie"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie"))
 		for idx, item := range m.GetCookie() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -7916,29 +7772,20 @@ func (v *ValidateTransactionResultType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["responseBody"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("responseBody"))
 		if err := fv(ctx, m.GetResponseBody(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["responseCode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("responseCode"))
 		if err := fv(ctx, m.GetResponseCode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["responseHeader"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("responseHeader"))
 		for idx, item := range m.GetResponseHeader() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -7946,22 +7793,16 @@ func (v *ValidateTransactionResultType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTransactionResultTypeValidator = func() *ValidateTransactionResultType {
 	v := &ValidateTransactionResultType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["responseCode"] = ResponseCodeValidator().Validate
-
 	v.FldValidators["responseBody"] = ResponseBodyValidator().Validate
-
 	v.FldValidators["responseHeader"] = ResponseHeaderValidator().Validate
-
 	v.FldValidators["cookie"] = CookieValidator().Validate
 
 	return v
@@ -8013,7 +7854,6 @@ type ValidateUpstreamRoutingDetail struct {
 }
 
 func (v *ValidateUpstreamRoutingDetail) DomainNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_name")
@@ -8035,23 +7875,18 @@ func (v *ValidateUpstreamRoutingDetail) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["domain_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_name"))
 		if err := fv(ctx, m.GetDomainName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpstreamRoutingDetailValidator = func() *ValidateUpstreamRoutingDetail {
 	v := &ValidateUpstreamRoutingDetail{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8122,7 +7957,6 @@ type ValidateUpstreamRoutings struct {
 }
 
 func (v *ValidateUpstreamRoutings) UpstreamRoutingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -8182,22 +8016,18 @@ func (v *ValidateUpstreamRoutings) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["upstream_routing"]; exists {
 		vOpts := append(opts, db.WithValidateField("upstream_routing"))
 		if err := fv(ctx, m.GetUpstreamRouting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpstreamRoutingsValidator = func() *ValidateUpstreamRoutings {
 	v := &ValidateUpstreamRoutings{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8266,7 +8096,6 @@ type ValidateUserNameType struct {
 }
 
 func (v *ValidateUserNameType) UsernameReportingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for username_reporting")
@@ -8288,23 +8117,18 @@ func (v *ValidateUserNameType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["username_reporting"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username_reporting"))
 		if err := fv(ctx, m.GetUsernameReporting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUserNameTypeValidator = func() *ValidateUserNameType {
 	v := &ValidateUserNameType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8375,7 +8199,6 @@ type ValidateWebClientAddHeaderToRequest struct {
 }
 
 func (v *ValidateWebClientAddHeaderToRequest) NameValuePairValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -8435,22 +8258,18 @@ func (v *ValidateWebClientAddHeaderToRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name_value_pair"]; exists {
 		vOpts := append(opts, db.WithValidateField("name_value_pair"))
 		if err := fv(ctx, m.GetNameValuePair(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWebClientAddHeaderToRequestValidator = func() *ValidateWebClientAddHeaderToRequest {
 	v := &ValidateWebClientAddHeaderToRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8519,7 +8338,6 @@ type ValidateWebClientBlockMitigationActionType struct {
 }
 
 func (v *ValidateWebClientBlockMitigationActionType) NameValuePairValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -8565,9 +8383,7 @@ func (v *ValidateWebClientBlockMitigationActionType) NameValuePairValidationRule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWebClientBlockMitigationActionType) BodyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for body")
@@ -8575,9 +8391,7 @@ func (v *ValidateWebClientBlockMitigationActionType) BodyValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWebClientBlockMitigationActionType) StatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(BlockActionHttpStatusCode)
@@ -8605,40 +8419,30 @@ func (v *ValidateWebClientBlockMitigationActionType) Validate(ctx context.Contex
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["body"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("body"))
 		if err := fv(ctx, m.GetBody(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name_value_pair"]; exists {
 		vOpts := append(opts, db.WithValidateField("name_value_pair"))
 		if err := fv(ctx, m.GetNameValuePair(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWebClientBlockMitigationActionTypeValidator = func() *ValidateWebClientBlockMitigationActionType {
 	v := &ValidateWebClientBlockMitigationActionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8785,16 +8589,13 @@ func (v *ValidateWebClientContinueMitigationActionType) Validate(ctx context.Con
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWebClientContinueMitigationActionTypeValidator = func() *ValidateWebClientContinueMitigationActionType {
 	v := &ValidateWebClientContinueMitigationActionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8802,7 +8603,6 @@ var DefaultWebClientContinueMitigationActionTypeValidator = func() *ValidateWebC
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSendHeadersChoice := v.SendHeadersChoiceValidationRuleHandler
 	rulesSendHeadersChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8813,7 +8613,6 @@ var DefaultWebClientContinueMitigationActionTypeValidator = func() *ValidateWebC
 		panic(errMsg)
 	}
 	v.FldValidators["send_headers_choice"] = vFn
-
 	v.FldValidators["send_headers_choice.append_headers"] = WebClientContinueMitigationHeaderValidator().Validate
 
 	return v
@@ -8865,7 +8664,6 @@ type ValidateWebClientContinueMitigationHeader struct {
 }
 
 func (v *ValidateWebClientContinueMitigationHeader) AutoTypeHeaderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for auto_type_header_name")
@@ -8887,23 +8685,18 @@ func (v *ValidateWebClientContinueMitigationHeader) Validate(ctx context.Context
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["auto_type_header_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auto_type_header_name"))
 		if err := fv(ctx, m.GetAutoTypeHeaderName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWebClientContinueMitigationHeaderValidator = func() *ValidateWebClientContinueMitigationHeader {
 	v := &ValidateWebClientContinueMitigationHeader{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8974,7 +8767,6 @@ type ValidateWebClientRedirectMitigationActionType struct {
 }
 
 func (v *ValidateWebClientRedirectMitigationActionType) StatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.HttpStatusCode)
@@ -8988,9 +8780,7 @@ func (v *ValidateWebClientRedirectMitigationActionType) StatusValidationRuleHand
 
 	return validatorFn, nil
 }
-
 func (v *ValidateWebClientRedirectMitigationActionType) UriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for uri")
@@ -9012,32 +8802,24 @@ func (v *ValidateWebClientRedirectMitigationActionType) Validate(ctx context.Con
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uri"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uri"))
 		if err := fv(ctx, m.GetUri(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWebClientRedirectMitigationActionTypeValidator = func() *ValidateWebClientRedirectMitigationActionType {
 	v := &ValidateWebClientRedirectMitigationActionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -9156,16 +8938,13 @@ func (v *ValidateWebClientTransformMitigationActionChoiceType) Validate(ctx cont
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultWebClientTransformMitigationActionChoiceTypeValidator = func() *ValidateWebClientTransformMitigationActionChoiceType {
 	v := &ValidateWebClientTransformMitigationActionChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["add_headers_choice.add_headers"] = WebClientAddHeaderToRequestValidator().Validate
 
 	return v

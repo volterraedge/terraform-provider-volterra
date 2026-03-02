@@ -72,15 +72,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSourceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSourceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -88,7 +85,6 @@ func (m *CreateSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAction() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
@@ -98,7 +94,6 @@ func (m *CreateSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "action." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -108,11 +103,8 @@ func (m *CreateSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSource().(type) {
 	case *CreateSpecType_Prefix:
-
 		return nil, nil
-
 	case *CreateSpecType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -122,11 +114,9 @@ func (m *CreateSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCreateSpecType struct {
@@ -140,9 +130,7 @@ func (v *ValidateCreateSpecType) SourceValidationRuleHandler(rules map[string]st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for action")
@@ -151,15 +139,12 @@ func (v *ValidateCreateSpecType) ActionValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -219,22 +204,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["source"]; exists {
@@ -270,16 +250,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -287,7 +264,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -321,7 +297,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["source.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["source.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
 
@@ -375,7 +350,6 @@ func (m *FastAclRuleAction) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetActionDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -385,7 +359,6 @@ func (m *FastAclRuleAction) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAction().(type) {
 	case *FastAclRuleAction_PolicerAction:
-
 		drInfos, err := m.GetPolicerAction().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPolicerAction().GetDRefInfo() FAILED")
@@ -395,9 +368,7 @@ func (m *FastAclRuleAction) GetActionDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "policer_action." + dri.DRField
 		}
 		return drInfos, err
-
 	case *FastAclRuleAction_ProtocolPolicerAction:
-
 		drInfos, err := m.GetProtocolPolicerAction().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetProtocolPolicerAction().GetDRefInfo() FAILED")
@@ -407,11 +378,9 @@ func (m *FastAclRuleAction) GetActionDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "protocol_policer_action." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateFastAclRuleAction struct {
@@ -466,16 +435,13 @@ func (v *ValidateFastAclRuleAction) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFastAclRuleActionValidator = func() *ValidateFastAclRuleAction {
 	v := &ValidateFastAclRuleAction{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["action.policer_action"] = ves_io_schema.PolicerRefTypeValidator().Validate
 	v.FldValidators["action.protocol_policer_action"] = ves_io_schema.ProtocolPolicerRefTypeValidator().Validate
 
@@ -534,15 +500,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSourceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSourceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -550,7 +513,6 @@ func (m *GetSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAction() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
@@ -560,7 +522,6 @@ func (m *GetSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "action." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -570,11 +531,8 @@ func (m *GetSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSource().(type) {
 	case *GetSpecType_Prefix:
-
 		return nil, nil
-
 	case *GetSpecType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -584,11 +542,9 @@ func (m *GetSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGetSpecType struct {
@@ -602,9 +558,7 @@ func (v *ValidateGetSpecType) SourceValidationRuleHandler(rules map[string]strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for action")
@@ -613,15 +567,12 @@ func (v *ValidateGetSpecType) ActionValidationRuleHandler(rules map[string]strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -681,22 +632,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["source"]; exists {
@@ -732,16 +678,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -749,7 +692,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -783,7 +725,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["source.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["source.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
 
@@ -842,15 +783,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSourceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSourceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -858,7 +796,6 @@ func (m *GlobalSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAction() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
@@ -868,7 +805,6 @@ func (m *GlobalSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "action." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -878,11 +814,8 @@ func (m *GlobalSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSource().(type) {
 	case *GlobalSpecType_Prefix:
-
 		return nil, nil
-
 	case *GlobalSpecType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -892,11 +825,9 @@ func (m *GlobalSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -910,9 +841,7 @@ func (v *ValidateGlobalSpecType) SourceValidationRuleHandler(rules map[string]st
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for action")
@@ -921,15 +850,12 @@ func (v *ValidateGlobalSpecType) ActionValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -989,22 +915,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["source"]; exists {
@@ -1040,16 +961,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1057,7 +975,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1091,7 +1008,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["source.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["source.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
 
@@ -1150,15 +1066,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetSourceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSourceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 // GetDRefInfo for the field's type
@@ -1166,7 +1079,6 @@ func (m *ReplaceSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAction() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
@@ -1176,7 +1088,6 @@ func (m *ReplaceSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "action." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -1186,11 +1097,8 @@ func (m *ReplaceSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSource().(type) {
 	case *ReplaceSpecType_Prefix:
-
 		return nil, nil
-
 	case *ReplaceSpecType_IpPrefixSet:
-
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -1200,11 +1108,9 @@ func (m *ReplaceSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "ip_prefix_set." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1218,9 +1124,7 @@ func (v *ValidateReplaceSpecType) SourceValidationRuleHandler(rules map[string]s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for action")
@@ -1229,15 +1133,12 @@ func (v *ValidateReplaceSpecType) ActionValidationRuleHandler(rules map[string]s
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1297,22 +1198,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["source"]; exists {
@@ -1348,16 +1244,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1365,7 +1258,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1399,7 +1291,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
-
 	v.FldValidators["source.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["source.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
 

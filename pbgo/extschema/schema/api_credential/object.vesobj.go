@@ -11,17 +11,16 @@ import (
 	"time"
 
 	google_protobuf "github.com/gogo/protobuf/types"
+	"github.com/google/uuid"
 	multierror "github.com/hashicorp/go-multierror"
 
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/db/sro"
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/store"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	"github.com/google/uuid"
-	"gopkg.volterra.us/stdlib/db/sro"
 )
 
 const (
@@ -167,7 +166,6 @@ func GetObjectIndexers() store.Indexers {
 		})),
 	}
 	return indexers
-
 }
 
 func (e *DBObject) GetDB() (*db.DB, error) {
@@ -374,9 +372,7 @@ func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (e *DBObject) ToStore() store.Entry {
@@ -424,7 +420,6 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSpec() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
@@ -434,7 +429,6 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -442,7 +436,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSystemMetadata() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := e.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
@@ -452,7 +445,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // Implement sro.SRO interface
@@ -635,7 +627,6 @@ func (o *StatusObject) GetVtrpStale() bool {
 func (o *StatusObject) SetVtrpStale(isStale bool) {
 	o.GetMetadata().SetVtrpStale(isStale)
 }
-
 func (o *StatusObject) GetStatusObjConditions() []sro.StatusObjectCondition {
 	if o == nil {
 		return nil
@@ -889,47 +880,33 @@ func (v *ValidateObject) Validate(ctx context.Context, pm interface{}, opts ...d
 	if e == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, e.GetSpec(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
 		if err := fv(ctx, e.GetSystemMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultObjectValidator = func() *ValidateObject {
 	v := &ValidateObject{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
-
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
-
 	v.FldValidators["spec"] = SpecTypeValidator().Validate
-
 	return v
 }()
 
@@ -1013,9 +990,7 @@ type DBStatusObject struct {
 
 // GetStatusObjectIndexers returns the associated store.Indexers for StatusObject
 func GetStatusObjectIndexers() store.Indexers {
-
 	return nil
-
 }
 
 func (e *DBStatusObject) GetDB() (*db.DB, error) {
@@ -1052,7 +1027,6 @@ func (e *DBStatusObject) UnmarshalBytes(b []byte) error {
 }
 
 func (e *DBStatusObject) Sample(r *rand.Rand) (db.Entry, error) {
-
 	o := &StatusObject{}
 
 	return &DBStatusObject{o, e.tbl}, nil
@@ -1173,7 +1147,6 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 	}
 	return drInfos, nil
-
 }
 
 func (e *DBStatusObject) ToStore() store.Entry {
@@ -1289,9 +1262,7 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 	if e == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["conditions"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("conditions"))
 		for idx, item := range e.GetConditions() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1299,20 +1270,14 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metadata"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_refs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_refs"))
 		for idx, item := range e.GetObjectRefs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1320,18 +1285,14 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
-
 	return v
 }()
 

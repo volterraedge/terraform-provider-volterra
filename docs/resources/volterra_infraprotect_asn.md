@@ -25,7 +25,6 @@ resource "volterra_infraprotect_asn" "example" {
 
   bgp_session_enabled = true
 }
-
 ```
 
 Argument Reference
@@ -58,4 +57,4 @@ Argument Reference
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured infraprotect_asn.
+*   `id` - This is the id of the configured infraprotect_asn.

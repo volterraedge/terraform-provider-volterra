@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.Object"] = ObjectValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.GetRequest"] = GetRequestValidator()
@@ -27,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeployPoliciesRequest"] = DeployPoliciesRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeployPoliciesResponse"] = DeployPoliciesResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeployPolicyMetadata"] = DeployPolicyMetadataValidator()
@@ -37,10 +34,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeploymentHistoryResponse"] = DeploymentHistoryResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeploymentStatusRequest"] = DeploymentStatusRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeploymentStatusResponse"] = DeploymentStatusResponseValidator()
-	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.SuggestValuesReq"] = SuggestValuesReqValidator()
-	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.SuggestValuesResp"] = SuggestValuesRespValidator()
-	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.SuggestedItem"] = SuggestedItemValidator()
-
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CreateSpecInfraCloudHosted"] = CreateSpecInfraCloudHostedValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.Device"] = DeviceValidator()
@@ -56,7 +49,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.Production"] = ProductionValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.Testing"] = TestingValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -68,11 +60,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.shape.bot_defense.bot_infrastructure.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.shape.bot_defense.bot_infrastructure.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Create"] = []string{
 		"spec.egress.#",
 		"spec.host_names.#",
@@ -82,7 +72,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ingress.#",
 		"spec.ip_addresses.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Get"] = []string{
 		"spec.egress.#",
 		"spec.host_names.#",
@@ -92,7 +81,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ingress.#",
 		"spec.ip_addresses.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.API.List"] = []string{
 		"items.#.get_spec.egress.#",
 		"items.#.get_spec.host_names.#",
@@ -102,25 +90,20 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.get_spec.ingress.#",
 		"items.#.get_spec.ip_addresses.#",
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Replace"] = []string{
 		"spec.cloud_hosted.infra_region.#",
 	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI.DeploymentStatusOverview"] = []string{
 		"deployment_data.#.region",
 	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.shape.bot_defense.bot_infrastructure.API"] = "shape/bot"
 	sm["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI"] = "shape/bot"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -129,9 +112,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.Object"] = APISwaggerJSON
@@ -145,15 +126,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.shape.bot_defense.bot_infrastructure.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.shape.bot_defense.bot_infrastructure.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -164,22 +141,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

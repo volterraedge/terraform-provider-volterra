@@ -74,9 +74,7 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SIDCounters"] = ccl.doRPCSIDCounters
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -173,7 +171,6 @@ func (c *CustomDataAPIRestClient) doRPCSIDCounters(ctx context.Context, callOpts
 	pbRsp := &SIDCounterResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_network.SIDCounterResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -207,9 +204,7 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SIDCounters"] = ccl.doRPCSIDCounters
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -290,7 +285,6 @@ func (s *customDataAPISrv) SIDCounters(ctx context.Context, in *SIDCounterReques
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_network.SIDCounterResponse", rsp)...)
 
 	return rsp, nil

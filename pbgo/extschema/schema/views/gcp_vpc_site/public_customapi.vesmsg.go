@@ -76,41 +76,30 @@ func (v *ValidateSetCloudSiteInfoRequest) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_vpc_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_vpc_info"))
 		if err := fv(ctx, m.GetAwsVpcInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSetCloudSiteInfoRequestValidator = func() *ValidateSetCloudSiteInfoRequest {
 	v := &ValidateSetCloudSiteInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["aws_vpc_info"] = GCPVPCSiteInfoTypeValidator().Validate
 
 	return v
@@ -174,7 +163,6 @@ func (v *ValidateSetCloudSiteInfoResponse) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

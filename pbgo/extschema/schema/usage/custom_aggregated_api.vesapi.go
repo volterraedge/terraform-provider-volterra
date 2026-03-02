@@ -42,7 +42,6 @@ func (c *CustomAggregatedUsageAPIGrpcClient) doRPCListHourlyUsageDetails(ctx con
 	rsp, err := c.grpcClient.ListHourlyUsageDetails(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAggregatedUsageAPIGrpcClient) doRPCListUsageDetails(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListUsageDetailsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomAggregatedUsageAPIGrpcClient(cc *grpc.ClientConn) server.CustomCli
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ListHourlyUsageDetails"] = ccl.doRPCListHourlyUsageDetails
-
 	rpcFns["ListUsageDetails"] = ccl.doRPCListUsageDetails
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -174,7 +170,6 @@ func (c *CustomAggregatedUsageAPIRestClient) doRPCListHourlyUsageDetails(ctx con
 	pbRsp := &ListHourlyUsageDetailsResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.usage.ListHourlyUsageDetailsResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -182,7 +177,6 @@ func (c *CustomAggregatedUsageAPIRestClient) doRPCListHourlyUsageDetails(ctx con
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAggregatedUsageAPIRestClient) doRPCListUsageDetails(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -259,7 +253,6 @@ func (c *CustomAggregatedUsageAPIRestClient) doRPCListUsageDetails(ctx context.C
 	pbRsp := &ListUsageDetailsResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.usage.ListUsageDetailsResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -293,11 +286,8 @@ func NewCustomAggregatedUsageAPIRestClient(baseURL string, hc http.Client) serve
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ListHourlyUsageDetails"] = ccl.doRPCListHourlyUsageDetails
-
 	rpcFns["ListUsageDetails"] = ccl.doRPCListUsageDetails
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -382,7 +372,6 @@ func (s *customAggregatedUsageAPISrv) ListHourlyUsageDetails(ctx context.Context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.usage.ListHourlyUsageDetailsResp", rsp)...)
 
 	return rsp, nil
@@ -431,7 +420,6 @@ func (s *customAggregatedUsageAPISrv) ListUsageDetails(ctx context.Context, in *
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.usage.ListUsageDetailsResp", rsp)...)
 
 	return rsp, nil
@@ -713,10 +701,13 @@ var CustomAggregatedUsageAPISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace\n\nExample: - \"system\"-",
+                    "description": " Namespace\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "query": {
                     "type": "string",
@@ -762,10 +753,13 @@ var CustomAggregatedUsageAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace to be considered\n\nExample: - \"system\"-",
+                    "description": " Namespace to be considered\n\nExample: - \"system\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "system"
+                    "x-ves-example": "system",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.const": "system"
+                    }
                 },
                 "to": {
                     "type": "string",

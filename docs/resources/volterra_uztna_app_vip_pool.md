@@ -38,7 +38,6 @@ resource "volterra_uztna_app_vip_pool" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -101,4 +100,4 @@ IPV4 Start Address.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_app_vip_pool.
+-   `id` - This is the id of the configured uztna_app_vip_pool.

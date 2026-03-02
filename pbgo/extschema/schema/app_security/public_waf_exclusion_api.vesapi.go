@@ -42,7 +42,6 @@ func (c *AppSecurityWafExclusionAPIGrpcClient) doRPCGetSuggestedWAFExclusionRule
 	rsp, err := c.grpcClient.GetSuggestedWAFExclusionRule(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *AppSecurityWafExclusionAPIGrpcClient) doRPCGetSuggestedWAFExclusionRuleForCDN(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetSuggestedWAFExclusionRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewAppSecurityWafExclusionAPIGrpcClient(cc *grpc.ClientConn) server.CustomC
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetSuggestedWAFExclusionRule"] = ccl.doRPCGetSuggestedWAFExclusionRule
-
 	rpcFns["GetSuggestedWAFExclusionRuleForCDN"] = ccl.doRPCGetSuggestedWAFExclusionRuleForCDN
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -187,7 +183,6 @@ func (c *AppSecurityWafExclusionAPIRestClient) doRPCGetSuggestedWAFExclusionRule
 	pbRsp := &GetSuggestedWAFExclusionRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedWAFExclusionRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -195,7 +190,6 @@ func (c *AppSecurityWafExclusionAPIRestClient) doRPCGetSuggestedWAFExclusionRule
 	}
 	return pbRsp, nil
 }
-
 func (c *AppSecurityWafExclusionAPIRestClient) doRPCGetSuggestedWAFExclusionRuleForCDN(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -284,7 +278,6 @@ func (c *AppSecurityWafExclusionAPIRestClient) doRPCGetSuggestedWAFExclusionRule
 	pbRsp := &GetSuggestedWAFExclusionRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.GetSuggestedWAFExclusionRuleRsp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -318,11 +311,8 @@ func NewAppSecurityWafExclusionAPIRestClient(baseURL string, hc http.Client) ser
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetSuggestedWAFExclusionRule"] = ccl.doRPCGetSuggestedWAFExclusionRule
-
 	rpcFns["GetSuggestedWAFExclusionRuleForCDN"] = ccl.doRPCGetSuggestedWAFExclusionRuleForCDN
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -407,7 +397,6 @@ func (s *appSecurityWafExclusionAPISrv) GetSuggestedWAFExclusionRule(ctx context
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedWAFExclusionRuleRsp", rsp)...)
 
 	return rsp, nil
@@ -456,7 +445,6 @@ func (s *appSecurityWafExclusionAPISrv) GetSuggestedWAFExclusionRuleForCDN(ctx c
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.GetSuggestedWAFExclusionRuleRsp", rsp)...)
 
 	return rsp, nil

@@ -43,7 +43,6 @@ func (c *CustomAPIGrpcClient) doRPCDelete(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.Delete(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -52,7 +51,6 @@ func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts
 	rsp, err := c.grpcClient.Get(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetImageDownloadUrl(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetImageDownloadUrlReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -61,7 +59,6 @@ func (c *CustomAPIGrpcClient) doRPCGetImageDownloadUrl(ctx context.Context, yaml
 	rsp, err := c.grpcClient.GetImageDownloadUrl(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCGetRegistrationsBySiteToken(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRegistrationsBySiteTokenReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -70,7 +67,6 @@ func (c *CustomAPIGrpcClient) doRPCGetRegistrationsBySiteToken(ctx context.Conte
 	rsp, err := c.grpcClient.GetRegistrationsBySiteToken(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -79,7 +75,6 @@ func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opt
 	rsp, err := c.grpcClient.List(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListRegistrationsBySite(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListBySiteReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -88,7 +83,6 @@ func (c *CustomAPIGrpcClient) doRPCListRegistrationsBySite(ctx context.Context, 
 	rsp, err := c.grpcClient.ListRegistrationsBySite(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListRegistrationsByState(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListStateReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -97,7 +91,6 @@ func (c *CustomAPIGrpcClient) doRPCListRegistrationsByState(ctx context.Context,
 	rsp, err := c.grpcClient.ListRegistrationsByState(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRegistrationApprove(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ApprovalReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -106,7 +99,6 @@ func (c *CustomAPIGrpcClient) doRPCRegistrationApprove(ctx context.Context, yaml
 	rsp, err := c.grpcClient.RegistrationApprove(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRegistrationConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -115,7 +107,6 @@ func (c *CustomAPIGrpcClient) doRPCRegistrationConfig(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.RegistrationConfig(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRegistrationCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RegistrationCreateRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -124,7 +115,6 @@ func (c *CustomAPIGrpcClient) doRPCRegistrationCreate(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.RegistrationCreate(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuggestValuesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -165,29 +155,17 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Delete"] = ccl.doRPCDelete
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["GetImageDownloadUrl"] = ccl.doRPCGetImageDownloadUrl
-
 	rpcFns["GetRegistrationsBySiteToken"] = ccl.doRPCGetRegistrationsBySiteToken
-
 	rpcFns["List"] = ccl.doRPCList
-
 	rpcFns["ListRegistrationsBySite"] = ccl.doRPCListRegistrationsBySite
-
 	rpcFns["ListRegistrationsByState"] = ccl.doRPCListRegistrationsByState
-
 	rpcFns["RegistrationApprove"] = ccl.doRPCRegistrationApprove
-
 	rpcFns["RegistrationConfig"] = ccl.doRPCRegistrationConfig
-
 	rpcFns["RegistrationCreate"] = ccl.doRPCRegistrationCreate
-
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -275,7 +253,6 @@ func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.
 	pbRsp := &google_protobuf.Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *google.protobuf.Empty", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -283,7 +260,6 @@ func (c *CustomAPIRestClient) doRPCDelete(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -360,7 +336,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.GetResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -368,7 +343,6 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetImageDownloadUrl(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -443,7 +417,6 @@ func (c *CustomAPIRestClient) doRPCGetImageDownloadUrl(ctx context.Context, call
 	pbRsp := &GetImageDownloadUrlResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.GetImageDownloadUrlResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -451,7 +424,6 @@ func (c *CustomAPIRestClient) doRPCGetImageDownloadUrl(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCGetRegistrationsBySiteToken(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -526,7 +498,6 @@ func (c *CustomAPIRestClient) doRPCGetRegistrationsBySiteToken(ctx context.Conte
 	pbRsp := &GetRegistrationsBySiteTokenResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.GetRegistrationsBySiteTokenResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -534,7 +505,6 @@ func (c *CustomAPIRestClient) doRPCGetRegistrationsBySiteToken(ctx context.Conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -616,7 +586,6 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -624,7 +593,6 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListRegistrationsBySite(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -700,7 +668,6 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsBySite(ctx context.Context, 
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -708,7 +675,6 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsBySite(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListRegistrationsByState(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -784,7 +750,6 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsByState(ctx context.Context,
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -792,7 +757,6 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsByState(ctx context.Context,
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -833,6 +797,7 @@ func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, call
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("annotations", fmt.Sprintf("%v", req.Annotations))
+		q.Add("backup_connected_region", fmt.Sprintf("%v", req.BackupConnectedRegion))
 		q.Add("connected_region", fmt.Sprintf("%v", req.ConnectedRegion))
 		q.Add("labels", fmt.Sprintf("%v", req.Labels))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
@@ -875,7 +840,6 @@ func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, call
 	pbRsp := &ObjectChangeResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ObjectChangeResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -883,7 +847,6 @@ func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, call
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRegistrationConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -960,7 +923,6 @@ func (c *CustomAPIRestClient) doRPCRegistrationConfig(ctx context.Context, callO
 	pbRsp := &ConfigResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ConfigResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -968,7 +930,6 @@ func (c *CustomAPIRestClient) doRPCRegistrationConfig(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRegistrationCreate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1044,7 +1005,6 @@ func (c *CustomAPIRestClient) doRPCRegistrationCreate(ctx context.Context, callO
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.Object", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1052,7 +1012,6 @@ func (c *CustomAPIRestClient) doRPCRegistrationCreate(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1130,7 +1089,6 @@ func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *
 	pbRsp := &SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.SuggestValuesResp", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1164,29 +1122,17 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Delete"] = ccl.doRPCDelete
-
 	rpcFns["Get"] = ccl.doRPCGet
-
 	rpcFns["GetImageDownloadUrl"] = ccl.doRPCGetImageDownloadUrl
-
 	rpcFns["GetRegistrationsBySiteToken"] = ccl.doRPCGetRegistrationsBySiteToken
-
 	rpcFns["List"] = ccl.doRPCList
-
 	rpcFns["ListRegistrationsBySite"] = ccl.doRPCListRegistrationsBySite
-
 	rpcFns["ListRegistrationsByState"] = ccl.doRPCListRegistrationsByState
-
 	rpcFns["RegistrationApprove"] = ccl.doRPCRegistrationApprove
-
 	rpcFns["RegistrationConfig"] = ccl.doRPCRegistrationConfig
-
 	rpcFns["RegistrationCreate"] = ccl.doRPCRegistrationCreate
-
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -1307,7 +1253,6 @@ func (s *customAPISrv) Delete(ctx context.Context, in *DeleteRequest) (*google_p
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.protobuf.Empty", rsp)...)
 
 	return rsp, nil
@@ -1356,7 +1301,6 @@ func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, e
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.GetResponse", rsp)...)
 
 	return rsp, nil
@@ -1405,7 +1349,6 @@ func (s *customAPISrv) GetImageDownloadUrl(ctx context.Context, in *GetImageDown
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.GetImageDownloadUrlResp", rsp)...)
 
 	return rsp, nil
@@ -1454,7 +1397,6 @@ func (s *customAPISrv) GetRegistrationsBySiteToken(ctx context.Context, in *GetR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.GetRegistrationsBySiteTokenResp", rsp)...)
 
 	return rsp, nil
@@ -1503,7 +1445,6 @@ func (s *customAPISrv) List(ctx context.Context, in *ListRequest) (*ListResponse
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.ListResponse", rsp)...)
 
 	return rsp, nil
@@ -1552,7 +1493,6 @@ func (s *customAPISrv) ListRegistrationsBySite(ctx context.Context, in *ListBySi
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.ListResponse", rsp)...)
 
 	return rsp, nil
@@ -1601,7 +1541,6 @@ func (s *customAPISrv) ListRegistrationsByState(ctx context.Context, in *ListSta
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.ListResponse", rsp)...)
 
 	return rsp, nil
@@ -1650,7 +1589,6 @@ func (s *customAPISrv) RegistrationApprove(ctx context.Context, in *ApprovalReq)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.ObjectChangeResp", rsp)...)
 
 	return rsp, nil
@@ -1699,7 +1637,6 @@ func (s *customAPISrv) RegistrationConfig(ctx context.Context, in *ConfigReq) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.ConfigResp", rsp)...)
 
 	return rsp, nil
@@ -1748,7 +1685,6 @@ func (s *customAPISrv) RegistrationCreate(ctx context.Context, in *RegistrationC
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.Object", rsp)...)
 
 	return rsp, nil
@@ -1797,7 +1733,6 @@ func (s *customAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.SuggestValuesResp", rsp)...)
 
 	return rsp, nil
@@ -2962,6 +2897,13 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Annotations",
                     "x-ves-example": "key:value"
                 },
+                "backup_connected_region": {
+                    "type": "string",
+                    "description": " Optional.\n Backup RE connection for CE(s)\n\nExample: - \"value\"-",
+                    "title": "Connected Region",
+                    "x-displayname": "Backup Connected Region",
+                    "x-ves-example": "value"
+                },
                 "connected_region": {
                     "type": "string",
                     "description": " Optional.\n closest REs to which to connect in selected region. If there is more than one RE with the label\n then select 2 of them. Otherwise default \"geo-ip\" database is consulted to find closest RE(s) to\n public ip with which node registration request was received.\n\nExample: - \"value\"-",
@@ -3325,6 +3267,13 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/registrationInternetProxy",
                     "x-displayname": "Local HTTP/HTTPS proxy configuration"
                 },
+                "is_slo_static": {
+                    "type": "boolean",
+                    "description": " Indicates whether the SLO is static",
+                    "title": "Is SLO Static",
+                    "format": "boolean",
+                    "x-displayname": "Is SLO Static"
+                },
                 "machine_id": {
                     "type": "string",
                     "description": " Machine id - generated by operating system\n\nExample: - \"value\"-",
@@ -3619,7 +3568,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "registrationObjectState": {
             "type": "string",
-            "description": "Defines states for registration object\n\nState isn't set\nObject was created (registration request was received and object created)\nRegistration was approved and waiting for configuration\nThis state can be set by user only if current state is NEW\nRegistration is approved and prepared for  to connect\nIt can't be set manually.\nRegistration isn't valid anymore and it will be deleted in near future\nThis state can be set by user anytime.\nRegistration is failed (vpm reported or timeout)\nDEPRECATED. Registration is reported as finished (workload was deployed)\nUser action is required\nRegistration is online\nOperating system upgrade is in progress\nMaintenance is in progress",
+            "description": "Defines states for registration object\n\nState isn't set\nObject was created (registration request was received and object created)\nRegistration was approved and waiting for configuration\nThis state can be set by user only if current state is NEW\nRegistration is approved and prepared for  to connect\nIt can't be set manually.\nRegistration isn't valid anymore and it will be deleted in near future\nThis state can be set by user anytime.\nRegistration is failed (vpm reported or timeout)\nDEPRECATED. Registration is reported as finished (workload was deployed)\nUser action is required\nRegistration is online\nOperating system upgrade is in progress\nMaintenance is in progress\nSite node(s) in failed state for a prolonged time period",
             "title": "ObjectState",
             "enum": [
                 "NOTSET",
@@ -3632,7 +3581,8 @@ var CustomAPISwaggerJSON string = `{
                 "PENDING",
                 "ONLINE",
                 "UPGRADING",
-                "MAINTENANCE"
+                "MAINTENANCE",
+                "FAILED_INACTIVE"
             ],
             "default": "NOTSET",
             "x-displayname": "Object State",
@@ -3758,7 +3708,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenstack Instance\nEquinix Instance",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenStack Instance\nEquinix Instance\nOpenShift Virtualization Instance",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -3784,7 +3734,8 @@ var CustomAPISwaggerJSON string = `{
                 "OCI",
                 "NUTANIX",
                 "OPENSTACK",
-                "EQUINIX"
+                "EQUINIX",
+                "OPENSHIFT_VIRTUALIZATION"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",
@@ -4426,7 +4377,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -4657,6 +4608,16 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-proto-message": "ves.io.schema.registration.GlobalSpecType",
             "properties": {
+                "connected_regions": {
+                    "type": "array",
+                    "description": " Optional.\n REs in selected region to which CEs connect, contains primary and backup RE region info\n\nExample: - \"value\"-",
+                    "title": "Connected Region",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Connected Regions",
+                    "x-ves-example": "value"
+                },
                 "infra": {
                     "description": " Infrastructure metadata section\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Infra",
@@ -4730,7 +4691,7 @@ var CustomAPISwaggerJSON string = `{
             "description": "Most recent observer status of object",
             "title": "Shape of the registration status",
             "x-displayname": "Status Type",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,2,3",
             "x-ves-proto-message": "ves.io.schema.registration.StatusType",
             "properties": {
                 "current_state": {
@@ -4744,6 +4705,19 @@ var CustomAPISwaggerJSON string = `{
                     "title": "object status",
                     "$ref": "#/definitions/ioschemaStatusType",
                     "x-displayname": "Object Status"
+                },
+                "parent_current_state": {
+                    "description": " It defines group, parent state of registration.",
+                    "title": "Parent current state of registration",
+                    "$ref": "#/definitions/siteSiteState",
+                    "x-displayname": "Registration parent state"
+                },
+                "state_update_timestamp": {
+                    "type": "string",
+                    "description": " Time of last registration state update",
+                    "title": "Modification timestamp for state of registration",
+                    "format": "date-time",
+                    "x-displayname": "Registration state update timestamp"
                 }
             }
         },
@@ -5423,6 +5397,40 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "siteSiteState": {
+            "type": "string",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.\nSite is in failed state for prolong period of time. Site Status Objects contain more details.\nSite resources are waiting to be updated. Check Status objects for more details\nAn Error occurred while updating cloud resources for F5XC managed site. Check Status objects for more details.\nSite resources orchestration is queued for F5XC managed site. Check Status objects for more details\nSite resources update is queued for F5XC managed site. Check Status objects for more details\nSite resources delete is queued for F5XC managed site. Check Status objects for more details",
+            "title": "SiteState",
+            "enum": [
+                "ONLINE",
+                "PROVISIONING",
+                "UPGRADING",
+                "STANDBY",
+                "FAILED",
+                "REREGISTRATION",
+                "WAITINGNODES",
+                "DECOMMISSIONING",
+                "WAITING_FOR_REGISTRATION",
+                "ORCHESTRATION_IN_PROGRESS",
+                "ORCHESTRATION_COMPLETE",
+                "ERROR_IN_ORCHESTRATION",
+                "DELETING_CLOUD_RESOURCES",
+                "DELETED_CLOUD_RESOURCES",
+                "ERROR_DELETING_CLOUD_RESOURCES",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_SUCCESS",
+                "VALIDATION_FAILED",
+                "FAILED_INACTIVE",
+                "UPDATING_CLOUD_RESOURCES",
+                "ERROR_UPDATING_CLOUD_RESOURCES",
+                "ORCHESTRATION_QUEUED",
+                "UPDATE_QUEUED",
+                "DELETE_QUEUED"
+            ],
+            "default": "ONLINE",
+            "x-displayname": "Site State",
+            "x-ves-proto-enum": "ves.io.schema.site.SiteState"
         },
         "siteStorageDevice": {
             "type": "object",

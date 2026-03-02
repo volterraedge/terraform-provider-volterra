@@ -66,7 +66,6 @@ type ValidateAvailabilitySetsInfoType struct {
 }
 
 func (v *ValidateAvailabilitySetsInfoType) EnableValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for enable")
@@ -74,9 +73,7 @@ func (v *ValidateAvailabilitySetsInfoType) EnableValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAvailabilitySetsInfoType) FaultDomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for fault_domains")
@@ -84,9 +81,7 @@ func (v *ValidateAvailabilitySetsInfoType) FaultDomainsValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAvailabilitySetsInfoType) UpdateDomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for update_domains")
@@ -108,41 +103,30 @@ func (v *ValidateAvailabilitySetsInfoType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["enable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable"))
 		if err := fv(ctx, m.GetEnable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["fault_domains"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fault_domains"))
 		if err := fv(ctx, m.GetFaultDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_domains"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_domains"))
 		if err := fv(ctx, m.GetUpdateDomains(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAvailabilitySetsInfoTypeValidator = func() *ValidateAvailabilitySetsInfoType {
 	v := &ValidateAvailabilitySetsInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -247,25 +231,18 @@ func (v *ValidateAzureExistingSubnetParamType) Validate(ctx context.Context, pm 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["subnet_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_name"))
 		if err := fv(ctx, m.GetSubnetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_resource_grp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_resource_grp"))
 		if err := fv(ctx, m.GetSubnetResourceGrp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -296,7 +273,6 @@ func (m *AzureExpressRouteType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetExpressRouteCircuitInfo() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting AzureExpressRouteType.express_route_circuit_info idx %v", idx)
@@ -338,7 +314,6 @@ type ValidateAzureExpressRouteType struct {
 }
 
 func (v *ValidateAzureExpressRouteType) SiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for site_asn")
@@ -360,36 +335,25 @@ func (v *ValidateAzureExpressRouteType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["adn_dns_ip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("adn_dns_ip"))
 		if err := fv(ctx, m.GetAdnDnsIp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["existing_gateway_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("existing_gateway_subnet"))
 		if err := fv(ctx, m.GetExistingGatewaySubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["existing_route_server_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("existing_route_server_subnet"))
 		if err := fv(ctx, m.GetExistingRouteServerSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["express_route_circuit_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("express_route_circuit_info"))
 		for idx, item := range m.GetExpressRouteCircuitInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -397,70 +361,49 @@ func (v *ValidateAzureExpressRouteType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["express_route_enable"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("express_route_enable"))
 		if err := fv(ctx, m.GetExpressRouteEnable(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["new_gateway_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("new_gateway_subnet"))
 		if err := fv(ctx, m.GetNewGatewaySubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["new_route_server_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("new_route_server_subnet"))
 		if err := fv(ctx, m.GetNewRouteServerSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_network_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_network_name"))
 		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_asn"))
 		if err := fv(ctx, m.GetSiteAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["virtual_network_gateway_sku"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_network_gateway_sku"))
 		if err := fv(ctx, m.GetVirtualNetworkGatewaySku(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureExpressRouteTypeValidator = func() *ValidateAzureExpressRouteType {
 	v := &ValidateAzureExpressRouteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -480,11 +423,8 @@ var DefaultAzureExpressRouteTypeValidator = func() *ValidateAzureExpressRouteTyp
 		panic(errMsg)
 	}
 	v.FldValidators["site_asn"] = vFn
-
 	v.FldValidators["new_gateway_subnet"] = AzureSubnetParamTypeValidator().Validate
-
 	v.FldValidators["new_route_server_subnet"] = AzureSubnetParamTypeValidator().Validate
-
 	v.FldValidators["express_route_circuit_info"] = ExpressRouteCircuitInfoValidator().Validate
 
 	return v
@@ -548,88 +488,84 @@ func (v *ValidateAzureInstanceType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("az"))
 		if err := fv(ctx, m.GetAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["disk_encryption_set"]; exists {
+		vOpts := append(opts, db.WithValidateField("disk_encryption_set"))
+		if err := fv(ctx, m.GetDiskEncryptionSet(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["disk_type"]; exists {
+		vOpts := append(opts, db.WithValidateField("disk_type"))
+		if err := fv(ctx, m.GetDiskType(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["encryption"]; exists {
+		vOpts := append(opts, db.WithValidateField("encryption"))
+		if err := fv(ctx, m.GetEncryption(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["machine_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("machine_type"))
 		if err := fv(ctx, m.GetMachineType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["marketplace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("marketplace"))
 		if err := fv(ctx, m.GetMarketplace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_count"))
 		if err := fv(ctx, m.GetNodeCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_subnet_id"))
 		if err := fv(ctx, m.GetPrivateSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_subnet_id"))
 		if err := fv(ctx, m.GetPublicSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["resource_group"]; exists {
+		vOpts := append(opts, db.WithValidateField("resource_group"))
+		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["volt_node_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_node_id"))
 		if err := fv(ctx, m.GetVoltNodeId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_vnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_vnet_id"))
 		if err := fv(ctx, m.GetVoltVnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -698,32 +634,24 @@ func (v *ValidateAzureSubnetChoice) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["existing_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("existing_subnet"))
 		if err := fv(ctx, m.GetExistingSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_param"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_param"))
 		if err := fv(ctx, m.GetSubnetParam(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSubnetChoiceValidator = func() *ValidateAzureSubnetChoice {
 	v := &ValidateAzureSubnetChoice{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["subnet_param"] = AzureSubnetParamTypeValidator().Validate
 
 	return v
@@ -775,7 +703,6 @@ type ValidateAzureSubnetParamType struct {
 }
 
 func (v *ValidateAzureSubnetParamType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
@@ -783,9 +710,7 @@ func (v *ValidateAzureSubnetParamType) ResourceGroupValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureSubnetParamType) Ipv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4")
@@ -793,9 +718,7 @@ func (v *ValidateAzureSubnetParamType) Ipv4ValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureSubnetParamType) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
@@ -817,41 +740,30 @@ func (v *ValidateAzureSubnetParamType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv4"))
 		if err := fv(ctx, m.GetIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6"))
 		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_group"))
 		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSubnetParamTypeValidator = func() *ValidateAzureSubnetParamType {
 	v := &ValidateAzureSubnetParamType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -954,50 +866,36 @@ func (v *ValidateAzureSubnetType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["interface_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("interface_type"))
 		if err := fv(ctx, m.GetInterfaceType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet"))
 		if err := fv(ctx, m.GetSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_subnet_id"))
 		if err := fv(ctx, m.GetVoltSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_vnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_vnet_id"))
 		if err := fv(ctx, m.GetVoltVnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSubnetTypeValidator = func() *ValidateAzureSubnetType {
 	v := &ValidateAzureSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["subnet"] = AzureSubnetChoiceValidator().Validate
 
 	return v
@@ -1061,34 +959,25 @@ func (v *ValidateAzureVnetInfoType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["new_vnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("new_vnet"))
 		if err := fv(ctx, m.GetNewVnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet"))
 		if err := fv(ctx, m.GetVnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetInfoTypeValidator = func() *ValidateAzureVnetInfoType {
 	v := &ValidateAzureVnetInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["new_vnet"] = ves_io_schema_views.AzureVnetParamsTypeValidator().Validate
-
 	v.FldValidators["vnet"] = ves_io_schema_views.AzureVnetTypeValidator().Validate
 
 	return v
@@ -1140,7 +1029,6 @@ type ValidateAzureVnetParamsType struct {
 }
 
 func (v *ValidateAzureVnetParamsType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
@@ -1148,9 +1036,7 @@ func (v *ValidateAzureVnetParamsType) ResourceGroupValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetParamsType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -1158,9 +1044,7 @@ func (v *ValidateAzureVnetParamsType) NameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetParamsType) PrimaryIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for primary_ipv4")
@@ -1182,41 +1066,30 @@ func (v *ValidateAzureVnetParamsType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["primary_ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("primary_ipv4"))
 		if err := fv(ctx, m.GetPrimaryIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["resource_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_group"))
 		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetParamsTypeValidator = func() *ValidateAzureVnetParamsType {
 	v := &ValidateAzureVnetParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1274,7 +1147,6 @@ func (m *AzureVnetSiteType) ToJSON() (string, error) {
 func (m *AzureVnetSiteType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *AzureVnetSiteType) String() string {
 	if m == nil {
 		return ""
@@ -1298,7 +1170,6 @@ func (m *AzureVnetSiteType) Redact(ctx context.Context) error {
 	}
 
 	m.AdminPasswordBlindfolded = ""
-
 	if err := m.GetExpressRoute().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzureVnetSiteType.express_route")
 	}
@@ -1350,117 +1221,79 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password"))
 		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
 		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
 		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["availability_set"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("availability_set"))
 		if err := fv(ctx, m.GetAvailabilitySet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["azure_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_name"))
 		if err := fv(ctx, m.GetAzureName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["azure_region"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_region"))
 		if err := fv(ctx, m.GetAzureRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["azure_resource_grp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_resource_grp"))
 		if err := fv(ctx, m.GetAzureResourceGrp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["certified_hw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certified_hw"))
 		if err := fv(ctx, m.GetCertifiedHw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disable_internet_connectivity_via_igw"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disable_internet_connectivity_via_igw"))
 		if err := fv(ctx, m.GetDisableInternetConnectivityViaIgw(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["enable_accelerated_networking"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_accelerated_networking"))
 		if err := fv(ctx, m.GetEnableAcceleratedNetworking(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["express_route"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("express_route"))
 		if err := fv(ctx, m.GetExpressRoute(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gateway_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gateway_type"))
 		if err := fv(ctx, m.GetGatewayType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_vip_port_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_vip_port_config"))
 		for idx, item := range m.GetInsideVipPortConfig() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1468,20 +1301,14 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["manual_routing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("manual_routing"))
 		if err := fv(ctx, m.GetManualRouting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["master_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("master_nodes"))
 		for idx, item := range m.GetMasterNodes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1489,20 +1316,14 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
 		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_vip_port_config"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_vip_port_config"))
 		for idx, item := range m.GetOutsideVipPortConfig() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1510,20 +1331,14 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["spoke_vnets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("spoke_vnets"))
 		for idx, item := range m.GetSpokeVnets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1531,20 +1346,14 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnets"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnets"))
 		for idx, item := range m.GetSubnets() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1552,11 +1361,8 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for key, value := range m.GetTags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1564,53 +1370,36 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet"))
 		if err := fv(ctx, m.GetVnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["volt_vnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volt_vnet_id"))
 		if err := fv(ctx, m.GetVoltVnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("worker_nodes"))
 		if err := fv(ctx, m.GetWorkerNodes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetSiteTypeValidator = func() *ValidateAzureVnetSiteType {
 	v := &ValidateAzureVnetSiteType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["vnet"] = AzureVnetInfoTypeValidator().Validate
-
 	v.FldValidators["subnets"] = AzureSubnetTypeValidator().Validate
-
 	v.FldValidators["inside_vip_port_config"] = VIPPortConfigValidator().Validate
-
 	v.FldValidators["outside_vip_port_config"] = VIPPortConfigValidator().Validate
-
 	v.FldValidators["availability_set"] = AvailabilitySetsInfoTypeValidator().Validate
-
 	v.FldValidators["express_route"] = AzureExpressRouteTypeValidator().Validate
 
 	return v
@@ -1629,7 +1418,6 @@ func (m *ExpressRouteCircuitInfo) ToJSON() (string, error) {
 func (m *ExpressRouteCircuitInfo) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *ExpressRouteCircuitInfo) String() string {
 	if m == nil {
 		return ""
@@ -1689,7 +1477,6 @@ type ValidateExpressRouteCircuitInfo struct {
 }
 
 func (v *ValidateExpressRouteCircuitInfo) ExpressRouteCircuitResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for express_route_circuit_resource_group")
@@ -1711,86 +1498,60 @@ func (v *ValidateExpressRouteCircuitInfo) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["authorization_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("authorization_key"))
 		if err := fv(ctx, m.GetAuthorizationKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["authorization_key_blindfolded"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("authorization_key_blindfolded"))
 		if err := fv(ctx, m.GetAuthorizationKeyBlindfolded(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["authorization_key_clear_b64"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("authorization_key_clear_b64"))
 		if err := fv(ctx, m.GetAuthorizationKeyClearB64(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["connection_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("connection_name"))
 		if err := fv(ctx, m.GetConnectionName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["express_route_circuit_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("express_route_circuit_id"))
 		if err := fv(ctx, m.GetExpressRouteCircuitId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["express_route_circuit_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("express_route_circuit_name"))
 		if err := fv(ctx, m.GetExpressRouteCircuitName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["express_route_circuit_resource_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("express_route_circuit_resource_group"))
 		if err := fv(ctx, m.GetExpressRouteCircuitResourceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["routing_weight"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("routing_weight"))
 		if err := fv(ctx, m.GetRoutingWeight(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultExpressRouteCircuitInfoValidator = func() *ValidateExpressRouteCircuitInfo {
 	v := &ValidateExpressRouteCircuitInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1871,34 +1632,24 @@ func (v *ValidateSpokeVnetsInfoType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["auto_routing"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auto_routing"))
 		if err := fv(ctx, m.GetAutoRouting(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_name"))
 		if err := fv(ctx, m.GetVnetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet_resource_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_resource_group"))
 		if err := fv(ctx, m.GetVnetResourceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

@@ -76,16 +76,12 @@ func (v *ValidateGetPlanTransitionReq) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -154,16 +150,12 @@ func (v *ValidateGetPlanTransitionRsp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -194,7 +186,6 @@ func (m *InitiatePlanTransitionReq) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPayload().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting InitiatePlanTransitionReq.payload")
 	}
@@ -233,6 +224,15 @@ type ValidateInitiatePlanTransitionReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateInitiatePlanTransitionReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateInitiatePlanTransitionReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*InitiatePlanTransitionReq)
 	if !ok {
@@ -246,40 +246,48 @@ func (v *ValidateInitiatePlanTransitionReq) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["new_plan"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("new_plan"))
 		if err := fv(ctx, m.GetNewPlan(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["payload"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("payload"))
 		if err := fv(ctx, m.GetPayload(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInitiatePlanTransitionReqValidator = func() *ValidateInitiatePlanTransitionReq {
 	v := &ValidateInitiatePlanTransitionReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InitiatePlanTransitionReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -342,25 +350,18 @@ func (v *ValidateInitiatePlanTransitionRsp) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["requires_manual_approval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("requires_manual_approval"))
 		if err := fv(ctx, m.GetRequiresManualApproval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -384,7 +385,6 @@ func (m *TransitionPayload) ToJSON() (string, error) {
 func (m *TransitionPayload) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-
 func (m *TransitionPayload) String() string {
 	if m == nil {
 		return ""
@@ -456,81 +456,55 @@ func (v *ValidateTransitionPayload) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["billing_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("billing_address"))
 		if err := fv(ctx, m.GetBillingAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["billing_provider_account_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("billing_provider_account_id"))
 		if err := fv(ctx, m.GetBillingProviderAccountId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["create_support_ticket"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("create_support_ticket"))
 		if err := fv(ctx, m.GetCreateSupportTicket(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deletion_feedback"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deletion_feedback"))
 		if err := fv(ctx, m.GetDeletionFeedback(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deletion_reason"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deletion_reason"))
 		if err := fv(ctx, m.GetDeletionReason(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["payment_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("payment_address"))
 		if err := fv(ctx, m.GetPaymentAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["payment_provider_token"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("payment_provider_token"))
 		if err := fv(ctx, m.GetPaymentProviderToken(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subscribe_addon_services"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subscribe_addon_services"))
 		for idx, item := range m.GetSubscribeAddonServices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -538,29 +512,20 @@ func (v *ValidateTransitionPayload) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["support_ticket_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("support_ticket_info"))
 		if err := fv(ctx, m.GetSupportTicketInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tp_subscription_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tp_subscription_id"))
 		if err := fv(ctx, m.GetTpSubscriptionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unsubscribe_addon_services"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unsubscribe_addon_services"))
 		for idx, item := range m.GetUnsubscribeAddonServices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -568,9 +533,7 @@ func (v *ValidateTransitionPayload) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 

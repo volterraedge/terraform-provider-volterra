@@ -64,7 +64,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -124,22 +123,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -211,7 +206,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -271,22 +265,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -358,7 +348,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -418,22 +407,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -505,7 +490,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -565,22 +549,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -666,6 +646,7 @@ func (v *ValidateUserIdentificationRule) IdentifierQueryParamKeyValidationRuleHa
 	}
 	return oValidatorFn_QueryParamKey, nil
 }
+
 func (v *ValidateUserIdentificationRule) IdentifierHttpHeaderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_HttpHeaderName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -673,6 +654,7 @@ func (v *ValidateUserIdentificationRule) IdentifierHttpHeaderNameValidationRuleH
 	}
 	return oValidatorFn_HttpHeaderName, nil
 }
+
 func (v *ValidateUserIdentificationRule) IdentifierCookieNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_CookieName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -680,6 +662,7 @@ func (v *ValidateUserIdentificationRule) IdentifierCookieNameValidationRuleHandl
 	}
 	return oValidatorFn_CookieName, nil
 }
+
 func (v *ValidateUserIdentificationRule) IdentifierIpAndHttpHeaderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_IpAndHttpHeaderName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -687,6 +670,7 @@ func (v *ValidateUserIdentificationRule) IdentifierIpAndHttpHeaderNameValidation
 	}
 	return oValidatorFn_IpAndHttpHeaderName, nil
 }
+
 func (v *ValidateUserIdentificationRule) IdentifierJwtClaimNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_JwtClaimName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -885,16 +869,13 @@ func (v *ValidateUserIdentificationRule) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUserIdentificationRuleValidator = func() *ValidateUserIdentificationRule {
 	v := &ValidateUserIdentificationRule{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -902,7 +883,6 @@ var DefaultUserIdentificationRuleValidator = func() *ValidateUserIdentificationR
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhIdentifier := v.IdentifierValidationRuleHandler
 	rulesIdentifier := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -913,7 +893,6 @@ var DefaultUserIdentificationRuleValidator = func() *ValidateUserIdentificationR
 		panic(errMsg)
 	}
 	v.FldValidators["identifier"] = vFn
-
 	vrhIdentifierQueryParamKey := v.IdentifierQueryParamKeyValidationRuleHandler
 	rulesIdentifierQueryParamKey := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -966,7 +945,6 @@ var DefaultUserIdentificationRuleValidator = func() *ValidateUserIdentificationR
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UserIdentificationRule.identifier_jwt_claim_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["identifier.query_param_key"] = vFnMap["identifier.query_param_key"]
 	v.FldValidators["identifier.http_header_name"] = vFnMap["identifier.http_header_name"]
 	v.FldValidators["identifier.cookie_name"] = vFnMap["identifier.cookie_name"]

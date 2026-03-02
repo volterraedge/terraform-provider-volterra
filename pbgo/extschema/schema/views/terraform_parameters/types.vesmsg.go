@@ -76,32 +76,23 @@ func (v *ValidateApplyStatus) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["container_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("container_version"))
 		if err := fv(ctx, m.GetContainerVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["error_output"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_output"))
 		if err := fv(ctx, m.GetErrorOutput(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["modification_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("modification_timestamp"))
 		if err := fv(ctx, m.GetModificationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetState().(type) {
@@ -138,54 +129,37 @@ func (v *ValidateApplyStatus) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["suggested_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("suggested_action"))
 		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tf_output"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tf_output"))
 		if err := fv(ctx, m.GetTfOutput(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tf_rollback_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tf_rollback_state"))
 		if err := fv(ctx, m.GetTfRollbackState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tf_stdout"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tf_stdout"))
 		if err := fv(ctx, m.GetTfStdout(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tf_upgrade_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tf_upgrade_state"))
 		if err := fv(ctx, m.GetTfUpgradeState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -254,34 +228,24 @@ func (v *ValidateDeploymentStatusType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["apply_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("apply_status"))
 		if err := fv(ctx, m.GetApplyStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["expected_container_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("expected_container_version"))
 		if err := fv(ctx, m.GetExpectedContainerVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plan_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plan_status"))
 		if err := fv(ctx, m.GetPlanStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -339,7 +303,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCredsDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetCredsDRefInfo() ([]db.DRefInfo, error) {
@@ -364,7 +327,6 @@ func (m *GlobalSpecType) GetCredsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetCredsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -383,7 +345,6 @@ func (m *GlobalSpecType) GetCredsDBEntries(ctx context.Context, d db.Interface) 
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -404,18 +365,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["container_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("container_version"))
 		if err := fv(ctx, m.GetContainerVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["creds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creds"))
 		for idx, item := range m.GetCreds() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -423,11 +379,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tf_objects"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tf_objects"))
 		for idx, item := range m.GetTfObjects() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -435,9 +388,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -506,23 +457,17 @@ func (v *ValidatePlanStatus) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error_output"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_output"))
 		if err := fv(ctx, m.GetErrorOutput(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["modification_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("modification_timestamp"))
 		if err := fv(ctx, m.GetModificationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetState().(type) {
@@ -548,27 +493,19 @@ func (v *ValidatePlanStatus) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["suggested_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("suggested_action"))
 		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tf_plan_output"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tf_plan_output"))
 		if err := fv(ctx, m.GetTfPlanOutput(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -625,7 +562,6 @@ type ValidateVIPPortConfig struct {
 }
 
 func (v *ValidateVIPPortConfig) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
@@ -633,9 +569,7 @@ func (v *ValidateVIPPortConfig) PortValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateVIPPortConfig) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
@@ -657,32 +591,24 @@ func (v *ValidateVIPPortConfig) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["port"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port"))
 		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["protocol"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVIPPortConfigValidator = func() *ValidateVIPPortConfig {
 	v := &ValidateVIPPortConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

@@ -42,7 +42,6 @@ func (c *CustomPrivateAPIEywaprimeGrpcClient) doRPCDeactivateTenant(ctx context.
 	rsp, err := c.grpcClient.DeactivateTenant(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomPrivateAPIEywaprimeGrpcClient) doRPCRestrictedDeactivateTenant(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PrivateDeactivateTenantRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -83,11 +82,8 @@ func NewCustomPrivateAPIEywaprimeGrpcClient(cc *grpc.ClientConn) server.CustomCl
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DeactivateTenant"] = ccl.doRPCDeactivateTenant
-
 	rpcFns["RestrictedDeactivateTenant"] = ccl.doRPCRestrictedDeactivateTenant
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -177,7 +173,6 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCDeactivateTenant(ctx context.
 	pbRsp := &PrivateDeactivateTenantResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.PrivateDeactivateTenantResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -185,7 +180,6 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCDeactivateTenant(ctx context.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomPrivateAPIEywaprimeRestClient) doRPCRestrictedDeactivateTenant(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -264,7 +258,6 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCRestrictedDeactivateTenant(ct
 	pbRsp := &PrivateDeactivateTenantResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.PrivateDeactivateTenantResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -298,11 +291,8 @@ func NewCustomPrivateAPIEywaprimeRestClient(baseURL string, hc http.Client) serv
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DeactivateTenant"] = ccl.doRPCDeactivateTenant
-
 	rpcFns["RestrictedDeactivateTenant"] = ccl.doRPCRestrictedDeactivateTenant
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 

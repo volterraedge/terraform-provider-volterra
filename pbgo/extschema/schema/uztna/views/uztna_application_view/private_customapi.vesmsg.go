@@ -76,9 +76,7 @@ func (v *ValidateDeleteExtendedTagsRequest) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["extended_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("extended_tags"))
 		for idx, item := range m.GetExtendedTags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -86,27 +84,19 @@ func (v *ValidateDeleteExtendedTagsRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["objname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("objname"))
 		if err := fv(ctx, m.GetObjname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -175,7 +165,6 @@ func (v *ValidateDeleteExtendedTagsResponse) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -244,9 +233,7 @@ func (v *ValidateSetExtendedTagsRequest) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["extended_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("extended_tags"))
 		for idx, item := range m.GetExtendedTags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -254,27 +241,19 @@ func (v *ValidateSetExtendedTagsRequest) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["objname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("objname"))
 		if err := fv(ctx, m.GetObjname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -343,7 +322,6 @@ func (v *ValidateSetExtendedTagsResponse) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -412,9 +390,7 @@ func (v *ValidateUpdateExtendedTagsRequest) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["add_extended_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("add_extended_tags"))
 		for idx, item := range m.GetAddExtendedTags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -422,11 +398,8 @@ func (v *ValidateUpdateExtendedTagsRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["delete_extended_tags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("delete_extended_tags"))
 		for idx, item := range m.GetDeleteExtendedTags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -434,27 +407,19 @@ func (v *ValidateUpdateExtendedTagsRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["objname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("objname"))
 		if err := fv(ctx, m.GetObjname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -523,7 +488,6 @@ func (v *ValidateUpdateExtendedTagsResponse) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

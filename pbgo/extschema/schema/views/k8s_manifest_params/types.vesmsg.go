@@ -64,7 +64,6 @@ type ValidateBigIpBareMetalDeviceK8SParams struct {
 }
 
 func (v *ValidateBigIpBareMetalDeviceK8SParams) NodeNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for node_name")
@@ -72,9 +71,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) NodeNameValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) InternalNetworkSelfipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for internal_network_selfip")
@@ -82,9 +79,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) InternalNetworkSelfipValidationR
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) InternalNetworkGatewayValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for internal_network_gateway")
@@ -92,9 +87,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) InternalNetworkGatewayValidation
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) ExternalNetworkSelfipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for external_network_selfip")
@@ -102,9 +95,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) ExternalNetworkSelfipValidationR
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) ExternalNetworkGatewayValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for external_network_gateway")
@@ -112,9 +103,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) ExternalNetworkGatewayValidation
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) NadForExternalInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nad_for_external_interface")
@@ -122,9 +111,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) NadForExternalInterfaceValidatio
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) NadForInternalInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nad_for_internal_interface")
@@ -132,9 +119,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) NadForInternalInterfaceValidatio
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) BigiqTcplbVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bigiq_tcplb_vip")
@@ -142,9 +127,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) BigiqTcplbVipValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) VcpuCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vcpu_count")
@@ -152,9 +135,7 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) VcpuCountValidationRuleHandler(r
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) MemorySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for memory_size")
@@ -176,104 +157,72 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bigiq_tcplb_vip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("bigiq_tcplb_vip"))
 		if err := fv(ctx, m.GetBigiqTcplbVip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["external_network_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("external_network_gateway"))
 		if err := fv(ctx, m.GetExternalNetworkGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["external_network_selfip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("external_network_selfip"))
 		if err := fv(ctx, m.GetExternalNetworkSelfip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_network_gateway"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_network_gateway"))
 		if err := fv(ctx, m.GetInternalNetworkGateway(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["internal_network_selfip"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_network_selfip"))
 		if err := fv(ctx, m.GetInternalNetworkSelfip(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["memory_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("memory_size"))
 		if err := fv(ctx, m.GetMemorySize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nad_for_external_interface"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nad_for_external_interface"))
 		if err := fv(ctx, m.GetNadForExternalInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["nad_for_internal_interface"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nad_for_internal_interface"))
 		if err := fv(ctx, m.GetNadForInternalInterface(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_name"))
 		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vcpu_count"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vcpu_count"))
 		if err := fv(ctx, m.GetVcpuCount(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBigIpBareMetalDeviceK8SParamsValidator = func() *ValidateBigIpBareMetalDeviceK8SParams {
 	v := &ValidateBigIpBareMetalDeviceK8SParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -441,7 +390,6 @@ type ValidateBigIpBareMetalK8SType struct {
 }
 
 func (v *ValidateBigIpBareMetalK8SType) AdminUsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for admin_username")
@@ -449,9 +397,7 @@ func (v *ValidateBigIpBareMetalK8SType) AdminUsernameValidationRuleHandler(rules
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalK8SType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
@@ -459,9 +405,7 @@ func (v *ValidateBigIpBareMetalK8SType) SshKeyValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalK8SType) DevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -507,9 +451,7 @@ func (v *ValidateBigIpBareMetalK8SType) DevicesValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateBigIpBareMetalK8SType) PublicDownloadUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for public_download_url")
@@ -531,49 +473,36 @@ func (v *ValidateBigIpBareMetalK8SType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["admin_username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("admin_username"))
 		if err := fv(ctx, m.GetAdminUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("devices"))
 		if err := fv(ctx, m.GetDevices(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["public_download_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("public_download_url"))
 		if err := fv(ctx, m.GetPublicDownloadUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBigIpBareMetalK8STypeValidator = func() *ValidateBigIpBareMetalK8SType {
 	v := &ValidateBigIpBareMetalK8SType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -689,25 +618,18 @@ func (v *ValidateDeploymentStatusType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["status_output"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("status_output"))
 		if err := fv(ctx, m.GetStatusOutput(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -789,16 +711,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["f5_k8s_type.f5_bare_metal_k8s_params"] = BigIpBareMetalK8STypeValidator().Validate
 
 	return v

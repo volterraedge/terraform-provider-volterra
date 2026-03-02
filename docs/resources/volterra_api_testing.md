@@ -28,8 +28,8 @@ resource "volterra_api_testing" "example" {
 
       // One of the arguments from this list "api_key basic_auth bearer_token login_endpoint" must be set
 
-      login_endpoint {
-        json_payload {
+      basic_auth {
+        password {
           blindfold_secret_info_internal {
             decryption_provider = "value"
 
@@ -51,11 +51,7 @@ resource "volterra_api_testing" "example" {
           }
         }
 
-        method = "method"
-
-        path = "path"
-
-        token_response_key = "token_response_key"
+        user = "user"
       }
 
       // One of the arguments from this list "admin standard" must be set
@@ -68,9 +64,8 @@ resource "volterra_api_testing" "example" {
 
   // One of the arguments from this list "every_day every_month every_week" must be set
 
-  every_day = true
+  every_week = true
 }
-
 ```
 
 Argument Reference
@@ -108,7 +103,7 @@ Argument Reference
 
 Add and configure testing domains and credentials.
 
-`allow_destructive_methods` - (Optional) Enable to allow API test to execute destructive methods. Be cautious as these can alter or delete data (`Bool`).
+`allow_destructive_methods` - (Optional) Enable to allow API Testing to execute against destructive methods. Use with caution as these may modify or delete data (`Bool`).
 
 `credentials` - (Required) Add credentials for API testing to use in the selected environment.. See [Domains Credentials ](#domains-credentials) below for details.
 
@@ -331,4 +326,4 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured api_testing.
+*   `id` - This is the id of the configured api_testing.

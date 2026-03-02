@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -26,7 +24,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.VIP4PoolRange"] = VIP4PoolRangeValidator()
 	vr["ves.io.schema.uztna.uztna_app_vip_pool.VIP6PoolRange"] = VIP6PoolRangeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -38,24 +35,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.uztna.uztna_app_vip_pool.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.uztna.uztna_app_vip_pool.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.uztna.uztna_app_vip_pool.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -64,20 +56,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

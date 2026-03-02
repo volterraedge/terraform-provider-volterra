@@ -76,25 +76,18 @@ func (v *ValidateDaemonEnvironmentType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["internal_dns_suffix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("internal_dns_suffix"))
 		if err := fv(ctx, m.GetInternalDnsSuffix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -163,25 +156,18 @@ func (v *ValidateDaemonTLSParamsType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["client_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_params"))
 		if err := fv(ctx, m.GetClientParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["server_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("server_params"))
 		if err := fv(ctx, m.GetServerParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -250,25 +236,18 @@ func (v *ValidateDaemonTlsCertificateType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_url"))
 		if err := fv(ctx, m.GetCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_key_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_key_url"))
 		if err := fv(ctx, m.GetPrivateKeyUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -337,9 +316,7 @@ func (v *ValidateDaemonTlsParametersType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cipher_suites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cipher_suites"))
 		for idx, item := range m.GetCipherSuites() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -347,29 +324,20 @@ func (v *ValidateDaemonTlsParametersType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["maximum_protocol_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("maximum_protocol_version"))
 		if err := fv(ctx, m.GetMaximumProtocolVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["minimum_protocol_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("minimum_protocol_version"))
 		if err := fv(ctx, m.GetMinimumProtocolVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tls_certificates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_certificates"))
 		for idx, item := range m.GetTlsCertificates() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -377,18 +345,13 @@ func (v *ValidateDaemonTlsParametersType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["trusted_ca_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("trusted_ca_url"))
 		if err := fv(ctx, m.GetTrustedCaUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -446,7 +409,6 @@ func (m *DcClusterGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -454,7 +416,6 @@ func (m *DcClusterGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteInfo() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSiteInfo() {
 		driSet, err := e.GetDRefInfo()
@@ -468,7 +429,6 @@ func (m *DcClusterGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateDcClusterGroupStatus struct {
@@ -476,7 +436,6 @@ type ValidateDcClusterGroupStatus struct {
 }
 
 func (v *ValidateDcClusterGroupStatus) SiteInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -536,22 +495,18 @@ func (v *ValidateDcClusterGroupStatus) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["site_info"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_info"))
 		if err := fv(ctx, m.GetSiteInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDcClusterGroupStatusValidator = func() *ValidateDcClusterGroupStatus {
 	v := &ValidateDcClusterGroupStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -632,9 +587,7 @@ func (v *ValidateOperMetaType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["annotations"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("annotations"))
 		for key, value := range m.GetAnnotations() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -642,63 +595,43 @@ func (v *ValidateOperMetaType) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creation_timestamp"))
 		if err := fv(ctx, m.GetCreationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["modification_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("modification_timestamp"))
 		if err := fv(ctx, m.GetModificationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -767,25 +700,18 @@ func (v *ValidateServiceParameters) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ctype"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ctype"))
 		if err := fv(ctx, m.GetCtype(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -843,7 +769,6 @@ func (m *SiteMeshGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSiteInfoDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -851,7 +776,6 @@ func (m *SiteMeshGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteInfo() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSiteInfo() {
 		driSet, err := e.GetDRefInfo()
@@ -865,7 +789,6 @@ func (m *SiteMeshGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateSiteMeshGroupStatus struct {
@@ -885,9 +808,7 @@ func (v *ValidateSiteMeshGroupStatus) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["other_connected_sites"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("other_connected_sites"))
 		for idx, item := range m.GetOtherConnectedSites() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -895,11 +816,8 @@ func (v *ValidateSiteMeshGroupStatus) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_info"))
 		for idx, item := range m.GetSiteInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -907,16 +825,13 @@ func (v *ValidateSiteMeshGroupStatus) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteMeshGroupStatusValidator = func() *ValidateSiteMeshGroupStatus {
 	v := &ValidateSiteMeshGroupStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["site_info"] = SiteInfoValidator().Validate
 
 	return v
@@ -980,9 +895,7 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -990,9 +903,7 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1061,25 +972,18 @@ func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1136,7 +1040,6 @@ type ValidateSyncServerParamsType struct {
 }
 
 func (v *ValidateSyncServerParamsType) SyncServerListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1196,31 +1099,24 @@ func (v *ValidateSyncServerParamsType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["sync_server_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("sync_server_list"))
 		if err := fv(ctx, m.GetSyncServerList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vtrp_graceful_restart_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vtrp_graceful_restart_params"))
 		if err := fv(ctx, m.GetVtrpGracefulRestartParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSyncServerParamsTypeValidator = func() *ValidateSyncServerParamsType {
 	v := &ValidateSyncServerParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1304,43 +1200,30 @@ func (v *ValidateUseragentType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["host_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["program_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("program_name"))
 		if err := fv(ctx, m.GetProgramName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_name"))
 		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("site_name"))
 		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1409,43 +1292,30 @@ func (v *ValidateVTRPGracefulRestartParamsType) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gr_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gr_enabled"))
 		if err := fv(ctx, m.GetGrEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gr_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gr_time"))
 		if err := fv(ctx, m.GetGrTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["llgr_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("llgr_enabled"))
 		if err := fv(ctx, m.GetLlgrEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["llgr_time"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("llgr_time"))
 		if err := fv(ctx, m.GetLlgrTime(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

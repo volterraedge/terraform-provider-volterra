@@ -20,7 +20,6 @@ resource "volterra_ip_prefix_set" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -69,4 +68,4 @@ list of IPv6 prefixes with description..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured ip_prefix_set.
+*   `id` - This is the id of the configured ip_prefix_set.

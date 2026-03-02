@@ -73,19 +73,15 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *CreateSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -101,7 +97,6 @@ func (m *CreateSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +106,6 @@ func (m *CreateSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: workload_flavor")
 	}
-
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -129,7 +123,6 @@ func (m *CreateSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -155,7 +148,6 @@ func (m *CreateSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVsiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -174,7 +166,6 @@ func (m *CreateSpecType) GetVsiteRefsDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -183,7 +174,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) VsiteRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -243,14 +233,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_flavor_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_flavor_ref"))
 		if err := fv(ctx, m.GetDefaultFlavorRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServiceIsolationChoice().(type) {
@@ -276,24 +263,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vsite_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("vsite_refs"))
 		if err := fv(ctx, m.GetVsiteRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -312,7 +294,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vsite_refs"] = vFn
-
 	v.FldValidators["default_flavor_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -370,19 +351,15 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GetSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -398,7 +375,6 @@ func (m *GetSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -408,7 +384,6 @@ func (m *GetSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.Int
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: workload_flavor")
 	}
-
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -426,7 +401,6 @@ func (m *GetSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.Int
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -452,7 +426,6 @@ func (m *GetSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVsiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -471,7 +444,6 @@ func (m *GetSpecType) GetVsiteRefsDBEntries(ctx context.Context, d db.Interface)
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -480,7 +452,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) VsiteRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -540,14 +511,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_flavor_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_flavor_ref"))
 		if err := fv(ctx, m.GetDefaultFlavorRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServiceIsolationChoice().(type) {
@@ -573,24 +541,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vsite_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("vsite_refs"))
 		if err := fv(ctx, m.GetVsiteRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -609,7 +572,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vsite_refs"] = vFn
-
 	v.FldValidators["default_flavor_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -667,19 +629,15 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -695,7 +653,6 @@ func (m *GlobalSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -705,7 +662,6 @@ func (m *GlobalSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: workload_flavor")
 	}
-
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -723,7 +679,6 @@ func (m *GlobalSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -749,7 +704,6 @@ func (m *GlobalSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVsiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -768,7 +722,6 @@ func (m *GlobalSpecType) GetVsiteRefsDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -777,7 +730,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) VsiteRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -837,14 +789,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_flavor_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_flavor_ref"))
 		if err := fv(ctx, m.GetDefaultFlavorRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServiceIsolationChoice().(type) {
@@ -870,24 +819,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vsite_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("vsite_refs"))
 		if err := fv(ctx, m.GetVsiteRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -906,7 +850,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vsite_refs"] = vFn
-
 	v.FldValidators["default_flavor_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -964,19 +907,15 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *ReplaceSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -992,7 +931,6 @@ func (m *ReplaceSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1002,7 +940,6 @@ func (m *ReplaceSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: workload_flavor")
 	}
-
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -1020,7 +957,6 @@ func (m *ReplaceSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1046,7 +982,6 @@ func (m *ReplaceSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetVsiteRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1065,7 +1000,6 @@ func (m *ReplaceSpecType) GetVsiteRefsDBEntries(ctx context.Context, d db.Interf
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -1074,7 +1008,6 @@ type ValidateReplaceSpecType struct {
 }
 
 func (v *ValidateReplaceSpecType) VsiteRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -1134,14 +1067,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["default_flavor_ref"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_flavor_ref"))
 		if err := fv(ctx, m.GetDefaultFlavorRef(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetServiceIsolationChoice().(type) {
@@ -1167,24 +1097,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vsite_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("vsite_refs"))
 		if err := fv(ctx, m.GetVsiteRefs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1203,7 +1128,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vsite_refs"] = vFn
-
 	v.FldValidators["default_flavor_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

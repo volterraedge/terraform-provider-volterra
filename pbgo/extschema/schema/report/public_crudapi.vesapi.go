@@ -459,16 +459,12 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	tenant := server.TenantFromContext(ctx)
 	rsrcReq := &server.ResourceGetRequest{IsPublic: true, Tenant: tenant, Namespace: req.GetNamespace(), Name: req.GetName()}
 	switch req.ResponseFormat {
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -550,11 +546,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -567,7 +561,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -589,7 +582,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -597,16 +589,13 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1334,6 +1323,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Estimated Time at which the report generation would be complete",
                     "x-ves-example": "June 3 11PM 2022"
                 },
+                "generated_time": {
+                    "type": "string",
+                    "description": " generated time\n\nExample: - \"June 3 11PM 2022\"-",
+                    "title": "report generated time",
+                    "format": "date-time",
+                    "x-displayname": "Report Generated Time",
+                    "x-ves-example": "June 3 11PM 2022"
+                },
                 "report_status": {
                     "description": " report status\n\nExample: - \"Pending\"-\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n",
                     "title": "report delivery status",
@@ -1490,7 +1487,7 @@ var APISwaggerJSON string = `{
                 },
                 "header": {
                     "type": "string",
-                    "description": " Security events header \n\nExample: - \"Security Events Breakdown\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Security events header\n\nExample: - \"Security Events Breakdown\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "header",
                     "x-displayname": "Security Events header",
                     "x-ves-example": "Security Events Breakdown",
@@ -1520,7 +1517,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "value": {
-                    "description": " Security events data value \n\nExample: - \"128K Total Security Events 148K Previous Month\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Security events data value\n\nExample: - \"128K Total Security Events 148K Previous Month\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Security events data value",
                     "$ref": "#/definitions/reportWaapReportFieldData",
                     "x-displayname": "Security events data value",
@@ -1723,7 +1720,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "data": {
                     "type": "array",
-                    "description": " waap report data field list \n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " waap report data field list\n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "field data list",
                     "items": {
                         "$ref": "#/definitions/reportWaapReportFieldData"

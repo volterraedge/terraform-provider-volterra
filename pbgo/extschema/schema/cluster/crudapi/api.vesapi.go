@@ -56,7 +56,6 @@ func (r *ObjectCreateReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // EntryConverter
 func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 	r.FromObject(e)
@@ -76,15 +75,11 @@ func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
 }
 
 // create setters in object from request for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
-
 // create setters in response from object for oneof fields
 
 // CLIENT side
-
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -93,7 +88,6 @@ func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r.FromObject(e)
 	return r, nil
 }
-
 func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 	r := &ObjectReplaceReq{}
 	if e == nil {
@@ -105,12 +99,10 @@ func NewObjectReplaceReq(e db.Entry) (*ObjectReplaceReq, error) {
 		// See if uid can be got from Metadata.Uid
 		obj := e.(*object.DBObject)
 		uid = obj.GetMetadata().GetUid()
-
 	}
 	r.ObjectUid = uid
 	return r, nil
 }
-
 func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	ccOpts := server.NewCRUDCallOpts()
 	for _, o := range opts {
@@ -120,7 +112,6 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
-
 func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	r := &ObjectListReq{
 		TenantFilter:      cco.TenantFilter,
@@ -146,7 +137,6 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	}
 	return r, nil
 }
-
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
 	return &ObjectDeleteReq{ObjectUid: uid}
 }
@@ -158,7 +148,6 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -180,11 +169,9 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -202,9 +189,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -228,7 +213,6 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -236,11 +220,9 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -257,11 +239,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -271,11 +251,9 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -285,9 +263,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -312,7 +288,6 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -328,11 +303,9 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
-
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -346,7 +319,6 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -389,7 +361,6 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -457,11 +428,9 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
-
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -543,9 +512,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
-
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	req := NewObjectGetReq(key, opts...)
 
@@ -597,7 +564,6 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -605,11 +571,9 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -627,11 +591,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -641,11 +603,9 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -655,9 +615,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
 	sl := strings.Split("ves.io.schema.cluster.crudapi", ".")
@@ -748,7 +706,6 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -795,7 +752,6 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
-
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -824,7 +780,6 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
-
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cluster.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -835,7 +790,6 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
-
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cluster.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -846,7 +800,6 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
-
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cluster.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -857,11 +810,9 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.List")
 	return oah.List(ctx, req)
 }
-
 func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (API_ListStreamClient, error) {
 	return nil, fmt.Errorf("ListStream Not implemented")
 }
-
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.cluster.crudapi.API")
 	oah, ok := ah.(*APISrv)
@@ -883,7 +834,6 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -904,11 +854,9 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -924,9 +872,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
-
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -947,7 +893,6 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -955,11 +900,9 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
-
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
-
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -977,11 +920,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
-
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
-
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -991,11 +932,9 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
-
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
-
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -1005,9 +944,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
-
 }
-
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -1035,7 +972,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1047,7 +983,6 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
-
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -1077,7 +1012,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 	}
 	return nil
 }
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1098,7 +1032,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	obj := object.NewDBObject(nil)
 	req.ToObject(obj)
 	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-
 	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1110,7 +1043,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1141,9 +1073,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		return nil, status.Error(codes.ResourceExhausted, errors.Wrap(err, "Replace with NewObjectReplaceRsp").Error())
 	}
 	return rsp, nil
-
 }
-
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1168,7 +1098,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	}
 	return rsp, nil
 }
-
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1180,7 +1109,6 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1193,17 +1121,16 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+		return nil, errors.Wrap(err, "List")
 	}
 	rsp, err := NewObjectListRsp(req, rsrcRsp.Items)
 	if err != nil {
-		merr = multierror.Append(merr, err)
+		return rsp, err
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
 	rsp.NextPage = rsrcRsp.NextPage
-	return rsp, merr
+	return rsp, nil
 }
-
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
 	var merr *multierror.Error
 	rsrcReq := &server.ResourceListRequest{
@@ -1215,6 +1142,7 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
 	if err != nil {
 		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+		return errors.ErrOrNil(merr)
 	}
 	streamSvr := &crudAPIListStreamServer{stream}
 	for item := range rsrcRsp.ItemsCh {
@@ -1225,7 +1153,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 	}
 	return errors.ErrOrNil(merr)
 }
-
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
 	if err := s.validateTransport(ctx); err != nil {
 		return nil, err
@@ -1314,11 +1241,9 @@ func (r *ObjectGetReq) GetBackrefParam() (bool, []string) {
 func (r *ObjectDeleteReq) ToUid() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectCreateRsp) Key() string {
 	return r.ObjectUid
 }
-
 func (r *ObjectGetRsp) GetBackrefs(ef db.NewEntryFunc) ([]db.Entry, error) {
 	brEnts := []db.Entry{}
 	bRefs := r.GetEntBackrefs()
@@ -1377,7 +1302,6 @@ func NewObjectCreateRsp(e db.Entry) (*ObjectCreateRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo := &ObjectReplaceRsp{}
 	switch e.(type) {
@@ -1391,7 +1315,6 @@ func NewObjectReplaceRsp(e db.Entry) (*ObjectReplaceRsp, error) {
 	rspo.FromObject(o)
 	return rspo, nil
 }
-
 func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*ObjectGetRsp, error) {
 	rspo := &ObjectGetRsp{}
 	e := rsrcRsp.Entry
@@ -1435,7 +1358,6 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 	rspo.Status = statusObjs
 	return rspo, nil
 }
-
 func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*ObjectListRsp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("Nil ObjectListReq")
@@ -1461,7 +1383,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
 			continue
 		}
-
 		tenant := dbObj.GetSystemMetadata().GetTenant()
 		namespace := dbObj.GetMetadata().GetNamespace()
 		name := dbObj.GetMetadata().GetName()
@@ -1484,7 +1405,6 @@ func NewObjectListRsp(req *ObjectListReq, rsrcRspItems []*server.ResourceListRes
 	}
 	return o, errs
 }
-
 func NewObjectDeleteRsp(ec ErrorCode) (*ObjectDeleteRsp, error) {
 	return &ObjectDeleteRsp{Err: ec}, nil
 }
@@ -2785,8 +2705,10 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Cluster",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
+            "x-ves-oneof-field-cluster_type": "[\"default_cluster\",\"tmm_pool_cluster\"]",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-lb_source_ip_persistance_choice": "[\"disable_lb_source_ip_persistance\",\"enable_lb_source_ip_persistance\"]",
+            "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-proxy_protocol_type": "[\"disable_proxy_protocol\",\"proxy_protocol_v1\",\"proxy_protocol_v2\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GlobalSpecType",
@@ -2813,6 +2735,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "600000"
                     }
+                },
+                "default_cluster": {
+                    "description": "Exclusive with [tmm_pool_cluster]\n",
+                    "title": "Default",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "default_subset": {
                     "type": "object",
@@ -2934,11 +2862,27 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
                     "x-displayname": "LoadBalancer Algorithm"
                 },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_request_limit_per_connection]\n\n Sets the maximum number of requests allowed per connection to the origin server.\n Enter a value \u003e=1 to define the request limit per connection.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "Maximum Requests Per Connection",
+                    "format": "int64",
+                    "x-displayname": "Maximum Requests Per Connection",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
                 "no_panic_threshold": {
                     "description": "Exclusive with [panic_threshold]\n\n Disable panic threshold. Only healthy endpoints are considered for loadbalancing.",
                     "title": "Disable panic threshold",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No Panic threshold"
+                },
+                "no_request_limit_per_connection": {
+                    "description": "Exclusive with [max_requests_per_connection]\n This option disables the maximum requests per connection limit.\n When selected, no limit is enforced, and connections can handle unlimited requests.",
+                    "title": "Disable the max requests per connection option",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Request Limit"
                 },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
@@ -2973,6 +2917,12 @@ var APISwaggerJSON string = `{
                     "title": "tls_parameters",
                     "$ref": "#/definitions/schemaUpstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
+                },
+                "tmm_pool_cluster": {
+                    "description": "Exclusive with [default_cluster]\n Supporting config which is configured only for TMM Pool , This option is hidden and will not be set for non-TMM origin pool",
+                    "title": "TMM Pool",
+                    "$ref": "#/definitions/clusterTMMPoolType",
+                    "x-displayname": "TMM Pool"
                 },
                 "upstream_conn_pool_reuse_type": {
                     "description": " Select upstream connection pool reuse state for every downstream connection\n This configuration choice is for HTTP(S) LB only.",
@@ -3152,6 +3102,55 @@ var APISwaggerJSON string = `{
             "default": "NO_FALLBACK",
             "x-displayname": "Subset Fallback Policy",
             "x-ves-proto-enum": "ves.io.schema.cluster.SubsetFallbackPolicy"
+        },
+        "clusterTMMPoolType": {
+            "type": "object",
+            "title": "TMM Pool",
+            "x-displayname": "TMM Pool",
+            "x-ves-proto-message": "ves.io.schema.cluster.TMMPoolType",
+            "properties": {
+                "action_on_service_down": {
+                    "description": " Specifies how the system should respond when the target pool member becomes unavailable. The default is None, meaning that the system takes no action to manage existing connections when a pool member becomes unavailable.\n None: Specifies that the system maintains existing connections, but does not send new traffic to the member.\n Reject: Specifies that, if there are no pool members available, the system resets and clears the active connections from the connection table and sends a reset (RST) or Internet Control Message Protocol (ICMP) message. If there are pool members available, the system resets and clears the active connections, but sends newly arriving connections to the available pool member and does not send RST or ICMP messages.\n Drop: Specifies that the system simply cleans up the connection.\n Reselect: Specifies that the system manages established client connections by moving them to an alternative pool member when monitors mark the original pool member down.",
+                    "title": "Action On Service Down",
+                    "$ref": "#/definitions/schemaTMMActionOnServiceDownType",
+                    "x-displayname": "Action On Service Down"
+                },
+                "health_monitoring": {
+                    "description": " Specifies an association between a health or performance monitor and an entire pool, rather than with individual pool members.",
+                    "title": "Health Monitoring",
+                    "$ref": "#/definitions/schemaTMMHealthMonitoringType",
+                    "x-displayname": "Health Monitors"
+                },
+                "priority_group": {
+                    "description": " Specifies whether the system load balances traffic according to the priority number assigned to the pool member. The default is Disabled. Once you enable this setting, you can specify pool member priority when you create a new pool or on a pool member's properties screen. The system treats same-priority pool members as a group. To enable priority group activation, select Less than from the list, and in the Available Member(s) field, type a number from 0 to 65535 that represents the minimum number of members that must be available in one priority group before the system directs traffic to members in a lower priority group. When a sufficient number of members become available in the higher priority group, the system again directs traffic to the higher priority group.",
+                    "title": "priority_group_activation_choice",
+                    "$ref": "#/definitions/schemaTMMPriorityGroupActivationType",
+                    "x-displayname": "Priority Group Activation"
+                },
+                "request_queue_config": {
+                    "description": " Enables TCP request queueing.",
+                    "title": "Request Queuing",
+                    "$ref": "#/definitions/schemaTMMRequestQueuingOptionsType",
+                    "x-displayname": "Request Queuing"
+                },
+                "slow_ramp_time": {
+                    "type": "integer",
+                    "description": " Specifies the duration during which the system sends less traffic to a newly-enabled pool member. The amount of traffic is based on the ratio of how long the pool member has been available compared to the slow ramp time, in seconds. Once the pool member has been online for a time greater than the slow ramp time, the pool member receives a full proportion of the incoming traffic. Slow ramp time is particularly useful for the least connections load balancing mode.\n Setting this to a nonzero value can cause unexpected Priority Group behavior, such as load balancing to a low-priority member even with enough high-priority servers.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 6000\n",
+                    "title": "Slow Ramp Time",
+                    "format": "int64",
+                    "x-displayname": "Slow Ramp Time",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "6000"
+                    }
+                },
+                "tmm_lb_method": {
+                    "description": " Reference to TMM LB Method object - to be populated by vs_pool",
+                    "title": "Reference to TMM LB Method object",
+                    "$ref": "#/definitions/schemaTMMLBMethodType",
+                    "x-displayname": "LB Method"
+                }
+            }
         },
         "clustercrudapiErrorCode": {
             "type": "string",
@@ -3473,10 +3472,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -3944,7 +3943,7 @@ var APISwaggerJSON string = `{
                 },
                 "direct_ref_hash": {
                     "type": "string",
-                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if\n this object hash has had references become resolved/unresolved",
                     "title": "direct_ref_hash",
                     "x-displayname": "Direct Reference Hash"
                 },
@@ -4053,6 +4052,235 @@ var APISwaggerJSON string = `{
                     "title": "vtrp_stale",
                     "format": "boolean",
                     "x-displayname": "VTRP Stale"
+                }
+            }
+        },
+        "schemaTMMActionOnServiceDownType": {
+            "type": "object",
+            "description": "Specifies how the system should respond when the target pool member becomes unavailable.",
+            "title": "Action On Service Down",
+            "x-displayname": "Action On Service Down",
+            "x-ves-oneof-field-action_on_down_choice": "[\"drop\",\"none\",\"reject\",\"reselect\"]",
+            "x-ves-proto-message": "ves.io.schema.TMMActionOnServiceDownType",
+            "properties": {
+                "drop": {
+                    "description": "Exclusive with [none reject reselect]\n",
+                    "title": "Drop",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Drop"
+                },
+                "none": {
+                    "description": "Exclusive with [drop reject reselect]\n",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
+                },
+                "reject": {
+                    "description": "Exclusive with [drop none reselect]\n",
+                    "title": "Reject",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Reject"
+                },
+                "reselect": {
+                    "description": "Exclusive with [drop none reject]\n",
+                    "title": "Reselect",
+                    "$ref": "#/definitions/schemaTMMPoolReselectType",
+                    "x-displayname": "Reselect"
+                }
+            }
+        },
+        "schemaTMMHealthMonitoringType": {
+            "type": "object",
+            "description": "Reference to healthcheck configuration objects",
+            "title": "Health Monitoring",
+            "x-displayname": "Health Monitoring",
+            "x-ves-oneof-field-health_monitor_availability_choice": "[\"health_monitor_availability_all\",\"health_monitor_availability_at_least\"]",
+            "x-ves-proto-message": "ves.io.schema.TMMHealthMonitoringType",
+            "properties": {
+                "health_monitor_availability_all": {
+                    "description": "Exclusive with [health_monitor_availability_at_least]\n",
+                    "title": "All",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All"
+                },
+                "health_monitor_availability_at_least": {
+                    "description": "Exclusive with [health_monitor_availability_all]\n",
+                    "title": "Atleast",
+                    "$ref": "#/definitions/schemaTMMPoolHealthMonitorAvailabilityType",
+                    "x-displayname": "At least"
+                },
+                "healthcheck": {
+                    "type": "array",
+                    "description": " Reference to healthcheck configuration objects\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
+                    "title": "Health Monitors",
+                    "maxItems": 4,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Health Monitors",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4"
+                    }
+                }
+            }
+        },
+        "schemaTMMLBMethodType": {
+            "type": "string",
+            "description": "Load Balancing Method\n\n - ROUND_ROBIN: ROUND_ROBIN\n\n - LEAST_CONN_MEMBER: LEAST_CONN_MEMBER\n\n - FASTEST_NODE_ADDR: FASTEST_NODE_ADDR\n\n - PREDICTIVE_MEMBER: PREDICTIVE_MEMBER\n\n - OBSERVED_MEMBER: OBSERVED_MEMBER\n\n - PREDICTIVE_NODE_ADDR: PREDICTIVE_NODE_ADDR\n\n - OBSERVED_NODE_ADDR: OBSERVED_NODE_ADDR\n\n - RATIO_MEMBER: RATIO_MEMBER\n\n - DYNAMIC_RATIO_NODE_ADDR: DYNAMIC_RATIO_NODE_ADDR\n\n - DYNAMIC_RATIO_MEMBER: DYNAMIC_RATIO_MEMBER\n\n - LEAST_CONN_NODE_ADDR: LEAST_CONN_NODE_ADDR\n\n - RATIO_NODE_ADDR: RATIO_NODE_ADDR\n\n - LEAST_SESSIONS: LEAST_SESSIONS\n\n - WEIGHTED_LEAST_CONN_MEMBER: WEIGHTED_LEAST_CONN_MEMBER\n\n - WEIGHTED_LEAST_CONN_NODE_ADDR: WEIGHTED_LEAST_CONN_NODE_ADDR\n\n - RATIO_LEAST_CONN_MEMBER: RATIO_LEAST_CONN_MEMBER\n\n - RATIO_LEAST_CONN_NODE_ADDR: RATIO_LEAST_CONN_NODE_ADDR\n\n - RATIO_SESSION: RATIO_SESSION\n",
+            "title": "TMM Load Balancing Method",
+            "enum": [
+                "ROUND_ROBIN",
+                "LEAST_CONN_MEMBER",
+                "FASTEST_NODE_ADDR",
+                "PREDICTIVE_MEMBER",
+                "OBSERVED_MEMBER",
+                "PREDICTIVE_NODE_ADDR",
+                "OBSERVED_NODE_ADDR",
+                "RATIO_MEMBER",
+                "DYNAMIC_RATIO_NODE_ADDR",
+                "DYNAMIC_RATIO_MEMBER",
+                "LEAST_CONN_NODE_ADDR",
+                "RATIO_NODE_ADDR",
+                "LEAST_SESSIONS",
+                "WEIGHTED_LEAST_CONN_MEMBER",
+                "WEIGHTED_LEAST_CONN_NODE_ADDR",
+                "RATIO_LEAST_CONN_MEMBER",
+                "RATIO_LEAST_CONN_NODE_ADDR",
+                "RATIO_SESSION"
+            ],
+            "default": "ROUND_ROBIN",
+            "x-displayname": "Load Balancing Method",
+            "x-ves-proto-enum": "ves.io.schema.TMMLBMethodType"
+        },
+        "schemaTMMPoolHealthMonitorAvailabilityType": {
+            "type": "object",
+            "title": "Atleast",
+            "x-displayname": "Atleast",
+            "x-ves-proto-message": "ves.io.schema.TMMPoolHealthMonitorAvailabilityType",
+            "properties": {
+                "minimum_available": {
+                    "type": "integer",
+                    "description": " Minimum Availability\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "Minimum Availability",
+                    "format": "int64",
+                    "x-displayname": "Minimum Availability",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
+                }
+            }
+        },
+        "schemaTMMPoolMemberCountType": {
+            "type": "object",
+            "title": "Member Count",
+            "x-displayname": "Member Count",
+            "x-ves-proto-message": "ves.io.schema.TMMPoolMemberCountType",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "description": " Specify pool member priority\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Member Count",
+                    "format": "int64",
+                    "x-displayname": "Member Count",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
+        "schemaTMMPoolRequestQueuingType": {
+            "type": "object",
+            "description": "Request Queuing",
+            "title": "Request Queuing",
+            "x-displayname": "Request Queuing",
+            "x-ves-proto-message": "ves.io.schema.TMMPoolRequestQueuingType",
+            "properties": {
+                "queue_depth": {
+                    "type": "integer",
+                    "description": " Specifies the maximum number of connection requests allowed in the queue. The default value of 0 equates to unlimited connection requests, constrained only by available memory.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "Request Queuing Depth",
+                    "format": "int64",
+                    "x-displayname": "Request Queuing Depth",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
+                },
+                "queue_timeout": {
+                    "type": "integer",
+                    "description": " Specifies the maximum number of milliseconds that a connection request can be queued until capacity becomes available, whereupon the connection request is removed from the queue and reset. The default value of 0 equates to an unlimited time in the queue.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 60000\n",
+                    "title": "Request Queuing Timeout",
+                    "format": "int64",
+                    "x-displayname": "Request Queuing Timeout",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "60000"
+                    }
+                }
+            }
+        },
+        "schemaTMMPoolReselectType": {
+            "type": "object",
+            "title": "Reselect",
+            "x-displayname": "Reselect",
+            "x-ves-proto-message": "ves.io.schema.TMMPoolReselectType",
+            "properties": {
+                "reselect_count": {
+                    "type": "integer",
+                    "description": " Specifies the number of times the system tries to contact a new pool member after a passive failure. A passive failure consists of a server-connect failure or a failure to receive a data response within a user-specified interval. The default is 0 (zero), which indicates no reselects.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "Reselect Tries",
+                    "format": "int64",
+                    "x-displayname": "Reselect Tries",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
+                }
+            }
+        },
+        "schemaTMMPriorityGroupActivationType": {
+            "type": "object",
+            "description": "Specifies whether the system load balances traffic according to the priority number assigned to the pool member. The default is Disabled. Once you enable this setting, you can specify pool member priority when you create a new pool or on a pool member's properties screen. The system treats same-priority pool members as a group. To enable priority group activation, select Less than from the list, and in the Available Member(s) field, type a number from 0 to 65535 that represents the minimum number of members that must be available in one priority group before the system directs traffic to members in a lower priority group. When a sufficient number of members become available in the higher priority group, the system again directs traffic to the higher priority group.",
+            "title": "priority_group_activation_choice",
+            "x-displayname": "Priority Group Activation",
+            "x-ves-oneof-field-priority_group_activation_choice": "[\"disabled_priority_group\",\"enabled_priority_group\"]",
+            "x-ves-proto-message": "ves.io.schema.TMMPriorityGroupActivationType",
+            "properties": {
+                "disabled_priority_group": {
+                    "description": "Exclusive with [enabled_priority_group]\n",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "enabled_priority_group": {
+                    "description": "Exclusive with [disabled_priority_group]\n",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/schemaTMMPoolMemberCountType",
+                    "x-displayname": "Enabled"
+                }
+            }
+        },
+        "schemaTMMRequestQueuingOptionsType": {
+            "type": "object",
+            "description": "Enables TCP request queueing.",
+            "title": "Request Queuing",
+            "x-displayname": "Request Queuing",
+            "x-ves-oneof-field-request_queuing_choice": "[\"request_queuing_disabled\",\"request_queuing_enabled\"]",
+            "x-ves-proto-message": "ves.io.schema.TMMRequestQueuingOptionsType",
+            "properties": {
+                "request_queuing_disabled": {
+                    "description": "Exclusive with [request_queuing_enabled]\n",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "request_queuing_enabled": {
+                    "description": "Exclusive with [request_queuing_disabled]\n",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/schemaTMMPoolRequestQueuingType",
+                    "x-displayname": "Enabled"
                 }
             }
         },

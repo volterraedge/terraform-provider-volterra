@@ -1,3 +1,7 @@
+//
+// Copyright (c) 2026 F5 Inc. All rights reserved.
+//
+
 package statemigration
 
 import (
@@ -229,6 +233,18 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 							Optional: true,
 						},
 
+						"max_requests_per_connection": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"no_request_limit_per_connection": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"disable_outlier_detection": {
 
 							Type:     schema.TypeBool,
@@ -323,7 +339,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"keys": {
-
 													Type: schema.TypeList,
 
 													Required: true,
@@ -387,7 +402,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 			},
 
 			"healthcheck": {
-
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Resource{
@@ -554,7 +568,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -564,7 +577,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -591,7 +603,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"endpoint": {
-
 										Type:     schema.TypeList,
 										MaxItems: 1,
 										Required: true,
@@ -664,7 +675,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"expressions": {
-
 													Type: schema.TypeList,
 
 													Required:   true,
@@ -769,7 +779,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -779,7 +788,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -945,7 +953,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -955,7 +962,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -1119,7 +1125,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"ipv6_prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -1129,7 +1134,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 															},
 
 															"prefixes": {
-
 																Type: schema.TypeList,
 
 																Optional: true,
@@ -1200,7 +1204,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"virtual_network": {
-
 										Type:     schema.TypeList,
 										MaxItems: 1,
 										Required: true,
@@ -1252,7 +1255,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 									},
 
 									"private_network": {
-
 										Type:     schema.TypeList,
 										MaxItems: 1,
 										Required: true,
@@ -1376,7 +1378,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"hash_algorithms": {
-
 																Type: schema.TypeList,
 
 																Required: true,
@@ -1680,7 +1681,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"cipher_suites": {
-
 													Type: schema.TypeList,
 
 													Required: true,

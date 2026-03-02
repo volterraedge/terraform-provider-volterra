@@ -41,7 +41,6 @@ func (m *CookieParams) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAuthHmac().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CookieParams.auth_hmac")
 	}
@@ -82,7 +81,6 @@ func (m *CookieParams) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSecretChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -92,11 +90,8 @@ func (m *CookieParams) GetSecretChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSecretChoice().(type) {
 	case *CookieParams_AuthHmac:
-
 		return nil, nil
-
 	case *CookieParams_KmsKeyHmac:
-
 		drInfos, err := m.GetKmsKeyHmac().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetKmsKeyHmac().GetDRefInfo() FAILED")
@@ -106,11 +101,9 @@ func (m *CookieParams) GetSecretChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "kms_key_hmac." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateCookieParams struct {
@@ -118,7 +111,6 @@ type ValidateCookieParams struct {
 }
 
 func (v *ValidateCookieParams) CookieRefreshIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cookie_refresh_interval")
@@ -126,9 +118,7 @@ func (v *ValidateCookieParams) CookieRefreshIntervalValidationRuleHandler(rules 
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCookieParams) CookieExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cookie_expiry")
@@ -136,9 +126,7 @@ func (v *ValidateCookieParams) CookieExpiryValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCookieParams) SessionExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for session_expiry")
@@ -160,23 +148,17 @@ func (v *ValidateCookieParams) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cookie_expiry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_expiry"))
 		if err := fv(ctx, m.GetCookieExpiry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_refresh_interval"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_refresh_interval"))
 		if err := fv(ctx, m.GetCookieRefreshInterval(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetSecretChoice().(type) {
@@ -202,25 +184,19 @@ func (v *ValidateCookieParams) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["session_expiry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("session_expiry"))
 		if err := fv(ctx, m.GetSessionExpiry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCookieParamsValidator = func() *ValidateCookieParams {
 	v := &ValidateCookieParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -261,7 +237,6 @@ var DefaultCookieParamsValidator = func() *ValidateCookieParams {
 		panic(errMsg)
 	}
 	v.FldValidators["session_expiry"] = vFn
-
 	v.FldValidators["secret_choice.auth_hmac"] = HMACKeyPairValidator().Validate
 	v.FldValidators["secret_choice.kms_key_hmac"] = KMSKeyRefTypeValidator().Validate
 
@@ -288,11 +263,9 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetOidcAuth().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.oidc_auth")
 	}
-
 	if err := m.GetCookieParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.cookie_params")
 	}
@@ -333,7 +306,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCookieParamsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -341,7 +313,6 @@ func (m *CreateSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCookieParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
@@ -351,7 +322,6 @@ func (m *CreateSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "cookie_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -365,9 +335,7 @@ func (v *ValidateCreateSpecType) AuthTypeChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) CookieParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cookie_params")
@@ -376,11 +344,9 @@ func (v *ValidateCreateSpecType) CookieParamsValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CookieParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -423,25 +389,19 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_params"))
 		if err := fv(ctx, m.GetCookieParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -449,7 +409,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
 	rulesAuthTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -471,7 +430,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cookie_params"] = vFn
-
 	v.FldValidators["auth_type_choice.oidc_auth"] = OIDCAuthTypeValidator().Validate
 
 	return v
@@ -497,11 +455,9 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetOidcAuth().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.oidc_auth")
 	}
-
 	if err := m.GetCookieParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.cookie_params")
 	}
@@ -542,7 +498,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCookieParamsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -550,7 +505,6 @@ func (m *GetSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCookieParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
@@ -560,7 +514,6 @@ func (m *GetSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "cookie_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -574,9 +527,7 @@ func (v *ValidateGetSpecType) AuthTypeChoiceValidationRuleHandler(rules map[stri
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) CookieParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cookie_params")
@@ -585,11 +536,9 @@ func (v *ValidateGetSpecType) CookieParamsValidationRuleHandler(rules map[string
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CookieParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -632,25 +581,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_params"))
 		if err := fv(ctx, m.GetCookieParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -658,7 +601,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
 	rulesAuthTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -680,7 +622,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cookie_params"] = vFn
-
 	v.FldValidators["auth_type_choice.oidc_auth"] = OIDCAuthTypeValidator().Validate
 
 	return v
@@ -706,11 +647,9 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetOidcAuth().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.oidc_auth")
 	}
-
 	if err := m.GetCookieParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.cookie_params")
 	}
@@ -751,7 +690,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCookieParamsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -759,7 +697,6 @@ func (m *GlobalSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCookieParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
@@ -769,7 +706,6 @@ func (m *GlobalSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "cookie_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -783,9 +719,7 @@ func (v *ValidateGlobalSpecType) AuthTypeChoiceValidationRuleHandler(rules map[s
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) CookieParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cookie_params")
@@ -794,11 +728,9 @@ func (v *ValidateGlobalSpecType) CookieParamsValidationRuleHandler(rules map[str
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CookieParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -841,25 +773,19 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_params"))
 		if err := fv(ctx, m.GetCookieParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -867,7 +793,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
 	rulesAuthTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -889,7 +814,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cookie_params"] = vFn
-
 	v.FldValidators["auth_type_choice.oidc_auth"] = OIDCAuthTypeValidator().Validate
 
 	return v
@@ -915,11 +839,9 @@ func (m *HMACKeyPair) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPrimKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HMACKeyPair.prim_key")
 	}
-
 	if err := m.GetSecKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting HMACKeyPair.sec_key")
 	}
@@ -959,7 +881,6 @@ type ValidateHMACKeyPair struct {
 }
 
 func (v *ValidateHMACKeyPair) PrimKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for prim_key")
@@ -968,29 +889,23 @@ func (v *ValidateHMACKeyPair) PrimKeyValidationRuleHandler(rules map[string]stri
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHMACKeyPair) PrimKeyExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var (
 		reqdValidatorFn db.ValidatorFunc
 		err             error
 	)
-
 	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for prim_key_expiry")
 	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if reqdValidatorFn != nil {
 			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -1003,9 +918,7 @@ func (v *ValidateHMACKeyPair) PrimKeyExpiryValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHMACKeyPair) SecKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for sec_key")
@@ -1014,29 +927,23 @@ func (v *ValidateHMACKeyPair) SecKeyValidationRuleHandler(rules map[string]strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHMACKeyPair) SecKeyExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var (
 		reqdValidatorFn db.ValidatorFunc
 		err             error
 	)
-
 	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for sec_key_expiry")
 	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if reqdValidatorFn != nil {
 			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -1063,50 +970,36 @@ func (v *ValidateHMACKeyPair) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["prim_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prim_key"))
 		if err := fv(ctx, m.GetPrimKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["prim_key_expiry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prim_key_expiry"))
 		if err := fv(ctx, m.GetPrimKeyExpiry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sec_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sec_key"))
 		if err := fv(ctx, m.GetSecKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sec_key_expiry"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sec_key_expiry"))
 		if err := fv(ctx, m.GetSecKeyExpiry(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHMACKeyPairValidator = func() *ValidateHMACKeyPair {
 	v := &ValidateHMACKeyPair{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1209,11 +1102,9 @@ func (m *KMSKeyRefType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetAuthHmacKmsDRefInfo()
-
 }
 
 func (m *KMSKeyRefType) GetAuthHmacKmsDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetAuthHmacKms()
 	if vref == nil {
 		return nil, nil
@@ -1229,7 +1120,6 @@ func (m *KMSKeyRefType) GetAuthHmacKmsDRefInfo() ([]db.DRefInfo, error) {
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetAuthHmacKmsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1239,7 +1129,6 @@ func (m *KMSKeyRefType) GetAuthHmacKmsDBEntries(ctx context.Context, d db.Interf
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: kms_key")
 	}
-
 	vref := m.GetAuthHmacKms()
 	if vref == nil {
 		return nil, nil
@@ -1257,7 +1146,6 @@ func (m *KMSKeyRefType) GetAuthHmacKmsDBEntries(ctx context.Context, d db.Interf
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -1278,23 +1166,18 @@ func (v *ValidateKMSKeyRefType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["auth_hmac_kms"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auth_hmac_kms"))
 		if err := fv(ctx, m.GetAuthHmacKms(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultKMSKeyRefTypeValidator = func() *ValidateKMSKeyRefType {
 	v := &ValidateKMSKeyRefType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["auth_hmac_kms"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1346,7 +1229,6 @@ type ValidateOIDCAuthParams struct {
 }
 
 func (v *ValidateOIDCAuthParams) AuthEndpointUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_endpoint_url")
@@ -1354,9 +1236,7 @@ func (v *ValidateOIDCAuthParams) AuthEndpointUrlValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOIDCAuthParams) TokenEndpointUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for token_endpoint_url")
@@ -1364,9 +1244,7 @@ func (v *ValidateOIDCAuthParams) TokenEndpointUrlValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOIDCAuthParams) EndSessionEndpointUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for end_session_endpoint_url")
@@ -1388,41 +1266,30 @@ func (v *ValidateOIDCAuthParams) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["auth_endpoint_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auth_endpoint_url"))
 		if err := fv(ctx, m.GetAuthEndpointUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_session_endpoint_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_session_endpoint_url"))
 		if err := fv(ctx, m.GetEndSessionEndpointUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["token_endpoint_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("token_endpoint_url"))
 		if err := fv(ctx, m.GetTokenEndpointUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOIDCAuthParamsValidator = func() *ValidateOIDCAuthParams {
 	v := &ValidateOIDCAuthParams{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1496,7 +1363,6 @@ func (m *OIDCAuthType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetClientSecret().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting OIDCAuthType.client_secret")
 	}
@@ -1550,9 +1416,7 @@ func (v *ValidateOIDCAuthType) AuthParamsChoiceOidcWellKnownConfigUrlValidationR
 	}
 	return oValidatorFn_OidcWellKnownConfigUrl, nil
 }
-
 func (v *ValidateOIDCAuthType) OidcClientIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for oidc_client_id")
@@ -1560,9 +1424,7 @@ func (v *ValidateOIDCAuthType) OidcClientIdValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateOIDCAuthType) ClientSecretValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for client_secret")
@@ -1571,11 +1433,9 @@ func (v *ValidateOIDCAuthType) ClientSecretValidationRuleHandler(rules map[strin
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1629,34 +1489,25 @@ func (v *ValidateOIDCAuthType) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_secret"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_secret"))
 		if err := fv(ctx, m.GetClientSecret(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["oidc_client_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("oidc_client_id"))
 		if err := fv(ctx, m.GetOidcClientId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOIDCAuthTypeValidator = func() *ValidateOIDCAuthType {
 	v := &ValidateOIDCAuthType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1664,7 +1515,6 @@ var DefaultOIDCAuthTypeValidator = func() *ValidateOIDCAuthType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAuthParamsChoice := v.AuthParamsChoiceValidationRuleHandler
 	rulesAuthParamsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1675,7 +1525,6 @@ var DefaultOIDCAuthTypeValidator = func() *ValidateOIDCAuthType {
 		panic(errMsg)
 	}
 	v.FldValidators["auth_params_choice"] = vFn
-
 	vrhAuthParamsChoiceOidcWellKnownConfigUrl := v.AuthParamsChoiceOidcWellKnownConfigUrlValidationRuleHandler
 	rulesAuthParamsChoiceOidcWellKnownConfigUrl := map[string]string{
 		"ves.io.schema.rules.string.max_len": "128",
@@ -1687,7 +1536,6 @@ var DefaultOIDCAuthTypeValidator = func() *ValidateOIDCAuthType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OIDCAuthType.auth_params_choice_oidc_well_known_config_url: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["auth_params_choice.oidc_well_known_config_url"] = vFnMap["auth_params_choice.oidc_well_known_config_url"]
 
 	vrhOidcClientId := v.OidcClientIdValidationRuleHandler
@@ -1713,7 +1561,6 @@ var DefaultOIDCAuthTypeValidator = func() *ValidateOIDCAuthType {
 		panic(errMsg)
 	}
 	v.FldValidators["client_secret"] = vFn
-
 	v.FldValidators["auth_params_choice.oidc_auth_params"] = OIDCAuthParamsValidator().Validate
 
 	return v
@@ -1739,11 +1586,9 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetOidcAuth().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.oidc_auth")
 	}
-
 	if err := m.GetCookieParams().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.cookie_params")
 	}
@@ -1784,7 +1629,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCookieParamsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -1792,7 +1636,6 @@ func (m *ReplaceSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCookieParams() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
@@ -1802,7 +1645,6 @@ func (m *ReplaceSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "cookie_params." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {
@@ -1816,9 +1658,7 @@ func (v *ValidateReplaceSpecType) AuthTypeChoiceValidationRuleHandler(rules map[
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateReplaceSpecType) CookieParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cookie_params")
@@ -1827,11 +1667,9 @@ func (v *ValidateReplaceSpecType) CookieParamsValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CookieParamsValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1874,25 +1712,19 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cookie_params"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cookie_params"))
 		if err := fv(ctx, m.GetCookieParams(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1900,7 +1732,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
 	rulesAuthTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1922,7 +1753,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cookie_params"] = vFn
-
 	v.FldValidators["auth_type_choice.oidc_auth"] = OIDCAuthTypeValidator().Validate
 
 	return v

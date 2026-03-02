@@ -65,7 +65,6 @@ func (m *CreateBulkRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return nil, nil
-
 }
 
 type ValidateCreateBulkRequest struct {
@@ -85,9 +84,7 @@ func (v *ValidateCreateBulkRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["objects"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("objects"))
 		for idx, item := range m.GetObjects() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -95,16 +92,13 @@ func (v *ValidateCreateBulkRequest) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateBulkRequestValidator = func() *ValidateCreateBulkRequest {
 	v := &ValidateCreateBulkRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["objects"] = ObjectValidator().Validate
 
 	return v
@@ -168,9 +162,7 @@ func (v *ValidateCreateBulkResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["created"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("created"))
 		for idx, item := range m.GetCreated() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -178,11 +170,8 @@ func (v *ValidateCreateBulkResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_created"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_created"))
 		for idx, item := range m.GetNotCreated() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -190,11 +179,8 @@ func (v *ValidateCreateBulkResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rebuild_errors"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rebuild_errors"))
 		for idx, item := range m.GetRebuildErrors() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -202,11 +188,8 @@ func (v *ValidateCreateBulkResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rebuilt"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rebuilt"))
 		for idx, item := range m.GetRebuilt() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -214,9 +197,7 @@ func (v *ValidateCreateBulkResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -285,9 +266,7 @@ func (v *ValidateDeleteBulkRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["objects"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("objects"))
 		for idx, item := range m.GetObjects() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -295,9 +274,7 @@ func (v *ValidateDeleteBulkRequest) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -366,9 +343,7 @@ func (v *ValidateDeleteBulkResponse) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["deleted"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deleted"))
 		for idx, item := range m.GetDeleted() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -376,11 +351,8 @@ func (v *ValidateDeleteBulkResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["not_deleted"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("not_deleted"))
 		for idx, item := range m.GetNotDeleted() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -388,11 +360,8 @@ func (v *ValidateDeleteBulkResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rebuild_errors"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rebuild_errors"))
 		for idx, item := range m.GetRebuildErrors() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -400,11 +369,8 @@ func (v *ValidateDeleteBulkResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rebuilt"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rebuilt"))
 		for idx, item := range m.GetRebuilt() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -412,9 +378,7 @@ func (v *ValidateDeleteBulkResponse) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -483,25 +447,18 @@ func (v *ValidateFailedOperation) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object"))
 		if err := fv(ctx, m.GetObject(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

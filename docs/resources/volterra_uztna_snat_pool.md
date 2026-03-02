@@ -28,7 +28,6 @@ resource "volterra_uztna_snat_pool" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -77,4 +76,4 @@ IPv6 Address.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured uztna_snat_pool.
+-   `id` - This is the id of the configured uztna_snat_pool.

@@ -64,7 +64,6 @@ type ValidateAllocationScheme struct {
 }
 
 func (v *ValidateAllocationScheme) AllocationUnitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for allocation_unit")
@@ -72,9 +71,7 @@ func (v *ValidateAllocationScheme) AllocationUnitValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAllocationScheme) LocalInterfaceAddressOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for local_interface_address_offset")
@@ -96,41 +93,30 @@ func (v *ValidateAllocationScheme) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allocation_unit"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allocation_unit"))
 		if err := fv(ctx, m.GetAllocationUnit(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_interface_address_offset"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_interface_address_offset"))
 		if err := fv(ctx, m.GetLocalInterfaceAddressOffset(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_interface_address_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_interface_address_type"))
 		if err := fv(ctx, m.GetLocalInterfaceAddressType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAllocationSchemeValidator = func() *ValidateAllocationScheme {
 	v := &ValidateAllocationScheme{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -213,7 +199,6 @@ type ValidateCreateSpecType struct {
 }
 
 func (v *ValidateCreateSpecType) ModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(AllocatorMode)
@@ -227,9 +212,7 @@ func (v *ValidateCreateSpecType) ModeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AddressAllocationSchemeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for address_allocation_scheme")
@@ -238,19 +221,15 @@ func (v *ValidateCreateSpecType) AddressAllocationSchemeValidationRuleHandler(ru
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := AllocationSchemeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCreateSpecType) AddressPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -304,40 +283,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address_allocation_scheme"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address_allocation_scheme"))
 		if err := fv(ctx, m.GetAddressAllocationScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address_pool"]; exists {
 		vOpts := append(opts, db.WithValidateField("address_pool"))
 		if err := fv(ctx, m.GetAddressPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mode"))
 		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -431,7 +400,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) ModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(AllocatorMode)
@@ -445,9 +413,7 @@ func (v *ValidateGetSpecType) ModeValidationRuleHandler(rules map[string]string)
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AddressAllocationSchemeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for address_allocation_scheme")
@@ -456,19 +422,15 @@ func (v *ValidateGetSpecType) AddressAllocationSchemeValidationRuleHandler(rules
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := AllocationSchemeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSpecType) AddressPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -522,40 +484,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address_allocation_scheme"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address_allocation_scheme"))
 		if err := fv(ctx, m.GetAddressAllocationScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address_pool"]; exists {
 		vOpts := append(opts, db.WithValidateField("address_pool"))
 		if err := fv(ctx, m.GetAddressPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mode"))
 		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -649,7 +601,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) ModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(AllocatorMode)
@@ -663,9 +614,7 @@ func (v *ValidateGlobalSpecType) ModeValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AddressAllocationSchemeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for address_allocation_scheme")
@@ -674,19 +623,15 @@ func (v *ValidateGlobalSpecType) AddressAllocationSchemeValidationRuleHandler(ru
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := AllocationSchemeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGlobalSpecType) AddressPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -740,49 +685,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["address_allocation_scheme"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("address_allocation_scheme"))
 		if err := fv(ctx, m.GetAddressAllocationScheme(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["address_pool"]; exists {
 		vOpts := append(opts, db.WithValidateField("address_pool"))
 		if err := fv(ctx, m.GetAddressPool(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["allocation_map"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allocation_map"))
 		if err := fv(ctx, m.GetAllocationMap(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mode"))
 		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -826,7 +758,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address_pool"] = vFn
-
 	v.FldValidators["allocation_map"] = NodePrefixMapTypeValidator().Validate
 
 	return v
@@ -878,7 +809,6 @@ type ValidateNodePrefixMapType struct {
 }
 
 func (v *ValidateNodePrefixMapType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -930,22 +860,18 @@ func (v *ValidateNodePrefixMapType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["endpoints"]; exists {
 		vOpts := append(opts, db.WithValidateField("endpoints"))
 		if err := fv(ctx, m.GetEndpoints(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNodePrefixMapTypeValidator = func() *ValidateNodePrefixMapType {
 	v := &ValidateNodePrefixMapType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1016,7 +942,6 @@ type ValidateNodePrefixType struct {
 }
 
 func (v *ValidateNodePrefixType) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix")
@@ -1024,9 +949,7 @@ func (v *ValidateNodePrefixType) PrefixValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateNodePrefixType) RemotePrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for remote_prefix")
@@ -1048,32 +971,24 @@ func (v *ValidateNodePrefixType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["remote_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("remote_prefix"))
 		if err := fv(ctx, m.GetRemotePrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultNodePrefixTypeValidator = func() *ValidateNodePrefixType {
 	v := &ValidateNodePrefixType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

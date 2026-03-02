@@ -14,21 +14,17 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.pbac.addon_service.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.pbac.addon_service.Object"] = ObjectValidator()
 	vr["ves.io.schema.pbac.addon_service.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.pbac.addon_service.CanSubscribeReq"] = CanSubscribeReqValidator()
 	vr["ves.io.schema.pbac.addon_service.CanSubscribeResp"] = CanSubscribeRespValidator()
 	vr["ves.io.schema.pbac.addon_service.SetSubscriptionReq"] = SetSubscriptionReqValidator()
 	vr["ves.io.schema.pbac.addon_service.SetSubscriptionResp"] = SetSubscriptionRespValidator()
-
 	vr["ves.io.schema.pbac.addon_service.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.pbac.addon_service.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.pbac.addon_service.ListRequest"] = ListRequestValidator()
 	vr["ves.io.schema.pbac.addon_service.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.pbac.addon_service.ListResponseItem"] = ListResponseItemValidator()
-
 	vr["ves.io.schema.pbac.addon_service.AddonServiceActivationStatus"] = AddonServiceActivationStatusValidator()
 	vr["ves.io.schema.pbac.addon_service.GetActivationStatusReq"] = GetActivationStatusReqValidator()
 	vr["ves.io.schema.pbac.addon_service.GetActivationStatusResp"] = GetActivationStatusRespValidator()
@@ -36,7 +32,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.pbac.addon_service.GetAddonServiceDetailsResp"] = GetAddonServiceDetailsRespValidator()
 	vr["ves.io.schema.pbac.addon_service.GetAllServiceTiersActivationStatusReq"] = GetAllServiceTiersActivationStatusReqValidator()
 	vr["ves.io.schema.pbac.addon_service.GetAllServiceTiersActivationStatusResp"] = GetAllServiceTiersActivationStatusRespValidator()
-
 	vr["ves.io.schema.pbac.addon_service.Content"] = ContentValidator()
 	vr["ves.io.schema.pbac.addon_service.CustomSupportTicket"] = CustomSupportTicketValidator()
 	vr["ves.io.schema.pbac.addon_service.FullyManagedActivationType"] = FullyManagedActivationTypeValidator()
@@ -45,8 +40,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.pbac.addon_service.NotificationPreference"] = NotificationPreferenceValidator()
 	vr["ves.io.schema.pbac.addon_service.PartiallyManagedActivationType"] = PartiallyManagedActivationTypeValidator()
 	vr["ves.io.schema.pbac.addon_service.SelfActivationType"] = SelfActivationTypeValidator()
+	vr["ves.io.schema.pbac.addon_service.ServiceUsageType"] = ServiceUsageTypeValidator()
 	vr["ves.io.schema.pbac.addon_service.SupportTicketOptions"] = SupportTicketOptionsValidator()
-
+	vr["ves.io.schema.pbac.addon_service.UsageType"] = UsageTypeValidator()
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -58,21 +54,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.pbac.addon_service.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.pbac.addon_service.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.pbac.addon_service.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.pbac.addon_service.API"] = "web"
 	sm["ves.io.schema.pbac.addon_service.CustomAPI"] = "web"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -81,14 +73,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.addon_service.Object"] = CustomPrivateAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.pbac.addon_service.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.pbac.addon_service.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
 		if isExternal {
@@ -99,11 +87,8 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.pbac.addon_service.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateAPIServer(svc)
 		}
-
 	}()
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.pbac.addon_service.Object"] = APISwaggerJSON
@@ -117,16 +102,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.pbac.addon_service.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.pbac.addon_service.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.pbac.addon_service.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.addon_service.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.pbac.addon_service.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.pbac.addon_service.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -137,22 +117,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.pbac.addon_service.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

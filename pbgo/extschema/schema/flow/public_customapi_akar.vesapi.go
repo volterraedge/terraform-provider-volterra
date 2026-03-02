@@ -42,7 +42,6 @@ func (c *CustomFlowConnectionAPIGrpcClient) doRPCGetSubscriptionStatus(ctx conte
 	rsp, err := c.grpcClient.GetSubscriptionStatus(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomFlowConnectionAPIGrpcClient) doRPCSubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SubscribeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomFlowConnectionAPIGrpcClient) doRPCSubscribe(ctx context.Context, 
 	rsp, err := c.grpcClient.Subscribe(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomFlowConnectionAPIGrpcClient) doRPCUnsubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnsubscribeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,13 +90,9 @@ func NewCustomFlowConnectionAPIGrpcClient(cc *grpc.ClientConn) server.CustomClie
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetSubscriptionStatus"] = ccl.doRPCGetSubscriptionStatus
-
 	rpcFns["Subscribe"] = ccl.doRPCSubscribe
-
 	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -183,7 +177,6 @@ func (c *CustomFlowConnectionAPIRestClient) doRPCGetSubscriptionStatus(ctx conte
 	pbRsp := &SubscriptionStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.flow.SubscriptionStatusResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -191,7 +184,6 @@ func (c *CustomFlowConnectionAPIRestClient) doRPCGetSubscriptionStatus(ctx conte
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomFlowConnectionAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -266,7 +258,6 @@ func (c *CustomFlowConnectionAPIRestClient) doRPCSubscribe(ctx context.Context, 
 	pbRsp := &SubscribeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.flow.SubscribeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -274,7 +265,6 @@ func (c *CustomFlowConnectionAPIRestClient) doRPCSubscribe(ctx context.Context, 
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomFlowConnectionAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -349,7 +339,6 @@ func (c *CustomFlowConnectionAPIRestClient) doRPCUnsubscribe(ctx context.Context
 	pbRsp := &UnsubscribeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.flow.UnsubscribeResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -383,13 +372,9 @@ func NewCustomFlowConnectionAPIRestClient(baseURL string, hc http.Client) server
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetSubscriptionStatus"] = ccl.doRPCGetSubscriptionStatus
-
 	rpcFns["Subscribe"] = ccl.doRPCSubscribe
-
 	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -478,7 +463,6 @@ func (s *customFlowConnectionAPISrv) GetSubscriptionStatus(ctx context.Context, 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.flow.SubscriptionStatusResponse", rsp)...)
 
 	return rsp, nil
@@ -527,7 +511,6 @@ func (s *customFlowConnectionAPISrv) Subscribe(ctx context.Context, in *Subscrib
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.flow.SubscribeResponse", rsp)...)
 
 	return rsp, nil
@@ -576,7 +559,6 @@ func (s *customFlowConnectionAPISrv) Unsubscribe(ctx context.Context, in *Unsubs
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.flow.UnsubscribeResponse", rsp)...)
 
 	return rsp, nil

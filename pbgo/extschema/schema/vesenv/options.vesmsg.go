@@ -76,9 +76,7 @@ func (v *ValidateAPIGroupElementInfo) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -86,27 +84,19 @@ func (v *ValidateAPIGroupElementInfo) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -175,25 +165,18 @@ func (v *ValidateAPIGroupElementItem) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["method"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("method"))
 		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["path_regex"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("path_regex"))
 		if err := fv(ctx, m.GetPathRegex(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -262,9 +245,7 @@ func (v *ValidateAPIGroupNameMap) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["rpc_mappings"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rpc_mappings"))
 		for idx, item := range m.GetRpcMappings() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -272,9 +253,7 @@ func (v *ValidateAPIGroupNameMap) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -343,25 +322,18 @@ func (v *ValidateAPIGroupNameMapItem) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_names"))
 		if err := fv(ctx, m.GetApiGroupNames(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["rpc_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("rpc_name"))
 		if err := fv(ctx, m.GetRpcName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -430,34 +402,24 @@ func (v *ValidateAddonServiceInfo) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_group_name_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_group_name_prefix"))
 		if err := fv(ctx, m.GetApiGroupNamePrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["daemon"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("daemon"))
 		if err := fv(ctx, m.GetDaemon(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["display_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("display_name"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -825,9 +787,29 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
+	case *BFSecretChoice_VesIoAwsCloudUserAccountSecret:
+		if fv, exists := v.FldValidators["choice.ves_io_aws_cloud_user_account_secret"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesIoAwsCloudUserAccountSecret).VesIoAwsCloudUserAccountSecret
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_aws_cloud_user_account_secret"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesIoLogReceiverKeyUrl:
+		if fv, exists := v.FldValidators["choice.ves_io_log_receiver_key_url"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesIoLogReceiverKeyUrl).VesIoLogReceiverKeyUrl
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_log_receiver_key_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
-
 	return nil
 }
 
@@ -896,9 +878,7 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["gc_jobs"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_jobs"))
 		for idx, item := range m.GetGcJobs() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -906,11 +886,8 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["gc_services"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("gc_services"))
 		for idx, item := range m.GetGcServices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -918,11 +895,8 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["non_gc_services"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("non_gc_services"))
 		for idx, item := range m.GetNonGcServices() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -930,45 +904,31 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_id"))
 		if err := fv(ctx, m.GetPolicyId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_name"))
 		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_uid"))
 		if err := fv(ctx, m.GetPolicyUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["well_known_tenant_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("well_known_tenant_prefix"))
 		if err := fv(ctx, m.GetWellKnownTenantPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1037,34 +997,24 @@ func (v *ValidateNameToUid) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1133,25 +1083,18 @@ func (v *ValidateQuotaResourceKeyInfo) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["daemon"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("daemon"))
 		if err := fv(ctx, m.GetDaemon(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1220,25 +1163,18 @@ func (v *ValidateReEncryptSecretItemType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["field_path"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("field_path"))
 		if err := fv(ctx, m.GetFieldPath(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["policy_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("policy_name"))
 		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1307,9 +1243,7 @@ func (v *ValidateReEncryptSecretsType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1317,9 +1251,7 @@ func (v *ValidateReEncryptSecretsType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -1388,34 +1320,24 @@ func (v *ValidateRouteTargetInfo) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["for_object_types"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("for_object_types"))
 		if err := fv(ctx, m.GetForObjectTypes(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ip_based"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ip_based"))
 		if err := fv(ctx, m.GetIpBased(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1484,27 +1406,19 @@ func (v *ValidateServiceInfo) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["daemon"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("daemon"))
 		if err := fv(ctx, m.GetDaemon(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["locations"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("locations"))
 		for idx, item := range m.GetLocations() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1512,9 +1426,7 @@ func (v *ValidateServiceInfo) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2113,9 +2025,7 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -2184,43 +2094,30 @@ func (v *ValidateServiceSlugInfo) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["daemon"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("daemon"))
 		if err := fv(ctx, m.GetDaemon(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["p0_pol_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("p0_pol_name"))
 		if err := fv(ctx, m.GetP0PolName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["service_selector"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("service_selector"))
 		if err := fv(ctx, m.GetServiceSelector(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["value"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("value"))
 		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 

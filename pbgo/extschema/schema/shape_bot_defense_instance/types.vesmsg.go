@@ -88,7 +88,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -167,7 +166,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -198,11 +196,9 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetWeb().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.web")
 	}
-
 	if err := m.GetMobile().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.mobile")
 	}
@@ -248,21 +244,17 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetMobileDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMobileDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	if fdrInfos, err := m.GetWebDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWebDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-
 	return drInfos, nil
-
 }
 
 func (m *GlobalSpecType) GetJsClusterDRefInfo() ([]db.DRefInfo, error) {
@@ -287,7 +279,6 @@ func (m *GlobalSpecType) GetJsClusterDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetJsClusterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -306,7 +297,6 @@ func (m *GlobalSpecType) GetJsClusterDBEntries(ctx context.Context, d db.Interfa
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -315,7 +305,6 @@ func (m *GlobalSpecType) GetMobileDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMobile() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetMobile().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMobile().GetDRefInfo() FAILED")
@@ -325,7 +314,6 @@ func (m *GlobalSpecType) GetMobileDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "mobile." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 // GetDRefInfo for the field's type
@@ -333,7 +321,6 @@ func (m *GlobalSpecType) GetWebDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWeb() == nil {
 		return nil, nil
 	}
-
 	drInfos, err := m.GetWeb().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWeb().GetDRefInfo() FAILED")
@@ -343,7 +330,6 @@ func (m *GlobalSpecType) GetWebDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "web." + dri.DRField
 	}
 	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -363,9 +349,7 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["js_cluster"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("js_cluster"))
 		for idx, item := range m.GetJsCluster() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -373,36 +357,26 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mobile"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mobile"))
 		if err := fv(ctx, m.GetMobile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["web"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("web"))
 		if err := fv(ctx, m.GetWeb(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["web"] = InstanceValidator().Validate
-
 	v.FldValidators["mobile"] = InstanceValidator().Validate
 
 	return v
@@ -428,7 +402,6 @@ func (m *Instance) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetApiKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting Instance.api_key")
 	}
@@ -469,7 +442,6 @@ func (m *Instance) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetClusterDRefInfo()
-
 }
 
 func (m *Instance) GetClusterDRefInfo() ([]db.DRefInfo, error) {
@@ -494,7 +466,6 @@ func (m *Instance) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetClusterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -513,7 +484,6 @@ func (m *Instance) GetClusterDBEntries(ctx context.Context, d db.Interface) ([]d
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -522,7 +492,6 @@ type ValidateInstance struct {
 }
 
 func (v *ValidateInstance) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
@@ -530,9 +499,7 @@ func (v *ValidateInstance) UrlValidationRuleHandler(rules map[string]string) (db
 
 	return validatorFn, nil
 }
-
 func (v *ValidateInstance) ClusterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -592,49 +559,36 @@ func (v *ValidateInstance) Validate(ctx context.Context, pm interface{}, opts ..
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["api_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_key"))
 		if err := fv(ctx, m.GetApiKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cluster"]; exists {
 		vOpts := append(opts, db.WithValidateField("cluster"))
 		if err := fv(ctx, m.GetCluster(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["telemetry_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("telemetry_prefix"))
 		if err := fv(ctx, m.GetTelemetryPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("url"))
 		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultInstanceValidator = func() *ValidateInstance {
 	v := &ValidateInstance{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -664,7 +618,6 @@ var DefaultInstanceValidator = func() *ValidateInstance {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster"] = vFn
-
 	v.FldValidators["api_key"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -738,7 +691,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 

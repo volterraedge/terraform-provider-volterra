@@ -67,7 +67,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPreferredRegionDRefInfo()
-
 }
 
 func (m *GetSpecType) GetPreferredRegionDRefInfo() ([]db.DRefInfo, error) {
@@ -92,7 +91,6 @@ func (m *GetSpecType) GetPreferredRegionDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPreferredRegionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -111,7 +109,6 @@ func (m *GetSpecType) GetPreferredRegionDBEntries(ctx context.Context, d db.Inte
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -120,7 +117,6 @@ type ValidateGetSpecType struct {
 }
 
 func (v *ValidateGetSpecType) PreferredRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -180,22 +176,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["preferred_region"]; exists {
 		vOpts := append(opts, db.WithValidateField("preferred_region"))
 		if err := fv(ctx, m.GetPreferredRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["store_access_logs_in_aws_s3"]; exists {
+		vOpts := append(opts, db.WithValidateField("store_access_logs_in_aws_s3"))
+		if err := fv(ctx, m.GetStoreAccessLogsInAwsS3(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -206,7 +204,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhPreferredRegion := v.PreferredRegionValidationRuleHandler
 	rulesPreferredRegion := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "1",
+		"ves.io.schema.rules.repeated.min_items": "1",
 	}
 	vFn, err = vrhPreferredRegion(rulesPreferredRegion)
 	if err != nil {
@@ -265,7 +265,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPreferredRegionDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetPreferredRegionDRefInfo() ([]db.DRefInfo, error) {
@@ -290,7 +289,6 @@ func (m *GlobalSpecType) GetPreferredRegionDRefInfo() ([]db.DRefInfo, error) {
 		})
 	}
 	return drInfos, nil
-
 }
 
 // GetPreferredRegionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -309,7 +307,6 @@ func (m *GlobalSpecType) GetPreferredRegionDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-
 	return entries, nil
 }
 
@@ -318,7 +315,6 @@ type ValidateGlobalSpecType struct {
 }
 
 func (v *ValidateGlobalSpecType) PreferredRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -378,22 +374,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["preferred_region"]; exists {
 		vOpts := append(opts, db.WithValidateField("preferred_region"))
 		if err := fv(ctx, m.GetPreferredRegion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
+	if fv, exists := v.FldValidators["store_access_logs_in_aws_s3"]; exists {
+		vOpts := append(opts, db.WithValidateField("store_access_logs_in_aws_s3"))
+		if err := fv(ctx, m.GetStoreAccessLogsInAwsS3(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -404,7 +402,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhPreferredRegion := v.PreferredRegionValidationRuleHandler
 	rulesPreferredRegion := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "1",
+		"ves.io.schema.rules.repeated.min_items": "1",
 	}
 	vFn, err = vrhPreferredRegion(rulesPreferredRegion)
 	if err != nil {
@@ -425,6 +425,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.PreferredRegion = f.GetPreferredRegion()
+	m.StoreAccessLogsInAwsS3 = f.GetStoreAccessLogsInAwsS3()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -443,6 +444,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.PreferredRegion = m1.PreferredRegion
+	f.StoreAccessLogsInAwsS3 = m1.StoreAccessLogsInAwsS3
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {

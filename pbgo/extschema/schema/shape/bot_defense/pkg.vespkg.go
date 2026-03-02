@@ -5,12 +5,14 @@ package bot_defense
 
 import (
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.BotInfraWithVersion"] = BotInfraWithVersionValidator()
 	vr["ves.io.schema.shape.bot_defense.Cookie"] = CookieValidator()
+	vr["ves.io.schema.shape.bot_defense.CookieDefinition"] = CookieDefinitionValidator()
 	vr["ves.io.schema.shape.bot_defense.CookieMatcher"] = CookieMatcherValidator()
 	vr["ves.io.schema.shape.bot_defense.CookieMatcherType"] = CookieMatcherTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.CookieMatcherValue"] = CookieMatcherValueValidator()
@@ -29,6 +31,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.IPDetail"] = IPDetailValidator()
 	vr["ves.io.schema.shape.bot_defense.IPPrefixDetail"] = IPPrefixDetailValidator()
 	vr["ves.io.schema.shape.bot_defense.IPRangeAllowlistDetail"] = IPRangeAllowlistDetailValidator()
+	vr["ves.io.schema.shape.bot_defense.KnownBotAllowDenyActionType"] = KnownBotAllowDenyActionTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.ManualRoutingDetail"] = ManualRoutingDetailValidator()
 	vr["ves.io.schema.shape.bot_defense.ManualRoutings"] = ManualRoutingsValidator()
 	vr["ves.io.schema.shape.bot_defense.MatcherType"] = MatcherTypeValidator()
@@ -70,23 +73,22 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.WebClientContinueMitigationHeader"] = WebClientContinueMitigationHeaderValidator()
 	vr["ves.io.schema.shape.bot_defense.WebClientRedirectMitigationActionType"] = WebClientRedirectMitigationActionTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.WebClientTransformMitigationActionChoiceType"] = WebClientTransformMitigationActionChoiceTypeValidator()
-
+	vr["ves.io.schema.shape.bot_defense.SuggestValuesReq"] = SuggestValuesReqValidator()
+	vr["ves.io.schema.shape.bot_defense.SuggestValuesResp"] = SuggestValuesRespValidator()
+	vr["ves.io.schema.shape.bot_defense.SuggestedItem"] = SuggestedItemValidator()
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
+	sm["ves.io.schema.shape.bot_defense.CustomAPI"] = "shape/bot"
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -95,20 +97,31 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
+	customCSR = mdr.PubCustomServiceRegistry
+	func() {
+		// set swagger jsons for our and external schemas
+		customCSR.SwaggerRegistry["ves.io.schema.shape.bot_defense.CustomAPI"] = CustomAPISwaggerJSON
+		customCSR.GrpcClientRegistry["ves.io.schema.shape.bot_defense.CustomAPI"] = NewCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.shape.bot_defense.CustomAPI"] = NewCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.shape.bot_defense.CustomAPI"] = RegisterCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.shape.bot_defense.CustomAPI"] = RegisterGwCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.shape.bot_defense.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomAPIServer(svc)
+		}
+	}()
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

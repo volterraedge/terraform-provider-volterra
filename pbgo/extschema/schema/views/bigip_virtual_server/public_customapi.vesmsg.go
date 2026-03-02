@@ -64,7 +64,6 @@ type ValidateBigIPVirtualServerList struct {
 }
 
 func (v *ValidateBigIPVirtualServerList) BigipVirtualServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -118,22 +117,18 @@ func (v *ValidateBigIPVirtualServerList) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["bigip_virtual_servers"]; exists {
 		vOpts := append(opts, db.WithValidateField("bigip_virtual_servers"))
 		if err := fv(ctx, m.GetBigipVirtualServers(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBigIPVirtualServerListValidator = func() *ValidateBigIPVirtualServerList {
 	v := &ValidateBigIPVirtualServerList{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -212,9 +207,7 @@ func (v *ValidateGetSecurityConfigReq) LoadbalancerChoiceValidationRuleHandler(r
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateGetSecurityConfigReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -270,25 +263,19 @@ func (v *ValidateGetSecurityConfigReq) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSecurityConfigReqValidator = func() *ValidateGetSecurityConfigReq {
 	v := &ValidateGetSecurityConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -296,7 +283,6 @@ var DefaultGetSecurityConfigReqValidator = func() *ValidateGetSecurityConfigReq 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhLoadbalancerChoice := v.LoadbalancerChoiceValidationRuleHandler
 	rulesLoadbalancerChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -318,7 +304,6 @@ var DefaultGetSecurityConfigReqValidator = func() *ValidateGetSecurityConfigReq 
 		panic(errMsg)
 	}
 	v.FldValidators["namespace"] = vFn
-
 	v.FldValidators["loadbalancer_choice.bigip_virtual_servers_list"] = BigIPVirtualServerListValidator().Validate
 
 	return v

@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCApiKey(ctx context.Context, yamlReq string, o
 	rsp, err := c.grpcClient.ApiKey(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCConnectorConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ConnectorConfigRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCConnectorConfig(ctx context.Context, yamlReq 
 	rsp, err := c.grpcClient.ConnectorConfig(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCRegionsList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &RegionsListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCRegionsList(ctx context.Context, yamlReq stri
 	rsp, err := c.grpcClient.RegionsList(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCTemplateConnector(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &TemplateConnectorRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,15 +98,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ApiKey"] = ccl.doRPCApiKey
-
 	rpcFns["ConnectorConfig"] = ccl.doRPCConnectorConfig
-
 	rpcFns["RegionsList"] = ccl.doRPCRegionsList
-
 	rpcFns["TemplateConnector"] = ccl.doRPCTemplateConnector
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -194,7 +186,6 @@ func (c *CustomAPIRestClient) doRPCApiKey(ctx context.Context, callOpts *server.
 	pbRsp := &ApiKeyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.protected_application.ApiKeyResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -202,7 +193,6 @@ func (c *CustomAPIRestClient) doRPCApiKey(ctx context.Context, callOpts *server.
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCConnectorConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -278,7 +268,6 @@ func (c *CustomAPIRestClient) doRPCConnectorConfig(ctx context.Context, callOpts
 	pbRsp := &ConnectorConfigResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.protected_application.ConnectorConfigResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -286,7 +275,6 @@ func (c *CustomAPIRestClient) doRPCConnectorConfig(ctx context.Context, callOpts
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCRegionsList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -360,7 +348,6 @@ func (c *CustomAPIRestClient) doRPCRegionsList(ctx context.Context, callOpts *se
 	pbRsp := &RegionsListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.protected_application.RegionsListResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -368,7 +355,6 @@ func (c *CustomAPIRestClient) doRPCRegionsList(ctx context.Context, callOpts *se
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCTemplateConnector(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -444,7 +430,6 @@ func (c *CustomAPIRestClient) doRPCTemplateConnector(ctx context.Context, callOp
 	pbRsp := &TemplateConnectorResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.protected_application.TemplateConnectorResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -478,15 +463,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ApiKey"] = ccl.doRPCApiKey
-
 	rpcFns["ConnectorConfig"] = ccl.doRPCConnectorConfig
-
 	rpcFns["RegionsList"] = ccl.doRPCRegionsList
-
 	rpcFns["TemplateConnector"] = ccl.doRPCTemplateConnector
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -579,7 +559,6 @@ func (s *customAPISrv) ApiKey(ctx context.Context, in *ApiKeyRequest) (*ApiKeyRe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.protected_application.ApiKeyResponse", rsp)...)
 
 	return rsp, nil
@@ -628,7 +607,6 @@ func (s *customAPISrv) ConnectorConfig(ctx context.Context, in *ConnectorConfigR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.protected_application.ConnectorConfigResponse", rsp)...)
 
 	return rsp, nil
@@ -677,7 +655,6 @@ func (s *customAPISrv) RegionsList(ctx context.Context, in *RegionsListRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.protected_application.RegionsListResponse", rsp)...)
 
 	return rsp, nil
@@ -726,7 +703,6 @@ func (s *customAPISrv) TemplateConnector(ctx context.Context, in *TemplateConnec
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.protected_application.TemplateConnectorResponse", rsp)...)
 
 	return rsp, nil

@@ -20,11 +20,14 @@ resource "volterra_site_mesh_group" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
+  // One of the arguments from this list "bfd_disabled bfd_enabled" must be set
+
+  bfd_disabled = true
+
   // One of the arguments from this list "disable_re_fallback enable_re_fallback" must be set
 
   enable_re_fallback = true
 }
-
 ```
 
 Argument Reference
@@ -46,6 +49,12 @@ Argument Reference
 
 ### Spec Argument Reference
 
+###### One of the arguments from this list "bfd_disabled, bfd_enabled" must be set
+
+`bfd_disabled` - (Optional) Disable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group. (`Bool`).
+
+`bfd_enabled` - (Optional) Enable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group.. See [Bfd Choice Bfd Enabled ](#bfd-choice-bfd-enabled) below for details.
+
 `hub` - (Optional) Hub must be empty when Site Mesh Group type is Hub or Full Mesh. See [ref](#ref) below for details.(Deprecated)
 
 ###### One of the arguments from this list "full_mesh, hub_mesh, spoke_mesh" can be set
@@ -65,6 +74,16 @@ Argument Reference
 `type` - (Optional) Type of Site to Site connectivity (Spoke, Hub or Full Mesh) (`String`).(Deprecated)
 
 `virtual_site` - (Optional) If 'Type' is Full Mesh, then it gives set of sites that are connected in full mesh.. See [ref](#ref) below for details.
+
+### Bfd Choice Bfd Enabled
+
+Enable BFD (Bi-directional Forwarding Detection) for the Site Mesh Group..
+
+`multiplier` - (Required) Specify Number of missed packets to bring session down" (`Int`).
+
+`receive_interval_milliseconds` - (Required) BFD receive interval timer, in milliseconds (`Int`).
+
+`transmit_interval_milliseconds` - (Required) BFD transmit interval timer, in milliseconds (`Int`).
 
 ### Full Mesh Choice Control And Data Plane Mesh
 
@@ -123,4 +142,4 @@ Mesh of data plane tunnels to the hub site/s.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured site_mesh_group.
+*   `id` - This is the id of the configured site_mesh_group.

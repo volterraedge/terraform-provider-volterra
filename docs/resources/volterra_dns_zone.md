@@ -32,17 +32,21 @@ resource "volterra_dns_zone" "example" {
 
       // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
 
-      ptr_record {
-        name = "www or mail or * or corp.web or *.b"
+      lb_record {
+        name = "www or mail or * or ww* or *ab"
 
-        values = ["my.example.com"]
+        value {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
       }
     }
 
     dnssec_mode {
       // One of the arguments from this list "disable enable" must be set
 
-      disable = true
+      enable {}
     }
 
     rr_set_group {
@@ -61,15 +65,13 @@ resource "volterra_dns_zone" "example" {
 
         // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
 
-        caa_record {
-          name = "www or mail or * or corp.web or *.b"
+        afsdb_record {
+          name = "www or mail or * or ww* or *ab"
 
           values {
-            flags = "0"
+            hostname = "mail.example.com"
 
-            tag = "issue"
-
-            value = "value"
+            subtype = "1"
           }
         }
       }
@@ -80,7 +82,6 @@ resource "volterra_dns_zone" "example" {
     default_soa_parameters = true
   }
 }
-
 ```
 
 Argument Reference
@@ -755,4 +756,4 @@ x-displayName: "TXT".
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured dns_zone.
+*   `id` - This is the id of the configured dns_zone.

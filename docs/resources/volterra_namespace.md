@@ -25,11 +25,12 @@ resource "volterra_namespace" "example" {
 Argument Reference
 ------------------
 
--	`name` - (Required) Name of the namespace to be queried
+-   `name` - (Required) Name of the namespace to be queried
 
 Attribute Reference
 -------------------
 
--	`id` - ID of the namespace returned
+-   `id` - ID of the namespace returned
 
--	`tenant_name` - Tenant name configured in volterra
+-   `tenant_name` - Tenant name configured in volterra
+

@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.token.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.token.Object"] = ObjectValidator()
 	vr["ves.io.schema.token.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.token.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.token.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.token.DeleteRequest"] = DeleteRequestValidator()
@@ -28,17 +26,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.token.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.token.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.token.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.token.GetCloudInitConfigReq"] = GetCloudInitConfigReqValidator()
 	vr["ves.io.schema.token.GetCloudInitConfigResp"] = GetCloudInitConfigRespValidator()
 	vr["ves.io.schema.token.ObjectChangeResp"] = ObjectChangeRespValidator()
 	vr["ves.io.schema.token.StateReq"] = StateReqValidator()
-
 	vr["ves.io.schema.token.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.token.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.token.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.token.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -50,21 +45,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.token.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.token.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.token.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.token.API"] = "register"
 	sm["ves.io.schema.token.CustomAPI"] = "register"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -73,9 +64,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.token.Object"] = APISwaggerJSON
@@ -89,16 +78,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.token.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.token.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.token.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.token.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.token.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.token.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -109,22 +93,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.token.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

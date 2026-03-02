@@ -14,10 +14,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.proxy.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.views.proxy.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.proxy.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.views.proxy.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.proxy.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.views.proxy.DeleteRequest"] = DeleteRequestValidator()
@@ -28,9 +26,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.proxy.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.proxy.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.proxy.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.proxy.GetProxyServerCACertRequest"] = GetProxyServerCACertRequestValidator()
-
 	vr["ves.io.schema.views.proxy.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.proxy.DynamicHttpProxyType"] = DynamicHttpProxyTypeValidator()
 	vr["ves.io.schema.views.proxy.DynamicHttpsProxyType"] = DynamicHttpsProxyTypeValidator()
@@ -41,7 +37,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.proxy.HttpConnectProxyType"] = HttpConnectProxyTypeValidator()
 	vr["ves.io.schema.views.proxy.HttpsConnectType"] = HttpsConnectTypeValidator()
 	vr["ves.io.schema.views.proxy.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -53,18 +48,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.views.proxy.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.views.proxy.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.views.proxy.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.proxy.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.proxy.CreateRequest.spec.site_choice.site_virtual_sites.advertise_where.choice.site.ipv6",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.proxy.API.Create"] = []string{
 		"spec.dynamic_proxy.http_proxy.more_option.buffer_policy.max_request_time",
 		"spec.dynamic_proxy.http_proxy.more_option.cookies_to_modify.#",
@@ -139,23 +131,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_intercept.custom_certificate.private_key.vault_secret_info",
 		"spec.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.proxy.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.site_virtual_sites.advertise_where.#.site.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.proxy.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.site_virtual_sites.advertise_where.#.site.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.proxy.API.Create"] = "ves.io.schema.views.proxy.CreateRequest"
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.proxy.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.site_virtual_sites.advertise_where.#.site.ipv6",
@@ -170,21 +158,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.proxy.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.site_virtual_sites.advertise_where.#.site.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.proxy.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.proxy.ReplaceRequest.spec.site_choice.site_virtual_sites.advertise_where.choice.site.ipv6",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.proxy.API.Replace"] = []string{
 		"spec.dynamic_proxy.http_proxy.more_option.buffer_policy.max_request_time",
 		"spec.dynamic_proxy.http_proxy.more_option.cookies_to_modify.#",
@@ -259,31 +244,25 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_intercept.custom_certificate.private_key.vault_secret_info",
 		"spec.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
-
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.proxy.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.site_virtual_sites.advertise_where.#.site.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.proxy.API.Replace"] = "ves.io.schema.views.proxy.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.proxy.API"] = "config"
 	sm["ves.io.schema.views.proxy.CustomAPI"] = "config"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -292,9 +271,7 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	csr = mdr.PubCRUDServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
 		csr.CRUDSwaggerRegistry["ves.io.schema.views.proxy.Object"] = APISwaggerJSON
@@ -308,16 +285,11 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.proxy.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.proxy.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.proxy.Object"] = NewCRUDAPIServer
-
 	}()
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.views.proxy.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.views.proxy.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.views.proxy.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -328,22 +300,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.views.proxy.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

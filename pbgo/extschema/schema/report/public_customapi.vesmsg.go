@@ -76,43 +76,30 @@ func (v *ValidateAttachmentValue) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["content"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content"))
 		if err := fv(ctx, m.GetContent(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_id"))
 		if err := fv(ctx, m.GetContentId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["content_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("content_type"))
 		if err := fv(ctx, m.GetContentType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["file_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("file_name"))
 		if err := fv(ctx, m.GetFileName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -169,7 +156,6 @@ type ValidateDownloadReportRequest struct {
 }
 
 func (v *ValidateDownloadReportRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -177,9 +163,7 @@ func (v *ValidateDownloadReportRequest) NamespaceValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDownloadReportRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -201,32 +185,24 @@ func (v *ValidateDownloadReportRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDownloadReportRequestValidator = func() *ValidateDownloadReportRequest {
 	v := &ValidateDownloadReportRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -306,7 +282,6 @@ type ValidateDownloadReportResponse struct {
 }
 
 func (v *ValidateDownloadReportResponse) HtmlDataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for html_data")
@@ -314,9 +289,7 @@ func (v *ValidateDownloadReportResponse) HtmlDataValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDownloadReportResponse) CssDataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for css_data")
@@ -338,9 +311,7 @@ func (v *ValidateDownloadReportResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["Attachments"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("Attachments"))
 		for idx, item := range m.GetAttachments() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -348,34 +319,25 @@ func (v *ValidateDownloadReportResponse) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["css_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("css_data"))
 		if err := fv(ctx, m.GetCssData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["html_data"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("html_data"))
 		if err := fv(ctx, m.GetHtmlData(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDownloadReportResponseValidator = func() *ValidateDownloadReportResponse {
 	v := &ValidateDownloadReportResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc

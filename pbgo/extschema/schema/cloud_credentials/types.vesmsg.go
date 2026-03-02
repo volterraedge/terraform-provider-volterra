@@ -80,9 +80,7 @@ func (v *ValidateAWSAssumeRoleType) ExternalIdCustomExternalIdValidationRuleHand
 	}
 	return oValidatorFn_CustomExternalId, nil
 }
-
 func (v *ValidateAWSAssumeRoleType) RoleArnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for role_arn")
@@ -90,9 +88,7 @@ func (v *ValidateAWSAssumeRoleType) RoleArnValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSAssumeRoleType) DurationSecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for duration_seconds")
@@ -100,9 +96,7 @@ func (v *ValidateAWSAssumeRoleType) DurationSecondsValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSAssumeRoleType) SessionNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for session_name")
@@ -110,9 +104,7 @@ func (v *ValidateAWSAssumeRoleType) SessionNameValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSAssumeRoleType) SessionTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemKeyRules := db.GetMapStringKeyRules(rules)
 	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
 	if err != nil {
@@ -169,14 +161,11 @@ func (v *ValidateAWSAssumeRoleType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["duration_seconds"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("duration_seconds"))
 		if err := fv(ctx, m.GetDurationSeconds(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["external_id"]; exists {
@@ -223,42 +212,31 @@ func (v *ValidateAWSAssumeRoleType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["role_arn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("role_arn"))
 		if err := fv(ctx, m.GetRoleArn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["session_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("session_name"))
 		if err := fv(ctx, m.GetSessionName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["session_tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("session_tags"))
 		if err := fv(ctx, m.GetSessionTags(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSAssumeRoleTypeValidator = func() *ValidateAWSAssumeRoleType {
 	v := &ValidateAWSAssumeRoleType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -266,7 +244,6 @@ var DefaultAWSAssumeRoleTypeValidator = func() *ValidateAWSAssumeRoleType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhExternalId := v.ExternalIdValidationRuleHandler
 	rulesExternalId := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -277,7 +254,6 @@ var DefaultAWSAssumeRoleTypeValidator = func() *ValidateAWSAssumeRoleType {
 		panic(errMsg)
 	}
 	v.FldValidators["external_id"] = vFn
-
 	vrhExternalIdCustomExternalId := v.ExternalIdCustomExternalIdValidationRuleHandler
 	rulesExternalIdCustomExternalId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -288,7 +264,6 @@ var DefaultAWSAssumeRoleTypeValidator = func() *ValidateAWSAssumeRoleType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSAssumeRoleType.external_id_custom_external_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["external_id.custom_external_id"] = vFnMap["external_id.custom_external_id"]
 
 	vrhRoleArn := v.RoleArnValidationRuleHandler
@@ -367,7 +342,6 @@ func (m *AWSSecretType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetSecretKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AWSSecretType.secret_key")
 	}
@@ -407,7 +381,6 @@ type ValidateAWSSecretType struct {
 }
 
 func (v *ValidateAWSSecretType) AccessKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for access_key")
@@ -415,9 +388,7 @@ func (v *ValidateAWSSecretType) AccessKeyValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSSecretType) SecretKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for secret_key")
@@ -426,11 +397,9 @@ func (v *ValidateAWSSecretType) SecretKeyValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -450,32 +419,24 @@ func (v *ValidateAWSSecretType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_key"))
 		if err := fv(ctx, m.GetAccessKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["secret_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("secret_key"))
 		if err := fv(ctx, m.GetSecretKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSSecretTypeValidator = func() *ValidateAWSSecretType {
 	v := &ValidateAWSSecretType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -530,7 +491,6 @@ func (m *AzurePfxType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetPassword().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzurePfxType.password")
 	}
@@ -570,7 +530,6 @@ type ValidateAzurePfxType struct {
 }
 
 func (v *ValidateAzurePfxType) ClientIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for client_id")
@@ -578,9 +537,7 @@ func (v *ValidateAzurePfxType) ClientIdValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzurePfxType) SubscriptionIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subscription_id")
@@ -588,9 +545,7 @@ func (v *ValidateAzurePfxType) SubscriptionIdValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzurePfxType) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
@@ -598,9 +553,7 @@ func (v *ValidateAzurePfxType) TenantIdValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzurePfxType) CertificateUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
@@ -608,9 +561,7 @@ func (v *ValidateAzurePfxType) CertificateUrlValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzurePfxType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
@@ -619,11 +570,9 @@ func (v *ValidateAzurePfxType) PasswordValidationRuleHandler(rules map[string]st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -643,59 +592,42 @@ func (v *ValidateAzurePfxType) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["certificate_url"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("certificate_url"))
 		if err := fv(ctx, m.GetCertificateUrl(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_id"))
 		if err := fv(ctx, m.GetClientId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["password"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("password"))
 		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subscription_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subscription_id"))
 		if err := fv(ctx, m.GetSubscriptionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_id"))
 		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzurePfxTypeValidator = func() *ValidateAzurePfxType {
 	v := &ValidateAzurePfxType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -787,7 +719,6 @@ func (m *AzureSecretType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetClientSecret().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzureSecretType.client_secret")
 	}
@@ -827,7 +758,6 @@ type ValidateAzureSecretType struct {
 }
 
 func (v *ValidateAzureSecretType) ClientIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for client_id")
@@ -835,9 +765,7 @@ func (v *ValidateAzureSecretType) ClientIdValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureSecretType) SubscriptionIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subscription_id")
@@ -845,9 +773,7 @@ func (v *ValidateAzureSecretType) SubscriptionIdValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureSecretType) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
@@ -855,9 +781,7 @@ func (v *ValidateAzureSecretType) TenantIdValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureSecretType) ClientSecretValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for client_secret")
@@ -866,11 +790,9 @@ func (v *ValidateAzureSecretType) ClientSecretValidationRuleHandler(rules map[st
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -890,50 +812,36 @@ func (v *ValidateAzureSecretType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["client_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_id"))
 		if err := fv(ctx, m.GetClientId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["client_secret"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("client_secret"))
 		if err := fv(ctx, m.GetClientSecret(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subscription_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subscription_id"))
 		if err := fv(ctx, m.GetSubscriptionId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_id"))
 		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSecretTypeValidator = func() *ValidateAzureSecretType {
 	v := &ValidateAzureSecretType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1012,19 +920,15 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAwsSecretKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.aws_secret_key")
 	}
-
 	if err := m.GetAzurePfxCertificate().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.azure_pfx_certificate")
 	}
-
 	if err := m.GetAzureClientSecret().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.azure_client_secret")
 	}
-
 	if err := m.GetGcpCredFile().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.gcp_cred_file")
 	}
@@ -1151,16 +1055,13 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1168,7 +1069,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1179,7 +1079,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud"] = vFn
-
 	v.FldValidators["cloud.aws_secret_key"] = AWSSecretTypeValidator().Validate
 	v.FldValidators["cloud.azure_pfx_certificate"] = AzurePfxTypeValidator().Validate
 	v.FldValidators["cloud.azure_client_secret"] = AzureSecretTypeValidator().Validate
@@ -1209,7 +1108,6 @@ func (m *GCPCredFileType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetCredentialFile().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GCPCredFileType.credential_file")
 	}
@@ -1249,7 +1147,6 @@ type ValidateGCPCredFileType struct {
 }
 
 func (v *ValidateGCPCredFileType) CredentialFileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for credential_file")
@@ -1258,11 +1155,9 @@ func (v *ValidateGCPCredFileType) CredentialFileValidationRuleHandler(rules map[
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -1282,23 +1177,18 @@ func (v *ValidateGCPCredFileType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["credential_file"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("credential_file"))
 		if err := fv(ctx, m.GetCredentialFile(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPCredFileTypeValidator = func() *ValidateGCPCredFileType {
 	v := &ValidateGCPCredFileType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1341,19 +1231,15 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAwsSecretKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.aws_secret_key")
 	}
-
 	if err := m.GetAzurePfxCertificate().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.azure_pfx_certificate")
 	}
-
 	if err := m.GetAzureClientSecret().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.azure_client_secret")
 	}
-
 	if err := m.GetGcpCredFile().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.gcp_cred_file")
 	}
@@ -1480,16 +1366,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1497,7 +1380,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1508,7 +1390,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud"] = vFn
-
 	v.FldValidators["cloud.aws_secret_key"] = AWSSecretTypeValidator().Validate
 	v.FldValidators["cloud.azure_pfx_certificate"] = AzurePfxTypeValidator().Validate
 	v.FldValidators["cloud.azure_client_secret"] = AzureSecretTypeValidator().Validate
@@ -1538,19 +1419,15 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAwsSecretKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.aws_secret_key")
 	}
-
 	if err := m.GetAzurePfxCertificate().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.azure_pfx_certificate")
 	}
-
 	if err := m.GetAzureClientSecret().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.azure_client_secret")
 	}
-
 	if err := m.GetGcpCredFile().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.gcp_cred_file")
 	}
@@ -1677,16 +1554,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1694,7 +1568,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1705,7 +1578,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud"] = vFn
-
 	v.FldValidators["cloud.aws_secret_key"] = AWSSecretTypeValidator().Validate
 	v.FldValidators["cloud.azure_pfx_certificate"] = AzurePfxTypeValidator().Validate
 	v.FldValidators["cloud.azure_client_secret"] = AzureSecretTypeValidator().Validate
@@ -1735,19 +1607,15 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAwsSecretKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.aws_secret_key")
 	}
-
 	if err := m.GetAzurePfxCertificate().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.azure_pfx_certificate")
 	}
-
 	if err := m.GetAzureClientSecret().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.azure_client_secret")
 	}
-
 	if err := m.GetGcpCredFile().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.gcp_cred_file")
 	}
@@ -1874,16 +1742,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1891,7 +1756,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1902,7 +1766,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["cloud"] = vFn
-
 	v.FldValidators["cloud.aws_secret_key"] = AWSSecretTypeValidator().Validate
 	v.FldValidators["cloud.azure_pfx_certificate"] = AzurePfxTypeValidator().Validate
 	v.FldValidators["cloud.azure_client_secret"] = AzureSecretTypeValidator().Validate

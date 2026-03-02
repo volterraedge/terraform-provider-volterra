@@ -23,16 +23,21 @@ resource "volterra_data_type" "example" {
   rules {
     // One of the arguments from this list "key_pattern key_value_pattern value_pattern" must be set
 
-    key_pattern {
-      // One of the arguments from this list "exact_values regex_value substring_value" must be set
+    key_value_pattern {
+      key_pattern {
+        // One of the arguments from this list "exact_values regex_value substring_value" must be set
 
-      exact_values {
-        exact_values = ["email, Email, EMAIL"]
+        regex_value = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$"
+      }
+
+      value_pattern {
+        // One of the arguments from this list "exact_values regex_value substring_value" must be set
+
+        regex_value = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$"
       }
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -139,4 +144,4 @@ Search for values that are exact match to at least one item of the list.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured data_type.
+*   `id` - This is the id of the configured data_type.

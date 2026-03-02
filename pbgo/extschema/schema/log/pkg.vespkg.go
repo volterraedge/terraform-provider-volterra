@@ -27,11 +27,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.LogScrollRequest"] = LogScrollRequestValidator()
 	vr["ves.io.schema.log.PlatformEventAggregationRequest"] = PlatformEventAggregationRequestValidator()
 	vr["ves.io.schema.log.PlatformEventRequest"] = PlatformEventRequestValidator()
+	vr["ves.io.schema.log.SearchAfterSortValues"] = SearchAfterSortValuesValidator()
 	vr["ves.io.schema.log.VK8SAuditLogAggregationRequest"] = VK8SAuditLogAggregationRequestValidator()
 	vr["ves.io.schema.log.VK8SAuditLogRequest"] = VK8SAuditLogRequestValidator()
 	vr["ves.io.schema.log.VK8SEventsAggregationRequest"] = VK8SEventsAggregationRequestValidator()
 	vr["ves.io.schema.log.VK8SEventsRequest"] = VK8SEventsRequestValidator()
-
 	vr["ves.io.schema.log.AvgAggregationData"] = AvgAggregationDataValidator()
 	vr["ves.io.schema.log.CardinalityAggregationData"] = CardinalityAggregationDataValidator()
 	vr["ves.io.schema.log.DateAggregationBucket"] = DateAggregationBucketValidator()
@@ -57,24 +57,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.OrderByData"] = OrderByDataValidator()
 	vr["ves.io.schema.log.PercentileAggregationData"] = PercentileAggregationDataValidator()
 	vr["ves.io.schema.log.TopHitsAggregationData"] = TopHitsAggregationDataValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.log.CustomAPI"] = "data"
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -83,14 +78,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PubCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.log.Object"] = CustomAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.log.CustomAPI"] = NewCustomAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.log.CustomAPI"] = NewCustomAPIRestClient
 		if isExternal {
@@ -101,22 +92,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.log.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

@@ -13,10 +13,8 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.resource_policy.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.resource_policy.Object"] = ObjectValidator()
 	vr["ves.io.schema.resource_policy.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.resource_policy.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.resource_policy.PolicyRuleType"] = PolicyRuleTypeValidator()
 	vr["ves.io.schema.resource_policy.ResourceListType"] = ResourceListTypeValidator()
@@ -26,7 +24,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.resource_policy.TenantSubjectType"] = TenantSubjectTypeValidator()
 	vr["ves.io.schema.resource_policy.UserRuleType"] = UserRuleTypeValidator()
 	vr["ves.io.schema.resource_policy.UserSubjectType"] = UserSubjectTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -38,24 +35,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.resource_policy.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.resource_policy.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.resource_policy.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -64,20 +56,16 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

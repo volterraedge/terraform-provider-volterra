@@ -64,7 +64,6 @@ type ValidateHourlyItem struct {
 }
 
 func (v *ValidateHourlyItem) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for deployment")
@@ -86,68 +85,48 @@ func (v *ValidateHourlyItem) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["container"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("container"))
 		if err := fv(ctx, m.GetContainer(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["deployment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("deployment"))
 		if err := fv(ctx, m.GetDeployment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["end_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_timestamp"))
 		if err := fv(ctx, m.GetEndTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["quantity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("quantity"))
 		if err := fv(ctx, m.GetQuantity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_timestamp"))
 		if err := fv(ctx, m.GetStartTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit_name"))
 		if err := fv(ctx, m.GetUnitName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHourlyItemValidator = func() *ValidateHourlyItem {
 	v := &ValidateHourlyItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -215,6 +194,15 @@ type ValidateListHourlyUsageDetailsReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListHourlyUsageDetailsReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListHourlyUsageDetailsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListHourlyUsageDetailsReq)
 	if !ok {
@@ -228,31 +216,42 @@ func (v *ValidateListHourlyUsageDetailsReq) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("query"))
 		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListHourlyUsageDetailsReqValidator = func() *ValidateListHourlyUsageDetailsReq {
 	v := &ValidateListHourlyUsageDetailsReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListHourlyUsageDetailsReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -315,9 +314,7 @@ func (v *ValidateListHourlyUsageDetailsResp) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["hourly_usage_items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hourly_usage_items"))
 		for idx, item := range m.GetHourlyUsageItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -325,16 +322,13 @@ func (v *ValidateListHourlyUsageDetailsResp) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListHourlyUsageDetailsRespValidator = func() *ValidateListHourlyUsageDetailsResp {
 	v := &ValidateListHourlyUsageDetailsResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["hourly_usage_items"] = HourlyItemValidator().Validate
 
 	return v
@@ -385,6 +379,15 @@ type ValidateListUsageDetailsReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListUsageDetailsReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListUsageDetailsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListUsageDetailsReq)
 	if !ok {
@@ -398,40 +401,48 @@ func (v *ValidateListUsageDetailsReq) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["from"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("from"))
 		if err := fv(ctx, m.GetFrom(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["to"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("to"))
 		if err := fv(ctx, m.GetTo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListUsageDetailsReqValidator = func() *ValidateListUsageDetailsReq {
 	v := &ValidateListUsageDetailsReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListUsageDetailsReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -494,9 +505,7 @@ func (v *ValidateListUsageDetailsResp) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["usage_items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usage_items"))
 		for idx, item := range m.GetUsageItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -504,16 +513,13 @@ func (v *ValidateListUsageDetailsResp) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListUsageDetailsRespValidator = func() *ValidateListUsageDetailsResp {
 	v := &ValidateListUsageDetailsResp{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["usage_items"] = UsageItemValidator().Validate
 
 	return v
@@ -565,7 +571,6 @@ type ValidateUsageItem struct {
 }
 
 func (v *ValidateUsageItem) HourlyBreakdownQueryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hourly_breakdown_query")
@@ -573,9 +578,7 @@ func (v *ValidateUsageItem) HourlyBreakdownQueryValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUsageItem) MetricLabelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for metric_label")
@@ -597,18 +600,13 @@ func (v *ValidateUsageItem) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["end_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("end_timestamp"))
 		if err := fv(ctx, m.GetEndTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hourly_breakdown"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hourly_breakdown"))
 		for idx, item := range m.GetHourlyBreakdown() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -616,88 +614,61 @@ func (v *ValidateUsageItem) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["hourly_breakdown_query"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("hourly_breakdown_query"))
 		if err := fv(ctx, m.GetHourlyBreakdownQuery(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["metric_label"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("metric_label"))
 		if err := fv(ctx, m.GetMetricLabel(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_name"))
 		if err := fv(ctx, m.GetObjectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["quantity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("quantity"))
 		if err := fv(ctx, m.GetQuantity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["start_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("start_timestamp"))
 		if err := fv(ctx, m.GetStartTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["unit_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("unit_name"))
 		if err := fv(ctx, m.GetUnitName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["usage_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("usage_type"))
 		if err := fv(ctx, m.GetUsageType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUsageItemValidator = func() *ValidateUsageItem {
 	v := &ValidateUsageItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -727,7 +698,6 @@ var DefaultUsageItemValidator = func() *ValidateUsageItem {
 		panic(errMsg)
 	}
 	v.FldValidators["metric_label"] = vFn
-
 	v.FldValidators["hourly_breakdown"] = HourlyItemValidator().Validate
 
 	return v

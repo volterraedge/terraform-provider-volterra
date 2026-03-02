@@ -14,23 +14,19 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dos_mitigation.SpecType"] = SpecTypeValidator()
-
 	vr["ves.io.schema.dos_mitigation.Object"] = ObjectValidator()
 	vr["ves.io.schema.dos_mitigation.StatusObject"] = StatusObjectValidator()
-
 	vr["ves.io.schema.dos_mitigation.CreateBulkRequest"] = CreateBulkRequestValidator()
 	vr["ves.io.schema.dos_mitigation.CreateBulkResponse"] = CreateBulkResponseValidator()
 	vr["ves.io.schema.dos_mitigation.DeleteBulkRequest"] = DeleteBulkRequestValidator()
 	vr["ves.io.schema.dos_mitigation.DeleteBulkResponse"] = DeleteBulkResponseValidator()
 	vr["ves.io.schema.dos_mitigation.FailedOperation"] = FailedOperationValidator()
-
 	vr["ves.io.schema.dos_mitigation.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.dos_mitigation.Destination"] = DestinationValidator()
 	vr["ves.io.schema.dos_mitigation.DoSMitigationRuleInfo"] = DoSMitigationRuleInfoValidator()
 	vr["ves.io.schema.dos_mitigation.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.dos_mitigation.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.dos_mitigation.ReplaceSpecType"] = ReplaceSpecTypeValidator()
-
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -42,24 +38,19 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.dos_mitigation.StatusObject"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.dos_mitigation.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
 	mdr.EntryIndexers["ves.io.schema.dos_mitigation.StatusObject"] = GetStatusObjectIndexers
-
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
-
 	sm["config"] = svcfw.P0PolicyInfo{
 		Name:            "ves-io-allow-config",
 		ServiceSelector: "akar\\.gc.*\\",
 	}
-
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -68,14 +59,10 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
 	customCSR = mdr.PvtCustomServiceRegistry
-
 	func() {
 		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.dos_mitigation.Object"] = PrivateDosMitigationAPISwaggerJSON
-
 		customCSR.GrpcClientRegistry["ves.io.schema.dos_mitigation.PrivateDosMitigationAPI"] = NewPrivateDosMitigationAPIGrpcClient
 		customCSR.RestClientRegistry["ves.io.schema.dos_mitigation.PrivateDosMitigationAPI"] = NewPrivateDosMitigationAPIRestClient
 		if isExternal {
@@ -86,22 +73,17 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.dos_mitigation.PrivateDosMitigationAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewPrivateDosMitigationAPIServer(svc)
 		}
-
 	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeEntryRegistry(mdr)
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
-
 	initializeCRUDServiceRegistry(mdr, isExternal)
 	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
-
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
-
 }

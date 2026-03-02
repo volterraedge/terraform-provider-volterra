@@ -42,7 +42,6 @@ func (c *CustomAPIGrpcClient) doRPCGetMetrics(ctx context.Context, yamlReq strin
 	rsp, err := c.grpcClient.GetMetrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListMetricsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -51,7 +50,6 @@ func (c *CustomAPIGrpcClient) doRPCListMetrics(ctx context.Context, yamlReq stri
 	rsp, err := c.grpcClient.ListMetrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCListSegmentMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListSegmentMetricsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,7 +58,6 @@ func (c *CustomAPIGrpcClient) doRPCListSegmentMetrics(ctx context.Context, yamlR
 	rsp, err := c.grpcClient.ListSegmentMetrics(ctx, req, opts...)
 	return rsp, err
 }
-
 func (c *CustomAPIGrpcClient) doRPCTopCloudConnect(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &TopCloudConnectRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -101,15 +98,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetMetrics"] = ccl.doRPCGetMetrics
-
 	rpcFns["ListMetrics"] = ccl.doRPCListMetrics
-
 	rpcFns["ListSegmentMetrics"] = ccl.doRPCListSegmentMetrics
-
 	rpcFns["TopCloudConnect"] = ccl.doRPCTopCloudConnect
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -202,7 +194,6 @@ func (c *CustomAPIRestClient) doRPCGetMetrics(ctx context.Context, callOpts *ser
 	pbRsp := &GetMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.GetMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -210,7 +201,6 @@ func (c *CustomAPIRestClient) doRPCGetMetrics(ctx context.Context, callOpts *ser
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -292,7 +282,6 @@ func (c *CustomAPIRestClient) doRPCListMetrics(ctx context.Context, callOpts *se
 	pbRsp := &ListMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.ListMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -300,7 +289,6 @@ func (c *CustomAPIRestClient) doRPCListMetrics(ctx context.Context, callOpts *se
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCListSegmentMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -384,7 +372,6 @@ func (c *CustomAPIRestClient) doRPCListSegmentMetrics(ctx context.Context, callO
 	pbRsp := &ListSegmentMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.ListSegmentMetricsResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -392,7 +379,6 @@ func (c *CustomAPIRestClient) doRPCListSegmentMetrics(ctx context.Context, callO
 	}
 	return pbRsp, nil
 }
-
 func (c *CustomAPIRestClient) doRPCTopCloudConnect(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -473,7 +459,6 @@ func (c *CustomAPIRestClient) doRPCTopCloudConnect(ctx context.Context, callOpts
 	pbRsp := &TopCloudConnectResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.TopCloudConnectResponse", body)
-
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -507,15 +492,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetMetrics"] = ccl.doRPCGetMetrics
-
 	rpcFns["ListMetrics"] = ccl.doRPCListMetrics
-
 	rpcFns["ListSegmentMetrics"] = ccl.doRPCListSegmentMetrics
-
 	rpcFns["TopCloudConnect"] = ccl.doRPCTopCloudConnect
-
 	ccl.rpcFns = rpcFns
-
 	return ccl
 }
 
@@ -608,7 +588,6 @@ func (s *customAPISrv) GetMetrics(ctx context.Context, in *GetMetricsRequest) (*
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.GetMetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -657,7 +636,6 @@ func (s *customAPISrv) ListMetrics(ctx context.Context, in *ListMetricsRequest) 
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.ListMetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -706,7 +684,6 @@ func (s *customAPISrv) ListSegmentMetrics(ctx context.Context, in *ListSegmentMe
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.ListSegmentMetricsResponse", rsp)...)
 
 	return rsp, nil
@@ -755,7 +732,6 @@ func (s *customAPISrv) TopCloudConnect(ctx context.Context, in *TopCloudConnectR
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.TopCloudConnectResponse", rsp)...)
 
 	return rsp, nil

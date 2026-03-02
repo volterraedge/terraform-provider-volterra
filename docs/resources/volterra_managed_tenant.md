@@ -24,7 +24,6 @@ resource "volterra_managed_tenant" "example" {
   // One of the arguments from this list "tenant_id all_tenants tenant_regex new_tenant_info" must be set
   tenant_id = "company-s4543dsa"
 }
-
 ```
 
 Argument Reference
@@ -127,4 +126,4 @@ Provide user information of the tenant owner..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured managed_tenant.
+-   `id` - This is the id of the configured managed_tenant.

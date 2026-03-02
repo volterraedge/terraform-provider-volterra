@@ -68,17 +68,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicyGroupChoiceDRefInfo()
-
 }
 
 func (m *GetSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPolicyGroupChoice().(type) {
 	case *GetSpecType_DefaultPolicyGroup:
-
 		return nil, nil
-
 	case *GetSpecType_PolicyGroup:
-
 		vref := m.GetPolicyGroup()
 		if vref == nil {
 			return nil, nil
@@ -94,7 +90,6 @@ func (m *GetSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -106,13 +101,11 @@ func (m *GetSpecType) GetPolicyGroupChoiceDBEntries(ctx context.Context, d db.In
 
 	switch m.GetPolicyGroupChoice().(type) {
 	case *GetSpecType_DefaultPolicyGroup:
-
 	case *GetSpecType_PolicyGroup:
 		refdType, err := d.TypeForEntryKind("", "", "unified_policy_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: unified_policy_group")
 		}
-
 		vref := m.GetPolicyGroup()
 		if vref == nil {
 			return nil, nil
@@ -130,7 +123,6 @@ func (m *GetSpecType) GetPolicyGroupChoiceDBEntries(ctx context.Context, d db.In
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -195,16 +187,13 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -212,7 +201,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPolicyGroupChoice := v.PolicyGroupChoiceValidationRuleHandler
 	rulesPolicyGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -223,7 +211,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["policy_group_choice"] = vFn
-
 	v.FldValidators["policy_group_choice.policy_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -276,17 +263,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicyGroupChoiceDRefInfo()
-
 }
 
 func (m *GlobalSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPolicyGroupChoice().(type) {
 	case *GlobalSpecType_DefaultPolicyGroup:
-
 		return nil, nil
-
 	case *GlobalSpecType_PolicyGroup:
-
 		vref := m.GetPolicyGroup()
 		if vref == nil {
 			return nil, nil
@@ -302,7 +285,6 @@ func (m *GlobalSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -314,13 +296,11 @@ func (m *GlobalSpecType) GetPolicyGroupChoiceDBEntries(ctx context.Context, d db
 
 	switch m.GetPolicyGroupChoice().(type) {
 	case *GlobalSpecType_DefaultPolicyGroup:
-
 	case *GlobalSpecType_PolicyGroup:
 		refdType, err := d.TypeForEntryKind("", "", "unified_policy_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: unified_policy_group")
 		}
-
 		vref := m.GetPolicyGroup()
 		if vref == nil {
 			return nil, nil
@@ -338,7 +318,6 @@ func (m *GlobalSpecType) GetPolicyGroupChoiceDBEntries(ctx context.Context, d db
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -403,16 +382,13 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -420,7 +396,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPolicyGroupChoice := v.PolicyGroupChoiceValidationRuleHandler
 	rulesPolicyGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -431,7 +406,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["policy_group_choice"] = vFn
-
 	v.FldValidators["policy_group_choice.policy_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -484,17 +458,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetPolicyGroupChoiceDRefInfo()
-
 }
 
 func (m *ReplaceSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetPolicyGroupChoice().(type) {
 	case *ReplaceSpecType_DefaultPolicyGroup:
-
 		return nil, nil
-
 	case *ReplaceSpecType_PolicyGroup:
-
 		vref := m.GetPolicyGroup()
 		if vref == nil {
 			return nil, nil
@@ -510,7 +480,6 @@ func (m *ReplaceSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) 
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-
 	default:
 		return nil, nil
 	}
@@ -522,13 +491,11 @@ func (m *ReplaceSpecType) GetPolicyGroupChoiceDBEntries(ctx context.Context, d d
 
 	switch m.GetPolicyGroupChoice().(type) {
 	case *ReplaceSpecType_DefaultPolicyGroup:
-
 	case *ReplaceSpecType_PolicyGroup:
 		refdType, err := d.TypeForEntryKind("", "", "unified_policy_group.Object")
 		if err != nil {
 			return nil, errors.Wrap(err, "Cannot find type for kind: unified_policy_group")
 		}
-
 		vref := m.GetPolicyGroup()
 		if vref == nil {
 			return nil, nil
@@ -546,7 +513,6 @@ func (m *ReplaceSpecType) GetPolicyGroupChoiceDBEntries(ctx context.Context, d d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
-
 	}
 
 	return entries, nil
@@ -611,16 +577,13 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -628,7 +591,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhPolicyGroupChoice := v.PolicyGroupChoiceValidationRuleHandler
 	rulesPolicyGroupChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -639,7 +601,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["policy_group_choice"] = vFn
-
 	v.FldValidators["policy_group_choice.policy_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v

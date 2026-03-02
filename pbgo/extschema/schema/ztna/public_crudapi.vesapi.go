@@ -543,7 +543,6 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	} else {
 		return fmt.Errorf("Request %s does not have 'metadata.namespace'", jsn)
 	}
-
 	if val, ok := md["name"].(string); ok {
 		name = val
 	} else {
@@ -1281,22 +1280,16 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	switch req.ResponseFormat {
 	case GET_RSP_FORMAT_FOR_CREATE:
 		rsrcReq.RspInCreateForm = true
-
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
-
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
-
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		rsrcReq.RspInBrokenReferencesForm = true
-
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1355,7 +1348,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 			Code:    ves_io_schema.EINTERNAL,
 			Message: merr.Error(),
 		})
-
 	}
 	return rsp, nil
 }
@@ -1508,7 +1500,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
@@ -1520,7 +1511,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 			}
 			rsp.Status = append(rsp.Status, statusObj)
 		}
-
 	}
 	_ = buildStatusForm
 	buildReferringObjectsForm := func() {
@@ -1533,7 +1523,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildReferringObjectsForm
 	buildBrokenReferencesForm := func() {
@@ -1555,7 +1544,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 				Name:      br.Name,
 			})
 		}
-
 	}
 	_ = buildBrokenReferencesForm
 
@@ -1579,19 +1567,15 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_STATUS:
 		buildStatusForm()
-
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
-
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
-
 	case GET_RSP_FORMAT_BROKEN_REFERENCES:
 		buildBrokenReferencesForm()
 
 	default:
 		buildReadForm()
-
 		buildStatusForm()
 	}
 
@@ -1623,7 +1607,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				Code:    ves_io_schema.EINTERNAL,
 				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
 			})
-
 			continue
 		}
 		if redactor, ok := e.(db.Redactor); ok {
@@ -1643,7 +1626,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			OwnerView: o.GetSystemMetadata().GetOwnerView(),
 			Labels:    o.GetMetadata().GetLabels(),
 		}
-
 		item.Description = o.GetMetadata().GetDescription()
 		item.Annotations = o.GetMetadata().GetAnnotations()
 		item.Disabled = o.GetMetadata().GetDisable()
@@ -1653,7 +1635,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.ztna.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1665,7 +1646,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 							Code:    ves_io_schema.EINTERNAL,
 							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
 						})
-
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1674,9 +1654,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
 				}
 			}
-
 		}
-
 		if len(req.ReportStatusFields) > 0 {
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
@@ -1685,7 +1663,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 						Code:    ves_io_schema.EINTERNAL,
 						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
 					})
-
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -2351,10 +2328,10 @@ var APISwaggerJSON string = `{
                 },
                 "reason": {
                     "type": "string",
-                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
                     "title": "reason",
                     "x-displayname": "Reason",
-                    "x-ves-example": "value"
+                    "x-ves-example": "Insufficient memory in data plane"
                 },
                 "service_name": {
                     "type": "string",
@@ -3064,7 +3041,7 @@ var APISwaggerJSON string = `{
         },
         "schemaztnaAction": {
             "type": "string",
-            "description": "x-displayName: \"Action\"\nThis sends allow/reject action in entry configuration of per session policy\n\n - reject: Reject \n\nx-displayName: \"Reject\"\nReject will be choosen as action\n - allow: allow\n\nx-displayName: \"Allow\"\nAllow will be choosen as action .",
+            "description": "x-displayName: \"Action\"\nThis sends allow/reject action in entry configuration of per session policy\n\n - reject: Reject\n\nx-displayName: \"Reject\"\nReject will be choosen as action\n - allow: allow\n\nx-displayName: \"Allow\"\nAllow will be choosen as action .",
             "title": "Ztna Policy Action",
             "enum": [
                 "reject",
@@ -3108,7 +3085,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Active Directory Query"
                 },
                 "log_on": {
-                    "description": "Exclusive with [active_directory_auth active_directory_query resource_assign]\n\n Action type is logon ",
+                    "description": "Exclusive with [active_directory_auth active_directory_query resource_assign]\n\n Action type is logon",
                     "title": "Logon",
                     "$ref": "#/definitions/ztnaLogonItemType",
                     "x-displayname": "Log On"
@@ -3176,13 +3153,13 @@ var APISwaggerJSON string = `{
                 },
                 "filter": {
                     "type": "string",
-                    "description": " Filter setting for filtering out the assigned resources \n\nExample: - \"(CN=%{session.logon.last.username})\"-",
+                    "description": " Filter setting for filtering out the assigned resources\n\nExample: - \"(CN=%{session.logon.last.username})\"-",
                     "title": "Filter",
                     "x-displayname": "Filter",
                     "x-ves-example": "(CN=%{session.logon.last.username})"
                 },
                 "resource_assign": {
-                    "description": "\n List of all assigned resources list ",
+                    "description": "\n List of all assigned resources list",
                     "title": "resource assigned",
                     "$ref": "#/definitions/ztnaResourceAssign",
                     "x-displayname": "Resource Assign"
@@ -3198,8 +3175,8 @@ var APISwaggerJSON string = `{
         },
         "ztnaAllowResourceAssign": {
             "type": "object",
-            "description": "Configuration of assigned resource after success of directory query",
-            "title": "Resource Assign\n \nx-displayName: \"Resource Assign\"",
+            "description": "\nConfiguration of assigned resource after success of directory query",
+            "title": "Resource Assign",
             "x-displayname": "Resource Assign",
             "x-ves-proto-message": "ves.io.schema.ztna.AllowResourceAssign",
             "properties": {
@@ -3219,7 +3196,7 @@ var APISwaggerJSON string = `{
                 },
                 "rules_resource_assign": {
                     "type": "array",
-                    "description": " Rules for assigning the resources ",
+                    "description": " Rules for assigning the resources",
                     "title": "Rules",
                     "items": {
                         "$ref": "#/definitions/ztnaRules"
@@ -3229,7 +3206,7 @@ var APISwaggerJSON string = `{
                 "server": {
                     "type": "string",
                     "description": " Server name for assigning the resources\n\nExample: - \"ad_auth_server\"-",
-                    "title": "Server Name\n \nx-displayName: \"Server\"\nx-example: \"ad_auth_server\"\nServer name for assigning the resources",
+                    "title": "Server Name",
                     "x-displayname": "Server",
                     "x-ves-example": "ad_auth_server"
                 }
@@ -3321,7 +3298,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.ztna.CreateSpecType",
             "properties": {
                 "connectivity": {
-                    "description": " List of Connectivity Policy Type ",
+                    "description": " List of Connectivity Policy Type",
                     "$ref": "#/definitions/ztnaConnectivityPolicyType",
                     "x-displayname": "Connectivity Access Policy"
                 },
@@ -3538,7 +3515,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.ztna.GetSpecType",
             "properties": {
                 "connectivity": {
-                    "description": " List of Connectivity Policy Type ",
+                    "description": " List of Connectivity Policy Type",
                     "$ref": "#/definitions/ztnaConnectivityPolicyType",
                     "x-displayname": "Connectivity Access Policy"
                 },
@@ -3724,7 +3701,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "external_server": {
                     "type": "object",
-                    "description": " List of configuration of external server \n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n",
+                    "description": " List of configuration of external server\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n",
                     "title": "ExternalServers",
                     "x-displayname": "External Servers",
                     "x-ves-validation-rules": {
@@ -3762,7 +3739,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "sequence_action": {
-                    "description": " Choose the sequence action from Log On/AAA Directory Auth/\n Active Directory Query/Resource Assign  ",
+                    "description": " Choose the sequence action from Log On/AAA Directory Auth/\n Active Directory Query/Resource Assign",
                     "title": "Sequence of Action",
                     "$ref": "#/definitions/ztnaSequenceAction",
                     "x-displayname": "Sequence Action"
@@ -3802,7 +3779,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.ztna.ReplaceSpecType",
             "properties": {
                 "connectivity": {
-                    "description": " List of Connectivity Policy Type ",
+                    "description": " List of Connectivity Policy Type",
                     "$ref": "#/definitions/ztnaConnectivityPolicyType",
                     "x-displayname": "Connectivity Access Policy"
                 },
@@ -3892,20 +3869,20 @@ var APISwaggerJSON string = `{
         },
         "ztnaSequenceAction": {
             "type": "object",
-            "description": "\nThis configuration is used to specify the sequence of action \nfor connectivity access Policy",
+            "description": "\nThis configuration is used to specify the sequence of action\nfor connectivity access Policy",
             "title": "sequenceAction",
             "x-displayname": "SequenceAction",
             "x-ves-proto-message": "ves.io.schema.ztna.SequenceAction",
             "properties": {
                 "connectivity_access_policy_name": {
                     "type": "string",
-                    "description": " Name of connectivity policy \n\nExample: - \"connectivity_demo\"-",
+                    "description": " Name of connectivity policy\n\nExample: - \"connectivity_demo\"-",
                     "title": "connectivityAccessPolicyName",
                     "x-displayname": "Connectivity AccessPolicy Name",
                     "x-ves-example": "connectivity_demo"
                 },
                 "next_action": {
-                    "description": " Next Action could be any one from the Log On/AAA Directory Auth/\n Active Directory Query/Resource Assign ",
+                    "description": " Next Action could be any one from the Log On/AAA Directory Auth/\n Active Directory Query/Resource Assign",
                     "title": "Next Item",
                     "$ref": "#/definitions/ztnaActionType",
                     "x-displayname": "Next Item "

@@ -26,6 +26,107 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSDiskEncryption) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSDiskEncryption) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSDiskEncryption) DeepCopy() *AWSDiskEncryption {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSDiskEncryption{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSDiskEncryption) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSDiskEncryption) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSDiskEncryptionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSDiskEncryption struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSDiskEncryption) KmsKeyIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for kms_key_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSDiskEncryption) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSDiskEncryption)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSDiskEncryption got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["kms_key_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("kms_key_id"))
+		if err := fv(ctx, m.GetKmsKeyId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSDiskEncryptionValidator = func() *ValidateAWSDiskEncryption {
+	v := &ValidateAWSDiskEncryption{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKmsKeyId := v.KmsKeyIdValidationRuleHandler
+	rulesKmsKeyId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhKmsKeyId(rulesKmsKeyId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSDiskEncryption.kms_key_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["kms_key_id"] = vFn
+
+	return v
+}()
+
+func AWSDiskEncryptionValidator() db.Validator {
+	return DefaultAWSDiskEncryptionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AWSNATGatewaychoiceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -117,16 +218,13 @@ func (v *ValidateAWSNATGatewaychoiceType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSNATGatewaychoiceTypeValidator = func() *ValidateAWSNATGatewaychoiceType {
 	v := &ValidateAWSNATGatewaychoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -134,7 +232,6 @@ var DefaultAWSNATGatewaychoiceTypeValidator = func() *ValidateAWSNATGatewaychoic
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -145,7 +242,6 @@ var DefaultAWSNATGatewaychoiceTypeValidator = func() *ValidateAWSNATGatewaychoic
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceNatGwId := v.ChoiceNatGwIdValidationRuleHandler
 	rulesChoiceNatGwId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "21",
@@ -156,7 +252,6 @@ var DefaultAWSNATGatewaychoiceTypeValidator = func() *ValidateAWSNATGatewaychoic
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSNATGatewaychoiceType.choice_nat_gw_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.nat_gw_id"] = vFnMap["choice.nat_gw_id"]
 
 	return v
@@ -220,81 +315,56 @@ func (v *ValidateAWSSubnetIdsType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["az_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("az_name"))
 		if err := fv(ctx, m.GetAzName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_subnet"))
 		if err := fv(ctx, m.GetInsideSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_subnet_id"))
 		if err := fv(ctx, m.GetInsideSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_subnet"))
 		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_subnet_id"))
 		if err := fv(ctx, m.GetOutsideSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["workload_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("workload_subnet"))
 		if err := fv(ctx, m.GetWorkloadSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["workload_subnet_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("workload_subnet_id"))
 		if err := fv(ctx, m.GetWorkloadSubnetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSSubnetIdsTypeValidator = func() *ValidateAWSSubnetIdsType {
 	v := &ValidateAWSSubnetIdsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["outside_subnet"] = AWSSubnetInfoTypeValidator().Validate
-
 	v.FldValidators["inside_subnet"] = AWSSubnetInfoTypeValidator().Validate
-
 	v.FldValidators["workload_subnet"] = AWSSubnetInfoTypeValidator().Validate
 
 	return v
@@ -346,7 +416,6 @@ type ValidateAWSSubnetInfoType struct {
 }
 
 func (v *ValidateAWSSubnetInfoType) AzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for az_name")
@@ -354,9 +423,7 @@ func (v *ValidateAWSSubnetInfoType) AzNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSSubnetInfoType) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
@@ -364,9 +431,7 @@ func (v *ValidateAWSSubnetInfoType) IdValidationRuleHandler(rules map[string]str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSSubnetInfoType) Ipv4PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4_prefix")
@@ -388,41 +453,30 @@ func (v *ValidateAWSSubnetInfoType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["az_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("az_name"))
 		if err := fv(ctx, m.GetAzName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("id"))
 		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv4_prefix"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv4_prefix"))
 		if err := fv(ctx, m.GetIpv4Prefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSSubnetInfoTypeValidator = func() *ValidateAWSSubnetInfoType {
 	v := &ValidateAWSSubnetInfoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -518,7 +572,6 @@ type ValidateAWSVPCOneInterfaceNodeType struct {
 }
 
 func (v *ValidateAWSVPCOneInterfaceNodeType) AwsAzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_az_name")
@@ -526,9 +579,7 @@ func (v *ValidateAWSVPCOneInterfaceNodeType) AwsAzNameValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSVPCOneInterfaceNodeType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
@@ -550,41 +601,30 @@ func (v *ValidateAWSVPCOneInterfaceNodeType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_az_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_az_name"))
 		if err := fv(ctx, m.GetAwsAzName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_subnet"))
 		if err := fv(ctx, m.GetLocalSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCOneInterfaceNodeTypeValidator = func() *ValidateAWSVPCOneInterfaceNodeType {
 	v := &ValidateAWSVPCOneInterfaceNodeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -614,7 +654,6 @@ var DefaultAWSVPCOneInterfaceNodeTypeValidator = func() *ValidateAWSVPCOneInterf
 		panic(errMsg)
 	}
 	v.FldValidators["disk_size"] = vFn
-
 	v.FldValidators["local_subnet"] = CloudSubnetTypeValidator().Validate
 
 	return v
@@ -680,9 +719,7 @@ func (v *ValidateAWSVPCParamsType) NameChoiceNameTagValidationRuleHandler(rules 
 	}
 	return oValidatorFn_NameTag, nil
 }
-
 func (v *ValidateAWSVPCParamsType) PrimaryIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for primary_ipv4")
@@ -704,14 +741,11 @@ func (v *ValidateAWSVPCParamsType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["allocate_ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("allocate_ipv6"))
 		if err := fv(ctx, m.GetAllocateIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["name_choice"]; exists {
@@ -747,25 +781,19 @@ func (v *ValidateAWSVPCParamsType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["primary_ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("primary_ipv4"))
 		if err := fv(ctx, m.GetPrimaryIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCParamsTypeValidator = func() *ValidateAWSVPCParamsType {
 	v := &ValidateAWSVPCParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -773,7 +801,6 @@ var DefaultAWSVPCParamsTypeValidator = func() *ValidateAWSVPCParamsType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNameChoice := v.NameChoiceValidationRuleHandler
 	rulesNameChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -784,7 +811,6 @@ var DefaultAWSVPCParamsTypeValidator = func() *ValidateAWSVPCParamsType {
 		panic(errMsg)
 	}
 	v.FldValidators["name_choice"] = vFn
-
 	vrhNameChoiceNameTag := v.NameChoiceNameTagValidationRuleHandler
 	rulesNameChoiceNameTag := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -794,7 +820,6 @@ var DefaultAWSVPCParamsTypeValidator = func() *ValidateAWSVPCParamsType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSVPCParamsType.name_choice_name_tag: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["name_choice.name_tag"] = vFnMap["name_choice.name_tag"]
 
 	vrhPrimaryIpv4 := v.PrimaryIpv4ValidationRuleHandler
@@ -866,9 +891,7 @@ func (v *ValidateAWSVPCTwoInterfaceNodeType) ChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSVPCTwoInterfaceNodeType) AwsAzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_az_name")
@@ -876,9 +899,7 @@ func (v *ValidateAWSVPCTwoInterfaceNodeType) AwsAzNameValidationRuleHandler(rule
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSVPCTwoInterfaceNodeType) OutsideSubnetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for outside_subnet")
@@ -887,19 +908,15 @@ func (v *ValidateAWSVPCTwoInterfaceNodeType) OutsideSubnetValidationRuleHandler(
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := CloudSubnetTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAWSVPCTwoInterfaceNodeType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
@@ -921,14 +938,11 @@ func (v *ValidateAWSVPCTwoInterfaceNodeType) Validate(ctx context.Context, pm in
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["aws_az_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("aws_az_name"))
 		if err := fv(ctx, m.GetAwsAzName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["choice"]; exists {
@@ -964,43 +978,31 @@ func (v *ValidateAWSVPCTwoInterfaceNodeType) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_subnet"))
 		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["workload_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("workload_subnet"))
 		if err := fv(ctx, m.GetWorkloadSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCTwoInterfaceNodeTypeValidator = func() *ValidateAWSVPCTwoInterfaceNodeType {
 	v := &ValidateAWSVPCTwoInterfaceNodeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1008,7 +1010,6 @@ var DefaultAWSVPCTwoInterfaceNodeTypeValidator = func() *ValidateAWSVPCTwoInterf
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1052,9 +1053,7 @@ var DefaultAWSVPCTwoInterfaceNodeTypeValidator = func() *ValidateAWSVPCTwoInterf
 		panic(errMsg)
 	}
 	v.FldValidators["disk_size"] = vFn
-
 	v.FldValidators["choice.inside_subnet"] = CloudSubnetTypeValidator().Validate
-
 	v.FldValidators["workload_subnet"] = CloudSubnetTypeValidator().Validate
 
 	return v
@@ -1168,16 +1167,13 @@ func (v *ValidateAWSVPCchoiceType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCchoiceTypeValidator = func() *ValidateAWSVPCchoiceType {
 	v := &ValidateAWSVPCchoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1185,7 +1181,6 @@ var DefaultAWSVPCchoiceTypeValidator = func() *ValidateAWSVPCchoiceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1196,7 +1191,6 @@ var DefaultAWSVPCchoiceTypeValidator = func() *ValidateAWSVPCchoiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceVpcId := v.ChoiceVpcIdValidationRuleHandler
 	rulesChoiceVpcId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -1207,9 +1201,7 @@ var DefaultAWSVPCchoiceTypeValidator = func() *ValidateAWSVPCchoiceType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSVPCchoiceType.choice_vpc_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.vpc_id"] = vFnMap["choice.vpc_id"]
-
 	v.FldValidators["choice.new_vpc"] = AWSVPCParamsTypeValidator().Validate
 
 	return v
@@ -1312,16 +1304,13 @@ func (v *ValidateAWSVirtualPrivateGatewaychoiceType) Validate(ctx context.Contex
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVirtualPrivateGatewaychoiceTypeValidator = func() *ValidateAWSVirtualPrivateGatewaychoiceType {
 	v := &ValidateAWSVirtualPrivateGatewaychoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1329,7 +1318,6 @@ var DefaultAWSVirtualPrivateGatewaychoiceTypeValidator = func() *ValidateAWSVirt
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1340,7 +1328,6 @@ var DefaultAWSVirtualPrivateGatewaychoiceTypeValidator = func() *ValidateAWSVirt
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceVgwId := v.ChoiceVgwIdValidationRuleHandler
 	rulesChoiceVgwId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "21",
@@ -1351,7 +1338,6 @@ var DefaultAWSVirtualPrivateGatewaychoiceTypeValidator = func() *ValidateAWSVirt
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSVirtualPrivateGatewaychoiceType.choice_vgw_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.vgw_id"] = vFnMap["choice.vgw_id"]
 
 	return v
@@ -1472,16 +1458,13 @@ func (v *ValidateAllowedVIPPorts) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAllowedVIPPortsValidator = func() *ValidateAllowedVIPPorts {
 	v := &ValidateAllowedVIPPorts{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["port_choice.custom_ports"] = CustomPortsValidator().Validate
 
 	return v
@@ -1577,16 +1560,13 @@ func (v *ValidateAzureSpecialSubnetType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSpecialSubnetTypeValidator = func() *ValidateAzureSpecialSubnetType {
 	v := &ValidateAzureSpecialSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1594,7 +1574,6 @@ var DefaultAzureSpecialSubnetTypeValidator = func() *ValidateAzureSpecialSubnetT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhResourceGroupChoiceSubnetResourceGrp := v.ResourceGroupChoiceSubnetResourceGrpValidationRuleHandler
 	rulesResourceGroupChoiceSubnetResourceGrp := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -1604,7 +1583,6 @@ var DefaultAzureSpecialSubnetTypeValidator = func() *ValidateAzureSpecialSubnetT
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AzureSpecialSubnetType.resource_group_choice_subnet_resource_grp: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["resource_group_choice.subnet_resource_grp"] = vFnMap["resource_group_choice.subnet_resource_grp"]
 
 	return v
@@ -1666,6 +1644,7 @@ func (v *ValidateAzureSubnetChoiceType) ChoiceValidationRuleHandler(rules map[st
 func (v *ValidateAzureSubnetChoiceType) ChoiceSubnetParamValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return CloudSubnetParamTypeValidator().Validate, nil
 }
+
 func (v *ValidateAzureSubnetChoiceType) ChoiceSubnetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return AzureSubnetTypeValidator().Validate, nil
 }
@@ -1717,16 +1696,13 @@ func (v *ValidateAzureSubnetChoiceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceType {
 	v := &ValidateAzureSubnetChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1734,7 +1710,6 @@ var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1745,7 +1720,6 @@ var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceSubnetParam := v.ChoiceSubnetParamValidationRuleHandler
 	rulesChoiceSubnetParam := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1764,7 +1738,6 @@ var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceTyp
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AzureSubnetChoiceType.choice_subnet: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.subnet_param"] = vFnMap["choice.subnet_param"]
 	v.FldValidators["choice.subnet"] = vFnMap["choice.subnet"]
 
@@ -1882,16 +1855,13 @@ func (v *ValidateAzureSubnetChoiceWithAutoType) Validate(ctx context.Context, pm
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSubnetChoiceWithAutoTypeValidator = func() *ValidateAzureSubnetChoiceWithAutoType {
 	v := &ValidateAzureSubnetChoiceWithAutoType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1899,7 +1869,6 @@ var DefaultAzureSubnetChoiceWithAutoTypeValidator = func() *ValidateAzureSubnetC
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1910,7 +1879,6 @@ var DefaultAzureSubnetChoiceWithAutoTypeValidator = func() *ValidateAzureSubnetC
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.subnet_param"] = CloudSubnetParamTypeValidator().Validate
 	v.FldValidators["choice.subnet"] = AzureSpecialSubnetTypeValidator().Validate
 
@@ -1969,9 +1937,7 @@ func (v *ValidateAzureSubnetType) ResourceGroupChoiceSubnetResourceGrpValidation
 	}
 	return oValidatorFn_SubnetResourceGrp, nil
 }
-
 func (v *ValidateAzureSubnetType) SubnetNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_name")
@@ -2017,25 +1983,19 @@ func (v *ValidateAzureSubnetType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_name"))
 		if err := fv(ctx, m.GetSubnetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureSubnetTypeValidator = func() *ValidateAzureSubnetType {
 	v := &ValidateAzureSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2043,7 +2003,6 @@ var DefaultAzureSubnetTypeValidator = func() *ValidateAzureSubnetType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhResourceGroupChoiceSubnetResourceGrp := v.ResourceGroupChoiceSubnetResourceGrpValidationRuleHandler
 	rulesResourceGroupChoiceSubnetResourceGrp := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -2053,7 +2012,6 @@ var DefaultAzureSubnetTypeValidator = func() *ValidateAzureSubnetType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AzureSubnetType.resource_group_choice_subnet_resource_grp: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["resource_group_choice.subnet_resource_grp"] = vFnMap["resource_group_choice.subnet_resource_grp"]
 
 	vrhSubnetName := v.SubnetNameValidationRuleHandler
@@ -2171,16 +2129,13 @@ func (v *ValidateAzureVnetChoiceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetChoiceTypeValidator = func() *ValidateAzureVnetChoiceType {
 	v := &ValidateAzureVnetChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2188,7 +2143,6 @@ var DefaultAzureVnetChoiceTypeValidator = func() *ValidateAzureVnetChoiceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2199,7 +2153,6 @@ var DefaultAzureVnetChoiceTypeValidator = func() *ValidateAzureVnetChoiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.new_vnet"] = AzureVnetParamsTypeValidator().Validate
 	v.FldValidators["choice.existing_vnet"] = AzureVnetTypeValidator().Validate
 
@@ -2252,7 +2205,6 @@ type ValidateAzureVnetOneInterfaceNodeARType struct {
 }
 
 func (v *ValidateAzureVnetOneInterfaceNodeARType) NodeNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for node_number")
@@ -2260,9 +2212,7 @@ func (v *ValidateAzureVnetOneInterfaceNodeARType) NodeNumberValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetOneInterfaceNodeARType) FaultDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for fault_domain")
@@ -2270,9 +2220,7 @@ func (v *ValidateAzureVnetOneInterfaceNodeARType) FaultDomainValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetOneInterfaceNodeARType) UpdateDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for update_domain")
@@ -2294,50 +2242,36 @@ func (v *ValidateAzureVnetOneInterfaceNodeARType) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fault_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fault_domain"))
 		if err := fv(ctx, m.GetFaultDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_subnet"))
 		if err := fv(ctx, m.GetLocalSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_number"))
 		if err := fv(ctx, m.GetNodeNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_domain"))
 		if err := fv(ctx, m.GetUpdateDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetOneInterfaceNodeARTypeValidator = func() *ValidateAzureVnetOneInterfaceNodeARType {
 	v := &ValidateAzureVnetOneInterfaceNodeARType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2381,7 +2315,6 @@ var DefaultAzureVnetOneInterfaceNodeARTypeValidator = func() *ValidateAzureVnetO
 		panic(errMsg)
 	}
 	v.FldValidators["update_domain"] = vFn
-
 	v.FldValidators["local_subnet"] = AzureSubnetChoiceTypeValidator().Validate
 
 	return v
@@ -2433,7 +2366,6 @@ type ValidateAzureVnetOneInterfaceNodeType struct {
 }
 
 func (v *ValidateAzureVnetOneInterfaceNodeType) AzureAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_az")
@@ -2441,9 +2373,7 @@ func (v *ValidateAzureVnetOneInterfaceNodeType) AzureAzValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetOneInterfaceNodeType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
@@ -2465,41 +2395,30 @@ func (v *ValidateAzureVnetOneInterfaceNodeType) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["azure_az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_az"))
 		if err := fv(ctx, m.GetAzureAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["local_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("local_subnet"))
 		if err := fv(ctx, m.GetLocalSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetOneInterfaceNodeTypeValidator = func() *ValidateAzureVnetOneInterfaceNodeType {
 	v := &ValidateAzureVnetOneInterfaceNodeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2530,7 +2449,6 @@ var DefaultAzureVnetOneInterfaceNodeTypeValidator = func() *ValidateAzureVnetOne
 		panic(errMsg)
 	}
 	v.FldValidators["disk_size"] = vFn
-
 	v.FldValidators["local_subnet"] = AzureSubnetChoiceTypeValidator().Validate
 
 	return v
@@ -2596,9 +2514,7 @@ func (v *ValidateAzureVnetParamsType) NameChoiceNameValidationRuleHandler(rules 
 	}
 	return oValidatorFn_Name, nil
 }
-
 func (v *ValidateAzureVnetParamsType) PrimaryIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for primary_ipv4")
@@ -2654,25 +2570,19 @@ func (v *ValidateAzureVnetParamsType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["primary_ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("primary_ipv4"))
 		if err := fv(ctx, m.GetPrimaryIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetParamsTypeValidator = func() *ValidateAzureVnetParamsType {
 	v := &ValidateAzureVnetParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2680,7 +2590,6 @@ var DefaultAzureVnetParamsTypeValidator = func() *ValidateAzureVnetParamsType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhNameChoice := v.NameChoiceValidationRuleHandler
 	rulesNameChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2691,7 +2600,6 @@ var DefaultAzureVnetParamsTypeValidator = func() *ValidateAzureVnetParamsType {
 		panic(errMsg)
 	}
 	v.FldValidators["name_choice"] = vFn
-
 	vrhNameChoiceName := v.NameChoiceNameValidationRuleHandler
 	rulesNameChoiceName := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -2702,7 +2610,6 @@ var DefaultAzureVnetParamsTypeValidator = func() *ValidateAzureVnetParamsType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AzureVnetParamsType.name_choice_name: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["name_choice.name"] = vFnMap["name_choice.name"]
 
 	vrhPrimaryIpv4 := v.PrimaryIpv4ValidationRuleHandler
@@ -2768,7 +2675,6 @@ type ValidateAzureVnetTwoInterfaceNodeARType struct {
 }
 
 func (v *ValidateAzureVnetTwoInterfaceNodeARType) NodeNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for node_number")
@@ -2776,9 +2682,7 @@ func (v *ValidateAzureVnetTwoInterfaceNodeARType) NodeNumberValidationRuleHandle
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetTwoInterfaceNodeARType) FaultDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for fault_domain")
@@ -2786,9 +2690,7 @@ func (v *ValidateAzureVnetTwoInterfaceNodeARType) FaultDomainValidationRuleHandl
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetTwoInterfaceNodeARType) UpdateDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for update_domain")
@@ -2810,59 +2712,42 @@ func (v *ValidateAzureVnetTwoInterfaceNodeARType) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["fault_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("fault_domain"))
 		if err := fv(ctx, m.GetFaultDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_subnet"))
 		if err := fv(ctx, m.GetInsideSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_number"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_number"))
 		if err := fv(ctx, m.GetNodeNumber(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_subnet"))
 		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["update_domain"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("update_domain"))
 		if err := fv(ctx, m.GetUpdateDomain(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetTwoInterfaceNodeARTypeValidator = func() *ValidateAzureVnetTwoInterfaceNodeARType {
 	v := &ValidateAzureVnetTwoInterfaceNodeARType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2906,9 +2791,7 @@ var DefaultAzureVnetTwoInterfaceNodeARTypeValidator = func() *ValidateAzureVnetT
 		panic(errMsg)
 	}
 	v.FldValidators["update_domain"] = vFn
-
 	v.FldValidators["inside_subnet"] = AzureSubnetChoiceTypeValidator().Validate
-
 	v.FldValidators["outside_subnet"] = AzureSubnetChoiceTypeValidator().Validate
 
 	return v
@@ -2960,7 +2843,6 @@ type ValidateAzureVnetTwoInterfaceNodeType struct {
 }
 
 func (v *ValidateAzureVnetTwoInterfaceNodeType) AzureAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_az")
@@ -2968,9 +2850,7 @@ func (v *ValidateAzureVnetTwoInterfaceNodeType) AzureAzValidationRuleHandler(rul
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetTwoInterfaceNodeType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
@@ -2992,50 +2872,36 @@ func (v *ValidateAzureVnetTwoInterfaceNodeType) Validate(ctx context.Context, pm
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["azure_az"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("azure_az"))
 		if err := fv(ctx, m.GetAzureAz(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disk_size"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["inside_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_subnet"))
 		if err := fv(ctx, m.GetInsideSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_subnet"))
 		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetTwoInterfaceNodeTypeValidator = func() *ValidateAzureVnetTwoInterfaceNodeType {
 	v := &ValidateAzureVnetTwoInterfaceNodeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3066,9 +2932,7 @@ var DefaultAzureVnetTwoInterfaceNodeTypeValidator = func() *ValidateAzureVnetTwo
 		panic(errMsg)
 	}
 	v.FldValidators["disk_size"] = vFn
-
 	v.FldValidators["inside_subnet"] = AzureSubnetChoiceTypeValidator().Validate
-
 	v.FldValidators["outside_subnet"] = AzureSubnetChoiceTypeValidator().Validate
 
 	return v
@@ -3126,9 +2990,7 @@ func (v *ValidateAzureVnetType) RoutingTypeValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
@@ -3136,9 +2998,7 @@ func (v *ValidateAzureVnetType) ResourceGroupValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateAzureVnetType) VnetNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vnet_name")
@@ -3160,14 +3020,11 @@ func (v *ValidateAzureVnetType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["resource_group"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("resource_group"))
 		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["routing_type"]; exists {
@@ -3203,25 +3060,19 @@ func (v *ValidateAzureVnetType) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vnet_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vnet_name"))
 		if err := fv(ctx, m.GetVnetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetTypeValidator = func() *ValidateAzureVnetType {
 	v := &ValidateAzureVnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3229,7 +3080,6 @@ var DefaultAzureVnetTypeValidator = func() *ValidateAzureVnetType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhRoutingType := v.RoutingTypeValidationRuleHandler
 	rulesRoutingType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3316,7 +3166,6 @@ type ValidateCloudLinkADNType struct {
 }
 
 func (v *ValidateCloudLinkADNType) CloudlinkNetworkNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cloudlink_network_name")
@@ -3338,23 +3187,18 @@ func (v *ValidateCloudLinkADNType) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloudlink_network_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloudlink_network_name"))
 		if err := fv(ctx, m.GetCloudlinkNetworkName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCloudLinkADNTypeValidator = func() *ValidateCloudLinkADNType {
 	v := &ValidateCloudLinkADNType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3424,7 +3268,6 @@ type ValidateCloudSubnetParamType struct {
 }
 
 func (v *ValidateCloudSubnetParamType) Ipv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4")
@@ -3432,9 +3275,7 @@ func (v *ValidateCloudSubnetParamType) Ipv4ValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateCloudSubnetParamType) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
@@ -3456,32 +3297,24 @@ func (v *ValidateCloudSubnetParamType) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv4"))
 		if err := fv(ctx, m.GetIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["ipv6"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("ipv6"))
 		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCloudSubnetParamTypeValidator = func() *ValidateCloudSubnetParamType {
 	v := &ValidateCloudSubnetParamType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3625,16 +3458,13 @@ func (v *ValidateCloudSubnetType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 	v := &ValidateCloudSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3642,7 +3472,6 @@ var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3653,7 +3482,6 @@ var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceExistingSubnetId := v.ChoiceExistingSubnetIdValidationRuleHandler
 	rulesChoiceExistingSubnetId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -3664,9 +3492,7 @@ var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CloudSubnetType.choice_existing_subnet_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.existing_subnet_id"] = vFnMap["choice.existing_subnet_id"]
-
 	v.FldValidators["choice.subnet_param"] = CloudSubnetParamTypeValidator().Validate
 
 	return v
@@ -3718,7 +3544,6 @@ type ValidateCustomPorts struct {
 }
 
 func (v *ValidateCustomPorts) PortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
@@ -3740,23 +3565,18 @@ func (v *ValidateCustomPorts) Validate(ctx context.Context, pm interface{}, opts
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["port_ranges"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("port_ranges"))
 		if err := fv(ctx, m.GetPortRanges(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCustomPortsValidator = func() *ValidateCustomPorts {
 	v := &ValidateCustomPorts{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -3802,7 +3622,6 @@ func (m *DCGWBGPPeerType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetAuthKey().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting DCGWBGPPeerType.auth_key")
 	}
@@ -3842,7 +3661,6 @@ type ValidateDCGWBGPPeerType struct {
 }
 
 func (v *ValidateDCGWBGPPeerType) AmazonAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for amazon_address")
@@ -3850,9 +3668,7 @@ func (v *ValidateDCGWBGPPeerType) AmazonAddressValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDCGWBGPPeerType) CustomerAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for customer_address")
@@ -3860,9 +3676,7 @@ func (v *ValidateDCGWBGPPeerType) CustomerAddressValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDCGWBGPPeerType) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
@@ -3870,9 +3684,7 @@ func (v *ValidateDCGWBGPPeerType) AsnValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDCGWBGPPeerType) AuthKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for auth_key")
@@ -3881,11 +3693,9 @@ func (v *ValidateDCGWBGPPeerType) AuthKeyValidationRuleHandler(rules map[string]
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -3905,50 +3715,36 @@ func (v *ValidateDCGWBGPPeerType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["amazon_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("amazon_address"))
 		if err := fv(ctx, m.GetAmazonAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["auth_key"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("auth_key"))
 		if err := fv(ctx, m.GetAuthKey(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["customer_address"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("customer_address"))
 		if err := fv(ctx, m.GetCustomerAddress(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDCGWBGPPeerTypeValidator = func() *ValidateDCGWBGPPeerType {
 	v := &ValidateDCGWBGPPeerType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4067,7 +3863,6 @@ func (v *ValidateDirectConnectConfigType) AsnChoiceCustomAsnValidationRuleHandle
 	}
 	return oValidatorFn_CustomAsn, nil
 }
-
 func (v *ValidateDirectConnectConfigType) VifChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4075,9 +3870,7 @@ func (v *ValidateDirectConnectConfigType) VifChoiceValidationRuleHandler(rules m
 	}
 	return validatorFn, nil
 }
-
 func (v *ValidateDirectConnectConfigType) CloudAggregatedPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4117,9 +3910,7 @@ func (v *ValidateDirectConnectConfigType) CloudAggregatedPrefixValidationRuleHan
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDirectConnectConfigType) DcConnectAggregatedPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -4207,23 +3998,18 @@ func (v *ValidateDirectConnectConfigType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cloud_aggregated_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("cloud_aggregated_prefix"))
 		if err := fv(ctx, m.GetCloudAggregatedPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["dc_connect_aggregated_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("dc_connect_aggregated_prefix"))
 		if err := fv(ctx, m.GetDcConnectAggregatedPrefix(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vif_choice"]; exists {
@@ -4270,16 +4056,13 @@ func (v *ValidateDirectConnectConfigType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDirectConnectConfigTypeValidator = func() *ValidateDirectConnectConfigType {
 	v := &ValidateDirectConnectConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4287,7 +4070,6 @@ var DefaultDirectConnectConfigTypeValidator = func() *ValidateDirectConnectConfi
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4298,7 +4080,6 @@ var DefaultDirectConnectConfigTypeValidator = func() *ValidateDirectConnectConfi
 		panic(errMsg)
 	}
 	v.FldValidators["asn_choice"] = vFn
-
 	vrhAsnChoiceCustomAsn := v.AsnChoiceCustomAsnValidationRuleHandler
 	rulesAsnChoiceCustomAsn := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -4308,9 +4089,7 @@ var DefaultDirectConnectConfigTypeValidator = func() *ValidateDirectConnectConfi
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DirectConnectConfigType.asn_choice_custom_asn: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["asn_choice.custom_asn"] = vFnMap["asn_choice.custom_asn"]
-
 	vrhVifChoice := v.VifChoiceValidationRuleHandler
 	rulesVifChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4347,7 +4126,6 @@ var DefaultDirectConnectConfigTypeValidator = func() *ValidateDirectConnectConfi
 		panic(errMsg)
 	}
 	v.FldValidators["dc_connect_aggregated_prefix"] = vFn
-
 	v.FldValidators["vif_choice.hosted_vifs"] = HostedVIFConfigTypeValidator().Validate
 
 	return v
@@ -4399,7 +4177,6 @@ type ValidateDirectConnectInfo struct {
 }
 
 func (v *ValidateDirectConnectInfo) DirectConnectGatewayIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_gateway_id")
@@ -4407,9 +4184,7 @@ func (v *ValidateDirectConnectInfo) DirectConnectGatewayIdValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDirectConnectInfo) VgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vgw_id")
@@ -4417,9 +4192,7 @@ func (v *ValidateDirectConnectInfo) VgwIdValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
-
 func (v *ValidateDirectConnectInfo) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
@@ -4441,41 +4214,30 @@ func (v *ValidateDirectConnectInfo) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["asn"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["direct_connect_gateway_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_id"))
 		if err := fv(ctx, m.GetDirectConnectGatewayId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vgw_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vgw_id"))
 		if err := fv(ctx, m.GetVgwId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDirectConnectInfoValidator = func() *ValidateDirectConnectInfo {
 	v := &ValidateDirectConnectInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4568,7 +4330,6 @@ type ValidateGCPSubnetParamsType struct {
 }
 
 func (v *ValidateGCPSubnetParamsType) SubnetNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_name")
@@ -4576,9 +4337,7 @@ func (v *ValidateGCPSubnetParamsType) SubnetNameValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-
 func (v *ValidateGCPSubnetParamsType) PrimaryIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for primary_ipv4")
@@ -4600,32 +4359,24 @@ func (v *ValidateGCPSubnetParamsType) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["primary_ipv4"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("primary_ipv4"))
 		if err := fv(ctx, m.GetPrimaryIpv4(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["subnet_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_name"))
 		if err := fv(ctx, m.GetSubnetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPSubnetParamsTypeValidator = func() *ValidateGCPSubnetParamsType {
 	v := &ValidateGCPSubnetParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4708,7 +4459,6 @@ type ValidateGCPSubnetType struct {
 }
 
 func (v *ValidateGCPSubnetType) SubnetNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_name")
@@ -4730,23 +4480,18 @@ func (v *ValidateGCPSubnetType) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["subnet_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("subnet_name"))
 		if err := fv(ctx, m.GetSubnetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPSubnetTypeValidator = func() *ValidateGCPSubnetType {
 	v := &ValidateGCPSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4829,16 +4574,12 @@ func (v *ValidateGCPVPCNetworkAutogenerateParamsType) Validate(ctx context.Conte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["autogenerate"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("autogenerate"))
 		if err := fv(ctx, m.GetAutogenerate(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -4960,16 +4701,13 @@ func (v *ValidateGCPVPCNetworkChoiceType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPVPCNetworkChoiceTypeValidator = func() *ValidateGCPVPCNetworkChoiceType {
 	v := &ValidateGCPVPCNetworkChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -4977,7 +4715,6 @@ var DefaultGCPVPCNetworkChoiceTypeValidator = func() *ValidateGCPVPCNetworkChoic
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4988,7 +4725,6 @@ var DefaultGCPVPCNetworkChoiceTypeValidator = func() *ValidateGCPVPCNetworkChoic
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.new_network"] = GCPVPCNetworkParamsTypeValidator().Validate
 	v.FldValidators["choice.existing_network"] = GCPVPCNetworkTypeValidator().Validate
 
@@ -5041,7 +4777,6 @@ type ValidateGCPVPCNetworkParamsType struct {
 }
 
 func (v *ValidateGCPVPCNetworkParamsType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -5063,23 +4798,18 @@ func (v *ValidateGCPVPCNetworkParamsType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPVPCNetworkParamsTypeValidator = func() *ValidateGCPVPCNetworkParamsType {
 	v := &ValidateGCPVPCNetworkParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5150,7 +4880,6 @@ type ValidateGCPVPCNetworkType struct {
 }
 
 func (v *ValidateGCPVPCNetworkType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -5172,14 +4901,11 @@ func (v *ValidateGCPVPCNetworkType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetRoutingType().(type) {
@@ -5205,16 +4931,13 @@ func (v *ValidateGCPVPCNetworkType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPVPCNetworkTypeValidator = func() *ValidateGCPVPCNetworkType {
 	v := &ValidateGCPVPCNetworkType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5339,16 +5062,13 @@ func (v *ValidateGCPVPCSubnetChoiceType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPVPCSubnetChoiceTypeValidator = func() *ValidateGCPVPCSubnetChoiceType {
 	v := &ValidateGCPVPCSubnetChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5356,7 +5076,6 @@ var DefaultGCPVPCSubnetChoiceTypeValidator = func() *ValidateGCPVPCSubnetChoiceT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5367,7 +5086,6 @@ var DefaultGCPVPCSubnetChoiceTypeValidator = func() *ValidateGCPVPCSubnetChoiceT
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	v.FldValidators["choice.new_subnet"] = GCPSubnetParamsTypeValidator().Validate
 	v.FldValidators["choice.existing_subnet"] = GCPSubnetTypeValidator().Validate
 
@@ -5394,7 +5112,6 @@ func (m *GlobalNetworkConnectionListType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	for idx, e := range m.GetGlobalNetworkConnections() {
 		if err := e.Redact(ctx); err != nil {
 			return errors.Wrapf(err, "Redacting GlobalNetworkConnectionListType.global_network_connections idx %v", idx)
@@ -5437,7 +5154,6 @@ func (m *GlobalNetworkConnectionListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetGlobalNetworkConnectionsDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -5445,7 +5161,6 @@ func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnectionsDRefInfo() 
 	if m.GetGlobalNetworkConnections() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetGlobalNetworkConnections() {
 		driSet, err := e.GetDRefInfo()
@@ -5459,7 +5174,6 @@ func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnectionsDRefInfo() 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateGlobalNetworkConnectionListType struct {
@@ -5467,7 +5181,6 @@ type ValidateGlobalNetworkConnectionListType struct {
 }
 
 func (v *ValidateGlobalNetworkConnectionListType) GlobalNetworkConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5527,22 +5240,18 @@ func (v *ValidateGlobalNetworkConnectionListType) Validate(ctx context.Context, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["global_network_connections"]; exists {
 		vOpts := append(opts, db.WithValidateField("global_network_connections"))
 		if err := fv(ctx, m.GetGlobalNetworkConnections(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalNetworkConnectionListTypeValidator = func() *ValidateGlobalNetworkConnectionListType {
 	v := &ValidateGlobalNetworkConnectionListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5587,7 +5296,6 @@ func (m *GlobalNetworkConnectionType) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
 	if err := m.GetEnableForwardProxy().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalNetworkConnectionType.enable_forward_proxy")
 	}
@@ -5628,7 +5336,6 @@ func (m *GlobalNetworkConnectionType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConnectionChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -5638,7 +5345,6 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 	}
 	switch m.GetConnectionChoice().(type) {
 	case *GlobalNetworkConnectionType_SliToGlobalDr:
-
 		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
@@ -5648,9 +5354,7 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 			dri.DRField = "sli_to_global_dr." + dri.DRField
 		}
 		return drInfos, err
-
 	case *GlobalNetworkConnectionType_SloToGlobalDr:
-
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -5660,11 +5364,9 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 			dri.DRField = "slo_to_global_dr." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateGlobalNetworkConnectionType struct {
@@ -5726,7 +5428,6 @@ func (v *ValidateGlobalNetworkConnectionType) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
 
 	switch m.GetForwardProxyChoice().(type) {
@@ -5752,16 +5453,13 @@ func (v *ValidateGlobalNetworkConnectionType) Validate(ctx context.Context, pm i
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalNetworkConnectionTypeValidator = func() *ValidateGlobalNetworkConnectionType {
 	v := &ValidateGlobalNetworkConnectionType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -5769,7 +5467,6 @@ var DefaultGlobalNetworkConnectionTypeValidator = func() *ValidateGlobalNetworkC
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConnectionChoice := v.ConnectionChoiceValidationRuleHandler
 	rulesConnectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5780,10 +5477,8 @@ var DefaultGlobalNetworkConnectionTypeValidator = func() *ValidateGlobalNetworkC
 		panic(errMsg)
 	}
 	v.FldValidators["connection_choice"] = vFn
-
 	v.FldValidators["connection_choice.sli_to_global_dr"] = GlobalConnectorTypeValidator().Validate
 	v.FldValidators["connection_choice.slo_to_global_dr"] = GlobalConnectorTypeValidator().Validate
-
 	v.FldValidators["forward_proxy_choice.enable_forward_proxy"] = ves_io_schema.ForwardProxyConfigTypeValidator().Validate
 
 	return v
@@ -5835,7 +5530,6 @@ type ValidateHostedVIFConfigType struct {
 }
 
 func (v *ValidateHostedVIFConfigType) VifsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5875,9 +5569,7 @@ func (v *ValidateHostedVIFConfigType) VifsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateHostedVIFConfigType) VifListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -5961,32 +5653,25 @@ func (v *ValidateHostedVIFConfigType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vif_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("vif_list"))
 		if err := fv(ctx, m.GetVifList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["vifs"]; exists {
 		vOpts := append(opts, db.WithValidateField("vifs"))
 		if err := fv(ctx, m.GetVifs(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultHostedVIFConfigTypeValidator = func() *ValidateHostedVIFConfigType {
 	v := &ValidateHostedVIFConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6019,7 +5704,6 @@ var DefaultHostedVIFConfigTypeValidator = func() *ValidateHostedVIFConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["vif_list"] = vFn
-
 	v.FldValidators["connectivity_options.site_registration_over_direct_connect"] = CloudLinkADNTypeValidator().Validate
 
 	return v
@@ -6125,16 +5809,13 @@ func (v *ValidateOfflineSurvivabilityModeType) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOfflineSurvivabilityModeTypeValidator = func() *ValidateOfflineSurvivabilityModeType {
 	v := &ValidateOfflineSurvivabilityModeType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6142,7 +5823,6 @@ var DefaultOfflineSurvivabilityModeTypeValidator = func() *ValidateOfflineSurviv
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhOfflineSurvivabilityModeChoice := v.OfflineSurvivabilityModeChoiceValidationRuleHandler
 	rulesOfflineSurvivabilityModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6204,11 +5884,9 @@ func (m *PrivateConnectConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetCloudLinkDRefInfo()
-
 }
 
 func (m *PrivateConnectConfigType) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetCloudLink()
 	if vref == nil {
 		return nil, nil
@@ -6224,7 +5902,6 @@ func (m *PrivateConnectConfigType) GetCloudLinkDRefInfo() ([]db.DRefInfo, error)
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetCloudLinkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6234,7 +5911,6 @@ func (m *PrivateConnectConfigType) GetCloudLinkDBEntries(ctx context.Context, d 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_link")
 	}
-
 	vref := m.GetCloudLink()
 	if vref == nil {
 		return nil, nil
@@ -6252,7 +5928,6 @@ func (m *PrivateConnectConfigType) GetCloudLinkDBEntries(ctx context.Context, d 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -6261,7 +5936,6 @@ type ValidatePrivateConnectConfigType struct {
 }
 
 func (v *ValidatePrivateConnectConfigType) CloudLinkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cloud_link")
@@ -6270,11 +5944,9 @@ func (v *ValidatePrivateConnectConfigType) CloudLinkValidationRuleHandler(rules 
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
-
 		return nil
 	}
 
@@ -6294,14 +5966,11 @@ func (v *ValidatePrivateConnectConfigType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_link"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_link"))
 		if err := fv(ctx, m.GetCloudLink(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetNetworkOptions().(type) {
@@ -6327,16 +5996,13 @@ func (v *ValidatePrivateConnectConfigType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultPrivateConnectConfigTypeValidator = func() *ValidatePrivateConnectConfigType {
 	v := &ValidatePrivateConnectConfigType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6417,25 +6083,18 @@ func (v *ValidatePrivateConnectivityType) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["cloud_link"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cloud_link"))
 		if err := fv(ctx, m.GetCloudLink(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["private_network_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("private_network_name"))
 		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -6493,11 +6152,9 @@ func (m *SMSv2InterfaceOptions) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetSegmentNetworkDRefInfo()
-
 }
 
 func (m *SMSv2InterfaceOptions) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, error) {
-
 	vref := m.GetSegmentNetwork()
 	if vref == nil {
 		return nil, nil
@@ -6513,7 +6170,6 @@ func (m *SMSv2InterfaceOptions) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, erro
 		Ref:        vdRef,
 	}
 	return []db.DRefInfo{dri}, nil
-
 }
 
 // GetSegmentNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6523,7 +6179,6 @@ func (m *SMSv2InterfaceOptions) GetSegmentNetworkDBEntries(ctx context.Context, 
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
-
 	vref := m.GetSegmentNetwork()
 	if vref == nil {
 		return nil, nil
@@ -6541,7 +6196,6 @@ func (m *SMSv2InterfaceOptions) GetSegmentNetworkDBEntries(ctx context.Context, 
 	if refdEnt != nil {
 		entries = append(entries, refdEnt)
 	}
-
 	return entries, nil
 }
 
@@ -6562,52 +6216,37 @@ func (v *ValidateSMSv2InterfaceOptions) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["enable_site_to_site_connectivity"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("enable_site_to_site_connectivity"))
 		if err := fv(ctx, m.GetEnableSiteToSiteConnectivity(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["mtu"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("mtu"))
 		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_network"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_network"))
 		if err := fv(ctx, m.GetSegmentNetwork(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["segment_subnet"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("segment_subnet"))
 		if err := fv(ctx, m.GetSegmentSubnet(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSMSv2InterfaceOptionsValidator = func() *ValidateSMSv2InterfaceOptions {
 	v := &ValidateSMSv2InterfaceOptions{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["segment_network"] = ObjectRefTypeValidator().Validate
-
 	v.FldValidators["segment_subnet"] = SegmentSubnetTypeValidator().Validate
 
 	return v
@@ -6659,7 +6298,6 @@ type ValidateSecurityGroupType struct {
 }
 
 func (v *ValidateSecurityGroupType) OutsideSecurityGroupIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_security_group_id")
@@ -6667,9 +6305,7 @@ func (v *ValidateSecurityGroupType) OutsideSecurityGroupIdValidationRuleHandler(
 
 	return validatorFn, nil
 }
-
 func (v *ValidateSecurityGroupType) InsideSecurityGroupIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_security_group_id")
@@ -6691,32 +6327,24 @@ func (v *ValidateSecurityGroupType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["inside_security_group_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("inside_security_group_id"))
 		if err := fv(ctx, m.GetInsideSecurityGroupId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["outside_security_group_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("outside_security_group_id"))
 		if err := fv(ctx, m.GetOutsideSecurityGroupId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSecurityGroupTypeValidator = func() *ValidateSecurityGroupType {
 	v := &ValidateSecurityGroupType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6812,6 +6440,7 @@ func (v *ValidateSegmentSubnetType) ChoiceIpv4ValidationRuleHandler(rules map[st
 	}
 	return oValidatorFn_Ipv4, nil
 }
+
 func (v *ValidateSegmentSubnetType) ChoiceExistingSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_ExistingSubnetId, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -6867,16 +6496,13 @@ func (v *ValidateSegmentSubnetType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSegmentSubnetTypeValidator = func() *ValidateSegmentSubnetType {
 	v := &ValidateSegmentSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -6884,7 +6510,6 @@ var DefaultSegmentSubnetTypeValidator = func() *ValidateSegmentSubnetType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6895,7 +6520,6 @@ var DefaultSegmentSubnetTypeValidator = func() *ValidateSegmentSubnetType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
-
 	vrhChoiceIpv4 := v.ChoiceIpv4ValidationRuleHandler
 	rulesChoiceIpv4 := map[string]string{
 		"ves.io.schema.rules.string.ipv4_prefix":          "true",
@@ -6916,7 +6540,6 @@ var DefaultSegmentSubnetTypeValidator = func() *ValidateSegmentSubnetType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SegmentSubnetType.choice_existing_subnet_id: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["choice.ipv4"] = vFnMap["choice.ipv4"]
 	v.FldValidators["choice.existing_subnet_id"] = vFnMap["choice.existing_subnet_id"]
 
@@ -6981,25 +6604,18 @@ func (v *ValidateSiteCloudLinkType) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -7068,25 +6684,18 @@ func (v *ValidateSiteError) Validate(ctx context.Context, pm interface{}, opts .
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error_description"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_description"))
 		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["suggested_action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("suggested_action"))
 		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -7144,7 +6753,6 @@ func (m *SiteStaticRoutesListType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetStaticRouteListDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7152,7 +6760,6 @@ func (m *SiteStaticRoutesListType) GetStaticRouteListDRefInfo() ([]db.DRefInfo, 
 	if m.GetStaticRouteList() == nil {
 		return nil, nil
 	}
-
 	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRouteList() {
 		driSet, err := e.GetDRefInfo()
@@ -7166,7 +6773,6 @@ func (m *SiteStaticRoutesListType) GetStaticRouteListDRefInfo() ([]db.DRefInfo, 
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
 }
 
 type ValidateSiteStaticRoutesListType struct {
@@ -7174,7 +6780,6 @@ type ValidateSiteStaticRoutesListType struct {
 }
 
 func (v *ValidateSiteStaticRoutesListType) StaticRouteListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7234,22 +6839,18 @@ func (v *ValidateSiteStaticRoutesListType) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["static_route_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_route_list"))
 		if err := fv(ctx, m.GetStaticRouteList(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteStaticRoutesListTypeValidator = func() *ValidateSiteStaticRoutesListType {
 	v := &ValidateSiteStaticRoutesListType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7321,7 +6922,6 @@ func (m *SiteStaticRoutesType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return m.GetConfigModeChoiceDRefInfo()
-
 }
 
 // GetDRefInfo for the field's type
@@ -7331,7 +6931,6 @@ func (m *SiteStaticRoutesType) GetConfigModeChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetConfigModeChoice().(type) {
 	case *SiteStaticRoutesType_CustomStaticRoute:
-
 		drInfos, err := m.GetCustomStaticRoute().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomStaticRoute().GetDRefInfo() FAILED")
@@ -7341,11 +6940,9 @@ func (m *SiteStaticRoutesType) GetConfigModeChoiceDRefInfo() ([]db.DRefInfo, err
 			dri.DRField = "custom_static_route." + dri.DRField
 		}
 		return drInfos, err
-
 	default:
 		return nil, nil
 	}
-
 }
 
 type ValidateSiteStaticRoutesType struct {
@@ -7415,16 +7012,13 @@ func (v *ValidateSiteStaticRoutesType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteStaticRoutesTypeValidator = func() *ValidateSiteStaticRoutesType {
 	v := &ValidateSiteStaticRoutesType{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7432,7 +7026,6 @@ var DefaultSiteStaticRoutesTypeValidator = func() *ValidateSiteStaticRoutesType 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhConfigModeChoice := v.ConfigModeChoiceValidationRuleHandler
 	rulesConfigModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7443,7 +7036,6 @@ var DefaultSiteStaticRoutesTypeValidator = func() *ValidateSiteStaticRoutesType 
 		panic(errMsg)
 	}
 	v.FldValidators["config_mode_choice"] = vFn
-
 	vrhConfigModeChoiceSimpleStaticRoute := v.ConfigModeChoiceSimpleStaticRouteValidationRuleHandler
 	rulesConfigModeChoiceSimpleStaticRoute := map[string]string{
 		"ves.io.schema.rules.string.ipv4_prefix": "true",
@@ -7453,9 +7045,7 @@ var DefaultSiteStaticRoutesTypeValidator = func() *ValidateSiteStaticRoutesType 
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SiteStaticRoutesType.config_mode_choice_simple_static_route: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["config_mode_choice.simple_static_route"] = vFnMap["config_mode_choice.simple_static_route"]
-
 	v.FldValidators["config_mode_choice.custom_static_route"] = ves_io_schema.StaticRouteTypeValidator().Validate
 
 	return v
@@ -7507,7 +7097,6 @@ type ValidateUpdateSiteErrorRequest struct {
 }
 
 func (v *ValidateUpdateSiteErrorRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
@@ -7515,9 +7104,7 @@ func (v *ValidateUpdateSiteErrorRequest) NamespaceValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateSiteErrorRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
@@ -7525,9 +7112,7 @@ func (v *ValidateUpdateSiteErrorRequest) NameValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateSiteErrorRequest) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant")
@@ -7535,9 +7120,7 @@ func (v *ValidateUpdateSiteErrorRequest) TenantValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUpdateSiteErrorRequest) SiteErrorsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
@@ -7597,49 +7180,36 @@ func (v *ValidateUpdateSiteErrorRequest) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["site_errors"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_errors"))
 		if err := fv(ctx, m.GetSiteErrors(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUpdateSiteErrorRequestValidator = func() *ValidateUpdateSiteErrorRequest {
 	v := &ValidateUpdateSiteErrorRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -7753,7 +7323,6 @@ func (v *ValidateUpdateSiteErrorResponse) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -7822,25 +7391,18 @@ func (v *ValidateValidateConfigRequest) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -7909,7 +7471,6 @@ func (v *ValidateValidateConfigResponse) Validate(ctx context.Context, pm interf
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -7980,9 +7541,7 @@ func (v *ValidateVifRegionConfig) VifRegionChoiceOtherRegionValidationRuleHandle
 	}
 	return oValidatorFn_OtherRegion, nil
 }
-
 func (v *ValidateVifRegionConfig) VifIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vif_id")
@@ -8004,14 +7563,11 @@ func (v *ValidateVifRegionConfig) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["vif_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("vif_id"))
 		if err := fv(ctx, m.GetVifId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	if fv, exists := v.FldValidators["vif_region_choice"]; exists {
@@ -8047,16 +7603,13 @@ func (v *ValidateVifRegionConfig) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVifRegionConfigValidator = func() *ValidateVifRegionConfig {
 	v := &ValidateVifRegionConfig{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -8064,7 +7617,6 @@ var DefaultVifRegionConfigValidator = func() *ValidateVifRegionConfig {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
 	vrhVifRegionChoice := v.VifRegionChoiceValidationRuleHandler
 	rulesVifRegionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8075,7 +7627,6 @@ var DefaultVifRegionConfigValidator = func() *ValidateVifRegionConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["vif_region_choice"] = vFn
-
 	vrhVifRegionChoiceOtherRegion := v.VifRegionChoiceOtherRegionValidationRuleHandler
 	rulesVifRegionChoiceOtherRegion := map[string]string{
 		"ves.io.schema.rules.string.in": "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
@@ -8085,7 +7636,6 @@ var DefaultVifRegionConfigValidator = func() *ValidateVifRegionConfig {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field VifRegionConfig.vif_region_choice_other_region: %s", err)
 		panic(errMsg)
 	}
-
 	v.FldValidators["vif_region_choice.other_region"] = vFnMap["vif_region_choice.other_region"]
 
 	vrhVifId := v.VifIdValidationRuleHandler

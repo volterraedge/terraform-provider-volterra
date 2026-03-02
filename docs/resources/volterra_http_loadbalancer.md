@@ -53,13 +53,7 @@ resource "volterra_http_loadbalancer" "example" {
 
     // One of the arguments from this list "custom_api_auth_discovery default_api_auth_discovery" must be set
 
-    custom_api_auth_discovery {
-      api_discovery_ref {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
+    default_api_auth_discovery = true
     discovered_api_settings {
       purge_duration_for_inactive_discovered_apis = "2"
     }
@@ -84,10 +78,18 @@ resource "volterra_http_loadbalancer" "example" {
 
           // One of the arguments from this list "key_pattern key_value_pattern value_pattern" must be set
 
-          key_pattern {
-            // One of the arguments from this list "exact_value regex_value" must be set
+          key_value_pattern {
+            key_pattern {
+              // One of the arguments from this list "exact_value regex_value" must be set
 
-            exact_value = "x-volt-header"
+              exact_value = "x-volt-header"
+            }
+
+            value_pattern {
+              // One of the arguments from this list "exact_value regex_value" must be set
+
+              exact_value = "x-volt-header"
+            }
           }
 
           // One of the arguments from this list "all_request_sections all_response_sections all_sections custom_sections" must be set
@@ -125,7 +127,7 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "cookie_stickiness least_active random ring_hash round_robin source_ip_stickiness" must be set
 
-  least_active = true
+  round_robin = true
 
   // One of the arguments from this list "http https https_auto_cert" must be set
 
@@ -134,7 +136,7 @@ resource "volterra_http_loadbalancer" "example" {
 
     // One of the arguments from this list "port port_ranges" must be set
 
-    port_ranges = "80,443,8080-8191,9080"
+    port = "80"
   }
 
   // One of the arguments from this list "disable_malicious_user_detection enable_malicious_user_detection" must be set
@@ -143,43 +145,7 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "disable_malware_protection malware_protection_settings" must be set
 
-  malware_protection_settings {
-    malware_protection_rules {
-      action {
-        // One of the arguments from this list "block report" must be set
-
-        block = true
-      }
-
-      domain {
-        // One of the arguments from this list "any_domain domain" must be set
-
-        domain {
-          // One of the arguments from this list "exact_value regex_value suffix_value" must be set
-
-          exact_value = "abc.zyz.com"
-        }
-      }
-
-      http_methods = ["http_methods"]
-
-      metadata {
-        description = "Virtual Host for acmecorp website"
-
-        disable = true
-
-        name = "acmecorp-web"
-      }
-
-      path {
-        // One of the arguments from this list "path prefix regex" must be set
-
-        prefix = "/register/"
-      }
-
-      protocol = "protocol"
-    }
-  }
+  disable_malware_protection = true
 
   // One of the arguments from this list "api_rate_limit disable_rate_limit rate_limit" must be set
 
@@ -207,9 +173,12 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "app_firewall disable_waf" must be set
 
-  disable_waf = true
+  app_firewall {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
-
 ```
 
 Argument Reference
@@ -629,13 +598,15 @@ tokens or tokens that are not yet valid..
 
 `action` - (Required) x-required. See [Jwt Validation Action ](#jwt-validation-action) below for details.
 
-###### One of the arguments from this list "auth_server_uri, jwks, jwks_config" must be set
+###### One of the arguments from this list "auth_server_uri, authorization_server, jwks, jwks_config" must be set
 
 `auth_server_uri` - (Optional) JWKS URI will be will be retrieved from this URI (`String`).(Deprecated)
 
+`authorization_server` - (Optional) Automatically fetch JWKS from URI endpoint. See [Jwks Configuration Authorization Server ](#jwks-configuration-authorization-server) below for details.
+
 `jwks` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details. (`String`).(Deprecated)
 
-`jwks_config` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.. See [Jwks Configuration Jwks Config ](#jwks-configuration-jwks-config) below for details.
+`jwks_config` - (Optional) Manually provide JWKS. See [Jwks Configuration Jwks Config ](#jwks-configuration-jwks-config) below for details.
 
 `mandatory_claims` - (Optional) If the claim does not exist JWT token validation will fail.. See [Jwt Validation Mandatory Claims ](#jwt-validation-mandatory-claims) below for details.
 
@@ -701,6 +672,12 @@ More options like header manipulation, compression etc..
 
 `max_request_header_size` - (Optional) such load balancers is used for all the load balancers in question. (`Int`).
 
+###### One of the arguments from this list "max_requests_per_connection, no_request_limit_per_connection" must be set
+
+`max_requests_per_connection` - (Optional) Enter a value >=1 to define the request limit per connection. (`Int`).
+
+`no_request_limit_per_connection` - (Optional) When selected, no limit is enforced, and connections can handle unlimited requests. (`Bool`).
+
 ###### One of the arguments from this list "disable_path_normalize, enable_path_normalize" can be set
 
 `disable_path_normalize` - (Optional) x-displayName: "Disable" (`Bool`).(Deprecated)
@@ -725,7 +702,7 @@ More options like header manipulation, compression etc..
 
 ###### One of the arguments from this list "additional_domains, enable_strict_sni_host_header_check" can be set
 
-`additional_domains` - (Optional) Wildcard names are supported in the suffix or prefix form. See [Strict Sni Host Header Check Choice Additional Domains ](#strict-sni-host-header-check-choice-additional-domains) below for details.(Deprecated)
+`additional_domains`- (Optional) Wildcard names are supported in the suffix or prefix form. See [Strict Sni Host Header Check Choice Additional Domains ](#strict-sni-host-header-check-choice-additional-domains) below for details.(Deprecated)
 
 `enable_strict_sni_host_header_check` - (Optional) Enable strict SNI and Host header check (`Bool`).(Deprecated)
 
@@ -789,6 +766,12 @@ to origin pool or redirect matching traffic to a different URL or respond direct
 
 `simple_route` - (Optional) A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools. See [Choice Simple Route ](#choice-simple-route) below for details.
 
+###### One of the arguments from this list "route_state_disabled, route_state_enabled" must be set
+
+`route_state_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
+`route_state_enabled` - (Optional) x-displayName: "Enabled" (`Bool`).
+
 ### Sensitive Data Disclosure Rules
 
 Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses.
@@ -833,7 +816,7 @@ The WAF Exclusion is evaluated sequentially and can only be matched once per req
 
 `waf_exclusion_inline_rules` - (Optional) An ordered list of rules specific to this Load Balancer.. See [Waf Exclusion Choice Waf Exclusion Inline Rules ](#waf-exclusion-choice-waf-exclusion-inline-rules) below for details.
 
-`waf_exclusion_policy` - (Optional) A policy containing an ordered list of rules that can be applied to one or more Load Balancers or Routes.. See [ref](#ref) below for details.
+`waf_exclusion_policy` - (Required) A policy containing an ordered list of rules that can be applied to one or more Load Balancers or Routes.. See [ref](#ref) below for details.
 
 ### Waf Exclusion Rules
 
@@ -1619,7 +1602,7 @@ x-displayName: "Selected API Repositories".
 
 Add and configure testing domains and credentials.
 
-`allow_destructive_methods` - (Optional) Enable to allow API test to execute destructive methods. Be cautious as these can alter or delete data. (`Bool`).
+`allow_destructive_methods` - (Optional) Enable to allow API Testing to execute against destructive methods. Use with caution as these may modify or delete data (`Bool`).
 
 `credentials` - (Required) Add credentials for API testing to use in the selected environment.. See [Domains Credentials ](#domains-credentials) below for details.
 
@@ -1965,6 +1948,14 @@ Caching Policies for the CDN..
 
 `default_cache_action` - (Optional) Default value for Cache action.. See [Caching Policy Default Cache Action ](#caching-policy-default-cache-action) below for details.
 
+### Caching Caching Disable
+
+x-displayName: "Disable".
+
+### Caching Caching Inherit
+
+x-displayName: "Inherit".
+
 ### Caching Policy Custom Cache Rule
 
 Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs..
@@ -2107,7 +2098,7 @@ Advertise this load balancer on public network.
 
 ### Choice Cbip Service
 
-Specify origin server with cBIP service name.
+Specify origin server with BIG-IP service name.
 
 `service_name` - (Required) Name of the discovered Classic BIG-IP virtual server to be used as origin. (`String`).
 
@@ -2136,6 +2127,12 @@ Specify origin server with a reference to endpoint object.
 ### Choice Custom Route Object
 
 A custom route uses a route object created outside of this view..
+
+###### One of the arguments from this list "caching_disable, caching_inherit" can be set
+
+`caching_disable` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`caching_inherit` - (Optional) x-displayName: "Inherit" (`Bool`).
 
 `route_ref` - (Optional) Reference to a custom route object. See [ref](#ref) below for details.
 
@@ -2247,7 +2244,7 @@ Specify origin server with public IP.
 
 ###### One of the arguments from this list "ip, ipv6" must be set
 
-`ip` - (Optional) Public IPV4 address (`String`).
+`ip`- (Optional) Public IPV4 address (`String`).
 
 `ipv6` - (Optional) Public IPV6 address (`String`).
 
@@ -2278,6 +2275,12 @@ A redirect route matches on path and/or HTTP method and redirects the matching t
 A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools.
 
 `advanced_options` - (Optional) Configure Advanced per route options. See [Simple Route Advanced Options ](#simple-route-advanced-options) below for details.
+
+###### One of the arguments from this list "caching_disable, caching_inherit" can be set
+
+`caching_disable` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`caching_inherit` - (Optional) x-displayName: "Inherit" (`Bool`).
 
 `headers` - (Optional) List of (key, value) headers. See [Simple Route Headers ](#simple-route-headers) below for details.
 
@@ -2607,7 +2610,7 @@ x-displayName: "Login Endpoint".
 
 `path` - (Required) x-displayName: "Path" (`String`).
 
-`token_response_key` - (Required) Specifies how to handle the API response, extracting authentication tokens. (`String`).
+`token_response_key` - (Required) Specifies the key name used to extract the authentication token from the login response, such as token or access_token. (`String`).
 
 ### Crl Choice No Crl
 
@@ -2765,6 +2768,12 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistence (`Bool`).
 
+###### One of the arguments from this list "max_requests_per_connection, no_request_limit_per_connection" must be set
+
+`max_requests_per_connection` - (Optional) Enter a value >=1 to define the request limit per connection. (`Int`).
+
+`no_request_limit_per_connection` - (Optional) When selected, no limit is enforced, and connections can handle unlimited requests. (`Bool`).
+
 ###### One of the arguments from this list "disable_outlier_detection, outlier_detection" must be set
 
 `disable_outlier_detection` - (Optional) Outlier detection is disabled (`Bool`).
@@ -2797,7 +2806,7 @@ List of origin servers in this pool.
 
 ###### One of the arguments from this list "cbip_service, consul_service, custom_endpoint_object, k8s_service, private_ip, private_name, public_ip, public_name, vn_private_ip, vn_private_name" must be set
 
-`cbip_service` - (Optional) Specify origin server with cBIP service name. See [Choice Cbip Service ](#choice-cbip-service) below for details.
+`cbip_service` - (Optional) Specify origin server with BIG-IP service name. See [Choice Cbip Service ](#choice-cbip-service) below for details.
 
 `consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Choice Consul Service ](#choice-consul-service) below for details.
 
@@ -2847,7 +2856,7 @@ List of Origin Pools.
 
 ### Destination Type Any Url
 
-Any URL .
+Any URL.
 
 ### Destination Type Api Endpoint
 
@@ -3779,9 +3788,15 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
+### Jwks Configuration Authorization Server
+
+Automatically fetch JWKS from URI endpoint.
+
+`authorization_servers` - (Required) API Protection workspace and used to fetch JWKS for JWT validation.. See [ref](#ref) below for details.
+
 ### Jwks Configuration Jwks Config
 
-The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details..
+Manually provide JWKS.
 
 `cleartext` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details. (`String`).
 
@@ -4276,6 +4291,10 @@ Ignore max age attribute.
 ### Max Age Choice Ignore Max Age
 
 Ignore max age attribute.
+
+### Max Requests Per Connection Choice No Request Limit Per Connection
+
+When selected, no limit is enforced, and connections can handle unlimited requests..
 
 ### Max Session Keys Type Default Session Key Caching
 
@@ -5479,6 +5498,14 @@ x-displayName: "Admin".
 
 x-displayName: "Standard".
 
+### Route State Route State Disabled
+
+x-displayName: "Disabled".
+
+### Route State Route State Enabled
+
+x-displayName: "Enabled".
+
 ### Rps Threshold Choice Default Rps Threshold
 
 Use the system's default RPS threshold, which is set to 10,000 RPS.
@@ -5757,7 +5784,7 @@ Apply custom sensitive data discovery.
 
 x-displayName: "JSON Path".
 
-`fields` - (Required) List of JSON Path field values. Use square brackets with an underscore \[*] to indicate array elements (e.g., person.emails\[*]). To reference JSON keys that contain spaces, enclose the entire path in double quotes. For example: "person.first name". (`String`).
+`fields` - (Required) List of JSON Path field values. Use square brackets with an underscore [*] to indicate array elements (e.g., person.emails[*]). To reference JSON keys that contain spaces, enclose the entire path in double quotes. For example: "person.first name". (`String`).
 
 ### Server Header Choice Default Header
 
@@ -5915,7 +5942,7 @@ Configure Advanced per route options.
 
 ###### One of the arguments from this list "default_retry_policy, no_retry_policy, retry_policy" must be set
 
-`default_retry_policy` - (Optional) Use system default retry policy (`Bool`).
+`default_retry_policy`- (Optional) Use system default retry policy (`Bool`).
 
 `no_retry_policy` - (Optional) Do not configure retry policy (`Bool`).
 
@@ -6148,6 +6175,8 @@ http_method.
 ### Spec Path
 
 path.
+
+`encoded_path_matcher` - (Optional)Match against the encoded, escaped path (`Bool`).
 
 `exact_values` - (Optional) A list of exact path values to match the input HTTP path against. (`String`).
 
@@ -6848,5 +6877,5 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured http_loadbalancer.
--	`cname` - This is the hostname of the configured http_loadbalancer.
+*   `id` - This is the id of the configured http_loadbalancer.
+*   `cname` - This is the hostname of the configured http_loadbalancer.

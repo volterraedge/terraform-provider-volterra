@@ -65,6 +65,15 @@ type ValidateAcceptTOSRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAcceptTOSRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAcceptTOSRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AcceptTOSRequest)
 	if !ok {
@@ -78,49 +87,54 @@ func (v *ValidateAcceptTOSRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_accepted"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_accepted"))
 		if err := fv(ctx, m.GetTosAccepted(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_accepted_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_accepted_at"))
 		if err := fv(ctx, m.GetTosAcceptedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_version"))
 		if err := fv(ctx, m.GetTosVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAcceptTOSRequestValidator = func() *ValidateAcceptTOSRequest {
 	v := &ValidateAcceptTOSRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AcceptTOSRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -183,7 +197,6 @@ func (v *ValidateAcceptTOSResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -239,6 +252,15 @@ type ValidateAssignRoleRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAssignRoleRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAssignRoleRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AssignRoleRequest)
 	if !ok {
@@ -252,27 +274,19 @@ func (v *ValidateAssignRoleRequest) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespaces_role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespaces_role"))
 		if err := fv(ctx, m.GetNamespacesRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		for idx, item := range m.GetUsername() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -280,15 +294,31 @@ func (v *ValidateAssignRoleRequest) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAssignRoleRequestValidator = func() *ValidateAssignRoleRequest {
 	v := &ValidateAssignRoleRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AssignRoleRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -351,43 +381,30 @@ func (v *ValidateBillingFeatureIndicator) Validate(ctx context.Context, pm inter
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["action"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["additional_info"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("additional_info"))
 		if err := fv(ctx, m.GetAdditionalInfo(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["billing_flag"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("billing_flag"))
 		if err := fv(ctx, m.GetBillingFlag(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["failed"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("failed"))
 		if err := fv(ctx, m.GetFailed(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -456,43 +473,30 @@ func (v *ValidateCascadeDeleteItemType) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error_message"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error_message"))
 		if err := fv(ctx, m.GetErrorMessage(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_name"))
 		if err := fv(ctx, m.GetObjectName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_type"))
 		if err := fv(ctx, m.GetObjectType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["object_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("object_uid"))
 		if err := fv(ctx, m.GetObjectUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -548,8 +552,15 @@ type ValidateCascadeDeleteRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCascadeDeleteRequest) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCascadeDeleteRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
 
+	return validatorFn, nil
+}
+func (v *ValidateCascadeDeleteRequest) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
@@ -571,32 +582,24 @@ func (v *ValidateCascadeDeleteRequest) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCascadeDeleteRequestValidator = func() *ValidateCascadeDeleteRequest {
 	v := &ValidateCascadeDeleteRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -604,6 +607,17 @@ var DefaultCascadeDeleteRequestValidator = func() *ValidateCascadeDeleteRequest 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CascadeDeleteRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	vrhEmail := v.EmailValidationRuleHandler
 	rulesEmail := map[string]string{
@@ -677,18 +691,13 @@ func (v *ValidateCascadeDeleteResponse) Validate(ctx context.Context, pm interfa
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["delete_ok"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("delete_ok"))
 		if err := fv(ctx, m.GetDeleteOk(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -696,9 +705,7 @@ func (v *ValidateCascadeDeleteResponse) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -767,7 +774,6 @@ func (v *ValidateEmpty) Validate(ctx context.Context, pm interface{}, opts ...db
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -836,25 +842,18 @@ func (v *ValidateFeatureFlagType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["disabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disabled"))
 		if err := fv(ctx, m.GetDisabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -910,6 +909,15 @@ type ValidateGetTOSRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetTOSRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetTOSRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetTOSRequest)
 	if !ok {
@@ -923,22 +931,36 @@ func (v *ValidateGetTOSRequest) Validate(ctx context.Context, pm interface{}, op
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetTOSRequestValidator = func() *ValidateGetTOSRequest {
 	v := &ValidateGetTOSRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetTOSRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -1001,25 +1023,18 @@ func (v *ValidateGetTOSResponse) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["text"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("text"))
 		if err := fv(ctx, m.GetText(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("version"))
 		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -1075,6 +1090,15 @@ type ValidateGetUserRoleRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetUserRoleRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetUserRoleRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetUserRoleRequest)
 	if !ok {
@@ -1088,22 +1112,36 @@ func (v *ValidateGetUserRoleRequest) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetUserRoleRequestValidator = func() *ValidateGetUserRoleRequest {
 	v := &ValidateGetUserRoleRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetUserRoleRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -1154,7 +1192,6 @@ type ValidateGetUserRoleResponse struct {
 }
 
 func (v *ValidateGetUserRoleResponse) SignupOriginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
 		i := v.(ves_io_schema.SignupOrigin)
@@ -1182,27 +1219,19 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["access_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("access_type"))
 		if err := fv(ctx, m.GetAccessType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["active_plan_transition_uid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("active_plan_transition_uid"))
 		if err := fv(ctx, m.GetActivePlanTransitionUid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["addon_service_status"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("addon_service_status"))
 		for key, value := range m.GetAddonServiceStatus() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1210,11 +1239,8 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["billing_flags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("billing_flags"))
 		for idx, item := range m.GetBillingFlags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1222,83 +1248,56 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["billing_plan_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("billing_plan_name"))
 		if err := fv(ctx, m.GetBillingPlanName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["cname"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("cname"))
 		if err := fv(ctx, m.GetCname(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["company"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("company"))
 		if err := fv(ctx, m.GetCompany(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creation_timestamp"))
 		if err := fv(ctx, m.GetCreationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disabled"))
 		if err := fv(ctx, m.GetDisabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_owner"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_owner"))
 		if err := fv(ctx, m.GetDomainOwner(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["environment"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("environment"))
 		if err := fv(ctx, m.GetEnvironment(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["feature_flags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("feature_flags"))
 		for idx, item := range m.GetFeatureFlags() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1306,20 +1305,14 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["first_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_names"))
 		for idx, item := range m.GetGroupNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1327,34 +1320,24 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idm_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idm_type"))
 		if err := fv(ctx, m.GetIdmType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_login_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_login_timestamp"))
 		if err := fv(ctx, m.GetLastLoginTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_name"))
 		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
 
 	switch m.GetManagedAccessInfo().(type) {
@@ -1380,38 +1363,26 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_access"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_access"))
 		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_roles"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
 		for idx, item := range m.GetNamespaceRoles() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1419,65 +1390,44 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["original_tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("original_tenant"))
 		if err := fv(ctx, m.GetOriginalTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["plan_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("plan_type"))
 		if err := fv(ctx, m.GetPlanType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["signup_origin"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("signup_origin"))
 		if err := fv(ctx, m.GetSignupOrigin(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sync_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sync_mode"))
 		if err := fv(ctx, m.GetSyncMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_flags"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_flags"))
 		for key, value := range m.GetTenantFlags() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1485,29 +1435,20 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_state"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_state"))
 		if err := fv(ctx, m.GetTenantState(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_type"))
 		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tile_access"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tile_access"))
 		for key, value := range m.GetTileAccess() {
 			vOpts := append(vOpts, db.WithValidateMapKey(key))
@@ -1515,70 +1456,49 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_accepted"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_accepted"))
 		if err := fv(ctx, m.GetTosAccepted(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_accepted_at"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_accepted_at"))
 		if err := fv(ctx, m.GetTosAcceptedAt(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_current_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_current_version"))
 		if err := fv(ctx, m.GetTosCurrentVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tos_version"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tos_version"))
 		if err := fv(ctx, m.GetTosVersion(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["user_uuid"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("user_uuid"))
 		if err := fv(ctx, m.GetUserUuid(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetUserRoleResponseValidator = func() *ValidateGetUserRoleResponse {
 	v := &ValidateGetUserRoleResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -1597,13 +1517,9 @@ var DefaultGetUserRoleResponseValidator = func() *ValidateGetUserRoleResponse {
 		panic(errMsg)
 	}
 	v.FldValidators["signup_origin"] = vFn
-
 	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
-
 	v.FldValidators["tile_access"] = TileAccessValidator().Validate
-
 	v.FldValidators["addon_service_status"] = AddonServiceStatusValidator().Validate
-
 	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
 
 	return v
@@ -1654,6 +1570,15 @@ type ValidateListUserRoleRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListUserRoleRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListUserRoleRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListUserRoleRequest)
 	if !ok {
@@ -1667,22 +1592,36 @@ func (v *ValidateListUserRoleRequest) Validate(ctx context.Context, pm interface
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListUserRoleRequestValidator = func() *ValidateListUserRoleRequest {
 	v := &ValidateListUserRoleRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListUserRoleRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -1745,9 +1684,7 @@ func (v *ValidateListUserRoleResponse) Validate(ctx context.Context, pm interfac
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["items"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("items"))
 		for idx, item := range m.GetItems() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1755,16 +1692,13 @@ func (v *ValidateListUserRoleResponse) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListUserRoleResponseValidator = func() *ValidateListUserRoleResponse {
 	v := &ValidateListUserRoleResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["items"] = ListUserRoleResponseItemValidator().Validate
 
 	return v
@@ -1828,54 +1762,37 @@ func (v *ValidateListUserRoleResponseItem) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("creation_timestamp"))
 		if err := fv(ctx, m.GetCreationTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["disabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("disabled"))
 		if err := fv(ctx, m.GetDisabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["domain_owner"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("domain_owner"))
 		if err := fv(ctx, m.GetDomainOwner(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["first_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_names"))
 		for idx, item := range m.GetGroupNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1883,56 +1800,38 @@ func (v *ValidateListUserRoleResponseItem) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idm_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idm_type"))
 		if err := fv(ctx, m.GetIdmType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_login_timestamp"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_login_timestamp"))
 		if err := fv(ctx, m.GetLastLoginTimestamp(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_name"))
 		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_roles"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
 		for idx, item := range m.GetNamespaceRoles() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -1940,61 +1839,43 @@ func (v *ValidateListUserRoleResponseItem) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["otp_enabled"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("otp_enabled"))
 		if err := fv(ctx, m.GetOtpEnabled(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["sync_mode"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("sync_mode"))
 		if err := fv(ctx, m.GetSyncMode(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tenant_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tenant_type"))
 		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListUserRoleResponseItemValidator = func() *ValidateListUserRoleResponseItem {
 	v := &ValidateListUserRoleResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
-
 	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
 	return v
@@ -2058,43 +1939,30 @@ func (v *ValidateMSPManaged) Validate(ctx context.Context, pm interface{}, opts 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["msp_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("msp_id"))
 		if err := fv(ctx, m.GetMspId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["node_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("node_type"))
 		if err := fv(ctx, m.GetNodeType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["parent_tenant_id"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("parent_tenant_id"))
 		if err := fv(ctx, m.GetParentTenantId(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["tier"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tier"))
 		if err := fv(ctx, m.GetTier(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2163,9 +2031,7 @@ func (v *ValidateNamespacesRoleType) Validate(ctx context.Context, pm interface{
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["namespaces"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespaces"))
 		for idx, item := range m.GetNamespaces() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2173,18 +2039,13 @@ func (v *ValidateNamespacesRoleType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["role"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("role"))
 		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2241,7 +2102,6 @@ type ValidateResetPasswordByAdminRequest struct {
 }
 
 func (v *ValidateResetPasswordByAdminRequest) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
@@ -2263,23 +2123,18 @@ func (v *ValidateResetPasswordByAdminRequest) Validate(ctx context.Context, pm i
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultResetPasswordByAdminRequestValidator = func() *ValidateResetPasswordByAdminRequest {
 	v := &ValidateResetPasswordByAdminRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2347,8 +2202,15 @@ type ValidateSendPasswordEmailRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSendPasswordEmailRequest) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateSendPasswordEmailRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
 
+	return validatorFn, nil
+}
+func (v *ValidateSendPasswordEmailRequest) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
@@ -2370,32 +2232,24 @@ func (v *ValidateSendPasswordEmailRequest) Validate(ctx context.Context, pm inte
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSendPasswordEmailRequestValidator = func() *ValidateSendPasswordEmailRequest {
 	v := &ValidateSendPasswordEmailRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2403,6 +2257,17 @@ var DefaultSendPasswordEmailRequestValidator = func() *ValidateSendPasswordEmail
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SendPasswordEmailRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	vrhEmail := v.EmailValidationRuleHandler
 	rulesEmail := map[string]string{
@@ -2476,7 +2341,6 @@ func (v *ValidateSendPasswordEmailResponse) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
-
 	return nil
 }
 
@@ -2533,7 +2397,6 @@ type ValidateUserGroupRequest struct {
 }
 
 func (v *ValidateUserGroupRequest) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
@@ -2555,9 +2418,7 @@ func (v *ValidateUserGroupRequest) Validate(ctx context.Context, pm interface{},
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_names"))
 		for idx, item := range m.GetGroupNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2565,25 +2426,19 @@ func (v *ValidateUserGroupRequest) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["username"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("username"))
 		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUserGroupRequestValidator = func() *ValidateUserGroupRequest {
 	v := &ValidateUserGroupRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2665,16 +2520,12 @@ func (v *ValidateUserGroupResponse) Validate(ctx context.Context, pm interface{}
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["error"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("error"))
 		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
@@ -2730,8 +2581,15 @@ type ValidateUserRoleRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateUserRoleRequest) FirstNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateUserRoleRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
 
+	return validatorFn, nil
+}
+func (v *ValidateUserRoleRequest) FirstNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for first_name")
@@ -2739,9 +2597,7 @@ func (v *ValidateUserRoleRequest) FirstNameValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUserRoleRequest) LastNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for last_name")
@@ -2749,9 +2605,7 @@ func (v *ValidateUserRoleRequest) LastNameValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-
 func (v *ValidateUserRoleRequest) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
@@ -2773,27 +2627,19 @@ func (v *ValidateUserRoleRequest) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
-
 	if fv, exists := v.FldValidators["email"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("email"))
 		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["first_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("first_name"))
 		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["group_names"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("group_names"))
 		for idx, item := range m.GetGroupNames() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2801,47 +2647,32 @@ func (v *ValidateUserRoleRequest) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["idm_type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("idm_type"))
 		if err := fv(ctx, m.GetIdmType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["last_name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("last_name"))
 		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["name"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["namespace_roles"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
 		for idx, item := range m.GetNamespaceRoles() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
@@ -2849,25 +2680,19 @@ func (v *ValidateUserRoleRequest) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-
 	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultUserRoleRequestValidator = func() *ValidateUserRoleRequest {
 	v := &ValidateUserRoleRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -2875,6 +2700,17 @@ var DefaultUserRoleRequestValidator = func() *ValidateUserRoleRequest {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.string.const": "system",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UserRoleRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	vrhFirstName := v.FirstNameValidationRuleHandler
 	rulesFirstName := map[string]string{
@@ -2908,7 +2744,6 @@ var DefaultUserRoleRequestValidator = func() *ValidateUserRoleRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["email"] = vFn
-
 	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
 	return v
