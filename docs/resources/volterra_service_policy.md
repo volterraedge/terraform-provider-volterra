@@ -601,6 +601,8 @@ Specification for the rule including match predicates and actions..
 
 `segment_policy` - (Optional) Skip the configuration or set option as Any to ignore corresponding segment match. See [Segment Policy ](#segment-policy) below for details.
 
+`log_rule_evaluation` - (Optional) Log the rule match details along with the request and continue to evaluate rules in the sequence. (`Bool`)
+
 ### Tls Fingerprint Matcher
 
 The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints..

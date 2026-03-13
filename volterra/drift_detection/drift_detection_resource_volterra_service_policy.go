@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2026 F5 Inc. All rights reserved.
+// Copyright (c) 2023 F5 Inc. All rights reserved.
 //
 
 package driftdetection
@@ -309,6 +309,7 @@ func FlattenSpecServicePolicy(f *ves_io_schema_service_policy_rule.GlobalSpecTyp
 			"request_constraints":             FlattenRequestConstraints(f.GetRequestConstraints()),
 			"user_identity_matcher":           FlattenUserIdentityMatcher(f.GetUserIdentityMatcher()),
 			"segment_policy":                  FlattenSegmentPolicy(f.GetSegmentPolicy()),
+			"log_rule_evaluation":             f.GetLogRuleEvaluation(),
 		}
 		rslt = append(rslt, val)
 	}

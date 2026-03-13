@@ -532,13 +532,13 @@ func ResourceSecureMeshSiteV2InstanceResourceV1() *schema.Resource {
 
 				Type:     schema.TypeList,
 				MaxItems: 1,
-				Required: true,
+				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"private_adn": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
 					},
 				},

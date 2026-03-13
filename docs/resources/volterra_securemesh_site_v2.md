@@ -123,13 +123,13 @@ Argument Reference
 
 `dns_ntp_config` - (Optional) Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.. See [Dns Ntp Config ](#dns-ntp-config) below for details.
 
-###### One of the arguments from this list "custom_proxy, f5_proxy, private_adn" can be set
+###### One of the arguments from this list "custom_proxy, f5_proxy" can be set
 
 `custom_proxy` - (Optional) Use the customer provided internal Enterprise Proxy. See [Enterprise Proxy Choice Custom Proxy ](#enterprise-proxy-choice-custom-proxy) below for details.
 
 `f5_proxy` - (Optional) Use the F5 Enterprise Proxy hosted on the F5 Global Network (`Bool`).
 
-`private_adn` - (Optional) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support.. See [Enterprise Proxy Choice Private Adn ](#enterprise-proxy-choice-private-adn) below for details.
+`private_adn` - (Optional) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support.. See [Enterprise Proxy Choice Private Adn ](#enterprise-proxy-choice-private-adn) below for details. (Deprecated)
 
 ###### One of the arguments from this list "active_forward_proxy_policies, no_forward_proxy" can be set
 
@@ -773,7 +773,7 @@ Use the customer provided internal Enterprise Proxy.
 
 Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support..
 
-`private_adn` - (Required) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support. (`String`).
+`private_adn` - (Optional) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support. (`String`).
 
 ### Forward Proxy Choice Active Forward Proxy Policies
 
