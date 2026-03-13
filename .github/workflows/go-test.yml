@@ -30,11 +30,11 @@ jobs:
     env:
       GOPRIVATE: "gopkg.volterra.us,gitlab.com/f5/*"
       GOTOOLCHAIN: "local"
-      # Set terminal prompt to 0 here to prevent Git from hanging on authentication
+      # Set terminal prompt to 0 to prevent Git from hanging on authentication
       GIT_TERMINAL_PROMPT: "0"
 
     steps:
-      # 1. Reset permissions if the previous run left root-owned files (common on self-hosted)
+      # 1. Reset permissions if the previous run left root-owned files
       - name: Cleanup workspace permissions
         run: sudo chown -R $USER:$USER $GITHUB_WORKSPACE
         continue-on-error: true
@@ -43,26 +43,25 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 3. Install Go environment
+      # 3. Install Go environment (Updated to Go 1.25)
       - name: Install Go
-        uses: actions/setup-go@v5 # Note: v5 is currently the stable version
+        uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
+          go-version: '1.25'
           cache: true
         id: go
 
-      # 4. Configure Git to use Personal Access Token for private GitLab modules
+      # 4. Configure Git for Private Modules
       - name: Configure Git for Private Modules
         run: |
           # Rewrite GitLab URLs to include the OAuth2 token for authentication
-          # Using the PAT from secrets to access private f5/ repositories
           git config --global url."https://oauth2:${{ secrets.GITLAB_PAT }}@gitlab.com/".insteadOf "https://gitlab.com/"
 
       # 5. Resolve and download dependencies
       - name: Go Mod Tidy
         run: go mod tidy
 
-      # 6. Run custom make command for tidying (if applicable)
+      # 6. Run custom make command for tidying
       - name: Make Tidy (Verify)
         run: make cmd-go-mod-tidy
 
