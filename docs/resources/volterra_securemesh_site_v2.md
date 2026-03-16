@@ -18,7 +18,7 @@ Example Usage
 ```hcl
 resource "volterra_securemesh_site_v2" "example" {
   name      = "acmecorp-web"
-  namespace = "staging"
+  namespace = "system"
 
   // One of the arguments from this list "block_all_services blocked_services" must be set
 
@@ -30,40 +30,32 @@ resource "volterra_securemesh_site_v2" "example" {
 
   // One of the arguments from this list "aws azure baremetal equinix gcp kvm nutanix oci openshift_virtualization openstack rseries vmware" must be set
 
-  nutanix {
-    // One of the arguments from this list "not_managed" can be set
+  azure {
+    // One of the arguments from this list "not_managed" must be set
 
     not_managed {
       node_list {
-        hostname = "Control"
+        hostname = "control"
 
         interface_list {
           // One of the arguments from this list "dhcp_client dhcp_server no_ipv4_address static_ip" must be set
 
-          dhcp_client = true
+          no_ipv4_address = true
 
           description = "value"
 
           // One of the arguments from this list "bond_interface ethernet_interface vlan_interface" must be set
 
-          bond_interface {
-            devices = ["eth0"]
-
-            // One of the arguments from this list "active_backup lacp" must be set
-
-            lacp {
-              rate = "30"
-            }
-            link_polling_interval = "1000"
-            link_up_delay = "200"
-            name = "bond0"
+          ethernet_interface {
+            device = "eth0"
+            mac    = "01:10:20:0a:bb:1c"
           }
 
           // One of the arguments from this list "ipv6_auto_config no_ipv6_address static_ipv6_address" can be set
 
           no_ipv6_address = true
-          is_management = true
-          is_primary = true
+          is_management   = true
+          is_primary      = true
           labels = {
             "key1" = "value1"
           }
@@ -71,8 +63,8 @@ resource "volterra_securemesh_site_v2" "example" {
           // One of the arguments from this list "monitor monitor_disabled" can be set
 
           monitor_disabled = true
-          mtu = "1450"
-          name = "value"
+          mtu              = "1450"
+          name             = "value"
           network_option {
             // One of the arguments from this list "segment_network site_local_inside_network site_local_network" can be set
 
@@ -82,7 +74,7 @@ resource "volterra_securemesh_site_v2" "example" {
 
           // One of the arguments from this list "site_to_site_connectivity_interface_disabled site_to_site_connectivity_interface_enabled" can be set
 
-          site_to_site_connectivity_interface_enabled = true
+          site_to_site_connectivity_interface_disabled = true
         }
 
         public_ip = "1.1.1.1"
