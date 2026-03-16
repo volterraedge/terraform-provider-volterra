@@ -23,7 +23,7 @@ on:
 jobs:
   tests:
     name: Go Tests
-    runs-on: self-hosted
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 60
     
     # Global environment variables for the job
