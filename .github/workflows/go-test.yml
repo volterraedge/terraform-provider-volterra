@@ -19,6 +19,7 @@ on:
       - '.github/workflows/**'
       - '.goreleaser.yml'
       - 'README.md'
+ workflow_dispatch:
 
 jobs:
   tests:
