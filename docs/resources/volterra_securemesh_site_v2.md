@@ -83,6 +83,11 @@ resource "volterra_securemesh_site_v2" "example" {
       }
     }
   }
+  lifecycle {
+      ignore_changes = [
+          labels
+      ]
+  }
 }
 ```
 
@@ -1957,3 +1962,5 @@ Attribute Reference
 -------------------
 
 *   `id` - This is the id of the configured securemesh_site_v2.
+
+~> **Note:**`lifecycle`is a Terraform meta-argument and is not specific to this provider resource. It controls resource behavior through settings such as `ignore_changes`, `create_before_destroy`, and `prevent_destroy`. In the example above, the `lifecycle` block is used to ignore external changes to `labels`, so Terraform will not plan updates when those labels are changed outside of the configuration.
