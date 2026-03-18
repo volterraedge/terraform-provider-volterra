@@ -19,8 +19,8 @@ We recommend using the latest version of Terraform Core ([the latest version can
 terraform {
   required_providers {
     volterra = {
-      source  = "localhost/volterraedge/volterra"
-      version = ">=0.11.47"
+      source  = "volterraedge/volterra"
+      version = ">=0.11.48"
     }
   }
 }
