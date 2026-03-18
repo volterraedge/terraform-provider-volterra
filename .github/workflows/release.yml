@@ -40,7 +40,7 @@ jobs:
       # 4. Import GPG key for signing artifacts
       - name: Import GPG key
         id: import_gpg
-        uses: paultyng/ghaction-import-gpg@v0.5.0 # Updated to v0.5.0
+        uses: crazy-max/ghaction-import-gpg@v7
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
