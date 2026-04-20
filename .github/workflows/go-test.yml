@@ -1,12 +1,6 @@
 name: Go Unit Tests
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '.github/workflows/**'
-      - '.goreleaser.yml'
   pull_request:
     branches:
       - "*"
