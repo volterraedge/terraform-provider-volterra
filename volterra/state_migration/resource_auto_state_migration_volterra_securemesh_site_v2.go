@@ -6,7 +6,6 @@ package statemigration
 
 import (
 	"context"
-	"reflect"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -14000,9 +13999,9 @@ func ResourceSecureMeshSiteV2InstanceStateUpgradeV1(ctx context.Context, rawStat
 		}
 
 		value, ok := aa["perf_mode_l7_enhanced"]
-		if ok && value != nil && reflect.TypeOf(value).Kind() == reflect.Bool {
+		if boolVal, ok := value.(bool); ok {
 			aa["perf_mode_l7_enhanced"] = []interface{}{map[string]interface{}{
-				"jumbo_enabled": true,
+				"jumbo_disabled": boolVal,
 			}}
 		}
 	}

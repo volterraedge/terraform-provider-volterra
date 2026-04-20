@@ -6,7 +6,6 @@ package statemigration
 
 import (
 	"context"
-	"reflect"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -3311,23 +3310,45 @@ func ResourceGcpVpcSiteInstanceResourceV1() *schema.Resource {
 }
 
 func ResourceGcpVpcSiteInstanceStateUpgradeV1(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
-	advancedOptions, ok := rawState["performance_enhancement_mode"].([]interface{})
-	if !ok {
-		return rawState, nil
+	upgradePerfModeL7Enhanced := func(segments []interface{}) {
+		for _, segment := range segments {
+			segmentMap, ok := segment.(map[string]interface{})
+			if !ok {
+				continue
+			}
+
+			performanceEnhancementMode, ok := segmentMap["performance_enhancement_mode"].([]interface{})
+			if !ok {
+				continue
+			}
+
+			for _, perfMode := range performanceEnhancementMode {
+				perfModeMap, ok := perfMode.(map[string]interface{})
+				if !ok {
+					continue
+				}
+
+				value, ok := perfModeMap["perf_mode_l7_enhanced"]
+				if !ok {
+					continue
+				}
+
+				if boolVal, ok := value.(bool); ok {
+					perfModeMap["perf_mode_l7_enhanced"] = []interface{}{map[string]interface{}{
+						"jumbo_disabled": boolVal,
+					}}
+				}
+			}
+		}
 	}
 
-	for _, va := range advancedOptions {
-		aa, ok := va.(map[string]interface{})
-		if !ok {
-			continue
-		}
-
-		value, ok := aa["perf_mode_l7_enhanced"]
-		if ok && value != nil && reflect.TypeOf(value).Kind() == reflect.Bool {
-			aa["perf_mode_l7_enhanced"] = []interface{}{map[string]interface{}{
-				"jumbo_enabled": true,
-			}}
-		}
+	if ingressEgressGW, ok := rawState["ingress_egress_gw"].([]interface{}); ok {
+		upgradePerfModeL7Enhanced(ingressEgressGW)
 	}
+
+	if ingressGW, ok := rawState["ingress_gw"].([]interface{}); ok {
+		upgradePerfModeL7Enhanced(ingressGW)
+	}
+
 	return rawState, nil
 }
