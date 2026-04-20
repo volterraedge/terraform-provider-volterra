@@ -52,9 +52,12 @@ jobs:
           # Rewrite GitLab URLs to include the OAuth2 token for authentication
           git config --global url."https://oauth2:${{ secrets.GITLAB_PAT }}@gitlab.com/".insteadOf "https://gitlab.com/"
 
-      # 5. Resolve and download dependencies
-      - name: Go Mod Tidy
-        run: go mod tidy
+      # 5. Install a specific Terraform version
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "v1.14.8"
+          terraform_wrapper: false
 
       # 6. Run custom make command for tidying
       - name: Make Tidy (Verify)
@@ -63,4 +66,8 @@ jobs:
       # 7. Run the actual test suite
       - name: Run tests
         run: |
-          TF_ACC=1 go test -v ./... -timeout=30m
+          TF_BINARY=$(which terraform)
+          echo "Using Terraform from: $TF_BINARY"
+          TF_ACC=1 \
+          TF_ACC_TERRAFORM_PATH=$TF_BINARY \
+          go test -v ./... -timeout=30m
