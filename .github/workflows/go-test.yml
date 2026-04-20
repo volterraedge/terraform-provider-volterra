@@ -33,12 +33,21 @@ jobs:
       - name: Cleanup workspace permissions
         run: sudo chown -R $USER:$USER $GITHUB_WORKSPACE
         continue-on-error: true
-
-      # 2. Checkout the repository
+      
+      # 2. Install tools
+      - name: Install unzip
+        run: |
+          if command -v unzip > /dev/null; then
+            echo "unzip already installed"
+          else
+            sudo yum install -y unzip || sudo dnf install -y unzip || sudo apt-get install -y unzip
+          fi
+    
+      # 3. Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 3. Install Go environment (Updated to Go 1.25)
+      # 4. Install Go environment (Updated to Go 1.25)
       - name: Install Go
         uses: actions/setup-go@v5
         with:
@@ -46,24 +55,24 @@ jobs:
           cache: true
         id: go
 
-      # 4. Configure Git for Private Modules
+      # 5. Configure Git for Private Modules
       - name: Configure Git for Private Modules
         run: |
           # Rewrite GitLab URLs to include the OAuth2 token for authentication
           git config --global url."https://oauth2:${{ secrets.GITLAB_PAT }}@gitlab.com/".insteadOf "https://gitlab.com/"
 
-      # 5. Install a specific Terraform version
+      # 6. Install a specific Terraform version
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "v1.14.8"
           terraform_wrapper: false
 
-      # 6. Run custom make command for tidying
+      # 7. Run custom make command for tidying
       - name: Make Tidy (Verify)
         run: make cmd-go-mod-tidy
 
-      # 7. Run the actual test suite
+      # 8. Run the actual test suite
       - name: Run tests
         run: |
           TF_BINARY=$(which terraform)
