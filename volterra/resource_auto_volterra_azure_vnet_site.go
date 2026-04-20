@@ -6770,8 +6770,8 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 		SchemaVersion: 1,
 		StateUpgraders: []schema.StateUpgrader{
 			{
-				Type:    statemigration.ResourceAwsVpcSiteInstanceResourceV1().CoreConfigSchema().ImpliedType(),
-				Upgrade: statemigration.ResourceAwsVpcSiteInstanceStateUpgradeV1,
+				Type:    statemigration.ResourceAzureVnetSiteInstanceResourceV1().CoreConfigSchema().ImpliedType(),
+				Upgrade: statemigration.ResourceAzureVnetSiteInstanceStateUpgradeV1,
 				Version: 0,
 			},
 		},
