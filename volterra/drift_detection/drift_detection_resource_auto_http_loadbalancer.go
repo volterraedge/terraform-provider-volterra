@@ -1419,6 +1419,7 @@ func FlattenAuthentication(x *ves_io_schema.BotDefenseFlowLabelAuthenticationCho
 	authValue := make([]interface{}, 0)
 	if x != nil {
 		authVal := map[string]interface{}{
+			"login":         FlattenLogin(x.GetLogin()),
 			"login_mfa":     isEmpty(x.GetLoginMfa()),
 			"login_partner": isEmpty(x.GetLoginPartner()),
 			"logout":        isEmpty(x.GetLogout()),
@@ -1494,9 +1495,11 @@ func FlattenBotDefense(x *ves_io_schema_views_common_security.ShapeBotDefenseTyp
 	val := make([]interface{}, 0)
 	if x != nil {
 		test := map[string]interface{}{
-			"policy":            FlattenPolicy(x.GetPolicy()),
-			"regional_endpoint": x.GetRegionalEndpoint().String(),
-			"timeout":           x.GetTimeout(),
+			"disable_cors_support": isEmpty(x.GetDisableCorsSupport()),
+			"enable_cors_support":  isEmpty(x.GetEnableCorsSupport()),
+			"policy":               FlattenPolicy(x.GetPolicy()),
+			"regional_endpoint":    x.GetRegionalEndpoint().String(),
+			"timeout":              x.GetTimeout(),
 		}
 		val = append(val, test)
 	}
@@ -1526,7 +1529,8 @@ func FlattenMobileSdkConfig(x *ves_io_schema_views_common_security.MobileSDKConf
 	mscValue := make([]interface{}, 0)
 	if x != nil {
 		mscVal := map[string]interface{}{
-			"mobile_identifier": FlattenMobileIdentifier(x.GetMobileIdentifier()),
+			"mobile_identifier":  FlattenMobileIdentifier(x.GetMobileIdentifier()),
+			"reload_header_name": x.GetReloadHeaderName(),
 		}
 		mscValue = append(mscValue, mscVal)
 	}
@@ -2461,24 +2465,25 @@ func FlattenHttpsAutoCert(x *ves_io_schema_views_http_loadbalancer.ProxyTypeHttp
 	val := make([]interface{}, 0)
 	if x != nil {
 		test := map[string]interface{}{
-			"add_hsts":                 x.GetAddHsts(),
-			"coalescing_options":       FlattenCoalescingOptions(x.GetCoalescingOptions()),
-			"connection_idle_timeout":  x.GetConnectionIdleTimeout(),
-			"default_loadbalancer":     isEmpty(x.GetDefaultLoadbalancer()),
-			"non_default_loadbalancer": isEmpty(x.GetNonDefaultLoadbalancer()),
-			"http_protocol_options":    FlattenHttpProtocolOptions(x.GetHttpProtocolOptions()),
-			"http_redirect":            x.GetHttpRedirect(),
-			"no_mtls":                  isEmpty(x.GetNoMtls()),
-			"use_mtls":                 FlattenUseMtls(x.GetUseMtls()),
-			"disable_path_normalize":   isEmpty(x.GetDisablePathNormalize()),
-			"enable_path_normalize":    isEmpty(x.GetEnablePathNormalize()),
-			"port":                     x.GetPort(),
-			"port_ranges":              x.GetPortRanges(),
-			"append_server_name":       x.GetAppendServerName(),
-			"default_header":           isEmpty(x.GetDefaultHeader()),
-			"pass_through":             isEmpty(x.GetPassThrough()),
-			"server_name":              x.GetServerName(),
-			"tls_config":               FlattenTlsConfig(x.GetTlsConfig()),
+			"add_hsts":                   x.GetAddHsts(),
+			"coalescing_options":         FlattenCoalescingOptions(x.GetCoalescingOptions()),
+			"connection_idle_timeout":    x.GetConnectionIdleTimeout(),
+			"default_loadbalancer":       isEmpty(x.GetDefaultLoadbalancer()),
+			"non_default_loadbalancer":   isEmpty(x.GetNonDefaultLoadbalancer()),
+			"http_protocol_options":      FlattenHttpProtocolOptions(x.GetHttpProtocolOptions()),
+			"header_transformation_type": FlattenHeaderTransformationType(x.GetHeaderTransformationType()),
+			"http_redirect":              x.GetHttpRedirect(),
+			"no_mtls":                    isEmpty(x.GetNoMtls()),
+			"use_mtls":                   FlattenUseMtls(x.GetUseMtls()),
+			"disable_path_normalize":     isEmpty(x.GetDisablePathNormalize()),
+			"enable_path_normalize":      isEmpty(x.GetEnablePathNormalize()),
+			"port":                       x.GetPort(),
+			"port_ranges":                x.GetPortRanges(),
+			"append_server_name":         x.GetAppendServerName(),
+			"default_header":             isEmpty(x.GetDefaultHeader()),
+			"pass_through":               isEmpty(x.GetPassThrough()),
+			"server_name":                x.GetServerName(),
+			"tls_config":                 FlattenTlsConfig(x.GetTlsConfig()),
 		}
 		val = append(val, test)
 	}
